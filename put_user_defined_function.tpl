@@ -1,13 +1,14 @@
+{% if 'application/octet-stream' not in method['produces'] %}
 {% set method_parameters = method['parameters'] %}
 
 @xw.func
 {% for parameter in method_parameters -%}
 {{add_parameter_converter(parameter)}}
 {%- endfor %}
-@xw.ret(expand='table')
+{{ add_return_type(method) }}
 def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|map(attribute='name')|join(', ') }}):
-{% if 'description' in method and method['description'] %}
-    """{{ method['description'] }}"""
+{% if 'summary' in method and method['summary'] %}
+    """{{ method['summary'] }}"""
 {% endif %}
     request_parameters = {}
     request_body = {}
@@ -27,10 +28,5 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|ma
 {% else %}
     response = requests.put('{{server_uri}}{{ method_path }}', data=request_body, params=request_parameters)
 {% endif %}
-    try:
-        response.raise_for_status()
-        return to_list(response.json())
-    except HTTPError as http_error:
-        return [http_error.message]
-    except:
-        return [response.text]
+{{ return_response(method) }}
+{% endif %}

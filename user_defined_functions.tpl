@@ -25,6 +25,50 @@ from requests.exceptions import HTTPError
 {% endif %}
 {%- endmacro -%}
 
+{%- macro add_return_type(method) -%}
+{% set method_produces = method['produces'] %}
+{% if 'application/json' in method_produces %}
+@xw.ret(expand='table')
+{% elif 'text/plain' in method_produces %}
+{% elif not method_produces %}
+{% else %}
+Return type is unknown and must be handled: {{ method_produces }}
+{% endif %}
+{%- endmacro -%}
+
+{%- macro return_response(method) %}
+{% set method_produces = method['produces'] %}
+{% if 'application/json' in method_produces %}
+{{ return_json_response() }}
+{% elif 'text/plain' in method_produces %}
+{{ return_text_response() }}
+{% elif not method_produces %}
+{{ return_text_response() }}
+{% else %}
+Return type is unknown and must be handled: {{ method_produces }}
+{% endif %}
+{%- endmacro -%}
+
+{%- macro return_json_response() %}
+    try:
+        response.raise_for_status()
+        return to_list(response.json())
+    except HTTPError as http_error:
+        return [http_error.message]
+    except:
+        # Text format cell is limited to 255 characters by Excel
+        return [response.text[:255]]
+{%- endmacro -%}
+
+{%- macro return_text_response() %}
+    try:
+        response.raise_for_status()
+        # Text format cell is limited to 255 characters by Excel
+        return response.text[:255]
+    except HTTPError as http_error:
+        return http_error.message
+{%- endmacro -%}
+
 {% macro validate_parameter_value(parameter) %}
 {% set param_name = parameter['name'] %}
 {% set param_type = parameter['type'] %}
