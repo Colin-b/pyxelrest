@@ -51,10 +51,7 @@ Return type is unknown and must be handled: {{ method_produces }}
 
 {%- macro return_json_response() %}
     try:
-        response.raise_for_status()
         return to_list(response.json())
-    except HTTPError as http_error:
-        return [http_error.message]
     except:
         # Text format cell is limited to 255 characters by Excel
         return [response.text[:255]]
