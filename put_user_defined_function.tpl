@@ -1,7 +1,7 @@
 {% if 'application/octet-stream' not in method['produces'] %}
 {% set method_parameters = method['parameters'] %}
 
-@xw.func
+@xw.func(category='{{ service.udf_prefix }}')
 {% for parameter in method_parameters -%}
 {{add_parameter_converter(parameter)}}
 {%- endfor %}
@@ -17,16 +17,6 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|ma
 {{ add_parameter(parameter) }}
 {%- endfor %}
 
-{% set path_parameters = method_parameters|selectattr("in", "equalto", "path")|map(attribute='name') %}
-{% set path_parameters_count = method_parameters|selectattr("in", "equalto", "path")|list|count %}
-{% if path_parameters_count > 0 %}
-    response = requests.put('{{server_uri}}{{ method_path }}'.format(
-{%- for path_parameter in path_parameters -%}
-        {{ path_parameter }}={{ path_parameter }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-), data=request_body, params=request_parameters)
-{% else %}
-    response = requests.put('{{server_uri}}{{ method_path }}', data=request_body, params=request_parameters)
-{% endif %}
+    response = requests.put(f'{{server_uri}}{{ method_path }}', data=request_body, params=request_parameters)
 {{ return_response(method) }}
 {% endif %}

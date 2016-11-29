@@ -11,17 +11,22 @@ from requests.exceptions import HTTPError
 {%- macro add_parameter_converter(parameter) -%}
 {% set param_name = parameter['name'] %}
 {% set param_type = parameter['type'] %}
+{% set param_description = parameter['description']|replace('\'', '') %}
 {% if param_type == 'integer' %}
-@xw.arg('{{param_name}}', numbers=int)
+@xw.arg('{{param_name}}', numbers=int, doc='{{param_description}}')
 {% elif param_type == 'number' %}
-@xw.arg('{{param_name}}', numbers=float)
+@xw.arg('{{param_name}}', numbers=float, doc='{{param_description}}')
 {% elif param_type == 'string' %}
 {% set param_format = parameter['format'] %}
 {% if param_format == 'date' %}
-@xw.arg('{{param_name}}', dates=datetime.date)
+@xw.arg('{{param_name}}', dates=datetime.date, doc='{{param_description}}')
 {% elif param_format == 'date-time' %}
-@xw.arg('{{param_name}}', dates=datetime.datetime)
+@xw.arg('{{param_name}}', dates=datetime.datetime, doc='{{param_description}}')
+{% else %}
+@xw.arg('{{param_name}}', doc='{{param_description}}')
 {% endif %}
+{% else %}
+@xw.arg('{{param_name}}', doc='{{param_description}}')
 {% endif %}
 {%- endmacro -%}
 
@@ -182,7 +187,7 @@ Return type is unknown and must be handled: {{ method_produces }}
 {% set server_uri = service.uri %}
 {% set swagger = service.swagger %}
 {# Iterate over server methods #}
-{% for method_path, methods in swagger['paths'].iteritems() %}
+{% for method_path, methods in swagger['paths'].items() %}
 {% if 'get' in service.methods %}
 {# server GET method #}
 {% if 'get' in methods %}
@@ -231,10 +236,10 @@ def flattened_list_of_dicts(list_of_dicts):
     Other lists are containing dictionary values.
     """
     flat_list = []
-    header_list = list_of_dicts[0].keys()
+    header_list = list(list_of_dicts[0].keys())
     flat_list.append(header_list)
     for dictionary in list_of_dicts:
-        flat_list.append(dictionary.values())
+        flat_list.append(list(dictionary.values()))
     return flat_list
 
 def to_list(data):
@@ -254,10 +259,10 @@ def to_list(data):
         if len(data) == 0:
             return ['']
         if len(data) == 1:
-            key, value = data.iteritems().next()
+            value = data.values().next()
             if isinstance(value, list):
                 return to_list(value)
-        return [data.keys(), data.values()]
+        return [list(data.keys()), list(data.values())]
     if isinstance(data, list):
         if len(data) == 0:
             return ['']
