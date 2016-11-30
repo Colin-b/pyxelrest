@@ -230,7 +230,7 @@ from pandas.io.json import json_normalize
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
 {% if 'application/json' in method['produces'] %}
-@xw.ret(expand='table')
+@xw.ret(expand='table', index=True)
 {% endif %}
 def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|map(attribute='name')|join(', ') }}):
 {% if 'summary' in method and method['summary'] %}
@@ -313,7 +313,7 @@ def to_list(data):
         if len(data) == 0:
             return ['']
         if len(data) == 1:
-            value = data.values().next()
+            value = next(iter(data.values()))
             if isinstance(value, list):
                 return to_list(value)
         return [list(data.keys()), list(data.values())]
@@ -330,7 +330,7 @@ def to_pandas_dataframe(json_data):
     if not isinstance(json_data, dict):
         raise Exception('Expecting JSON')
     if len(json_data) == 1:
-        value = json_data.values().next()
+        value = next(iter(json_data.values()))
         if isinstance(value, list):
             return json_normalize(value)
     return json_normalize(json_data)

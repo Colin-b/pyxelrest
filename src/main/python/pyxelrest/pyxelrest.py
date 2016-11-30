@@ -1,8 +1,8 @@
-import os
-import requests
 import datetime
-from jinja2 import Environment, FileSystemLoader
+import os
 from configparser import ConfigParser
+
+from jinja2 import Environment, FileSystemLoader
 
 # Some parameter names might be VBA keywords
 vba_restricted_keywords = {
@@ -58,8 +58,8 @@ with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 
     )
     generated_file.write(generated_file_content)
 
-from user_defined_functions import *
+from src.main.python.pyxelrest.user_defined_functions import *
 
 # Uncomment to debug Microsoft Excel UDF calls
-# if __name__ == '__main__':
-#     xw.serve()
+if __name__ == '__main__':
+    xw.serve()
