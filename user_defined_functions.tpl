@@ -7,92 +7,75 @@ import xlwings as xw
 import requests
 import datetime
 from requests.exceptions import HTTPError
+from pandas import read_json
+from pandas.io.json import json_normalize
 
-{%- macro add_parameter_converter(parameter) -%}
-{% set param_name = parameter['name'] %}
-{% set param_type = parameter['type'] %}
-{% set param_description = parameter['description']|replace('\'', '') %}
-{% if param_type == 'integer' %}
-@xw.arg('{{param_name}}', numbers=int, doc='{{param_description}}')
-{% elif param_type == 'number' %}
-@xw.arg('{{param_name}}', numbers=float, doc='{{param_description}}')
-{% elif param_type == 'string' %}
-{% set param_format = parameter['format'] %}
-{% if param_format == 'date' %}
-@xw.arg('{{param_name}}', dates=datetime.date, doc='{{param_description}}')
-{% elif param_format == 'date-time' %}
-@xw.arg('{{param_name}}', dates=datetime.datetime, doc='{{param_description}}')
-{% else %}
-@xw.arg('{{param_name}}', doc='{{param_description}}')
+{% macro convert_to_return_type(str_value, method) %}
+{% if 'application/json' in method['produces'] -%}
+[{{ str_value }}]
+{% else -%}
+{{ str_value }}
 {% endif %}
-{% else %}
-@xw.arg('{{param_name}}', doc='{{param_description}}')
-{% endif %}
-{%- endmacro -%}
+{% endmacro %}
 
-{%- macro add_return_type(method) -%}
-{% set method_produces = method['produces'] %}
-{% if 'application/json' in method_produces %}
-@xw.ret(expand='table')
-{% elif 'text/plain' in method_produces %}
-{% elif not method_produces %}
-{% else %}
-Return type is unknown and must be handled: {{ method_produces }}
-{% endif %}
-{%- endmacro -%}
+{%- macro delete(server_uri, method_path) %}
+    response = requests.delete(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+{% endmacro -%}
 
-{%- macro return_response(method) %}
-{% set method_produces = method['produces'] %}
-{% if 'application/json' in method_produces %}
-{{ return_json_response() }}
-{% elif 'text/plain' in method_produces %}
-{{ return_text_response() }}
-{% elif not method_produces %}
-{{ return_text_response() }}
-{% else %}
-Return type is unknown and must be handled: {{ method_produces }}
-{% endif %}
-{%- endmacro -%}
+{%- macro get(server_uri, method_path) %}
+    response = requests.get(f'{{ server_uri }}{{ method_path }}', request_parameters)
+{% endmacro -%}
 
-{%- macro return_json_response() %}
-    try:
-        return to_list(response.json())
-    except:
-        # Text format cell is limited to 255 characters by Excel
-        return [response.text[:255]]
-{%- endmacro -%}
+{%- macro post(server_uri, method_path) %}
+    response = requests.post(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+{% endmacro -%}
 
-{%- macro return_text_response() %}
-    try:
-        response.raise_for_status()
-        # Text format cell is limited to 255 characters by Excel
-        return response.text[:255]
-    except HTTPError as http_error:
-        return http_error.message
-{%- endmacro -%}
+{%- macro put(server_uri, method_path) %}
+    response = requests.put(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+{% endmacro -%}
 
-{% macro validate_parameter_value(parameter) %}
+{% macro validate_parameter_value(parameter, method) %}
 {% set param_name = parameter['name'] %}
 {% set param_type = parameter['type'] %}
 {% if param_type == 'integer' -%}
         if not isinstance({{param_name}}, int):
-            return ['{{param_name}} must be an integer.']
+{% if 'application/json' in method['produces'] %}
+            return ['{{ param_name }} must be an integer.']
+{% else %}
+            return '{{ param_name }} must be an integer.'
+{% endif %}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
-            return ['{{param_name}} must be a number.']
+{% if 'application/json' in method['produces'] %}
+            return ['{{ param_name }} must be a number.']
+{% else %}
+            return '{{ param_name }} must be a number.'
+{% endif %}
 {% elif param_type == 'string' %}
 {% set param_format = parameter['format'] %}
 {% if param_format == 'date' -%}
         if not isinstance({{param_name}}, datetime.date):
-            return ['{{param_name}} must be a date.']
+{% if 'application/json' in method['produces'] %}
+            return ['{{ param_name }} must be a date.']
+{% else %}
+            return '{{ param_name }} must be a date.'
+{% endif %}
 {% elif param_format == 'date-time' -%}
         if not isinstance({{param_name}}, datetime.datetime):
-            return ['{{param_name}} must be a date time.']
+{% if 'application/json' in method['produces'] %}
+            return ['{{ param_name }} must be a date time.']
+{% else %}
+            return '{{ param_name }} must be a date time.'
+{% endif %}
 {% else %}
 {% set param_enum = parameter['enum'] %}
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
-            return ['{{param_name}} value "{0}" should be {1}.'.format({{param_name}}, ' or '.join({{ param_enum }}))]
+{% if 'application/json' in method['produces'] %}
+            return [f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.']
+{% else %}
+            return f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'
+{% endif %}
 {% endif %}
 {% endif %}
 {% elif param_type == 'array' -%}
@@ -103,46 +86,86 @@ Return type is unknown and must be handled: {{ method_produces }}
         if isinstance({{param_name}}, list):
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, int):
-                    return ['{{param_name}} must contains integers.']
+{% if 'application/json' in method['produces'] %}
+                    return ['{{ param_name }} must contains integers.']
+{% else %}
+                    return '{{ param_name }} must contains integers.'
+{% endif %}
         else:
             if not isinstance({{param_name}}, int):
-                return ['{{param_name}} must contains integers.']
+{% if 'application/json' in method['produces'] %}
+                return ['{{ param_name }} must contains integers.']
+{% else %}
+                return '{{ param_name }} must contains integers.'
+{% endif %}
 {% elif param_items_type == 'number' -%}
         if isinstance({{param_name}}, list):
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, float):
-                    return ['{{param_name}} must contains numbers.']
+{% if 'application/json' in method['produces'] %}
+                    return ['{{ param_name }} must contains numbers.']
+{% else %}
+                    return '{{ param_name }} must contains numbers.'
+{% endif %}
         else:
             if not isinstance({{param_name}}, float):
-                return ['{{param_name}} must contains numbers.']
+{% if 'application/json' in method['produces'] %}
+                return ['{{ param_name }} must contains numbers.']
+{% else %}
+                return '{{ param_name }} must contains numbers.'
+{% endif %}
 {% elif param_items_type == 'string' %}
 {% set param_items_format = param_items['format'] %}
 {% if param_items_format == 'date' -%}
         if isinstance({{param_name}}, list):
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.date):
-                    return ['{{param_name}} must contains dates.']
+{% if 'application/json' in method['produces'] %}
+                    return ['{{ param_name }} must contains dates.']
+{% else %}
+                    return '{{ param_name }} must contains dates.'
+{% endif %}
         else:
             if not isinstance({{param_name}}, datetime.date):
-                return ['{{param_name}} must contains dates.']
+{% if 'application/json' in method['produces'] %}
+                return ['{{ param_name }} must contains dates.']
+{% else %}
+                return '{{ param_name }} must contains dates.'
+{% endif %}
 {% elif param_items_format == 'date-time' -%}
         if isinstance({{param_name}}, list):
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.datetime):
-                    return ['{{param_name}} must contains date times.']
+{% if 'application/json' in method['produces'] %}
+                    return ['{{ param_name }} must contains date times.']
+{% else %}
+                    return '{{ param_name }} must contains date times.'
+{% endif %}
         else:
             if not isinstance({{param_name}}, datetime.datetime):
-                return ['{{param_name}} must contains date times.']
+{% if 'application/json' in method['produces'] %}
+                return ['{{ param_name }} must contains date times.']
+{% else %}
+                return '{{ param_name }} must contains date times.'
+{% endif %}
 {% else %}
 {% set param_items_enum = param_items['enum'] %}
 {% if param_items_enum|count > 0 -%}
         if isinstance({{param_name}}, list):
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
-                    return ['{{param_name}} value "{0}" should be {1}.'.format({{param_name}}_item, ' or '.join({{ param_items_enum }}))]
+{% if 'application/json' in method['produces'] %}
+                    return [f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}_item{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.']
+{% else %}
+                    return f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}_item{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'
+{% endif %}
         else:
             if {{param_name}} not in {{ param_items_enum }}:
-                return ['{{param_name}} value "{0}" should be {1}.'.format({{param_name}}, ' or '.join({{ param_items_enum }}))]
+{% if 'application/json' in method['produces'] %}
+                return [f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.']
+{% else %}
+                return f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}
@@ -150,85 +173,115 @@ Return type is unknown and must be handled: {{ method_produces }}
 {% endif %}
 {% endmacro %}
 
-{%- macro add_request_parameter_or_body(parameter, dictionary) -%}
+{% macro validate_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
-{% set server_param_name = parameter['name'] if parameter['name'] not in modified_parameters else modified_parameters[parameter['name']] %}
-{% set param_required = parameter['required'] %}
-{% if param_required %}
-    if not {{param_name}}:
-        return ['{{param_name}} is required.']
-    else:
-        {{ validate_parameter_value(parameter) }}
-        {{ dictionary }}['{{server_param_name}}'] = {{param_name}}
-{% else %}
-    if {{param_name}}:
-        {{ validate_parameter_value(parameter) }}
-        {{ dictionary }}['{{server_param_name}}'] = {{param_name}}
-{% endif %}
-{%- endmacro -%}
-
-{%- macro add_parameter(parameter) -%}
-{% set param_name = parameter['name'] %}
-{% set server_param_name = parameter['name'] if parameter['name'] not in modified_parameters else modified_parameters[parameter['name']] %}
-{% set param_required = parameter['required'] %}
 {% set param_in = parameter['in'] %}
+{% set param_required = parameter['required'] and not parameter['default'] %}
 {% if param_in == 'path' %}
-    if not {{param_name}}:
-        return ['{{param_name}} is required.']
-{% elif param_in == 'query' -%}
-{{ add_request_parameter_or_body(parameter, 'request_parameters') }}
-{%- elif param_in == 'body' -%}
-{{ add_request_parameter_or_body(parameter, 'request_body') }}
-{%- endif %}
-{%- endmacro -%}
+    if not {{ param_name }}:
+{% if 'application/json' in method['produces'] %}
+        return ['{{ param_name }} is required.']
+{% else %}
+        return '{{ param_name }} is required.'
+{% endif %}
+{% else %}
+{% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
+{% if param_required %}
+    if not {{ param_name }}:
+{% if 'application/json' in method['produces'] %}
+        return ['{{ param_name }} is required.']
+{% else %}
+        return '{{ param_name }} is required.'
+{% endif %}
+{% endif %}
+    if {{ param_name }}:
+        {{ validate_parameter_value(parameter, method) }}
+{% if param_in == 'query' %}
+        request_parameters['{{ server_param_name }}'] = {{ param_name }}
+{% elif param_in == 'body' %}
+        request_body['{{ server_param_name }}'] = {{ param_name }}
+{% endif %}
+{% endif %}
+{% endmacro %}
 
-{# Iterate over services #}
+{# Macro generating the converter for the parameter if needed #}
+{% macro param_converter(parameter) %}
+{% set param_type = parameter['type'] %}
+{%- if param_type == 'integer' %}
+ numbers=int,
+{%- elif param_type == 'number' %}
+ numbers=float,
+{%- elif param_type == 'string' %}
+    {%- set param_format = parameter['format'] %}
+    {%- if param_format == 'date' %}
+ dates=datetime.date,
+    {%- elif param_format == 'date-time' %}
+ dates=datetime.datetime,
+    {%- endif %}
+{% endif %}
+{% endmacro %}
+
+{# Macro generating the UDF related to provided method #}
+{% macro add_udf(service, method_path, method, request_macro) %}
+{% if 'application/octet-stream' not in method['produces'] %}
+{% set method_parameters = method['parameters'] %}
+@xw.func(category='{{ service.udf_prefix }}')
+{% for parameter in method_parameters %}
+@xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
+{% endfor %}
+{% if 'application/json' in method['produces'] %}
+@xw.ret(expand='table')
+{% endif %}
+def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|map(attribute='name')|join(', ') }}):
+{% if 'summary' in method and method['summary'] %}
+    """{{ method['summary'] }}"""
+{% endif %}
+    request_parameters = {}
+    request_body = {}
+
+{% for parameter in method_parameters %}
+{{ validate_parameter(parameter, method) }}
+{% endfor %}
+    try:
+    {{ request_macro(service.uri, method_path) }}
+{% if 'application/json' in method['produces'] %}
+        return to_pandas_dataframe(response.json())
+{% else %}
+        response.raise_for_status()
+        return response.text[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+{% endif %}
+    except Exception as error:
+        return {{ convert_to_return_type('response.text[:255] if response else error.message[:255]', method) }}
+
+{% endif %}
+{% endmacro %}
+
 {% for service in services %}
-{% set server_uri = service.uri %}
-{% set swagger = service.swagger %}
-{# Iterate over server methods #}
-{% for method_path, methods in swagger['paths'].items() %}
-{% if 'get' in service.methods %}
-{# server GET method #}
-{% if 'get' in methods %}
-
-{% set method = methods['get'] %}
-{% include 'get_user_defined_function.tpl' %}
-{# End of server GET method #}
-{% endif %}
-{% endif %}
-{% if 'post' in service.methods %}
-{# server POST method #}
-{% if 'post' in methods %}
-
-{% set method = methods['post'] %}
-{% include 'post_user_defined_function.tpl' %}
-{# End of server POST method #}
-{% endif %}
-{% endif %}
-{% if 'put' in service.methods %}
-{# server PUT method #}
-{% if 'put' in methods %}
-
-{% set method = methods['put'] %}
-{% include 'put_user_defined_function.tpl' %}
-{# End of server PUT method #}
-{% endif %}
-{% endif %}
-{% if 'delete' in service.methods %}
-{# server DELETE method #}
-{% if 'delete' in methods %}
-
-{% set method = methods['delete'] %}
-{% include 'delete_user_defined_function.tpl' %}
-{# End of server DELETE method #}
-{% endif %}
-{% endif %}
-{# End of iteration over server methods #}
+    {%- for method_path, methods in service.swagger['paths'].items() %}
+        {%- if 'get' in service.methods -%}
+            {%- if 'get' in methods -%}
+                {{- add_udf(service, method_path, methods['get'], get) -}}
+            {%- endif -%}
+        {%- endif -%}
+        {%- if 'post' in service.methods -%}
+            {%- if 'post' in methods -%}
+                {{- add_udf(service, method_path, methods['post'], post) -}}
+            {%- endif -%}
+        {%- endif -%}
+        {%- if 'put' in service.methods -%}
+            {%- if 'put' in methods -%}
+                {{- add_udf(service, method_path, methods['put'], put) -}}
+            {%- endif -%}
+        {%- endif -%}
+        {%- if 'delete' in service.methods -%}
+            {%- if 'delete' in methods -%}
+                {{- add_udf(service, method_path, methods['delete'], delete) -}}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endfor %}
 {% endfor %}
-{# End of iteration over services #}
-{% endfor %}
-
 def flattened_list_of_dicts(list_of_dicts):
     """
     Transform a list of dictionaries into a list of lists.
@@ -241,6 +294,7 @@ def flattened_list_of_dicts(list_of_dicts):
     for dictionary in list_of_dicts:
         flat_list.append(list(dictionary.values()))
     return flat_list
+
 
 def to_list(data):
     """
@@ -270,3 +324,13 @@ def to_list(data):
             return flattened_list_of_dicts(data)
         return data
     return [data]
+
+
+def to_pandas_dataframe(json_data):
+    if not isinstance(json_data, dict):
+        raise Exception('Expecting JSON')
+    if len(json_data) == 1:
+        value = json_data.values().next()
+        if isinstance(value, list):
+            return json_normalize(value)
+    return json_normalize(json_data)
