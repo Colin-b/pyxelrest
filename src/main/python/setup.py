@@ -19,7 +19,7 @@ setup(name='pyxelrest',
           'jinja2',
           'requests',
           'xlwings',
-          'pywin32>=220',
+          'pywin32>=219',
           'pandas'
         ]
       )

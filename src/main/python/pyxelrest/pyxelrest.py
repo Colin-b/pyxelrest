@@ -1,7 +1,7 @@
 import datetime
 import os
 from configparser import ConfigParser
-
+import requests
 from jinja2 import Environment, FileSystemLoader
 
 # Some parameter names might be VBA keywords
