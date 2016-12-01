@@ -10,17 +10,17 @@
 
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
 
-- XLWings (https://www.xlwings.org/) Excel Add In must be installed
+- XLWings Excel Add In must be installed
 
     > xlwings addin install
 
 The following steps should be performed thanks to a script:
 - The following python modules must be installed:
 
-    - pywin32
-    - xlwings
-    - requests
-    - pandas
+    - pywin32 (https://sourceforge.net/projects/pywin32/)
+    - xlwings (https://www.xlwings.org/)
+    - requests (http://docs.python-requests.org/en/master/)
+    - pandas (http://pandas.pydata.org/)
 
 - Update default configuration: To be explained here
 - Install Auto Load XLWings Excel AddIn: To be explained here
