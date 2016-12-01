@@ -8,11 +8,11 @@
 
 - Within Excel, enable "Trust access to the VBA project object model"
 
-    File > Options > Trust Center > Trust Center Settings > Macro Settings
+    > File > Options > Trust Center > Trust Center Settings > Macro Settings
 
 - XLWings Excel Add In must be installed
 
-    xlwings addin install
+    > xlwings addin install
 
 The following steps should be performed thanks to a script:
 - The following python modules must be installed:
