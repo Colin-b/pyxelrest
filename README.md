@@ -6,7 +6,10 @@
 
     - You can download it from https://www.python.org/ftp/python/3.6.0/python-3.6.0b4-amd64.exe
 
-- "Trust access to the VBA project object model" should be enabled under Excel "File > Options > Trust Center > Trust Center Settings > Macro Settings"
+- Within Excel, enable "Trust access to the VBA project object model"
+
+    File > Options > Trust Center > Trust Center Settings > Macro Settings
+
 - XLWings Excel Add In must be installed
 
     xlwings addin install
