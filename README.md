@@ -14,9 +14,8 @@
     - [requests](http://docs.python-requests.org/en/master/)
     - [pandas](http://pandas.pydata.org/)
 
-    Thanks to the following commands:
+    Thanks to the following command executed from within src\main\python folder:
 
-            cd src\main\python
             pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
 
 - PathToXlWingsBasFile environment variable must be set to the path of xlwings.bas
