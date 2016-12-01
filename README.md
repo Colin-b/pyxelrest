@@ -2,10 +2,7 @@
 
 ## Client Requirements
 
-- Python >= 3.6 must be installed
-
-    - You can download it from https://www.python.org/ftp/python/3.6.0/python-3.6.0b4-amd64.exe
-
+- [Python >= 3.6](https://www.python.org/ftp/python/3.6.0/python-3.6.0b4-amd64.exe) must be installed
 - Within Excel, enable "Trust access to the VBA project object model"
 
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
@@ -13,10 +10,10 @@
 The following steps should be performed thanks to a script:
 - The following python modules must be installed:
 
-    - pywin32 (https://sourceforge.net/projects/pywin32/)
-    - xlwings (https://www.xlwings.org/)
-    - requests (http://docs.python-requests.org/en/master/)
-    - pandas (http://pandas.pydata.org/)
+    - [pywin32](https://sourceforge.net/projects/pywin32/)
+    - [xlwings](https://www.xlwings.org/)
+    - [requests](http://docs.python-requests.org/en/master/)
+    - [pandas](http://pandas.pydata.org/)
 
 - PathToXlWingsBasFile environment variable must be set to the path of xlwings.bas
 
