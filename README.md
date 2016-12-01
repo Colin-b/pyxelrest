@@ -9,14 +9,14 @@
 
 - The following python modules must be installed:
 
-    - [pywin32](https://sourceforge.net/projects/pywin32/)
+    - [pywin32](https://sourceforge.net/projects/pywin32/) from http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32
     - [xlwings](https://www.xlwings.org/)
     - [requests](http://docs.python-requests.org/en/master/)
     - [pandas](http://pandas.pydata.org/)
 
     Thanks to the following command executed from within src\main\python folder:
 
-            pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+            pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 
 - PathToXlWingsBasFile environment variable must be set to the path of xlwings.bas
 
