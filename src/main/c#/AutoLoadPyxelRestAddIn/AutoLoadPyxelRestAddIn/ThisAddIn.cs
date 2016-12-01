@@ -1,32 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
-using Office = Microsoft.Office.Core;
-using Microsoft.Office.Tools.Excel;
+using Microsoft.Vbe.Interop;
 
 namespace AutoLoadPyxelRestAddIn
 {
     public partial class ThisAddIn
     {
-        private void ThisAddIn_Startup(object sender, System.EventArgs e)
+        private static readonly string XLWINGS_VB_COMPONENT_NAME = "xlwings";
+        private static readonly string PATH_TO_XLWINGS_BAS_ENV_VAR = "PathToXlWingsBasFile";
+
+        private void ThisAddIn_Startup(object sender, EventArgs e)
         {
-            ((Excel.AppEvents_Event)Application).NewWorkbook += OnNewWorkBook;
-            // TODO Handle Opening of books without module already imported
+            Application.WorkbookOpen += ImportXlWingsBasFile;
         }
 
-        private void OnNewWorkBook(Excel.Workbook Wb)
+        private void ImportXlWingsBasFile(Excel.Workbook Wb)
         {
-            string pathToBasFile = Environment.GetEnvironmentVariable("PathToXlWingsBasFile");
+            string pathToBasFile = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR);
             if (pathToBasFile != null && pathToBasFile.Length > 0)
             {
-                Wb.VBProject.VBComponents.Import(pathToBasFile);
+                if (CanImportXlWingsBasFile(Wb))
+                    Wb.VBProject.VBComponents.Import(pathToBasFile);
             }
         }
 
-        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
+        private bool CanImportXlWingsBasFile(Excel.Workbook Wb)
+        {
+            foreach (VBComponent vbComponent in Wb.VBProject.VBComponents)
+            {
+                if (XLWINGS_VB_COMPONENT_NAME.Equals(vbComponent.Name))
+                {
+                    if (RemoveXlWingsModule(Wb, vbComponent))
+                        break;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool RemoveXlWingsModule(Excel.Workbook Wb, VBComponent vbComponent)
+        {
+            try
+            {
+                Wb.VBProject.VBComponents.Remove(vbComponent);
+            }
+            catch
+            {
+                // TODO Log the fact that module could not be removed and the reason
+                return false;
+            };
+            return true;
+        }
+
+        private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
         }
 
