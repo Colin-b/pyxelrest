@@ -22,8 +22,8 @@ The following steps should be performed thanks to a script:
 
     - You can retrieve this path thanks to the following python code:
 
-        > import xlwings
-        > print(xlwings.__path__[0])
+            import xlwings
+            print(xlwings.__path__[0])
 
 - Update default XLWings UDF configuration
 
@@ -33,7 +33,7 @@ The following steps should be performed thanks to a script:
 
 - XLWings Excel Add In must be installed
 
-    > xlwings addin install
+        xlwings addin install
 
 - Auto Load PyxelRest Excel Add In must be installed
 
@@ -53,6 +53,6 @@ The following commands should be executed within the project folder:
 
 In case your IDE is PyCharm, you will need to add a local virtual environment to your project.
 
-    Settings > Project > Python Interpreter > Add local
+> Settings > Project > Python Interpreter > Add local
 
 And then specify your python executable in env\Scripts
