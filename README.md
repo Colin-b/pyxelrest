@@ -10,7 +10,7 @@
 
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
 
-- XLWings Excel Add In must be installed
+- XLWings (https://www.xlwings.org/) Excel Add In must be installed
 
     > xlwings addin install
 
