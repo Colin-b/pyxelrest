@@ -17,7 +17,6 @@
 
     - [xlwings](https://www.xlwings.org/)
     - [requests](http://docs.python-requests.org/en/master/)
-    - [pandas](http://pandas.pydata.org/)
 
     Thanks to the following command executed from within src\main\python folder:
 
