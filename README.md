@@ -9,16 +9,18 @@
 
 - The following python modules must be installed (using python 3.6 pip):
 
-    - [pywin32](https://sourceforge.net/projects/pywin32/) should be downloaded from http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32
+    - [pywin32](https://sourceforge.net/projects/pywin32/) is an xlwings dependency
 
+    It can be downloaded from http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32
     And installed thanks to the following command:
 
             pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
 
-    - [xlwings](https://www.xlwings.org/)
-    - [requests](http://docs.python-requests.org/en/master/)
+    - [jinja2] (http://jinja.pocoo.org/) is used to generate a python file containing UDFs
+    - [xlwings](https://www.xlwings.org/) is used to interpret generated UDFs python file
+    - [requests](http://docs.python-requests.org/en/master/) is used to communicate with services
 
-    Thanks to the following command executed from within src\main\python folder:
+    They can be downloaded thanks to the following command executed from within src\main\python folder:
 
             pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 

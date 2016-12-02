@@ -11,10 +11,18 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
-            Application.WorkbookOpen += ImportXlWingsBasFile;
+            ((Excel.AppEvents_Event)Application).NewWorkbook += InsertXlWingsBasFile;
+            Application.WorkbookOpen += UpdateXlWingsBasFile;
         }
 
-        private void ImportXlWingsBasFile(Excel.Workbook Wb)
+        private void InsertXlWingsBasFile(Excel.Workbook Wb)
+        {
+            string pathToBasFile = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR);
+            if (pathToBasFile != null && pathToBasFile.Length > 0)
+                Wb.VBProject.VBComponents.Import(pathToBasFile);
+        }
+
+        private void UpdateXlWingsBasFile(Excel.Workbook Wb)
         {
             string pathToBasFile = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR);
             if (pathToBasFile != null && pathToBasFile.Length > 0)
@@ -26,13 +34,16 @@ namespace AutoLoadPyxelRestAddIn
 
         private bool CanImportXlWingsBasFile(Excel.Workbook Wb)
         {
-            foreach (VBComponent vbComponent in Wb.VBProject.VBComponents)
+            if(Wb.HasVBProject)
             {
-                if (XLWINGS_VB_COMPONENT_NAME.Equals(vbComponent.Name))
+                foreach (VBComponent vbComponent in Wb.VBProject.VBComponents)
                 {
-                    if (RemoveXlWingsModule(Wb, vbComponent))
-                        break;
-                    return false;
+                    if (XLWINGS_VB_COMPONENT_NAME.Equals(vbComponent.Name))
+                    {
+                        if (RemoveXlWingsModule(Wb, vbComponent))
+                            break;
+                        return false;
+                    }
                 }
             }
             return true;
