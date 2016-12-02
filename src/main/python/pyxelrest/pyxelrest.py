@@ -40,23 +40,28 @@ class SwaggerService:
 
 
 def load_services(config_file_path):
-    config = ConfigParser()
+    config_parser = ConfigParser()
     file_path = os.path.abspath(config_file_path)
-    if not config.read(file_path):
+    if not config_parser.read(file_path):
         raise Exception(f'"{file_path}" configuration file cannot be read.')
-    return [
-        SwaggerService(service, config) for service in config.sections()
-    ]
+    return [SwaggerService(service, config_parser) for service in config_parser.sections()]
 
 
-with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
+def user_defined_functions():
     renderer = Environment(loader=FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
-    generated_file_content = renderer.get_template('user_defined_functions.tpl').render(
+    return renderer.get_template('user_defined_functions.tpl').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=load_services('resources/config/default.ini'),
         modified_parameters={value: key for key, value in vba_restricted_keywords.items()}
     )
-    generated_file.write(generated_file_content)
+
+
+def generate_user_defined_functions():
+    with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
+        generated_file.write(user_defined_functions())
+
+
+generate_user_defined_functions()
 
 from src.main.python.pyxelrest.user_defined_functions import *
 
