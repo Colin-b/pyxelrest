@@ -16,7 +16,7 @@
 
             pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
 
-    - [jinja2] (http://jinja.pocoo.org/) is used to generate a python file containing UDFs
+    - [jinja2](http://jinja.pocoo.org/) is used to generate a python file containing UDFs
     - [xlwings](https://www.xlwings.org/) is used to interpret generated UDFs python file
     - [requests](http://docs.python-requests.org/en/master/) is used to communicate with services
 
