@@ -7,7 +7,7 @@
 
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
 
-- The following python modules must be installed:
+- The following python modules must be installed (using python 3.6 pip):
 
     - [pywin32](https://sourceforge.net/projects/pywin32/) should be downloaded from http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32
 

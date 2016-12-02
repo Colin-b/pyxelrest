@@ -225,7 +225,7 @@ from pandas.io.json import json_normalize
 {% macro add_udf(service, method_path, method, request_macro) %}
 {% if 'application/octet-stream' not in method['produces'] %}
 {% set method_parameters = method['parameters'] %}
-@xw.func
+@xw.func(category='{{ service.udf_prefix }}')
 {% for parameter in method_parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
