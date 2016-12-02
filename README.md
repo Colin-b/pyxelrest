@@ -11,8 +11,8 @@
 
     - [pywin32](https://sourceforge.net/projects/pywin32/) is an xlwings dependency
 
-    It can be downloaded from http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32
-    And installed thanks to the following command:
+        - It should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32)
+        - And installed thanks to the following command:
 
             pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
 
