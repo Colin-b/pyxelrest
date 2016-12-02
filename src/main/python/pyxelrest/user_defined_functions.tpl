@@ -7,8 +7,6 @@ import xlwings as xw
 import requests
 import datetime
 from requests.exceptions import HTTPError
-from pandas import read_json
-from pandas.io.json import json_normalize
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -23,7 +21,7 @@ from pandas.io.json import json_normalize
 {% endmacro -%}
 
 {%- macro get(server_uri, method_path) %}
-    response = requests.get(f'{{ server_uri }}{{ method_path }}', request_parameters)
+    response = requests.get(f'{{ server_uri }}{{ method_path }}', request_parameters, stream=True)
 {% endmacro -%}
 
 {%- macro post(server_uri, method_path) %}
@@ -245,10 +243,14 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|ma
     try:
     {{ request_macro(service.uri, method_path) }}
 {% if 'application/json' in method['produces'] %}
-        return to_pandas_dataframe(response.json())
+        response_json = response.json()
+        response.close()
+        return to_list(response_json)
 {% else %}
+        response_content = response.content
+        response.close()
         response.raise_for_status()
-        return response.text[:255]
+        return response_content[:255]
     except HTTPError as http_error:
         return http_error.message[:255]
 {% endif %}
@@ -324,13 +326,3 @@ def to_list(data):
             return flattened_list_of_dicts(data)
         return data
     return [data]
-
-
-def to_pandas_dataframe(json_data):
-    if not isinstance(json_data, dict):
-        raise Exception('Expecting JSON')
-    if len(json_data) == 1:
-        value = next(iter(json_data.values()))
-        if isinstance(value, list):
-            return json_normalize(value)
-    return json_normalize(json_data)
