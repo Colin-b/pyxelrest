@@ -11,7 +11,7 @@
 
     - [pywin32](https://sourceforge.net/projects/pywin32/) should be downloaded from http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32
 
-    And installed thanks to the following command executed from within src\main\python folder:
+    And installed thanks to the following command:
 
             pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
 
