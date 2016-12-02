@@ -14,7 +14,7 @@
         - It should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32)
         - And installed thanks to the following command:
 
-            pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
+                pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
 
     - [jinja2](http://jinja.pocoo.org/) is used to generate a python file containing UDFs
     - [xlwings](https://www.xlwings.org/) is used to interpret generated UDFs python file
