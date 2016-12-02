@@ -22,7 +22,7 @@
 
     They can be downloaded thanks to the following command executed from within src\main\python folder:
 
-            pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
+        pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 
 - PathToXlWingsBasFile environment variable must be set to the path of xlwings.bas
 
