@@ -228,9 +228,18 @@ from requests.exceptions import HTTPError
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
 {% if 'application/json' in method['produces'] %}
-@xw.ret(expand='table', index=True)
+@xw.ret(expand='table')
 {% endif %}
-def {{ service.udf_prefix }}_{{ method['operationId'] }}({{ method_parameters|map(attribute='name')|join(', ') }}):
+{% set required_parameters = method_parameters|selectattr('required') %}
+{% set nb_required_parameters = method_parameters|selectattr('required')|list|count %}
+{% set path_parameters = method_parameters|rejectattr('required')|selectattr('in', 'equalto', 'path') %}
+{% set nb_path_parameters = method_parameters|rejectattr('required')|selectattr('in', 'equalto', 'path')|list|count %}
+{% set optional_parameters = method_parameters|rejectattr('required')|rejectattr('in', 'equalto', 'path') %}
+{% set nb_optional_parameters = method_parameters|rejectattr('required')|rejectattr('in', 'equalto', 'path')|list|count %}
+def {{ service.udf_prefix }}_{{ method['operationId'] }}(
+    {%- for parameter in required_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_optional_parameters > 0 or nb_path_parameters > 0 %}, {% endif %}{% endfor %}
+    {%- for parameter in path_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_optional_parameters > 0 %}, {% endif %}{% endfor %}
+    {%- for parameter in optional_parameters %}{{ parameter['name'] }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
 {% if 'summary' in method and method['summary'] %}
     """{{ method['summary'] }}"""
 {% endif %}
