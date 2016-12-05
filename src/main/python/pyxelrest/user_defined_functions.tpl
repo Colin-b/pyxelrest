@@ -16,35 +16,67 @@ from requests.exceptions import HTTPError
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(server_uri, method_path, contains_parameters) %}
+{%- macro delete(server_uri, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.delete(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+    response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+), data=request_body, params=request_parameters)
 {% else %}
-    response = requests.delete(f'{{ server_uri }}{{ method_path }}')
+    response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+))
 {% endif %}
 {% endmacro -%}
 
-{%- macro get(server_uri, method_path, contains_parameters) %}
+{%- macro get(server_uri, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.get(f'{{ server_uri }}{{ method_path }}', request_parameters, stream=True)
+    response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+), request_parameters, stream=True)
 {% else %}
-    response = requests.get(f'{{ server_uri }}{{ method_path }}', stream=True)
+    response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+), stream=True)
 {% endif %}
 {% endmacro -%}
 
-{%- macro post(server_uri, method_path, contains_parameters) %}
+{%- macro post(server_uri, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.post(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+    response = requests.post('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+), data=request_body, params=request_parameters)
 {% else %}
-    response = requests.post(f'{{ server_uri }}{{ method_path }}')
+    response = requests.post('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+))
 {% endif %}
 {% endmacro -%}
 
-{%- macro put(server_uri, method_path, contains_parameters) %}
+{%- macro put(server_uri, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.put(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+    response = requests.put('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+), data=request_body, params=request_parameters)
 {% else %}
-    response = requests.put(f'{{ server_uri }}{{ method_path }}')
+    response = requests.put('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+))
 {% endif %}
 {% endmacro -%}
 
@@ -289,7 +321,8 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {{ validate_optional_parameter(parameter, method) }}
 {% endfor %}
     try:
-    {{ request_macro(service.uri, method_path, contains_parameters) }}
+{% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
+    {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}
 {% if 'application/json' in method['produces'] %}
         response_json = response.json()
         response.close()
