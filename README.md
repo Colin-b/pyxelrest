@@ -15,6 +15,9 @@
         - And installed thanks to the following command:
 
                 pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
+		- To install pywin32 system files, launch an elevated command prompt
+		
+				python.exe Scripts\pywin32_postinstall.py -install
 
     - [jinja2](http://jinja.pocoo.org/) is used to generate a python file containing UDFs
     - [xlwings](https://www.xlwings.org/) is used to interpret generated UDFs python file
@@ -33,7 +36,7 @@
 
 - Update xlwings.bas Settings function:
 
-        PYTHON_WIN = "path\to\your\local\environment\Scripts\pythonw.exe"
+        PYTHON_WIN = "path\to\your\local\environment\pythonw.exe"
         PYTHONPATH = "path\to\the\pyxelrest\module\folder"
         UDF_MODULES = "pyxelrest"
 
