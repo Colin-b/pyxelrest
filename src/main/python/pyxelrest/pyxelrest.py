@@ -1,8 +1,10 @@
 import datetime
-import os
+import os, sys
 from configparser import ConfigParser
 import requests
 from jinja2 import Environment, FileSystemLoader
+
+PY2 = sys.version_info[0] == 2
 
 # Some parameter names might be VBA keywords
 vba_restricted_keywords = {
@@ -16,11 +18,11 @@ class SwaggerService:
         self.udf_prefix = udf_prefix
 
         if 'host' not in section:
-            raise Exception(f'"{udf_prefix}" configuration section must provide "host".')
+            raise Exception('"{0}" configuration section must provide "host".'.format(udf_prefix))
         self.uri = section['host']
 
         if 'methods' not in section:
-            raise Exception(f'"{udf_prefix}" configuration section must provide "methods".')
+            raise Exception('"{0}" configuration section must provide "methods".'.format(udf_prefix))
         self.methods = [method.strip() for method in section['methods'].split(',')]
 
         # Consider that swagger is provided by base url
@@ -43,7 +45,7 @@ def load_services(config_file_path):
     config_parser = ConfigParser()
     file_path = os.path.abspath(config_file_path)
     if not config_parser.read(file_path):
-        raise Exception(f'"{file_path}" configuration file cannot be read.')
+        raise Exception('"{0}" configuration file cannot be read.'.format(file_path))
     return [SwaggerService(service, config_parser) for service in config_parser.sections()]
 
 
@@ -66,5 +68,5 @@ generate_user_defined_functions()
 from src.main.python.pyxelrest.user_defined_functions import *
 
 # Uncomment to debug Microsoft Excel UDF calls
-if __name__ == '__main__':
-    xw.serve()
+# if __name__ == '__main__':
+#     xw.serve()

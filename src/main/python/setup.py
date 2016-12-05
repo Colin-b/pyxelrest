@@ -8,6 +8,7 @@ setup(name='pyxelrest',
           "Intended Audience :: Developers"
           "Programming Language :: Python",
           "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.6",
           "Operating System :: Microsoft :: Windows :: Windows 7"
       ],
       keywords='excel pyxelrest swagger',

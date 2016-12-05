@@ -16,20 +16,36 @@ from requests.exceptions import HTTPError
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(server_uri, method_path) %}
+{%- macro delete(server_uri, method_path, contains_parameters) %}
+{% if contains_parameters %}
     response = requests.delete(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+{% else %}
+    response = requests.delete(f'{{ server_uri }}{{ method_path }}')
+{% endif %}
 {% endmacro -%}
 
-{%- macro get(server_uri, method_path) %}
+{%- macro get(server_uri, method_path, contains_parameters) %}
+{% if contains_parameters %}
     response = requests.get(f'{{ server_uri }}{{ method_path }}', request_parameters, stream=True)
+{% else %}
+    response = requests.get(f'{{ server_uri }}{{ method_path }}', stream=True)
+{% endif %}
 {% endmacro -%}
 
-{%- macro post(server_uri, method_path) %}
+{%- macro post(server_uri, method_path, contains_parameters) %}
+{% if contains_parameters %}
     response = requests.post(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+{% else %}
+    response = requests.post(f'{{ server_uri }}{{ method_path }}')
+{% endif %}
 {% endmacro -%}
 
-{%- macro put(server_uri, method_path) %}
+{%- macro put(server_uri, method_path, contains_parameters) %}
+{% if contains_parameters %}
     response = requests.put(f'{{ server_uri }}{{ method_path }}', data=request_body, params=request_parameters)
+{% else %}
+    response = requests.put(f'{{ server_uri }}{{ method_path }}')
+{% endif %}
 {% endmacro -%}
 
 {% macro validate_parameter_value(parameter, method) %}
@@ -70,9 +86,9 @@ from requests.exceptions import HTTPError
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
 {% if 'application/json' in method['produces'] %}
-            return [f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.']
+            return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
-            return f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'
+            return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})
 {% endif %}
 {% endif %}
 {% endif %}
@@ -153,16 +169,16 @@ from requests.exceptions import HTTPError
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
 {% if 'application/json' in method['produces'] %}
-                    return [f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}_item{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.']
+                    return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)]
 {% else %}
-                    return f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}_item{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'
+                    return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)
 {% endif %}
         else:
             if {{param_name}} not in {{ param_items_enum }}:
 {% if 'application/json' in method['produces'] %}
-                return [f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.']
+                return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
-                return f'{{ param_name }} value "{% raw %}{{% endraw %}{{ param_name }}{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'
+                return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})
 {% endif %}
 {% endif %}
 {% endif %}
@@ -171,26 +187,15 @@ from requests.exceptions import HTTPError
 {% endif %}
 {% endmacro %}
 
-{% macro validate_parameter(parameter, method) %}
+{% macro validate_required_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
-{% set param_required = parameter['required'] and not parameter['default'] %}
-{% if param_in == 'path' %}
-    if not {{ param_name }}:
-{% if 'application/json' in method['produces'] %}
-        return ['{{ param_name }} is required.']
-{% else %}
-        return '{{ param_name }} is required.'
-{% endif %}
-{% else %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
-{% if param_required %}
     if not {{ param_name }}:
 {% if 'application/json' in method['produces'] %}
         return ['{{ param_name }} is required.']
 {% else %}
         return '{{ param_name }} is required.'
-{% endif %}
 {% endif %}
     if {{ param_name }}:
         {{ validate_parameter_value(parameter, method) }}
@@ -199,6 +204,28 @@ from requests.exceptions import HTTPError
 {% elif param_in == 'body' %}
         request_body['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
+{% endmacro %}
+
+{% macro validate_path_parameter(parameter, method) %}
+{% set param_name = parameter['name'] %}
+    if not {{ param_name }}:
+{% if 'application/json' in method['produces'] %}
+        return ['{{ param_name }} is required.']
+{% else %}
+        return '{{ param_name }} is required.'
+{% endif %}
+{% endmacro %}
+
+{% macro validate_optional_parameter(parameter, method) %}
+{% set param_name = parameter['name'] %}
+{% set param_in = parameter['in'] %}
+{% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
+    if {{ param_name }}:
+        {{ validate_parameter_value(parameter, method) }}
+{% if param_in == 'query' %}
+        request_parameters['{{ server_param_name }}'] = {{ param_name }}
+{% elif param_in == 'body' %}
+        request_body['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
 {% endmacro %}
 
@@ -230,27 +257,39 @@ from requests.exceptions import HTTPError
 {% if 'application/json' in method['produces'] %}
 @xw.ret(expand='table')
 {% endif %}
-{% set required_parameters = method_parameters|selectattr('required') %}
-{% set nb_required_parameters = method_parameters|selectattr('required')|list|count %}
-{% set path_parameters = method_parameters|rejectattr('required')|selectattr('in', 'equalto', 'path') %}
-{% set nb_path_parameters = method_parameters|rejectattr('required')|selectattr('in', 'equalto', 'path')|list|count %}
+{% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
+{% set nb_path_parameters = method_parameters|selectattr('in', 'equalto', 'path')|list|count %}
+{% set required_parameters = method_parameters|selectattr('required')|rejectattr('in', 'equalto', 'path') %}
+{% set nb_required_parameters = method_parameters|selectattr('required')|rejectattr('in', 'equalto', 'path')|list|count %}
 {% set optional_parameters = method_parameters|rejectattr('required')|rejectattr('in', 'equalto', 'path') %}
 {% set nb_optional_parameters = method_parameters|rejectattr('required')|rejectattr('in', 'equalto', 'path')|list|count %}
 def {{ service.udf_prefix }}_{{ method['operationId'] }}(
-    {%- for parameter in required_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_optional_parameters > 0 or nb_path_parameters > 0 %}, {% endif %}{% endfor %}
-    {%- for parameter in path_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_optional_parameters > 0 %}, {% endif %}{% endfor %}
+    {%- for parameter in path_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_required_parameters > 0 or nb_optional_parameters > 0 %}, {% endif %}{% endfor %}
+    {%- for parameter in required_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_optional_parameters > 0 %}, {% endif %}{% endfor %}
     {%- for parameter in optional_parameters %}{{ parameter['name'] }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
 {% if 'summary' in method and method['summary'] %}
     """{{ method['summary'] }}"""
 {% endif %}
+{% set contains_parameters = nb_required_parameters > 0 or nb_optional_parameters > 0 %}
+{% if contains_parameters %}
     request_parameters = {}
     request_body = {}
 
-{% for parameter in method_parameters %}
-{{ validate_parameter(parameter, method) }}
+{% endif %}
+{% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
+{% for parameter in path_parameters %}
+{{ validate_path_parameter(parameter, method) }}
+{% endfor %}
+{% set required_parameters = method_parameters|selectattr('required')|rejectattr('in', 'equalto', 'path') %}
+{% for parameter in required_parameters %}
+{{ validate_required_parameter(parameter, method) }}
+{% endfor %}
+{% set optional_parameters = method_parameters|rejectattr('required')|rejectattr('in', 'equalto', 'path') %}
+{% for parameter in optional_parameters %}
+{{ validate_optional_parameter(parameter, method) }}
 {% endfor %}
     try:
-    {{ request_macro(service.uri, method_path) }}
+    {{ request_macro(service.uri, method_path, contains_parameters) }}
 {% if 'application/json' in method['produces'] %}
         response_json = response.json()
         response.close()

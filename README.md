@@ -15,8 +15,9 @@
         - And installed thanks to the following command:
 
                 pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
+
 		- To install pywin32 system files, launch an elevated command prompt
-		
+
 				python.exe Scripts\pywin32_postinstall.py -install
 
     - [jinja2](http://jinja.pocoo.org/) is used to generate a python file containing UDFs
