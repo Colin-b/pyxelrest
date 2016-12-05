@@ -4,8 +4,6 @@ from configparser import ConfigParser
 import requests
 from jinja2 import Environment, FileSystemLoader
 
-PY2 = sys.version_info[0] == 2
-
 # Some parameter names might be VBA keywords
 vba_restricted_keywords = {
     'currency': 'currency_visual_basic'
