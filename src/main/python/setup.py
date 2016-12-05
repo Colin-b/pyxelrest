@@ -18,7 +18,6 @@ setup(name='pyxelrest',
       install_requires=[
           'jinja2',
           'requests',
-          'xlwings',
-          'pywin32>=219'
+          'xlwings'
         ]
       )
