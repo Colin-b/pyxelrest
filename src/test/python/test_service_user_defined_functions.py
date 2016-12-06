@@ -15,10 +15,178 @@ from requests.exceptions import HTTPError
 
 
 @xw.func(category='test')
-def test_get_test_string():
+def test_get_test_without_parameter():
     try:
-        response = requests.get('http://localhost:8943/test/string'.format(
+        response = requests.get('http://localhost:8943/test/without/parameter'.format(
 ), stream=True)
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+def test_post_test_without_parameter():
+    try:
+        response = requests.post('http://localhost:8943/test/without/parameter'.format(
+))
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+def test_put_test_without_parameter():
+    try:
+        response = requests.put('http://localhost:8943/test/without/parameter'.format(
+))
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+def test_delete_test_without_parameter():
+    try:
+        response = requests.delete('http://localhost:8943/test/without/parameter'.format(
+))
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+@xw.ret(expand='table')
+def test_get_test_json_without_parameter():
+    try:
+        response = requests.get('http://localhost:8943/test/json/without/parameter'.format(
+), stream=True)
+
+        response_json = response.json()
+        response.close()
+        return to_list(response_json)
+    except Exception as error:
+        return [response.text[:255] if response else error.message[:255]]
+
+
+@xw.func(category='test')
+@xw.ret(expand='table')
+def test_post_test_json_without_parameter():
+    try:
+        response = requests.post('http://localhost:8943/test/json/without/parameter'.format(
+))
+
+        response_json = response.json()
+        response.close()
+        return to_list(response_json)
+    except Exception as error:
+        return [response.text[:255] if response else error.message[:255]]
+
+
+@xw.func(category='test')
+@xw.ret(expand='table')
+def test_put_test_json_without_parameter():
+    try:
+        response = requests.put('http://localhost:8943/test/json/without/parameter'.format(
+))
+
+        response_json = response.json()
+        response.close()
+        return to_list(response_json)
+    except Exception as error:
+        return [response.text[:255] if response else error.message[:255]]
+
+
+@xw.func(category='test')
+@xw.ret(expand='table')
+def test_delete_test_json_without_parameter():
+    try:
+        response = requests.delete('http://localhost:8943/test/json/without/parameter'.format(
+))
+
+        response_json = response.json()
+        response.close()
+        return to_list(response_json)
+    except Exception as error:
+        return [response.text[:255] if response else error.message[:255]]
+
+
+@xw.func(category='test')
+def test_get_test_plain_text_without_parameter():
+    try:
+        response = requests.get('http://localhost:8943/test/plain/text/without/parameter'.format(
+), stream=True)
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+def test_post_test_plain_text_without_parameter():
+    try:
+        response = requests.post('http://localhost:8943/test/plain/text/without/parameter'.format(
+))
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+def test_put_test_plain_text_without_parameter():
+    try:
+        response = requests.put('http://localhost:8943/test/plain/text/without/parameter'.format(
+))
+
+        response_content = response.content
+        response.close()
+        response.raise_for_status()
+        return response_content[:255]
+    except HTTPError as http_error:
+        return http_error.message[:255]
+    except Exception as error:
+        return response.text[:255] if response else error.message[:255]
+
+
+@xw.func(category='test')
+def test_delete_test_plain_text_without_parameter():
+    try:
+        response = requests.delete('http://localhost:8943/test/plain/text/without/parameter'.format(
+))
 
         response_content = response.content
         response.close()
