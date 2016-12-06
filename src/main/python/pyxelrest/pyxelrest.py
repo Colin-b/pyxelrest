@@ -1,3 +1,7 @@
+"""
+Each time the pyxelrest module is imported it will generate xlwings User Defined Functions.
+"""
+
 import datetime
 import os, sys
 from configparser import ConfigParser
