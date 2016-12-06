@@ -309,7 +309,7 @@ from requests.exceptions import HTTPError
 {% macro add_udf(service, method_path, method, request_macro) %}
 {% if 'application/octet-stream' not in method['produces'] %}
 {% set method_parameters = method['parameters'] %}
-@xw.func(category='{{ service.udf_prefix }}')
+@xw.func(category='{{ service.udf_prefix }}', call_while_in_wizard=False)
 {% for parameter in method_parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}

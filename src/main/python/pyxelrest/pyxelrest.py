@@ -84,15 +84,14 @@ class SwaggerService:
                             parameter['name'] = vba_restricted_keywords[parameter['name']]
 
 
-def load_services(config_file_path):
+def load_services():
     """
     Retrieve swagger JSON for each service defined in configuration file.
-    :param config_file_path: Absolute file path (related to this file) to configuration file.
     :return: List of SwaggerService objects, size is the same one as the number of sections within configuration file
     (DEFAULT excluded).
     """
     config_parser = ConfigParser()
-    file_path = os.path.abspath(config_file_path)
+    file_path = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
     if not config_parser.read(file_path):
         raise Exception('"{0}" configuration file cannot be read.'.format(file_path))
     return [SwaggerService(service, config_parser) for service in config_parser.sections()]
@@ -106,7 +105,7 @@ def user_defined_functions():
     renderer = Environment(loader=FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
     return renderer.get_template('user_defined_functions.tpl').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
-        services=load_services('resources/config/default.ini'),
+        services=load_services(),
         modified_parameters={value: key for key, value in vba_restricted_keywords.items()}
     )
 
@@ -122,7 +121,10 @@ def generate_user_defined_functions():
 
 generate_user_defined_functions()
 
-from src.main.python.pyxelrest.user_defined_functions import *
+try:
+    from src.main.python.pyxelrest.user_defined_functions import *
+except ModuleNotFoundError:
+    from pyxelrest.user_defined_functions import *
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':
