@@ -3,11 +3,12 @@ Each time the pyxelrest module is imported it will generate xlwings User Defined
 """
 
 import datetime
-import os, sys
+import os
+import sys
 try:
     # Python 3
     from configparser import ConfigParser
-except:
+except ImportError:
     # Python 2
     from ConfigParser import ConfigParser
 import requests
@@ -26,12 +27,6 @@ class SwaggerService:
         :param udf_prefix: Prefix to use in front of services UDFs to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
-        try:
-            # Python 3
-            section = config[udf_prefix]
-        except:
-            # Python 2
-            section = config.items(udf_prefix)
         self.udf_prefix = udf_prefix
         self.uri = self.get_item(config, 'host')
         self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',')]
@@ -47,7 +42,7 @@ class SwaggerService:
             if key not in section:
                 raise Exception('"{0}" configuration section must provide "{1}".'.format(self.udf_prefix, key))
             return section[key]
-        except:
+        except AttributeError:
             # Python 2
             if not config.has_option(self.udf_prefix, key):
                 raise Exception('"{0}" configuration section must provide "{1}".'.format(self.udf_prefix, key))
@@ -58,7 +53,7 @@ class SwaggerService:
             # Python 3
             section = config[self.udf_prefix]
             return section[key] if key in section else default_value
-        except:
+        except AttributeError:
             # Python 2
             return config.get(self.udf_prefix, key) if config.has_option(self.udf_prefix, key) else default_value
 
