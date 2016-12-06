@@ -78,9 +78,10 @@ class SwaggerService:
         """
         for methods in swagger_json['paths'].values():
             for method in methods.values():
-                for parameter in method['parameters']:
-                    if parameter['name'] in vba_restricted_keywords:
-                        parameter['name'] = vba_restricted_keywords[parameter['name']]
+                if 'parameters' in method:
+                    for parameter in method['parameters']:
+                        if parameter['name'] in vba_restricted_keywords:
+                            parameter['name'] = vba_restricted_keywords[parameter['name']]
 
 
 def load_services(config_file_path):
