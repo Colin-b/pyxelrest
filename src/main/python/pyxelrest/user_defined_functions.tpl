@@ -124,6 +124,14 @@ from requests.exceptions import HTTPError
 {% endif %}
 {% endif %}
 {% endif %}
+{% elif param_type == 'boolean' -%}
+        if {{param_name}} not in ['true', 'false']:
+{% if 'application/json' in method['produces'] %}
+            return ['{{ param_name }} must be either "true" or "false".']
+{% else %}
+            return '{{ param_name }} must be either "true" or "false".'
+{% endif %}
+        {{param_name}} = {{param_name}} == 'true'
 {% elif param_type == 'array' -%}
 {# Array Type check #}
 {% set param_items = parameter['items'] %}
@@ -215,6 +223,25 @@ from requests.exceptions import HTTPError
 {% endif %}
 {% endif %}
 {% endif %}
+{% elif param_items_type == 'boolean' -%}
+        if isinstance({{param_name}}, list):
+            for {{param_name}}_item in {{param_name}}:
+                if {{param_name}}_item not in ['true', 'false']:
+{% if 'application/json' in method['produces'] %}
+                    return ['{{ param_name }} must be either "true" or "false".']
+{% else %}
+                    return '{{ param_name }} must be either "true" or "false".'
+{% endif %}
+                else:
+                    {{param_name}}_item = {{param_name}}_item == 'true'
+        else:
+            if {{param_name}} not in ['true', 'false']:
+{% if 'application/json' in method['produces'] %}
+                return ['{{ param_name }} must contains "true" or "false".']
+{% else %}
+                return '{{ param_name }} must contains "true" or "false".'
+{% endif %}
+            {{param_name}} = {{param_name}} == 'true'
 {# End of Array Type check #}
 {% endif %}
 {% endmacro %}
