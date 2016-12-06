@@ -4,7 +4,12 @@ Each time the pyxelrest module is imported it will generate xlwings User Defined
 
 import datetime
 import os, sys
-from configparser import ConfigParser
+try:
+    # Python 3
+    from configparser import ConfigParser
+except:
+    # Python 2
+    from ConfigParser import ConfigParser
 import requests
 from jinja2 import Environment, FileSystemLoader
 
@@ -21,20 +26,41 @@ class SwaggerService:
         :param udf_prefix: Prefix to use in front of services UDFs to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
-        section = config[udf_prefix]
+        try:
+            # Python 3
+            section = config[udf_prefix]
+        except:
+            # Python 2
+            section = config.items(udf_prefix)
         self.udf_prefix = udf_prefix
-
-        if 'host' not in section:
-            raise Exception('"{0}" configuration section must provide "host".'.format(udf_prefix))
-        self.uri = section['host']
-
-        if 'methods' not in section:
-            raise Exception('"{0}" configuration section must provide "methods".'.format(udf_prefix))
-        self.methods = [method.strip() for method in section['methods'].split(',')]
+        self.uri = self.get_item(config, 'host')
+        self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',')]
 
         # Consider that swagger is provided by base url
-        swagger_suffix = section['swaggerBasePath'] if 'swaggerBasePath' in section else '/'
+        swagger_suffix = self.get_item_default(config, 'swaggerBasePath', '/')
         self.swagger = self._retrieve_swagger(swagger_suffix)
+
+    def get_item(self, config, key):
+        try:
+            # Python 3
+            section = config[self.udf_prefix]
+            if key not in section:
+                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.udf_prefix, key))
+            return section[key]
+        except:
+            # Python 2
+            if not config.has_option(self.udf_prefix, key):
+                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.udf_prefix, key))
+            return config.get(self.udf_prefix, key)
+
+    def get_item_default(self, config, key, default_value):
+        try:
+            # Python 3
+            section = config[self.udf_prefix]
+            return section[key] if key in section else default_value
+        except:
+            # Python 2
+            return config.get(self.udf_prefix, key) if config.has_option(self.udf_prefix, key) else default_value
 
     def _retrieve_swagger(self, swagger_suffix):
         """
