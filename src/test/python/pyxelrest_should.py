@@ -1,6 +1,7 @@
 import unittest
 import os
 
+
 # Test cases requires test_service to run prior to execution
 class PyxelRestShould(unittest.TestCase):
     def setUp(self):
@@ -17,4 +18,5 @@ class PyxelRestShould(unittest.TestCase):
         actual_file.close()
         self.assertEqual(actual[:3], expected[:3])
         self.assertRegexpMatches(actual[3], expected[3])
-        self.assertEqual(actual[4:], expected[4:])
+        # PyCharm may rstrip lines without asking...
+        self.assertEqual([line.rstrip() for line in actual[4:]], [line.rstrip() for line in expected[4:]])
