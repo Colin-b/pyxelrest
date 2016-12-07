@@ -53,4 +53,4 @@ def install_auto_load_pyxelrest():
 create_user_configuration()
 if sys.platform.startswith('win'):
     configure_xlwings_for_pyxelrest()
-install_auto_load_pyxelrest()
+    install_auto_load_pyxelrest()
