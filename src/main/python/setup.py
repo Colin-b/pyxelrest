@@ -19,8 +19,8 @@ setup(name='pyxelrest',
          '': ['*.ini', '*.tpl'],
       },
       install_requires=[
-          'jinja2==2.8',
-          'requests==2.12.2',
+          'jinja2>=2.8',
+          'requests>=2.12.2',
           'xlwings==0.10.1'
         ]
       )

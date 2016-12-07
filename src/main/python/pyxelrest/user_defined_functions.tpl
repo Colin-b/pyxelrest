@@ -7,6 +7,7 @@ import xlwings as xw
 import requests
 import datetime
 from requests.exceptions import HTTPError
+from json import JSONDecodeError
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -350,20 +351,21 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
     {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}
-{% if 'application/json' in method['produces'] %}
-        response_json = response.json()
-        response.close()
-        return to_list(response_json)
-{% else %}
-        response_content = response.content
-        response.close()
         response.raise_for_status()
-        return response_content[:255]
+{% if 'application/json' in method['produces'] %}
+        return to_list(response.json())
+    except JSONDecodeError as decode_error:
+        return decode_error.errmsg[:255]
+{% else %}
+        return response.content[:255]
+{% endif %}
     except HTTPError as http_error:
         return http_error.message[:255]
-{% endif %}
     except Exception as error:
-        return {{ convert_to_return_type('response.text[:255] if response else error.message[:255]', method) }}
+        return {{ convert_to_return_type('describe_error(response, error)', method) }}
+    finally:
+        if response:
+            response.close()
 
 {% endif %}
 {% endmacro %}
@@ -434,3 +436,10 @@ def to_list(data):
             return flattened_list_of_dicts(data)
         return data
     return [data]
+
+
+def describe_error(response, error):
+    if response:
+        return response.text[:255]
+    if error.message:
+        return error.message[:255]
