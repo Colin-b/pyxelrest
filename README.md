@@ -5,7 +5,7 @@
 1. This step will certainly be removed in the future, but in the meantime: Within Excel, "Trust access to the VBA project object model" should be enabled.
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Python dependencies must be installed.
-    * For Python 2 users execute the following commands:
+    * For Python 2 users execute the following commands from within src\main\python folder:
     
             pip install pypiwin32
             pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
