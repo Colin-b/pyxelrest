@@ -2,9 +2,9 @@
 
 ## Requirements
 
-1. Within Excel, "Trust access to the VBA project object model" should be enabled
+1. Within Excel, "Trust access to the VBA project object model" should be enabled.
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. PyWin32 must be installed
+2. PyWin32 must be installed.
     * For Python 2 users execute the following command:
     
             pip install pypiwin32
@@ -16,7 +16,11 @@
         3. Finally, from an elevated command prompt, execute the following command from your python directory:
         
                 python.exe Scripts\pywin32_postinstall.py -install
-3. Python dependencies must be installed. Execute the following command from within src\main\python folder:
+3. Python dependencies must be installed.
+    * For Python 2 users execute the following command from within src\main\python folder:
+
+        pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+    * For Python 3 users execute the following command from within src\main\python folder:
 
         pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 4. This step will be included in step 3, but in the meantime: XLWings default configuration for PixelRest must be installed. Execute the following command from within src\main\python folder:
