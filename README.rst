@@ -17,12 +17,12 @@ Installation
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 #. Python dependencies must be installed.
 
-    - For _Python 2_ users execute the following commands:
+    - For *Python 2* users execute the following commands:
             >>> pip install pypiwin32 --trusted-host rms.gdfsuez.net --index `http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple`
             >>> pip install -e . --trusted-host rms.gdfsuez.net --index `http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple`
-    - For _Python 3_ users the following steps must be performed:
+    - For *Python 3* users the following steps must be performed:
 
-        #. _PyWin32_ should be `downloaded <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32>`_.
+        #. *PyWin32* should be `downloaded <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32>`_.
         #. And installed thanks to the following command:
                 >>> pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
         #. Finally, from an elevated command prompt, execute the following command from your python directory:
