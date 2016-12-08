@@ -1,5 +1,14 @@
 # Access REST APIs from Excel using User Defined Functions (UDF)
 
+PyxelRest allow you to query Swagger/OpenAPI REST APIs using Excel User Defined Functions.
+
+## How to use
+
+1. Update the configuration so that it contains the required services.
+2. Launch an existing Excel file or create a new one.
+3. Hit "Import Python UDFs" button within xlwings tab
+4. Enjoy
+
 ## Requirements
 
 1. This step will certainly be removed in the future, but in the meantime: Within Excel, `Trust access to the VBA project object model` should be enabled.
