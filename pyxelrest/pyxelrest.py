@@ -1,18 +1,17 @@
 """
 Each time the pyxelrest module is imported it will generate xlwings User Defined Functions.
 """
-
-import datetime
 import os
-import sys
+import jinja2
+import requests
+import datetime
+
 try:
     # Python 3
     from configparser import ConfigParser
 except ImportError:
     # Python 2
     from ConfigParser import ConfigParser
-import requests
-from jinja2 import Environment, FileSystemLoader
 
 # Some parameter names might be VBA keywords, this dictionary is used to use valid VBA parameter names.
 vba_restricted_keywords = {
@@ -102,7 +101,7 @@ def user_defined_functions():
     Create xlwings User Defined Functions according to user_defined_functions template.
     :return: A string containing python code with all xlwings UDFs.
     """
-    renderer = Environment(loader=FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
+    renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
     return renderer.get_template('user_defined_functions.tpl').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=load_services(),
@@ -122,7 +121,7 @@ def generate_user_defined_functions():
 generate_user_defined_functions()
 
 try:
-    from src.main.python.pyxelrest.user_defined_functions import *
+    from user_defined_functions import *
 except ModuleNotFoundError:
     from pyxelrest.user_defined_functions import *
 

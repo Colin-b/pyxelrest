@@ -67,8 +67,7 @@ def create_user_configuration():
 
 
 def get_auto_load_pyxelrest_addin():
-    auto_load_pyxelrest_addin_folder = os.path.join(this_dir, '..', 'c#', 'AutoLoadPyxelRestAddIn',
-                                                    'AutoLoadPyxelRestAddIn', 'bin', 'Release')
+    auto_load_pyxelrest_addin_folder = os.path.join(this_dir, 'addin', 'AutoLoadPyxelRestAddIn', 'bin', 'Release')
     auto_load_pyxelrest_addin_path = os.path.join(auto_load_pyxelrest_addin_folder, 'AutoLoadPyxelRestAddIn.vsto')
     if not os.path.isfile(auto_load_pyxelrest_addin_path):
         with zipfile.ZipFile(r'\\XS008183\Exchange\AutoLoadPyxelRestAddIn.zip', 'r') as packaged_addin:

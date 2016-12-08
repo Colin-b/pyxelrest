@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(this_dir, '..', '..', '..', 'README.md'), 'r') as f:
+with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
 
 setup(name='pyxelrest',
@@ -18,7 +18,7 @@ setup(name='pyxelrest',
       description="Access REST APIs from Excel using User Defined Functions (UDF)",
       long_description=long_description,
       # TODO Package to artifactory and assert that bamboo will keep it up to date
-      download_url='http://rms.gdfsuez.net:8310/artifactory/webapp/#/artifacts/browse/tree/General/python3-local/pyxelrest',
+      download_url='http://www.engie.com',
       classifiers=[
           "Development Status :: 3 - Alpha",
           "Intended Audience :: Developers"
@@ -39,7 +39,7 @@ setup(name='pyxelrest',
       ],
       packages=find_packages(),
       package_data={
-         '': ['*.ini', '*.tpl'],
+         '': ['*.ini', '*.tpl', '*.rst'],
       },
       install_requires=[
           'jinja2>=2.8',

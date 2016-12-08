@@ -13,7 +13,7 @@ class PyxelRestShould(unittest.TestCase):
         expected = expected_file.readlines()
         expected_file.close()
         actual_file = open(os.path.join(os.path.dirname(__file__),
-                                        '..\..\main\python\pyxelrest\user_defined_functions.py'), 'r')
+                                        r'..\pyxelrest\user_defined_functions.py'), 'r')
         actual = actual_file.readlines()
         actual_file.close()
         self.assertEqual(actual[:3], expected[:3])
