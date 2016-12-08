@@ -1,5 +1,7 @@
 import os
 import sys
+import subprocess
+import zipfile
 from shutil import copyfile
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
@@ -46,9 +48,22 @@ def create_user_configuration():
     copyfile(default_config_file, user_config_file)
 
 
+def get_auto_load_pyxelrest_addin():
+    auto_load_pyxelrest_addin_folder = os.path.join(this_dir, '..', 'c#', 'AutoLoadPyxelRestAddIn',
+                                                  'AutoLoadPyxelRestAddIn', 'bin', 'Release')
+    auto_load_pyxelrest_addin_path = os.path.join(auto_load_pyxelrest_addin_folder, 'AutoLoadPyxelRestAddIn.vsto')
+    if not os.path.isfile(auto_load_pyxelrest_addin_path):
+        with zipfile.ZipFile('\\\\XS008183\Exchange\\AutoLoadPyxelRestAddIn.zip', 'r') as packaged_addin:
+            packaged_addin.extractall(auto_load_pyxelrest_addin_folder)
+    return auto_load_pyxelrest_addin_path
+
+
 def install_auto_load_pyxelrest():
-    # TODO
-    pass
+    vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', '10.0', 'VSTOInstaller.exe')
+    if not os.path.isfile(vsto_installer_path):
+        raise Exception('Auto Load PixelRest Excel Add-In cannot be installed as VSTO installer cannnot be found.')
+    subprocess.check_call([vsto_installer_path, '/i', get_auto_load_pyxelrest_addin(), '/silent'])
+
 
 create_user_configuration()
 if sys.platform.startswith('win'):
