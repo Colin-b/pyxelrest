@@ -29,7 +29,14 @@ setup(name='pyxelrest',
           "Programming Language :: Python :: 3.6",
           "Operating System :: Microsoft :: Windows :: Windows 7"
       ],
-      keywords='excel pyxelrest swagger',
+      keywords=[
+          'excel',
+          'openapi',
+          'swagger',
+          'rest',
+          'udf',
+          'service'
+      ],
       packages=find_packages(),
       package_data={
          '': ['*.ini', '*.tpl'],
@@ -41,5 +48,8 @@ setup(name='pyxelrest',
       ],
       scripts=[
           'pyxelrest_post_install.py'
+      ],
+      platforms=[
+          'Windows'
       ]
       )
