@@ -9,7 +9,7 @@ PyxelRest allow you to query Swagger/OpenAPI REST APIs using Excel User Defined 
 3. Hit "Import Python UDFs" button within xlwings tab
 4. Enjoy
 
-## Requirements
+## Installation
 
 1. This step will certainly be removed in the future, but in the meantime: Within Excel, `Trust access to the VBA project object model` should be enabled.
     > File > Options > Trust Center > Trust Center Settings > Macro Settings
