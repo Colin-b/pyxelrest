@@ -1,17 +1,7 @@
 import os
 from setuptools import setup, find_packages
-from distutils.command.install import install
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-
-
-class CustomInstall(install):
-    def run(self):
-        install.run(self)
-        filename = os.path.join(self.prefix, "Scripts", "pyxelrest_post_install.py")
-        if not os.path.isfile(filename):
-            raise RuntimeError("Cannot find post installation script: '%s'" % (filename,))
-        exec(filename)
 
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
@@ -62,8 +52,5 @@ setup(name='pyxelrest',
       ],
       platforms=[
           'Windows'
-      ],
-      cmdclass={
-          'install': CustomInstall
-      }
+      ]
       )
