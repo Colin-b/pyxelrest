@@ -7,7 +7,7 @@
 2. Python dependencies must be installed.
     * For _Python 2_ users execute the following commands from within `src\main\python` folder:
     
-            pip install pypiwin32
+            pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
             pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
     * For _Python 3_ users the following steps must be performed:
         1. _PyWin32_ should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32)

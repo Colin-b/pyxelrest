@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import zipfile
+import winreg
 from shutil import copyfile
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
@@ -36,10 +37,26 @@ def configure_xlwings_for_pyxelrest():
 
     import xlwings
     xlwings_path = xlwings.__path__[0]
-    os.putenv('PathToXlWingsBasFile', create_pyxelrest_bas_file())
+    if not os.getenv('PathToXlWingsBasFile'):
+        create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
     # Install Excel AddIn for XLWings (avoid call to external process)
     addin_path = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART', 'xlwings.xlam')
     copyfile(os.path.join(xlwings_path, 'xlwings.xlam'), addin_path)
+
+
+def create_environment_variable(string_name, string_value):
+    """
+    Create environment variable that stay available after execution of this python script.
+    The method must be run as administrator.
+    :param string_name: Name of the environment variable
+    :param string_value: String value of the environment variable
+    :return: None
+    """
+    reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+    env = winreg.OpenKey(reg, r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment", 0, winreg.KEY_ALL_ACCESS)
+    winreg.SetValueEx(env, string_name, 0, winreg.REG_EXPAND_SZ, string_value)
+    winreg.CloseKey(env)
+    winreg.CloseKey(reg)
 
 
 def create_user_configuration():
