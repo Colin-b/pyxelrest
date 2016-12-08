@@ -1,12 +1,13 @@
 import os
-from setuptools import setup, find_packages, command
+from setuptools import setup, find_packages
+from distutils.command.install import install
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 
 
-class CustomInstall(command.install):
+class CustomInstall(install):
     def run(self):
-        command.install.run(self)
+        install.run(self)
         filename = os.path.join(self.prefix, "Scripts", "pyxelrest_post_install.py")
         if not os.path.isfile(filename):
             raise RuntimeError("Cannot find post installation script: '%s'" % (filename,))
