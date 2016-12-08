@@ -36,14 +36,14 @@ def configure_xlwings_for_pyxelrest():
 
     import xlwings
     xlwings_path = xlwings.__path__[0]
-    os.environ['PathToXlWingsBasFile'] = create_pyxelrest_bas_file()
+    os.putenv('PathToXlWingsBasFile', create_pyxelrest_bas_file())
     # Install Excel AddIn for XLWings (avoid call to external process)
     addin_path = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART', 'xlwings.xlam')
     copyfile(os.path.join(xlwings_path, 'xlwings.xlam'), addin_path)
 
 
 def create_user_configuration():
-    default_config_file = os.path.join(this_dir, 'pyxelrest\\resources\\config\\default.ini')
+    default_config_file = os.path.join(this_dir, 'pyxelrest', 'resources', 'config', 'default.ini')
     user_config_file = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
     copyfile(default_config_file, user_config_file)
 
@@ -53,7 +53,7 @@ def get_auto_load_pyxelrest_addin():
                                                   'AutoLoadPyxelRestAddIn', 'bin', 'Release')
     auto_load_pyxelrest_addin_path = os.path.join(auto_load_pyxelrest_addin_folder, 'AutoLoadPyxelRestAddIn.vsto')
     if not os.path.isfile(auto_load_pyxelrest_addin_path):
-        with zipfile.ZipFile('\\\\XS008183\Exchange\\AutoLoadPyxelRestAddIn.zip', 'r') as packaged_addin:
+        with zipfile.ZipFile(r'\\XS008183\Exchange\AutoLoadPyxelRestAddIn.zip', 'r') as packaged_addin:
             packaged_addin.extractall(auto_load_pyxelrest_addin_folder)
     return auto_load_pyxelrest_addin_path
 
