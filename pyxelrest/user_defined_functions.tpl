@@ -7,7 +7,11 @@ import xlwings as xw
 import requests
 import datetime
 from requests.exceptions import HTTPError
-from json import JSONDecodeError
+try:
+    #Python 3
+    from json import JSONDecodeError
+except:
+    JSONDecodeError = ValueError
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -139,74 +143,79 @@ from json import JSONDecodeError
 {% set param_items_type = param_items['type'] %}
 {% if param_items_type == 'integer' -%}
         if isinstance({{param_name}}, list):
+            {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, int):
 {% if 'application/json' in method['produces'] %}
-                    return ['{{ param_name }} must contains integers.']
+                    return ['{{ param_name }} must contain integers.']
 {% else %}
-                    return '{{ param_name }} must contains integers.'
+                    return '{{ param_name }} must contain integers.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, int):
 {% if 'application/json' in method['produces'] %}
-                return ['{{ param_name }} must contains integers.']
+                return ['{{ param_name }} must be an integer.']
 {% else %}
-                return '{{ param_name }} must contains integers.'
+                return '{{ param_name }} must be an integer.'
 {% endif %}
 {% elif param_items_type == 'number' -%}
         if isinstance({{param_name}}, list):
+            {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, float):
 {% if 'application/json' in method['produces'] %}
-                    return ['{{ param_name }} must contains numbers.']
+                    return ['{{ param_name }} must contain numbers.']
 {% else %}
-                    return '{{ param_name }} must contains numbers.'
+                    return '{{ param_name }} must contain numbers.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, float):
 {% if 'application/json' in method['produces'] %}
-                return ['{{ param_name }} must contains numbers.']
+                return ['{{ param_name }} must be a number.']
 {% else %}
-                return '{{ param_name }} must contains numbers.'
+                return '{{ param_name }} must be a number.'
 {% endif %}
 {% elif param_items_type == 'string' %}
 {% set param_items_format = param_items['format'] %}
 {% if param_items_format == 'date' -%}
         if isinstance({{param_name}}, list):
+            {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.date):
 {% if 'application/json' in method['produces'] %}
-                    return ['{{ param_name }} must contains dates.']
+                    return ['{{ param_name }} must contain dates.']
 {% else %}
-                    return '{{ param_name }} must contains dates.'
+                    return '{{ param_name }} must contain dates.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.date):
 {% if 'application/json' in method['produces'] %}
-                return ['{{ param_name }} must contains dates.']
+                return ['{{ param_name }} must be a date.']
 {% else %}
-                return '{{ param_name }} must contains dates.'
+                return '{{ param_name }} must be a date.'
 {% endif %}
 {% elif param_items_format == 'date-time' -%}
         if isinstance({{param_name}}, list):
+            {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.datetime):
 {% if 'application/json' in method['produces'] %}
-                    return ['{{ param_name }} must contains date times.']
+                    return ['{{ param_name }} must contain date times.']
 {% else %}
-                    return '{{ param_name }} must contains date times.'
+                    return '{{ param_name }} must contain date times.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.datetime):
 {% if 'application/json' in method['produces'] %}
-                return ['{{ param_name }} must contains date times.']
+                return ['{{ param_name }} must be a date time.']
 {% else %}
-                return '{{ param_name }} must contains date times.'
+                return '{{ param_name }} must be a date time.'
 {% endif %}
 {% else %}
 {% set param_items_enum = param_items['enum'] %}
 {% if param_items_enum|count > 0 -%}
         if isinstance({{param_name}}, list):
+            {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
 {% if 'application/json' in method['produces'] %}
@@ -226,6 +235,7 @@ from json import JSONDecodeError
 {% endif %}
 {% elif param_items_type == 'boolean' -%}
         if isinstance({{param_name}}, list):
+            {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in ['true', 'false']:
 {% if 'application/json' in method['produces'] %}
@@ -238,9 +248,9 @@ from json import JSONDecodeError
         else:
             if {{param_name}} not in ['true', 'false']:
 {% if 'application/json' in method['produces'] %}
-                return ['{{ param_name }} must contains "true" or "false".']
+                return ['{{ param_name }} must contain "true" or "false".']
 {% else %}
-                return '{{ param_name }} must contains "true" or "false".'
+                return '{{ param_name }} must contain "true" or "false".'
 {% endif %}
             {{param_name}} = {{param_name}} == 'true'
 {# End of Array Type check #}
@@ -251,13 +261,13 @@ from json import JSONDecodeError
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
-    if not {{ param_name }}:
+    if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
 {% if 'application/json' in method['produces'] %}
         return ['{{ param_name }} is required.']
 {% else %}
         return '{{ param_name }} is required.'
 {% endif %}
-    if {{ param_name }}:
+    if {{ param_name }} is not None:
         {{ validate_parameter_value(parameter, method) }}
 {% if param_in == 'query' %}
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
@@ -268,7 +278,7 @@ from json import JSONDecodeError
 
 {% macro validate_path_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
-    if not {{ param_name }}:
+    if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
 {% if 'application/json' in method['produces'] %}
         return ['{{ param_name }} is required.']
 {% else %}
@@ -280,7 +290,7 @@ from json import JSONDecodeError
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
-    if {{ param_name }}:
+    if {{ param_name }} is not None:
         {{ validate_parameter_value(parameter, method) }}
 {% if param_in == 'query' %}
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
@@ -348,6 +358,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% for parameter in optional_parameters %}
 {{ validate_optional_parameter(parameter, method) }}
 {% endfor %}
+    response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
     {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}

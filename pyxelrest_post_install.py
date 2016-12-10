@@ -2,7 +2,12 @@ import os
 import sys
 import subprocess
 import zipfile
-import winreg
+try:
+    # Python 3
+    import winreg
+except:
+    # Python 2
+    import _winreg as winreg
 from shutil import copyfile
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
@@ -38,6 +43,7 @@ def configure_xlwings_for_pyxelrest():
 
     import xlwings
     xlwings_path = xlwings.__path__[0]
+    print xlwings_path
     if not os.getenv('PathToXlWingsBasFile'):
         create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
     # Install Excel AddIn for XLWings (avoid call to external process)
