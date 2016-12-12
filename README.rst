@@ -15,6 +15,7 @@ Installation
 
 #. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
+#. Excel must be closed while executing the following steps.
 #. Python dependencies must be installed.
 
     - For *Python 2* users execute the following commands:
