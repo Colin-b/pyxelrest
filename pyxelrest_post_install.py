@@ -1,3 +1,4 @@
+import argparse
 import os
 import shutil
 import subprocess
@@ -64,9 +65,12 @@ def create_environment_variable(string_name, string_value):
 
 
 def create_user_configuration(module_dir):
-    default_config_file = os.path.join(module_dir, 'pyxelrest', 'resources', 'config', 'default.ini')
-    user_config_file = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
-    shutil.copyfile(default_config_file, user_config_file)
+    default_config_file = os.path.join(module_dir, 'pyxelrest', 'default_configuration.ini')
+    if os.path.isfile(default_config_file):
+        user_config_file = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
+        shutil.copyfile(default_config_file, user_config_file)
+    else:
+        raise Exception('Default configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
 
 
 def get_auto_load_pyxelrest_addin(module_dir):
@@ -86,8 +90,13 @@ def install_auto_load_pyxelrest(module_dir):
     subprocess.check_call([vsto_installer_path, '/i', get_auto_load_pyxelrest_addin(module_dir)])
 
 
-this_dir = os.path.abspath(os.path.dirname(__file__))
-create_user_configuration(this_dir)
-if sys.platform.startswith('win'):
-    configure_xlwings_for_pyxelrest(this_dir)
-    install_auto_load_pyxelrest(this_dir)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-dir', '--directory', help='directory containing pyxelrest module', default=None, type=str)
+    options = parser.parse_args(sys.argv[1:])
+
+    module_dir = options.directory if options.directory else os.path.abspath(os.path.dirname(__file__))
+    create_user_configuration(module_dir)
+    if sys.platform.startswith('win'):
+        configure_xlwings_for_pyxelrest(module_dir)
+        install_auto_load_pyxelrest(module_dir)
