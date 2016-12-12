@@ -57,8 +57,8 @@ def create_environment_variable(string_name, string_value):
     :param string_value: String value of the environment variable
     :return: None
     """
-    reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
-    env = winreg.OpenKey(reg, r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment", 0, winreg.KEY_ALL_ACCESS)
+    reg = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
+    env = winreg.OpenKey(reg, "Environment", 0, winreg.KEY_ALL_ACCESS)
     winreg.SetValueEx(env, string_name, 0, winreg.REG_EXPAND_SZ, string_value)
     winreg.CloseKey(env)
     winreg.CloseKey(reg)
