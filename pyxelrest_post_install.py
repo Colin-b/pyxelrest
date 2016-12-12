@@ -1,6 +1,7 @@
 import os
-import sys
+import shutil
 import subprocess
+import sys
 import zipfile
 try:
     # Python 3
@@ -8,14 +9,11 @@ try:
 except:
     # Python 2
     import _winreg as winreg
-from shutil import copyfile
-
-this_dir = os.path.abspath(os.path.dirname(__file__))
 
 
-def configure_xlwings_for_pyxelrest():
+def configure_xlwings_for_pyxelrest(module_dir):
     def create_pyxelrest_bas_file():
-        pyxelrest_settings = os.path.join(this_dir, 'xlwings.bas')
+        pyxelrest_settings = os.path.join(module_dir, 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             fill_pyxelrest_bas_file(new_settings)
         return pyxelrest_settings
@@ -34,7 +32,7 @@ def configure_xlwings_for_pyxelrest():
             pyxelrest_settings.write('    PYTHON_WIN = "' + os.path.join(python_path, 'pythonw.exe') + '"\n')
         # Allow to call pyxelrest from any Excel file
         elif '    PYTHONPATH = ThisWorkbook.Path\n' == xlwings_settings_line:
-            pyxelrest_settings.write('    PYTHONPATH = "' + os.path.join(this_dir, 'pyxelrest') + '"\n')
+            pyxelrest_settings.write('    PYTHONPATH = "' + os.path.join(module_dir, 'pyxelrest') + '"\n')
         # Allow to call pyxelrest
         elif '    UDF_MODULES = ""\n' == xlwings_settings_line:
             pyxelrest_settings.write('    UDF_MODULES = "pyxelrest"\n')
@@ -47,7 +45,7 @@ def configure_xlwings_for_pyxelrest():
         create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
     # Install Excel AddIn for XLWings (avoid call to external process)
     addin_path = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART', 'xlwings.xlam')
-    copyfile(os.path.join(xlwings_path, 'xlwings.xlam'), addin_path)
+    shutil.copyfile(os.path.join(xlwings_path, 'xlwings.xlam'), addin_path)
 
 
 def create_environment_variable(string_name, string_value):
@@ -65,14 +63,14 @@ def create_environment_variable(string_name, string_value):
     winreg.CloseKey(reg)
 
 
-def create_user_configuration():
-    default_config_file = os.path.join(this_dir, 'pyxelrest', 'resources', 'config', 'default.ini')
+def create_user_configuration(module_dir):
+    default_config_file = os.path.join(module_dir, 'pyxelrest', 'resources', 'config', 'default.ini')
     user_config_file = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
-    copyfile(default_config_file, user_config_file)
+    shutil.copyfile(default_config_file, user_config_file)
 
 
-def get_auto_load_pyxelrest_addin():
-    auto_load_pyxelrest_addin_folder = os.path.join(this_dir, 'addin', 'AutoLoadPyxelRestAddIn', 'bin', 'Release')
+def get_auto_load_pyxelrest_addin(module_dir):
+    auto_load_pyxelrest_addin_folder = os.path.join(module_dir, 'addin', 'AutoLoadPyxelRestAddIn', 'bin', 'Release')
     auto_load_pyxelrest_addin_path = os.path.join(auto_load_pyxelrest_addin_folder, 'AutoLoadPyxelRestAddIn.vsto')
     if not os.path.isfile(auto_load_pyxelrest_addin_path):
         with zipfile.ZipFile(r'\\XS008183\Exchange\AutoLoadPyxelRestAddIn.zip', 'r') as packaged_addin:
@@ -80,14 +78,16 @@ def get_auto_load_pyxelrest_addin():
     return auto_load_pyxelrest_addin_path
 
 
-def install_auto_load_pyxelrest():
+def install_auto_load_pyxelrest(module_dir):
     vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', '10.0',
                                        'VSTOInstaller.exe')
     if not os.path.isfile(vsto_installer_path):
         raise Exception('Auto Load PixelRest Excel Add-In cannot be installed as VSTO installer cannnot be found.')
-    subprocess.check_call([vsto_installer_path, '/i', get_auto_load_pyxelrest_addin(), '/silent'])
+    subprocess.check_call([vsto_installer_path, '/i', get_auto_load_pyxelrest_addin(module_dir)])
 
-create_user_configuration()
+
+this_dir = os.path.abspath(os.path.dirname(__file__))
+create_user_configuration(this_dir)
 if sys.platform.startswith('win'):
-    configure_xlwings_for_pyxelrest()
-    install_auto_load_pyxelrest()
+    configure_xlwings_for_pyxelrest(this_dir)
+    install_auto_load_pyxelrest(this_dir)
