@@ -17,7 +17,7 @@ Installation
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 #. Excel must be closed while executing the following step.
 
-    - For *Python 2* users execute the following commands:
+    - For *Python 2* users, from an elevated command prompt, execute the following commands:
             >>> pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
             >>> pip install --egg pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
     - For *Python 3* users the following steps must be performed:
@@ -27,7 +27,7 @@ Installation
                 >>> pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
         #. Finally, from an elevated command prompt, execute the following command from your python directory:
                 >>> python.exe Scripts\pywin32_postinstall.py -install
-        #. Project must be installed. Execute the following command:
+        #. Project must be installed. From an elevated command prompt, execute the following command:
                 >>> pip install --egg pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 
 
