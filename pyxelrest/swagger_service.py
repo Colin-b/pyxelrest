@@ -25,6 +25,7 @@ class SwaggerService:
         # Consider that swagger is provided by base url
         swagger_suffix = self.get_item_default(config, 'swaggerBasePath', '/')
         self.swagger = self._retrieve_swagger(swagger_suffix)
+        print self.swagger, self.uri
 
     def get_item(self, config, key):
         try:

@@ -6,6 +6,7 @@ Generation date (UTC): {{ current_utc_time }}
 import xlwings as xw
 import requests
 import datetime
+from collections import OrderedDict
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -358,7 +359,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}
         response.raise_for_status()
 {% if 'application/json' in method['produces'] %}
-        return to_list(response.json())
+        return to_list(response.json(object_pairs_hook=OrderedDict))
 {% else %}
         return response.content[:255]
 {% endif %}
