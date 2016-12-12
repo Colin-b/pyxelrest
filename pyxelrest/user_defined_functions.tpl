@@ -6,12 +6,6 @@ Generation date (UTC): {{ current_utc_time }}
 import xlwings as xw
 import requests
 import datetime
-from requests.exceptions import HTTPError
-try:
-    #Python 3
-    from json import JSONDecodeError
-except:
-    JSONDecodeError = ValueError
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -365,13 +359,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         response.raise_for_status()
 {% if 'application/json' in method['produces'] %}
         return to_list(response.json())
-    except JSONDecodeError as decode_error:
-        return decode_error.errmsg[:255]
 {% else %}
         return response.content[:255]
 {% endif %}
-    except HTTPError as http_error:
-        return http_error.message[:255]
     except Exception as error:
         return {{ convert_to_return_type('describe_error(response, error)', method) }}
     finally:
@@ -451,6 +441,5 @@ def to_list(data):
 
 def describe_error(response, error):
     if response:
-        return response.text[:255]
-    if error.message:
-        return error.message[:255]
+        return 'An error occurred: "{0}" for value "{1}"'.format(str(error)[:66], response.text[:155])
+    return str(error)[:255]
