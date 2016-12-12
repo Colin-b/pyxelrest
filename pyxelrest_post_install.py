@@ -43,7 +43,6 @@ def configure_xlwings_for_pyxelrest():
 
     import xlwings
     xlwings_path = xlwings.__path__[0]
-    print xlwings_path
     if not os.getenv('PathToXlWingsBasFile'):
         create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
     # Install Excel AddIn for XLWings (avoid call to external process)

@@ -1,5 +1,10 @@
 import os
-from ConfigParser import ConfigParser
+try:
+    # Python 3
+    from configparser import ConfigParser
+except ImportError:
+    # Python 2
+    from ConfigParser import ConfigParser
 
 import requests
 
@@ -50,7 +55,6 @@ class SwaggerService:
         :return: Dictionary representation of the retrieved swagger JSON.
         """
         response = requests.get(self.uri + swagger_suffix)
-        print response
         response.raise_for_status()
         swagger = response.json()
         self._update_vba_restricted_keywords(swagger)

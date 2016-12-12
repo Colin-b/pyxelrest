@@ -9,15 +9,6 @@ import jinja2
 from vba import vba_restricted_keywords
 from swagger_service import load_services
 
-try:
-    # Python 3
-    from configparser import ConfigParser
-except ImportError:
-    # Python 2
-    from ConfigParser import ConfigParser
-
-
-
 
 def user_defined_functions(services):
     """
@@ -41,14 +32,15 @@ def generate_user_defined_functions(services):
         generated_file.write(user_defined_functions(services))
 
 
-
-
 services = load_services()
 generate_user_defined_functions(services)
 
 
-from user_defined_functions import *
+try:
+    from user_defined_functions import *
+except ModuleNotFoundError:
+    from pyxelrest.user_defined_functions import *
 
 # Uncomment to debug Microsoft Excel UDF calls.
-if __name__ == '__main__':
-    xw.serve()
+# if __name__ == '__main__':
+#     xw.serve()
