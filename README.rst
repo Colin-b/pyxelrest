@@ -19,8 +19,8 @@ Installation
 #. Python dependencies must be installed.
 
     - For *Python 2* users execute the following commands:
-            >>> pip install pypiwin32 --trusted-host rms.gdfsuez.net --index `http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple`
-            >>> pip install -e . --trusted-host rms.gdfsuez.net --index `http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple`
+            >>> pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+            >>> pip install --egg pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
     - For *Python 3* users the following steps must be performed:
 
         #. *PyWin32* should be `downloaded <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32>`_.
@@ -29,7 +29,7 @@ Installation
         #. Finally, from an elevated command prompt, execute the following command from your python directory:
                 >>> python.exe Scripts\pywin32_postinstall.py -install
         #. Project dependencies must be installed. Execute the following command:
-                >>> pip install -e . --trusted-host rms.gdfsuez.net --index `http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple`
+                >>> pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 
 
 #. This step will be included in previous step, but in the meantime: XLWings default configuration for PixelRest must be installed. Execute the following command:
