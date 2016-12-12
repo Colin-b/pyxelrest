@@ -36,9 +36,13 @@ services = load_services()
 generate_user_defined_functions(services)
 
 
-from user_defined_functions import *
+try:
+    from user_defined_functions import *
+except ModuleNotFoundError:
+    # Occurs when calling pyxelrest via xlwings in non-debug mode
+    from pyxelrest.user_defined_functions import *
 
 
 # Uncomment to debug Microsoft Excel UDF calls.
-if __name__ == '__main__':
-    xw.serve()
+# if __name__ == '__main__':
+#     xw.serve()
