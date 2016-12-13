@@ -367,7 +367,10 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         return response.content[:255]
 {% endif %}
     except Exception as error:
-        logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }}.")
+        if response:
+            logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling {{ service.udf_prefix }}_{{ method['operationId'] }}.")
         return {{ convert_to_return_type('describe_error(response, error)', method) }}
     finally:
         if response:
