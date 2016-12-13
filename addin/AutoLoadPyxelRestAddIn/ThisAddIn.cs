@@ -15,7 +15,7 @@ namespace AutoLoadPyxelRestAddIn
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
-            Log.Info("PyxelRest auto load add-in loaded.");
+            Log.Info("AddIn Startup.");
             ((Excel.AppEvents_Event)Application).NewWorkbook += InsertXlWingsBasFile;
             Application.WorkbookOpen += UpdateXlWingsBasFile;
         }
