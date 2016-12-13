@@ -20,26 +20,41 @@ namespace AutoLoadPyxelRestAddIn
             Application.WorkbookOpen += UpdateXlWingsBasFile;
         }
 
-        private void InsertXlWingsBasFile(Excel.Workbook Wb)
+        private void LoadXlWingsBasFile(Action<Excel.Workbook, string> loadAction, Excel.Workbook Wb)
         {
             string pathToBasFile = GetPathToXlWingsBasFile();
             if (pathToBasFile != null && pathToBasFile.Length > 0)
-            {
-                Log.Info("PyxelRest xlwings configuration loaded.");
-                Wb.VBProject.VBComponents.Import(pathToBasFile);
-            }
+                loadAction.Invoke(Wb, pathToBasFile);
+            else
+                Log.Warn("No configuration can be found to load.");
+        }
+
+        private void InsertXlWingsBasFile(Excel.Workbook Wb)
+        {
+            LoadXlWingsBasFile(InsertXlWingsBasFile, Wb);
+        }
+
+        private void InsertXlWingsBasFile(Excel.Workbook Wb, string pathToBasFile)
+        {
+            Wb.VBProject.VBComponents.Import(pathToBasFile);
+            Log.Info("XLWings module inserted.");
         }
 
         private void UpdateXlWingsBasFile(Excel.Workbook Wb)
         {
-            string pathToBasFile = GetPathToXlWingsBasFile();
-            if (pathToBasFile != null && pathToBasFile.Length > 0)
+            LoadXlWingsBasFile(UpdateXlWingsBasFile, Wb);
+        }
+
+        private void UpdateXlWingsBasFile(Excel.Workbook Wb, string pathToBasFile)
+        {
+            if (RemoveXlWingsModule(Wb))
             {
-                if (CanImportXlWingsBasFile(Wb))
-                {
-                    Log.Info("PyxelRest xlwings configuration updated.");
-                    Wb.VBProject.VBComponents.Import(pathToBasFile);
-                }
+                Wb.VBProject.VBComponents.Import(pathToBasFile);
+                Log.Info("XLWings module updated.");
+            }
+            else
+            {
+                Log.Error("Previous XLWings module cannot be removed.");
             }
         }
 
@@ -53,7 +68,7 @@ namespace AutoLoadPyxelRestAddIn
             return filePath;
         }
 
-        private bool CanImportXlWingsBasFile(Excel.Workbook Wb)
+        private bool RemoveXlWingsModule(Excel.Workbook Wb)
         {
             if(Wb.HasVBProject)
             {
