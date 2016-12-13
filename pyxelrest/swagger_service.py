@@ -7,8 +7,8 @@ except ImportError:
     from ConfigParser import ConfigParser
 
 import requests
-
-from vba import vba_restricted_keywords
+import vba
+import logging
 
 
 class SwaggerService:
@@ -18,6 +18,7 @@ class SwaggerService:
         :param udf_prefix: Prefix to use in front of services UDFs to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
+        logging.info('Creating {0} Swagger service.'.format(udf_prefix))
         self.udf_prefix = udf_prefix
         self.uri = self.get_item(config, 'host')
         self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',')]
@@ -71,8 +72,8 @@ class SwaggerService:
             for method in methods.values():
                 if 'parameters' in method:
                     for parameter in method['parameters']:
-                        if parameter['name'] in vba_restricted_keywords:
-                            parameter['name'] = vba_restricted_keywords[parameter['name']]
+                        if parameter['name'] in vba.vba_restricted_keywords:
+                            parameter['name'] = vba.vba_restricted_keywords[parameter['name']]
 
 
 def load_services():
@@ -85,4 +86,5 @@ def load_services():
     file_path = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
     if not config_parser.read(file_path):
         raise Exception('"{0}" configuration file cannot be read.'.format(file_path))
+    logging.info('Loading configuration from "{0}".'.format(file_path))
     return [SwaggerService(service, config_parser) for service in config_parser.sections()]

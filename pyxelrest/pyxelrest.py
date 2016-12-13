@@ -3,11 +3,10 @@ Each time the pyxelrest module is imported it will generate xlwings User Defined
 """
 import os
 import datetime
-
+import logging
 import jinja2
-
-from vba import vba_restricted_keywords
-from swagger_service import load_services
+import vba
+import swagger_service
 
 
 def user_defined_functions(services):
@@ -19,7 +18,7 @@ def user_defined_functions(services):
     return renderer.get_template('user_defined_functions.tpl').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=services,
-        modified_parameters={value: key for key, value in vba_restricted_keywords.items()}
+        modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()}
     )
 
 
@@ -28,14 +27,18 @@ def generate_user_defined_functions(services):
     Create user_defined_functions.py python file containing generated xlwings User Defined Functions.
     :return: None
     """
+    logging.info('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
         generated_file.write(user_defined_functions(services))
 
+logging.basicConfig(filename=os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pyxelrest.log'),
+                    format='%(asctime)s [%(levelname)s] %(message)s',
+                    level=logging.INFO)
 
-services = load_services()
+services = swagger_service.load_services()
 generate_user_defined_functions(services)
 
-
+logging.info('Expose user defined functions through PyxelRest.')
 try:
     from user_defined_functions import *
 except ModuleNotFoundError:
