@@ -20,6 +20,8 @@ def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
         return pyxelrest_settings
 
     def fill_pyxelrest_bas_file(pyxelrest_settings):
+        import xlwings
+        xlwings_path = xlwings.__path__[0]
         with open(os.path.join(xlwings_path, 'xlwings.bas')) as previous_settings:
             for line in previous_settings:
                 write_pyxelrest_settings_line(line, pyxelrest_settings)
@@ -40,13 +42,8 @@ def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
         else:
             pyxelrest_settings.write(xlwings_settings_line)
 
-    import xlwings
-    xlwings_path = xlwings.__path__[0]
     if not os.getenv('PathToXlWingsBasFile'):
         create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
-    # Install Excel AddIn for XLWings (avoid call to external process)
-    addin_path = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART', 'xlwings.xlam')
-    shutil.copyfile(os.path.join(xlwings_path, 'xlwings.xlam'), addin_path)
 
 
 def create_environment_variable(string_name, string_value):

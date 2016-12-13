@@ -16,11 +16,42 @@ namespace AutoLoadPyxelRestAddIn
         {
             log4net.Config.XmlConfigurator.Configure();
             Log.Info("AddIn Startup.");
-            ((Excel.AppEvents_Event)Application).NewWorkbook += InsertXlWingsBasFile;
-            Application.WorkbookOpen += UpdateXlWingsBasFile;
+            ((Excel.AppEvents_Event)Application).NewWorkbook += OnNewWorkBook;
+            Application.WorkbookOpen += OnOpenWorkBook;
+            Application.WorkbookBeforeSave += OnSaveWorkBook;
         }
 
-        private void LoadXlWingsBasFile(Action<Excel.Workbook, string> loadAction, Excel.Workbook Wb)
+        private void OnNewWorkBook(Excel.Workbook Wb)
+        {
+            ActivatePyxelRest(OnNewWorkBook, Wb);
+        }
+
+        private void OnOpenWorkBook(Excel.Workbook Wb)
+        {
+            ActivatePyxelRest(OnOpenWorkBook, Wb);
+        }
+
+        private void OnSaveWorkBook(Excel.Workbook Wb, bool SaveAsUI, ref bool Cancel)
+        {
+            ActivatePyxelRest(OnSaveWorkBook, Wb);
+        }
+
+        internal bool ImportUserDefinedFunctions()
+        {
+            try
+            {
+                Application.Run("'" + Application.ActiveWorkbook.Name + "'!ImportPythonUDFs");
+                Log.Info("User Defined Functions imported.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to import User Defined Functions.", ex);
+                return false;
+            }
+        }
+
+        private void ActivatePyxelRest(Action<Excel.Workbook, string> loadAction, Excel.Workbook Wb)
         {
             string pathToBasFile = GetPathToXlWingsBasFile();
             if (pathToBasFile != null && pathToBasFile.Length > 0)
@@ -29,33 +60,49 @@ namespace AutoLoadPyxelRestAddIn
                 Log.Warn("No configuration can be found to load.");
         }
 
-        private void InsertXlWingsBasFile(Excel.Workbook Wb)
+        private void OnNewWorkBook(Excel.Workbook Wb, string pathToBasFile)
         {
-            LoadXlWingsBasFile(InsertXlWingsBasFile, Wb);
+            ImportXlWingsBasFile(Wb, pathToBasFile);
+            ImportUserDefinedFunctions();
         }
 
-        private void InsertXlWingsBasFile(Excel.Workbook Wb, string pathToBasFile)
+        private void OnOpenWorkBook(Excel.Workbook Wb, string pathToBasFile)
         {
-            Wb.VBProject.VBComponents.Import(pathToBasFile);
-            Log.Info("XLWings module inserted.");
+            VBComponent xlwingsModule = GetXlWingsModule(Wb);
+            if (xlwingsModule == null || RemoveXlWingsModule(Wb, xlwingsModule))
+                ImportXlWingsBasFile(Wb, pathToBasFile);
+            else
+                Log.Error("Previous XLWings module cannot be removed.");
+            ImportUserDefinedFunctions();
         }
 
-        private void UpdateXlWingsBasFile(Excel.Workbook Wb)
+        private void OnSaveWorkBook(Excel.Workbook Wb, string pathToBasFile)
         {
-            LoadXlWingsBasFile(UpdateXlWingsBasFile, Wb);
-        }
-
-        private void UpdateXlWingsBasFile(Excel.Workbook Wb, string pathToBasFile)
-        {
-            if (RemoveXlWingsModule(Wb))
+            VBComponent xlwingsModule = GetXlWingsModule(Wb);
+            if(xlwingsModule == null)
             {
-                Wb.VBProject.VBComponents.Import(pathToBasFile);
-                Log.Info("XLWings module updated.");
+                if (RemoveXlWingsModule(Wb, xlwingsModule))
+                    ImportXlWingsBasFile(Wb, pathToBasFile);
+                else
+                    Log.Error("Previous XLWings module cannot be removed.");
+                ImportUserDefinedFunctions();
             }
             else
             {
-                Log.Error("Previous XLWings module cannot be removed.");
+                Log.Info("Do nothing on save.");
             }
+        }
+
+        private void ImportXlWingsBasFile(Excel.Workbook Wb, string pathToBasFile)
+        {
+            try {
+                Wb.VBProject.VBComponents.Import(pathToBasFile);
+                Log.Info("XLWings module imported.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("XlWings module could not be imported.", ex);
+            };
         }
 
         private string GetPathToXlWingsBasFile()
@@ -68,21 +115,17 @@ namespace AutoLoadPyxelRestAddIn
             return filePath;
         }
 
-        private bool RemoveXlWingsModule(Excel.Workbook Wb)
+        private VBComponent GetXlWingsModule(Excel.Workbook Wb)
         {
-            if(Wb.HasVBProject)
+            if (Wb.HasVBProject)
             {
                 foreach (VBComponent vbComponent in Wb.VBProject.VBComponents)
                 {
                     if (XLWINGS_VB_COMPONENT_NAME.Equals(vbComponent.Name))
-                    {
-                        if (RemoveXlWingsModule(Wb, vbComponent))
-                            break;
-                        return false;
-                    }
+                        return vbComponent;
                 }
             }
-            return true;
+            return null;
         }
 
         private bool RemoveXlWingsModule(Excel.Workbook Wb, VBComponent vbComponent)
@@ -90,6 +133,7 @@ namespace AutoLoadPyxelRestAddIn
             try
             {
                 Wb.VBProject.VBComponents.Remove(vbComponent);
+                Log.Info("XlWings module removed.");
             }
             catch(Exception ex)
             {
