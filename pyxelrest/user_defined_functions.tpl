@@ -6,6 +6,7 @@ Generation date (UTC): {{ current_utc_time }}
 import xlwings as xw
 import requests
 import datetime
+import logging
 from collections import OrderedDict
 
 {% macro convert_to_return_type(str_value, method) %}
@@ -335,6 +336,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% if 'summary' in method and method['summary'] %}
     """{{ method['summary'] }}"""
 {% endif %}
+    logging.info("Calling {{ service.udf_prefix }}_{{ method['operationId'] }}...")
 {% set contains_parameters = nb_required_parameters > 0 or nb_optional_parameters > 0 %}
 {% if contains_parameters %}
     request_parameters = {}
@@ -358,12 +360,14 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
     {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}
         response.raise_for_status()
+        logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }}.")
 {% if 'application/json' in method['produces'] %}
         return to_list(response.json(object_pairs_hook=OrderedDict))
 {% else %}
         return response.content[:255]
 {% endif %}
     except Exception as error:
+        logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }}.")
         return {{ convert_to_return_type('describe_error(response, error)', method) }}
     finally:
         if response:
