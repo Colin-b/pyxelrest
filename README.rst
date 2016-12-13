@@ -51,3 +51,7 @@ The following optional properties are available:
     - *put*
     - *delete*
 
+
+Logging
+-------
+Should you need to investigate what went wrong, logs can be found within your ```%APPDATA%\pyxelrest``` folder.

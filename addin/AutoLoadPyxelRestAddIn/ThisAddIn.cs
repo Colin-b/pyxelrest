@@ -1,35 +1,56 @@
 ﻿using System;
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Vbe.Interop;
+using log4net;
 
 namespace AutoLoadPyxelRestAddIn
 {
     public partial class ThisAddIn
     {
+        private static readonly ILog Log = LogManager.GetLogger("AutoLoadPyxelRestAddIn");
+
         private static readonly string XLWINGS_VB_COMPONENT_NAME = "xlwings";
         private static readonly string PATH_TO_XLWINGS_BAS_ENV_VAR = "PathToXlWingsBasFile";
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
+            log4net.Config.XmlConfigurator.Configure();
+            Log.Info("PyxelRest auto load add-in loaded.");
             ((Excel.AppEvents_Event)Application).NewWorkbook += InsertXlWingsBasFile;
             Application.WorkbookOpen += UpdateXlWingsBasFile;
         }
 
         private void InsertXlWingsBasFile(Excel.Workbook Wb)
         {
-            string pathToBasFile = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR);
+            string pathToBasFile = GetPathToXlWingsBasFile();
             if (pathToBasFile != null && pathToBasFile.Length > 0)
+            {
+                Log.Info("PyxelRest xlwings configuration loaded.");
                 Wb.VBProject.VBComponents.Import(pathToBasFile);
+            }
         }
 
         private void UpdateXlWingsBasFile(Excel.Workbook Wb)
         {
-            string pathToBasFile = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR);
+            string pathToBasFile = GetPathToXlWingsBasFile();
             if (pathToBasFile != null && pathToBasFile.Length > 0)
             {
                 if (CanImportXlWingsBasFile(Wb))
+                {
+                    Log.Info("PyxelRest xlwings configuration updated.");
                     Wb.VBProject.VBComponents.Import(pathToBasFile);
+                }
             }
+        }
+
+        private string GetPathToXlWingsBasFile()
+        {
+            string filePath = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR, EnvironmentVariableTarget.User);
+            if(filePath == null)
+                filePath = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR, EnvironmentVariableTarget.Machine);
+            if (filePath == null)
+                Log.WarnFormat("Environment variable ({0}) providing path to PyxelRest XlWings configuration file cannot be found.", PATH_TO_XLWINGS_BAS_ENV_VAR);
+            return filePath;
         }
 
         private bool CanImportXlWingsBasFile(Excel.Workbook Wb)
@@ -55,9 +76,9 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Wb.VBProject.VBComponents.Remove(vbComponent);
             }
-            catch
+            catch(Exception ex)
             {
-                // TODO Log the fact that module could not be removed and the reason
+                Log.Error("XlWings module could not be removed.", ex);
                 return false;
             };
             return true;
