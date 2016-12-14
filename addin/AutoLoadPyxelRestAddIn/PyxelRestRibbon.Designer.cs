@@ -57,10 +57,10 @@
             // importButton
             // 
             this.importButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.importButton.Description = "Import User Defined Functions";
+            this.importButton.Description = "Update User Defined Functions";
             this.importButton.Image = ((System.Drawing.Image)(resources.GetObject("importButton.Image")));
             this.importButton.ImageName = "OpenAPI Logo";
-            this.importButton.Label = "Import User-Defined Functions";
+            this.importButton.Label = "Update User-Defined Functions";
             this.importButton.Name = "importButton";
             this.importButton.ShowImage = true;
             // 

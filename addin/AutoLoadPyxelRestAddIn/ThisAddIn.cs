@@ -15,10 +15,10 @@ namespace AutoLoadPyxelRestAddIn
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
-            Log.Info("AddIn Startup.");
             ((Excel.AppEvents_Event)Application).NewWorkbook += OnNewWorkBook;
             Application.WorkbookOpen += OnOpenWorkBook;
-            Application.WorkbookBeforeSave += OnSaveWorkBook;
+            // This is how blank document is handled
+            ActivatePyxelRest(OnExcelStart, Application.ActiveWorkbook);
         }
 
         private void OnNewWorkBook(Excel.Workbook Wb)
@@ -29,11 +29,6 @@ namespace AutoLoadPyxelRestAddIn
         private void OnOpenWorkBook(Excel.Workbook Wb)
         {
             ActivatePyxelRest(OnOpenWorkBook, Wb);
-        }
-
-        private void OnSaveWorkBook(Excel.Workbook Wb, bool SaveAsUI, ref bool Cancel)
-        {
-            ActivatePyxelRest(OnSaveWorkBook, Wb);
         }
 
         internal bool ImportUserDefinedFunctions()
@@ -75,22 +70,23 @@ namespace AutoLoadPyxelRestAddIn
                 Log.Error("Previous XLWings module cannot be removed.");
             ImportUserDefinedFunctions();
         }
-
-        private void OnSaveWorkBook(Excel.Workbook Wb, string pathToBasFile)
+        
+        private void OnExcelStart(Excel.Workbook Wb, string pathToBasFile)
         {
-            VBComponent xlwingsModule = GetXlWingsModule(Wb);
-            if(xlwingsModule == null)
+            if (IsBlankWorkBook(Wb))
             {
-                if (RemoveXlWingsModule(Wb, xlwingsModule))
-                    ImportXlWingsBasFile(Wb, pathToBasFile);
-                else
-                    Log.Error("Previous XLWings module cannot be removed.");
+                ImportXlWingsBasFile(Wb, pathToBasFile);
                 ImportUserDefinedFunctions();
             }
             else
             {
-                Log.Info("Do nothing on save.");
+                Log.Info("Starting Excel with a non-blank Workbook.");
             }
+        }
+
+        private bool IsBlankWorkBook(Excel.Workbook Wb)
+        {
+            return "" == Wb.CodeName;
         }
 
         private void ImportXlWingsBasFile(Excel.Workbook Wb, string pathToBasFile)
