@@ -35,6 +35,14 @@ Upgrade
 1. Uninstall AutoLoadPyxelRestAddIn
 2. Follow installation but add ``--upgrade`` option on ``pip install`` commands
 
+Uninstall
+---------
+
+1. Uninstall AutoLoadPyxelRestAddIn.
+2. Execute the following command:
+        >>> pip uninstall pyxelrest
+3. Remove ``%APPDATA%\pyxelrest`` folder.
+
 Configuration
 -------------
 Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\pixelrest_config.ini`` file.
