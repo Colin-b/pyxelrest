@@ -29,6 +29,12 @@ Installation
                 >>> pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 
 
+Upgrade
+-------
+
+1. Uninstall AutoLoadPyxelRestAddIn
+2. Follow installation but add ``--upgrade`` option on ``pip install`` commands
+
 Configuration
 -------------
 Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\pixelrest_config.ini`` file.
