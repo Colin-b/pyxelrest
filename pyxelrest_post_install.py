@@ -3,7 +3,6 @@ import os
 import shutil
 import subprocess
 import sys
-import zipfile
 try:
     # Python 3
     import winreg
@@ -14,7 +13,7 @@ except:
 
 def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
     def create_pyxelrest_bas_file():
-        pyxelrest_settings = os.path.join(pyxelrest_module_dir, 'xlwings.bas')
+        pyxelrest_settings = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             fill_pyxelrest_bas_file(new_settings)
         return pyxelrest_settings
@@ -30,7 +29,6 @@ def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
     def write_pyxelrest_settings_line(xlwings_settings_line, pyxelrest_settings):
         # In case this installation is not performed using the default python executable in the system
         if '    PYTHON_WIN = ""\n' == xlwings_settings_line:
-            # TODO Check if this works properly when calling it using pip?
             python_path = os.path.dirname(sys.executable)
             pyxelrest_settings.write('    PYTHON_WIN = "' + os.path.join(python_path, 'pythonw.exe') + '"\n')
         # Allow to call pyxelrest from any Excel file
@@ -42,8 +40,7 @@ def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
         else:
             pyxelrest_settings.write(xlwings_settings_line)
 
-    if not os.getenv('PathToXlWingsBasFile'):
-        create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
+    create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
 
 
 def create_environment_variable(string_name, string_value):
@@ -64,25 +61,21 @@ def create_environment_variable(string_name, string_value):
 def create_user_configuration(install_dir):
     default_config_file = os.path.join(install_dir, 'pyxelrest', 'default_configuration.ini')
     if os.path.isfile(default_config_file):
-        user_config_file = os.path.join(os.getenv('USERPROFILE'), 'pixelrest_config.ini')
+        user_config_file = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pixelrest_config.ini')
         shutil.copyfile(default_config_file, user_config_file)
     else:
         raise Exception('Default configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
 
 
-def get_auto_load_pyxelrest_addin(pyxelrest_module_dir):
-    auto_load_pyxelrest_addin_folder = os.path.join(pyxelrest_module_dir, 'AutoLoadPyxelRestAddIn')
-    with zipfile.ZipFile(r'\\XS008183\Exchange\AutoLoadPyxelRestAddIn.zip', 'r') as packaged_addin:
-        packaged_addin.extractall(auto_load_pyxelrest_addin_folder)
-    return os.path.join(auto_load_pyxelrest_addin_folder, 'AutoLoadPyxelRestAddIn.vsto')
-
-
-def install_auto_load_pyxelrest(pyxelrest_module_dir):
+def install_auto_load_pyxelrest(pyxelrest_addin_dir):
     vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', '10.0',
                                        'VSTOInstaller.exe')
     if not os.path.isfile(vsto_installer_path):
         raise Exception('Auto Load PixelRest Excel Add-In cannot be installed as VSTO installer cannnot be found.')
-    subprocess.check_call([vsto_installer_path, '/i', get_auto_load_pyxelrest_addin(pyxelrest_module_dir)])
+    vsto_file_path = os.path.join(pyxelrest_addin_dir, 'AutoLoadPyxelRestAddIn.vsto')
+    if not os.path.isfile(vsto_file_path):
+        raise Exception('Auto Load PixelRest Excel Add-In cannot be found in {0}.'.format(vsto_file_path))
+    subprocess.check_call([vsto_installer_path, '/i', vsto_file_path])
 
 
 if __name__ == '__main__':
@@ -93,8 +86,9 @@ if __name__ == '__main__':
 
     modules_dir = options.modulesdirectory if options.modulesdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_module_dir = os.path.join(modules_dir, 'pyxelrest')
+    pyxelrest_addin_dir = os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
     install_dir = options.installdirectory if options.installdirectory else os.path.abspath(os.path.dirname(__file__))
     create_user_configuration(install_dir)
     if sys.platform.startswith('win'):
         configure_xlwings_for_pyxelrest(pyxelrest_module_dir)
-        install_auto_load_pyxelrest(pyxelrest_module_dir)
+        install_auto_load_pyxelrest(pyxelrest_addin_dir)

@@ -1,6 +1,6 @@
 import os
 from setuptools import setup, find_packages
-from distutils.command.install import install
+from distutils.command.install_data import install_data
 import subprocess
 import distutils.sysconfig
 
@@ -8,12 +8,9 @@ this_dir = os.path.abspath(os.path.dirname(__file__))
 modules_dir = distutils.sysconfig.get_python_lib()
 
 
-class CustomInstall(install):
+class install_pyxelrest_data(install_data):
     def run(self):
-        install.run(self)
-        filename = os.path.join(self.prefix, "Scripts", "pyxelrest_post_install.py")
-        if not os.path.isfile(filename):
-            raise RuntimeError("Cannot find post installation script: '%s'" % (filename,))
+        install_data.run(self)
         subprocess.check_call(['python', 'pyxelrest_post_install.py', '--installdirectory', this_dir, '--modulesdirectory', modules_dir])
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
@@ -50,10 +47,39 @@ setup(name='pyxelrest',
           'udf',
           'service'
       ],
-      packages=find_packages(),
+      packages=find_packages(exclude=['tests']),
       package_data={
-         '': ['*.ini', '*.tpl', '*.rst'],
+         'pyxelrest': ['default_configuration.ini', 'user_defined_functions.tpl']
       },
+      data_files=[
+          (
+              'pyxelrest_addin', [
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.dll.config',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.dll.manifest',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.vsto',
+                  # Package Dependencies to ensure that it will work on any client
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.xml',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.xml',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.xml',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.xml',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.xml',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml'
+              ]
+          ),
+          (
+              'pyxelrest_addin/resources', [
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/openapi_logo.png'
+              ]
+          )
+      ],
       install_requires=[
           'jinja2>=2.8',
           'requests>=2.12.2',
@@ -66,6 +92,6 @@ setup(name='pyxelrest',
           'Windows'
       ],
       cmdclass={
-          'install': CustomInstall
+          'install_data': install_pyxelrest_data
       }
       )

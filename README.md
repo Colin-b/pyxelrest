@@ -18,7 +18,7 @@ Installation
     - For *Python 2* users, from an elevated command prompt, execute the following commands:
     
             pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-            pip install --egg pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+            pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
     - For *Python 3* users the following steps must be performed:
 
         1. *PyWin32* should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32).
@@ -30,12 +30,12 @@ Installation
                 python.exe Scripts\pywin32_postinstall.py -install
         4. Project must be installed. From an elevated command prompt, execute the following command:
         
-                pip install --egg pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
+                pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
 
 
 Configuration
 -------------
-Services to be exposed can be configured thanks to ``pixelrest_config.ini`` file located in your user folder.
+Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\pixelrest_config.ini`` file.
 
 Each section corresponds to a service.
 
@@ -56,4 +56,4 @@ The following optional properties are available:
 
 Logging
 -------
-Should you need to investigate what went wrong, logs can be found within your ```%APPDATA%\pyxelrest``` folder.
+Should you need to investigate what went wrong, logs can be found within your ``%APPDATA%\pyxelrest`` folder.
