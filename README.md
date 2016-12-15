@@ -36,13 +36,13 @@ Installation
 Upgrade
 -------
 
-1. Uninstall AutoLoadPyxelRestAddIn (in case version changed).
+1. Go to ``Control Panel/Programs and Features`` and uninstall AutoLoadPyxelRestAddIn (in case version changed).
 2. Follow installation but add ``--upgrade`` option on ``pip install`` commands.
 
 Uninstall
 ---------
 
-1. Uninstall AutoLoadPyxelRestAddIn.
+1. Go to ``Control Panel/Programs and Features`` and uninstall AutoLoadPyxelRestAddIn.
 2. Execute the following command:
 
         pip uninstall pyxelrest

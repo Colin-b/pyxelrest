@@ -13,11 +13,20 @@ except:
 
 def configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_dir):
     def create_pyxelrest_bas_file():
+        """
+        Create XLWings specific configuration for PyxelRest.
+        :return: None
+        """
         pyxelrest_settings = os.path.join(pyxelrest_appdata_folder, 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             fill_pyxelrest_bas_file(new_settings)
 
     def fill_pyxelrest_bas_file(pyxelrest_settings):
+        """
+        Fill XLWings specific configuration for PyxelRest.
+        :param pyxelrest_settings: PyxelRest XLWings specific settings file.
+        :return: None
+        """
         import xlwings
         xlwings_path = xlwings.__path__[0]
         with open(os.path.join(xlwings_path, 'xlwings.bas')) as previous_settings:
@@ -26,6 +35,12 @@ def configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_d
 
     # TODO Use regular expressions to update settings
     def write_pyxelrest_settings_line(xlwings_settings_line, pyxelrest_settings):
+        """
+        Write a new line in PyxelRest XLWings settings file.
+        :param xlwings_settings_line: Line in default XLWings settings file.
+        :param pyxelrest_settings: PyxelRest XLWings specific settings file.
+        :return: None
+        """
         # In case this installation is not performed using the default python executable in the system
         if '    PYTHON_WIN = ""\n' == xlwings_settings_line:
             python_path = os.path.dirname(sys.executable)
