@@ -77,6 +77,13 @@ def install_auto_load_pyxelrest(pyxelrest_addin_dir):
     subprocess.check_call([vsto_installer_path, '/i', vsto_file_path])
 
 
+def get_addin_folder(addin_folder_option, modules_dir):
+    if addin_folder_option:
+        if os.path.isabs(addin_folder_option):
+            return addin_folder_option
+        return os.path.abspath(addin_folder_option)
+    return os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-idir', '--installdirectory', help='directory containing pyxelrest files for installation', default=None, type=str)
@@ -86,7 +93,7 @@ if __name__ == '__main__':
 
     modules_dir = options.modulesdirectory if options.modulesdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_module_dir = os.path.join(modules_dir, 'pyxelrest')
-    pyxelrest_addin_dir = options.addindirectory if options.addindirectory else os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
+    pyxelrest_addin_dir = get_addin_folder(options.addindirectory, modules_dir)
     install_dir = options.installdirectory if options.installdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
     if not os.path.exists(pyxelrest_appdata_folder):
