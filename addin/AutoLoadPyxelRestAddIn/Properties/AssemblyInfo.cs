@@ -7,7 +7,7 @@ using System.Security;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AutoLoadPyxelRestAddIn")]
-[assembly: AssemblyDescription("Auto load PyxelRest within Excel on opening or creating a file.")]
+[assembly: AssemblyDescription("Auto load PyxelRest within Excel.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Engie")]
 [assembly: AssemblyProduct("AutoLoadPyxelRestAddIn")]
