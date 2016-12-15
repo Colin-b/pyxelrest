@@ -41,7 +41,8 @@ generate_user_defined_functions(services)
 logging.info('Expose user defined functions through PyxelRest.')
 try:
     from user_defined_functions import *
-except ModuleNotFoundError:
+except Exception:
+    logging.warning('Failed to import UDFs relatively to module class. Trying relatively to module folder.')
     # Occurs when calling pyxelrest via xlwings in non-debug mode
     from pyxelrest.user_defined_functions import *
 
