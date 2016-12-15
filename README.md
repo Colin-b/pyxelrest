@@ -15,23 +15,8 @@ User Installation
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Excel must be closed while executing the following step.
 
-    - For *Python 2* users, from an elevated command prompt, execute the following commands:
-    
-            pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-            pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-    - For *Python 3* users the following steps must be performed:
-
-        1. *PyWin32* should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32).
-        2. And installed thanks to the following command:
-        
-                pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
-        3. Finally, from an elevated command prompt, execute the following command from your python directory:
-        
-                python.exe Scripts\pywin32_postinstall.py -install
-        4. Project must be installed. From an elevated command prompt, execute the following command:
-        
-                pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
-
+        pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
 
 Upgrade
 -------
@@ -74,28 +59,12 @@ Logging
 Should you need to investigate what went wrong, logs can be found within your ``%APPDATA%\pyxelrest`` folder.
 
 Developer Installation
-------------
+----------------------
 
 1. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Excel must be closed while executing the following step.
+2. Excel must be closed while executing the following step from within pyxelrest root folder:
 
-    - For *Python 2* users, from an elevated command prompt, execute the following commands:
-    
-            pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-            pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-            python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
-    - For *Python 3* users the following steps must be performed:
-
-        1. *PyWin32* should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32).
-        2. And installed thanks to the following command:
-        
-                pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
-        3. Finally, from an elevated command prompt, execute the following command from your python directory:
-        
-                python.exe Scripts\pywin32_postinstall.py -install
-        4. Project must be installed. From an elevated command prompt, execute the following command:
-        
-                pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
-                python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
-
+        pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
