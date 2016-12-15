@@ -10,7 +10,6 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly ILog Log = LogManager.GetLogger("AutoLoadPyxelRestAddIn");
 
         private static readonly string XLWINGS_VB_COMPONENT_NAME = "xlwings";
-        private static readonly string PATH_TO_XLWINGS_BAS_ENV_VAR = "PathToXlWingsBasFile";
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
@@ -49,7 +48,7 @@ namespace AutoLoadPyxelRestAddIn
         private void ActivatePyxelRest(Action<Excel.Workbook, string> loadAction, Excel.Workbook Wb)
         {
             string pathToBasFile = GetPathToXlWingsBasFile();
-            if (pathToBasFile != null && pathToBasFile.Length > 0)
+            if (pathToBasFile != null)
                 loadAction.Invoke(Wb, pathToBasFile);
             else
                 Log.Warn("No configuration can be found to load.");
@@ -103,12 +102,10 @@ namespace AutoLoadPyxelRestAddIn
 
         private string GetPathToXlWingsBasFile()
         {
-            string filePath = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR, EnvironmentVariableTarget.User);
-            if(filePath == null)
-                filePath = Environment.GetEnvironmentVariable(PATH_TO_XLWINGS_BAS_ENV_VAR, EnvironmentVariableTarget.Machine);
-            if (filePath == null)
-                Log.WarnFormat("Environment variable ({0}) providing path to PyxelRest XlWings configuration file cannot be found.", PATH_TO_XLWINGS_BAS_ENV_VAR);
-            return filePath;
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if(appDataFolder != null)
+                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "xlwings.bas");
+            return null;
         }
 
         private VBComponent GetXlWingsModule(Excel.Workbook Wb)

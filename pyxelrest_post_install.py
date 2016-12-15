@@ -16,7 +16,6 @@ def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
         pyxelrest_settings = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             fill_pyxelrest_bas_file(new_settings)
-        return pyxelrest_settings
 
     def fill_pyxelrest_bas_file(pyxelrest_settings):
         import xlwings
@@ -40,22 +39,7 @@ def configure_xlwings_for_pyxelrest(pyxelrest_module_dir):
         else:
             pyxelrest_settings.write(xlwings_settings_line)
 
-    create_environment_variable('PathToXlWingsBasFile', create_pyxelrest_bas_file())
-
-
-def create_environment_variable(string_name, string_value):
-    """
-    Create environment variable that stay available after execution of this python script.
-    The method must be run as administrator.
-    :param string_name: Name of the environment variable
-    :param string_value: String value of the environment variable
-    :return: None
-    """
-    reg = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
-    env = winreg.OpenKey(reg, "Environment", 0, winreg.KEY_ALL_ACCESS)
-    winreg.SetValueEx(env, string_name, 0, winreg.REG_EXPAND_SZ, string_value)
-    winreg.CloseKey(env)
-    winreg.CloseKey(reg)
+    create_pyxelrest_bas_file()
 
 
 def create_user_configuration(install_dir):
