@@ -33,7 +33,7 @@ Uninstall
 
 Configuration
 -------------
-Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\pixelrest_config.ini`` file.
+Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\configuration.ini`` file.
 
 Each section corresponds to a service.
 

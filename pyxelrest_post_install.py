@@ -60,7 +60,7 @@ def configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_d
 def create_user_configuration(pyxelrest_appdata_folder, install_dir):
     default_config_file = os.path.join(install_dir, 'pyxelrest', 'default_configuration.ini')
     if os.path.isfile(default_config_file):
-        user_config_file = os.path.join(pyxelrest_appdata_folder, 'pyxelrest_config.ini')
+        user_config_file = os.path.join(pyxelrest_appdata_folder, 'configuration.ini')
         shutil.copyfile(default_config_file, user_config_file)
     else:
         raise Exception('Default configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
