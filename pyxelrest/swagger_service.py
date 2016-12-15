@@ -87,4 +87,10 @@ def load_services():
     if not config_parser.read(file_path):
         raise Exception('"{0}" configuration file cannot be read.'.format(file_path))
     logging.info('Loading configuration from "{0}".'.format(file_path))
-    return [SwaggerService(service, config_parser) for service in config_parser.sections()]
+    loaded_services = []
+    for service in config_parser.sections():
+        try:
+            loaded_services.append(SwaggerService(service, config_parser))
+        except Exception:
+            logging.exception('Unable to load "{0}" service.'.format(service))
+    return loaded_services
