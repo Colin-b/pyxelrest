@@ -36,7 +36,7 @@ Installation
 Upgrade
 -------
 
-1. Uninstall AutoLoadPyxelRestAddIn.
+1. Uninstall AutoLoadPyxelRestAddIn (in case version changed).
 2. Follow installation but add ``--upgrade`` option on ``pip install`` commands.
 
 Uninstall
@@ -56,11 +56,11 @@ Each section corresponds to a service.
 
 The following mandatory properties are available:
 
-- **host**: URI to the service base path
+- **host**: URI to the service base path.
 
 The following optional properties are available:
 
-- **swaggerBasePath**: URI to retrieve the Swagger JSON. Default value is */*
+- **swaggerBasePath**: URI to retrieve the Swagger JSON. Default value is */*.
 - **methods**: List (separator is ",") of service methods to be exposed, all by default, amongst:
 
     - *get*
