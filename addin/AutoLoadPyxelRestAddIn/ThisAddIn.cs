@@ -16,7 +16,6 @@ namespace AutoLoadPyxelRestAddIn
             log4net.Config.XmlConfigurator.Configure();
             ((Excel.AppEvents_Event)Application).NewWorkbook += OnNewWorkBook;
             Application.WorkbookOpen += OnOpenWorkBook;
-            // This is how blank document is handled
             ActivatePyxelRest(OnExcelStart, Application.ActiveWorkbook);
         }
 
@@ -29,7 +28,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             ActivatePyxelRest(OnOpenWorkBook, Wb);
         }
-
+         
         internal bool ImportUserDefinedFunctions()
         {
             return ImportUserDefinedFunctions(Application.ActiveWorkbook);
@@ -84,7 +83,7 @@ namespace AutoLoadPyxelRestAddIn
             }
             else
             {
-                Log.InfoFormat("{0}: Starting Excel with a non-blank Workbook.", Wb.Name);
+                OnOpenWorkBook(Wb, pathToBasFile);
             }
         }
 
