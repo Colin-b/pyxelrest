@@ -91,4 +91,5 @@ Enhancements TODO list
 Known issues
 ------------
 
-- On Excel restart, plugin is sometimes not available.
+- On starting Excel with a xlsx file, addin might be deactivated.
+    - Workaround for now is to manually reactivate the addin
