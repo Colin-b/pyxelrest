@@ -68,3 +68,27 @@ Developer Installation
         pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
         pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
         python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
+
+Enhancements TODO list
+----------------------
+
+- Handle streaming of data back to Excel (reduce memory consumption).
+- Handle structure with dictionaries nested in dictionaries.
+- Full Swagger 2.0 specification support:
+    - Handle multiple ways of sending arrays (for now arrays are sent as replication of the same parameter name).
+    - etc...
+- Add client logs to splunk? (it should be generic with default settings to file anyway)
+- Upgrade pyxelrest settings on upgrade instead of overriding file content.
+- Handle filtering on Swagger tags
+- Add test specific module requirements in setup.
+- Do not package test module.
+- Clean up list of addin files that are packaged (App.config is useless).
+- Add more test cases actually performing calls to functions.
+- Get rid of xlwings bas file by including what is required in our own addin.
+- Allow to specify settings thanks to addin GUI and get rid of the update button.
+- Add UDFs at Excel application level instead of book level.
+
+Known issues
+------------
+
+- On Excel restart, plugin is sometimes not available.
