@@ -16,7 +16,6 @@ namespace AutoLoadPyxelRestAddIn
             log4net.Config.XmlConfigurator.Configure();
             ((Excel.AppEvents_Event)Application).NewWorkbook += OnNewWorkBook;
             Application.WorkbookOpen += OnOpenWorkBook;
-            // This is how blank document is handled
             ActivatePyxelRest(OnExcelStart, Application.ActiveWorkbook);
         }
 
@@ -29,18 +28,23 @@ namespace AutoLoadPyxelRestAddIn
         {
             ActivatePyxelRest(OnOpenWorkBook, Wb);
         }
-
+         
         internal bool ImportUserDefinedFunctions()
+        {
+            return ImportUserDefinedFunctions(Application.ActiveWorkbook);
+        }
+
+        private bool ImportUserDefinedFunctions(Excel.Workbook Wb)
         {
             try
             {
-                Application.Run("'" + Application.ActiveWorkbook.Name + "'!ImportPythonUDFs");
-                Log.Info("User Defined Functions imported.");
+                Application.Run("'" + Wb.Name + "'!ImportPythonUDFs");
+                Log.InfoFormat("{0}: User Defined Functions imported.", Wb.Name);
                 return true;
             }
             catch (Exception ex)
             {
-                Log.Error("Unable to import User Defined Functions.", ex);
+                Log.Error(string.Format("{0}: Unable to import User Defined Functions.", Wb.Name), ex);
                 return false;
             }
         }
@@ -51,13 +55,13 @@ namespace AutoLoadPyxelRestAddIn
             if (pathToBasFile != null)
                 loadAction.Invoke(Wb, pathToBasFile);
             else
-                Log.Warn("No configuration can be found to load.");
+                Log.WarnFormat("{0}: No XLWings module can be found to load.", Wb.Name);
         }
 
         private void OnNewWorkBook(Excel.Workbook Wb, string pathToBasFile)
         {
             ImportXlWingsBasFile(Wb, pathToBasFile);
-            ImportUserDefinedFunctions();
+            ImportUserDefinedFunctions(Wb);
         }
 
         private void OnOpenWorkBook(Excel.Workbook Wb, string pathToBasFile)
@@ -66,8 +70,8 @@ namespace AutoLoadPyxelRestAddIn
             if (xlwingsModule == null || RemoveXlWingsModule(Wb, xlwingsModule))
                 ImportXlWingsBasFile(Wb, pathToBasFile);
             else
-                Log.Error("Previous XLWings module cannot be removed.");
-            ImportUserDefinedFunctions();
+                Log.ErrorFormat("{0}: Previous XLWings module cannot be removed.", Wb.Name);
+            ImportUserDefinedFunctions(Wb);
         }
         
         private void OnExcelStart(Excel.Workbook Wb, string pathToBasFile)
@@ -75,11 +79,11 @@ namespace AutoLoadPyxelRestAddIn
             if (IsBlankWorkBook(Wb))
             {
                 ImportXlWingsBasFile(Wb, pathToBasFile);
-                ImportUserDefinedFunctions();
+                ImportUserDefinedFunctions(Wb);
             }
             else
             {
-                Log.Info("Starting Excel with a non-blank Workbook.");
+                OnOpenWorkBook(Wb, pathToBasFile);
             }
         }
 
@@ -92,11 +96,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             try {
                 Wb.VBProject.VBComponents.Import(pathToBasFile);
-                Log.Info("XLWings module imported.");
+                Log.InfoFormat("{0}: XLWings module imported.", Wb.Name);
             }
             catch (Exception ex)
             {
-                Log.Error("XlWings module could not be imported.", ex);
+                Log.Error(string.Format("{0}: XlWings module could not be imported.", Wb.Name), ex);
             };
         }
 
@@ -126,11 +130,11 @@ namespace AutoLoadPyxelRestAddIn
             try
             {
                 Wb.VBProject.VBComponents.Remove(vbComponent);
-                Log.Info("XlWings module removed.");
+                Log.InfoFormat("{0}: XlWings module removed.", Wb.Name);
             }
             catch(Exception ex)
             {
-                Log.Error("XlWings module could not be removed.", ex);
+                Log.Error(string.Format("{0}: XlWings module could not be removed.", Wb.Name), ex);
                 return false;
             };
             return true;

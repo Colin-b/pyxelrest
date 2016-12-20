@@ -8,41 +8,26 @@ How to use
 1. Update the configuration so that it contains the required services.
 2. Launch Excel.
 
-Installation
+User Installation
 ------------
 
 1. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Excel must be closed while executing the following step.
 
-    - For *Python 2* users, from an elevated command prompt, execute the following commands:
-    
-            pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-            pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-    - For *Python 3* users the following steps must be performed:
-
-        1. *PyWin32* should be [downloaded](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pywin32).
-        2. And installed thanks to the following command:
-        
-                pip install pywin32-220.1-cp36-cp36m-win_amd64.whl
-        3. Finally, from an elevated command prompt, execute the following command from your python directory:
-        
-                python.exe Scripts\pywin32_postinstall.py -install
-        4. Project must be installed. From an elevated command prompt, execute the following command:
-        
-                pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python3/simple
-
+        pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
 
 Upgrade
 -------
 
-1. Uninstall AutoLoadPyxelRestAddIn (in case version changed).
+1. Go to ``Control Panel/Programs and Features`` and uninstall AutoLoadPyxelRestAddIn (in case version changed).
 2. Follow installation but add ``--upgrade`` option on ``pip install`` commands.
 
 Uninstall
 ---------
 
-1. Uninstall AutoLoadPyxelRestAddIn.
+1. Go to ``Control Panel/Programs and Features`` and uninstall AutoLoadPyxelRestAddIn.
 2. Execute the following command:
 
         pip uninstall pyxelrest
@@ -50,7 +35,7 @@ Uninstall
 
 Configuration
 -------------
-Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\pixelrest_config.ini`` file.
+Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\configuration.ini`` file.
 
 Each section corresponds to a service.
 
@@ -72,3 +57,39 @@ The following optional properties are available:
 Logging
 -------
 Should you need to investigate what went wrong, logs can be found within your ``%APPDATA%\pyxelrest`` folder.
+
+Developer Installation
+----------------------
+
+1. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
+> File > Options > Trust Center > Trust Center Settings > Macro Settings
+2. Excel must be closed while executing the following step from within pyxelrest root folder (Note that for the moment you still need to build the addin C# solution by yourself):
+
+        pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
+
+Enhancements TODO list
+----------------------
+
+- Handle streaming of data back to Excel (reduce memory consumption).
+- Handle structure with dictionaries nested in dictionaries.
+- Full Swagger 2.0 specification support:
+    - Handle multiple ways of sending arrays (for now arrays are sent as replication of the same parameter name).
+    - etc...
+- Add client logs to splunk? (it should be generic with default settings to file anyway)
+- Upgrade pyxelrest settings on upgrade instead of overriding file content.
+- Handle filtering on Swagger tags
+- Add test specific module requirements in setup.
+- Do not package test module.
+- Clean up list of addin files that are packaged (App.config is useless).
+- Add more test cases actually performing calls to functions.
+- Get rid of xlwings bas file by including what is required in our own addin.
+- Allow to specify settings thanks to addin GUI and get rid of the update button.
+- Add UDFs at Excel application level instead of book level.
+
+Known issues
+------------
+
+- On starting Excel with a xlsx file, addin might be deactivated.
+    - Workaround for now is to manually reactivate the addin

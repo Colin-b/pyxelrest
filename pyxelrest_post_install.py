@@ -13,11 +13,20 @@ except:
 
 def configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_dir):
     def create_pyxelrest_bas_file():
+        """
+        Create XLWings specific configuration for PyxelRest.
+        :return: None
+        """
         pyxelrest_settings = os.path.join(pyxelrest_appdata_folder, 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             fill_pyxelrest_bas_file(new_settings)
 
     def fill_pyxelrest_bas_file(pyxelrest_settings):
+        """
+        Fill XLWings specific configuration for PyxelRest.
+        :param pyxelrest_settings: PyxelRest XLWings specific settings file.
+        :return: None
+        """
         import xlwings
         xlwings_path = xlwings.__path__[0]
         with open(os.path.join(xlwings_path, 'xlwings.bas')) as previous_settings:
@@ -26,6 +35,12 @@ def configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_d
 
     # TODO Use regular expressions to update settings
     def write_pyxelrest_settings_line(xlwings_settings_line, pyxelrest_settings):
+        """
+        Write a new line in PyxelRest XLWings settings file.
+        :param xlwings_settings_line: Line in default XLWings settings file.
+        :param pyxelrest_settings: PyxelRest XLWings specific settings file.
+        :return: None
+        """
         # In case this installation is not performed using the default python executable in the system
         if '    PYTHON_WIN = ""\n' == xlwings_settings_line:
             python_path = os.path.dirname(sys.executable)
@@ -45,7 +60,7 @@ def configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_d
 def create_user_configuration(pyxelrest_appdata_folder, install_dir):
     default_config_file = os.path.join(install_dir, 'pyxelrest', 'default_configuration.ini')
     if os.path.isfile(default_config_file):
-        user_config_file = os.path.join(pyxelrest_appdata_folder, 'pixelrest_config.ini')
+        user_config_file = os.path.join(pyxelrest_appdata_folder, 'configuration.ini')
         shutil.copyfile(default_config_file, user_config_file)
     else:
         raise Exception('Default configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
@@ -62,6 +77,13 @@ def install_auto_load_pyxelrest(pyxelrest_addin_dir):
     subprocess.check_call([vsto_installer_path, '/i', vsto_file_path])
 
 
+def get_addin_folder(addin_folder_option, modules_dir):
+    if addin_folder_option:
+        if os.path.isabs(addin_folder_option):
+            return addin_folder_option
+        return os.path.abspath(addin_folder_option)
+    return os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-idir', '--installdirectory', help='directory containing pyxelrest files for installation', default=None, type=str)
@@ -71,7 +93,7 @@ if __name__ == '__main__':
 
     modules_dir = options.modulesdirectory if options.modulesdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_module_dir = os.path.join(modules_dir, 'pyxelrest')
-    pyxelrest_addin_dir = os.path.abspath(options.addindirectory) if options.addindirectory else os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
+    pyxelrest_addin_dir = get_addin_folder(options.addindirectory, modules_dir)
     install_dir = options.installdirectory if options.installdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
     if not os.path.exists(pyxelrest_appdata_folder):

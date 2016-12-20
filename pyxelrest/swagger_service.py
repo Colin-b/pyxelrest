@@ -83,7 +83,7 @@ def load_services():
     (DEFAULT excluded).
     """
     config_parser = ConfigParser()
-    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pixelrest_config.ini')
+    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration.ini')
     if not config_parser.read(file_path):
         raise Exception('"{0}" configuration file cannot be read.'.format(file_path))
     logging.info('Loading configuration from "{0}".'.format(file_path))
