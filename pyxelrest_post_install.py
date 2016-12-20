@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     modules_dir = options.modulesdirectory if options.modulesdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_module_dir = os.path.join(modules_dir, 'pyxelrest')
-    pyxelrest_addin_dir = options.addindirectory if options.addindirectory else os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
+    pyxelrest_addin_dir = os.path.abspath(options.addindirectory) if options.addindirectory else os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
     install_dir = options.installdirectory if options.installdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
     if not os.path.exists(pyxelrest_appdata_folder):
