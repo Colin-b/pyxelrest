@@ -16,7 +16,9 @@ namespace AutoLoadPyxelRestAddIn
             log4net.Config.XmlConfigurator.Configure();
             ((Excel.AppEvents_Event)Application).NewWorkbook += OnNewWorkBook;
             Application.WorkbookOpen += OnOpenWorkBook;
-            ActivatePyxelRest(OnExcelStart, Application.ActiveWorkbook);
+            // When opening an already existing document, active workbook is null at this point and opening event will be triggered
+            if(Application.ActiveWorkbook != null)
+                ActivatePyxelRest(OnExcelStart, Application.ActiveWorkbook);
         }
 
         private void OnNewWorkBook(Excel.Workbook Wb)
