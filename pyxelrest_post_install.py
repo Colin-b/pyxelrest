@@ -84,16 +84,38 @@ def get_addin_folder(addin_folder_option, modules_dir):
         return os.path.abspath(addin_folder_option)
     return os.path.join(modules_dir, '..', '..', 'pyxelrest_addin')
 
+
+def install_pyxelrest_vb_addin(pyxelrest_vb_addin_dir):
+    pyxelrest_vb_file_path = os.path.join(pyxelrest_vb_addin_dir, 'pyxelrest.xlam')
+    if not os.path.isfile(pyxelrest_vb_file_path):
+        raise Exception('Visual Basic PixelRest Excel Add-In cannot be found in {0}.'.format(pyxelrest_vb_file_path))
+    xlstart_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART')
+    if not os.path.exists(xlstart_folder):
+        os.makedirs(xlstart_folder)
+    loaded_pyxelrest_vb_file = os.path.join(xlstart_folder, 'pyxelrest.xlam')
+    shutil.copyfile(pyxelrest_vb_file_path, loaded_pyxelrest_vb_file)
+
+
+def get_vb_addin_folder(vb_addin_folder_option, modules_dir):
+    if vb_addin_folder_option:
+        if os.path.isabs(vb_addin_folder_option):
+            return vb_addin_folder_option
+        return os.path.abspath(vb_addin_folder_option)
+    return os.path.join(modules_dir, '..', '..', 'pyxelrest_vb_addin')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-idir', '--installdirectory', help='directory containing pyxelrest files for installation', default=None, type=str)
     parser.add_argument('-mdir', '--modulesdirectory', help='directory containing installed python modules', default=None, type=str)
-    parser.add_argument('-adir', '--addindirectory', help='directory containing pyxelrest addin', default=None, type=str)
+    parser.add_argument('-adir', '--addindirectory', help='directory containing pyxelrest auto load addin', default=None, type=str)
+    parser.add_argument('-vbdir', '--vbaddindirectory', help='directory containing pyxelrest visual basic addin', default=None, type=str)
     options = parser.parse_args(sys.argv[1:])
 
     modules_dir = options.modulesdirectory if options.modulesdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_module_dir = os.path.join(modules_dir, 'pyxelrest')
     pyxelrest_addin_dir = get_addin_folder(options.addindirectory, modules_dir)
+    pyxelrest_vb_addin_dir = get_vb_addin_folder(options.vbaddindirectory, modules_dir)
     install_dir = options.installdirectory if options.installdirectory else os.path.abspath(os.path.dirname(__file__))
     pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
     if not os.path.exists(pyxelrest_appdata_folder):
@@ -101,5 +123,6 @@ if __name__ == '__main__':
 
     create_user_configuration(pyxelrest_appdata_folder, install_dir)
     if sys.platform.startswith('win'):
+        install_pyxelrest_vb_addin(pyxelrest_vb_addin_dir)
         configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_dir)
         install_auto_load_pyxelrest(pyxelrest_addin_dir)

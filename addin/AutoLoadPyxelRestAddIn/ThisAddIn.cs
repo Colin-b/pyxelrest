@@ -2,28 +2,15 @@
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Vbe.Interop;
 using log4net;
-using System.Runtime.InteropServices;
 
 namespace AutoLoadPyxelRestAddIn
 {
-    static class NativeMethods
-    {
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr LoadLibrary(string dllToLoad);
-
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
-        
-        [DllImport("kernel32.dll")]
-        public static extern bool FreeLibrary(IntPtr hModule);
-    }
-
-
     public partial class ThisAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("AutoLoadPyxelRestAddIn");
 
         private static readonly string XLWINGS_VB_COMPONENT_NAME = "xlwings";
+        private static readonly string PYXELREST_VB_PROJECT_NAME = "PyxelRest";
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
@@ -69,22 +56,20 @@ namespace AutoLoadPyxelRestAddIn
         private void ActivatePyxelRest()
         {
             string pathToBasFile = GetPathToXlWingsBasFile();
-            if (pathToBasFile != null)
+            if (pathToBasFile == null)
             {
-                ReloadXlWingsBasFile(pathToBasFile);
-                ImportUserDefinedFunctions();
-            }
-            else
                 Log.WarnFormat("No XLWings module can be found to load.");
+                return;
+            }
+
+            ReloadXlWingsBasFile(pathToBasFile);
+            ImportUserDefinedFunctions();
         }
 
         private void ReloadXlWingsBasFile(string pathToBasFile)
         {
-            VBComponent xlwingsModule = GetXlWingsModule();
-            if (xlwingsModule == null || RemoveXlWingsModule(xlwingsModule))
+            if (RemoveXlWingsModule())
                 ImportXlWingsBasFile(pathToBasFile);
-            else
-                Log.Error("Previous XLWings module cannot be removed.");
         }
 
         private void ImportXlWingsBasFile(string pathToBasFile)
@@ -110,7 +95,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             foreach (VBProject vb in Application.VBE.VBProjects)
             {
-                if ("PyxelRest".Equals(vb.Name))
+                if (PYXELREST_VB_PROJECT_NAME.Equals(vb.Name))
                     return vb;
             }
             return null;
@@ -138,8 +123,11 @@ namespace AutoLoadPyxelRestAddIn
             return null;
         }
 
-        private bool RemoveXlWingsModule(VBComponent vbComponent)
+        private bool RemoveXlWingsModule()
         {
+            VBComponent xlWingsModule = GetXlWingsModule();
+            if (xlWingsModule == null)
+                return true;
             try
             {
                 VBProject vbProject = GetPyxelRestVBProject();
@@ -148,7 +136,7 @@ namespace AutoLoadPyxelRestAddIn
                     Log.Error("PyxelRest VB Project cannot be found.");
                     return false;
                 }
-                vbProject.VBComponents.Remove(vbComponent);
+                vbProject.VBComponents.Remove(xlWingsModule);
                 Log.Info("XlWings module removed.");
             }
             catch(Exception ex)

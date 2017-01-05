@@ -32,6 +32,7 @@ Uninstall
 
         pip uninstall pyxelrest
 3. Remove ``%APPDATA%\pyxelrest`` folder.
+4. Remove ``%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam`` file.
 
 Configuration
 -------------
@@ -67,7 +68,7 @@ Developer Installation
 
         pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
         pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-        python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
+        python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release --vbaddindirectory addin
 
 Enhancements TODO list
 ----------------------
