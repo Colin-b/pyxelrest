@@ -87,4 +87,3 @@ Enhancements TODO list
 - Add more test cases actually performing calls to functions.
 - Get rid of xlwings bas file by including what is required in our own addin.
 - Allow to specify settings thanks to addin GUI and get rid of the update button.
-- Add UDFs at Excel application level instead of book level.
