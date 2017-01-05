@@ -32,6 +32,7 @@ Uninstall
 
         pip uninstall pyxelrest
 3. Remove ``%APPDATA%\pyxelrest`` folder.
+4. Remove ``%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam`` file.
 
 Configuration
 -------------
@@ -67,7 +68,7 @@ Developer Installation
 
         pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
         pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-        python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release
+        python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release --vbaddindirectory addin
 
 Enhancements TODO list
 ----------------------
@@ -86,10 +87,3 @@ Enhancements TODO list
 - Add more test cases actually performing calls to functions.
 - Get rid of xlwings bas file by including what is required in our own addin.
 - Allow to specify settings thanks to addin GUI and get rid of the update button.
-- Add UDFs at Excel application level instead of book level.
-
-Known issues
-------------
-
-- On starting Excel with a xlsx file, addin might be deactivated.
-    - Workaround for now is to manually reactivate the addin

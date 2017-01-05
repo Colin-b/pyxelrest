@@ -76,6 +76,11 @@ setup(name='pyxelrest',
               ]
           ),
           (
+              'pyxelrest_vb_addin', [
+                  'addin/pyxelrest.xlam'
+              ]
+          ),
+          (
               'pyxelrest_addin/resources', [
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/openapi_logo.png'
               ]
