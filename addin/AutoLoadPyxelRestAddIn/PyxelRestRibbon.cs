@@ -94,9 +94,9 @@ namespace AutoLoadPyxelRestAddIn
             newServiceName.TextChanged += NewServiceName_TextChanged;
             newServicePanel.Controls.Add(newServiceName, 0, 0);
             addServiceButton = new Button();
-            addServiceButton.Text = "Create a new service";
+            addServiceButton.Text = "Enter service name to create a new configuration";
             addServiceButton.ForeColor = Color.DarkBlue;
-            addServiceButton.BackColor = Color.LightBlue;
+            addServiceButton.BackColor = Color.LightGray;
             addServiceButton.Dock = DockStyle.Fill;
             addServiceButton.AutoSize = true;
             addServiceButton.Click += AddServiceSection;
@@ -122,10 +122,29 @@ namespace AutoLoadPyxelRestAddIn
 
         private void NewServiceName_TextChanged(object sender, EventArgs e)
         {
-            if(newServiceName.TextLength > 0)
-                addServiceButton.Enabled = !services.Exists(s => newServiceName.Text.Equals(s.Name));
+            newServiceName.Text = newServiceName.Text.Replace(' ', '_');
+            if (newServiceName.TextLength > 0)
+            {
+                string newService = newServiceName.Text;
+                bool alreadyExists = services.Exists(s => newService.Equals(s.Name));
+                addServiceButton.Enabled = !alreadyExists;
+                if (alreadyExists)
+                {
+                    addServiceButton.Text = newService + " configuration already exists";
+                    addServiceButton.BackColor = Color.OrangeRed;
+                }
+                else
+                {
+                    addServiceButton.Text = "Add " + newService + " configuration";
+                    addServiceButton.BackColor = Color.LightBlue;
+                }
+            }
             else
+            {
                 addServiceButton.Enabled = false;
+                addServiceButton.Text = "Enter service name to create a new configuration";
+                addServiceButton.BackColor = Color.LightGray;
+            }
         }
 
         private void LoadServices()
