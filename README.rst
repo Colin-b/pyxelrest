@@ -5,8 +5,17 @@ PyxelRest allow you to query `Swagger 2.0/OpenAPI <https://www.openapis.org>`_ R
 How to use
 ----------
 
-#. Update the configuration so that it contains the required services.
-#. Launch Excel.
+Once installed, open Microsoft Excel and add services within PyxelRest configuration.
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG
+   :align: center
+
+   Microsoft Excel add-in
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG
+   :align: center
+
+   Configuration screen
 
 Installation
 ------------
@@ -31,27 +40,6 @@ Uninstall
         >>> pip uninstall pyxelrest
 3. Remove ``%APPDATA%\pyxelrest`` folder.
 4. Remove ``%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam`` file.
-
-Configuration
--------------
-Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\configuration.ini`` file.
-
-Each section corresponds to a service.
-
-The following mandatory properties are available:
-
-- **host**: URI to the service base path.
-
-The following optional properties are available:
-
-- **swaggerBasePath**: URI to retrieve the Swagger JSON. Default value is */*.
-- **methods**: List (separator is ",") of service methods to be exposed, all by default, amongst:
-
-    - *get*
-    - *post*
-    - *put*
-    - *delete*
-
 
 Logging
 -------

@@ -162,6 +162,7 @@ namespace AutoLoadPyxelRestAddIn
         private void AddServiceSection(object sender, EventArgs e)
         {
             displayService(new Service(newServiceName.Text), true);
+            newServiceName.Text = "";
         }
 
         private void Save(object sender, EventArgs e)
