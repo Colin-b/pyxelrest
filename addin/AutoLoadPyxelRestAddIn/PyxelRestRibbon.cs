@@ -6,6 +6,7 @@ using System.Drawing;
 using IniParser;
 using IniParser.Model;
 using System.Collections.Generic;
+using System.Text;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -61,6 +62,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void InitializeComponent()
         {
+            Icon = Properties.Resources.configuration_icon;
             AutoSize = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "Configure PyxelRest Services";
@@ -70,6 +72,7 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel layout = new TableLayoutPanel();
             layout.AutoSize = true;
 
+            #region Services
             accordion = new Accordion();
             accordion.CheckBoxMargin = new Padding(2);
             accordion.ContentMargin = new Padding(15, 5, 15, 5);
@@ -79,7 +82,9 @@ namespace AutoLoadPyxelRestAddIn
             accordion.ContentBackColor = Color.Transparent;
             accordion.AutoSize = true;
             layout.Controls.Add(accordion);
+            #endregion
 
+            #region New Service
             TableLayoutPanel newServicePanel = new TableLayoutPanel();
             newServicePanel.AutoSize = true;
             newServicePanel.Dock = DockStyle.Fill;
@@ -90,20 +95,27 @@ namespace AutoLoadPyxelRestAddIn
             newServicePanel.Controls.Add(newServiceName, 0, 0);
             addServiceButton = new Button();
             addServiceButton.Text = "Create a new service";
+            addServiceButton.ForeColor = Color.DarkBlue;
+            addServiceButton.BackColor = Color.LightBlue;
             addServiceButton.Dock = DockStyle.Fill;
             addServiceButton.AutoSize = true;
             addServiceButton.Click += AddServiceSection;
             addServiceButton.Enabled = false;
             newServicePanel.Controls.Add(addServiceButton, 0, 1);
             layout.Controls.Add(newServicePanel);
+            #endregion
 
+            #region Save
             saveButton = new Button();
             saveButton.Text = "Save Configuration";
+            saveButton.ForeColor = Color.DarkGreen;
+            saveButton.BackColor = Color.LightGreen;
             saveButton.DialogResult = DialogResult.Yes;
             saveButton.Dock = DockStyle.Fill;
             saveButton.AutoSize = true;
             saveButton.Click += Save;
             layout.Controls.Add(saveButton);
+            #endregion
 
             Controls.Add(layout);
         }
@@ -180,26 +192,40 @@ namespace AutoLoadPyxelRestAddIn
 
     public sealed class Service
     {
+        private static readonly string GET = "get";
+        private static readonly string POST = "post";
+        private static readonly string PUT = "put";
+        private static readonly string DELETE = "delete";
+
         public string Name;
         public TableLayoutPanel servicePanel;
 
         private TextBox hostTextBox;
         private TextBox swaggerBasePathTextBox;
-        private TextBox methodsTextBox;
+        private CheckBox get;
+        private CheckBox post;
+        private CheckBox put;
+        private CheckBox delete;
         private List<Service> services;
         private CheckBox checkbox;
 
         public Service(SectionData section, IniData config)
         {
-            string defaultMethods = config["DEFAULT"] == null ? null : config["DEFAULT"]["methods"];
-            string defaultSwaggerBasePath = config["DEFAULT"] == null ? null : config["DEFAULT"]["swaggerBasePath"];
+            string[] defaultMethods = config["DEFAULT"] == null ? new string[0] : config["DEFAULT"]["methods"].Split(',');
+            string defaultSwaggerBasePath = config["DEFAULT"] == null ? "" : config["DEFAULT"]["swaggerBasePath"];
 
             Name = section.SectionName;
 
             servicePanel = DefaultPanel();
             hostTextBox.Text = config[section.SectionName]["host"];
             swaggerBasePathTextBox.Text = config[section.SectionName]["swaggerBasePath"] ?? defaultSwaggerBasePath;
-            methodsTextBox.Text = config[section.SectionName]["methods"] ?? defaultMethods;
+            string[] methods = config[section.SectionName]["methods"].Split(',') ?? defaultMethods;
+            for (int i = 0; i < methods.Length; i++)
+                methods[i] = methods[i].Trim();
+            get.Checked = Array.Exists(methods, s => GET.Equals(s));
+            post.Checked = Array.Exists(methods, s => POST.Equals(s));
+            put.Checked = Array.Exists(methods, s => PUT.Equals(s));
+            delete.Checked = Array.Exists(methods, s => DELETE.Equals(s));
         }
 
         public SectionData ToSection()
@@ -216,10 +242,31 @@ namespace AutoLoadPyxelRestAddIn
             section.Keys.SetKeyData(swaggerBasePath);
 
             KeyData methods = new KeyData("methods");
-            methods.Value = methodsTextBox.Text;
+            methods.Value = GetMethods();
             section.Keys.SetKeyData(methods);
 
             return section;
+        }
+
+        private string GetMethods()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (get.Checked)
+                sb.Append(GET);
+            if (post.Checked)
+                AppendMethod(sb, POST);
+            if (put.Checked)
+                AppendMethod(sb, PUT);
+            if (delete.Checked)
+                AppendMethod(sb, DELETE);
+            return sb.ToString();
+        }
+
+        private void AppendMethod(StringBuilder sb, string method)
+        {
+            if (sb.Length > 0)
+                sb.Append(", ");
+            sb.Append(method);
         }
 
         public Service(string name)
@@ -228,7 +275,10 @@ namespace AutoLoadPyxelRestAddIn
 
             servicePanel = DefaultPanel();
             swaggerBasePathTextBox.Text = "/";
-            methodsTextBox.Text = "get, post, put, delete";
+            get.Checked = true;
+            post.Checked = true;
+            put.Checked = true;
+            delete.Checked = true;
         }
 
         private TableLayoutPanel DefaultPanel()
@@ -236,20 +286,40 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
             servicePanel.TabStop = true;
 
-            servicePanel.Controls.Add(new Label { Width = 120, Text = "Host", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            hostTextBox = new TextBox() { Width = 300, Text = "" };
+            servicePanel.Controls.Add(new Label { Width = 120, Text = "Host (mandatory)", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
+            hostTextBox = new TextBox();
+            hostTextBox.Dock = DockStyle.Fill;
+            hostTextBox.AutoSize = true;
             servicePanel.Controls.Add(hostTextBox, 1, 0);
 
             servicePanel.Controls.Add(new Label { Width = 120, Text = "Swagger Base Path", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            swaggerBasePathTextBox = new TextBox() { Width = 300, Text = "" };
+            swaggerBasePathTextBox = new TextBox();
+            swaggerBasePathTextBox.Dock = DockStyle.Fill;
+            swaggerBasePathTextBox.AutoSize = true;
             servicePanel.Controls.Add(swaggerBasePathTextBox, 1, 1);
 
             servicePanel.Controls.Add(new Label { Width = 120, Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            methodsTextBox = new TextBox() { Width = 300, Text = "" };
-            servicePanel.Controls.Add(methodsTextBox, 1, 2);
+            TableLayoutPanel methodsPanel = new TableLayoutPanel();
+            methodsPanel.Dock = DockStyle.Fill;
+            methodsPanel.AutoSize = true;
+            get = new CheckBox();
+            get.Text = "get";
+            methodsPanel.Controls.Add(get, 0, 0);
+            post = new CheckBox();
+            post.Text = "post";
+            methodsPanel.Controls.Add(post, 1, 0);
+            put = new CheckBox();
+            put.Text = "put";
+            methodsPanel.Controls.Add(put, 2, 0);
+            delete = new CheckBox();
+            delete.Text = "delete";
+            methodsPanel.Controls.Add(delete, 3, 0);
+            servicePanel.Controls.Add(methodsPanel, 1, 2);
 
-            Button deleteButton = new Button() { Text = "Delete Service" };
+            Button deleteButton = new Button() { Text = "Delete " + Name + " Configuration" };
             deleteButton.Dock = DockStyle.Fill;
+            deleteButton.ForeColor = Color.White;
+            deleteButton.BackColor = Color.MediumOrchid;
             deleteButton.AutoSize = true;
             deleteButton.Click += DeleteButton_Click;
             servicePanel.Controls.Add(deleteButton);
@@ -260,13 +330,12 @@ namespace AutoLoadPyxelRestAddIn
 
         public bool IsValid()
         {
-            return hostTextBox.TextLength > 0 && swaggerBasePathTextBox.TextLength > 0;
+            return hostTextBox.TextLength > 0;
         }
 
         internal void AddEventHandler(Action<object, EventArgs> validateSaveButton)
         {
             hostTextBox.TextChanged += new EventHandler(validateSaveButton);
-            swaggerBasePathTextBox.TextChanged += new EventHandler(validateSaveButton);
         }
 
         internal void Added(Accordion accordion, List<Service> services, bool expanded)

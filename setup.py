@@ -84,6 +84,7 @@ setup(name='pyxelrest',
           ),
           (
               'pyxelrest_addin/resources', [
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/configuration_icon.ico',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/nebraska-danger_logo.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/openapi_logo.png'
               ]
