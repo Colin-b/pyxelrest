@@ -60,6 +60,8 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.dll.manifest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.vsto',
                   # Package Dependencies to ensure that it will work on any client
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/INIFileParser.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/INIFileParser.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.dll',
@@ -82,6 +84,7 @@ setup(name='pyxelrest',
           ),
           (
               'pyxelrest_addin/resources', [
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/nebraska-danger_logo.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/openapi_logo.png'
               ]
           )
