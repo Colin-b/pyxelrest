@@ -34,7 +34,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PyxelRestRibbon));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.importButton = this.Factory.CreateRibbonButton();
@@ -60,9 +59,9 @@
             // 
             this.importButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.importButton.Description = "Update User Defined Functions";
-            this.importButton.Image = ((System.Drawing.Image)(resources.GetObject("importButton.Image")));
-            this.importButton.ImageName = "OpenAPI Logo";
-            this.importButton.Label = "Update User-Defined Functions";
+            this.importButton.Image = global::AutoLoadPyxelRestAddIn.Properties.Resources.refresh_128;
+            this.importButton.ImageName = "Update Functions";
+            this.importButton.Label = "Update Functions";
             this.importButton.Name = "importButton";
             this.importButton.ShowImage = true;
             // 
@@ -70,7 +69,8 @@
             // 
             this.configureButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.configureButton.Description = "Configure Services";
-            this.configureButton.Image = ((System.Drawing.Image)(resources.GetObject("configureButton.Image")));
+            this.configureButton.Image = global::AutoLoadPyxelRestAddIn.Properties.Resources.settings_8_128;
+            this.configureButton.ImageName = "Configure Services";
             this.configureButton.Label = "Configure Services";
             this.configureButton.Name = "configureButton";
             this.configureButton.ShowImage = true;
