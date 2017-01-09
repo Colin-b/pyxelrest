@@ -67,6 +67,5 @@ Enhancements TODO list
 - Handle filtering on Swagger tags
 - Add test specific module requirements in setup.
 - Do not package test module.
-- Clean up list of addin files that are packaged (App.config is useless).
 - Add more test cases actually performing calls to functions.
 - Get rid of xlwings bas file by including what is required in our own addin.
