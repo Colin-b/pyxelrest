@@ -5,8 +5,11 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 How to use
 ----------
 
-1. Update the configuration so that it contains the required services.
-2. Launch Excel.
+Once installed, open Microsoft Excel and add services within PyxelRest configuration.
+
+![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+
+![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG)
 
 User Installation
 ------------
@@ -34,27 +37,6 @@ Uninstall
 3. Remove ``%APPDATA%\pyxelrest`` folder.
 4. Remove ``%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam`` file.
 
-Configuration
--------------
-Services to be exposed can be configured thanks to ``%APPDATA%\pyxelrest\configuration.ini`` file.
-
-Each section corresponds to a service.
-
-The following mandatory properties are available:
-
-- **host**: URI to the service base path.
-
-The following optional properties are available:
-
-- **swaggerBasePath**: URI to retrieve the Swagger JSON. Default value is */*.
-- **methods**: List (separator is ",") of service methods to be exposed, all by default, amongst:
-
-    - *get*
-    - *post*
-    - *put*
-    - *delete*
-
-
 Logging
 -------
 Should you need to investigate what went wrong, logs can be found within your ``%APPDATA%\pyxelrest`` folder.
@@ -79,11 +61,9 @@ Enhancements TODO list
     - Handle multiple ways of sending arrays (for now arrays are sent as replication of the same parameter name).
     - etc...
 - Add client logs to splunk? (it should be generic with default settings to file anyway)
-- Upgrade pyxelrest settings on upgrade instead of overriding file content.
 - Handle filtering on Swagger tags
 - Add test specific module requirements in setup.
 - Do not package test module.
 - Clean up list of addin files that are packaged (App.config is useless).
 - Add more test cases actually performing calls to functions.
 - Get rid of xlwings bas file by including what is required in our own addin.
-- Allow to specify settings thanks to addin GUI and get rid of the update button.

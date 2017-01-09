@@ -38,6 +38,7 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.importButton = this.Factory.CreateRibbonButton();
+            this.configureButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.SuspendLayout();
@@ -51,6 +52,7 @@
             // group1
             // 
             this.group1.Items.Add(this.importButton);
+            this.group1.Items.Add(this.configureButton);
             this.group1.Label = "User Defined Functions";
             this.group1.Name = "group1";
             // 
@@ -63,6 +65,15 @@
             this.importButton.Label = "Update User-Defined Functions";
             this.importButton.Name = "importButton";
             this.importButton.ShowImage = true;
+            // 
+            // configureButton
+            // 
+            this.configureButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.configureButton.Description = "Configure Services";
+            this.configureButton.Image = ((System.Drawing.Image)(resources.GetObject("configureButton.Image")));
+            this.configureButton.Label = "Configure Services";
+            this.configureButton.Name = "configureButton";
+            this.configureButton.ShowImage = true;
             // 
             // PyxelRestRibbon
             // 
@@ -83,6 +94,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton importButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton configureButton;
     }
 
     partial class ThisRibbonCollection
