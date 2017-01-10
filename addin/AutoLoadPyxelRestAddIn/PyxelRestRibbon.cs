@@ -3,11 +3,9 @@ using Microsoft.Office.Tools.Ribbon;
 using System.Windows.Forms;
 using Opulos.Core.UI;
 using System.Drawing;
-using IniParser;
-using IniParser.Model;
 using System.Collections.Generic;
-using System.Text;
 using log4net;
+using System.Net;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -25,7 +23,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ConfigureServices(object sender, RibbonControlEventArgs e)
         {
-            if(DialogResult.Yes == new ServiceConfigurationFrame().ShowDialog())
+            if (DialogResult.Yes == new ServiceConfigurationFrame().ShowDialog())
             {
                 if (!Globals.ThisAddIn.ImportUserDefinedFunctions())
                     MessageBox.Show(
@@ -52,25 +50,56 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly ILog Log = LogManager.GetLogger("ServiceConfigurationFrame");
 
         internal static readonly string DEFAULT_SECTION = "DEFAULT";
+        /// <summary>
+        /// Minimum inactivity interval to wait before checking for host validity.
+        /// Avoid preventing the user from typing a long url straightfully.
+        /// This interval is in milliseconds.
+        /// </summary>
+        private static readonly int CHECK_HOST_INTERVAL_MS = 500;
+        internal static readonly int CHECK_HOST_INTERVAL_TICKS = CHECK_HOST_INTERVAL_MS * 10000;
 
-        private Accordion accordion;
+        internal Accordion accordion;
         private TextBox newServiceName;
         private Button addServiceButton;
-        private List<Service> services = new List<Service>();
+        private List<ServicePanel> services = new List<ServicePanel>();
         private Button saveButton;
+        private readonly Timer hostReachabilityTimer;
+        internal readonly Configuration configuration;
 
         public ServiceConfigurationFrame()
         {
+            hostReachabilityTimer = StartHostReachabilityTimer();
+            InitializeComponent();
+            FormClosed += ServiceConfigurationFrame_FormClosed;
+            configuration = new Configuration();
             try
             {
-                InitializeComponent();
                 LoadServices();
             }
             catch (Exception e)
             {
-                Log.Error("Unable to create configuration frame.", e);
-                throw e;
+                Log.Error("Unable to load services.", e);
             }
+        }
+
+        private Timer StartHostReachabilityTimer()
+        {
+            Timer hostReachabilityTimer = new Timer();
+            hostReachabilityTimer.Tick += HostReachabilityTimer_Tick;
+            hostReachabilityTimer.Interval = CHECK_HOST_INTERVAL_MS;
+            hostReachabilityTimer.Start();
+            return hostReachabilityTimer;
+        }
+
+        private void ServiceConfigurationFrame_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            hostReachabilityTimer.Stop();
+        }
+
+        private void HostReachabilityTimer_Tick(object sender, EventArgs e)
+        {
+            foreach (ServicePanel service in services)
+                service.CheckHostReachability();
         }
 
         private void InitializeComponent()
@@ -139,7 +168,7 @@ namespace AutoLoadPyxelRestAddIn
             if (newServiceName.TextLength > 0)
             {
                 string newService = newServiceName.Text;
-                bool alreadyExists = services.Exists(s => s.HasName(newService));
+                bool alreadyExists = services.Exists(s => s.Exists(newService));
                 addServiceButton.Enabled = !alreadyExists;
                 if (alreadyExists)
                 {
@@ -163,112 +192,59 @@ namespace AutoLoadPyxelRestAddIn
         private void LoadServices()
         {
             services.Clear();
-
-            var parser = new FileIniDataParser();
-            string configurationFilePath = GetConfigurationFilePath();
-            if (configurationFilePath == null)
+            foreach(Service service in configuration.Load())
             {
-                Log.Error("Configuration cannot be loaded as configuration file path cannot be found.");
-                return;
-            }
-
-            IniData config = parser.ReadFile(configurationFilePath);
-
-            foreach (var section in config.Sections)
-            {
-                if (DEFAULT_SECTION.Equals(section.SectionName))
-                    continue;
-                try
-                {
-                    Service service = new Service(this, section.SectionName);
-                    service.FillFields(config);
-                    displayService(service, false);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(string.Format("Unable to load '{0}' service configuration", section.SectionName), e);
-                }
+                ServicePanel panel = new ServicePanel(this, service);
+                displayService(panel, false);
             }
         }
 
-        private void displayService(Service service, bool expanded)
+        private void displayService(ServicePanel service, bool expanded)
         {
-            service.Added(accordion, expanded);
+            service.Display(expanded);
             services.Add(service);
             saveButton.Enabled = IsValid();
         }
 
         private bool IsValid()
         {
-            foreach (Service service in services)
+            foreach (ServicePanel service in services)
                 if (!service.IsValid())
                     return false;
             return true;
         }
 
-        private string GetConfigurationFilePath()
-        {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration.ini");
-            return null;
-        }
-
         private void AddServiceSection(object sender, EventArgs e)
         {
-            Service service = new Service(this, newServiceName.Text);
-            service.FillFields();
-            displayService(service, true);
-            Log.InfoFormat("Adding configuration for {0} service.", newServiceName.Text);
+            Service newService = configuration.AddDefaultService(newServiceName.Text);
+            ServicePanel panel = new ServicePanel(this, newService);
+            displayService(panel, true);
             newServiceName.Text = "";
         }
 
         private void Save(object sender, EventArgs e)
         {
-            var parser = new FileIniDataParser();
-            string configurationFilePath = GetConfigurationFilePath();
-            if(configurationFilePath == null)
-            {
-                Log.Error("Configuration cannot be saved as configuration file path cannot be found.");
-                return;
-            }
-            IniData config = parser.ReadFile(configurationFilePath);
-
-            config.Sections.Clear();
-            foreach (Service service in services)
-                config.Sections.Add(service.ToSection());
-            parser.WriteFile(configurationFilePath, config);
-            Log.Info("Services configuration updated.");
+            configuration.Save();
         }
 
-        internal void Removed(Service service)
+        internal void Removed(ServicePanel service)
         {
-            Log.InfoFormat("Removing '{0}' service configuration.", service);
             services.Remove(service);
             saveButton.Enabled = IsValid();
         }
 
-        internal void Updated(Service service)
+        internal void ServiceUpdated()
         {
             saveButton.Enabled = IsValid();
         }
     }
 
-    public sealed class Service
+    public sealed class ServicePanel
     {
         private static readonly ILog Log = LogManager.GetLogger("Service");
 
-        private static readonly string HOST_PROPERTY = "host";
-        private static readonly string SWAGGER_BASE_PATH_PROPERTY = "swaggerBasePath";
-        private static readonly string METHODS_PROPERTY = "methods";
-        
-        private static readonly string GET = "get";
-        private static readonly string POST = "post";
-        private static readonly string PUT = "put";
-        private static readonly string DELETE = "delete";
-
-        private readonly string Name;
-        private readonly TableLayoutPanel servicePanel;
+        private readonly Service service;
+        internal readonly TableLayoutPanel servicePanel;
         private TextBox hostTextBox;
         private TextBox swaggerBasePathTextBox;
         private CheckBox get;
@@ -278,106 +254,49 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox checkbox;
 
         private readonly ServiceConfigurationFrame configurationFrame;
+        private long? hostModificationTicks;
+        private long? swaggerPathModificationTicks;
 
-        public Service(ServiceConfigurationFrame configurationFrame, string name)
+        public ServicePanel(ServiceConfigurationFrame configurationFrame, Service service)
         {
             this.configurationFrame = configurationFrame;
-            Name = name;
+            this.service = service;
             servicePanel = DefaultPanel();
         }
 
-        internal void FillFields()
+        public override string ToString()
         {
-            swaggerBasePathTextBox.Text = "/";
-            get.Checked = true;
-            post.Checked = true;
-            put.Checked = true;
-            delete.Checked = true;
+            return service.ToString();
         }
 
-        internal void FillFields(IniData config)
+        internal bool IsValid()
         {
-            KeyDataCollection serviceConfig = config[Name];
-            KeyDataCollection defaultConfig = config[ServiceConfigurationFrame.DEFAULT_SECTION];
-            FillHost(serviceConfig);
-            FillSwaggerBasePath(serviceConfig, defaultConfig);
-            FillMethods(serviceConfig, defaultConfig);
+            return hostTextBox.TextLength > 0;
         }
 
-        private void FillHost(KeyDataCollection serviceConfig)
+        internal void CheckHostReachability()
         {
-            hostTextBox.Text = serviceConfig[HOST_PROPERTY];
+            long actualTicks = DateTime.UtcNow.Ticks;
+            if (hostModificationTicks != null && actualTicks >= hostModificationTicks + ServiceConfigurationFrame.CHECK_HOST_INTERVAL_TICKS)
+            {
+                hostTextBox.BackColor = IsHostReachable() ? Color.LightGreen : Color.Red;
+                hostModificationTicks = null;
+            }
+            if (swaggerPathModificationTicks != null && actualTicks >= swaggerPathModificationTicks + ServiceConfigurationFrame.CHECK_HOST_INTERVAL_TICKS)
+            {
+                swaggerBasePathTextBox.BackColor = IsSwaggerReachable() ? Color.LightGreen : Color.Red;
+                swaggerPathModificationTicks = null;
+            }
         }
 
-        private void FillSwaggerBasePath(KeyDataCollection serviceConfig, KeyDataCollection defaultConfig)
+        internal bool Exists(string serviceName)
         {
-            swaggerBasePathTextBox.Text = serviceConfig[SWAGGER_BASE_PATH_PROPERTY] ?? DefaultSwaggerBasePath(defaultConfig);
+            return service.Name.Equals(serviceName);
         }
 
-        private string DefaultSwaggerBasePath(KeyDataCollection defaultConfig)
+        internal void Display(bool expanded)
         {
-            if (defaultConfig == null || !defaultConfig.ContainsKey(SWAGGER_BASE_PATH_PROPERTY))
-                return string.Empty;
-            return defaultConfig[SWAGGER_BASE_PATH_PROPERTY];
-        }
-
-        private void FillMethods(KeyDataCollection serviceConfig, KeyDataCollection defaultConfig)
-        {
-            string[] methods = serviceConfig.ContainsKey(METHODS_PROPERTY) ? serviceConfig[METHODS_PROPERTY].Split(',') : DefaultMethods(defaultConfig);
-            for (int i = 0; i < methods.Length; i++)
-                methods[i] = methods[i].Trim();
-            get.Checked = Array.Exists(methods, s => GET.Equals(s));
-            post.Checked = Array.Exists(methods, s => POST.Equals(s));
-            put.Checked = Array.Exists(methods, s => PUT.Equals(s));
-            delete.Checked = Array.Exists(methods, s => DELETE.Equals(s));
-        }
-
-        private string[] DefaultMethods(KeyDataCollection defaultConfig)
-        {
-            if (defaultConfig == null || !defaultConfig.ContainsKey(METHODS_PROPERTY))
-                return new string[0];
-            return defaultConfig[METHODS_PROPERTY].Split(',');
-        }
-
-        public SectionData ToSection()
-        {
-            SectionData section = new SectionData(Name);
-            section.Keys = new KeyDataCollection();
-
-            KeyData host = new KeyData(HOST_PROPERTY);
-            host.Value = hostTextBox.Text;
-            section.Keys.SetKeyData(host);
-
-            KeyData swaggerBasePath = new KeyData(SWAGGER_BASE_PATH_PROPERTY);
-            swaggerBasePath.Value = swaggerBasePathTextBox.Text;
-            section.Keys.SetKeyData(swaggerBasePath);
-
-            KeyData methods = new KeyData(METHODS_PROPERTY);
-            methods.Value = GetMethods();
-            section.Keys.SetKeyData(methods);
-
-            return section;
-        }
-
-        private string GetMethods()
-        {
-            StringBuilder sb = new StringBuilder();
-            if (get.Checked)
-                sb.Append(GET);
-            if (post.Checked)
-                AppendMethod(sb, POST);
-            if (put.Checked)
-                AppendMethod(sb, PUT);
-            if (delete.Checked)
-                AppendMethod(sb, DELETE);
-            return sb.ToString();
-        }
-
-        private void AppendMethod(StringBuilder sb, string method)
-        {
-            if (sb.Length > 0)
-                sb.Append(", ");
-            sb.Append(method);
+            checkbox = configurationFrame.accordion.Add(servicePanel, service.Name, open: expanded);
         }
 
         private TableLayoutPanel DefaultPanel()
@@ -385,38 +304,46 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
             servicePanel.TabStop = true;
 
+            #region Host
             servicePanel.Controls.Add(new Label { Width = 120, Text = "Host (mandatory)", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            hostTextBox = new TextBox();
+            hostTextBox = new TextBox() {Text = service.Host };
             hostTextBox.Dock = DockStyle.Fill;
             hostTextBox.AutoSize = true;
             hostTextBox.TextChanged += HostTextBox_TextChanged;
             servicePanel.Controls.Add(hostTextBox, 1, 0);
+            #endregion
 
+            #region Swagger Base Path
             servicePanel.Controls.Add(new Label { Width = 120, Text = "Swagger Base Path", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            swaggerBasePathTextBox = new TextBox();
+            swaggerBasePathTextBox = new TextBox() { Text = service.SwaggerBasePath };
             swaggerBasePathTextBox.Dock = DockStyle.Fill;
             swaggerBasePathTextBox.AutoSize = true;
+            swaggerBasePathTextBox.TextChanged += SwaggerBasePathTextBox_TextChanged;
             servicePanel.Controls.Add(swaggerBasePathTextBox, 1, 1);
+            #endregion
 
+            #region Methods
             servicePanel.Controls.Add(new Label { Width = 120, Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
-            get = new CheckBox();
-            get.Text = "get";
+            get = new CheckBox() { Text = "get", Checked = service.Get };
+            get.CheckedChanged += Get_CheckedChanged;
             methodsPanel.Controls.Add(get, 0, 0);
-            post = new CheckBox();
-            post.Text = "post";
+            post = new CheckBox() { Text = "post", Checked = service.Post };
+            post.CheckedChanged += Post_CheckedChanged;
             methodsPanel.Controls.Add(post, 1, 0);
-            put = new CheckBox();
-            put.Text = "put";
+            put = new CheckBox() { Text = "put", Checked = service.Put };
+            put.CheckedChanged += Put_CheckedChanged;
             methodsPanel.Controls.Add(put, 2, 0);
-            delete = new CheckBox();
-            delete.Text = "delete";
+            delete = new CheckBox() { Text = "delete", Checked = service.Delete };
+            delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
             servicePanel.Controls.Add(methodsPanel, 1, 2);
+            #endregion
 
-            Button deleteButton = new Button() { Text = "Delete " + Name + " Configuration" };
+            #region Delete
+            Button deleteButton = new Button() { Text = "Delete " + service.Name + " Configuration" };
             deleteButton.Dock = DockStyle.Fill;
             deleteButton.ForeColor = Color.White;
             deleteButton.BackColor = Color.MediumOrchid;
@@ -424,39 +351,85 @@ namespace AutoLoadPyxelRestAddIn
             deleteButton.Click += DeleteButton_Click;
             servicePanel.Controls.Add(deleteButton);
             servicePanel.SetColumnSpan(deleteButton, 2);
+            #endregion
 
             return servicePanel;
         }
 
+        private void Delete_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Delete = delete.Checked;
+        }
+
+        private void Put_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Put= put.Checked;
+        }
+
+        private void Post_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Post = post.Checked;
+        }
+
+        private void Get_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Get = get.Checked;
+        }
+
         private void HostTextBox_TextChanged(object sender, EventArgs e)
         {
-            configurationFrame.Updated(this);
+            service.Host = hostTextBox.Text;
+            configurationFrame.ServiceUpdated();
+            hostModificationTicks = DateTime.UtcNow.Ticks;
         }
 
-        public bool IsValid()
+        private void SwaggerBasePathTextBox_TextChanged(object sender, EventArgs e)
         {
-            return hostTextBox.TextLength > 0;
-        }
-
-        internal void Added(Accordion accordion, bool expanded)
-        {
-            checkbox = accordion.Add(servicePanel, Name, open: expanded);
+            service.SwaggerBasePath = swaggerBasePathTextBox.Text;
+            swaggerPathModificationTicks = DateTime.UtcNow.Ticks;
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             checkbox.Visible = false;
+            configurationFrame.configuration.Remove(service);
             configurationFrame.Removed(this);
         }
 
-        public override string ToString()
+        private bool IsHostReachable()
         {
-            return Name;
+            // Receiving a response means that host can be reached
+            return ConnectTo(hostTextBox.Text) != null;
         }
 
-        internal bool HasName(string serviceName)
+        private bool IsSwaggerReachable()
         {
-            return Name.Equals(serviceName);
+            HttpWebResponse response = ConnectTo(hostTextBox.Text + swaggerBasePathTextBox.Text);
+            return response != null && response.StatusCode == HttpStatusCode.OK;
+        }
+
+        private HttpWebResponse ConnectTo(string url)
+        {
+            try
+            {
+                Uri urlCheck = new Uri(url);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
+                request.Timeout = 500;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                response.Close();
+                return response;
+            }
+            catch (WebException e)
+            {
+                HttpWebResponse response = (HttpWebResponse)e.Response;
+                if (response != null)
+                    response.Close();
+                return response;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
