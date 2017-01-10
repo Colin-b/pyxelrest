@@ -61,11 +61,31 @@ namespace AutoLoadPyxelRestAddIn.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap refresh_128 {
+            get {
+                object obj = ResourceManager.GetObject("refresh_128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settings_8_128 {
+            get {
+                object obj = ResourceManager.GetObject("settings_8_128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon configuration_icon {
+        internal static System.Drawing.Icon settings_8_16 {
             get {
-                object obj = ResourceManager.GetObject("configuration_icon", resourceCulture);
+                object obj = ResourceManager.GetObject("settings_8_16", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -45,15 +45,16 @@ Logging
 -------
 Should you need to investigate what went wrong, logs can be found within your ``%APPDATA%\pyxelrest`` folder.
 
-Developer Installation
-----------------------
+Developer Installation/Upgrade
+------------------------------
 
 1. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Excel must be closed while executing the following step from within pyxelrest root folder (Note that for the moment you still need to build the addin C# solution by yourself):
-        >>> pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-        >>> pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-        >>> python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release --vbaddindirectory addin
+2. Build the addin C# solution:
+In order to do so, you need to add a test certificate.
+> Project > AutoLoadPyxelRestAddIn > Signing
+3. Excel must be closed while executing the following script from within pyxelrest root folder:
+        >>> developer_install.bat
 
 Enhancements TODO list
 ----------------------
@@ -67,6 +68,5 @@ Enhancements TODO list
 - Handle filtering on Swagger tags
 - Add test specific module requirements in setup.
 - Do not package test module.
-- Clean up list of addin files that are packaged (App.config is useless).
 - Add more test cases actually performing calls to functions.
 - Get rid of xlwings bas file by including what is required in our own addin.
