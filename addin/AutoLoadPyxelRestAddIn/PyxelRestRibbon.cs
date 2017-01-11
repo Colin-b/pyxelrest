@@ -134,6 +134,7 @@ namespace AutoLoadPyxelRestAddIn
             newServiceName.Dock = DockStyle.Fill;
             newServiceName.AutoSize = true;
             newServiceName.TextChanged += NewServiceName_TextChanged;
+            newServiceName.KeyDown += NewServiceName_KeyDown;
             newServicePanel.Controls.Add(newServiceName, 0, 0);
             addServiceButton = new Button();
             addServiceButton.Text = "Enter service name to create a new configuration";
@@ -162,9 +163,29 @@ namespace AutoLoadPyxelRestAddIn
             Controls.Add(layout);
         }
 
+        private void NewServiceName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch(e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addServiceButton.Enabled)
+                        addServiceButton.PerformClick();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                // As Service name will be used as UDF prefix, value should be a valid Excel one
+                // This is why the following characters are forbidden
+                case Keys.Space:
+                    e.SuppressKeyPress = true;
+                    break;
+                default:
+                    // Allow any other character
+                    break;
+
+            }
+        }
+
         private void NewServiceName_TextChanged(object sender, EventArgs e)
         {
-            newServiceName.Text = newServiceName.Text.Replace(' ', '_');
             if (newServiceName.TextLength > 0)
             {
                 string newService = newServiceName.Text;
@@ -363,7 +384,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void Put_CheckedChanged(object sender, EventArgs e)
         {
-            service.Put= put.Checked;
+            service.Put = put.Checked;
         }
 
         private void Post_CheckedChanged(object sender, EventArgs e)
