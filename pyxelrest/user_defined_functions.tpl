@@ -8,6 +8,8 @@ import requests
 import datetime
 import logging
 from collections import OrderedDict
+import msgpack
+
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -17,7 +19,7 @@ from collections import OrderedDict
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro delete(server_uri, method_path, contains_parameters, path_parameters, method) %}
 {% if contains_parameters %}
     response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -33,23 +35,31 @@ from collections import OrderedDict
 {% endif %}
 {% endmacro -%}
 
-{%- macro get(server_uri, method_path, contains_parameters, path_parameters) %}
-{% if contains_parameters %}
-    response = requests.get('{{ server_uri }}{{ method_path }}'.format(
-{% for path_parameter in path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-), request_parameters, stream=True)
+{%- macro get(server_uri, method_path, contains_parameters, path_parameters, method) %}
+{% if 'application/msgpack' in method['produces'] %}
+    headers = {'content-type':'application/msgpack'}
+{% elif 'application/json' in method['produces']  %}
+    headers = {'content-type':'application/json'}
 {% else %}
-    response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+    headers = {}
+{% endif %}
+
+{% if contains_parameters %}
+        response = requests.get('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), stream=True)
+), request_parameters, stream=True, headers=headers)
+{% else %}
+        response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+{% for path_parameter in path_parameters %}
+        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+), stream=True, headers=headers)
 {% endif %}
 {% endmacro -%}
 
-{%- macro post(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro post(server_uri, method_path, contains_parameters, path_parameters, method) %}
 {% if contains_parameters %}
     response = requests.post('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -65,7 +75,7 @@ from collections import OrderedDict
 {% endif %}
 {% endmacro -%}
 
-{%- macro put(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro put(server_uri, method_path, contains_parameters, path_parameters, method) %}
 {% if contains_parameters %}
     response = requests.put('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -86,14 +96,14 @@ from collections import OrderedDict
 {% set param_type = parameter['type'] %}
 {% if param_type == 'integer' -%}
         if not isinstance({{param_name}}, int):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
             return ['{{ param_name }} must be an integer.']
 {% else %}
             return '{{ param_name }} must be an integer.'
 {% endif %}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a number.']
 {% else %}
             return '{{ param_name }} must be a number.'
@@ -102,14 +112,14 @@ from collections import OrderedDict
 {% set param_format = parameter['format'] %}
 {% if param_format == 'date' -%}
         if not isinstance({{param_name}}, datetime.date):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a date.']
 {% else %}
             return '{{ param_name }} must be a date.'
 {% endif %}
 {% elif param_format == 'date-time' -%}
         if not isinstance({{param_name}}, datetime.datetime):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a date time.']
 {% else %}
             return '{{ param_name }} must be a date time.'
@@ -118,7 +128,7 @@ from collections import OrderedDict
 {% set param_enum = parameter['enum'] %}
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
             return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
             return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})
@@ -127,7 +137,7 @@ from collections import OrderedDict
 {% endif %}
 {% elif param_type == 'boolean' -%}
         if {{param_name}} not in ['true', 'false']:
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
             return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
             return '{{ param_name }} must be either "true" or "false".'
@@ -142,14 +152,14 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, int):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain integers.']
 {% else %}
                     return '{{ param_name }} must contain integers.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, int):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be an integer.']
 {% else %}
                 return '{{ param_name }} must be an integer.'
@@ -159,14 +169,14 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, float):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain numbers.']
 {% else %}
                     return '{{ param_name }} must contain numbers.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, float):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be a number.']
 {% else %}
                 return '{{ param_name }} must be a number.'
@@ -178,14 +188,14 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.date):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain dates.']
 {% else %}
                     return '{{ param_name }} must contain dates.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.date):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be a date.']
 {% else %}
                 return '{{ param_name }} must be a date.'
@@ -195,14 +205,14 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.datetime):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain date times.']
 {% else %}
                     return '{{ param_name }} must contain date times.'
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.datetime):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be a date time.']
 {% else %}
                 return '{{ param_name }} must be a date time.'
@@ -214,14 +224,14 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                     return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)]
 {% else %}
                     return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)
 {% endif %}
         else:
             if {{param_name}} not in {{ param_items_enum }}:
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                 return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
                 return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})
@@ -234,7 +244,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in ['true', 'false']:
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                     return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
                     return '{{ param_name }} must be either "true" or "false".'
@@ -243,7 +253,7 @@ from collections import OrderedDict
                     {{param_name}}_item = {{param_name}}_item == 'true'
         else:
             if {{param_name}} not in ['true', 'false']:
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
                 return ['{{ param_name }} must contain "true" or "false".']
 {% else %}
                 return '{{ param_name }} must contain "true" or "false".'
@@ -258,7 +268,7 @@ from collections import OrderedDict
 {% set param_in = parameter['in'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
         return ['{{ param_name }} is required.']
 {% else %}
         return '{{ param_name }} is required.'
@@ -275,7 +285,7 @@ from collections import OrderedDict
 {% macro validate_path_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
         return ['{{ param_name }} is required.']
 {% else %}
         return '{{ param_name }} is required.'
@@ -320,7 +330,7 @@ from collections import OrderedDict
 {% for parameter in method_parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
-{% if 'application/json' in method['produces'] %}
+{% if method['produces'] is table_result %}
 @xw.ret(expand='table')
 {% endif %}
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
@@ -358,14 +368,15 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
-    {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}
+    {{ request_macro(service.uri, method_path, contains_parameters, path_parameters, method) }}
         response.raise_for_status()
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }}.")
-{% if 'application/json' in method['produces'] %}
-        return to_list(response.json(object_pairs_hook=OrderedDict))
-{% else %}
-        return response.content[:255]
-{% endif %}
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpack':
+            return to_list(list(msgpack.Unpacker(response.content)))
+        else:
+            return response.content[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response: {0}.".format(response.text))

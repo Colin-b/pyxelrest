@@ -15,6 +15,7 @@ def user_defined_functions(services):
     :return: A string containing python code with all xlwings UDFs.
     """
     renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
+    renderer.tests['table_result'] = lambda produces: produces and ('application/json' in produces or 'application/msqpack' in produces)
     return renderer.get_template('user_defined_functions.tpl').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=services,
