@@ -113,10 +113,10 @@ def load_services():
     (DEFAULT excluded).
     """
     config_parser = ConfigParser()
-    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration.ini')
+    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
     if not config_parser.read(file_path):
-        raise Exception('"{0}" configuration file cannot be read.'.format(file_path))
-    logging.info('Loading configuration from "{0}".'.format(file_path))
+        raise Exception('"{0}" services configuration file cannot be read.'.format(file_path))
+    logging.info('Loading services from "{0}".'.format(file_path))
     loaded_services = []
     for service in config_parser.sections():
         try:

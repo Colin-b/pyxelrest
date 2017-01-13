@@ -166,6 +166,7 @@
     <Compile Include="Accordion.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Service.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="OpacityEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -183,6 +184,9 @@
     </Compile>
     <EmbeddedResource Include="PyxelRestRibbon.resx">
       <DependentUpon>PyxelRestRibbon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ServiceConfigurationForm.resx">
+      <DependentUpon>ServiceConfigurationForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -206,6 +210,10 @@
     <Compile Include="ResizeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ServiceConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServicePanel.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
