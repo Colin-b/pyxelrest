@@ -15,7 +15,7 @@ def user_defined_functions(services):
     :return: A string containing python code with all xlwings UDFs.
     """
     renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
-    return renderer.get_template('user_defined_functions.tpl').render(
+    return renderer.get_template('user_defined_functions.jinja2').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=services,
         modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()}

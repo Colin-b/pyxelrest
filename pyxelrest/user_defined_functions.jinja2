@@ -86,6 +86,7 @@ from collections import OrderedDict
 {% set param_type = parameter['type'] %}
 {% if param_type == 'integer' -%}
         if not isinstance({{param_name}}, int):
+            logging.error('{{ param_name }} must be an integer.')
 {% if 'application/json' in method['produces'] %}
             return ['{{ param_name }} must be an integer.']
 {% else %}
@@ -93,6 +94,7 @@ from collections import OrderedDict
 {% endif %}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
+            logging.error('{{ param_name }} must be a number.')
 {% if 'application/json' in method['produces'] %}
             return ['{{ param_name }} must be a number.']
 {% else %}
@@ -102,6 +104,7 @@ from collections import OrderedDict
 {% set param_format = parameter['format'] %}
 {% if param_format == 'date' -%}
         if not isinstance({{param_name}}, datetime.date):
+            logging.error('{{ param_name }} must be a date.')
 {% if 'application/json' in method['produces'] %}
             return ['{{ param_name }} must be a date.']
 {% else %}
@@ -109,6 +112,7 @@ from collections import OrderedDict
 {% endif %}
 {% elif param_format == 'date-time' -%}
         if not isinstance({{param_name}}, datetime.datetime):
+            logging.error('{{ param_name }} must be a date time.')
 {% if 'application/json' in method['produces'] %}
             return ['{{ param_name }} must be a date time.']
 {% else %}
@@ -118,6 +122,7 @@ from collections import OrderedDict
 {% set param_enum = parameter['enum'] %}
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
+            logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }}))
 {% if 'application/json' in method['produces'] %}
             return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
@@ -127,6 +132,7 @@ from collections import OrderedDict
 {% endif %}
 {% elif param_type == 'boolean' -%}
         if {{param_name}} not in ['true', 'false']:
+            logging.error('{{ param_name }} must be either "true" or "false".')
 {% if 'application/json' in method['produces'] %}
             return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -142,6 +148,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, int):
+                    logging.error('{{ param_name }} must contain integers.')
 {% if 'application/json' in method['produces'] %}
                     return ['{{ param_name }} must contain integers.']
 {% else %}
@@ -149,6 +156,7 @@ from collections import OrderedDict
 {% endif %}
         else:
             if not isinstance({{param_name}}, int):
+                logging.error('{{ param_name }} must be an integer.')
 {% if 'application/json' in method['produces'] %}
                 return ['{{ param_name }} must be an integer.']
 {% else %}
@@ -159,6 +167,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, float):
+                    logging.error('{{ param_name }} must contain numbers.')
 {% if 'application/json' in method['produces'] %}
                     return ['{{ param_name }} must contain numbers.']
 {% else %}
@@ -166,6 +175,7 @@ from collections import OrderedDict
 {% endif %}
         else:
             if not isinstance({{param_name}}, float):
+                logging.error('{{ param_name }} must be a number.')
 {% if 'application/json' in method['produces'] %}
                 return ['{{ param_name }} must be a number.']
 {% else %}
@@ -178,6 +188,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.date):
+                    logging.error('{{ param_name }} must contain dates.')
 {% if 'application/json' in method['produces'] %}
                     return ['{{ param_name }} must contain dates.']
 {% else %}
@@ -185,6 +196,7 @@ from collections import OrderedDict
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.date):
+                logging.error('{{ param_name }} must be a date.')
 {% if 'application/json' in method['produces'] %}
                 return ['{{ param_name }} must be a date.']
 {% else %}
@@ -195,6 +207,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.datetime):
+                    logging.error('{{ param_name }} must contain date times.')
 {% if 'application/json' in method['produces'] %}
                     return ['{{ param_name }} must contain date times.']
 {% else %}
@@ -202,6 +215,7 @@ from collections import OrderedDict
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.datetime):
+                logging.error('{{ param_name }} must be a date time.')
 {% if 'application/json' in method['produces'] %}
                 return ['{{ param_name }} must be a date time.']
 {% else %}
@@ -214,6 +228,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
+                    logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item))
 {% if 'application/json' in method['produces'] %}
                     return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)]
 {% else %}
@@ -221,6 +236,7 @@ from collections import OrderedDict
 {% endif %}
         else:
             if {{param_name}} not in {{ param_items_enum }}:
+                logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}))
 {% if 'application/json' in method['produces'] %}
                 return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
@@ -234,6 +250,7 @@ from collections import OrderedDict
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in ['true', 'false']:
+                    logging.error('{{ param_name }} must be either "true" or "false".')
 {% if 'application/json' in method['produces'] %}
                     return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -243,6 +260,7 @@ from collections import OrderedDict
                     {{param_name}}_item = {{param_name}}_item == 'true'
         else:
             if {{param_name}} not in ['true', 'false']:
+                logging.error('{{ param_name }} must contain "true" or "false".')
 {% if 'application/json' in method['produces'] %}
                 return ['{{ param_name }} must contain "true" or "false".']
 {% else %}
@@ -258,6 +276,7 @@ from collections import OrderedDict
 {% set param_in = parameter['in'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
+        logging.error('{{ param_name }} is required.')
 {% if 'application/json' in method['produces'] %}
         return ['{{ param_name }} is required.']
 {% else %}
@@ -275,6 +294,7 @@ from collections import OrderedDict
 {% macro validate_path_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
+        logging.error('{{ param_name }} is required.')
 {% if 'application/json' in method['produces'] %}
         return ['{{ param_name }} is required.']
 {% else %}
