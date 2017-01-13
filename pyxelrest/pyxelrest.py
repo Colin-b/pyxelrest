@@ -4,7 +4,7 @@ Each time the pyxelrest module is imported it will generate xlwings User Defined
 import os
 import datetime
 import logging
-import logging.handlers
+import logging.config
 import jinja2
 import vba
 import swagger_service
@@ -32,9 +32,7 @@ def generate_user_defined_functions(services):
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
         generated_file.write(user_defined_functions(services))
 
-logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
-                    handlers=[logging.handlers.TimedRotatingFileHandler(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pyxelrest.log'), when='D')],
-                    level=logging.INFO)
+logging.config.fileConfig(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini'))
 
 services = swagger_service.load_services()
 generate_user_defined_functions(services)

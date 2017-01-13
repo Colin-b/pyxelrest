@@ -50,7 +50,7 @@ setup(name='pyxelrest',
       ],
       packages=find_packages(exclude=['tests']),
       package_data={
-         'pyxelrest': ['default_configuration.ini', 'user_defined_functions.jinja2']
+         'pyxelrest': ['default_configuration.ini', 'default_logging_configuration.ini', 'user_defined_functions.jinja2']
       },
       data_files=[
           (

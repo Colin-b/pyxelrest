@@ -67,6 +67,16 @@ def create_user_configuration(pyxelrest_appdata_folder, install_dir):
         raise Exception('Default configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
 
 
+def create_logging_configuration(pyxelrest_appdata_folder, install_dir):
+    default_config_file = os.path.join(install_dir, 'pyxelrest', 'default_logging_configuration.ini')
+    if os.path.isfile(default_config_file):
+        user_config_file = os.path.join(pyxelrest_appdata_folder, 'logging_configuration.ini')
+        if not os.path.isfile(user_config_file):
+            shutil.copyfile(default_config_file, user_config_file)
+    else:
+        raise Exception('Default logging configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
+
+
 def install_auto_load_pyxelrest(pyxelrest_addin_dir):
     vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', '10.0',
                                        'VSTOInstaller.exe')
@@ -123,6 +133,7 @@ if __name__ == '__main__':
         os.makedirs(pyxelrest_appdata_folder)
 
     create_user_configuration(pyxelrest_appdata_folder, install_dir)
+    create_logging_configuration(pyxelrest_appdata_folder, install_dir)
     if sys.platform.startswith('win'):
         install_pyxelrest_vb_addin(pyxelrest_vb_addin_dir)
         configure_xlwings_for_pyxelrest(pyxelrest_appdata_folder, pyxelrest_module_dir)
