@@ -239,7 +239,7 @@
     <ManifestKeyFile>AutoLoadPyxelRestAddIn_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>7DC0F4BBAC8BE9B29F10ECAB7194C962FED5D4FB</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9F4E96358FCA6644735687AF9A94AA105AFDB1A5</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

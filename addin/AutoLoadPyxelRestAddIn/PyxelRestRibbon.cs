@@ -266,8 +266,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private readonly Service service;
         internal readonly TableLayoutPanel servicePanel;
-        private TextBox hostTextBox;
-        private TextBox swaggerBasePathTextBox;
+        private TextBox swaggerUrlTextBox;
         private CheckBox get;
         private CheckBox post;
         private CheckBox put;
@@ -275,8 +274,7 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox checkbox;
 
         private readonly ServiceConfigurationFrame configurationFrame;
-        private long? hostModificationTicks;
-        private long? swaggerPathModificationTicks;
+        private long? swaggerUrlModificationTicks;
 
         public ServicePanel(ServiceConfigurationFrame configurationFrame, Service service)
         {
@@ -292,21 +290,16 @@ namespace AutoLoadPyxelRestAddIn
 
         internal bool IsValid()
         {
-            return hostTextBox.TextLength > 0;
+            return swaggerUrlTextBox.TextLength > 0;
         }
 
         internal void CheckHostReachability()
         {
             long actualTicks = DateTime.UtcNow.Ticks;
-            if (hostModificationTicks != null && actualTicks >= hostModificationTicks + ServiceConfigurationFrame.CHECK_HOST_INTERVAL_TICKS)
+            if (swaggerUrlModificationTicks != null && actualTicks >= swaggerUrlModificationTicks + ServiceConfigurationFrame.CHECK_HOST_INTERVAL_TICKS)
             {
-                hostTextBox.BackColor = IsHostReachable() ? Color.LightGreen : Color.Red;
-                hostModificationTicks = null;
-            }
-            if (swaggerPathModificationTicks != null && actualTicks >= swaggerPathModificationTicks + ServiceConfigurationFrame.CHECK_HOST_INTERVAL_TICKS)
-            {
-                swaggerBasePathTextBox.BackColor = IsSwaggerReachable() ? Color.LightGreen : Color.Red;
-                swaggerPathModificationTicks = null;
+                swaggerUrlTextBox.BackColor = IsSwaggerReachable() ? Color.LightGreen : Color.Red;
+                swaggerUrlModificationTicks = null;
             }
         }
 
@@ -325,26 +318,17 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
             servicePanel.TabStop = true;
 
-            #region Host
-            servicePanel.Controls.Add(new Label { Width = 120, Text = "Host (mandatory)", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            hostTextBox = new TextBox() {Text = service.Host };
-            hostTextBox.Dock = DockStyle.Fill;
-            hostTextBox.AutoSize = true;
-            hostTextBox.TextChanged += HostTextBox_TextChanged;
-            servicePanel.Controls.Add(hostTextBox, 1, 0);
-            #endregion
-
-            #region Swagger Base Path
-            servicePanel.Controls.Add(new Label { Width = 120, Text = "Swagger Base Path", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            swaggerBasePathTextBox = new TextBox() { Text = service.SwaggerBasePath };
-            swaggerBasePathTextBox.Dock = DockStyle.Fill;
-            swaggerBasePathTextBox.AutoSize = true;
-            swaggerBasePathTextBox.TextChanged += SwaggerBasePathTextBox_TextChanged;
-            servicePanel.Controls.Add(swaggerBasePathTextBox, 1, 1);
+            #region Swagger Url
+            servicePanel.Controls.Add(new Label { Text = "Swagger URL", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
+            swaggerUrlTextBox = new TextBox() { Text = service.SwaggerUrl };
+            swaggerUrlTextBox.Dock = DockStyle.Fill;
+            swaggerUrlTextBox.AutoSize = true;
+            swaggerUrlTextBox.TextChanged += SwaggerUrlTextBox_TextChanged;
+            servicePanel.Controls.Add(swaggerUrlTextBox, 1, 0);
             #endregion
 
             #region Methods
-            servicePanel.Controls.Add(new Label { Width = 120, Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -360,7 +344,7 @@ namespace AutoLoadPyxelRestAddIn
             delete = new CheckBox() { Text = "delete", Checked = service.Delete };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 2);
+            servicePanel.Controls.Add(methodsPanel, 1, 1);
             #endregion
 
             #region Delete
@@ -397,17 +381,11 @@ namespace AutoLoadPyxelRestAddIn
             service.Get = get.Checked;
         }
 
-        private void HostTextBox_TextChanged(object sender, EventArgs e)
+        private void SwaggerUrlTextBox_TextChanged(object sender, EventArgs e)
         {
-            service.Host = hostTextBox.Text;
+            service.SwaggerUrl = swaggerUrlTextBox.Text;
             configurationFrame.ServiceUpdated();
-            hostModificationTicks = DateTime.UtcNow.Ticks;
-        }
-
-        private void SwaggerBasePathTextBox_TextChanged(object sender, EventArgs e)
-        {
-            service.SwaggerBasePath = swaggerBasePathTextBox.Text;
-            swaggerPathModificationTicks = DateTime.UtcNow.Ticks;
+            swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -417,15 +395,9 @@ namespace AutoLoadPyxelRestAddIn
             configurationFrame.Removed(this);
         }
 
-        private bool IsHostReachable()
-        {
-            // Receiving a response means that host can be reached
-            return ConnectTo(hostTextBox.Text) != null;
-        }
-
         private bool IsSwaggerReachable()
         {
-            HttpWebResponse response = ConnectTo(hostTextBox.Text + swaggerBasePathTextBox.Text);
+            HttpWebResponse response = ConnectTo(swaggerUrlTextBox.Text);
             return response != null && response.StatusCode == HttpStatusCode.OK;
         }
 

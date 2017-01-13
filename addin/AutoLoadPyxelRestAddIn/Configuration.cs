@@ -96,8 +96,7 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("Service");
 
-        private static readonly string HOST_PROPERTY = "host";
-        private static readonly string SWAGGER_BASE_PATH_PROPERTY = "swaggerBasePath";
+        private static readonly string SWAGGER_URL_PROPERTY = "swagger_url";
         private static readonly string METHODS_PROPERTY = "methods";
 
         private static readonly string GET = "get";
@@ -106,8 +105,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string DELETE = "delete";
 
         internal readonly string Name;
-        public string Host;
-        public string SwaggerBasePath;
+        public string SwaggerUrl;
         public bool Get;
         public bool Post;
         public bool Put;
@@ -127,8 +125,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             KeyDataCollection serviceConfig = config[Name];
             KeyDataCollection defaultConfig = config[Configuration.DEFAULT_SECTION];
-            Host = serviceConfig[HOST_PROPERTY];
-            SwaggerBasePath = serviceConfig[SWAGGER_BASE_PATH_PROPERTY] ?? DefaultSwaggerBasePath(defaultConfig);
+            SwaggerUrl = serviceConfig[SWAGGER_URL_PROPERTY];
             string[] methods = serviceConfig.ContainsKey(METHODS_PROPERTY) ? serviceConfig[METHODS_PROPERTY].Split(',') : DefaultMethods(defaultConfig);
             for (int i = 0; i < methods.Length; i++)
                 methods[i] = methods[i].Trim();
@@ -143,13 +140,9 @@ namespace AutoLoadPyxelRestAddIn
             SectionData section = new SectionData(Name);
             section.Keys = new KeyDataCollection();
 
-            KeyData host = new KeyData(HOST_PROPERTY);
-            host.Value = this.Host;
-            section.Keys.SetKeyData(host);
-
-            KeyData swaggerBasePath = new KeyData(SWAGGER_BASE_PATH_PROPERTY);
-            swaggerBasePath.Value = this.SwaggerBasePath;
-            section.Keys.SetKeyData(swaggerBasePath);
+            KeyData swaggerUrl = new KeyData(SWAGGER_URL_PROPERTY);
+            swaggerUrl.Value = this.SwaggerUrl;
+            section.Keys.SetKeyData(swaggerUrl);
 
             KeyData methods = new KeyData(METHODS_PROPERTY);
             methods.Value = GetMethods();
@@ -160,8 +153,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void Default()
         {
-            Host = "";
-            SwaggerBasePath = "/";
+            SwaggerUrl = "";
             Get = true;
             Post = true;
             Put = true;
@@ -187,13 +179,6 @@ namespace AutoLoadPyxelRestAddIn
             if (sb.Length > 0)
                 sb.Append(", ");
             sb.Append(method);
-        }
-
-        private string DefaultSwaggerBasePath(KeyDataCollection defaultConfig)
-        {
-            if (defaultConfig == null || !defaultConfig.ContainsKey(SWAGGER_BASE_PATH_PROPERTY))
-                return string.Empty;
-            return defaultConfig[SWAGGER_BASE_PATH_PROPERTY];
         }
 
         private string[] DefaultMethods(KeyDataCollection defaultConfig)
