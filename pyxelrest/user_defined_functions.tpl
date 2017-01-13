@@ -17,67 +17,67 @@ from collections import OrderedDict
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro delete(service, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters)
+), data=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
-    response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-))
+), proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
-{%- macro get(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro get(service, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, stream=True)
+), request_parameters, stream=True, proxies={{ service.proxy }})
 {% else %}
-    response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), stream=True)
+), stream=True, proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
-{%- macro post(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro post(service, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.post('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters)
+), data=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
-    response = requests.post('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-))
+), proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
-{%- macro put(server_uri, method_path, contains_parameters, path_parameters) %}
+{%- macro put(service, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.put('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters)
+), data=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
-    response = requests.put('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-))
+), proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
@@ -358,7 +358,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
-    {{ request_macro(service.uri, method_path, contains_parameters, path_parameters) }}
+    {{ request_macro(service, method_path, contains_parameters, path_parameters) }}
         response.raise_for_status()
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }}.")
 {% if 'application/json' in method['produces'] %}

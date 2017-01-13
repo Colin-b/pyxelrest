@@ -38,6 +38,8 @@ class SwaggerService:
         self.udf_prefix = udf_prefix
         self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',')]
         swagger_url = self.get_item(config, 'swagger_url')
+        proxy_url = self.get_item_default(config, 'proxy_url', None)
+        self.proxy = {urlparse(swagger_url).scheme: proxy_url} if proxy_url else {}
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url)
@@ -79,7 +81,7 @@ class SwaggerService:
         :param swagger_url: URI of the service swagger JSON.
         :return: Dictionary representation of the retrieved swagger JSON.
         """
-        response = requests.get(swagger_url)
+        response = requests.get(swagger_url, proxies=self.proxy)
         response.raise_for_status()
         swagger = response.json()
         self._update_vba_restricted_keywords(swagger)

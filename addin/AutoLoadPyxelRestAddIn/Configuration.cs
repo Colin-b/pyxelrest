@@ -97,6 +97,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly ILog Log = LogManager.GetLogger("Service");
 
         private static readonly string SWAGGER_URL_PROPERTY = "swagger_url";
+        private static readonly string PROXY_URL_PROPERTY = "proxy_url";
         private static readonly string METHODS_PROPERTY = "methods";
 
         private static readonly string GET = "get";
@@ -106,6 +107,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal readonly string Name;
         public string SwaggerUrl;
+        public string ProxyUrl;
         public bool Get;
         public bool Post;
         public bool Put;
@@ -126,6 +128,7 @@ namespace AutoLoadPyxelRestAddIn
             KeyDataCollection serviceConfig = config[Name];
             KeyDataCollection defaultConfig = config[Configuration.DEFAULT_SECTION];
             SwaggerUrl = serviceConfig[SWAGGER_URL_PROPERTY];
+            ProxyUrl = serviceConfig.ContainsKey(PROXY_URL_PROPERTY) ? serviceConfig[PROXY_URL_PROPERTY] : DefaultProxyUrl(defaultConfig);
             string[] methods = serviceConfig.ContainsKey(METHODS_PROPERTY) ? serviceConfig[METHODS_PROPERTY].Split(',') : DefaultMethods(defaultConfig);
             for (int i = 0; i < methods.Length; i++)
                 methods[i] = methods[i].Trim();
@@ -144,6 +147,12 @@ namespace AutoLoadPyxelRestAddIn
             swaggerUrl.Value = this.SwaggerUrl;
             section.Keys.SetKeyData(swaggerUrl);
 
+            if(!string.IsNullOrEmpty(ProxyUrl)) {
+                KeyData proxyUrl = new KeyData(PROXY_URL_PROPERTY);
+                proxyUrl.Value = this.ProxyUrl;
+                section.Keys.SetKeyData(proxyUrl);
+            }
+
             KeyData methods = new KeyData(METHODS_PROPERTY);
             methods.Value = GetMethods();
             section.Keys.SetKeyData(methods);
@@ -154,6 +163,7 @@ namespace AutoLoadPyxelRestAddIn
         internal void Default()
         {
             SwaggerUrl = "";
+            ProxyUrl = "";
             Get = true;
             Post = true;
             Put = true;
@@ -186,6 +196,13 @@ namespace AutoLoadPyxelRestAddIn
             if (defaultConfig == null || !defaultConfig.ContainsKey(METHODS_PROPERTY))
                 return new string[0];
             return defaultConfig[METHODS_PROPERTY].Split(',');
+        }
+
+        private string DefaultProxyUrl(KeyDataCollection defaultConfig)
+        {
+            if (defaultConfig == null || !defaultConfig.ContainsKey(PROXY_URL_PROPERTY))
+                return string.Empty;
+            return defaultConfig[PROXY_URL_PROPERTY];
         }
     }
 }

@@ -267,6 +267,7 @@ namespace AutoLoadPyxelRestAddIn
         private readonly Service service;
         internal readonly TableLayoutPanel servicePanel;
         private TextBox swaggerUrlTextBox;
+        private TextBox proxyUrlTextBox;
         private CheckBox get;
         private CheckBox post;
         private CheckBox put;
@@ -327,8 +328,17 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(swaggerUrlTextBox, 1, 0);
             #endregion
 
+            #region Proxy Url
+            servicePanel.Controls.Add(new Label { Text = "Proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+            proxyUrlTextBox = new TextBox() { Text = service.ProxyUrl };
+            proxyUrlTextBox.Dock = DockStyle.Fill;
+            proxyUrlTextBox.AutoSize = true;
+            proxyUrlTextBox.TextChanged += ProxyUrlTextBox_TextChanged; ;
+            servicePanel.Controls.Add(proxyUrlTextBox, 1, 1);
+            #endregion
+
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -344,7 +354,7 @@ namespace AutoLoadPyxelRestAddIn
             delete = new CheckBox() { Text = "delete", Checked = service.Delete };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 1);
+            servicePanel.Controls.Add(methodsPanel, 1, 2);
             #endregion
 
             #region Delete
@@ -359,6 +369,11 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             return servicePanel;
+        }
+
+        private void ProxyUrlTextBox_TextChanged(object sender, EventArgs e)
+        {
+            service.ProxyUrl = proxyUrlTextBox.Text;
         }
 
         private void Delete_CheckedChanged(object sender, EventArgs e)
