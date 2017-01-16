@@ -49,13 +49,13 @@ import msgpack
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, headers=headers)
+), request_parameters, stream=True, headers=headers)
 {% else %}
         response = requests.get('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), headers=headers)
+), stream=True, headers=headers)
 {% endif %}
 {% endmacro -%}
 
