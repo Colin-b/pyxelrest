@@ -8,6 +8,13 @@ import logging.config
 import jinja2
 import vba
 import swagger_service
+from importlib import import_module
+try:
+    # Python 3
+    from importlib import reload
+except:
+    # Python 2
+    from imp import reload
 
 
 def user_defined_functions(services):
@@ -38,10 +45,14 @@ services = swagger_service.load_services()
 generate_user_defined_functions(services)
 
 logging.info('Expose user defined functions through PyxelRest.')
+
 try:
+    # Force reload of module (even if this is first time, it should not take long) as reloading pyxelrest does not reload UDFs otherwise
+    reload(import_module('user_defined_functions'))
     from user_defined_functions import *
 except Exception:
     logging.warning('Failed to import UDFs relatively to module class. Trying relatively to module folder.')
+    reload(import_module('pyxelrest.user_defined_functions'))
     # Occurs when calling pyxelrest via xlwings in non-debug mode
     from pyxelrest.user_defined_functions import *
 
