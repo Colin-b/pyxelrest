@@ -25,7 +25,7 @@ import msgpack
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters)
+), json=request_body, params=request_parameters)
 {% else %}
     response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -37,7 +37,7 @@ import msgpack
 
 {%- macro get(server_uri, method_path, contains_parameters, path_parameters, method) %}
 {% if 'application/msgpack' in method['produces'] %}
-    headers = {'content-type':'application/msgpack'}
+    headers = {'content-type':'application/json'}
 {% elif 'application/json' in method['produces']  %}
     headers = {'content-type':'application/json'}
 {% else %}
@@ -49,13 +49,13 @@ import msgpack
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, stream=True, headers=headers)
+), request_parameters, headers=headers)
 {% else %}
         response = requests.get('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), stream=True, headers=headers)
+), headers=headers)
 {% endif %}
 {% endmacro -%}
 
@@ -65,7 +65,7 @@ import msgpack
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters)
+), json=request_body, params=request_parameters)
 {% else %}
     response = requests.post('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -81,7 +81,7 @@ import msgpack
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters)
+), json=request_body, params=request_parameters)
 {% else %}
     response = requests.put('{{ server_uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
