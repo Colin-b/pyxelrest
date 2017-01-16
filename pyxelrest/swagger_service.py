@@ -38,14 +38,16 @@ class SwaggerService:
         :param config: ConfigParser instance from where service details are retrieved.
         """
         self.udf_prefix = udf_prefix
-        self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',')]
+        self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
+        if not self.methods:
+            raise Exception('No specified methods.')
         swagger_url = self.get_item(config, 'swagger_url')
         proxy_url = self.get_item_default(config, 'proxy_url', None)
         self.proxy = {urlparse(swagger_url).scheme: proxy_url} if proxy_url else {}
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url)
-        logging.info('"{0}" service ({1}) will be available.'.format(udf_prefix, self.uri))
+        logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.udf_prefix, self.uri, self.methods))
 
     def _extract_uri(self, swagger_url):
         # If the schemes is not included, the default scheme to be used is the one used to access the Swagger definition itself.
