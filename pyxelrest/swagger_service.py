@@ -13,18 +13,20 @@ import vba
 import logging
 
 
+def extract_scheme(swagger_url):
+    return urlparse(swagger_url).scheme
+
+
 def extract_host(swagger_url):
-    result = urlparse(swagger_url)
-    return result.scheme + '://' + result.netloc
+    return urlparse(swagger_url).netloc
 
 
 def extract_base_path(swagger_url):
-    result = urlparse(swagger_url)
-    full_path = result.path
+    full_path = urlparse(swagger_url).path
     if len(full_path) == 0:
         return None
     # Remove last section of the path as it is used to access documentation
-    paths = result.path.split('/')
+    paths = full_path.split('/')
     return '/'.join(paths[:-1])
 
 
@@ -46,12 +48,14 @@ class SwaggerService:
         logging.info('"{0}" service ({1}) will be available.'.format(udf_prefix, self.uri))
 
     def _extract_uri(self, swagger_url):
+        # If the schemes is not included, the default scheme to be used is the one used to access the Swagger definition itself.
+        scheme = self.swagger['schemes'][0] if 'schemes' in self.swagger else extract_scheme(swagger_url)
         # If the host is not included, the host serving the documentation is to be used (including the port).
         host = self.swagger['host'] if 'host' in self.swagger else extract_host(swagger_url)
         # If it is not included, the API is served directly under the host.
         base_path = self.swagger['basePath'] if 'basePath' in self.swagger else extract_base_path(swagger_url)
 
-        return host + base_path if base_path else host
+        return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
     def get_item(self, config, key):
         try:
