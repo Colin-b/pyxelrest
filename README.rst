@@ -20,11 +20,11 @@ Once installed, open Microsoft Excel and add services within PyxelRest configura
 Installation
 ------------
 
-#. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
+#. Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 #. Excel must be closed while executing the following step.
-        >>> pip install pypiwin32 --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-        >>> pip install pyxelrest --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
+        >>> pip install pypiwin32
+        >>> pip install pyxelrest
 
 Upgrade
 -------
@@ -49,7 +49,7 @@ Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_con
 Developer Installation/Upgrade
 ------------------------------
 
-1. This step will certainly be removed in the future, but in the meantime: Within Excel, ``Trust access to the VBA project object model`` should be enabled.
+1. Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the addin C# solution:
 In order to do so, you need to add a test certificate.
