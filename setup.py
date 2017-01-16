@@ -93,7 +93,7 @@ setup(name='pyxelrest',
       install_requires=[
           'jinja2>=2.8',
           'requests>=2.12.2',
-          'xlwings==0.10.1'
+          'xlwings==0.10.2'
       ],
       scripts=[
           'pyxelrest_post_install.py'
