@@ -54,6 +54,11 @@ In order to do so, you need to add a test certificate.
 
         developer_install.bat
 
+Known issues
+------------
+
+- Excel needs to be restarted for UDFs not to be displayed anymore in function wizard. (Even if calling them does not work)
+
 Enhancements TODO list
 ----------------------
 
