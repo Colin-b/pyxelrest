@@ -191,6 +191,7 @@
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="AutoLoadPyxelRestAddIn_4_TemporaryKey.pfx" />
     <None Include="AutoLoadPyxelRestAddIn_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -244,10 +245,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>AutoLoadPyxelRestAddIn_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>AutoLoadPyxelRestAddIn_4_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>9F4E96358FCA6644735687AF9A94AA105AFDB1A5</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>6EBCA4394C73966AA517A855D1FF81044BDAD09E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

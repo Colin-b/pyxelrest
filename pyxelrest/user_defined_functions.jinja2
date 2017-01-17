@@ -8,7 +8,7 @@ import requests
 import datetime
 import logging
 from collections import OrderedDict
-import msgpack
+import pandas
 
 
 {% macro convert_to_return_type(str_value, method) %}
@@ -19,7 +19,7 @@ import msgpack
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(service, method_path, contains_parameters, path_parameters) %}
+{%- macro delete(service, method_path, contains_parameters, path_parameters, method) %}
 {% if contains_parameters %}
     response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -36,8 +36,8 @@ import msgpack
 {% endmacro -%}
 
 {%- macro get(service, method_path, contains_parameters, path_parameters, method) %}
-{% if 'application/msgpack' in method['produces'] %}
-    headers = {'content-type':'application/json'}
+{% if 'application/msgpackpandas' in method['produces'] %}
+    headers = {'content-type':'application/msgpackpandas'}
 {% elif 'application/json' in method['produces']  %}
     headers = {'content-type':'application/json'}
 {% else %}
@@ -45,13 +45,13 @@ import msgpack
 {% endif %}
 
 {% if contains_parameters %}
-    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
+        response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
 ), request_parameters, stream=True, headers=headers, proxies={{ service.proxy }})
 {% else %}
-    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
+        response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
@@ -143,7 +143,6 @@ import msgpack
 {% elif param_type == 'boolean' -%}
         if {{param_name}} not in ['true', 'false']:
             logging.error('{{ param_name }} must be either "true" or "false".')
-{% if 'application/json' in method['produces'] %}
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -394,13 +393,14 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }}.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
-        elif response.headers['content-type'] == 'application/msgpack':
-            return to_list(list(msgpack.Unpacker(response.content)))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.content[:255]
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response: {0}.".format(response.text))
+            logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response.")
         else:
             logging.exception("Error occurred while calling {{ service.udf_prefix }}_{{ method['operationId'] }}.")
         return {{ convert_to_return_type('describe_error(response, error)', method) }}

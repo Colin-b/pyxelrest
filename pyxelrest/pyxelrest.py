@@ -48,5 +48,5 @@ except Exception:
 
 
 # Uncomment to debug Microsoft Excel UDF calls.
-# if __name__ == '__main__':
-#     xw.serve()
+#if __name__ == '__main__':
+#    xw.serve()
