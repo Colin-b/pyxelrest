@@ -43,7 +43,8 @@ Uninstall
 
 Logging
 -------
-Should you need to investigate what went wrong, logs can be found within your ``%APPDATA%\pyxelrest`` folder.
+Default log files can be found in your ``%APPDATA%\pyxelrest`` folder.
+Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_configuration.ini`` file.
 
 Developer Installation/Upgrade
 ------------------------------

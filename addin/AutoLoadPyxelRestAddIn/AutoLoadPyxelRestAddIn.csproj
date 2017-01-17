@@ -166,6 +166,7 @@
     <Compile Include="Accordion.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Service.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="OpacityEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -184,11 +185,12 @@
     <EmbeddedResource Include="PyxelRestRibbon.resx">
       <DependentUpon>PyxelRestRibbon.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ServiceConfigurationForm.resx">
+      <DependentUpon>ServiceConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="AutoLoadPyxelRestAddIn_2_TemporaryKey.pfx" />
-    <None Include="AutoLoadPyxelRestAddIn_3_TemporaryKey.pfx" />
     <None Include="AutoLoadPyxelRestAddIn_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -208,6 +210,10 @@
     <Compile Include="ResizeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ServiceConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServicePanel.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -238,10 +244,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>AutoLoadPyxelRestAddIn_3_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>AutoLoadPyxelRestAddIn_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>254A147A4D929C009C90CD1D6DEE41C84AA1F057</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9F4E96358FCA6644735687AF9A94AA105AFDB1A5</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

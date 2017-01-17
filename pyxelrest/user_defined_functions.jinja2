@@ -19,23 +19,23 @@ import msgpack
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(server_uri, method_path, contains_parameters, path_parameters, method) %}
+{%- macro delete(service, method_path, contains_parameters, path_parameters) %}
 {% if contains_parameters %}
-    response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters)
+), json=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
-    response = requests.delete('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-))
+), proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
-{%- macro get(server_uri, method_path, contains_parameters, path_parameters, method) %}
+{%- macro get(service, method_path, contains_parameters, path_parameters, method) %}
 {% if 'application/msgpack' in method['produces'] %}
     headers = {'content-type':'application/json'}
 {% elif 'application/json' in method['produces']  %}
@@ -45,49 +45,49 @@ import msgpack
 {% endif %}
 
 {% if contains_parameters %}
-        response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, stream=True, headers=headers)
+), request_parameters, stream=True, headers=headers, proxies={{ service.proxy }})
 {% else %}
-        response = requests.get('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), stream=True, headers=headers)
+), stream=True, headers=headers, proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
-{%- macro post(server_uri, method_path, contains_parameters, path_parameters, method) %}
+{%- macro post(service, method_path, contains_parameters, path_parameters, method) %}
 {% if contains_parameters %}
-    response = requests.post('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters)
+), json=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
-    response = requests.post('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-))
+), proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
-{%- macro put(server_uri, method_path, contains_parameters, path_parameters, method) %}
+{%- macro put(service, method_path, contains_parameters, path_parameters, method) %}
 {% if contains_parameters %}
-    response = requests.put('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters)
+), json=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
-    response = requests.put('{{ server_uri }}{{ method_path }}'.format(
+    response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-))
+), proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
@@ -96,6 +96,7 @@ import msgpack
 {% set param_type = parameter['type'] %}
 {% if param_type == 'integer' -%}
         if not isinstance({{param_name}}, int):
+            logging.error('{{ param_name }} must be an integer.')
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be an integer.']
 {% else %}
@@ -103,6 +104,7 @@ import msgpack
 {% endif %}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
+            logging.error('{{ param_name }} must be an integer.')
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a number.']
 {% else %}
@@ -112,6 +114,7 @@ import msgpack
 {% set param_format = parameter['format'] %}
 {% if param_format == 'date' -%}
         if not isinstance({{param_name}}, datetime.date):
+            logging.error('{{ param_name }} must be a date.')
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a date.']
 {% else %}
@@ -119,6 +122,7 @@ import msgpack
 {% endif %}
 {% elif param_format == 'date-time' -%}
         if not isinstance({{param_name}}, datetime.datetime):
+            logging.error('{{ param_name }} must be a date time.')
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a date time.']
 {% else %}
@@ -128,6 +132,7 @@ import msgpack
 {% set param_enum = parameter['enum'] %}
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
+            logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }}))
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
@@ -137,6 +142,8 @@ import msgpack
 {% endif %}
 {% elif param_type == 'boolean' -%}
         if {{param_name}} not in ['true', 'false']:
+            logging.error('{{ param_name }} must be either "true" or "false".')
+{% if 'application/json' in method['produces'] %}
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -152,6 +159,7 @@ import msgpack
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, int):
+                    logging.error('{{ param_name }} must contain integers.')
 {% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain integers.']
 {% else %}
@@ -159,6 +167,7 @@ import msgpack
 {% endif %}
         else:
             if not isinstance({{param_name}}, int):
+                logging.error('{{ param_name }} must be an integer.')
 {% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be an integer.']
 {% else %}
@@ -169,6 +178,7 @@ import msgpack
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, float):
+                    logging.error('{{ param_name }} must contain numbers.')
 {% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain numbers.']
 {% else %}
@@ -176,6 +186,7 @@ import msgpack
 {% endif %}
         else:
             if not isinstance({{param_name}}, float):
+                logging.error('{{ param_name }} must be a number.')
 {% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be a number.']
 {% else %}
@@ -188,6 +199,7 @@ import msgpack
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.date):
+                    logging.error('{{ param_name }} must contain dates.')
 {% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain dates.']
 {% else %}
@@ -195,6 +207,7 @@ import msgpack
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.date):
+                logging.error('{{ param_name }} must be a date.')
 {% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be a date.']
 {% else %}
@@ -205,6 +218,7 @@ import msgpack
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.datetime):
+                    logging.error('{{ param_name }} must contain date times.')
 {% if method['produces'] is table_result %}
                     return ['{{ param_name }} must contain date times.']
 {% else %}
@@ -212,6 +226,7 @@ import msgpack
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.datetime):
+                logging.error('{{ param_name }} must be a date time.')
 {% if method['produces'] is table_result %}
                 return ['{{ param_name }} must be a date time.']
 {% else %}
@@ -224,6 +239,7 @@ import msgpack
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
+                    logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item))
 {% if method['produces'] is table_result %}
                     return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)]
 {% else %}
@@ -231,6 +247,7 @@ import msgpack
 {% endif %}
         else:
             if {{param_name}} not in {{ param_items_enum }}:
+                logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}))
 {% if method['produces'] is table_result %}
                 return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
@@ -244,6 +261,7 @@ import msgpack
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in ['true', 'false']:
+                    logging.error('{{ param_name }} must be either "true" or "false".')
 {% if method['produces'] is table_result %}
                     return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -253,6 +271,7 @@ import msgpack
                     {{param_name}}_item = {{param_name}}_item == 'true'
         else:
             if {{param_name}} not in ['true', 'false']:
+                logging.error('{{ param_name }} must contain "true" or "false".')
 {% if method['produces'] is table_result %}
                 return ['{{ param_name }} must contain "true" or "false".']
 {% else %}
@@ -268,6 +287,7 @@ import msgpack
 {% set param_in = parameter['in'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
+        logging.error('{{ param_name }} is required.')
 {% if method['produces'] is table_result %}
         return ['{{ param_name }} is required.']
 {% else %}
@@ -285,6 +305,7 @@ import msgpack
 {% macro validate_path_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
+        logging.error('{{ param_name }} is required.')
 {% if method['produces'] is table_result %}
         return ['{{ param_name }} is required.']
 {% else %}
@@ -326,7 +347,7 @@ import msgpack
 {% macro add_udf(service, method_path, method, request_macro) %}
 {% if 'application/octet-stream' not in method['produces'] %}
 {% set method_parameters = method['parameters'] %}
-@xw.func(category='{{ service.udf_prefix }}', call_while_in_wizard=False)
+@xw.func(category='{{ service.udf_prefix }}', call_in_wizard=False)
 {% for parameter in method_parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
@@ -368,7 +389,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
-    {{ request_macro(service.uri, method_path, contains_parameters, path_parameters, method) }}
+    {{ request_macro(service, method_path, contains_parameters, path_parameters, method) }}
         response.raise_for_status()
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }}.")
         if response.headers['content-type'] == 'application/json':

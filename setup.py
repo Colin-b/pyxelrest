@@ -50,7 +50,7 @@ setup(name='pyxelrest',
       ],
       packages=find_packages(exclude=['tests']),
       package_data={
-         'pyxelrest': ['default_configuration.ini', 'user_defined_functions.tpl']
+         'pyxelrest': ['default_services_configuration.ini', 'default_logging_configuration.ini', 'user_defined_functions.jinja2']
       },
       data_files=[
           (
@@ -93,7 +93,7 @@ setup(name='pyxelrest',
       install_requires=[
           'jinja2>=2.8',
           'requests>=2.12.2',
-          'xlwings==0.10.1',
+          'xlwings==0.10.2',
           'msgpack-python'
       ],
       scripts=[
