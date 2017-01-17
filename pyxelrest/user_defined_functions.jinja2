@@ -23,7 +23,7 @@ from collections import OrderedDict
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
     response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -55,7 +55,7 @@ from collections import OrderedDict
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
     response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -71,7 +71,7 @@ from collections import OrderedDict
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), data=request_body, params=request_parameters, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, proxies={{ service.proxy }})
 {% else %}
     response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
