@@ -22,7 +22,7 @@ namespace AutoLoadPyxelRestAddIn
             }
             catch (Exception ex)
             {
-                Log.Error("An error occurred while activating PyxelRest.", ex);
+                Log.Error("An error occurred while activating PyxelRest on Excel start.", ex);
             }
         }
 
@@ -43,7 +43,14 @@ namespace AutoLoadPyxelRestAddIn
 
         private void OnOpenWorkBook(Excel.Workbook Wb)
         {
-            ActivatePyxelRest();
+            try
+            {
+                ActivatePyxelRest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("An error occurred while activating PyxelRest on opening workbook.", ex);
+            }
         }
 
         private void OnExcelStart()
