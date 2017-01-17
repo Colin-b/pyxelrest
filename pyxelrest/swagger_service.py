@@ -50,7 +50,7 @@ class SwaggerService:
         logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.udf_prefix, self.uri, self.methods))
 
     def _extract_uri(self, swagger_url):
-        # If the schemes is not included, the default scheme to be used is the one used to access the Swagger definition itself.
+        # The default scheme to be used is the one used to access the Swagger definition itself.
         scheme = self.swagger['schemes'][0] if 'schemes' in self.swagger else extract_scheme(swagger_url)
         # If the host is not included, the host serving the documentation is to be used (including the port).
         host = self.swagger['host'] if 'host' in self.swagger else extract_host(swagger_url)
@@ -109,7 +109,9 @@ class SwaggerService:
 
     def validate_swagger_version(self):
         if self.swagger['swagger'] != '2.0':
-            raise Exception('PyxelRest does not support any other version (in this case "{}") than Swagger 2.0'.format(self.swagger['swagger']))
+            raise Exception('PyxelRest does not support any other version (in this case "{}") than Swagger 2.0'.format(
+                self.swagger['swagger']
+            ))
 
 
 def load_services():
