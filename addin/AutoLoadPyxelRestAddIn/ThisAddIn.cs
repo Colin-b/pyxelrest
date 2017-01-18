@@ -30,6 +30,8 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
+                if (!TryToLoadXlWingsModule())
+                    return false;
                 Application.Run("pyxelrest.xlam!ImportPythonUDFs");
                 Log.InfoFormat("User Defined Functions imported.");
                 return true;
@@ -39,6 +41,22 @@ namespace AutoLoadPyxelRestAddIn
                 Log.Error("Unable to import User Defined Functions.", ex);
                 return false;
             }
+        }
+
+        private bool TryToLoadXlWingsModule()
+        {
+            VBComponent xlWingsModule = GetXlWingsModule();
+            if (xlWingsModule == null)
+            {
+                string pathToBasFile = GetPathToXlWingsBasFile();
+                if (pathToBasFile == null)
+                {
+                    Log.WarnFormat("No XLWings module can be found to load.");
+                    return false;
+                }
+                return ImportXlWingsBasFile(pathToBasFile);
+            }
+            return true;
         }
 
         private void OnOpenWorkBook(Excel.Workbook Wb)
@@ -69,17 +87,18 @@ namespace AutoLoadPyxelRestAddIn
                 return;
             }
 
-            ReloadXlWingsBasFile(pathToBasFile);
-            ImportUserDefinedFunctions();
+            if(ReloadXlWingsBasFile(pathToBasFile))
+                ImportUserDefinedFunctions();
         }
 
-        private void ReloadXlWingsBasFile(string pathToBasFile)
+        private bool ReloadXlWingsBasFile(string pathToBasFile)
         {
             if (RemoveXlWingsModule())
-                ImportXlWingsBasFile(pathToBasFile);
+                return ImportXlWingsBasFile(pathToBasFile);
+            return true;
         }
 
-        private void ImportXlWingsBasFile(string pathToBasFile)
+        private bool ImportXlWingsBasFile(string pathToBasFile)
         {
             try
             {
@@ -87,14 +106,16 @@ namespace AutoLoadPyxelRestAddIn
                 if (vbProject == null)
                 {
                     Log.Error("PyxelRest VB Project cannot be found.");
-                    return;
+                    return false;
                 }
                 vbProject.VBComponents.Import(pathToBasFile);
                 Log.Info("XLWings module imported.");
+                return true;
             }
             catch (Exception ex)
             {
                 Log.Error("XlWings module could not be imported.", ex);
+                return false;
             };
         }
 
