@@ -95,7 +95,8 @@ setup(name='pyxelrest',
           'requests>=2.12.2',
           'msgpack-python',
           'xlwings==0.10.2',
-          'pyaml'
+          'pyaml',
+          'pandas'
       ],
       scripts=[
           'pyxelrest_post_install.py'
