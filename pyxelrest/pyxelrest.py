@@ -5,6 +5,7 @@ import os
 import datetime
 import logging
 import logging.config
+import logging.handlers
 import jinja2
 import yaml
 
@@ -42,9 +43,16 @@ def generate_user_defined_functions(services):
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
         generated_file.write(user_defined_functions(services))
 
-with open(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini'), 'r') as config_file:
-    log_config_dict=yaml.load(config_file)
-    logging.config.dictConfig(log_config_dict)
+logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
+if os.path.isfile(logging_configuration_file_path):
+    with open(logging_configuration_file_path, 'r') as config_file:
+        log_config_dict=yaml.load(config_file)
+        logging.config.dictConfig(log_config_dict)
+else:
+    logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
+                        handlers=[logging.handlers.TimedRotatingFileHandler(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pyxelrest.log'), when='D')],
+                        level=logging.INFO)
+    logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.', logging_configuration_file_path)
 
 services = swagger_service.load_services()
 generate_user_defined_functions(services)
@@ -63,5 +71,5 @@ except Exception:
 
 
 # Uncomment to debug Microsoft Excel UDF calls.
-#if __name__ == '__main__':
-#    xw.serve()
+# if __name__ == '__main__':
+#     xw.serve()
