@@ -1,11 +1,13 @@
 """
-Each time the pyxelrest module is imported it will generate xlwings User Defined Functions.
+Each time the pyxelrest module is loaded it will generate xlwings User Defined Functions.
 """
 import os
 import datetime
 import logging
 import logging.config
 import jinja2
+import yaml
+
 import vba
 import swagger_service
 from importlib import import_module
@@ -40,7 +42,9 @@ def generate_user_defined_functions(services):
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
         generated_file.write(user_defined_functions(services))
 
-logging.config.fileConfig(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini'))
+with open(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini'), 'r') as config_file:
+    log_config_dict=yaml.load(config_file)
+    logging.config.dictConfig(log_config_dict)
 
 services = swagger_service.load_services()
 generate_user_defined_functions(services)

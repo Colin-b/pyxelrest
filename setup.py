@@ -93,8 +93,9 @@ setup(name='pyxelrest',
       install_requires=[
           'jinja2>=2.8',
           'requests>=2.12.2',
+          'msgpack-python',
           'xlwings==0.10.2',
-          'msgpack-python'
+          'pyaml'
       ],
       scripts=[
           'pyxelrest_post_install.py'
