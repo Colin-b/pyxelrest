@@ -116,7 +116,8 @@ def install_pyxelrest_vb_addin(pyxelrest_vb_addin_dir):
     if not os.path.exists(xlstart_folder):
         os.makedirs(xlstart_folder)
     loaded_pyxelrest_vb_file = os.path.join(xlstart_folder, 'pyxelrest.xlam')
-    shutil.copyfile(pyxelrest_vb_file_path, loaded_pyxelrest_vb_file)
+    if not os.path.exists(loaded_pyxelrest_vb_file):
+        shutil.copyfile(pyxelrest_vb_file_path, loaded_pyxelrest_vb_file)
 
 
 def get_vb_addin_folder(vb_addin_folder_option, modules_dir):
