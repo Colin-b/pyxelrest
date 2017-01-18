@@ -214,6 +214,7 @@
     <Compile Include="ServiceConfigurationForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UrlChecker.cs" />
     <Compile Include="ServicePanel.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>

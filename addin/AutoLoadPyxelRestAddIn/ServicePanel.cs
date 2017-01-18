@@ -42,10 +42,9 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void CheckHostReachability()
         {
-            long actualTicks = DateTime.UtcNow.Ticks;
-            if (swaggerUrlModificationTicks != null && actualTicks >= swaggerUrlModificationTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
+            if (swaggerUrlModificationTicks != null && DateTime.UtcNow.Ticks >= swaggerUrlModificationTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
             {
-                swaggerUrlTextBox.BackColor = IsSwaggerReachable() ? Color.LightGreen : Color.Red;
+                swaggerUrlTextBox.BackColor = UrlChecker.IsSwaggerReachable(swaggerUrlTextBox.Text, proxyUrlTextBox.Text) ? Color.LightGreen : Color.Red;
                 swaggerUrlModificationTicks = null;
             }
         }
@@ -120,6 +119,7 @@ namespace AutoLoadPyxelRestAddIn
         private void ProxyUrlTextBox_TextChanged(object sender, EventArgs e)
         {
             service.ProxyUrl = proxyUrlTextBox.Text;
+            swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
         }
 
         private void Delete_CheckedChanged(object sender, EventArgs e)
@@ -154,36 +154,6 @@ namespace AutoLoadPyxelRestAddIn
             checkbox.Visible = false;
             configurationForm.configuration.Remove(service);
             configurationForm.Removed(this);
-        }
-
-        private bool IsSwaggerReachable()
-        {
-            HttpWebResponse response = ConnectTo(swaggerUrlTextBox.Text);
-            return response != null && response.StatusCode == HttpStatusCode.OK;
-        }
-
-        private HttpWebResponse ConnectTo(string url)
-        {
-            try
-            {
-                Uri urlCheck = new Uri(url);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
-                request.Timeout = 500;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                response.Close();
-                return response;
-            }
-            catch (WebException e)
-            {
-                HttpWebResponse response = (HttpWebResponse)e.Response;
-                if (response != null)
-                    response.Close();
-                return response;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
     }
 }
