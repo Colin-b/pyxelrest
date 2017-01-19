@@ -73,6 +73,7 @@ namespace AutoLoadPyxelRestAddIn
             Text = "Configure PyxelRest Services";
             MaximumSize = new Size(800, 600);
             AutoScroll = true;
+            StartPosition = FormStartPosition.CenterParent;
 
             TableLayoutPanel layout = new TableLayoutPanel();
             layout.AutoSize = true;

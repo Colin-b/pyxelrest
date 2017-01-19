@@ -11,6 +11,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private static readonly string SWAGGER_URL_PROPERTY = "swagger_url";
         private static readonly string PROXY_URL_PROPERTY = "proxy_url";
+        private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
 
         private static readonly string GET = "get";
@@ -21,6 +22,7 @@ namespace AutoLoadPyxelRestAddIn
         internal readonly string Name;
         public string SwaggerUrl;
         public string ProxyUrl;
+        public string ServiceHost;
         public bool Get;
         public bool Post;
         public bool Put;
@@ -42,6 +44,7 @@ namespace AutoLoadPyxelRestAddIn
             KeyDataCollection defaultConfig = config[Configuration.DEFAULT_SECTION];
             SwaggerUrl = serviceConfig[SWAGGER_URL_PROPERTY];
             ProxyUrl = serviceConfig.ContainsKey(PROXY_URL_PROPERTY) ? serviceConfig[PROXY_URL_PROPERTY] : DefaultProxyUrl(defaultConfig);
+            ServiceHost = serviceConfig.ContainsKey(SERVICE_HOST_PROPERTY) ? serviceConfig[SERVICE_HOST_PROPERTY] : string.Empty;
             string[] methods = serviceConfig.ContainsKey(METHODS_PROPERTY) ? serviceConfig[METHODS_PROPERTY].Split(',') : DefaultMethods(defaultConfig);
             for (int i = 0; i < methods.Length; i++)
                 methods[i] = methods[i].Trim();
@@ -66,6 +69,13 @@ namespace AutoLoadPyxelRestAddIn
                 section.Keys.SetKeyData(proxyUrl);
             }
 
+            if (!string.IsNullOrEmpty(ServiceHost))
+            {
+                KeyData serviceHost = new KeyData(SERVICE_HOST_PROPERTY);
+                serviceHost.Value = this.ServiceHost;
+                section.Keys.SetKeyData(serviceHost);
+            }
+
             KeyData methods = new KeyData(METHODS_PROPERTY);
             methods.Value = GetMethods();
             section.Keys.SetKeyData(methods);
@@ -77,6 +87,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             SwaggerUrl = "";
             ProxyUrl = "";
+            ServiceHost = "";
             Get = true;
             Post = true;
             Put = true;

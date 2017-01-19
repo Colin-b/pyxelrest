@@ -13,14 +13,6 @@ import vba
 import logging
 
 
-def extract_base_path(swagger_documentation_base_path):
-    if len(swagger_documentation_base_path) == 0:
-        return None
-    # Remove last section of the path as it is used to access documentation
-    paths = swagger_documentation_base_path.split('/')
-    return '/'.join(paths[:-1])
-
-
 class SwaggerService:
     def __init__(self, udf_prefix, config):
         """
@@ -38,16 +30,17 @@ class SwaggerService:
         self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
-        self.uri = self._extract_uri(swagger_url_parsed)
+        self.uri = self._extract_uri(swagger_url_parsed, config)
         logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.udf_prefix, self.uri, self.methods))
 
-    def _extract_uri(self, swagger_url_parsed):
+    def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
         scheme = self.swagger.get('schemes', [swagger_url_parsed.scheme])[0]
         # If the host is not included, the host serving the documentation is to be used (including the port).
-        host = self.swagger.get('host', swagger_url_parsed.netloc)
+        # service_host property is here to handle services behind a reverse proxy (otherwise host will be the reverse proxy one)
+        host = self.swagger.get('host', self.get_item_default(config, 'service_host', swagger_url_parsed.netloc))
         # If it is not included, the API is served directly under the host.
-        base_path = self.swagger.get('basePath', extract_base_path(swagger_url_parsed.path))
+        base_path = self.swagger.get('basePath', None)
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 

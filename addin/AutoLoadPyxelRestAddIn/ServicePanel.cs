@@ -1,7 +1,6 @@
 ﻿using log4net;
 using System;
 using System.Drawing;
-using System.Net;
 using System.Windows.Forms;
 
 namespace AutoLoadPyxelRestAddIn
@@ -14,6 +13,7 @@ namespace AutoLoadPyxelRestAddIn
         internal readonly TableLayoutPanel servicePanel;
         private TextBox swaggerUrlTextBox;
         private TextBox proxyUrlTextBox;
+        private TextBox serviceHostTextBox;
         private CheckBox get;
         private CheckBox post;
         private CheckBox put;
@@ -78,12 +78,21 @@ namespace AutoLoadPyxelRestAddIn
             proxyUrlTextBox = new TextBox() { Text = service.ProxyUrl };
             proxyUrlTextBox.Dock = DockStyle.Fill;
             proxyUrlTextBox.AutoSize = true;
-            proxyUrlTextBox.TextChanged += ProxyUrlTextBox_TextChanged; ;
+            proxyUrlTextBox.TextChanged += ProxyUrlTextBox_TextChanged;
             servicePanel.Controls.Add(proxyUrlTextBox, 1, 1);
             #endregion
 
+            #region Service Host
+            servicePanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+            serviceHostTextBox = new TextBox() { Text = service.ServiceHost };
+            serviceHostTextBox.Dock = DockStyle.Fill;
+            serviceHostTextBox.AutoSize = true;
+            serviceHostTextBox.TextChanged += ServiceHostTextBox_TextChanged;
+            servicePanel.Controls.Add(serviceHostTextBox, 1, 2);
+            #endregion
+
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -99,7 +108,7 @@ namespace AutoLoadPyxelRestAddIn
             delete = new CheckBox() { Text = "delete", Checked = service.Delete };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 2);
+            servicePanel.Controls.Add(methodsPanel, 1, 3);
             #endregion
 
             #region Delete
@@ -114,6 +123,11 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             return servicePanel;
+        }
+
+        private void ServiceHostTextBox_TextChanged(object sender, EventArgs e)
+        {
+            service.ServiceHost = serviceHostTextBox.Text;
         }
 
         private void ProxyUrlTextBox_TextChanged(object sender, EventArgs e)
