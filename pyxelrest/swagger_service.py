@@ -2,31 +2,22 @@ import os
 try:
     # Python 3
     from configparser import ConfigParser
-    from urllib.parse import urlparse
+    from urllib.parse import urlsplit
 except ImportError:
     # Python 2
     from ConfigParser import ConfigParser
-    from urlparse import urlparse
+    from urlparse import urlsplit
 
 import requests
 import vba
 import logging
 
 
-def extract_scheme(swagger_url):
-    return urlparse(swagger_url).scheme
-
-
-def extract_host(swagger_url):
-    return urlparse(swagger_url).netloc
-
-
-def extract_base_path(swagger_url):
-    full_path = urlparse(swagger_url).path
-    if len(full_path) == 0:
+def extract_base_path(swagger_documentation_base_path):
+    if len(swagger_documentation_base_path) == 0:
         return None
     # Remove last section of the path as it is used to access documentation
-    paths = full_path.split('/')
+    paths = swagger_documentation_base_path.split('/')
     return '/'.join(paths[:-1])
 
 
@@ -42,20 +33,21 @@ class SwaggerService:
         if not self.methods:
             raise Exception('All methods were filtered out.')
         swagger_url = self.get_item(config, 'swagger_url')
+        swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
-        self.proxy = {urlparse(swagger_url).scheme: proxy_url} if proxy_url else {}
+        self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
-        self.uri = self._extract_uri(swagger_url)
+        self.uri = self._extract_uri(swagger_url_parsed)
         logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.udf_prefix, self.uri, self.methods))
 
-    def _extract_uri(self, swagger_url):
+    def _extract_uri(self, swagger_url_parsed):
         # The default scheme to be used is the one used to access the Swagger definition itself.
-        scheme = self.swagger['schemes'][0] if 'schemes' in self.swagger else extract_scheme(swagger_url)
+        scheme = self.swagger.get('schemes', [swagger_url_parsed.scheme])[0]
         # If the host is not included, the host serving the documentation is to be used (including the port).
-        host = self.swagger['host'] if 'host' in self.swagger else extract_host(swagger_url)
+        host = self.swagger.get('host', swagger_url_parsed.netloc)
         # If it is not included, the API is served directly under the host.
-        base_path = self.swagger['basePath'] if 'basePath' in self.swagger else extract_base_path(swagger_url)
+        base_path = self.swagger.get('basePath', extract_base_path(swagger_url_parsed.path))
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
