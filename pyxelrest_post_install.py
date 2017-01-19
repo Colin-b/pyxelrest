@@ -103,7 +103,7 @@ class PostInstall:
         self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
         self.installation_files_folder = installation_files_folder or os.path.abspath(os.path.dirname(__file__))
         self.modules_folder = modules_folder or os.path.abspath(os.path.dirname(__file__))
-        self.pyxelrest_module_dir = os.path.join(modules_folder, 'pyxelrest')
+        self.pyxelrest_module_dir = os.path.join(self.modules_folder, 'pyxelrest')
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
 
     def perform_post_installation_tasks(self):
