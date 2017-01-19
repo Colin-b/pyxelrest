@@ -10,11 +10,7 @@ data_dir = os.path.join(modules_dir, '..', '..')
 
 class install_pyxelrest_data(install_data):
     def run(self):
-        from pyxelrest_post_install import PreInstall
-        PreInstall(os.path.join(data_dir, 'pyxelrest_addin')).perform_pre_installation_tasks()
-
         install_data.run(self)
-
         from pyxelrest_post_install import PostInstall
         post_install = PostInstall(os.path.join(data_dir, 'pyxelrest_addin'),
                                    os.path.join(data_dir, 'pyxelrest_vb_addin'),

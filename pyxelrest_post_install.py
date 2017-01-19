@@ -24,7 +24,8 @@ class VSTOManager:
     def uninstall_auto_load_addin(self, add_in_folder):
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if os.path.isfile(vsto_file_path):
-            subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
+            # Do not check call, we do not care about the result
+            subprocess.call([self.vsto_installer_path, '/Silent', '/Uninstall', vsto_file_path])
 
     @staticmethod
     def get_auto_load_vsto_file_path(add_in_folder):
@@ -79,17 +80,6 @@ class XlWingsConfig:
             pyxelrest_settings.write(xlwings_settings_line)
 
 
-class PreInstall:
-    def __init__(self, add_in_folder):
-        if not add_in_folder:
-            raise Exception('Path to Auto Load Addin folder must be provided.')
-
-        self.add_in_folder = to_absolute_path(add_in_folder)
-
-    def perform_pre_installation_tasks(self):
-        VSTOManager().uninstall_auto_load_addin(self.add_in_folder)
-
-
 class PostInstall:
     def __init__(self, add_in_folder, vba_add_in_folder, installation_files_folder=None, modules_folder=None):
         if not sys.platform.startswith('win'):
@@ -111,9 +101,13 @@ class PostInstall:
         self._create_services_configuration()
         self._create_logging_configuration()
         self._install_pyxelrest_vb_addin()
+
         xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_folder)
         xlwings_config.create_pyxelrest_bas_file()
-        VSTOManager().install_auto_load_addin(self.add_in_folder)
+
+        vsto = VSTOManager()
+        vsto.uninstall_auto_load_addin(self.add_in_folder)
+        vsto.install_auto_load_addin(self.add_in_folder)
 
     def _create_pyxelrest_appdata_folder(self):
         if not os.path.exists(self.pyxelrest_appdata_folder):
@@ -168,8 +162,10 @@ if __name__ == '__main__':
     parser.add_argument('-vbdir', '--vbaddindirectory', help='directory containing pyxelrest visual basic addin', type=str)
     options = parser.parse_args(sys.argv[1:])
 
-    post_install = PostInstall(options.addindirectory,
-                               options.vbaddindirectory,
-                               installation_files_folder=options.installdirectory,
-                               modules_folder=options.modulesdirectory)
-    post_install.perform_post_installation_tasks()
+    # Check values here to trigger the proper help from argument parser
+    if options.addindirectory and options.vbaddindirectory:
+        post_install = PostInstall(options.addindirectory,
+                                   options.vbaddindirectory,
+                                   installation_files_folder=options.installdirectory,
+                                   modules_folder=options.modulesdirectory)
+        post_install.perform_post_installation_tasks()
