@@ -19,7 +19,7 @@ class VSTOManager:
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
             raise Exception('Auto Load PixelRest Excel Add-In cannot be found in {0}.'.format(vsto_file_path))
-        subprocess.check_call([self.vsto_installer_path, '/Silent', '/Install', vsto_file_path])
+        subprocess.check_call([self.vsto_installer_path, '/Install', vsto_file_path])
 
     def uninstall_auto_load_addin(self, add_in_folder):
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
