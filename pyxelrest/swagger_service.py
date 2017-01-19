@@ -73,7 +73,7 @@ class SwaggerService:
         :param swagger_url: URI of the service swagger JSON.
         :return: Dictionary representation of the retrieved swagger JSON.
         """
-        response = requests.get(swagger_url, proxies=self.proxy)
+        response = requests.get(swagger_url, proxies=self.proxy, timeout=1)
         response.raise_for_status()
         swagger = response.json()
         self._update_vba_restricted_keywords(swagger)
