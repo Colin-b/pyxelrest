@@ -1,7 +1,6 @@
 import os
 from setuptools import setup, find_packages
 from distutils.command.install_data import install_data
-import subprocess
 import distutils.sysconfig
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
@@ -11,7 +10,8 @@ modules_dir = distutils.sysconfig.get_python_lib()
 class install_pyxelrest_data(install_data):
     def run(self):
         install_data.run(self)
-        subprocess.check_call(['python', 'pyxelrest_post_install.py', '--installdirectory', this_dir, '--modulesdirectory', modules_dir])
+        import pyxelrest_post_install
+        pyxelrest_post_install.perform_post_installation_tasks(installation_files_folder=this_dir, modules_folder=modules_dir)
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
