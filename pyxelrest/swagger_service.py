@@ -37,7 +37,8 @@ class SwaggerService:
         # The default scheme to be used is the one used to access the Swagger definition itself.
         scheme = self.swagger.get('schemes', [swagger_url_parsed.scheme])[0]
         # If the host is not included, the host serving the documentation is to be used (including the port).
-        # service_host property is here to handle services behind a reverse proxy (otherwise host will be the reverse proxy one)
+        # service_host property is here to handle services behind a reverse proxy
+        # (otherwise host will be the reverse proxy one)
         host = self.swagger.get('host', self.get_item_default(config, 'service_host', swagger_url_parsed.netloc))
         # If it is not included, the API is served directly under the host.
         base_path = self.swagger.get('basePath', None)
