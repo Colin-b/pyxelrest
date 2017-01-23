@@ -73,21 +73,21 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -345,21 +345,21 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -615,21 +615,21 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -885,21 +885,21 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -1167,7 +1167,7 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
         return ['query_number is required.']
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
@@ -1177,7 +1177,7 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
         return ['query_float is required.']
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
@@ -1187,7 +1187,7 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
         return ['query_double is required.']
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -1517,7 +1517,7 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
         return ['query_number is required.']
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
@@ -1527,7 +1527,7 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
         return ['query_float is required.']
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
@@ -1537,7 +1537,7 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
         return ['query_double is required.']
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -1865,7 +1865,7 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
         return ['query_number is required.']
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
@@ -1875,7 +1875,7 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
         return ['query_float is required.']
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
@@ -1885,7 +1885,7 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
         return ['query_double is required.']
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -2213,7 +2213,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
         return ['query_number is required.']
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return ['query_number must be a number.']
 
         request_parameters['query_number'] = query_number
@@ -2223,7 +2223,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
         return ['query_float is required.']
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return ['query_float must be a number.']
 
         request_parameters['query_float'] = query_float
@@ -2233,7 +2233,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
         return ['query_double is required.']
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return ['query_double must be a number.']
 
         request_parameters['query_double'] = query_double
@@ -3304,21 +3304,21 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -3575,21 +3575,21 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -3844,21 +3844,21 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -4113,21 +4113,21 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -4394,7 +4394,7 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -4404,7 +4404,7 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -4414,7 +4414,7 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -4743,7 +4743,7 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -4753,7 +4753,7 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -4763,7 +4763,7 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -5090,7 +5090,7 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -5100,7 +5100,7 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -5110,7 +5110,7 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -5437,7 +5437,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -5447,7 +5447,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -5457,7 +5457,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -6520,21 +6520,21 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -6791,21 +6791,21 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -7060,21 +7060,21 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -7329,21 +7329,21 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
 
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
 
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
 
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -7610,7 +7610,7 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -7620,7 +7620,7 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -7630,7 +7630,7 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -7959,7 +7959,7 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -7969,7 +7969,7 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -7979,7 +7979,7 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -8306,7 +8306,7 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -8316,7 +8316,7 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -8326,7 +8326,7 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double
@@ -8653,7 +8653,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
         return 'query_number is required.'
     if query_number is not None:
         if not isinstance(query_number, float):
-            logging.error('query_number must be an integer.')
+            logging.error('query_number must be a number.')
             return 'query_number must be a number.'
 
         request_parameters['query_number'] = query_number
@@ -8663,7 +8663,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
         return 'query_float is required.'
     if query_float is not None:
         if not isinstance(query_float, float):
-            logging.error('query_float must be an integer.')
+            logging.error('query_float must be a number.')
             return 'query_float must be a number.'
 
         request_parameters['query_float'] = query_float
@@ -8673,7 +8673,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
         return 'query_double is required.'
     if query_double is not None:
         if not isinstance(query_double, float):
-            logging.error('query_double must be an integer.')
+            logging.error('query_double must be a number.')
             return 'query_double must be a number.'
 
         request_parameters['query_double'] = query_double

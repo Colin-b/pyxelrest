@@ -104,7 +104,7 @@ import pandas
 {% endif %}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
-            logging.error('{{ param_name }} must be an integer.')
+            logging.error('{{ param_name }} must be a number.')
 {% if method['produces'] is table_result %}
             return ['{{ param_name }} must be a number.']
 {% else %}
