@@ -95,6 +95,9 @@ setup(name='pyxelrest',
               ]
           )
       ],
+      tests_require=[
+          'flask'
+      ],
       install_requires=[
           'jinja2>=2.8',
           'requests>=2.12.2',
