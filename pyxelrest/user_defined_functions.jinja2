@@ -94,6 +94,7 @@ import pandas
 {% macro validate_parameter_value(parameter, method) %}
 {% set param_name = parameter['name'] %}
 {% set param_type = parameter['type'] %}
+{# Integer Type check #}
 {% if param_type == 'integer' -%}
         if not isinstance({{param_name}}, int):
             logging.error('{{ param_name }} must be an integer.')
@@ -102,6 +103,7 @@ import pandas
 {% else %}
             return '{{ param_name }} must be an integer.'
 {% endif %}
+{# Number Type check #}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
             logging.error('{{ param_name }} must be a number.')
@@ -110,8 +112,10 @@ import pandas
 {% else %}
             return '{{ param_name }} must be a number.'
 {% endif %}
+{# String Type check #}
 {% elif param_type == 'string' %}
 {% set param_format = parameter['format'] %}
+{# String (date) Type check #}
 {% if param_format == 'date' -%}
         if not isinstance({{param_name}}, datetime.date):
             logging.error('{{ param_name }} must be a date.')
@@ -120,6 +124,7 @@ import pandas
 {% else %}
             return '{{ param_name }} must be a date.'
 {% endif %}
+{# String (date-time) Type check #}
 {% elif param_format == 'date-time' -%}
         if not isinstance({{param_name}}, datetime.datetime):
             logging.error('{{ param_name }} must be a date time.')
@@ -128,8 +133,10 @@ import pandas
 {% else %}
             return '{{ param_name }} must be a date time.'
 {% endif %}
+{# String (non date or date-time) Type check #}
 {% else %}
 {% set param_enum = parameter['enum'] %}
+{# String (enum) Type check #}
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
             logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }}))
@@ -140,6 +147,7 @@ import pandas
 {% endif %}
 {% endif %}
 {% endif %}
+{# Boolean Type check #}
 {% elif param_type == 'boolean' -%}
         if {{param_name}} not in ['true', 'false']:
             logging.error('{{ param_name }} must be either "true" or "false".')
@@ -149,10 +157,11 @@ import pandas
             return '{{ param_name }} must be either "true" or "false".'
 {% endif %}
         {{param_name}} = {{param_name}} == 'true'
-{% elif param_type == 'array' -%}
 {# Array Type check #}
+{% elif param_type == 'array' -%}
 {% set param_items = parameter['items'] %}
 {% set param_items_type = param_items['type'] %}
+{# Array (integers) Type check #}
 {% if param_items_type == 'integer' -%}
         if isinstance({{param_name}}, list):
             {{param_name}} = [item for item in {{param_name}} if item is not None]
@@ -172,6 +181,7 @@ import pandas
 {% else %}
                 return '{{ param_name }} must be an integer.'
 {% endif %}
+{# Array (numbers) Type check #}
 {% elif param_items_type == 'number' -%}
         if isinstance({{param_name}}, list):
             {{param_name}} = [item for item in {{param_name}} if item is not None]
@@ -191,8 +201,10 @@ import pandas
 {% else %}
                 return '{{ param_name }} must be a number.'
 {% endif %}
+{# Array (strings) Type check #}
 {% elif param_items_type == 'string' %}
 {% set param_items_format = param_items['format'] %}
+{# Array (string - date) Type check #}
 {% if param_items_format == 'date' -%}
         if isinstance({{param_name}}, list):
             {{param_name}} = [item for item in {{param_name}} if item is not None]
@@ -212,6 +224,7 @@ import pandas
 {% else %}
                 return '{{ param_name }} must be a date.'
 {% endif %}
+{# Array (string - date-time) Type check #}
 {% elif param_items_format == 'date-time' -%}
         if isinstance({{param_name}}, list):
             {{param_name}} = [item for item in {{param_name}} if item is not None]
@@ -231,8 +244,10 @@ import pandas
 {% else %}
                 return '{{ param_name }} must be a date time.'
 {% endif %}
+{# Array (string - non date or date-time) Type check #}
 {% else %}
 {% set param_items_enum = param_items['enum'] %}
+{# Array (string - enum) Type check #}
 {% if param_items_enum|count > 0 -%}
         if isinstance({{param_name}}, list):
             {{param_name}} = [item for item in {{param_name}} if item is not None]
@@ -252,8 +267,9 @@ import pandas
 {% else %}
                 return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})
 {% endif %}
+{# End of Array (string - enum) Type check #}
 {% endif %}
-{% endif %}
+{# End of Array (string) Type check #}
 {% endif %}
 {% elif param_items_type == 'boolean' -%}
         if isinstance({{param_name}}, list):
@@ -278,6 +294,7 @@ import pandas
 {% endif %}
             {{param_name}} = {{param_name}} == 'true'
 {# End of Array Type check #}
+{% endif %}
 {% endif %}
 {% endmacro %}
 

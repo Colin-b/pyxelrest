@@ -227,7 +227,20 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -499,7 +512,20 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -769,7 +795,20 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -1039,7 +1078,20 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -1378,7 +1430,20 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
         logging.error('query_array_boolean is required.')
         return ['query_array_boolean is required.']
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -1728,7 +1793,20 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
         logging.error('query_array_boolean is required.')
         return ['query_array_boolean is required.']
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -2076,7 +2154,20 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
         logging.error('query_array_boolean is required.')
         return ['query_array_boolean is required.']
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -2424,7 +2515,20 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
         logging.error('query_array_boolean is required.')
         return ['query_array_boolean is required.']
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return ['query_array_boolean must be either "true" or "false".']
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return ['query_array_boolean must contain "true" or "false".']
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -3458,7 +3562,20 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -3729,7 +3846,20 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -3998,7 +4128,20 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -4267,7 +4410,20 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -4605,7 +4761,20 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -4954,7 +5123,20 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -5301,7 +5483,20 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -5648,7 +5843,20 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -6674,7 +6882,20 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -6945,7 +7166,20 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -7214,7 +7448,20 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -7483,7 +7730,20 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is not None:
@@ -7821,7 +8081,20 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -8170,7 +8443,20 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -8517,7 +8803,20 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
@@ -8864,7 +9163,20 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
         logging.error('query_array_boolean is required.')
         return 'query_array_boolean is required.'
     if query_array_boolean is not None:
-        
+        if isinstance(query_array_boolean, list):
+            query_array_boolean = [item for item in query_array_boolean if item is not None]
+            for query_array_boolean_item in query_array_boolean:
+                if query_array_boolean_item not in ['true', 'false']:
+                    logging.error('query_array_boolean must be either "true" or "false".')
+                    return 'query_array_boolean must be either "true" or "false".'
+                else:
+                    query_array_boolean_item = query_array_boolean_item == 'true'
+        else:
+            if query_array_boolean not in ['true', 'false']:
+                logging.error('query_array_boolean must contain "true" or "false".')
+                return 'query_array_boolean must contain "true" or "false".'
+            query_array_boolean = query_array_boolean == 'true'
+
         request_parameters['query_array_boolean'] = query_array_boolean
 
     if query_array_date is None or isinstance(query_array_date, list) and all(x is None for x in query_array_date):
