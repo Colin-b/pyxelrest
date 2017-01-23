@@ -94,6 +94,8 @@ class SwaggerService:
                             parameter['name'] = vba.vba_restricted_keywords[parameter['name']]
 
     def validate_swagger_version(self):
+        if 'swagger' not in self.swagger:
+            raise Exception('Swagger version is not provided.')
         if self.swagger['swagger'] != '2.0':
             raise Exception('PyxelRest does not support any other version (in this case "{}") than Swagger 2.0'.format(
                 self.swagger['swagger']
