@@ -31,8 +31,17 @@ def user_defined_functions(loaded_services):
     return renderer.get_template('user_defined_functions.jinja2').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=loaded_services,
-        modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()}
+        modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
+        support_pandas=support_pandas()
     )
+
+
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
 
 
 def generate_user_defined_functions(loaded_services):

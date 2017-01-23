@@ -8,7 +8,9 @@ import requests
 import datetime
 import logging
 from collections import OrderedDict
+{% if support_pandas %}
 import pandas
+{% endif %}
 
 
 {% macro convert_to_return_type(str_value, method) %}
@@ -36,7 +38,7 @@ import pandas
 {% endmacro -%}
 
 {%- macro get(service, method_path, contains_parameters, path_parameters, method) %}
-{% if 'application/msgpackpandas' in method['produces'] %}
+{% if 'application/msgpackpandas' in method['produces'] and support_pandas %}
     headers = {'content-type':'application/msgpackpandas'}
 {% elif 'application/json' in method['produces']  %}
     headers = {'content-type':'application/json'}
@@ -411,8 +413,12 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
+{% if support_pandas %}
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
+{% else %}
+            return ['Please install pandas module to be able to decode result.']
+{% endif %}
         else:
             return response.content[:255]
     except Exception as error:
