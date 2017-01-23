@@ -27,11 +27,11 @@ class PyxelRestShould(unittest.TestCase):
         self.assertEqual([line.rstrip() for line in actual[4:]], [line.rstrip() for line in expected[4:]])
 
     def add_config(self):
-        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pixelrest_config.ini')
-        self.backup_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pixelrest_config.ini.back')
+        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
+        self.backup_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini.back')
         shutil.copyfile(config_file_path, self.backup_config_file_path)
-        shutil.copyfile('test_config.ini', config_file_path)
+        shutil.copyfile('test_services_configuration.ini', config_file_path)
 
     def add_back_initial_config(self):
-        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pixelrest_config.ini')
+        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
         shutil.move(self.backup_config_file_path, config_file_path)

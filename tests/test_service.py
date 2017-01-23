@@ -5,7 +5,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def swagger():
-    return jsonify(paths={
+    return jsonify(swagger='2.0',
+                   paths={
         '/test/without/parameter': {
             'get': {
                 'operationId': 'get_test_without_parameter'
