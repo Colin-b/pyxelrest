@@ -6674,6 +6674,196 @@ def test_delete_test_plain_text_without_parameter():
             response.close()
 
 @xw.func(category='test', call_in_wizard=False)
+@xw.arg('currency_visual_basic', doc='currency parameter')
+@xw.arg('end_visual_basic', doc='end parameter')
+def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling test_get_test_vba_restricted_keywords...")
+    request_parameters = {}
+    request_body = {}
+
+    if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
+        logging.error('currency_visual_basic is required.')
+        return 'currency_visual_basic is required.'
+    if currency_visual_basic is not None:
+        
+        request_parameters['currency'] = currency_visual_basic
+
+    if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
+        logging.error('end_visual_basic is required.')
+        return 'end_visual_basic is required.'
+    if end_visual_basic is not None:
+        
+        request_parameters['end'] = end_visual_basic
+
+    response = None
+    try:
+        headers = {}
+
+        response = requests.get('http://localhost:8943/test/vba/restricted/keywords'.format(
+), request_parameters, stream=True, headers=headers, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_get_test_vba_restricted_keywords.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.content[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_get_test_vba_restricted_keywords response.")
+        else:
+            logging.exception("Error occurred while calling test_get_test_vba_restricted_keywords.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
+@xw.arg('currency_visual_basic', doc='currency parameter')
+@xw.arg('end_visual_basic', doc='end parameter')
+def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling test_post_test_vba_restricted_keywords...")
+    request_parameters = {}
+    request_body = {}
+
+    if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
+        logging.error('currency_visual_basic is required.')
+        return 'currency_visual_basic is required.'
+    if currency_visual_basic is not None:
+        
+        request_parameters['currency'] = currency_visual_basic
+
+    if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
+        logging.error('end_visual_basic is required.')
+        return 'end_visual_basic is required.'
+    if end_visual_basic is not None:
+        
+        request_parameters['end'] = end_visual_basic
+
+    response = None
+    try:
+        response = requests.post('http://localhost:8943/test/vba/restricted/keywords'.format(
+), json=request_body, params=request_parameters, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_post_test_vba_restricted_keywords.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.content[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_post_test_vba_restricted_keywords response.")
+        else:
+            logging.exception("Error occurred while calling test_post_test_vba_restricted_keywords.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
+@xw.arg('currency_visual_basic', doc='currency parameter')
+@xw.arg('end_visual_basic', doc='end parameter')
+def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling test_put_test_vba_restricted_keywords...")
+    request_parameters = {}
+    request_body = {}
+
+    if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
+        logging.error('currency_visual_basic is required.')
+        return 'currency_visual_basic is required.'
+    if currency_visual_basic is not None:
+        
+        request_parameters['currency'] = currency_visual_basic
+
+    if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
+        logging.error('end_visual_basic is required.')
+        return 'end_visual_basic is required.'
+    if end_visual_basic is not None:
+        
+        request_parameters['end'] = end_visual_basic
+
+    response = None
+    try:
+        response = requests.put('http://localhost:8943/test/vba/restricted/keywords'.format(
+), json=request_body, params=request_parameters, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_put_test_vba_restricted_keywords.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.content[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_put_test_vba_restricted_keywords response.")
+        else:
+            logging.exception("Error occurred while calling test_put_test_vba_restricted_keywords.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
+@xw.arg('currency_visual_basic', doc='currency parameter')
+@xw.arg('end_visual_basic', doc='end parameter')
+def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling test_delete_test_vba_restricted_keywords...")
+    request_parameters = {}
+    request_body = {}
+
+    if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
+        logging.error('currency_visual_basic is required.')
+        return 'currency_visual_basic is required.'
+    if currency_visual_basic is not None:
+        
+        request_parameters['currency'] = currency_visual_basic
+
+    if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
+        logging.error('end_visual_basic is required.')
+        return 'end_visual_basic is required.'
+    if end_visual_basic is not None:
+        
+        request_parameters['end'] = end_visual_basic
+
+    response = None
+    try:
+        response = requests.delete('http://localhost:8943/test/vba/restricted/keywords'.format(
+), json=request_body, params=request_parameters, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_delete_test_vba_restricted_keywords.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.content[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_delete_test_vba_restricted_keywords response.")
+        else:
+            logging.exception("Error occurred while calling test_delete_test_vba_restricted_keywords.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
