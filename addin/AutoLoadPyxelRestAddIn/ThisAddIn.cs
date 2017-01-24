@@ -43,10 +43,14 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private bool ContainsXlWingsModule()
+        {
+            return GetXlWingsModule() != null;
+        }
+
         private bool TryToLoadXlWingsModule()
         {
-            VBComponent xlWingsModule = GetXlWingsModule();
-            if (xlWingsModule == null)
+            if (!ContainsXlWingsModule())
             {
                 string pathToBasFile = GetPathToXlWingsBasFile();
                 if (pathToBasFile == null)
@@ -63,7 +67,8 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
-                ActivatePyxelRest();
+                if(!ContainsXlWingsModule())
+                    ActivatePyxelRest();
             }
             catch (Exception ex)
             {
