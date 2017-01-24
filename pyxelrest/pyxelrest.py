@@ -5,6 +5,8 @@ import os
 import datetime
 import jinja2
 from importlib import import_module
+
+
 try:
     # Python 3
     from importlib import reload
@@ -18,7 +20,9 @@ import logging.config
 import logging.handlers
 import vba
 import swagger_service
+import _version
 
+logging.debug('PyxelRest version {}'.format(_version.__version__))
 
 def user_defined_functions(loaded_services):
     """
@@ -49,14 +53,14 @@ def generate_user_defined_functions(loaded_services):
     Create user_defined_functions.py python file containing generated xlwings User Defined Functions.
     :return: None
     """
-    logging.info('Generating user defined functions.')
+    logging.debug('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
         generated_file.write(user_defined_functions(loaded_services))
 
 services = swagger_service.load_services()
 generate_user_defined_functions(services)
 
-logging.info('Expose user defined functions through PyxelRest.')
+logging.debug('Expose user defined functions through PyxelRest.')
 
 try:
     # Force reload of module (even if this is first time, it should not take long)

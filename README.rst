@@ -70,9 +70,5 @@ Enhancements TODO list
 - Full Swagger 2.0 specification support:
     - Handle multiple ways of sending arrays (for now arrays are sent as replication of the same parameter name).
     - etc...
-- Add client logs to splunk? (it should be generic with default settings to file anyway)
 - Handle filtering on Swagger tags
-- Add test specific module requirements in setup.
-- Do not package test module.
-- Add more test cases actually performing calls to functions.
 - Get rid of xlwings bas file by including what is required in our own addin.
