@@ -15,7 +15,9 @@ namespace AutoLoadPyxelRestAddIn
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
+            Log.Info("Starting Auto Load PyxelRest Addin...");
             Application.WorkbookOpen += OnOpenWorkBook;
+            Application.WorkbookActivate += OnActivateWorkBook;
             try
             {
                 OnExcelStart();
@@ -30,6 +32,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
+                if (Application.ActiveWorkbook == null)
+                {
+                    Log.Info("User Defined Functions cannot be imported while workbook is inactive.");
+                    return false;
+                }
                 if (!TryToLoadXlWingsModule())
                     return false;
                 Application.Run("pyxelrest.xlam!ImportPythonUDFs");
@@ -40,6 +47,56 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Error("Unable to import User Defined Functions.", ex);
                 return false;
+            }
+        }
+
+        private void OnActivateWorkBook(Excel.Workbook Wb)
+        {
+            if (ContainsXlWingsModule())
+            {
+                Log.InfoFormat("Activating '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
+            }
+            else
+            {
+                Log.InfoFormat("Activating '{0}' workbook. Activating PyxelRest...", Wb.Name);
+                ActivatePyxelRest();
+            }
+        }
+
+        private void OnOpenWorkBook(Excel.Workbook Wb)
+        {
+            try
+            {
+                if(ContainsXlWingsModule())
+                {
+                    Log.InfoFormat("Opening '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
+                }
+                else if(Application.ActiveWorkbook == null)
+                {
+                    Log.InfoFormat("Opening Inactive '{0}' workbook. Waiting for workbook activation...", Wb.Name);
+                }
+                else
+                {
+                    Log.InfoFormat("Opening '{0}' workbook. Activating PyxelRest...", Wb.Name);
+                    ActivatePyxelRest();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("An error occurred while activating PyxelRest on opening workbook.", ex);
+            }
+        }
+
+        private void OnExcelStart()
+        {
+            if (Application.ActiveWorkbook == null)
+            {
+                Log.Info("Excel started with an already existing document. Expecting workbook opening event to activate PyxelRest.");
+            }
+            else
+            {
+                Log.Info("Excel started with a blank document. Activating PyxelRest...");
+                ActivatePyxelRest();
             }
         }
 
@@ -63,26 +120,6 @@ namespace AutoLoadPyxelRestAddIn
             return true;
         }
 
-        private void OnOpenWorkBook(Excel.Workbook Wb)
-        {
-            try
-            {
-                if(!ContainsXlWingsModule())
-                    ActivatePyxelRest();
-            }
-            catch (Exception ex)
-            {
-                Log.Error("An error occurred while activating PyxelRest on opening workbook.", ex);
-            }
-        }
-
-        private void OnExcelStart()
-        {
-            if (Application.ActiveWorkbook == null)
-                return; // Do nothing on opening of already existing document. Opening event will handle it properly once everything is opened.
-            ActivatePyxelRest();
-        }
-
         private void ActivatePyxelRest()
         {
             string pathToBasFile = GetPathToXlWingsBasFile();
@@ -92,15 +129,16 @@ namespace AutoLoadPyxelRestAddIn
                 return;
             }
 
-            if(ReloadXlWingsBasFile(pathToBasFile))
+            if(ImportXlWingsBasFile(pathToBasFile))
                 ImportUserDefinedFunctions();
         }
 
-        private bool ReloadXlWingsBasFile(string pathToBasFile)
+        private string GetPathToXlWingsBasFile()
         {
-            if (RemoveXlWingsModule())
-                return ImportXlWingsBasFile(pathToBasFile);
-            return true;
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (appDataFolder != null)
+                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "xlwings.bas");
+            return null;
         }
 
         private bool ImportXlWingsBasFile(string pathToBasFile)
@@ -134,14 +172,6 @@ namespace AutoLoadPyxelRestAddIn
             return null;
         }
 
-        private string GetPathToXlWingsBasFile()
-        {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if(appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "xlwings.bas");
-            return null;
-        }
-
         private VBComponent GetXlWingsModule()
         {
             VBProject vbProject = GetPyxelRestVBProject();
@@ -156,32 +186,9 @@ namespace AutoLoadPyxelRestAddIn
             return null;
         }
 
-        private bool RemoveXlWingsModule()
-        {
-            VBComponent xlWingsModule = GetXlWingsModule();
-            if (xlWingsModule == null)
-                return true;
-            try
-            {
-                VBProject vbProject = GetPyxelRestVBProject();
-                if(vbProject == null)
-                {
-                    Log.Error("PyxelRest VB Project cannot be found.");
-                    return false;
-                }
-                vbProject.VBComponents.Remove(xlWingsModule);
-                Log.Info("XlWings module removed.");
-            }
-            catch(Exception ex)
-            {
-                Log.Error("XlWings module could not be removed.", ex);
-                return false;
-            };
-            return true;
-        }
-
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
+            Log.Info("Stop Auto Load PyxelRest Addin...");
         }
         
         #region VSTO generated code
