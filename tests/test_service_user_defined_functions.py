@@ -47,8 +47,10 @@ import pandas
 @xw.ret(expand='table')
 def test_get_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_get_test_json_with_all_optional_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -277,10 +279,8 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
 
     response = None
     try:
-        headers = {'content-type':'application/json'}
-
         response = requests.get('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_json_with_all_optional_parameters_types.")
@@ -332,8 +332,10 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
 @xw.ret(expand='table')
 def test_post_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_post_test_json_with_all_optional_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -563,7 +565,7 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_json_with_all_optional_parameters_types.")
@@ -615,8 +617,10 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
 @xw.ret(expand='table')
 def test_put_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_put_test_json_with_all_optional_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -846,7 +850,7 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_json_with_all_optional_parameters_types.")
@@ -898,8 +902,10 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
 @xw.ret(expand='table')
 def test_delete_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_delete_test_json_with_all_optional_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -1129,7 +1135,7 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_json_with_all_optional_parameters_types.")
@@ -1181,8 +1187,10 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
 @xw.ret(expand='table')
 def test_get_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_get_test_json_with_all_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -1489,10 +1497,8 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
 
     response = None
     try:
-        headers = {'content-type':'application/json'}
-
         response = requests.get('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_json_with_all_parameters_types.")
@@ -1544,8 +1550,10 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
 @xw.ret(expand='table')
 def test_post_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_post_test_json_with_all_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -1853,7 +1861,7 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_json_with_all_parameters_types.")
@@ -1905,8 +1913,10 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
 @xw.ret(expand='table')
 def test_put_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_put_test_json_with_all_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -2214,7 +2224,7 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_json_with_all_parameters_types.")
@@ -2266,8 +2276,10 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
 @xw.ret(expand='table')
 def test_delete_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_delete_test_json_with_all_parameters_types...")
+    request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -2575,7 +2587,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_json_with_all_parameters_types.")
@@ -2627,6 +2639,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
 @xw.ret(expand='table')
 def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_get_test_json_with_all_paths_types...")
+    request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -2733,10 +2746,8 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
 
     response = None
     try:
-        headers = {'content-type':'application/json'}
-
         response = requests.get('http://localhost:8943/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=headers, proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_json_with_all_paths_types.")
@@ -2788,6 +2799,7 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
 @xw.ret(expand='table')
 def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_post_test_json_with_all_paths_types...")
+    request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -2947,6 +2959,7 @@ def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_
 @xw.ret(expand='table')
 def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_put_test_json_with_all_paths_types...")
+    request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -3106,6 +3119,7 @@ def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_i
 @xw.ret(expand='table')
 def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_delete_test_json_with_all_paths_types...")
+    request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -3239,12 +3253,11 @@ def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, pat
 @xw.ret(expand='table')
 def test_get_test_json_without_parameter():
     logging.info("Calling test_get_test_json_without_parameter...")
+    request_header = {'content-type':'application/json'}
     response = None
     try:
-        headers = {'content-type':'application/json'}
-
         response = requests.get('http://localhost:8943/test/json/without/parameter'.format(
-), stream=True, headers=headers, proxies={})
+), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_json_without_parameter.")
@@ -3270,6 +3283,7 @@ def test_get_test_json_without_parameter():
 @xw.ret(expand='table')
 def test_post_test_json_without_parameter():
     logging.info("Calling test_post_test_json_without_parameter...")
+    request_header = {'content-type':'application/json'}
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/without/parameter'.format(
@@ -3299,6 +3313,7 @@ def test_post_test_json_without_parameter():
 @xw.ret(expand='table')
 def test_put_test_json_without_parameter():
     logging.info("Calling test_put_test_json_without_parameter...")
+    request_header = {'content-type':'application/json'}
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/without/parameter'.format(
@@ -3328,6 +3343,7 @@ def test_put_test_json_without_parameter():
 @xw.ret(expand='table')
 def test_delete_test_json_without_parameter():
     logging.info("Calling test_delete_test_json_without_parameter...")
+    request_header = {'content-type':'application/json'}
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/without/parameter'.format(
@@ -3382,8 +3398,10 @@ def test_delete_test_json_without_parameter():
 @xw.arg('query_array_password', doc='password array parameter')
 def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_get_test_plain_text_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -3612,10 +3630,8 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_plain_text_with_all_optional_parameters_types.")
@@ -3666,8 +3682,10 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
 @xw.arg('query_array_password', doc='password array parameter')
 def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_post_test_plain_text_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -3897,7 +3915,7 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_plain_text_with_all_optional_parameters_types.")
@@ -3948,8 +3966,10 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
 @xw.arg('query_array_password', doc='password array parameter')
 def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_put_test_plain_text_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -4179,7 +4199,7 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_plain_text_with_all_optional_parameters_types.")
@@ -4230,8 +4250,10 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
 @xw.arg('query_array_password', doc='password array parameter')
 def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_delete_test_plain_text_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -4461,7 +4483,7 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_plain_text_with_all_optional_parameters_types.")
@@ -4512,8 +4534,10 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
 @xw.arg('query_array_password', doc='password array parameter')
 def test_get_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_get_test_plain_text_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -4820,10 +4844,8 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_plain_text_with_all_parameters_types.")
@@ -4874,8 +4896,10 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
 @xw.arg('query_array_password', doc='password array parameter')
 def test_post_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_post_test_plain_text_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -5183,7 +5207,7 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_plain_text_with_all_parameters_types.")
@@ -5234,8 +5258,10 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
 @xw.arg('query_array_password', doc='password array parameter')
 def test_put_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_put_test_plain_text_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -5543,7 +5569,7 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_plain_text_with_all_parameters_types.")
@@ -5594,8 +5620,10 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
 @xw.arg('query_array_password', doc='password array parameter')
 def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_delete_test_plain_text_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -5903,7 +5931,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_plain_text_with_all_parameters_types.")
@@ -5954,6 +5982,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
 @xw.arg('path_array_password', doc='password array path')
 def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_get_test_plain_text_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -6060,10 +6089,8 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=headers, proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_plain_text_with_all_paths_types.")
@@ -6114,6 +6141,7 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
 @xw.arg('path_array_password', doc='password array path')
 def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_post_test_plain_text_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -6272,6 +6300,7 @@ def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32,
 @xw.arg('path_array_password', doc='password array path')
 def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_put_test_plain_text_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -6430,6 +6459,7 @@ def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
 @xw.arg('path_array_password', doc='password array path')
 def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_delete_test_plain_text_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -6562,12 +6592,11 @@ def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer3
 @xw.func(category='test', call_in_wizard=False)
 def test_get_test_plain_text_without_parameter():
     logging.info("Calling test_get_test_plain_text_without_parameter...")
+    request_header = {}
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/plain/text/without/parameter'.format(
-), stream=True, headers=headers, proxies={})
+), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_plain_text_without_parameter.")
@@ -6592,6 +6621,7 @@ def test_get_test_plain_text_without_parameter():
 @xw.func(category='test', call_in_wizard=False)
 def test_post_test_plain_text_without_parameter():
     logging.info("Calling test_post_test_plain_text_without_parameter...")
+    request_header = {}
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -6620,6 +6650,7 @@ def test_post_test_plain_text_without_parameter():
 @xw.func(category='test', call_in_wizard=False)
 def test_put_test_plain_text_without_parameter():
     logging.info("Calling test_put_test_plain_text_without_parameter...")
+    request_header = {}
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -6648,6 +6679,7 @@ def test_put_test_plain_text_without_parameter():
 @xw.func(category='test', call_in_wizard=False)
 def test_delete_test_plain_text_without_parameter():
     logging.info("Calling test_delete_test_plain_text_without_parameter...")
+    request_header = {}
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -6678,8 +6710,10 @@ def test_delete_test_plain_text_without_parameter():
 @xw.arg('end_visual_basic', doc='end parameter')
 def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling test_get_test_vba_restricted_keywords...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -6697,10 +6731,8 @@ def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/vba/restricted/keywords'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_vba_restricted_keywords.")
@@ -6727,8 +6759,10 @@ def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
 @xw.arg('end_visual_basic', doc='end parameter')
 def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling test_post_test_vba_restricted_keywords...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -6747,7 +6781,7 @@ def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_bas
     response = None
     try:
         response = requests.post('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_vba_restricted_keywords.")
@@ -6774,8 +6808,10 @@ def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_bas
 @xw.arg('end_visual_basic', doc='end parameter')
 def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling test_put_test_vba_restricted_keywords...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -6794,7 +6830,7 @@ def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
     response = None
     try:
         response = requests.put('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_vba_restricted_keywords.")
@@ -6821,8 +6857,10 @@ def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
 @xw.arg('end_visual_basic', doc='end parameter')
 def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling test_delete_test_vba_restricted_keywords...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -6841,7 +6879,7 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_vba_restricted_keywords.")
@@ -6892,8 +6930,10 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
 @xw.arg('query_array_password', doc='password array parameter')
 def test_get_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_get_test_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -7122,10 +7162,8 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_with_all_optional_parameters_types.")
@@ -7176,8 +7214,10 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
 @xw.arg('query_array_password', doc='password array parameter')
 def test_post_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_post_test_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -7407,7 +7447,7 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_with_all_optional_parameters_types.")
@@ -7458,8 +7498,10 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
 @xw.arg('query_array_password', doc='password array parameter')
 def test_put_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_put_test_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -7689,7 +7731,7 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_with_all_optional_parameters_types.")
@@ -7740,8 +7782,10 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
 @xw.arg('query_array_password', doc='password array parameter')
 def test_delete_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling test_delete_test_with_all_optional_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -7971,7 +8015,7 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_with_all_optional_parameters_types.")
@@ -8022,8 +8066,10 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
 @xw.arg('query_array_password', doc='password array parameter')
 def test_get_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_get_test_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -8330,10 +8376,8 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=headers, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_with_all_parameters_types.")
@@ -8384,8 +8428,10 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
 @xw.arg('query_array_password', doc='password array parameter')
 def test_post_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_post_test_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -8693,7 +8739,7 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_post_test_with_all_parameters_types.")
@@ -8744,8 +8790,10 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
 @xw.arg('query_array_password', doc='password array parameter')
 def test_put_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_put_test_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -9053,7 +9101,7 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_put_test_with_all_parameters_types.")
@@ -9104,8 +9152,10 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
 @xw.arg('query_array_password', doc='password array parameter')
 def test_delete_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling test_delete_test_with_all_parameters_types...")
+    request_header = {}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -9413,7 +9463,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_delete_test_with_all_parameters_types.")
@@ -9464,6 +9514,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
 @xw.arg('path_array_password', doc='password array path')
 def test_get_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_get_test_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -9570,10 +9621,8 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
 
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=headers, proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_with_all_paths_types.")
@@ -9624,6 +9673,7 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
 @xw.arg('path_array_password', doc='password array path')
 def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_post_test_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -9782,6 +9832,7 @@ def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integ
 @xw.arg('path_array_password', doc='password array path')
 def test_put_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_put_test_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -9940,6 +9991,7 @@ def test_put_test_with_all_paths_types(path_integer, path_integer32, path_intege
 @xw.arg('path_array_password', doc='password array path')
 def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling test_delete_test_with_all_paths_types...")
+    request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return 'path_integer is required.'
@@ -10072,12 +10124,11 @@ def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_int
 @xw.func(category='test', call_in_wizard=False)
 def test_get_test_without_parameter():
     logging.info("Calling test_get_test_without_parameter...")
+    request_header = {}
     response = None
     try:
-        headers = {}
-
         response = requests.get('http://localhost:8943/test/without/parameter'.format(
-), stream=True, headers=headers, proxies={})
+), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
         logging.info("Valid response received for test_get_test_without_parameter.")
@@ -10102,6 +10153,7 @@ def test_get_test_without_parameter():
 @xw.func(category='test', call_in_wizard=False)
 def test_post_test_without_parameter():
     logging.info("Calling test_post_test_without_parameter...")
+    request_header = {}
     response = None
     try:
         response = requests.post('http://localhost:8943/test/without/parameter'.format(
@@ -10130,6 +10182,7 @@ def test_post_test_without_parameter():
 @xw.func(category='test', call_in_wizard=False)
 def test_put_test_without_parameter():
     logging.info("Calling test_put_test_without_parameter...")
+    request_header = {}
     response = None
     try:
         response = requests.put('http://localhost:8943/test/without/parameter'.format(
@@ -10158,6 +10211,7 @@ def test_put_test_without_parameter():
 @xw.func(category='test', call_in_wizard=False)
 def test_delete_test_without_parameter():
     logging.info("Calling test_delete_test_without_parameter...")
+    request_header = {}
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/without/parameter'.format(
