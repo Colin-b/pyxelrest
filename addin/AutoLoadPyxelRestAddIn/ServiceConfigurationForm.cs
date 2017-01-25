@@ -3,6 +3,7 @@ using Opulos.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AutoLoadPyxelRestAddIn
@@ -20,6 +21,7 @@ namespace AutoLoadPyxelRestAddIn
         /// </summary>
         private static readonly int CHECK_HOST_INTERVAL_MS = 500;
         internal static readonly int CHECK_HOST_INTERVAL_TICKS = CHECK_HOST_INTERVAL_MS * 10000;
+        private static readonly Regex SERVICE_NAME_UNALLOWED_CHARACTERS = new Regex("[^a-zA-Z_]+[^a-zA-Z_0-9]*");
 
         internal Accordion accordion;
         private TextBox newServiceName;
@@ -137,7 +139,7 @@ namespace AutoLoadPyxelRestAddIn
                     e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
                     break;
                 default:
-                    // Allow any other character
+                    // Allow all other characters
                     break;
             }
         }
@@ -145,27 +147,59 @@ namespace AutoLoadPyxelRestAddIn
         private void NewServiceName_TextChanged(object sender, EventArgs e)
         {
             if (newServiceName.TextLength > 0)
-            {
-                string newService = newServiceName.Text;
-                bool alreadyExists = services.Exists(s => s.Exists(newService));
-                addServiceButton.Enabled = !alreadyExists;
-                if (alreadyExists)
-                {
-                    addServiceButton.Text = newService + " configuration already exists";
-                    addServiceButton.BackColor = Color.OrangeRed;
-                }
-                else
-                {
-                    addServiceButton.Text = "Add " + newService + " configuration";
-                    addServiceButton.BackColor = Color.LightBlue;
-                }
-            }
+                CheckNonEmptyServiceName();
             else
-            {
-                addServiceButton.Enabled = false;
-                addServiceButton.Text = "Enter service name to create a new configuration";
-                addServiceButton.BackColor = Color.LightGray;
-            }
+                InvalidateEmptyServiceName();
+        }
+
+        private void CheckNonEmptyServiceName()
+        {
+            if (IsServiceNameValid())
+                CheckValidatedServiceName();
+            else
+                InvalidateServiceName();
+        }
+
+        private bool IsServiceNameValid()
+        {
+            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(newServiceName.Text, "");
+            return newServiceName.Text.Equals(validatedServiceName);
+        }
+
+        private void CheckValidatedServiceName()
+        {
+            if (services.Exists(s => s.Exists(newServiceName.Text)))
+                InvalidateDuplicatedServiceName();
+            else
+                ValidateServiceName();
+        }
+
+        private void InvalidateEmptyServiceName()
+        {
+            addServiceButton.Enabled = false;
+            addServiceButton.Text = "Enter service name to create a new configuration";
+            addServiceButton.BackColor = Color.LightGray;
+        }
+
+        private void InvalidateServiceName()
+        {
+            addServiceButton.Enabled = false;
+            addServiceButton.Text = "Service name only allows alphanumeric characters";
+            addServiceButton.BackColor = Color.OrangeRed;
+        }
+
+        private void InvalidateDuplicatedServiceName()
+        {
+            addServiceButton.Enabled = false;
+            addServiceButton.Text = newServiceName.Text + " configuration already exists";
+            addServiceButton.BackColor = Color.OrangeRed;
+        }
+
+        private void ValidateServiceName()
+        {
+            addServiceButton.Enabled = true;
+            addServiceButton.Text = "Add " + newServiceName.Text + " configuration";
+            addServiceButton.BackColor = Color.LightBlue;
         }
 
         private void LoadServices()
