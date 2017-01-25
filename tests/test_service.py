@@ -12026,22 +12026,31 @@ def swagger():
 
 @app.route('/test/vba/restricted/keywords', methods=['GET'])
 def get_test_vba_restricted_keywords():
-    return ', '.join(request.args)
+    return ', '.join(_request_args(request.args))
 
 
 @app.route('/test/vba/restricted/keywords', methods=['POST'])
 def post_test_vba_restricted_keywords():
-    return ', '.join(request.args)
+    return ', '.join(_request_args(request.args))
 
 
 @app.route('/test/vba/restricted/keywords', methods=['PUT'])
 def put_test_vba_restricted_keywords():
-    return ', '.join(request.args)
+    return ', '.join(_request_args(request.args))
 
 
 @app.route('/test/vba/restricted/keywords', methods=['DELETE'])
 def delete_test_vba_restricted_keywords():
-    return ', '.join(request.args)
+    return ', '.join(_request_args(request.args))
+
+
+@app.route('/test/json/with/all/parameters/types', methods=['GET'])
+def get_test_json_with_all_parameters_types():
+    return ', '.join(_request_args(request.args))
+
+
+def _request_args(args):
+    return ['{0}="{1}"'.format(arg, args[arg]) for arg in args]
 
 
 @app.route('/swagger_version_not_provided')

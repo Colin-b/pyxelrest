@@ -35,7 +35,7 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrest
         self.assertEqual(pyxelrest.test_get_test_vba_restricted_keywords(currency_visual_basic='currency value',
                                                                          end_visual_basic='end value'),
-                         b'currency, end')
+                         'currency="currency value", end="end value"')
 
     def test_mandatory_integer_parameter_not_provided(self):
         import pyxelrest
@@ -2606,6 +2606,39 @@ class PyxelRestTest(unittest.TestCase):
                                                                                 query_array_date_time=['str value'],
                                                                                 query_array_password=None),
                          ['query_array_date_time must contain date times.'])
+
+    def test_valid_mandatory_parameters(self):
+        import pyxelrest
+        today_date = datetime.date.today()
+        today_datetime = datetime.datetime.today()
+        self.assertEqual(pyxelrest.test_get_test_json_with_all_parameters_types(query_integer=0,
+                                                                                query_integer32=0,
+                                                                                query_integer64=0,
+                                                                                query_number=0.0,
+                                                                                query_float=0.0,
+                                                                                query_double=0.0,
+                                                                                query_string='str value',
+                                                                                query_string_byte='str value',
+                                                                                query_string_binary='str value',
+                                                                                query_boolean='true',
+                                                                                query_date=today_date,
+                                                                                query_date_time=today_datetime,
+                                                                                query_password='str value',
+                                                                                query_array_integer=[0],
+                                                                                query_array_integer32=[0],
+                                                                                query_array_integer64=[0],
+                                                                                query_array_number=[0.0],
+                                                                                query_array_float=[0.0],
+                                                                                query_array_double=[0.0],
+                                                                                query_array_string=['str value'],
+                                                                                query_array_string_byte=['str value'],
+                                                                                query_array_string_binary=['str value'],
+                                                                                query_array_boolean=['true'],
+                                                                                query_array_date=[today_date],
+                                                                                query_array_date_time=[today_datetime],
+                                                                                query_array_password='str value'),
+                         # Result is truncated to 255 characters
+                         'query_integer="0", query_integer32="0", query_integer64="0", query_number="0.0", query_float="0.0", query_double="0.0", query_string="str value", query_string_byte="str value", query_string_binary="str value", query_boolean="True", query_date="'+str(today_date)+'"')
 
     def test_optional_array_date_time_parameter_with_wrong_type(self):
         import pyxelrest

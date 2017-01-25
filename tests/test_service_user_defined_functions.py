@@ -290,7 +290,7 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_with_all_optional_parameters_types response.")
@@ -575,7 +575,7 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_with_all_optional_parameters_types response.")
@@ -860,7 +860,7 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_with_all_optional_parameters_types response.")
@@ -1145,7 +1145,7 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_with_all_optional_parameters_types response.")
@@ -1508,7 +1508,7 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_with_all_parameters_types response.")
@@ -1871,7 +1871,7 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_with_all_parameters_types response.")
@@ -2234,7 +2234,7 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_with_all_parameters_types response.")
@@ -2597,7 +2597,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_with_all_parameters_types response.")
@@ -2757,7 +2757,7 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_with_all_paths_types response.")
@@ -2917,7 +2917,7 @@ def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_with_all_paths_types response.")
@@ -3077,7 +3077,7 @@ def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_i
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_with_all_paths_types response.")
@@ -3237,7 +3237,7 @@ def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, pat
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_with_all_paths_types response.")
@@ -3267,7 +3267,7 @@ def test_get_test_json_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_without_parameter response.")
@@ -3297,7 +3297,7 @@ def test_post_test_json_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_without_parameter response.")
@@ -3327,7 +3327,7 @@ def test_put_test_json_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_without_parameter response.")
@@ -3357,7 +3357,7 @@ def test_delete_test_json_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_without_parameter response.")
@@ -3641,7 +3641,7 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_with_all_optional_parameters_types response.")
@@ -3925,7 +3925,7 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_with_all_optional_parameters_types response.")
@@ -4209,7 +4209,7 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_with_all_optional_parameters_types response.")
@@ -4493,7 +4493,7 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_optional_parameters_types response.")
@@ -4855,7 +4855,7 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_with_all_parameters_types response.")
@@ -5217,7 +5217,7 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_with_all_parameters_types response.")
@@ -5579,7 +5579,7 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_with_all_parameters_types response.")
@@ -5941,7 +5941,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_parameters_types response.")
@@ -6100,7 +6100,7 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_with_all_paths_types response.")
@@ -6259,7 +6259,7 @@ def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32,
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_with_all_paths_types response.")
@@ -6418,7 +6418,7 @@ def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_with_all_paths_types response.")
@@ -6577,7 +6577,7 @@ def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer3
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_paths_types response.")
@@ -6606,7 +6606,7 @@ def test_get_test_plain_text_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_without_parameter response.")
@@ -6635,7 +6635,7 @@ def test_post_test_plain_text_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_without_parameter response.")
@@ -6664,7 +6664,7 @@ def test_put_test_plain_text_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_without_parameter response.")
@@ -6693,7 +6693,7 @@ def test_delete_test_plain_text_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_without_parameter response.")
@@ -6742,7 +6742,7 @@ def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_vba_restricted_keywords response.")
@@ -6791,7 +6791,7 @@ def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_bas
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_vba_restricted_keywords response.")
@@ -6840,7 +6840,7 @@ def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_vba_restricted_keywords response.")
@@ -6889,7 +6889,7 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_vba_restricted_keywords response.")
@@ -7173,7 +7173,7 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_with_all_optional_parameters_types response.")
@@ -7457,7 +7457,7 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_with_all_optional_parameters_types response.")
@@ -7741,7 +7741,7 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_with_all_optional_parameters_types response.")
@@ -8025,7 +8025,7 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_with_all_optional_parameters_types response.")
@@ -8387,7 +8387,7 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_with_all_parameters_types response.")
@@ -8749,7 +8749,7 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_with_all_parameters_types response.")
@@ -9111,7 +9111,7 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_with_all_parameters_types response.")
@@ -9473,7 +9473,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_with_all_parameters_types response.")
@@ -9632,7 +9632,7 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_with_all_paths_types response.")
@@ -9791,7 +9791,7 @@ def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integ
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_with_all_paths_types response.")
@@ -9950,7 +9950,7 @@ def test_put_test_with_all_paths_types(path_integer, path_integer32, path_intege
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_with_all_paths_types response.")
@@ -10109,7 +10109,7 @@ def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_int
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_with_all_paths_types response.")
@@ -10138,7 +10138,7 @@ def test_get_test_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_without_parameter response.")
@@ -10167,7 +10167,7 @@ def test_post_test_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_without_parameter response.")
@@ -10196,7 +10196,7 @@ def test_put_test_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_without_parameter response.")
@@ -10225,7 +10225,7 @@ def test_delete_test_without_parameter():
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_without_parameter response.")
