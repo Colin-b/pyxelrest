@@ -136,15 +136,9 @@ namespace AutoLoadPyxelRestAddIn
                         addServiceButton.PerformClick();
                     e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
                     break;
-                // As Service name will be used as UDF prefix, value should be a valid Excel one
-                // This is why the following characters are forbidden
-                case Keys.Space:
-                    e.SuppressKeyPress = true;
-                    break;
                 default:
                     // Allow any other character
                     break;
-
             }
         }
 

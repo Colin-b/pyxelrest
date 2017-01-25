@@ -8,19 +8,25 @@ except ImportError:
     from ConfigParser import ConfigParser
     from urlparse import urlsplit
 
+import re
 import requests
 import vba
 import logging
 
 
+def to_valid_python_vba(str_value):
+    return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
+
+
 class SwaggerService:
-    def __init__(self, udf_prefix, config):
+    def __init__(self, service_name, config):
         """
         Load service information from configuration and swagger JSON.
-        :param udf_prefix: Prefix to use in front of services UDFs to avoid duplicate between services.
+        :param service_name: Will be used as prefix to use in front of services UDFs to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
-        self.udf_prefix = udf_prefix
+        self.name = service_name
+        self.udf_prefix = to_valid_python_vba(service_name)
         self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
         if not self.methods:
             raise Exception('All methods were filtered out.')
@@ -31,7 +37,7 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
-        logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.udf_prefix, self.uri, self.methods))
+        logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.name, self.uri, self.methods))
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
@@ -48,24 +54,24 @@ class SwaggerService:
     def get_item(self, config, key):
         try:
             # Python 3
-            section = config[self.udf_prefix]
+            section = config[self.name]
             if key not in section:
-                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.udf_prefix, key))
+                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.name, key))
             return section[key]
         except AttributeError:
             # Python 2
-            if not config.has_option(self.udf_prefix, key):
-                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.udf_prefix, key))
-            return config.get(self.udf_prefix, key)
+            if not config.has_option(self.name, key):
+                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.name, key))
+            return config.get(self.name, key)
 
     def get_item_default(self, config, key, default_value):
         try:
             # Python 3
-            section = config[self.udf_prefix]
+            section = config[self.name]
             return section[key] if key in section else default_value
         except AttributeError:
             # Python 2
-            return config.get(self.udf_prefix, key) if config.has_option(self.udf_prefix, key) else default_value
+            return config.get(self.name, key) if config.has_option(self.name, key) else default_value
 
     def _retrieve_swagger(self, swagger_url):
         """
@@ -114,9 +120,9 @@ def load_services():
         raise Exception('"{0}" services configuration file cannot be read.'.format(file_path))
     logging.debug('Loading services from "{0}".'.format(file_path))
     loaded_services = []
-    for service in config_parser.sections():
+    for service_name in config_parser.sections():
         try:
-            loaded_services.append(SwaggerService(service, config_parser))
+            loaded_services.append(SwaggerService(service_name, config_parser))
         except Exception as e:
-            logging.error('"{0}" service will not be available: {1}'.format(service, e))
+            logging.error('"{0}" service will not be available: {1}'.format(service_name, e))
     return loaded_services
