@@ -67,7 +67,7 @@ import pandas
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, files=request_form, proxies={{ service.proxy }})
 {% else %}
     response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -317,6 +317,8 @@ import pandas
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'body' %}
         request_body['{{ server_param_name }}'] = {{ param_name }}
+{% elif param_in == 'formData' %}
+        request_form['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
 {% endmacro %}
 
@@ -341,6 +343,8 @@ import pandas
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'body' %}
         request_body['{{ server_param_name }}'] = {{ param_name }}
+{% elif param_in == 'formData' %}
+        request_form['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
 {% endmacro %}
 
@@ -390,6 +394,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% if contains_parameters %}
     request_parameters = {}
     request_body = {}
+    request_form = {}
 
 {% endif %}
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
