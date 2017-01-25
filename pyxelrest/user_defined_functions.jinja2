@@ -27,7 +27,7 @@ import pandas
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }})
 {% else %}
     response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -38,26 +38,18 @@ import pandas
 {% endmacro -%}
 
 {%- macro get(service, method_path, contains_parameters, path_parameters, method) %}
-{% if 'application/msgpackpandas' in method['produces'] and support_pandas %}
-    headers = {'content-type':'application/msgpackpandas'}
-{% elif 'application/json' in method['produces']  %}
-    headers = {'content-type':'application/json'}
-{% else %}
-    headers = {}
-{% endif %}
-
 {% if contains_parameters %}
-        response = requests.get('{{ service.uri }}{{ method_path }}'.format(
+    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, stream=True, headers=headers, proxies={{ service.proxy }})
+), request_parameters, stream=True, headers=request_header, proxies={{ service.proxy }})
 {% else %}
-        response = requests.get('{{ service.uri }}{{ method_path }}'.format(
+    response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), stream=True, headers=headers, proxies={{ service.proxy }})
+), stream=True, headers=request_header, proxies={{ service.proxy }})
 {% endif %}
 {% endmacro -%}
 
@@ -67,7 +59,7 @@ import pandas
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, files=request_form, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={{ service.proxy }})
 {% else %}
     response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -83,7 +75,7 @@ import pandas
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }})
 {% else %}
     response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -319,6 +311,8 @@ import pandas
         request_body['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'formData' %}
         request_form['{{ server_param_name }}'] = {{ param_name }}
+{% elif param_in == 'header' %}
+        request_header['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
 {% endmacro %}
 
@@ -345,6 +339,8 @@ import pandas
         request_body['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'formData' %}
         request_form['{{ server_param_name }}'] = {{ param_name }}
+{% elif param_in == 'header' %}
+        request_header['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
 {% endmacro %}
 
@@ -390,6 +386,13 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     """{{ method['summary'] }}"""
 {% endif %}
     logging.info("Calling {{ service.udf_prefix }}_{{ method['operationId'] }}...")
+{% if 'application/msgpackpandas' in method['produces'] and support_pandas %}
+    request_header = {'content-type':'application/msgpackpandas'}
+{% elif 'application/json' in method['produces']  %}
+    request_header = {'content-type':'application/json'}
+{% else %}
+    request_header = {}
+{% endif %}
 {% set contains_parameters = nb_required_parameters > 0 or nb_optional_parameters > 0 %}
 {% if contains_parameters %}
     request_parameters = {}
