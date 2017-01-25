@@ -428,7 +428,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
             return ['Please install pandas module to be able to decode result.']
 {% endif %}
         else:
-            return response.content[:255]
+            return response.text[:255]
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response.")
