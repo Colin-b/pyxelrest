@@ -46,6 +46,10 @@ class SwaggerService:
         # service_host property is here to handle services behind a reverse proxy
         # (otherwise host will be the reverse proxy one)
         host = self.swagger.get('host', self.get_item_default(config, 'service_host', swagger_url_parsed.netloc))
+        # Allow user to provide service_host starting with scheme (removing it)
+        host_parsed = urlsplit(host)
+        if host_parsed.netloc:
+            host = host_parsed.netloc + host_parsed.path
         # If it is not included, the API is served directly under the host.
         base_path = self.swagger.get('basePath', None)
 
@@ -125,4 +129,18 @@ def load_services():
             loaded_services.append(SwaggerService(service_name, config_parser))
         except Exception as e:
             logging.error('"{0}" service will not be available: {1}'.format(service_name, e))
+    check_for_duplicates(loaded_services)
     return loaded_services
+
+
+def check_for_duplicates(loaded_services):
+    services_by_prefix = {}
+    for service in loaded_services:
+        duplicates = services_by_prefix.get(service.udf_prefix, [])
+        duplicates.append(service.name)
+        services_by_prefix[service.udf_prefix] = duplicates
+    for udf_prefix in services_by_prefix:
+        service_names = services_by_prefix[udf_prefix]
+        if len(service_names) > 1:
+            logging.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
+                            'only the last declared one will be available.'.format(service_names, udf_prefix))
