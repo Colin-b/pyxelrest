@@ -16,7 +16,7 @@ User Installation
 
 1. Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Excel must be closed while executing the following step.
+2. Excel must be closed while executing the following commands:
 
         pip install pypiwin32
         pip install pyxelrest
@@ -24,8 +24,9 @@ User Installation
 Upgrade
 -------
 
-1. Go to ``Control Panel/Programs and Features`` and uninstall AutoLoadPyxelRestAddIn (in case version changed).
-2. Follow installation but add ``--upgrade`` option on ``pip install`` commands.
+1. Excel must be closed while executing the following command:
+
+        pip install pyxelrest --upgrade
 
 Uninstall
 ---------
