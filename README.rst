@@ -44,7 +44,9 @@ Uninstall
 Services Configuration
 ----------------------
 
-Services configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
+Services configuration can be done within Excel thanks to the ``Configure Services`` button within ``PyxelRest`` tab.
+
+Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
 
 Each section name will be used as the UDFs category.
 
