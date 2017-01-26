@@ -12,6 +12,7 @@ import re
 import requests
 import vba
 import logging
+from pyxelresterrors import *
 
 
 def to_valid_python_vba(str_value):
@@ -29,7 +30,7 @@ class SwaggerService:
         self.udf_prefix = to_valid_python_vba(service_name)
         self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
         if not self.methods:
-            raise Exception('All methods were filtered out.')
+            raise NoMethodsProvided()
         swagger_url = self.get_item(config, 'swagger_url')
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
@@ -60,12 +61,12 @@ class SwaggerService:
             # Python 3
             section = config[self.name]
             if key not in section:
-                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.name, key))
+                raise MandatoryPropertyNotProvided(self.name, key)
             return section[key]
         except AttributeError:
             # Python 2
             if not config.has_option(self.name, key):
-                raise Exception('"{0}" configuration section must provide "{1}".'.format(self.name, key))
+                raise MandatoryPropertyNotProvided(self.name, key)
             return config.get(self.name, key)
 
     def get_item_default(self, config, key, default_value):
@@ -105,11 +106,9 @@ class SwaggerService:
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
-            raise Exception('Swagger version is not provided.')
+            raise SwaggerVersionNotProvided()
         if self.swagger['swagger'] != '2.0':
-            raise Exception('PyxelRest does not support any other version (in this case "{}") than Swagger 2.0'.format(
-                self.swagger['swagger']
-            ))
+            raise UnsupportedSwaggerVersion(self.swagger['swagger'])
 
 
 def load_services():
@@ -121,7 +120,7 @@ def load_services():
     config_parser = ConfigParser()
     file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
     if not config_parser.read(file_path):
-        raise Exception('"{0}" services configuration file cannot be read.'.format(file_path))
+        raise ConfigurationFileNotFound(file_path)
     logging.debug('Loading services from "{0}".'.format(file_path))
     loaded_services = []
     for service_name in config_parser.sections():
