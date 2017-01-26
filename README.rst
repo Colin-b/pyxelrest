@@ -46,6 +46,10 @@ Services Configuration
 
 Services configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
 
+Each section name will be used as the UDFs category.
+
+Each UDF will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
+
 The following options are available for each section:
 
 +--------------+--------------------------------------------------------------+-----------+------------------------+
