@@ -24,6 +24,7 @@ import _version
 
 logging.debug('PyxelRest version {}'.format(_version.__version__))
 
+
 def user_defined_functions(loaded_services):
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
@@ -57,12 +58,15 @@ def generate_user_defined_functions(loaded_services):
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
         generated_file.write(user_defined_functions(loaded_services))
 
-services = swagger_service.load_services()
-generate_user_defined_functions(services)
-
-logging.debug('Expose user defined functions through PyxelRest.')
+try:
+    services = swagger_service.load_services()
+    generate_user_defined_functions(services)
+except:
+    logging.exception('Cannot generate user defined functions.')
+    raise
 
 try:
+    logging.debug('Expose user defined functions through PyxelRest.')
     # Force reload of module (even if this is first time, it should not take long)
     # as reloading pyxelrest does not reload UDFs otherwise
     # TODO This is temporary until xlwings force a python reload instead
