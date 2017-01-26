@@ -100,6 +100,8 @@ class PostInstall:
         self._create_pyxelrest_appdata_folder()
         self._create_services_configuration()
         self._create_logging_configuration()
+        if self._is_excel_running():
+            raise Exception('Excel must be closed for add-ins to be installed.')
         self._install_pyxelrest_vb_addin()
 
         xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_folder)
@@ -108,6 +110,15 @@ class PostInstall:
         vsto = VSTOManager()
         vsto.uninstall_auto_load_addin(self.add_in_folder)
         vsto.install_auto_load_addin(self.add_in_folder)
+
+    @staticmethod
+    def _is_excel_running():
+        import win32com.client
+        processes = win32com.client.GetObject('winmgmts:').InstancesOf('Win32_Process')
+        for process in processes:
+            if process.Properties_('Name').Value == 'EXCEL.EXE':
+                return True
+        return False
 
     def _create_pyxelrest_appdata_folder(self):
         if not os.path.exists(self.pyxelrest_appdata_folder):
