@@ -5,11 +5,11 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 How to use
 ----------
 
-Once installed, open Microsoft Excel and add services within PyxelRest configuration.
+Once installed, open Microsoft Excel and UDFs from configured services will be available.
 
-![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_category.PNG)
 
-![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG)
+![Filling in UDF parameters](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG)
 
 User Installation
 ------------
@@ -42,6 +42,10 @@ Services Configuration
 ----------------------
 
 Services configuration can be done within Excel thanks to the ``Configure Services`` button within ``PyxelRest`` tab.
+
+![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+
+![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG)
 
 Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
 
