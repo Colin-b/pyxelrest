@@ -47,7 +47,6 @@ The following options are available for each section:
 
 <table>
     <th>
-        <td>Property</td>
         <td>Description</td>
         <td>Mandatory</td>
         <td>Possible values</td>

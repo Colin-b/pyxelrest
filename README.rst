@@ -49,7 +49,7 @@ Services configuration can also be manually updated thanks to ``%APPDATA%\pyxelr
 The following options are available for each section:
 
 +--------------+--------------------------------------------------------------+-----------+------------------------+
-| Property     | Description                                                  | Mandatory | Possible values        |
+|              | Description                                                  | Mandatory | Possible values        |
 +==============+==============================================================+===========+========================+
 | swagger_url  | Complete URL to the Swagger definition.                      | Mandatory |                        |
 +--------------+--------------------------------------------------------------+-----------+------------------------+
