@@ -16,3 +16,4 @@ try:
     logging.debug('PyxelRest loaded from module folder.')
 except:
     logging.exception('Unable to load PyxelRest from module folder.')
+    raise
