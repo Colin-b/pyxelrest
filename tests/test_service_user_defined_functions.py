@@ -18,6 +18,88 @@ import pandas
 
 
 @xw.func(category='test', call_in_wizard=False)
+@xw.arg('form_string', doc='form parameter')
+def test_post_test_form_parameter(form_string):
+    logging.info("Calling test_post_test_form_parameter...")
+    request_header = {}
+    request_parameters = {}
+    request_body = {}
+    request_form = {}
+
+    if form_string is None or isinstance(form_string, list) and all(x is None for x in form_string):
+        logging.error('form_string is required.')
+        return 'form_string is required.'
+    if form_string is not None:
+        
+        request_form['form_string'] = form_string
+
+    response = None
+    try:
+        response = requests.post('http://localhost:8943/test/form/parameter'.format(
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_post_test_form_parameter.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_post_test_form_parameter response.")
+        else:
+            logging.exception("Error occurred while calling test_post_test_form_parameter.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
+@xw.arg('header_string', doc='header parameter')
+def test_get_test_header_parameter(header_string):
+    logging.info("Calling test_get_test_header_parameter...")
+    request_header = {}
+    request_parameters = {}
+    request_body = {}
+    request_form = {}
+
+    if header_string is None or isinstance(header_string, list) and all(x is None for x in header_string):
+        logging.error('header_string is required.')
+        return 'header_string is required.'
+    if header_string is not None:
+        
+        request_header['header_string'] = header_string
+
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/header/parameter'.format(
+), request_parameters, stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_get_test_header_parameter.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_get_test_header_parameter response.")
+        else:
+            logging.exception("Error occurred while calling test_get_test_header_parameter.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -6699,6 +6781,47 @@ def test_delete_test_plain_text_without_parameter():
             logging.exception("Error occurred while handling test_delete_test_plain_text_without_parameter response.")
         else:
             logging.exception("Error occurred while calling test_delete_test_plain_text_without_parameter.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='test', call_in_wizard=False)
+@xw.arg('query_array_string', doc='string array parameter')
+def test_get_test_string_array_parameter(query_array_string):
+    logging.info("Calling test_get_test_string_array_parameter...")
+    request_header = {}
+    request_parameters = {}
+    request_body = {}
+    request_form = {}
+
+    if query_array_string is None or isinstance(query_array_string, list) and all(x is None for x in query_array_string):
+        logging.error('query_array_string is required.')
+        return 'query_array_string is required.'
+    if query_array_string is not None:
+        
+        request_parameters['query_array_string'] = query_array_string
+
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/string/array/parameter'.format(
+), request_parameters, stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for test_get_test_string_array_parameter.")
+        if response.headers['content-type'] == 'application/json':
+            return to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling test_get_test_string_array_parameter response.")
+        else:
+            logging.exception("Error occurred while calling test_get_test_string_array_parameter.")
         return describe_error(response, error)
 
     finally:

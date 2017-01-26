@@ -12020,37 +12020,125 @@ def swagger():
                     }
                 ]
             }
-        }
+        },
+        '/test/string/array/parameter': {
+            'get': {
+                'operationId': 'get_test_string_array_parameter',
+                'parameters': [
+                    {
+                        'description': 'string array parameter',
+                        'in': 'query',
+                        'name': 'query_array_string',
+                        'required': True,
+                        'items': {
+                            'type': 'string'
+                        },
+                        'type': 'array'
+                    }
+                ]
+            }
+        },
+        '/test/header/parameter': {
+            'get': {
+                'operationId': 'get_test_header_parameter',
+                'parameters': [
+                    {
+                        'description': 'header parameter',
+                        'in': 'header',
+                        'name': 'header_string',
+                        'required': True,
+                        'type': 'string'
+                    }
+                ]
+            }
+        },
+        '/test/form/parameter': {
+            'post': {
+                'operationId': 'post_test_form_parameter',
+                'parameters': [
+                    {
+                        'description': 'form parameter',
+                        'in': 'formData',
+                        'name': 'form_string',
+                        'required': True,
+                        'type': 'string'
+                    }
+                ]
+            }
+        },
     })
 
 
 @app.route('/test/vba/restricted/keywords', methods=['GET'])
 def get_test_vba_restricted_keywords():
-    return ', '.join(_request_args(request.args))
+    return jsonify(request.args)
 
 
 @app.route('/test/vba/restricted/keywords', methods=['POST'])
 def post_test_vba_restricted_keywords():
-    return ', '.join(_request_args(request.args))
+    return jsonify(request.args)
 
 
 @app.route('/test/vba/restricted/keywords', methods=['PUT'])
 def put_test_vba_restricted_keywords():
-    return ', '.join(_request_args(request.args))
+    return jsonify(request.args)
 
 
 @app.route('/test/vba/restricted/keywords', methods=['DELETE'])
 def delete_test_vba_restricted_keywords():
-    return ', '.join(_request_args(request.args))
+    return jsonify(request.args)
 
 
 @app.route('/test/json/with/all/parameters/types', methods=['GET'])
 def get_test_json_with_all_parameters_types():
+    return jsonify(request.args)
+
+
+@app.route('/test/json/with/all/optional/parameters/types', methods=['GET'])
+def get_test_json_with_all_optional_parameters_types():
+    return jsonify(request.args)
+
+
+@app.route('/test/string/array/parameter', methods=['GET'])
+def get_test_string_array_parameter():
     return ', '.join(_request_args(request.args))
 
 
+@app.route('/test/plain/text/without/parameter', methods=['GET'])
+def get_test_plain_text_without_parameter():
+    return 'string value returned should be truncated so that the following information cannot be seen by user, ' \
+           'because of the fact that Excel does not allow more than 255 characters in a cell. ' \
+           'Only the 255 characters will be returned by the user defined functions:  YOU CANNOT RECEIVE THIS!!!!!!'
+
+
+@app.route('/test/without/parameter', methods=['POST'])
+def post_test_without_parameter():
+    return 'POST performed properly'
+
+
+@app.route('/test/without/parameter', methods=['PUT'])
+def put_test_without_parameter():
+    return 'PUT performed properly'
+
+
+@app.route('/test/without/parameter', methods=['DELETE'])
+def delete_test_without_parameter():
+    return 'DELETE performed properly'
+
+
+@app.route('/test/header/parameter', methods=['GET'])
+def get_test_header_parameter():
+    return jsonify(dict(request.headers))
+
+
+@app.route('/test/form/parameter', methods=['POST'])
+def post_test_form_parameter():
+    all_files = {file[0].name: file[0].stream.read().decode("utf-8") for file in dict(request.files).values()}
+    return jsonify(all_files)
+
+
 def _request_args(args):
-    return ['{0}="{1}"'.format(arg, args[arg]) for arg in args]
+    return ['{0}="{1}"'.format(arg, args.getlist(arg)) for arg in args]
 
 
 @app.route('/swagger_version_not_provided')
