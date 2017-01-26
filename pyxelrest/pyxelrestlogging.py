@@ -14,4 +14,4 @@ else:
     logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                                  handlers=[logging.handlers.TimedRotatingFileHandler(os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pyxelrest.log'), when='D')],
                                  level=logging.INFO)
-    logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.', logging_configuration_file_path)
+    logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(logging_configuration_file_path))
