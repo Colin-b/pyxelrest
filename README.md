@@ -38,10 +38,52 @@ Uninstall
 3. Remove ``%APPDATA%\pyxelrest`` folder.
 4. Remove ``%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam`` file.
 
-Logging
--------
-Default log files can be found in your ``%APPDATA%\pyxelrest`` folder.
+Services Configuration
+----------------------
+
+Services configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
+
+The following options are available for each section:
+
+<table>
+    <th>
+        <td>Property</td>
+        <td>Description</td>
+        <td>Mandatory</td>
+        <td>Possible values</td>
+    </th>
+    <tr>
+        <td>swagger_url</td>
+        <td>Complete URL to the Swagger definition.</td>
+        <td>Mandatory</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>proxy_url</td>
+        <td>Proxy that should be used to reach service.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>service_host</td>
+        <td>Service host in case your service is behind a reverse proxy.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>methods</td>
+        <td>List of services methods to be exposed as UDFs.</td>
+        <td>Optional</td>
+        <td>get, post, put, delete</td>
+    </tr>
+</table>
+
+Logging Configuration
+---------------------
+
 Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_configuration.ini`` file.
+
+Default log files can be found in your ``%APPDATA%\pyxelrest`` folder.
 
 Developer Installation/Upgrade
 ----------------------
@@ -59,14 +101,3 @@ Known issues
 ------------
 
 - Excel needs to be restarted for UDFs not to be displayed anymore in function wizard. (Even if calling them does not work)
-
-Enhancements TODO list
-----------------------
-
-- Handle streaming of data back to Excel (reduce memory consumption).
-- Handle structure with dictionaries nested in dictionaries.
-- Full Swagger 2.0 specification support:
-    - Handle multiple ways of sending arrays (for now arrays are sent as replication of the same parameter name).
-    - etc...
-- Handle filtering on Swagger tags
-- Get rid of xlwings bas file by including what is required in our own addin.
