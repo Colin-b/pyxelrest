@@ -5,6 +5,7 @@ Generation date (UTC): {{ current_utc_time }}
 """
 import xlwings as xw
 import requests
+import requests.exceptions
 import datetime
 import logging
 from collections import OrderedDict
@@ -429,6 +430,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% endif %}
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling {{ service.udf_prefix }}_{{ method['operationId'] }}.")
+        return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", method) }}
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response.")
