@@ -1,37 +1,49 @@
 import unittest
 import os
 import shutil
-import datetime
+import multiprocessing
 
 
-# Test cases requires test_service to run prior to execution
 class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
-    def tearDown(self):
-        self._add_back_initial_config()
-
-    def test_without_logging_configuration_file(self):
+    def setUp(self):
+        self.start_services()
         self._remove_logging_config()
         self._add_services_config()
-        import pyxelrestgenerator
-        # This test case assert that pyxelrest can be loaded without logging configuration
+
+    def tearDown(self):
+        self.stop_services()
+        self._add_back_initial_config()
+
+    def start_services(self):
+        from tests.test_service import start_server
+        self.service_process = multiprocessing.Process(target=start_server, args=(8943,))
+        self.service_process.start()
+
+    def stop_services(self):
+        self.service_process.terminate()
+        self.service_process.join(timeout=0.5)
 
     def _remove_logging_config(self):
-        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
+        self.logging_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
         self.backup_logging_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                    'pyxelrest',
-                                                    'logging_configuration.ini.back')
-        shutil.move(config_file_path, self.backup_logging_config_file_path)
+                                                            'pyxelrest',
+                                                            'logging_configuration.ini.back')
+        shutil.move(self.logging_config_file_path, self.backup_logging_config_file_path)
 
     def _add_services_config(self):
-        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
+        self.services_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
         self.backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                    'pyxelrest',
-                                                    'services_configuration.ini.back')
-        shutil.copyfile(config_file_path, self.backup_services_config_file_path)
-        shutil.copyfile('test_services_configuration.ini', config_file_path)
+                                                             'pyxelrest',
+                                                             'services_configuration.ini.back')
+        shutil.copyfile(self.services_config_file_path, self.backup_services_config_file_path)
+        shutil.copyfile('test_services_configuration.ini', self.services_config_file_path)
 
     def _add_back_initial_config(self):
-        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
-        shutil.move(self.backup_services_config_file_path, config_file_path)
-        config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
-        shutil.move(self.backup_logging_config_file_path, config_file_path)
+        shutil.move(self.backup_services_config_file_path, self.services_config_file_path)
+        shutil.move(self.backup_logging_config_file_path, self.logging_config_file_path)
+
+    def test_without_logging_configuration_file(self):
+        """
+        This test case assert that pyxelrest can be loaded without logging configuration
+        """
+        import pyxelrestgenerator

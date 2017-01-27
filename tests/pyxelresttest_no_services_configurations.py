@@ -1,10 +1,8 @@
 import unittest
 import os
 import shutil
-import datetime
 
 
-# Test cases requires test_service to run prior to execution
 class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
     def tearDown(self):
         self._add_back_initial_config()

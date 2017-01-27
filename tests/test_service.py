@@ -12163,4 +12163,6 @@ def swagger_version_not_supported():
         },
     })
 
-app.run(port=8943)
+
+def start_server(port):
+    app.run(port=port)
