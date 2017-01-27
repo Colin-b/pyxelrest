@@ -1,5 +1,5 @@
 """
-Each time the pyxelrest module is loaded it will generate xlwings User Defined Functions.
+Each time this module is loaded it will generate xlwings User Defined Functions.
 """
 import os
 import datetime
@@ -72,12 +72,6 @@ try:
     # TODO This is temporary until xlwings force a python reload instead
     reload(import_module('user_defined_functions'))
     from user_defined_functions import *
-except ImportError:
-    logging.exception('Failed to import UDFs relatively to module class. Trying relatively to module folder.')
-    # TODO This is temporary until xlwings force a python reload instead
-    reload(import_module('pyxelrest.user_defined_functions'))
-    # Occurs when calling pyxelrest via xlwings in non-debug mode
-    from pyxelrest.user_defined_functions import *
 except:
     logging.exception('Error while importing UDFs.')
 

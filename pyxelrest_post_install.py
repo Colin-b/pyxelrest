@@ -75,7 +75,7 @@ class XlWingsConfig:
             pyxelrest_settings.write('    PYTHONPATH = "' + self.pyxelrest_module_dir + '"\n')
         # Allow to call pyxelrest
         elif '    UDF_MODULES = ""\n' == xlwings_settings_line:
-            pyxelrest_settings.write('    UDF_MODULES = "pyxelrest"\n')
+            pyxelrest_settings.write('    UDF_MODULES = "pyxelrestgenerator"\n')
         else:
             pyxelrest_settings.write(xlwings_settings_line)
 

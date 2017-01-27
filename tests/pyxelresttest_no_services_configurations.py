@@ -12,7 +12,7 @@ class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
     def test_without_service_configuration_file(self):
         self._remove_services_config()
         try:
-            import pyxelrest
+            import pyxelrestgenerator
             self.fail('Loading should be forbidden without a configuration file.')
         except Exception as e:
             config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')

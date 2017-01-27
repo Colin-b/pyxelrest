@@ -12,7 +12,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
     def test_without_logging_configuration_file(self):
         self._remove_logging_config()
         self._add_services_config()
-        import pyxelrest
+        import pyxelrestgenerator
         # This test case assert that pyxelrest can be loaded without logging configuration
 
     def _remove_logging_config(self):
