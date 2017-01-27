@@ -243,3 +243,4 @@ ModelManifest.xml
 
 # Python Virtual Env
 env/
+/.eggs/
