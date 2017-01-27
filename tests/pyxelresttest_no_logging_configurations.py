@@ -47,3 +47,4 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         This test case assert that pyxelrest can be loaded without logging configuration
         """
         import pyxelrestgenerator
+        self.assertTrue(True)
