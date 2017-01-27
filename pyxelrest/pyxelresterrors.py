@@ -28,7 +28,7 @@ class NoMethodsProvided(Exception):
         Exception.__init__(self, 'At least one method must be provided amongst [get, post, put, delete].')
 
 
-class ConfigurationFileNotFound(FileNotFoundError):
+class ConfigurationFileNotFound(Exception):
     """ Configuration file not found. """
     def __init__(self, file_path, *args, **kwargs):
         Exception.__init__(self, '"{0}" configuration file cannot be read.'.format(file_path))
