@@ -5,6 +5,7 @@ Generation date \(UTC\): \d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d
 """
 import xlwings as xw
 import requests
+import requests.exceptions
 import datetime
 import logging
 from collections import OrderedDict
@@ -47,6 +48,10 @@ def test_post_test_form_parameter(form_string):
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_form_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_form_parameter response.")
@@ -88,6 +93,10 @@ def test_get_test_header_parameter(header_string):
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_header_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_header_parameter response.")
@@ -373,6 +382,10 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_json_with_all_optional_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_with_all_optional_parameters_types response.")
@@ -658,6 +671,10 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_json_with_all_optional_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_with_all_optional_parameters_types response.")
@@ -943,6 +960,10 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_json_with_all_optional_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_with_all_optional_parameters_types response.")
@@ -1228,6 +1249,10 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_json_with_all_optional_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_with_all_optional_parameters_types response.")
@@ -1591,6 +1616,10 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_json_with_all_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_with_all_parameters_types response.")
@@ -1954,6 +1983,10 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_json_with_all_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_with_all_parameters_types response.")
@@ -2317,6 +2350,10 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_json_with_all_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_with_all_parameters_types response.")
@@ -2680,6 +2717,10 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_json_with_all_parameters_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_with_all_parameters_types response.")
@@ -2840,6 +2881,10 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_json_with_all_paths_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_with_all_paths_types response.")
@@ -3000,6 +3045,10 @@ def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_json_with_all_paths_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_with_all_paths_types response.")
@@ -3160,6 +3209,10 @@ def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_i
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_json_with_all_paths_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_with_all_paths_types response.")
@@ -3320,6 +3373,10 @@ def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, pat
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_json_with_all_paths_types.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_with_all_paths_types response.")
@@ -3350,6 +3407,10 @@ def test_get_test_json_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_json_without_parameter.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_json_without_parameter response.")
@@ -3380,6 +3441,10 @@ def test_post_test_json_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_json_without_parameter.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_json_without_parameter response.")
@@ -3410,6 +3475,10 @@ def test_put_test_json_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_json_without_parameter.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_json_without_parameter response.")
@@ -3440,6 +3509,10 @@ def test_delete_test_json_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_json_without_parameter.")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_json_without_parameter response.")
@@ -3724,6 +3797,10 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_plain_text_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_with_all_optional_parameters_types response.")
@@ -4008,6 +4085,10 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_plain_text_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_with_all_optional_parameters_types response.")
@@ -4292,6 +4373,10 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_plain_text_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_with_all_optional_parameters_types response.")
@@ -4576,6 +4661,10 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_plain_text_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_optional_parameters_types response.")
@@ -4938,6 +5027,10 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_plain_text_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_with_all_parameters_types response.")
@@ -5300,6 +5393,10 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_plain_text_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_with_all_parameters_types response.")
@@ -5662,6 +5759,10 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_plain_text_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_with_all_parameters_types response.")
@@ -6024,6 +6125,10 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_plain_text_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_parameters_types response.")
@@ -6183,6 +6288,10 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_plain_text_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_with_all_paths_types response.")
@@ -6342,6 +6451,10 @@ def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32,
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_plain_text_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_with_all_paths_types response.")
@@ -6501,6 +6614,10 @@ def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_plain_text_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_with_all_paths_types response.")
@@ -6660,6 +6777,10 @@ def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer3
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_plain_text_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_paths_types response.")
@@ -6689,6 +6810,10 @@ def test_get_test_plain_text_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_plain_text_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_plain_text_without_parameter response.")
@@ -6718,6 +6843,10 @@ def test_post_test_plain_text_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_plain_text_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_plain_text_without_parameter response.")
@@ -6747,6 +6876,10 @@ def test_put_test_plain_text_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_plain_text_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_plain_text_without_parameter response.")
@@ -6776,6 +6909,10 @@ def test_delete_test_plain_text_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_plain_text_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_plain_text_without_parameter response.")
@@ -6817,6 +6954,10 @@ def test_get_test_string_array_parameter(query_array_string):
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_string_array_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_string_array_parameter response.")
@@ -6866,6 +7007,10 @@ def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_vba_restricted_keywords.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_vba_restricted_keywords response.")
@@ -6915,6 +7060,10 @@ def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_bas
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_vba_restricted_keywords.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_vba_restricted_keywords response.")
@@ -6964,6 +7113,10 @@ def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_vba_restricted_keywords.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_vba_restricted_keywords response.")
@@ -7013,6 +7166,10 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_vba_restricted_keywords.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_vba_restricted_keywords response.")
@@ -7297,6 +7454,10 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_with_all_optional_parameters_types response.")
@@ -7581,6 +7742,10 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_with_all_optional_parameters_types response.")
@@ -7865,6 +8030,10 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_with_all_optional_parameters_types response.")
@@ -8149,6 +8318,10 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_with_all_optional_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_with_all_optional_parameters_types response.")
@@ -8511,6 +8684,10 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_with_all_parameters_types response.")
@@ -8873,6 +9050,10 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_with_all_parameters_types response.")
@@ -9235,6 +9416,10 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_with_all_parameters_types response.")
@@ -9597,6 +9782,10 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_with_all_parameters_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_with_all_parameters_types response.")
@@ -9756,6 +9945,10 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_with_all_paths_types response.")
@@ -9915,6 +10108,10 @@ def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integ
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_with_all_paths_types response.")
@@ -10074,6 +10271,10 @@ def test_put_test_with_all_paths_types(path_integer, path_integer32, path_intege
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_with_all_paths_types response.")
@@ -10233,6 +10434,10 @@ def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_int
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_with_all_paths_types.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_with_all_paths_types response.")
@@ -10262,6 +10467,10 @@ def test_get_test_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_get_test_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_get_test_without_parameter response.")
@@ -10291,6 +10500,10 @@ def test_post_test_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_post_test_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_post_test_without_parameter response.")
@@ -10320,6 +10533,10 @@ def test_put_test_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_put_test_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_put_test_without_parameter response.")
@@ -10349,6 +10566,10 @@ def test_delete_test_without_parameter():
             return [data.columns.values.tolist()] + data.values.tolist()
         else:
             return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling test_delete_test_without_parameter.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
     except Exception as error:
         if response:
             logging.exception("Error occurred while handling test_delete_test_without_parameter response.")
