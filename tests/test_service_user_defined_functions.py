@@ -18,10 +18,10 @@ import pandas
 
 
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('form_string', doc='form parameter')
-def test_post_test_form_parameter(form_string):
-    logging.info("Calling test_post_test_form_parameter...")
+def valid_swagger_test_post_test_form_parameter(form_string):
+    logging.info("Calling valid_swagger_test_post_test_form_parameter...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -40,7 +40,7 @@ def test_post_test_form_parameter(form_string):
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_form_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_form_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -49,24 +49,24 @@ def test_post_test_form_parameter(form_string):
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_form_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_form_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_form_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_form_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_form_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_form_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('header_string', doc='header parameter')
-def test_get_test_header_parameter(header_string):
-    logging.info("Calling test_get_test_header_parameter...")
+def valid_swagger_test_get_test_header_parameter(header_string):
+    logging.info("Calling valid_swagger_test_get_test_header_parameter...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -85,7 +85,7 @@ def test_get_test_header_parameter(header_string):
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_header_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_header_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -94,21 +94,21 @@ def test_get_test_header_parameter(header_string):
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_header_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_header_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_header_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_header_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_header_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_header_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -136,8 +136,8 @@ def test_get_test_header_parameter(header_string):
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_get_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_get_test_json_with_all_optional_parameters_types...")
+def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_get_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -374,7 +374,7 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -383,21 +383,21 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_json_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_json_with_all_optional_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_json_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -425,8 +425,8 @@ def test_get_test_json_with_all_optional_parameters_types(query_integer=None, qu
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_post_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_post_test_json_with_all_optional_parameters_types...")
+def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_post_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -663,7 +663,7 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -672,21 +672,21 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_json_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_json_with_all_optional_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_json_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -714,8 +714,8 @@ def test_post_test_json_with_all_optional_parameters_types(query_integer=None, q
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_put_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_put_test_json_with_all_optional_parameters_types...")
+def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_put_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -952,7 +952,7 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -961,21 +961,21 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_json_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_json_with_all_optional_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_json_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -1003,8 +1003,8 @@ def test_put_test_json_with_all_optional_parameters_types(query_integer=None, qu
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_delete_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_delete_test_json_with_all_optional_parameters_types...")
+def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_delete_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -1241,7 +1241,7 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1250,21 +1250,21 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_json_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_json_with_all_optional_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_json_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -1292,8 +1292,8 @@ def test_delete_test_json_with_all_optional_parameters_types(query_integer=None,
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_get_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_get_test_json_with_all_parameters_types...")
+def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_get_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -1608,7 +1608,7 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1617,21 +1617,21 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_json_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_json_with_all_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_json_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -1659,8 +1659,8 @@ def test_get_test_json_with_all_parameters_types(query_integer, query_integer32,
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_post_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_post_test_json_with_all_parameters_types...")
+def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_post_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -1975,7 +1975,7 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1984,21 +1984,21 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_json_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_json_with_all_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_json_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -2026,8 +2026,8 @@ def test_post_test_json_with_all_parameters_types(query_integer, query_integer32
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_put_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_put_test_json_with_all_parameters_types...")
+def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_put_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -2342,7 +2342,7 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2351,21 +2351,21 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_json_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_json_with_all_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_json_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -2393,8 +2393,8 @@ def test_put_test_json_with_all_parameters_types(query_integer, query_integer32,
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
 @xw.ret(expand='table')
-def test_delete_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_delete_test_json_with_all_parameters_types...")
+def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_delete_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
     request_parameters = {}
     request_body = {}
@@ -2709,7 +2709,7 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2718,21 +2718,21 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_json_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_json_with_all_parameters_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_json_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -2760,8 +2760,8 @@ def test_delete_test_json_with_all_parameters_types(query_integer, query_integer
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
 @xw.ret(expand='table')
-def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_get_test_json_with_all_paths_types...")
+def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_get_test_json_with_all_paths_types...")
     request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -2873,7 +2873,7 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2882,21 +2882,21 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_json_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_json_with_all_paths_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_json_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -2924,8 +2924,8 @@ def test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_i
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
 @xw.ret(expand='table')
-def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_post_test_json_with_all_paths_types...")
+def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_post_test_json_with_all_paths_types...")
     request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -3037,7 +3037,7 @@ def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3046,21 +3046,21 @@ def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_json_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_json_with_all_paths_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_json_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -3088,8 +3088,8 @@ def test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
 @xw.ret(expand='table')
-def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_put_test_json_with_all_paths_types...")
+def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_put_test_json_with_all_paths_types...")
     request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -3201,7 +3201,7 @@ def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_i
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3210,21 +3210,21 @@ def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_i
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_json_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_json_with_all_paths_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_json_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -3252,8 +3252,8 @@ def test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_i
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
 @xw.ret(expand='table')
-def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_delete_test_json_with_all_paths_types...")
+def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_delete_test_json_with_all_paths_types...")
     request_header = {'content-type':'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -3365,7 +3365,7 @@ def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, pat
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3374,24 +3374,24 @@ def test_delete_test_json_with_all_paths_types(path_integer, path_integer32, pat
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_json_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_json_with_all_paths_types.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_json_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.ret(expand='table')
-def test_get_test_json_without_parameter():
-    logging.info("Calling test_get_test_json_without_parameter...")
+def valid_swagger_test_get_test_json_without_parameter():
+    logging.info("Calling valid_swagger_test_get_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
     response = None
     try:
@@ -3399,7 +3399,7 @@ def test_get_test_json_without_parameter():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3408,24 +3408,24 @@ def test_get_test_json_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_json_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_json_without_parameter.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_json_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.ret(expand='table')
-def test_post_test_json_without_parameter():
-    logging.info("Calling test_post_test_json_without_parameter...")
+def valid_swagger_test_post_test_json_without_parameter():
+    logging.info("Calling valid_swagger_test_post_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
     response = None
     try:
@@ -3433,7 +3433,7 @@ def test_post_test_json_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3442,24 +3442,24 @@ def test_post_test_json_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_json_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_json_without_parameter.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_json_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.ret(expand='table')
-def test_put_test_json_without_parameter():
-    logging.info("Calling test_put_test_json_without_parameter...")
+def valid_swagger_test_put_test_json_without_parameter():
+    logging.info("Calling valid_swagger_test_put_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
     response = None
     try:
@@ -3467,7 +3467,7 @@ def test_put_test_json_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3476,24 +3476,24 @@ def test_put_test_json_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_json_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_json_without_parameter.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_json_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.ret(expand='table')
-def test_delete_test_json_without_parameter():
-    logging.info("Calling test_delete_test_json_without_parameter...")
+def valid_swagger_test_delete_test_json_without_parameter():
+    logging.info("Calling valid_swagger_test_delete_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
     response = None
     try:
@@ -3501,7 +3501,7 @@ def test_delete_test_json_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3510,21 +3510,21 @@ def test_delete_test_json_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_json_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_json_without_parameter.")
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_json_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -3551,8 +3551,8 @@ def test_delete_test_json_without_parameter():
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_get_test_plain_text_with_all_optional_parameters_types...")
+def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -3789,7 +3789,7 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3798,21 +3798,21 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_plain_text_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_plain_text_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -3839,8 +3839,8 @@ def test_get_test_plain_text_with_all_optional_parameters_types(query_integer=No
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_post_test_plain_text_with_all_optional_parameters_types...")
+def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -4077,7 +4077,7 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -4086,21 +4086,21 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_plain_text_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_plain_text_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -4127,8 +4127,8 @@ def test_post_test_plain_text_with_all_optional_parameters_types(query_integer=N
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_put_test_plain_text_with_all_optional_parameters_types...")
+def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -4365,7 +4365,7 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -4374,21 +4374,21 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_plain_text_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_plain_text_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -4415,8 +4415,8 @@ def test_put_test_plain_text_with_all_optional_parameters_types(query_integer=No
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_delete_test_plain_text_with_all_optional_parameters_types...")
+def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -4653,7 +4653,7 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -4662,21 +4662,21 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_plain_text_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_plain_text_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -4703,8 +4703,8 @@ def test_delete_test_plain_text_with_all_optional_parameters_types(query_integer
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_get_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_get_test_plain_text_with_all_parameters_types...")
+def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_get_test_plain_text_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -5019,7 +5019,7 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -5028,21 +5028,21 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_plain_text_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_plain_text_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_plain_text_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -5069,8 +5069,8 @@ def test_get_test_plain_text_with_all_parameters_types(query_integer, query_inte
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_post_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_post_test_plain_text_with_all_parameters_types...")
+def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_post_test_plain_text_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -5385,7 +5385,7 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -5394,21 +5394,21 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_plain_text_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_plain_text_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_plain_text_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -5435,8 +5435,8 @@ def test_post_test_plain_text_with_all_parameters_types(query_integer, query_int
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_put_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_put_test_plain_text_with_all_parameters_types...")
+def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_put_test_plain_text_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -5751,7 +5751,7 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -5760,21 +5760,21 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_plain_text_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_plain_text_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_plain_text_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -5801,8 +5801,8 @@ def test_put_test_plain_text_with_all_parameters_types(query_integer, query_inte
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_delete_test_plain_text_with_all_parameters_types...")
+def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_delete_test_plain_text_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -6117,7 +6117,7 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6126,21 +6126,21 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_plain_text_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_plain_text_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -6167,8 +6167,8 @@ def test_delete_test_plain_text_with_all_parameters_types(query_integer, query_i
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_get_test_plain_text_with_all_paths_types...")
+def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_get_test_plain_text_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -6280,7 +6280,7 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6289,21 +6289,21 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_plain_text_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_plain_text_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_plain_text_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -6330,8 +6330,8 @@ def test_get_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_post_test_plain_text_with_all_paths_types...")
+def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_post_test_plain_text_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -6443,7 +6443,7 @@ def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32,
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6452,21 +6452,21 @@ def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32,
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_plain_text_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_plain_text_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_plain_text_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -6493,8 +6493,8 @@ def test_post_test_plain_text_with_all_paths_types(path_integer, path_integer32,
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_put_test_plain_text_with_all_paths_types...")
+def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_put_test_plain_text_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -6606,7 +6606,7 @@ def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6615,21 +6615,21 @@ def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_plain_text_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_plain_text_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_plain_text_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -6656,8 +6656,8 @@ def test_put_test_plain_text_with_all_paths_types(path_integer, path_integer32, 
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_delete_test_plain_text_with_all_paths_types...")
+def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_delete_test_plain_text_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -6769,7 +6769,7 @@ def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer3
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6778,23 +6778,23 @@ def test_delete_test_plain_text_with_all_paths_types(path_integer, path_integer3
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_plain_text_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_plain_text_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_get_test_plain_text_without_parameter():
-    logging.info("Calling test_get_test_plain_text_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_plain_text_without_parameter():
+    logging.info("Calling valid_swagger_test_get_test_plain_text_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -6802,7 +6802,7 @@ def test_get_test_plain_text_without_parameter():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6811,23 +6811,23 @@ def test_get_test_plain_text_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_plain_text_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_plain_text_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_plain_text_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_post_test_plain_text_without_parameter():
-    logging.info("Calling test_post_test_plain_text_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_post_test_plain_text_without_parameter():
+    logging.info("Calling valid_swagger_test_post_test_plain_text_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -6835,7 +6835,7 @@ def test_post_test_plain_text_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6844,23 +6844,23 @@ def test_post_test_plain_text_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_plain_text_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_plain_text_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_plain_text_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_put_test_plain_text_without_parameter():
-    logging.info("Calling test_put_test_plain_text_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_put_test_plain_text_without_parameter():
+    logging.info("Calling valid_swagger_test_put_test_plain_text_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -6868,7 +6868,7 @@ def test_put_test_plain_text_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6877,23 +6877,23 @@ def test_put_test_plain_text_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_plain_text_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_plain_text_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_plain_text_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_delete_test_plain_text_without_parameter():
-    logging.info("Calling test_delete_test_plain_text_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_delete_test_plain_text_without_parameter():
+    logging.info("Calling valid_swagger_test_delete_test_plain_text_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -6901,7 +6901,7 @@ def test_delete_test_plain_text_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6910,24 +6910,24 @@ def test_delete_test_plain_text_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_plain_text_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_plain_text_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_plain_text_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_array_string', doc='string array parameter')
-def test_get_test_string_array_parameter(query_array_string):
-    logging.info("Calling test_get_test_string_array_parameter...")
+def valid_swagger_test_get_test_string_array_parameter(query_array_string):
+    logging.info("Calling valid_swagger_test_get_test_string_array_parameter...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -6946,7 +6946,7 @@ def test_get_test_string_array_parameter(query_array_string):
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_string_array_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_string_array_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6955,25 +6955,25 @@ def test_get_test_string_array_parameter(query_array_string):
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_string_array_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_string_array_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_string_array_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_string_array_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_string_array_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_string_array_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
-    logging.info("Calling test_get_test_vba_restricted_keywords...")
+def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling valid_swagger_test_get_test_vba_restricted_keywords...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -6999,7 +6999,7 @@ def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_get_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7008,25 +7008,25 @@ def test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_vba_restricted_keywords.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_vba_restricted_keywords.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_vba_restricted_keywords response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_vba_restricted_keywords.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
-    logging.info("Calling test_post_test_vba_restricted_keywords...")
+def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling valid_swagger_test_post_test_vba_restricted_keywords...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -7052,7 +7052,7 @@ def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_bas
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_post_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7061,25 +7061,25 @@ def test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_bas
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_vba_restricted_keywords.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_vba_restricted_keywords.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_vba_restricted_keywords response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_vba_restricted_keywords.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
-    logging.info("Calling test_put_test_vba_restricted_keywords...")
+def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling valid_swagger_test_put_test_vba_restricted_keywords...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -7105,7 +7105,7 @@ def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_put_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7114,25 +7114,25 @@ def test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basi
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_vba_restricted_keywords.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_vba_restricted_keywords.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_vba_restricted_keywords response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_vba_restricted_keywords.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
-    logging.info("Calling test_delete_test_vba_restricted_keywords...")
+def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+    logging.info("Calling valid_swagger_test_delete_test_vba_restricted_keywords...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -7158,7 +7158,7 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7167,21 +7167,21 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_vba_restricted_keywords.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_vba_restricted_keywords.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_vba_restricted_keywords response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_vba_restricted_keywords.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -7208,8 +7208,8 @@ def test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_b
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_get_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_get_test_with_all_optional_parameters_types...")
+def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_get_test_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -7446,7 +7446,7 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7455,21 +7455,21 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -7496,8 +7496,8 @@ def test_get_test_with_all_optional_parameters_types(query_integer=None, query_i
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_post_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_post_test_with_all_optional_parameters_types...")
+def valid_swagger_test_post_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_post_test_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -7734,7 +7734,7 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7743,21 +7743,21 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -7784,8 +7784,8 @@ def test_post_test_with_all_optional_parameters_types(query_integer=None, query_
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_put_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_put_test_with_all_optional_parameters_types...")
+def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_put_test_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -8022,7 +8022,7 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8031,21 +8031,21 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -8072,8 +8072,8 @@ def test_put_test_with_all_optional_parameters_types(query_integer=None, query_i
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_delete_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
-    logging.info("Calling test_delete_test_with_all_optional_parameters_types...")
+def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
+    logging.info("Calling valid_swagger_test_delete_test_with_all_optional_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -8310,7 +8310,7 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8319,21 +8319,21 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_with_all_optional_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_with_all_optional_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_optional_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_with_all_optional_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -8360,8 +8360,8 @@ def test_delete_test_with_all_optional_parameters_types(query_integer=None, quer
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_get_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_get_test_with_all_parameters_types...")
+def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_get_test_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -8676,7 +8676,7 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8685,21 +8685,21 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -8726,8 +8726,8 @@ def test_get_test_with_all_parameters_types(query_integer, query_integer32, quer
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_post_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_post_test_with_all_parameters_types...")
+def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_post_test_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -9042,7 +9042,7 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9051,21 +9051,21 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -9092,8 +9092,8 @@ def test_post_test_with_all_parameters_types(query_integer, query_integer32, que
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_put_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_put_test_with_all_parameters_types...")
+def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_put_test_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -9408,7 +9408,7 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9417,21 +9417,21 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
 @xw.arg('query_integer64', numbers=int, doc='integer 64 parameter')
@@ -9458,8 +9458,8 @@ def test_put_test_with_all_parameters_types(query_integer, query_integer32, quer
 @xw.arg('query_array_date', doc='date array parameter')
 @xw.arg('query_array_date_time', doc='date time array parameter')
 @xw.arg('query_array_password', doc='password array parameter')
-def test_delete_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
-    logging.info("Calling test_delete_test_with_all_parameters_types...")
+def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
+    logging.info("Calling valid_swagger_test_delete_test_with_all_parameters_types...")
     request_header = {}
     request_parameters = {}
     request_body = {}
@@ -9774,7 +9774,7 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9783,21 +9783,21 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_with_all_parameters_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_with_all_parameters_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_parameters_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_with_all_parameters_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -9824,8 +9824,8 @@ def test_delete_test_with_all_parameters_types(query_integer, query_integer32, q
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_get_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_get_test_with_all_paths_types...")
+def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_get_test_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -9937,7 +9937,7 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9946,21 +9946,21 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -9987,8 +9987,8 @@ def test_get_test_with_all_paths_types(path_integer, path_integer32, path_intege
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_post_test_with_all_paths_types...")
+def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_post_test_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -10100,7 +10100,7 @@ def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integ
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10109,21 +10109,21 @@ def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integ
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -10150,8 +10150,8 @@ def test_post_test_with_all_paths_types(path_integer, path_integer32, path_integ
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_put_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_put_test_with_all_paths_types...")
+def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_put_test_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -10263,7 +10263,7 @@ def test_put_test_with_all_paths_types(path_integer, path_integer32, path_intege
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10272,21 +10272,21 @@ def test_put_test_with_all_paths_types(path_integer, path_integer32, path_intege
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
 @xw.arg('path_integer64', numbers=int, doc='integer 64 path')
@@ -10313,8 +10313,8 @@ def test_put_test_with_all_paths_types(path_integer, path_integer32, path_intege
 @xw.arg('path_array_date', doc='date array path')
 @xw.arg('path_array_date_time', doc='date time array path')
 @xw.arg('path_array_password', doc='password array path')
-def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
-    logging.info("Calling test_delete_test_with_all_paths_types...")
+def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
+    logging.info("Calling valid_swagger_test_delete_test_with_all_paths_types...")
     request_header = {}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
@@ -10426,7 +10426,7 @@ def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_int
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10435,23 +10435,23 @@ def test_delete_test_with_all_paths_types(path_integer, path_integer32, path_int
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_with_all_paths_types.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_with_all_paths_types.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_paths_types response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_with_all_paths_types.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_get_test_without_parameter():
-    logging.info("Calling test_get_test_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_without_parameter():
+    logging.info("Calling valid_swagger_test_get_test_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -10459,7 +10459,7 @@ def test_get_test_without_parameter():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_get_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10468,23 +10468,23 @@ def test_get_test_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_get_test_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_get_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_get_test_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_post_test_without_parameter():
-    logging.info("Calling test_post_test_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_post_test_without_parameter():
+    logging.info("Calling valid_swagger_test_post_test_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -10492,7 +10492,7 @@ def test_post_test_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_post_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10501,23 +10501,23 @@ def test_post_test_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_post_test_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_post_test_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_post_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_post_test_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_post_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_put_test_without_parameter():
-    logging.info("Calling test_put_test_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_put_test_without_parameter():
+    logging.info("Calling valid_swagger_test_put_test_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -10525,7 +10525,7 @@ def test_put_test_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_put_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_put_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10534,23 +10534,23 @@ def test_put_test_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_put_test_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_put_test_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_put_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_put_test_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_put_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
         if response:
             response.close()
 
-@xw.func(category='test', call_in_wizard=False)
-def test_delete_test_without_parameter():
-    logging.info("Calling test_delete_test_without_parameter...")
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_delete_test_without_parameter():
+    logging.info("Calling valid_swagger_test_delete_test_without_parameter...")
     request_header = {}
     response = None
     try:
@@ -10558,7 +10558,7 @@ def test_delete_test_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for test_delete_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
             return to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10567,14 +10567,14 @@ def test_delete_test_without_parameter():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling test_delete_test_without_parameter.")
+        logging.exception("Connection error occurred while calling valid_swagger_test_delete_test_without_parameter.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling test_delete_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_without_parameter response.")
         else:
-            logging.exception("Error occurred while calling test_delete_test_without_parameter.")
+            logging.exception("Error occurred while calling valid_swagger_test_delete_test_without_parameter.")
         return describe_error(response, error)
 
     finally:

@@ -39,5 +39,5 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         self.start_services()
         import pyxelrestgenerator
         self.stop_services()
-        self.assertEqual(pyxelrestgenerator.test_get_test_plain_text_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_plain_text_without_parameter(),
                          'Cannot connect to service. Please retry once connection is re-established.')
