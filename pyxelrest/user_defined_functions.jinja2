@@ -435,7 +435,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", method) }}
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response.")
+            logging.exception("Error occurred while handling {{ service.udf_prefix }}_{{ method['operationId'] }} response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling {{ service.udf_prefix }}_{{ method['operationId'] }}.")
         return {{ convert_to_return_type('describe_error(response, error)', method) }}
