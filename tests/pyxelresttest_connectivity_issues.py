@@ -1,8 +1,7 @@
-import unittest
+import multiprocessing
 import os
 import shutil
-import datetime
-import multiprocessing
+import unittest
 
 
 class PyxelRestConnectivityIssuesTest(unittest.TestCase):
@@ -20,7 +19,7 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         self._add_back_initial_config()
 
     def start_services(self):
-        from tests.test_service import start_server
+        from testsutils.test_service import start_server
         self.service_process = multiprocessing.Process(target=start_server, args=(8943,))
         self.service_process.start()
 
@@ -29,8 +28,9 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         self.service_process.join(timeout=0.5)
 
     def _add_test_config(self):
+        this_dir = os.path.abspath(os.path.dirname(__file__))
         shutil.copyfile(self.services_config_file_path, self.backup_services_config_file_path)
-        shutil.copyfile('test_services_configuration.ini', self.services_config_file_path)
+        shutil.copyfile(os.path.join(this_dir, 'test_services_configuration.ini'), self.services_config_file_path)
 
     def _add_back_initial_config(self):
         shutil.move(self.backup_services_config_file_path, self.services_config_file_path)

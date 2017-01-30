@@ -1,7 +1,7 @@
-import unittest
+import multiprocessing
 import os
 import shutil
-import multiprocessing
+import unittest
 
 
 class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
@@ -15,7 +15,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         self._add_back_initial_config()
 
     def start_services(self):
-        from tests.test_service import start_server
+        from testsutils.test_service import start_server
         self.service_process = multiprocessing.Process(target=start_server, args=(8943,))
         self.service_process.start()
 
@@ -25,10 +25,11 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
 
     def _remove_logging_config(self):
         self.logging_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
-        self.backup_logging_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                            'pyxelrest',
-                                                            'logging_configuration.ini.back')
-        shutil.move(self.logging_config_file_path, self.backup_logging_config_file_path)
+        if os.path.isfile(self.logging_config_file_path):
+            self.backup_logging_config_file_path = os.path.join(os.getenv('APPDATA'),
+                                                                'pyxelrest',
+                                                                'logging_configuration.ini.back')
+            shutil.move(self.logging_config_file_path, self.backup_logging_config_file_path)
 
     def _add_services_config(self):
         self.services_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
@@ -40,11 +41,12 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
 
     def _add_back_initial_config(self):
         shutil.move(self.backup_services_config_file_path, self.services_config_file_path)
-        shutil.move(self.backup_logging_config_file_path, self.logging_config_file_path)
+        if hasattr(self, 'backup_logging_config_file_path') and os.path.isfile(self.backup_logging_config_file_path):
+            shutil.move(self.backup_logging_config_file_path, self.logging_config_file_path)
+        # TODO else remove it
 
     def test_without_logging_configuration_file(self):
         """
         This test case assert that pyxelrest can be loaded without logging configuration
         """
-        import pyxelrestgenerator
         self.assertTrue(True)

@@ -1,8 +1,9 @@
-import unittest
-import os
-import shutil
 import datetime
 import multiprocessing
+import os
+import os.path
+import shutil
+import unittest
 
 
 class PyxelRestTest(unittest.TestCase):
@@ -18,7 +19,6 @@ class PyxelRestTest(unittest.TestCase):
     def setUpClass(cls):
         cls.start_services()
         cls._add_test_config()
-        import pyxelrestgenerator
 
     @classmethod
     def tearDownClass(cls):
@@ -27,7 +27,7 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def start_services(cls):
-        from tests.test_service import start_server
+        from testsutils.test_service import start_server
         cls.service_process = multiprocessing.Process(target=start_server, args=(8943,))
         cls.service_process.start()
 
@@ -38,8 +38,9 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def _add_test_config(cls):
+        this_dir = os.path.abspath(os.path.dirname(__file__))
         shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile('test_services_configuration.ini', cls.services_config_file_path)
+        shutil.copyfile(os.path.join(this_dir, 'test_services_configuration.ini'), cls.services_config_file_path)
 
     @classmethod
     def _add_back_initial_config(cls):
@@ -51,6 +52,8 @@ class PyxelRestTest(unittest.TestCase):
         This test is mainly here to be aware that a change broke generated file.
         """
         expected_file = open(os.path.join(os.path.dirname(__file__),
+                                          '..',
+                                          'testsutils',
                                           'test_service_user_defined_functions.py'), 'r')
         expected = expected_file.readlines()
         expected_file.close()
