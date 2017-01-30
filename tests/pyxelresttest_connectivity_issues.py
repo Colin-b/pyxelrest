@@ -2,6 +2,15 @@ import multiprocessing
 import os
 import shutil
 import unittest
+from importlib import import_module
+
+
+try:
+    # Python 3
+    from importlib import reload
+except ImportError:
+    # Python 2
+    from imp import reload
 
 
 class PyxelRestConnectivityIssuesTest(unittest.TestCase):
@@ -37,6 +46,7 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
 
     def test_get_test_plain_text_with_service_down(self):
         self.start_services()
+        reload(import_module('pyxelrestgenerator'))
         import pyxelrestgenerator
         self.stop_services()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_plain_text_without_parameter(),

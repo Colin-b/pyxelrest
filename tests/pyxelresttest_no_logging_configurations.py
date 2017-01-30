@@ -2,6 +2,15 @@ import multiprocessing
 import os
 import shutil
 import unittest
+from importlib import import_module
+
+
+try:
+    # Python 3
+    from importlib import reload
+except ImportError:
+    # Python 2
+    from imp import reload
 
 
 class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
@@ -49,4 +58,5 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         """
         This test case assert that pyxelrest can be loaded without logging configuration
         """
+        reload(import_module('pyxelrestgenerator'))
         self.assertTrue(True)

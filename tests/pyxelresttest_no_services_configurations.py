@@ -1,6 +1,15 @@
 import unittest
 import os
 import shutil
+from importlib import import_module
+
+
+try:
+    # Python 3
+    from importlib import reload
+except ImportError:
+    # Python 2
+    from imp import reload
 
 
 class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
@@ -10,6 +19,7 @@ class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
     def test_without_service_configuration_file(self):
         self._remove_services_config()
         try:
+            reload(import_module('pyxelrestgenerator'))
             import pyxelrestgenerator
             self.fail('Loading should be forbidden without a configuration file.')
         except Exception as e:
