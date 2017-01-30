@@ -53,7 +53,7 @@ setup(name='pyxelrest',
           'udf',
           'service'
       ],
-      packages=find_packages(exclude=['tests']),
+      packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': ['default_services_configuration.ini', 'default_logging_configuration.ini', 'user_defined_functions.jinja2']
       },
