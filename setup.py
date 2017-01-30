@@ -103,7 +103,7 @@ setup(name='pyxelrest',
           'jinja2>=2.8',
           'requests>=2.12.2',
           'msgpack-python',
-          'xlwings==0.10.2',
+          'xlwings==0.10.3',
           'pyaml'
       ],
       scripts=[
