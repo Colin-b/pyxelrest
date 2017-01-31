@@ -188,7 +188,8 @@ def user_defined_functions(loaded_services):
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=loaded_services,
         modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
-        support_pandas=support_pandas()
+        support_pandas=support_pandas(),
+        extract_url=extract_url
     )
 
 
@@ -198,6 +199,12 @@ def support_pandas():
         return True
     except:
         return False
+
+
+def extract_url(text):
+    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+    if urls:
+        return urls[0]
 
 
 def generate_user_defined_functions():
