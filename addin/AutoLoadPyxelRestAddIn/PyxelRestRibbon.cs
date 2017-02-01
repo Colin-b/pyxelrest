@@ -7,7 +7,7 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly string UDF_IMPORT_FAILURE_MSG = 
             "User Defined Functions cannot be loaded.\n"+
-            "Please check that you trust access to Visual Basic Project\n";
+            "Check logs for more details or contact your support team.\n";
 
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {

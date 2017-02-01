@@ -2,6 +2,8 @@
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Vbe.Interop;
 using log4net;
+using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -11,11 +13,14 @@ namespace AutoLoadPyxelRestAddIn
 
         private static readonly string XLWINGS_VB_COMPONENT_NAME = "xlwings";
         private static readonly string PYXELREST_VB_PROJECT_NAME = "PyxelRest";
+        private static readonly string VBA_OBJ_MODEL_FAILURE_MSG = 
+            "Please 'Trust access to the VBA object model'.\n" +
+            "> File > Options > Trust Center > Trust Center Settings > Macro Settings\n";
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
-            Log.Info("Starting Auto Load PyxelRest Addin...");
+            Log.Debug("Starting Auto Load PyxelRest Addin...");
             Application.WorkbookOpen += OnOpenWorkBook;
             Application.WorkbookActivate += OnActivateWorkBook;
             try
@@ -37,10 +42,12 @@ namespace AutoLoadPyxelRestAddIn
                     Log.Info("User Defined Functions cannot be imported while workbook is inactive.");
                     return false;
                 }
+                if (!TrustAccessToTheVBAObjectModel())
+                    return false;
                 if (!TryToLoadXlWingsModule())
                     return false;
                 Application.Run("pyxelrest.xlam!ImportPythonUDFs");
-                Log.InfoFormat("User Defined Functions imported.");
+                Log.Debug("User Defined Functions imported.");
                 return true;
             }
             catch (Exception ex)
@@ -50,15 +57,35 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private bool TrustAccessToTheVBAObjectModel()
+        {
+            int? accessVBOM = Registry.GetValue(
+                "HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security",
+                "AccessVBOM", 
+                null) as int?;
+            if(!accessVBOM.HasValue || accessVBOM.Value != 1)
+            {
+                Log.Error("'Trust access to the VBA project object model' is not enabled.");
+                MessageBox.Show(
+                    VBA_OBJ_MODEL_FAILURE_MSG,
+                    "Access to VBA object model is not enabled",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+                return false;
+            }
+            Log.Debug("'Trust access to the VBA project object model' is enabled.");
+            return true;
+        }
+
         private void OnActivateWorkBook(Excel.Workbook Wb)
         {
             if (ContainsXlWingsModule())
             {
-                Log.InfoFormat("Activating '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
+                Log.DebugFormat("Activating '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
             }
             else
             {
-                Log.InfoFormat("Activating '{0}' workbook. Activating PyxelRest...", Wb.Name);
+                Log.DebugFormat("Activating '{0}' workbook. Activating PyxelRest...", Wb.Name);
                 ActivatePyxelRest();
             }
         }
@@ -69,15 +96,15 @@ namespace AutoLoadPyxelRestAddIn
             {
                 if(ContainsXlWingsModule())
                 {
-                    Log.InfoFormat("Opening '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
+                    Log.DebugFormat("Opening '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
                 }
                 else if(Application.ActiveWorkbook == null)
                 {
-                    Log.InfoFormat("Opening Inactive '{0}' workbook. Waiting for workbook activation...", Wb.Name);
+                    Log.DebugFormat("Opening Inactive '{0}' workbook. Waiting for workbook activation...", Wb.Name);
                 }
                 else
                 {
-                    Log.InfoFormat("Opening '{0}' workbook. Activating PyxelRest...", Wb.Name);
+                    Log.DebugFormat("Opening '{0}' workbook. Activating PyxelRest...", Wb.Name);
                     ActivatePyxelRest();
                 }
             }
@@ -91,11 +118,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             if (Application.ActiveWorkbook == null)
             {
-                Log.Info("Excel started with an already existing document. Expecting workbook opening event to activate PyxelRest.");
+                Log.Debug("Excel started with an already existing document. Expecting workbook opening event to activate PyxelRest.");
             }
             else
             {
-                Log.Info("Excel started with a blank document. Activating PyxelRest...");
+                Log.Debug("Excel started with a blank document. Activating PyxelRest...");
                 ActivatePyxelRest();
             }
         }
@@ -112,7 +139,7 @@ namespace AutoLoadPyxelRestAddIn
                 string pathToBasFile = GetPathToXlWingsBasFile();
                 if (pathToBasFile == null)
                 {
-                    Log.WarnFormat("No XLWings module can be found to load.");
+                    Log.Warn("No XLWings module can be found to load.");
                     return false;
                 }
                 return ImportXlWingsBasFile(pathToBasFile);
@@ -125,7 +152,7 @@ namespace AutoLoadPyxelRestAddIn
             string pathToBasFile = GetPathToXlWingsBasFile();
             if (pathToBasFile == null)
             {
-                Log.WarnFormat("No XLWings module can be found to load.");
+                Log.Warn("No XLWings module can be found to load.");
                 return;
             }
 
@@ -145,6 +172,8 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
+                if (!TrustAccessToTheVBAObjectModel())
+                    return false;
                 VBProject vbProject = GetPyxelRestVBProject();
                 if (vbProject == null)
                 {
@@ -152,7 +181,7 @@ namespace AutoLoadPyxelRestAddIn
                     return false;
                 }
                 vbProject.VBComponents.Import(pathToBasFile);
-                Log.Info("XLWings module imported.");
+                Log.Debug("XLWings module imported.");
                 return true;
             }
             catch (Exception ex)
@@ -188,7 +217,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
-            Log.Info("Stop Auto Load PyxelRest Addin...");
+            Log.Debug("Stop Auto Load PyxelRest Addin...");
         }
         
         #region VSTO generated code
