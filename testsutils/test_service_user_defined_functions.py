@@ -54,7 +54,7 @@ def valid_swagger_test_post_test_form_parameter(form_string):
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_form_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_form_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_form_parameter.")
         return describe_error(response, error)
@@ -99,7 +99,7 @@ def valid_swagger_test_get_test_header_parameter(header_string):
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_header_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_header_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_header_parameter.")
         return describe_error(response, error)
@@ -388,7 +388,7 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
@@ -677,7 +677,7 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
@@ -966,7 +966,7 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
@@ -1255,7 +1255,7 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
@@ -1622,7 +1622,7 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
@@ -1989,7 +1989,7 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
@@ -2356,7 +2356,7 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
@@ -2723,7 +2723,7 @@ def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer,
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
@@ -2887,7 +2887,7 @@ def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_int
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
@@ -3051,7 +3051,7 @@ def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_in
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
@@ -3215,7 +3215,7 @@ def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_int
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
@@ -3379,7 +3379,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
@@ -3413,7 +3413,7 @@ def valid_swagger_test_get_test_json_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_json_without_parameter.")
         return [describe_error(response, error)]
@@ -3447,7 +3447,7 @@ def valid_swagger_test_post_test_json_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_json_without_parameter.")
         return [describe_error(response, error)]
@@ -3481,7 +3481,7 @@ def valid_swagger_test_put_test_json_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_json_without_parameter.")
         return [describe_error(response, error)]
@@ -3515,7 +3515,7 @@ def valid_swagger_test_delete_test_json_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_without_parameter.")
         return [describe_error(response, error)]
@@ -3803,7 +3803,7 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -4091,7 +4091,7 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -4379,7 +4379,7 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -4667,7 +4667,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -5033,7 +5033,7 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
@@ -5399,7 +5399,7 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
@@ -5765,7 +5765,7 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
@@ -6131,7 +6131,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_in
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
@@ -6294,7 +6294,7 @@ def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, pa
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
@@ -6457,7 +6457,7 @@ def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, p
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
@@ -6620,7 +6620,7 @@ def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, pa
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
@@ -6783,7 +6783,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
@@ -6816,7 +6816,7 @@ def valid_swagger_test_get_test_plain_text_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_plain_text_without_parameter.")
         return describe_error(response, error)
@@ -6849,7 +6849,7 @@ def valid_swagger_test_post_test_plain_text_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_plain_text_without_parameter.")
         return describe_error(response, error)
@@ -6882,7 +6882,7 @@ def valid_swagger_test_put_test_plain_text_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_plain_text_without_parameter.")
         return describe_error(response, error)
@@ -6915,7 +6915,7 @@ def valid_swagger_test_delete_test_plain_text_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_plain_text_without_parameter.")
         return describe_error(response, error)
@@ -6960,7 +6960,7 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_string_array_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_string_array_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_string_array_parameter.")
         return describe_error(response, error)
@@ -7013,7 +7013,7 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_vba_restricted_keywords.")
         return describe_error(response, error)
@@ -7066,7 +7066,7 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_vba_restricted_keywords.")
         return describe_error(response, error)
@@ -7119,7 +7119,7 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_vba_restricted_keywords.")
         return describe_error(response, error)
@@ -7172,7 +7172,7 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_vba_restricted_keywords response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_vba_restricted_keywords.")
         return describe_error(response, error)
@@ -7460,7 +7460,7 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -7748,7 +7748,7 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -8036,7 +8036,7 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -8324,7 +8324,7 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_optional_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
@@ -8690,7 +8690,7 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_with_all_parameters_types.")
         return describe_error(response, error)
@@ -9056,7 +9056,7 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_with_all_parameters_types.")
         return describe_error(response, error)
@@ -9422,7 +9422,7 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_with_all_parameters_types.")
         return describe_error(response, error)
@@ -9788,7 +9788,7 @@ def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, quer
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_parameters_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_with_all_parameters_types.")
         return describe_error(response, error)
@@ -9951,7 +9951,7 @@ def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer3
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_with_all_paths_types.")
         return describe_error(response, error)
@@ -10114,7 +10114,7 @@ def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_with_all_paths_types.")
         return describe_error(response, error)
@@ -10277,7 +10277,7 @@ def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer3
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_with_all_paths_types.")
         return describe_error(response, error)
@@ -10440,7 +10440,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_paths_types response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_with_all_paths_types.")
         return describe_error(response, error)
@@ -10473,7 +10473,7 @@ def valid_swagger_test_get_test_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_get_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_get_test_without_parameter.")
         return describe_error(response, error)
@@ -10506,7 +10506,7 @@ def valid_swagger_test_post_test_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_post_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_post_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_post_test_without_parameter.")
         return describe_error(response, error)
@@ -10539,7 +10539,7 @@ def valid_swagger_test_put_test_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_put_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_put_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_put_test_without_parameter.")
         return describe_error(response, error)
@@ -10572,7 +10572,7 @@ def valid_swagger_test_delete_test_without_parameter():
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling valid_swagger_test_delete_test_without_parameter response.")
+            logging.exception("Error occurred while handling valid_swagger_test_delete_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_without_parameter.")
         return describe_error(response, error)

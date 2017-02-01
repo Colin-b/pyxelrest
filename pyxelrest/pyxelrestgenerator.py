@@ -202,9 +202,10 @@ def support_pandas():
 
 
 def extract_url(text):
-    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
-    if urls:
-        return urls[0]
+    if text:
+        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+        if urls:
+            return urls[0]
 
 
 def generate_user_defined_functions():
