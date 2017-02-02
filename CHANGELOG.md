@@ -1,6 +1,6 @@
 # PyxelRest Changelog #
 
-## 0.48 (next) ##
+## 0.48 (Upcoming) ##
 
 ### Enhancements ###
 
@@ -15,7 +15,7 @@
 
 - Help on function is always linking to the same URL
 
-## 0.47 (actual) ##
+## 0.47 (2017-01-31) ##
 
 ### Known issues ###
 
