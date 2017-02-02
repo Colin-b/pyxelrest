@@ -11,5 +11,12 @@
 
 - XlWings module was loaded twice on Excel Startup in case it was already loaded.
 
+### Known issues ###
+
+- Help on function is always linking to the same URL
+
 ## 0.47 (actual) ##
 
+### Known issues ###
+
+- Excel needs to be restarted for UDFs not to be displayed anymore in function wizard. (Even if calling them does not work)
