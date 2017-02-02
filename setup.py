@@ -100,11 +100,10 @@ setup(name='pyxelrest',
           'nose'
       ],
       install_requires=[
-          'jinja2>=2.8',
-          'requests>=2.12.2',
-          'msgpack-python',
+          'jinja2==2.9.5',
+          'requests==2.13.0',
           'xlwings==0.10.3',
-          'pyaml'
+          'pyaml==16.12.2'
       ],
       scripts=[
           'pyxelrest_post_install.py'
