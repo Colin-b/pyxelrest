@@ -12,9 +12,9 @@ Once installed, open Microsoft Excel and UDFs from configured services will be a
 ![Filling in UDF parameters](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG)
 
 User Installation
-------------
+-----------------
 
-1. Within Excel, ``Trust access to the VBA project object model`` should be enabled.
+1. Within Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Excel must be closed while executing the following commands:
 
@@ -31,23 +31,23 @@ Upgrade
 Uninstall
 ---------
 
-1. Go to ``Control Panel/Programs and Features`` and uninstall AutoLoadPyxelRestAddIn.
+1. Go to `Control Panel/Programs and Features` and uninstall AutoLoadPyxelRestAddIn.
 2. Execute the following command:
 
         pip uninstall pyxelrest
-3. Remove ``%APPDATA%\pyxelrest`` folder.
-4. Remove ``%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam`` file.
+3. Remove `%APPDATA%\pyxelrest` folder.
+4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
 
 Services Configuration
 ----------------------
 
-Services configuration can be done within Excel thanks to the ``Configure Services`` button within ``PyxelRest`` tab.
+Services configuration can be done within Excel thanks to the `Configure Services` button within `PyxelRest` tab.
 
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 
 ![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG)
 
-Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
+Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\services_configuration.ini` file.
 
 Each section name will be used as the UDFs category.
 
@@ -90,14 +90,14 @@ The following options are available for each section:
 Logging Configuration
 ---------------------
 
-Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_configuration.ini`` file.
+Logging configuration can be updated thanks to `%APPDATA%\pyxelrest\logging_configuration.ini` file.
 
-Default log files can be found in your ``%APPDATA%\pyxelrest`` folder.
+Default log files can be found in your `%APPDATA%\pyxelrest` folder.
 
 Developer Installation/Upgrade
-----------------------
+------------------------------
 
-1. Within Excel, ``Trust access to the VBA project object model`` should be enabled.
+1. Within Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the addin C# solution:
 In order to do so, you need to add a test certificate.
@@ -105,3 +105,9 @@ In order to do so, you need to add a test certificate.
 3. Excel must be closed while executing the following script from within pyxelrest root folder:
 
         developer_install.bat
+
+Optional Dependencies
+---------------------
+
+- Support for `application/msgpackpandas`
+    - Pandas encoded msgpack will be used if `pandas` and `msgpack-python` modules are available.

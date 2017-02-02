@@ -93,3 +93,9 @@ In order to do so, you need to add a test certificate.
 > Project > AutoLoadPyxelRestAddIn > Signing
 3. Excel must be closed while executing the following script from within pyxelrest root folder:
         >>> developer_install.bat
+
+Optional Dependencies
+---------------------
+
+- Support for ``application/msgpackpandas``
+    - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
