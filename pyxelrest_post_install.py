@@ -10,8 +10,8 @@ def to_absolute_path(file_path):
 
 
 class VSTOManager:
-    def __init__(self):
-        self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', '10.0', 'VSTOInstaller.exe')
+    def __init__(self, version):
+        self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', version, 'VSTOInstaller.exe')
         if not os.path.isfile(self.vsto_installer_path):
             raise Exception('Auto Load PixelRest Excel Add-In cannot be installed as VSTO installer cannnot be found.')
 
@@ -81,7 +81,7 @@ class XlWingsConfig:
 
 
 class PostInstall:
-    def __init__(self, add_in_folder, vba_add_in_folder, installation_files_folder=None, modules_folder=None):
+    def __init__(self, add_in_folder, vba_add_in_folder, installation_files_folder=None, modules_folder=None, vsto_version='10.0'):
         if not sys.platform.startswith('win'):
             raise Exception('PyxelRest can only be installed on Microsoft Windows.')
         if not add_in_folder:
@@ -95,6 +95,7 @@ class PostInstall:
         self.modules_folder = modules_folder or os.path.abspath(os.path.dirname(__file__))
         self.pyxelrest_module_dir = os.path.join(self.modules_folder, 'pyxelrest')
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
+        self.vsto_version = vsto_version
 
     def perform_post_installation_tasks(self):
         self._create_pyxelrest_appdata_folder()
@@ -107,7 +108,7 @@ class PostInstall:
         xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_folder)
         xlwings_config.create_pyxelrest_bas_file()
 
-        vsto = VSTOManager()
+        vsto = VSTOManager(self.vsto_version)
         vsto.uninstall_auto_load_addin(self.add_in_folder)
         vsto.install_auto_load_addin(self.add_in_folder)
 
