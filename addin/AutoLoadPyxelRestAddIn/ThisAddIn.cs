@@ -180,8 +180,15 @@ namespace AutoLoadPyxelRestAddIn
                     Log.Error("PyxelRest VB Project cannot be found.");
                     return false;
                 }
-                vbProject.VBComponents.Import(pathToBasFile);
-                Log.Debug("XLWings module imported.");
+                if(RemoveXlWingsModule(vbProject))
+                {
+                    vbProject.VBComponents.Import(pathToBasFile);
+                    Log.Debug("XLWings module imported.");
+                }
+                else
+                {
+                    Log.Warn("XLWings module was not reloaded.");
+                }
                 return true;
             }
             catch (Exception ex)
@@ -204,15 +211,37 @@ namespace AutoLoadPyxelRestAddIn
         private VBComponent GetXlWingsModule()
         {
             VBProject vbProject = GetPyxelRestVBProject();
-            if (vbProject != null)
+            if (vbProject == null)
+                return null;
+            return GetXlWingsModule(vbProject);
+        }
+
+        private VBComponent GetXlWingsModule(VBProject pyxelRest)
+        {
+            foreach (VBComponent vbComponent in pyxelRest.VBComponents)
             {
-                foreach (VBComponent vbComponent in vbProject.VBComponents)
-                {
-                    if (XLWINGS_VB_COMPONENT_NAME.Equals(vbComponent.Name))
-                        return vbComponent;
-                }
+                if (XLWINGS_VB_COMPONENT_NAME.Equals(vbComponent.Name))
+                    return vbComponent;
             }
             return null;
+        }
+
+        private bool RemoveXlWingsModule(VBProject vbProject)
+        {
+            VBComponent xlWingsModule = GetXlWingsModule(vbProject);
+            if (xlWingsModule == null)
+                return true;
+            try
+            {
+                vbProject.VBComponents.Remove(xlWingsModule);
+                Log.Debug("XlWings module removed.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("XlWings module could not be removed.", ex);
+                return false;
+            };
+            return true;
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
