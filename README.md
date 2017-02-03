@@ -1,9 +1,12 @@
-Access REST APIs from Excel using User Defined Functions (UDF)
-==============================================================
+# Access REST APIs from Excel using User Defined Functions (UDF) #
+
 PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Excel User Defined Functions.
 
-How to use
-----------
+1. [Usage](#Usage)
+2. [Installation](#Installation)
+3. [Configuration](#Configuration)
+
+## Usage ##
 
 Once installed, open Microsoft Excel and UDFs from configured services will be available.
 
@@ -11,8 +14,9 @@ Once installed, open Microsoft Excel and UDFs from configured services will be a
 
 ![Filling in UDF parameters](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG)
 
-User Installation
------------------
+## Installation ##
+
+### User installation ###
 
 1. Within Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
@@ -21,15 +25,13 @@ User Installation
         pip install pypiwin32
         pip install pyxelrest
 
-Upgrade
--------
+### User upgrade ###
 
 1. Excel must be closed while executing the following command:
 
         pip install pyxelrest --upgrade
 
-Uninstall
----------
+### User uninstall ###
 
 1. Go to `Control Panel/Programs and Features` and uninstall AutoLoadPyxelRestAddIn.
 2. Execute the following command:
@@ -38,8 +40,25 @@ Uninstall
 3. Remove `%APPDATA%\pyxelrest` folder.
 4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
 
-Services Configuration
-----------------------
+### Developer Installation/Upgrade ###
+
+1. Within Excel, `Trust access to the VBA project object model` should be enabled.
+> File > Options > Trust Center > Trust Center Settings > Macro Settings
+2. Build the addin C# solution:
+In order to do so, you need to add a test certificate.
+> Project > AutoLoadPyxelRestAddIn > Signing
+3. Excel must be closed while executing the following script from within pyxelrest root folder:
+
+        developer_install.bat
+
+### Optional Dependencies ###
+
+- Support for `application/msgpackpandas`
+    - Pandas encoded msgpack will be used if `pandas` and `msgpack-python` modules are available.
+
+## Configuration ##
+
+### Services Configuration ###
 
 Services configuration can be done within Excel thanks to the `Configure Services` button within `PyxelRest` tab.
 
@@ -87,27 +106,8 @@ The following options are available for each section:
     </tr>
 </table>
 
-Logging Configuration
----------------------
+### Logging Configuration ###
 
 Logging configuration can be updated thanks to `%APPDATA%\pyxelrest\logging_configuration.ini` file.
 
 Default log files can be found in your `%APPDATA%\pyxelrest` folder.
-
-Developer Installation/Upgrade
-------------------------------
-
-1. Within Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Build the addin C# solution:
-In order to do so, you need to add a test certificate.
-> Project > AutoLoadPyxelRestAddIn > Signing
-3. Excel must be closed while executing the following script from within pyxelrest root folder:
-
-        developer_install.bat
-
-Optional Dependencies
----------------------
-
-- Support for `application/msgpackpandas`
-    - Pandas encoded msgpack will be used if `pandas` and `msgpack-python` modules are available.
