@@ -10,6 +10,7 @@ import datetime
 import logging
 from collections import OrderedDict
 import pandas
+from data_flattenizer import Flattenizer
 
 
 
@@ -17,6 +18,204 @@ import pandas
 
 
 
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_dict_with_empty_nested_list():
+    logging.info("Calling valid_swagger_test_get_test_dict_with_empty_nested_list...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/dict/with/empty/nested/list'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_empty_nested_list.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_dict_with_empty_nested_list.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_dict_with_empty_nested_list response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_dict_with_empty_nested_list.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_dict_with_four_imbricated_levels():
+    logging.info("Calling valid_swagger_test_get_test_dict_with_four_imbricated_levels...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/dict/with/four/imbricated/levels'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_four_imbricated_levels.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_dict_with_four_imbricated_levels.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_dict_with_four_imbricated_levels response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_dict_with_four_imbricated_levels.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys():
+    logging.info("Calling valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/dict/with/multiple/imbricated/levels/and/duplicate/keys'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_dict_with_three_imbricated_levels():
+    logging.info("Calling valid_swagger_test_get_test_dict_with_three_imbricated_levels...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/dict/with/three/imbricated/levels'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_three_imbricated_levels.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_dict_with_three_imbricated_levels.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_dict_with_three_imbricated_levels response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_dict_with_three_imbricated_levels.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_empty_dict():
+    logging.info("Calling valid_swagger_test_get_test_empty_dict...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/empty/dict'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_empty_dict.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_empty_dict.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_empty_dict response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_empty_dict.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_empty_list():
+    logging.info("Calling valid_swagger_test_get_test_empty_list...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/empty/list'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_empty_list.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_empty_list.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_empty_list response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_empty_list.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
 
 @xw.func(category='valid_swagger_test', call_in_wizard=False)
 @xw.arg('form_string', doc='form parameter')
@@ -42,7 +241,7 @@ def valid_swagger_test_post_test_form_parameter(form_string):
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_form_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -87,7 +286,7 @@ def valid_swagger_test_get_test_header_parameter(header_string):
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_header_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -376,7 +575,7 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -665,7 +864,7 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -954,7 +1153,7 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -1243,7 +1442,7 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -1610,7 +1809,7 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -1977,7 +2176,7 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -2344,7 +2543,7 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -2711,7 +2910,7 @@ def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer,
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -2875,7 +3074,7 @@ def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_int
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3039,7 +3238,7 @@ def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_in
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3203,7 +3402,7 @@ def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_int
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3367,7 +3566,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3401,7 +3600,7 @@ def valid_swagger_test_get_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3435,7 +3634,7 @@ def valid_swagger_test_post_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3469,7 +3668,7 @@ def valid_swagger_test_put_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3503,7 +3702,7 @@ def valid_swagger_test_delete_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -3519,6 +3718,171 @@ def valid_swagger_test_delete_test_json_without_parameter():
         else:
             logging.exception("Error occurred while calling valid_swagger_test_delete_test_json_without_parameter.")
         return [describe_error(response, error)]
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_list_of_dict():
+    logging.info("Calling valid_swagger_test_get_test_list_of_dict...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/list/of/dict'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_list_of_dict.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_list_of_dict.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_list_of_dict response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_list_of_dict.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_one_dict_entry_with_a_list():
+    logging.info("Calling valid_swagger_test_get_test_one_dict_entry_with_a_list...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/one/dict/entry/with/a/list'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_one_dict_entry_with_a_list.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_one_dict_entry_with_a_list response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_one_dict_entry_with_a_list.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict():
+    logging.info("Calling valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/one/dict/entry/with/a/list/of/dict'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_one_level_dict():
+    logging.info("Calling valid_swagger_test_get_test_one_level_dict...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/one/level/dict'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_one_level_dict.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_one_level_dict.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_one_level_dict response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_one_level_dict.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='valid_swagger_test', call_in_wizard=False)
+def valid_swagger_test_get_test_one_level_list():
+    logging.info("Calling valid_swagger_test_get_test_one_level_list...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8943/test/one/level/list'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for valid_swagger_test_get_test_one_level_list.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling valid_swagger_test_get_test_one_level_list.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling valid_swagger_test_get_test_one_level_list response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling valid_swagger_test_get_test_one_level_list.")
+        return describe_error(response, error)
 
     finally:
         if response:
@@ -3791,7 +4155,7 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -4079,7 +4443,7 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -4367,7 +4731,7 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -4655,7 +5019,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -5021,7 +5385,7 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -5387,7 +5751,7 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -5753,7 +6117,7 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6119,7 +6483,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_in
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6282,7 +6646,7 @@ def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, pa
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6445,7 +6809,7 @@ def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, p
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6608,7 +6972,7 @@ def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, pa
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6771,7 +7135,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6804,7 +7168,7 @@ def valid_swagger_test_get_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6837,7 +7201,7 @@ def valid_swagger_test_post_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6870,7 +7234,7 @@ def valid_swagger_test_put_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6903,7 +7267,7 @@ def valid_swagger_test_delete_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -6948,7 +7312,7 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_string_array_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -7001,7 +7365,7 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -7054,7 +7418,7 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -7107,7 +7471,7 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -7160,7 +7524,7 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_vba_restricted_keywords.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -7448,7 +7812,7 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -7736,7 +8100,7 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -8024,7 +8388,7 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -8312,7 +8676,7 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_optional_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -8678,7 +9042,7 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -9044,7 +9408,7 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -9410,7 +9774,7 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -9776,7 +10140,7 @@ def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, quer
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_parameters_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -9939,7 +10303,7 @@ def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer3
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10102,7 +10466,7 @@ def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10265,7 +10629,7 @@ def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer3
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10428,7 +10792,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_paths_types.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10461,7 +10825,7 @@ def valid_swagger_test_get_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10494,7 +10858,7 @@ def valid_swagger_test_post_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10527,7 +10891,7 @@ def valid_swagger_test_put_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10560,7 +10924,7 @@ def valid_swagger_test_delete_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_without_parameter.")
         if response.headers['content-type'] == 'application/json':
-            return to_list(response.json(object_pairs_hook=OrderedDict))
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             data = pandas.read_msgpack(response.content)
             return [data.columns.values.tolist()] + data.values.tolist()
@@ -10581,48 +10945,6 @@ def valid_swagger_test_delete_test_without_parameter():
         if response:
             response.close()
 
-def flattened_list_of_dicts(list_of_dicts):
-    """
-    Transform a list of dictionaries into a list of lists.
-    First list is the header (first dictionary keys)
-    Other lists are containing dictionary values.
-    """
-    flat_list = []
-    header_list = list(list_of_dicts[0].keys())
-    flat_list.append(header_list)
-    for dictionary in list_of_dicts:
-        flat_list.append(list(dictionary.values()))
-    return flat_list
-
-
-def to_list(data):
-    """
-    Transform this data into a list (if needed).
-    If data is a dictionary:
-        - If empty return a list with an empty string in it
-        - If there is a single key and value is a list, then do not handle the key and return the list.
-        - Otherwise return a list containing 2 lists, the keys and the values.
-    If data is a list:
-        - If this is a list of dictionaries, return a list of list containing keys (as first list) and values
-        - Otherwise return this list
-    Else:
-        - Return a new list containing this item
-    """
-    if isinstance(data, dict):
-        if len(data) == 0:
-            return ['']
-        if len(data) == 1:
-            value = next(iter(data.values()))
-            if isinstance(value, list):
-                return to_list(value)
-        return [list(data.keys()), list(data.values())]
-    if isinstance(data, list):
-        if len(data) == 0:
-            return ['']
-        if isinstance(data[0], dict):
-            return flattened_list_of_dicts(data)
-        return data
-    return [data]
 
 
 def describe_error(response, error):
