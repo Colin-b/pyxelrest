@@ -1,6 +1,16 @@
 # PyxelRest Changelog #
 
-## 0.49 (Upcoming) ##
+## 0.50 (upcoming) ##
+
+## 0.49 (2017-02-09) ##
+
+### Bug fixes ###
+
+- Structure with more than 1 nested level are now handled
+
+### Known issues ###
+
+- Structure with multiple dictionaries on a same level might not be handled properly
 
 ## 0.48 (2017-02-08) ##
 
