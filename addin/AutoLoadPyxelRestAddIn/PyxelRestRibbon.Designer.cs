@@ -34,26 +34,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tab1 = this.Factory.CreateRibbonTab();
-            this.group1 = this.Factory.CreateRibbonGroup();
+            this.pyxelrestTab = this.Factory.CreateRibbonTab();
+            this.udfGroup = this.Factory.CreateRibbonGroup();
             this.importButton = this.Factory.CreateRibbonButton();
             this.configureButton = this.Factory.CreateRibbonButton();
-            this.tab1.SuspendLayout();
-            this.group1.SuspendLayout();
+            this.developerGroup = this.Factory.CreateRibbonGroup();
+            this.openFolderButton = this.Factory.CreateRibbonButton();
+            this.pyxelrestTab.SuspendLayout();
+            this.udfGroup.SuspendLayout();
+            this.developerGroup.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tab1
+            // pyxelrestTab
             // 
-            this.tab1.Groups.Add(this.group1);
-            this.tab1.Label = "PyxelRest";
-            this.tab1.Name = "tab1";
+            this.pyxelrestTab.Groups.Add(this.udfGroup);
+            this.pyxelrestTab.Groups.Add(this.developerGroup);
+            this.pyxelrestTab.Label = "PyxelRest";
+            this.pyxelrestTab.Name = "pyxelrestTab";
             // 
-            // group1
+            // udfGroup
             // 
-            this.group1.Items.Add(this.importButton);
-            this.group1.Items.Add(this.configureButton);
-            this.group1.Label = "User Defined Functions";
-            this.group1.Name = "group1";
+            this.udfGroup.Items.Add(this.importButton);
+            this.udfGroup.Items.Add(this.configureButton);
+            this.udfGroup.Label = "User Defined Functions";
+            this.udfGroup.Name = "udfGroup";
             // 
             // importButton
             // 
@@ -75,26 +79,46 @@
             this.configureButton.Name = "configureButton";
             this.configureButton.ShowImage = true;
             // 
+            // developerGroup
+            // 
+            this.developerGroup.Items.Add(this.openFolderButton);
+            this.developerGroup.Label = "Version X.Y";
+            this.developerGroup.Name = "developerGroup";
+            // 
+            // openFolderButton
+            // 
+            this.openFolderButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.openFolderButton.Description = "Open PyxelRest user folder";
+            this.openFolderButton.Image = global::AutoLoadPyxelRestAddIn.Properties.Resources.folder_3_128;
+            this.openFolderButton.ImageName = "Open User Folder";
+            this.openFolderButton.Label = "Open User Folder";
+            this.openFolderButton.Name = "openFolderButton";
+            this.openFolderButton.ShowImage = true;
+            // 
             // PyxelRestRibbon
             // 
             this.Name = "PyxelRestRibbon";
             this.RibbonType = "Microsoft.Excel.Workbook";
-            this.Tabs.Add(this.tab1);
+            this.Tabs.Add(this.pyxelrestTab);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.PyxelRestRibbon_Load);
-            this.tab1.ResumeLayout(false);
-            this.tab1.PerformLayout();
-            this.group1.ResumeLayout(false);
-            this.group1.PerformLayout();
+            this.pyxelrestTab.ResumeLayout(false);
+            this.pyxelrestTab.PerformLayout();
+            this.udfGroup.ResumeLayout(false);
+            this.udfGroup.PerformLayout();
+            this.developerGroup.ResumeLayout(false);
+            this.developerGroup.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonTab pyxelrestTab;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup udfGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton importButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton configureButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup developerGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton openFolderButton;
     }
 
     partial class ThisRibbonCollection

@@ -63,6 +63,16 @@ namespace AutoLoadPyxelRestAddIn.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap folder_3_128 {
+            get {
+                object obj = ResourceManager.GetObject("folder_3_128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap refresh_128 {
             get {
                 object obj = ResourceManager.GetObject("refresh_128", resourceCulture);
