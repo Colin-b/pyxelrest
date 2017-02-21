@@ -202,6 +202,11 @@ def support_pandas():
 
 
 def extract_url(text):
+    """
+    Swagger URLs are interpreted thanks to the following format:
+    [description of the url](url)
+    :return: URL or None if no URL can be found.
+    """
     if text:
         urls = re.findall('^.*\[.*\]\((.*)\).*$', text)
         if urls:
