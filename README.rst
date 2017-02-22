@@ -28,8 +28,7 @@ User Installation
 
 #. Within Excel, ``Trust access to the VBA project object model`` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-#. Excel must be closed while executing the following commands:
-        >>> pip install pypiwin32
+#. Excel must be closed while executing the following command:
         >>> pip install pyxelrest
 
 User Upgrade

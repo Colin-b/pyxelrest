@@ -24,9 +24,8 @@ Updating UDFs without restarting Excel or updating configuration can be done tha
 
 1. Within Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Excel must be closed while executing the following commands:
+2. Excel must be closed while executing the following command:
 
-        pip install pypiwin32
         pip install pyxelrest
 
 ### User upgrade ###
