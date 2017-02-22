@@ -2,6 +2,11 @@
 
 ## 0.50 (upcoming) ##
 
+### Release Notes ###
+
+This version breaks compatibility with previous ones.
+To ensure that you update properly please follow uninstall procedure first.
+
 ### Enhancements ###
 
 - PyxelRest version is now displayed in Excel
@@ -9,7 +14,8 @@
 
 ### Bug fixes ###
 
-- Python for Windows extension was not listed in dependencies
+- Python for Windows extension was not listed in dependencies, thus not installed automatically
+- In case addin version changed, the previous version was not automatically uninstalled
 
 ## 0.49 (2017-02-09) ##
 

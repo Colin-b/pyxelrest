@@ -3,6 +3,7 @@ import os
 import shutil
 import subprocess
 import sys
+import distutils.dir_util as dir_util
 
 
 def to_absolute_path(file_path):
@@ -95,6 +96,7 @@ class PostInstall:
         self.modules_folder = modules_folder or os.path.abspath(os.path.dirname(__file__))
         self.pyxelrest_module_dir = os.path.join(self.modules_folder, 'pyxelrest')
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
+        self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
         self.vsto_version = vsto_version
 
     def perform_post_installation_tasks(self):
@@ -108,9 +110,7 @@ class PostInstall:
         xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_folder)
         xlwings_config.create_pyxelrest_bas_file()
 
-        vsto = VSTOManager(self.vsto_version)
-        vsto.uninstall_auto_load_addin(self.add_in_folder)
-        vsto.install_auto_load_addin(self.add_in_folder)
+        self._install_auto_load_addin()
 
     @staticmethod
     def _is_excel_running():
@@ -165,6 +165,21 @@ class PostInstall:
         loaded_pyxelrest_vb_file = os.path.join(xlstart_folder, 'pyxelrest.xlam')
         if not os.path.exists(loaded_pyxelrest_vb_file):
             shutil.copyfile(pyxelrest_vb_file_path, loaded_pyxelrest_vb_file)
+
+    def _install_auto_load_addin(self):
+        """
+        Install Excel addin in a different folder than the python copied one as it must be uninstalled prior to
+        installation and python copy is performed before running post installation script.
+        """
+        vsto = VSTOManager(self.vsto_version)
+        if os.path.exists(self.pyxelrest_appdata_addin_folder):
+            vsto.uninstall_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+            dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
+
+        os.makedirs(self.pyxelrest_appdata_addin_folder)
+        dir_util.copy_tree(self.add_in_folder, self.pyxelrest_appdata_addin_folder)
+        vsto.install_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
