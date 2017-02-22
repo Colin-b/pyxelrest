@@ -1,6 +1,5 @@
 ﻿using Microsoft.Office.Tools.Ribbon;
 using System.Diagnostics;
-using System.Reflection;
 using System.Windows.Forms;
 using System;
 
@@ -14,9 +13,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            developerGroup.Label = string.Format("Version {0}.{1}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart); 
+            developerGroup.Label = string.Format("Version {0}", Globals.ThisAddIn.GetVersion()); 
             importButton.Click += ImportUserDefinedFunctions;
             configureButton.Click += ConfigureServices;
             openFolderButton.Click += OpenPyxelRestFolder;

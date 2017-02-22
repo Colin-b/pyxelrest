@@ -4,6 +4,8 @@ using Microsoft.Vbe.Interop;
 using log4net;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -20,7 +22,7 @@ namespace AutoLoadPyxelRestAddIn
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
-            Log.Debug("Starting Auto Load PyxelRest Addin...");
+            Log.DebugFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
             Application.WorkbookOpen += OnOpenWorkBook;
             Application.WorkbookActivate += OnActivateWorkBook;
             try
@@ -31,6 +33,13 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Error("An error occurred while activating PyxelRest on Excel start.", ex);
             }
+        }
+
+        internal string GetVersion()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return string.Format("{0}.{1}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart);
         }
 
         internal bool ImportUserDefinedFunctions()
