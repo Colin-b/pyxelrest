@@ -7,6 +7,10 @@
 - PyxelRest version is now displayed in Excel
 - PyxelRest folder can now be opened from within Excel (to ease investigation)
 
+### Bug fixes ###
+
+- Python for Windows extension was not listed in dependencies
+
 ## 0.49 (2017-02-09) ##
 
 ### Bug fixes ###
