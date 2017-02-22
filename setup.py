@@ -29,7 +29,7 @@ setup(name='pyxelrest',
       maintainer='Engie',
       # TODO Provide a support mailbox for our products
       maintainer_email='colin.bounouar@external.engie.com',
-      url="http://rms.gdfsuez.net:8310/stash/projects/RMS/repos/pyxelrest",
+      url="http://guru.trading.gdfsuez.net/bitbucket/projects/RMS/repos/pyxelrest",
       description="Access REST APIs from Excel using User Defined Functions (UDF)",
       long_description=long_description,
       # TODO Package to artifactory and assert that bamboo will keep it up to date
@@ -89,6 +89,7 @@ setup(name='pyxelrest',
           ),
           (
               'pyxelrest_addin/resources', [
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/folder-3-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/refresh-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-16.ico',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-128.png'
@@ -96,13 +97,19 @@ setup(name='pyxelrest',
           )
       ],
       tests_require=[
+          # Used to run a test service
           'flask',
+          # Used to run tests
           'nose'
       ],
       install_requires=[
+          # Used to generate UDFs python file from a template
           'jinja2==2.9.5',
+          # Used to communicate with services
           'requests==2.13.0',
+          # Used to communicate with Microsoft Excel
           'xlwings==0.10.3',
+          # Used to parse logging configuration file
           'pyaml==16.12.2'
       ],
       scripts=[
