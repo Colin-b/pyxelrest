@@ -14,6 +14,10 @@ Once installed, open Microsoft Excel and UDFs from configured services will be a
 
 ![Filling in UDF parameters](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG)
 
+UDFs are automatically updated on Excel start and on Configuration update.
+
+Updating UDFs without restarting Excel or updating configuration can be done thanks to the ``Update Functions`` button within ``PyxelRest`` tab.
+
 ## Installation ##
 
 ### User installation ###
