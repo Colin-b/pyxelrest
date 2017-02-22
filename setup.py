@@ -111,8 +111,8 @@ setup(name='pyxelrest',
           'jinja2==2.9.5',
           # Used to communicate with services
           'requests==2.13.0',
-          # Used to check that Excel is not running and required by xlwings
-          'pypiwin32==220',
+          # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
+          'pypiwin32>=219',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.3',
           # Used to parse logging configuration file
