@@ -452,22 +452,30 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     {%- for method_path, methods in service.swagger['paths'].items() %}
         {%- if 'get' in service.methods -%}
             {%- if 'get' in methods -%}
-                {{- add_udf(service, method_path, methods['get'], get) -}}
+                {%- if 'tags' not in methods['get'] or service.should_provide_tags(methods['get']['tags']) -%}
+                    {{- add_udf(service, method_path, methods['get'], get) -}}
+                {%- endif -%}
             {%- endif -%}
         {%- endif -%}
         {%- if 'post' in service.methods -%}
             {%- if 'post' in methods -%}
-                {{- add_udf(service, method_path, methods['post'], post) -}}
+                {%- if 'tags' not in methods['post'] or service.should_provide_tags(methods['post']['tags']) -%}
+                    {{- add_udf(service, method_path, methods['post'], post) -}}
+                {%- endif -%}
             {%- endif -%}
         {%- endif -%}
         {%- if 'put' in service.methods -%}
             {%- if 'put' in methods -%}
-                {{- add_udf(service, method_path, methods['put'], put) -}}
+                {%- if 'tags' not in methods['put'] or service.should_provide_tags(methods['put']['tags']) -%}
+                    {{- add_udf(service, method_path, methods['put'], put) -}}
+                {%- endif -%}
             {%- endif -%}
         {%- endif -%}
         {%- if 'delete' in service.methods -%}
             {%- if 'delete' in methods -%}
-                {{- add_udf(service, method_path, methods['delete'], delete) -}}
+                {%- if 'tags' not in methods['delete'] or service.should_provide_tags(methods['delete']['tags']) -%}
+                    {{- add_udf(service, method_path, methods['delete'], delete) -}}
+                {%- endif -%}
             {%- endif -%}
         {%- endif -%}
     {%- endfor %}

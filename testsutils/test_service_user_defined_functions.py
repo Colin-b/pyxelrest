@@ -10945,6 +10945,105 @@ def valid_swagger_test_delete_test_without_parameter():
         if response:
             response.close()
 
+@xw.func(category='filtered_tags_test', call_in_wizard=False)
+def filtered_tags_test_get_test_with_tags():
+    logging.info("Calling filtered_tags_test_get_test_with_tags...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8944/test/with/tags'.format(
+), stream=True, headers=request_header, proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for filtered_tags_test_get_test_with_tags.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling filtered_tags_test_get_test_with_tags.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling filtered_tags_test_get_test_with_tags response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling filtered_tags_test_get_test_with_tags.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='filtered_tags_test', call_in_wizard=False)
+def filtered_tags_test_post_test_with_tags():
+    logging.info("Calling filtered_tags_test_post_test_with_tags...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.post('http://localhost:8944/test/with/tags'.format(
+), proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for filtered_tags_test_post_test_with_tags.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling filtered_tags_test_post_test_with_tags.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling filtered_tags_test_post_test_with_tags response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling filtered_tags_test_post_test_with_tags.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='filtered_tags_test', call_in_wizard=False)
+def filtered_tags_test_put_test_with_tags():
+    logging.info("Calling filtered_tags_test_put_test_with_tags...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.put('http://localhost:8944/test/with/tags'.format(
+), proxies={})
+
+        response.raise_for_status()
+        logging.info("Valid response received for filtered_tags_test_put_test_with_tags.")
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            data = pandas.read_msgpack(response.content)
+            return [data.columns.values.tolist()] + data.values.tolist()
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling filtered_tags_test_put_test_with_tags.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling filtered_tags_test_put_test_with_tags response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling filtered_tags_test_put_test_with_tags.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
 
 
 def describe_error(response, error):

@@ -16,7 +16,7 @@ except ImportError:
 
 
 class PyxelRestTest(unittest.TestCase):
-    service_process = None
+    service_processes = []
     services_config_file_path = os.path.join(os.getenv('APPDATA'),
                                              'pyxelrest',
                                              'services_configuration.ini')
@@ -37,14 +37,19 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def start_services(cls):
-        from testsutils.test_service import start_server
-        cls.service_process = multiprocessing.Process(target=start_server, args=(8943,))
-        cls.service_process.start()
+        import testsutils.test_service as test_service
+        cls.service_processes.append(multiprocessing.Process(target=test_service.start_server, args=(8943,)))
+        import testsutils.filtered_tags_test_service as filtered_tags_test_service
+        cls.service_processes.append(multiprocessing.Process(target=filtered_tags_test_service.start_server, args=(8944,)))
+        for service_process in cls.service_processes:
+            service_process.start()
 
     @classmethod
     def stop_services(cls):
-        cls.service_process.terminate()
-        cls.service_process.join(timeout=0.5)
+        for service_process in cls.service_processes:
+            service_process.terminate()
+            service_process.join(timeout=0.5)
+        cls.service_processes.clear()
 
     @classmethod
     def _add_test_config(cls):
@@ -3158,3 +3163,22 @@ class PyxelRestTest(unittest.TestCase):
             ['value 21', 'value 22']
         ],
             pyxelrestgenerator.valid_swagger_test_get_test_list_of_dict())
+
+    def test_get_test_with_tags(self):
+        import pyxelrestgenerator
+        self.assertEqual('Second tag is one of the accepted tags',
+                         pyxelrestgenerator.filtered_tags_test_get_test_with_tags())
+
+    def test_post_test_with_tags(self):
+        import pyxelrestgenerator
+        self.assertEqual('All tags are accepted',
+                         pyxelrestgenerator.filtered_tags_test_post_test_with_tags())
+
+    def test_put_test_with_tags(self):
+        import pyxelrestgenerator
+        self.assertEqual('First tag is one of the accepted tags',
+                         pyxelrestgenerator.filtered_tags_test_put_test_with_tags())
+
+    def test_delete_test_with_tags(self):
+        import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_test_delete_test_with_tags'))

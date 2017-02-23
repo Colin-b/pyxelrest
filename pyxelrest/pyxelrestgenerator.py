@@ -59,6 +59,7 @@ class SwaggerService:
         self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
         if not self.methods:
             raise NoMethodsProvided()
+        self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
         swagger_url = self.get_item(config, 'swagger_url')
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
@@ -83,6 +84,14 @@ class SwaggerService:
         base_path = self.swagger.get('basePath', None)
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
+
+    def should_provide_tags(self, tags):
+        if not self.tags:
+            return True
+        for tag in tags:
+            if tag in self.tags:
+                return True
+        return False
 
     def get_item(self, config, key):
         try:
