@@ -107,6 +107,12 @@ The following options are available for each section:
         <td>Optional</td>
         <td>get, post, put, delete</td>
     </tr>
+    <tr>
+        <td>tags</td>
+        <td>Swagger tags that should be retrieved. If not specified, no filtering is applied.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 ### Logging Configuration ###

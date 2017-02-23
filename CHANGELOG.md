@@ -2,6 +2,10 @@
 
 ## 0.51 (upcoming) ##
 
+### Enhancements ###
+
+- Ability to filter by tags
+
 ## 0.50 (2017-02-22) ##
 
 ### Release Notes ###
