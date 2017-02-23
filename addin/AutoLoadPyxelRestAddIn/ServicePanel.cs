@@ -19,6 +19,7 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox put;
         private CheckBox delete;
         private CheckBox checkbox;
+        private TextBox tagsTextBox;
 
         private readonly ServiceConfigurationForm configurationForm;
         private long? swaggerUrlModificationTicks;
@@ -91,8 +92,17 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(serviceHostTextBox, 1, 2);
             #endregion
 
+            #region Tags
+            servicePanel.Controls.Add(new Label { Text = "Tags", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+            tagsTextBox = new TextBox() { Text = service.Tags };
+            tagsTextBox.Dock = DockStyle.Fill;
+            tagsTextBox.AutoSize = true;
+            tagsTextBox.TextChanged += TagsTextBox_TextChanged;
+            servicePanel.Controls.Add(tagsTextBox, 1, 3);
+            #endregion
+
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -108,7 +118,7 @@ namespace AutoLoadPyxelRestAddIn
             delete = new CheckBox() { Text = "delete", Checked = service.Delete };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 3);
+            servicePanel.Controls.Add(methodsPanel, 1, 4);
             #endregion
 
             #region Delete
@@ -123,6 +133,11 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             return servicePanel;
+        }
+
+        private void TagsTextBox_TextChanged(object sender, EventArgs e)
+        {
+            service.Tags = tagsTextBox.Text;
         }
 
         private void ServiceHostTextBox_TextChanged(object sender, EventArgs e)

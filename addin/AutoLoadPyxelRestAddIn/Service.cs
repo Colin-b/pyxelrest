@@ -13,6 +13,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string PROXY_URL_PROPERTY = "proxy_url";
         private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
+        private static readonly string TAGS_PROPERTY = "tags";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -27,6 +28,7 @@ namespace AutoLoadPyxelRestAddIn
         public bool Post;
         public bool Put;
         public bool Delete;
+        public string Tags;
 
         public Service(string name)
         {
@@ -52,6 +54,7 @@ namespace AutoLoadPyxelRestAddIn
             Post = Array.Exists(methods, s => POST.Equals(s));
             Put = Array.Exists(methods, s => PUT.Equals(s));
             Delete = Array.Exists(methods, s => DELETE.Equals(s));
+            Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
         }
 
         internal SectionData ToConfig()
@@ -60,25 +63,32 @@ namespace AutoLoadPyxelRestAddIn
             section.Keys = new KeyDataCollection();
 
             KeyData swaggerUrl = new KeyData(SWAGGER_URL_PROPERTY);
-            swaggerUrl.Value = this.SwaggerUrl;
+            swaggerUrl.Value = SwaggerUrl;
             section.Keys.SetKeyData(swaggerUrl);
 
             if(!string.IsNullOrEmpty(ProxyUrl)) {
                 KeyData proxyUrl = new KeyData(PROXY_URL_PROPERTY);
-                proxyUrl.Value = this.ProxyUrl;
+                proxyUrl.Value = ProxyUrl;
                 section.Keys.SetKeyData(proxyUrl);
             }
 
             if (!string.IsNullOrEmpty(ServiceHost))
             {
                 KeyData serviceHost = new KeyData(SERVICE_HOST_PROPERTY);
-                serviceHost.Value = this.ServiceHost;
+                serviceHost.Value = ServiceHost;
                 section.Keys.SetKeyData(serviceHost);
             }
 
             KeyData methods = new KeyData(METHODS_PROPERTY);
             methods.Value = GetMethods();
             section.Keys.SetKeyData(methods);
+
+            if (!string.IsNullOrEmpty(Tags))
+            {
+                KeyData tags = new KeyData(TAGS_PROPERTY);
+                tags.Value = Tags;
+                section.Keys.SetKeyData(tags);
+            }
 
             return section;
         }
@@ -92,6 +102,7 @@ namespace AutoLoadPyxelRestAddIn
             Post = true;
             Put = true;
             Delete = true;
+            Tags = "";
         }
 
         private string GetMethods()
