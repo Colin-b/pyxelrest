@@ -113,7 +113,7 @@ Logging Configuration
 
 Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_configuration.ini`` file.
 
-Default log files can be found in your ``%APPDATA%\pyxelrest`` folder.
+Default log files can be found in your ``%APPDATA%\pyxelrest\logs`` folder.
 
 This folder can easily be accessed thanks to the ``Open User Folder`` button within ``PyxelRest`` tab.
 

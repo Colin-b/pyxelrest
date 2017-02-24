@@ -34,7 +34,7 @@ if os.path.isfile(logging_configuration_file_path):
         log_config_dict=yaml.load(config_file)
         logging.config.dictConfig(log_config_dict)
 else:
-    default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pyxelrest.log')
+    default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest.log')
     logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                         handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
                         level=logging.INFO)

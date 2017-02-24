@@ -97,10 +97,12 @@ class PostInstall:
         self.pyxelrest_module_dir = os.path.join(self.modules_folder, 'pyxelrest')
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
+        self.pyxelrest_appdata_logs_folder = os.path.join(self.pyxelrest_appdata_folder, 'logs')
         self.vsto_version = vsto_version
 
     def perform_post_installation_tasks(self):
         self._create_pyxelrest_appdata_folder()
+        self._clear_logs()
         self._create_services_configuration()
         self._create_logging_configuration()
         if self._is_excel_running():
@@ -138,8 +140,9 @@ class PostInstall:
         # TODO Use regular expressions to update settings
         def write_logging_configuration_line(logging_settings_line, logging_settings_file):
             if 'FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in logging_settings_line:
-                default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'pyxelrest.log')
-                new_line = logging_settings_line.replace('FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', default_log_file_path)
+                default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest.log')
+                new_line = logging_settings_line.replace('FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
+                                                         default_log_file_path)
                 logging_settings_file.write(new_line)
             else:
                 logging_settings_file.write(logging_settings_line)
@@ -179,6 +182,11 @@ class PostInstall:
         os.makedirs(self.pyxelrest_appdata_addin_folder)
         dir_util.copy_tree(self.add_in_folder, self.pyxelrest_appdata_addin_folder)
         vsto.install_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+
+    def _clear_logs(self):
+        if os.path.exists(self.pyxelrest_appdata_logs_folder):
+            dir_util.remove_tree(self.pyxelrest_appdata_logs_folder)
+        os.makedirs(self.pyxelrest_appdata_logs_folder)
 
 
 if __name__ == '__main__':
