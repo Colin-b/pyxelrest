@@ -34,16 +34,16 @@ class VSTOManager:
 
 
 class XlWingsConfig:
-    def __init__(self, pyxelrest_module_dir, pyxelrest_appdata_folder):
+    def __init__(self, pyxelrest_module_dir, xlwings_config_folder):
         self.pyxelrest_module_dir = pyxelrest_module_dir
-        self.pyxelrest_appdata_folder = pyxelrest_appdata_folder
+        self.xlwings_config_folder = xlwings_config_folder
 
     def create_pyxelrest_bas_file(self):
         """
         Create XLWings specific configuration for PyxelRest.
         :return: None
         """
-        pyxelrest_settings = os.path.join(self.pyxelrest_appdata_folder, 'xlwings.bas')
+        pyxelrest_settings = os.path.join(self.xlwings_config_folder, 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             self._fill_pyxelrest_bas_file(new_settings)
 
@@ -98,18 +98,20 @@ class PostInstall:
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
         self.pyxelrest_appdata_logs_folder = os.path.join(self.pyxelrest_appdata_folder, 'logs')
+        self.pyxelrest_appdata_config_folder = os.path.join(self.pyxelrest_appdata_folder, 'configuration')
         self.vsto_version = vsto_version
 
     def perform_post_installation_tasks(self):
         self._create_pyxelrest_appdata_folder()
         self._clear_logs()
+        self._create_pyxelrest_configuration_folder()
         self._create_services_configuration()
         self._create_logging_configuration()
         if self._is_excel_running():
             raise Exception('Excel must be closed for add-ins to be installed.')
         self._install_pyxelrest_vb_addin()
 
-        xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_folder)
+        xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_config_folder)
         xlwings_config.create_pyxelrest_bas_file()
 
         self._install_auto_load_addin()
@@ -127,10 +129,14 @@ class PostInstall:
         if not os.path.exists(self.pyxelrest_appdata_folder):
             os.makedirs(self.pyxelrest_appdata_folder)
 
+    def _create_pyxelrest_configuration_folder(self):
+        if not os.path.exists(self.pyxelrest_appdata_config_folder):
+            os.makedirs(self.pyxelrest_appdata_config_folder)
+
     def _create_services_configuration(self):
         default_config_file = os.path.join(self.installation_files_folder, 'pyxelrest', 'default_services_configuration.ini')
         if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(self.pyxelrest_appdata_folder, 'services_configuration.ini')
+            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.ini')
             if not os.path.isfile(user_config_file):
                 shutil.copyfile(default_config_file, user_config_file)
         else:
@@ -149,7 +155,7 @@ class PostInstall:
 
         default_config_file = os.path.join(self.installation_files_folder, 'pyxelrest', 'default_logging_configuration.ini')
         if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(self.pyxelrest_appdata_folder, 'logging_configuration.ini')
+            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'logging.ini')
             if not os.path.isfile(user_config_file):
                 with open(user_config_file, 'w') as new_file:
                     with open(default_config_file) as default_file:

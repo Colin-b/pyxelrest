@@ -173,7 +173,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "xlwings.bas");
+                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "xlwings.bas");
             return null;
         }
 

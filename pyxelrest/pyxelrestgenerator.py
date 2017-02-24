@@ -28,7 +28,7 @@ import vba
 import _version
 from pyxelresterrors import *
 
-logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
+logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.ini')
 if os.path.isfile(logging_configuration_file_path):
     with open(logging_configuration_file_path, 'r') as config_file:
         log_config_dict=yaml.load(config_file)
@@ -155,7 +155,7 @@ def load_services():
     (DEFAULT excluded).
     """
     config_parser = ConfigParser()
-    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
+    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
     if not config_parser.read(file_path):
         raise ConfigurationFileNotFound(file_path)
     logging.debug('Loading services from "{0}".'.format(file_path))

@@ -86,7 +86,7 @@ Services configuration can be done within Excel thanks to the ``Configure Servic
 
    Configuration screen
 
-Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\services_configuration.ini`` file.
+Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\configuration\services.ini`` file.
 
 Each section name will be used as the UDFs category.
 
@@ -111,7 +111,7 @@ The following options are available for each section:
 Logging Configuration
 ---------------------
 
-Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_configuration.ini`` file.
+Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\configuration\logging.ini`` file.
 
 Default log files can be found in your ``%APPDATA%\pyxelrest\logs`` folder.
 

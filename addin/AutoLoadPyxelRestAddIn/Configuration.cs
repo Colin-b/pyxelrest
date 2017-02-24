@@ -80,7 +80,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "services_configuration.ini");
+                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini");
             return null;
         }
 

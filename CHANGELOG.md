@@ -5,6 +5,7 @@
 ### Release Notes ###
 
 Default configuration is now using the official OpenAPI example.
+Configuration files are now located in a specific configuration folder.
 
 ### Enhancements ###
 
