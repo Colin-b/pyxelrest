@@ -21,6 +21,11 @@ UDFs are automatically updated on Excel start and on Configuration update.
 
 Updating UDFs without restarting Excel or updating configuration can be done thanks to the ``Update Functions`` button within ``PyxelRest`` tab.
 
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG
+   :align: center
+
+   Microsoft Excel add-in
+
 Installation
 ------------
 User Installation
@@ -111,3 +116,8 @@ Logging configuration can be updated thanks to ``%APPDATA%\pyxelrest\logging_con
 Default log files can be found in your ``%APPDATA%\pyxelrest`` folder.
 
 This folder can easily be accessed thanks to the ``Open User Folder`` button within ``PyxelRest`` tab.
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG
+   :align: center
+
+   Microsoft Excel add-in
