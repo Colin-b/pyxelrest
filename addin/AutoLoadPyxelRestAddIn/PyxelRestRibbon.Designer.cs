@@ -88,10 +88,10 @@
             // openFolderButton
             // 
             this.openFolderButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.openFolderButton.Description = "Open PyxelRest user folder";
+            this.openFolderButton.Description = "Open PyxelRest logs folder";
             this.openFolderButton.Image = global::AutoLoadPyxelRestAddIn.Properties.Resources.folder_3_128;
-            this.openFolderButton.ImageName = "Open User Folder";
-            this.openFolderButton.Label = "Open User Folder";
+            this.openFolderButton.ImageName = "Open Logs Folder";
+            this.openFolderButton.Label = "Open Logs";
             this.openFolderButton.Name = "openFolderButton";
             this.openFolderButton.ShowImage = true;
             // 
