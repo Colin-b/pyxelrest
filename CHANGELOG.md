@@ -2,6 +2,10 @@
 
 ## 0.52 (upcoming) ##
 
+### Release Notes ###
+
+Default configuration is now using the official OpenAPI example.
+
 ## 0.51 (2017-02-23) ##
 
 ### Enhancements ###
