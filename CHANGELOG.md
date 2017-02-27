@@ -6,6 +6,10 @@
 
 - Microsoft Excel Auto-Load add-in uninstall is not silent anymore on PyxelRest update.
 
+### Enhancements ###
+
+- Logs now also contains requested URL in case of a valid response.
+
 ### Bug fixes ###
 
 - Update will now fail in case of Microsoft Excel Auto-Load add-in uninstall failure.
