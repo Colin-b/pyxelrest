@@ -30,8 +30,8 @@ class VSTOManager:
     def uninstall_auto_load_addin(self, add_in_folder):
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if os.path.isfile(vsto_file_path):
-            # Do not check call, we do not care about the result
-            subprocess.call([self.vsto_installer_path, '/Silent', '/Uninstall', vsto_file_path])
+            # Check result of uninstall as failed uninstall should never occurs
+            subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
 
     @staticmethod
     def get_auto_load_vsto_file_path(add_in_folder):
@@ -112,8 +112,10 @@ class PostInstall:
         self._create_pyxelrest_configuration_folder()
         self._create_services_configuration()
         self._create_logging_configuration()
+        # Assert that Microsoft Excel is closed otherwise Add-In uninstall will silently fail and result to failure in
+        # installation of a new add-in version
         if self._is_excel_running():
-            raise Exception('Excel must be closed for add-ins to be installed.')
+            raise Exception('Microsoft Excel must be closed for add-ins to be installed.')
         self._install_pyxelrest_vb_addin()
 
         xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_config_folder)
