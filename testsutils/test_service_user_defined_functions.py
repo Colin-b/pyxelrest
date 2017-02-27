@@ -29,7 +29,7 @@ def valid_swagger_test_get_test_dict_with_empty_nested_list():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_empty_nested_list.")
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_empty_nested_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -62,7 +62,7 @@ def valid_swagger_test_get_test_dict_with_four_imbricated_levels():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_four_imbricated_levels.")
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_four_imbricated_levels ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -95,7 +95,7 @@ def valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplica
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys.")
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -128,7 +128,7 @@ def valid_swagger_test_get_test_dict_with_three_imbricated_levels():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_three_imbricated_levels.")
+        logging.info("Valid response received for valid_swagger_test_get_test_dict_with_three_imbricated_levels ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -161,7 +161,7 @@ def valid_swagger_test_get_test_empty_dict():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_empty_dict.")
+        logging.info("Valid response received for valid_swagger_test_get_test_empty_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -194,7 +194,7 @@ def valid_swagger_test_get_test_empty_list():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_empty_list.")
+        logging.info("Valid response received for valid_swagger_test_get_test_empty_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -239,7 +239,7 @@ def valid_swagger_test_post_test_form_parameter(form_string):
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_form_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_form_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -284,7 +284,7 @@ def valid_swagger_test_get_test_header_parameter(header_string):
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_header_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_header_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -573,7 +573,7 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -862,7 +862,7 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1151,7 +1151,7 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1440,7 +1440,7 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1807,7 +1807,7 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2174,7 +2174,7 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2541,7 +2541,7 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2908,7 +2908,7 @@ def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer,
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3072,7 +3072,7 @@ def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_int
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3236,7 +3236,7 @@ def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_in
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3400,7 +3400,7 @@ def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_int
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3564,7 +3564,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3598,7 +3598,7 @@ def valid_swagger_test_get_test_json_without_parameter():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3632,7 +3632,7 @@ def valid_swagger_test_post_test_json_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3666,7 +3666,7 @@ def valid_swagger_test_put_test_json_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_put_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3700,7 +3700,7 @@ def valid_swagger_test_delete_test_json_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_json_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3733,7 +3733,7 @@ def valid_swagger_test_get_test_list_of_dict():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_list_of_dict.")
+        logging.info("Valid response received for valid_swagger_test_get_test_list_of_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3766,7 +3766,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list.")
+        logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3799,7 +3799,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict.")
+        logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3832,7 +3832,7 @@ def valid_swagger_test_get_test_one_level_dict():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_one_level_dict.")
+        logging.info("Valid response received for valid_swagger_test_get_test_one_level_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3865,7 +3865,7 @@ def valid_swagger_test_get_test_one_level_list():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_one_level_list.")
+        logging.info("Valid response received for valid_swagger_test_get_test_one_level_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -4153,7 +4153,7 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -4441,7 +4441,7 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -4729,7 +4729,7 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -5017,7 +5017,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -5383,7 +5383,7 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -5749,7 +5749,7 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6115,7 +6115,7 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6481,7 +6481,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_in
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6644,7 +6644,7 @@ def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, pa
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6807,7 +6807,7 @@ def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, p
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -6970,7 +6970,7 @@ def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, pa
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7133,7 +7133,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7166,7 +7166,7 @@ def valid_swagger_test_get_test_plain_text_without_parameter():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7199,7 +7199,7 @@ def valid_swagger_test_post_test_plain_text_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7232,7 +7232,7 @@ def valid_swagger_test_put_test_plain_text_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_put_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7265,7 +7265,7 @@ def valid_swagger_test_delete_test_plain_text_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7310,7 +7310,7 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_string_array_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_string_array_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7363,7 +7363,7 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_get_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7416,7 +7416,7 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7469,7 +7469,7 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7522,7 +7522,7 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_vba_restricted_keywords.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -7810,7 +7810,7 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8098,7 +8098,7 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8386,7 +8386,7 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8674,7 +8674,7 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_optional_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9040,7 +9040,7 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
 ), request_parameters, stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9406,7 +9406,7 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
 ), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9772,7 +9772,7 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10138,7 +10138,7 @@ def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, quer
 ), json=request_body, params=request_parameters, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_parameters_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10301,7 +10301,7 @@ def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer3
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_get_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10464,7 +10464,7 @@ def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_post_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10627,7 +10627,7 @@ def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer3
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_put_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10790,7 +10790,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
         path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_paths_types.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10823,7 +10823,7 @@ def valid_swagger_test_get_test_without_parameter():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_get_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_get_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10856,7 +10856,7 @@ def valid_swagger_test_post_test_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_post_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_post_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10889,7 +10889,7 @@ def valid_swagger_test_put_test_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_put_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_put_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10922,7 +10922,7 @@ def valid_swagger_test_delete_test_without_parameter():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for valid_swagger_test_delete_test_without_parameter.")
+        logging.info("Valid response received for valid_swagger_test_delete_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10955,7 +10955,7 @@ def filtered_tags_test_get_test_with_tags():
 ), stream=True, headers=request_header, proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for filtered_tags_test_get_test_with_tags.")
+        logging.info("Valid response received for filtered_tags_test_get_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10988,7 +10988,7 @@ def filtered_tags_test_post_test_with_tags():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for filtered_tags_test_post_test_with_tags.")
+        logging.info("Valid response received for filtered_tags_test_post_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -11021,7 +11021,7 @@ def filtered_tags_test_put_test_with_tags():
 ), proxies={})
 
         response.raise_for_status()
-        logging.info("Valid response received for filtered_tags_test_put_test_with_tags.")
+        logging.info("Valid response received for filtered_tags_test_put_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':

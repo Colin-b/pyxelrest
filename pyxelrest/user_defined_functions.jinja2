@@ -420,7 +420,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
     {{ request_macro(service, method_path, contains_parameters, path_parameters, method) }}
         response.raise_for_status()
-        logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }}.")
+        logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }} ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
