@@ -28,13 +28,13 @@ To ensure that you update properly please follow uninstall procedure first.
 
 ### Enhancements ###
 
-- PyxelRest version is now displayed in Excel
-- PyxelRest folder can now be opened from within Excel (to ease investigation)
+- PyxelRest version is now displayed in Microsoft Excel
+- PyxelRest folder can now be opened from within Microsoft Excel (to ease investigation)
 
 ### Bug fixes ###
 
 - Python for Windows extension was not listed in dependencies, thus not installed automatically
-- In case addin version changed, the previous version was not automatically uninstalled
+- In case add-in version changed, the previous version was not automatically uninstalled
 
 ## 0.49 (2017-02-09) ##
 
@@ -51,11 +51,11 @@ To ensure that you update properly please follow uninstall procedure first.
 ### Enhancements ###
 
 - Help on function is now provided for each UDF when available (first link to be present in provided description will be used)
-- Excel add-in now assert that '''Trust access to the the VBA object model''' is activated before trying to perform an action that would fail.
+- Microsoft Excel add-in now assert that '''Trust access to the the VBA object model''' is activated before trying to perform an action that would fail.
 
 ### Bug fixes ###
 
-- XlWings module was loaded twice on Excel Startup in case it was already loaded.
+- XlWings module was loaded twice on Microsoft Excel startup in case it was already loaded.
 
 ### Known issues ###
 
@@ -65,4 +65,4 @@ To ensure that you update properly please follow uninstall procedure first.
 
 ### Known issues ###
 
-- Excel needs to be restarted for UDFs not to be displayed anymore in function wizard. (Even if calling them does not work)
+- Microsoft Excel needs to be restarted for UDFs not to be displayed anymore in function wizard. (Even if calling them does not work)

@@ -1,6 +1,6 @@
-# Access REST APIs from Excel using User Defined Functions (UDF) #
+# Access REST APIs from Microsoft Excel using User Defined Functions (UDF) #
 
-PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Excel User Defined Functions.
+PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Microsoft Excel User Defined Functions.
 
 1. [Usage](#Usage)
 2. [Installation](#Installation)
@@ -14,9 +14,9 @@ Once installed, open Microsoft Excel and UDFs from configured services will be a
 
 ![Filling in UDF parameters](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG)
 
-UDFs are automatically updated on Excel start and on Configuration update.
+UDFs are automatically updated on Microsoft Excel start and on Configuration update.
 
-Updating UDFs without restarting Excel or updating configuration can be done thanks to the ``Update Functions`` button within ``PyxelRest`` tab.
+Updating UDFs without restarting Microsoft Excel or updating configuration can be done thanks to the ``Update Functions`` button within ``PyxelRest`` tab.
 
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 
@@ -24,15 +24,15 @@ Updating UDFs without restarting Excel or updating configuration can be done tha
 
 ### User installation ###
 
-1. Within Excel, `Trust access to the VBA project object model` should be enabled.
+1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Excel must be closed while executing the following command:
+2. Microsoft Excel must be closed while executing the following command:
 
         pip install pyxelrest
 
 ### User upgrade ###
 
-1. Excel must be closed while executing the following command:
+1. Microsoft Excel must be closed while executing the following command:
 
         pip install pyxelrest --upgrade
 
@@ -47,12 +47,12 @@ Updating UDFs without restarting Excel or updating configuration can be done tha
 
 ### Developer Installation/Upgrade ###
 
-1. Within Excel, `Trust access to the VBA project object model` should be enabled.
+1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Build the addin C# solution:
+2. Build the add-in C# solution:
 In order to do so, you need to add a test certificate.
 > Project > AutoLoadPyxelRestAddIn > Signing
-3. Excel must be closed while executing the following script from within pyxelrest root folder:
+3. Microsoft Excel must be closed while executing the following script from within pyxelrest root folder:
 
         developer_install.bat
 
@@ -65,7 +65,7 @@ In order to do so, you need to add a test certificate.
 
 ### Services Configuration ###
 
-Services configuration can be done within Excel thanks to the `Configure Services` button within `PyxelRest` tab.
+Services configuration can be done within Microsoft Excel thanks to the `Configure Services` button within `PyxelRest` tab.
 
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 

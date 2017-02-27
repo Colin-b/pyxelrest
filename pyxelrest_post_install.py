@@ -12,14 +12,19 @@ def to_absolute_path(file_path):
 
 class VSTOManager:
     def __init__(self, version):
-        self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'), 'microsoft shared', 'VSTO', version, 'VSTOInstaller.exe')
+        self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'),
+                                                'microsoft shared',
+                                                'VSTO',
+                                                version,
+                                                'VSTOInstaller.exe')
         if not os.path.isfile(self.vsto_installer_path):
-            raise Exception('Auto Load PixelRest Excel Add-In cannot be installed as VSTO installer cannnot be found.')
+            raise Exception('Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {0}.'
+                            .format(self.vsto_installer_path))
 
     def install_auto_load_addin(self, add_in_folder):
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
-            raise Exception('Auto Load PixelRest Excel Add-In cannot be found in {0}.'.format(vsto_file_path))
+            raise Exception('Auto Load PyxelRest add-in cannot be found in {0}.'.format(vsto_file_path))
         subprocess.check_call([self.vsto_installer_path, '/Install', vsto_file_path])
 
     def uninstall_auto_load_addin(self, add_in_folder):
@@ -86,9 +91,9 @@ class PostInstall:
         if not sys.platform.startswith('win'):
             raise Exception('PyxelRest can only be installed on Microsoft Windows.')
         if not add_in_folder:
-            raise Exception('Path to Auto Load Addin folder must be provided.')
+            raise Exception('Path to Auto Load add-in folder must be provided.')
         if not vba_add_in_folder:
-            raise Exception('Path to Visual Basic Addin folder must be provided.')
+            raise Exception('Path to Visual Basic add-in folder must be provided.')
 
         self.add_in_folder = to_absolute_path(add_in_folder)
         self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
@@ -134,13 +139,16 @@ class PostInstall:
             os.makedirs(self.pyxelrest_appdata_config_folder)
 
     def _create_services_configuration(self):
-        default_config_file = os.path.join(self.installation_files_folder, 'pyxelrest', 'default_services_configuration.ini')
+        default_config_file = os.path.join(self.installation_files_folder,
+                                           'pyxelrest',
+                                           'default_services_configuration.ini')
         if os.path.isfile(default_config_file):
             user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.ini')
             if not os.path.isfile(user_config_file):
                 shutil.copyfile(default_config_file, user_config_file)
         else:
-            raise Exception('Default services configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
+            raise Exception('Default services configuration file cannot be found in provided pyxelrest directory. {0}'
+                            .format(default_config_file))
 
     def _create_logging_configuration(self):
         # TODO Use regular expressions to update settings
@@ -153,7 +161,9 @@ class PostInstall:
             else:
                 logging_settings_file.write(logging_settings_line)
 
-        default_config_file = os.path.join(self.installation_files_folder, 'pyxelrest', 'default_logging_configuration.ini')
+        default_config_file = os.path.join(self.installation_files_folder,
+                                           'pyxelrest',
+                                           'default_logging_configuration.ini')
         if os.path.isfile(default_config_file):
             user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'logging.ini')
             if not os.path.isfile(user_config_file):
@@ -162,12 +172,14 @@ class PostInstall:
                         for line in default_file:
                             write_logging_configuration_line(line, new_file)
         else:
-            raise Exception('Default logging configuration file cannot be found in provided pyxelrest directory. {0}'.format(default_config_file))
+            raise Exception('Default logging configuration file cannot be found in provided pyxelrest directory. {0}'
+                            .format(default_config_file))
 
     def _install_pyxelrest_vb_addin(self):
         pyxelrest_vb_file_path = os.path.join(self.vba_add_in_folder, 'pyxelrest.xlam')
         if not os.path.isfile(pyxelrest_vb_file_path):
-            raise Exception('Visual Basic PixelRest Excel Add-In cannot be found in {0}.'.format(pyxelrest_vb_file_path))
+            raise Exception('Visual Basic PixelRest Excel Add-In cannot be found in {0}.'
+                            .format(pyxelrest_vb_file_path))
         xlstart_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART')
         if not os.path.exists(xlstart_folder):
             os.makedirs(xlstart_folder)
