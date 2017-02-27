@@ -19,10 +19,12 @@ class PyxelRestTest(unittest.TestCase):
     service_processes = []
     services_config_file_path = os.path.join(os.getenv('APPDATA'),
                                              'pyxelrest',
-                                             'services_configuration.ini')
+                                             'configuration',
+                                             'services.ini')
     backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
                                                     'pyxelrest',
-                                                    'services_configuration.ini.back')
+                                                    'configuration',
+                                                    'services.ini.back')
 
     @classmethod
     def setUpClass(cls):

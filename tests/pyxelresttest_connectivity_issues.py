@@ -16,10 +16,12 @@ except ImportError:
 class PyxelRestConnectivityIssuesTest(unittest.TestCase):
     services_config_file_path = os.path.join(os.getenv('APPDATA'),
                                              'pyxelrest',
-                                             'services_configuration.ini')
+                                             'configuration',
+                                             'services.ini')
     backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
                                                     'pyxelrest',
-                                                    'services_configuration.ini.back')
+                                                    'configuration',
+                                                    'services.ini.back')
 
     def setUp(self):
         self._add_test_config()

@@ -33,18 +33,26 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         self.service_process.join(timeout=0.5)
 
     def _remove_logging_config(self):
-        self.logging_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logging_configuration.ini')
+        self.logging_config_file_path = os.path.join(os.getenv('APPDATA'),
+                                                     'pyxelrest',
+                                                     'configuration',
+                                                     'logging.ini')
         if os.path.isfile(self.logging_config_file_path):
             self.backup_logging_config_file_path = os.path.join(os.getenv('APPDATA'),
                                                                 'pyxelrest',
-                                                                'logging_configuration.ini.back')
+                                                                'configuration',
+                                                                'logging.ini.back')
             shutil.move(self.logging_config_file_path, self.backup_logging_config_file_path)
 
     def _add_services_config(self):
-        self.services_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'services_configuration.ini')
+        self.services_config_file_path = os.path.join(os.getenv('APPDATA'),
+                                                      'pyxelrest',
+                                                      'configuration',
+                                                      'services.ini')
         self.backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
                                                              'pyxelrest',
-                                                             'services_configuration.ini.back')
+                                                             'configuration',
+                                                             'services.ini.back')
         shutil.copyfile(self.services_config_file_path, self.backup_services_config_file_path)
         shutil.copyfile('test_services_configuration.ini', self.services_config_file_path)
 
