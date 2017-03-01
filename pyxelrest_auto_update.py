@@ -6,6 +6,13 @@ import subprocess
 import os
 import time
 import sys
+import logging
+import logging.handlers
+
+default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auto_update.log')
+logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
+                    handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
+                    level=logging.DEBUG)
 
 
 class PyxelRestUpdater:
@@ -16,11 +23,19 @@ class PyxelRestUpdater:
 
     def check_update(self):
         if self._is_update_available():
+            logging.info('Update available.')
             if self._want_update():
+                logging.debug('Update accepted. Waiting for Microsoft Excel to close...')
                 while self._is_excel_running():
                     # As closing Microsoft Excel is a manual user action, wait for 1 second between each check.
                     time.sleep(1)
+                logging.debug('Microsoft Excel is closed. Installing update.')
                 self._update_pyxelrest()
+                logging.info('Update installed.')
+            else:
+                logging.info('Update rejected.')
+        else:
+            logging.debug('No update available.')
 
     def _is_update_available(self):
         outdated_packages = subprocess.check_output([self._pip_path, 'list', '--outdated'])
