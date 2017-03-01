@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
+using System.Configuration;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -31,7 +32,21 @@ namespace AutoLoadPyxelRestAddIn
             }
             catch (Exception ex)
             {
-                Log.Error("An error occurred while activating PyxelRest on Excel start.", ex);
+                Log.Error("An error occurred while activating PyxelRest on Microsoft Excel start.", ex);
+            }
+        }
+
+        private void ThisAddIn_Shutdown(object sender, EventArgs e)
+        {
+            Log.Debug("Stop Auto Load PyxelRest Addin...");
+            try
+            {
+                if("true".Equals(ConfigurationManager.AppSettings["AutoCheckForUpdates"]))
+                    new Updater().CheckUpdate();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("An error occurred while checking for PyxelRest update on Microsoft Excel shutdown.", ex);
             }
         }
 
@@ -127,11 +142,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             if (Application.ActiveWorkbook == null)
             {
-                Log.Debug("Excel started with an already existing document. Expecting workbook opening event to activate PyxelRest.");
+                Log.Debug("Microsoft Excel started with an already existing document. Expecting workbook opening event to activate PyxelRest.");
             }
             else
             {
-                Log.Debug("Excel started with a blank document. Activating PyxelRest...");
+                Log.Debug("Microsoft Excel started with a blank document. Activating PyxelRest...");
                 ActivatePyxelRest();
             }
         }
@@ -251,11 +266,6 @@ namespace AutoLoadPyxelRestAddIn
                 return false;
             };
             return true;
-        }
-
-        private void ThisAddIn_Shutdown(object sender, EventArgs e)
-        {
-            Log.Debug("Stop Auto Load PyxelRest Addin...");
         }
         
         #region VSTO generated code

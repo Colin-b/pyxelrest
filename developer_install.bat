@@ -13,18 +13,18 @@ IF ERRORLEVEL 2 GOTO Update
 IF ERRORLEVEL 1 GOTO Install
 
 :ForceUpdate
-pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple --upgrade --force-reinstall
-python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release --vbaddindirectory addin
+pip install -e . --upgrade --force-reinstall
+python pyxelrest_post_install.py addin/AutoLoadPyxelRestAddIn/bin/Release addin
 GOTO End
 
 :Update
-pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple --upgrade
-python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release --vbaddindirectory addin
+pip install -e . --upgrade
+python pyxelrest_post_install.py addin/AutoLoadPyxelRestAddIn/bin/Release addin
 GOTO End
 
 :Install
-pip install -e . --trusted-host rms.gdfsuez.net --index http://rms.gdfsuez.net:8310/artifactory/api/pypi/python/simple
-python pyxelrest_post_install.py --addindirectory addin/AutoLoadPyxelRestAddIn/bin/Release --vbaddindirectory addin
+pip install -e .
+python pyxelrest_post_install.py addin/AutoLoadPyxelRestAddIn/bin/Release addin
 GOTO End
 
 :End

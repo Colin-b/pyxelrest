@@ -87,7 +87,8 @@ class XlWingsConfig:
 
 
 class PostInstall:
-    def __init__(self, add_in_folder, vba_add_in_folder, installation_files_folder=None, modules_folder=None, vsto_version='10.0'):
+    def __init__(self, add_in_folder, vba_add_in_folder, installation_files_folder=None, modules_folder=None,
+                 scripts_folder=None, vsto_version='10.0'):
         if not sys.platform.startswith('win'):
             raise Exception('PyxelRest can only be installed on Microsoft Windows.')
         if not add_in_folder:
@@ -99,6 +100,7 @@ class PostInstall:
         self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
         self.installation_files_folder = installation_files_folder or os.path.abspath(os.path.dirname(__file__))
         self.modules_folder = modules_folder or os.path.abspath(os.path.dirname(__file__))
+        self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
         self.pyxelrest_module_dir = os.path.join(self.modules_folder, 'pyxelrest')
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
@@ -149,7 +151,7 @@ class PostInstall:
             if not os.path.isfile(user_config_file):
                 shutil.copyfile(default_config_file, user_config_file)
         else:
-            raise Exception('Default services configuration file cannot be found in provided pyxelrest directory. {0}'
+            raise Exception('Default services configuration file cannot be found in provided PyxelRest directory. {0}'
                             .format(default_config_file))
 
     def _create_logging_configuration(self):
@@ -201,7 +203,38 @@ class PostInstall:
 
         os.makedirs(self.pyxelrest_appdata_addin_folder)
         dir_util.copy_tree(self.add_in_folder, self.pyxelrest_appdata_addin_folder)
+        self._update_auto_load_addin_config()
         vsto.install_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+
+    def _update_auto_load_addin_config(self):
+        # TODO Use regular expressions to update settings
+        def write_addin_configuration_line(addin_settings_line, addin_settings_file):
+            if 'PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
+                python_executable_folder_path = os.path.dirname(sys.executable)
+                pip_path = os.path.join(python_executable_folder_path, 'pip.exe')
+                new_line = addin_settings_line.replace('PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', pip_path)
+                addin_settings_file.write(new_line)
+            elif 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
+                python_executable_folder_path = os.path.dirname(sys.executable)
+                python_path = os.path.join(python_executable_folder_path, 'python.exe')
+                new_line = addin_settings_line.replace('PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', python_path)
+                addin_settings_file.write(new_line)
+            elif 'AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
+                auto_update_script_path = os.path.join(self.scripts_folder, 'pyxelrest_auto_update.py')
+                new_line = addin_settings_line.replace('AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
+                                                       auto_update_script_path)
+                addin_settings_file.write(new_line)
+            else:
+                addin_settings_file.write(addin_settings_line)
+
+        config_file_path = os.path.join(self.pyxelrest_appdata_addin_folder, 'AutoLoadPyxelRestAddIn.dll.config')
+        if os.path.exists(config_file_path):
+            default_config_file_path = config_file_path + '.bak'
+            shutil.move(config_file_path, default_config_file_path)
+            with open(config_file_path, 'w') as new_file:
+                with open(default_config_file_path) as default_file:
+                    for line in default_file:
+                        write_addin_configuration_line(line, new_file)
 
     def _clear_logs(self):
         if os.path.exists(self.pyxelrest_appdata_logs_folder):
@@ -211,16 +244,21 @@ class PostInstall:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-idir', '--installdirectory', help='directory containing pyxelrest files for installation', default=None, type=str)
-    parser.add_argument('-mdir', '--modulesdirectory', help='directory containing installed python modules', default=None, type=str)
-    parser.add_argument('-adir', '--addindirectory', help='directory containing pyxelrest auto load addin', type=str)
-    parser.add_argument('-vbdir', '--vbaddindirectory', help='directory containing pyxelrest visual basic addin', type=str)
+    parser.add_argument('add_in_directory', help='Directory containing PyxelRest Microsoft Excel auto load add-in.',
+                        type=str)
+    parser.add_argument('vb_add_in_directory', help='Directory containing PyxelRest Microsoft Visual Basic add-in.',
+                        type=str)
+    parser.add_argument('--install_directory', help='Directory containing PyxelRest files for installation.',
+                        default=None, type=str)
+    parser.add_argument('--modules_directory', help='Directory containing installed Python modules.',
+                        default=None, type=str)
+    parser.add_argument('--scripts_directory', help='Directory containing installed Python scripts.',
+                        default=None, type=str)
     options = parser.parse_args(sys.argv[1:])
 
-    # Check values here to trigger the proper help from argument parser
-    if options.addindirectory and options.vbaddindirectory:
-        post_install = PostInstall(options.addindirectory,
-                                   options.vbaddindirectory,
-                                   installation_files_folder=options.installdirectory,
-                                   modules_folder=options.modulesdirectory)
-        post_install.perform_post_installation_tasks()
+    post_install = PostInstall(options.add_in_directory,
+                               options.vb_add_in_directory,
+                               installation_files_folder=options.install_directory,
+                               modules_folder=options.modules_directory,
+                               scripts_folder=options.scripts_directory)
+    post_install.perform_post_installation_tasks()
