@@ -4,6 +4,7 @@ from distutils.command.install_data import install_data
 import distutils.sysconfig
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
+# Corresponds to Lib\site-packages folder
 modules_dir = distutils.sysconfig.get_python_lib()
 data_dir = os.path.join(modules_dir, '..', '..')
 
@@ -119,6 +120,7 @@ setup(name='pyxelrest',
           'pyaml==16.12.2'
       ],
       scripts=[
+          'pyxelrest_auto_update.py',
           'pyxelrest_post_install.py'
       ],
       platforms=[
