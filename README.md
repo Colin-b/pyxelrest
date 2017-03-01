@@ -127,7 +127,7 @@ Microsoft Excel Auto-Load add-in logging configuration can be updated thanks to 
 
 Default log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
-This folder can easily be accessed thanks to the `Open User Folder` button within `PyxelRest` tab.
+This folder can easily be accessed thanks to the `Open Logs` button within `PyxelRest` tab.
 
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 
