@@ -8,7 +8,7 @@
 
 ### Enhancements ###
 
-- Microsoft Excel Auto-Load add-in now check for PyxelRest update on close and ask for an auto update if available.
+- Microsoft Excel Auto-Load add-in is now able to check for PyxelRest update on close and ask for an auto update if available.
 - Logs now also contains requested URL in case of a valid response.
 
 ### Bug fixes ###
