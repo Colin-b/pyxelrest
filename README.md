@@ -119,7 +119,11 @@ The following options are available for each section:
 
 ### Logging Configuration ###
 
-Logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.ini` file.
+PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.ini` file.
+
+PyxelRest auto-update logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\auto_update_logging.ini` file.
+
+Microsoft Excel Auto-Load add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
 
 Default log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
@@ -129,4 +133,8 @@ This folder can easily be accessed thanks to the `Open User Folder` button withi
 
 ### Microsoft Excel Auto-Load add-in Configuration ###
 
-Microsoft Excel Auto-Load add-in configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
+Auto check for update can be activated/deactivated within Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
+
+![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+
+Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.

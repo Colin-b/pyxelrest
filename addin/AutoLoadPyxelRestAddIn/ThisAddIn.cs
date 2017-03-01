@@ -44,8 +44,7 @@ namespace AutoLoadPyxelRestAddIn
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             Config = LoadConfig();
-            // TODO Load configuration from LocalConfig
-            log4net.Config.XmlConfigurator.Configure();
+            log4net.Config.XmlConfigurator.Configure(new FileInfo(Config.FilePath));
             Log.DebugFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
             Log.DebugFormat("Configuration loaded from {0}", Config.FilePath);
             Application.WorkbookOpen += OnOpenWorkBook;

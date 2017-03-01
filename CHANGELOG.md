@@ -19,10 +19,6 @@
 - Update will now fail in case of Microsoft Excel Auto-Load add-in uninstall failure.
 - Avoid trying to uninstall add-in that was not installed previously because of previous failure at add-in installation step.
 
-### Known issues ###
-
-- Microsoft Excel Auto-Load add-in user specific configuration for logging is not taken into account.
-
 ## 0.52 (2017-02-24) ##
 
 ### Release Notes ###
