@@ -1,6 +1,8 @@
 # PyxelRest Changelog #
 
-## 0.53 (upcoming) ##
+## 0.54 (upcoming) ##
+
+## 0.53 (2017-03-01) ##
 
 ### Release Notes ###
 
