@@ -138,3 +138,37 @@ Auto check for update can be activated/deactivated within Microsoft Excel thanks
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
+
+The following application settings are available:
+
+<table>
+    <th>
+        <td>Description</td>
+        <td>Mandatory</td>
+        <td>Possible values</td>
+    </th>
+    <tr>
+        <td>PathToPIP</td>
+        <td>Path to the pip.exe (including) executable that should be used to update PyxelRest.</td>
+        <td>Mandatory</td>
+        <td>Installation script is already setting this value properly.</td>
+    </tr>
+    <tr>
+        <td>PathToPython</td>
+        <td>Path to the python.exe (including) executable that should be used to launch the update script.</td>
+        <td>Mandatory</td>
+        <td>Installation script is already setting this value properly.</td>
+    </tr>
+    <tr>
+        <td>PathToUpdateScript</td>
+        <td>Path to the Python script used to update PyxelRest.</td>
+        <td>Mandatory</td>
+        <td>Installation script is already setting this value properly.</td>
+    </tr>
+    <tr>
+        <td>AutoCheckForUpdates</td>
+        <td>Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.</td>
+        <td>Optional</td>
+        <td>True (default), False</td>
+    </tr>
+</table>

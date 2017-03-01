@@ -137,3 +137,17 @@ Auto check for update can be activated/deactivated within Microsoft Excel thanks
    Microsoft Excel add-in
 
 Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\configuration\addin.config`` file.
+
+The following application settings are available:
+
++---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+|                     | Description                                                                                    | Mandatory | Possible values                                             |
++=====================+================================================================================================+===========+=============================================================+
+| PathToPIP           | Path to the pip.exe (including) executable that should be used to update PyxelRest.            | Mandatory | Installation script is already setting this value properly. |
++---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| PathToPython        | Path to the python.exe (including) executable that should be used to launch the update script. | Mandatory | Installation script is already setting this value properly. |
++---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| PathToUpdateScript  | Path to the Python script used to update PyxelRest.                                            | Mandatory | Installation script is already setting this value properly. |
++---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| AutoCheckForUpdates | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.        | Optional  | True (default), False                                       |
++---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
