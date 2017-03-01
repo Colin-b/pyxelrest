@@ -21,16 +21,16 @@ namespace AutoLoadPyxelRestAddIn
             "Please 'Trust access to the VBA object model'.\n" +
             "> File > Options > Trust Center > Trust Center Settings > Macro Settings\n";
 
-        private System.Configuration.Configuration Config;
+        private static System.Configuration.Configuration Config = LoadConfig();
 
-        internal string GetSetting(string key)
+        internal static string GetSetting(string key)
         {
             if (Config.AppSettings.Settings[key] == null)
                 return string.Empty;
             return Config.AppSettings.Settings[key].Value;
         }
 
-        internal void SetSetting(string key, string value)
+        internal static void SetSetting(string key, string value)
         {
             var settings = Config.AppSettings.Settings;
             if (settings[key] == null)
@@ -61,7 +61,7 @@ namespace AutoLoadPyxelRestAddIn
         }
 
         // Hack to load configuration from external configuration file instead of embedded one.
-        private System.Configuration.Configuration LoadConfig()
+        private static System.Configuration.Configuration LoadConfig()
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
