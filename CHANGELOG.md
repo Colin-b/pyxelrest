@@ -17,7 +17,7 @@
 ### Bug fixes ###
 
 - Update will now fail in case of Microsoft Excel Auto-Load add-in uninstall failure.
-- Avoid trying to uninstall add-in that was not installed previously because of failure at add-in installation step.
+- Avoid trying to uninstall add-in that was not installed previously because of previous failure at add-in installation step.
 
 ### Known issues ###
 

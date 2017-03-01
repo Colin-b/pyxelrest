@@ -59,6 +59,7 @@ setup(name='pyxelrest',
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
+             'default_auto_update_logging_configuration.ini',
              'default_services_configuration.ini',
              'default_logging_configuration.ini',
              'user_defined_functions.jinja2'

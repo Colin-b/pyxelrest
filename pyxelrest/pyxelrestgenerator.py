@@ -31,7 +31,7 @@ from pyxelresterrors import *
 logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.ini')
 if os.path.isfile(logging_configuration_file_path):
     with open(logging_configuration_file_path, 'r') as config_file:
-        log_config_dict=yaml.load(config_file)
+        log_config_dict = yaml.load(config_file)
         logging.config.dictConfig(log_config_dict)
 else:
     default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest.log')
