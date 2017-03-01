@@ -21,28 +21,16 @@ namespace AutoLoadPyxelRestAddIn
             "Please 'Trust access to the VBA object model'.\n" +
             "> File > Options > Trust Center > Trust Center Settings > Macro Settings\n";
 
-        // Hack to load configuration from external configuration file instead of embedded one.
-        private static System.Configuration.Configuration Config
-        {
-            get
-            {
-                var configMap = new ExeConfigurationFileMap
-                {
-                    ExeConfigFilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AutoLoadPyxelRestAddIn.dll.config")
-                };
+        private System.Configuration.Configuration Config;
 
-                return ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-            }
-        }
-
-        public static string GetSetting(string key)
+        internal string GetSetting(string key)
         {
             if (Config.AppSettings.Settings[key] == null)
                 return string.Empty;
             return Config.AppSettings.Settings[key].Value;
         }
 
-        public static void SetSetting(string key, string value)
+        internal void SetSetting(string key, string value)
         {
             var settings = Config.AppSettings.Settings;
             if (settings[key] == null)
@@ -55,9 +43,11 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
+            Config = LoadConfig();
             // TODO Load configuration from LocalConfig
             log4net.Config.XmlConfigurator.Configure();
             Log.DebugFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
+            Log.DebugFormat("Configuration loaded from {0}", Config.FilePath);
             Application.WorkbookOpen += OnOpenWorkBook;
             Application.WorkbookActivate += OnActivateWorkBook;
             try
@@ -68,6 +58,23 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Error("An error occurred while activating PyxelRest on Microsoft Excel start.", ex);
             }
+        }
+
+        // Hack to load configuration from external configuration file instead of embedded one.
+        private System.Configuration.Configuration LoadConfig()
+        {
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (appDataFolder != null)
+            {
+                var configMap = new ExeConfigurationFileMap
+                {
+                    ExeConfigFilename = Path.Combine(appDataFolder, "pyxelrest", "configuration", "addin.config")
+                };
+
+                return ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            }
+            // If custom configuration cannot be found, load internal one (default)
+            return ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
@@ -223,7 +230,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "xlwings.bas");
+                return Path.Combine(appDataFolder, "pyxelrest", "configuration", "xlwings.bas");
             return null;
         }
 

@@ -17,7 +17,7 @@ namespace AutoLoadPyxelRestAddIn
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             developerGroup.Label = string.Format("Version {0}", Globals.ThisAddIn.GetVersion());
-            autoUpdateButton.Checked = "True".Equals(ThisAddIn.GetSetting("AutoCheckForUpdates"));
+            autoUpdateButton.Checked = "True".Equals(Globals.ThisAddIn.GetSetting("AutoCheckForUpdates"));
             autoUpdateButton.Click += ActivateOrDeactivateAutoUpdate;
             importButton.Click += ImportUserDefinedFunctions;
             configureButton.Click += ConfigureServices;
@@ -28,7 +28,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
-                ThisAddIn.SetSetting("AutoCheckForUpdates", "" + autoUpdateButton.Checked);
+                Globals.ThisAddIn.SetSetting("AutoCheckForUpdates", "" + autoUpdateButton.Checked);
                 Log.DebugFormat("Auto check for update set to {0}", autoUpdateButton.Checked);
             }
             catch (ConfigurationErrorsException ex)

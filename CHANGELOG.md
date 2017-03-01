@@ -12,11 +12,16 @@
 
 - Microsoft Excel Auto-Load add-in is now able to check for PyxelRest update on close and ask for an auto update if available.
 - Logs now also contains requested URL in case of a valid response.
+- Microsoft Excel Auto-Load add-in configuration can now be user specific and is located in configuration folder.
 
 ### Bug fixes ###
 
 - Update will now fail in case of Microsoft Excel Auto-Load add-in uninstall failure.
 - Avoid trying to uninstall add-in that was not installed previously because of failure at add-in installation step.
+
+### Known issues ###
+
+- Microsoft Excel Auto-Load add-in user specific configuration for logging is not taken into account.
 
 ## 0.52 (2017-02-24) ##
 

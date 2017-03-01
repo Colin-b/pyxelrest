@@ -233,14 +233,15 @@ class PostInstall:
             else:
                 addin_settings_file.write(addin_settings_line)
 
-        config_file_path = os.path.join(self.pyxelrest_appdata_addin_folder, 'AutoLoadPyxelRestAddIn.dll.config')
-        if os.path.exists(config_file_path):
-            default_config_file_path = config_file_path + '.bak'
-            shutil.move(config_file_path, default_config_file_path)
-            with open(config_file_path, 'w') as new_file:
-                with open(default_config_file_path) as default_file:
-                    for line in default_file:
-                        write_addin_configuration_line(line, new_file)
+        config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, 'addin.config')
+        if not os.path.exists(config_file_path):
+            default_config_file_path = os.path.join(self.pyxelrest_appdata_addin_folder,
+                                                    'AutoLoadPyxelRestAddIn.dll.config')
+            if os.path.exists(default_config_file_path):
+                with open(config_file_path, 'w') as new_file:
+                    with open(default_config_file_path) as default_file:
+                        for line in default_file:
+                            write_addin_configuration_line(line, new_file)
 
     def _clear_logs(self):
         if os.path.exists(self.pyxelrest_appdata_logs_folder):

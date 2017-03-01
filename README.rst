@@ -121,3 +121,8 @@ This folder can easily be accessed thanks to the ``Open User Folder`` button wit
    :align: center
 
    Microsoft Excel add-in
+
+Microsoft Excel Auto-Load add-in Configuration
+----------------------------------------------
+
+Microsoft Excel Auto-Load add-in configuration can be updated thanks to ``%APPDATA%\pyxelrest\configuration\addin.config`` file.
