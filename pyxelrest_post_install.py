@@ -203,8 +203,14 @@ class PostInstall:
 
         os.makedirs(self.pyxelrest_appdata_addin_folder)
         dir_util.copy_tree(self.add_in_folder, self.pyxelrest_appdata_addin_folder)
+        try:
+            vsto.install_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+        except:
+            # Avoid next install trying to uninstall an addin that was not properly installed
+            dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
+            raise
         self._update_auto_load_addin_config()
-        vsto.install_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+
 
     def _update_auto_load_addin_config(self):
         # TODO Use regular expressions to update settings
