@@ -31,7 +31,6 @@ class PyxelRestUpdater:
                     time.sleep(1)
                 logging.debug('Microsoft Excel is closed. Installing update.')
                 self._update_pyxelrest()
-                logging.info('Update installed.')
             else:
                 logging.info('Update rejected.')
         else:
