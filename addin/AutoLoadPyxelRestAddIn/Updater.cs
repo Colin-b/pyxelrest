@@ -15,16 +15,16 @@ namespace AutoLoadPyxelRestAddIn
 
         internal Updater()
         {
-            pipPath = ConfigurationManager.AppSettings["PathToPIP"];
-            if (pipPath == null || !File.Exists(pipPath))
+            pipPath = ThisAddIn.GetSetting("PathToPIP");
+            if (!File.Exists(pipPath))
                 throw new FileNotFoundException("Path to PIP cannot be found.", pipPath);
 
-            pythonPath = ConfigurationManager.AppSettings["PathToPython"];
-            if (pythonPath == null || !File.Exists(pythonPath))
+            pythonPath = ThisAddIn.GetSetting("PathToPython");
+            if (!File.Exists(pythonPath))
                 throw new FileNotFoundException("Path to Python cannot be found.", pythonPath);
 
-            update_script = ConfigurationManager.AppSettings["PathToUpdateScript"];
-            if (update_script == null || !File.Exists(update_script))
+            update_script = ThisAddIn.GetSetting("PathToUpdateScript");
+            if (!File.Exists(update_script))
                 throw new FileNotFoundException("PyxelRest auto update script cannot be found.", update_script);
         }
 

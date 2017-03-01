@@ -6,6 +6,8 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
+using System.Configuration;
+using System.IO;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -19,8 +21,41 @@ namespace AutoLoadPyxelRestAddIn
             "Please 'Trust access to the VBA object model'.\n" +
             "> File > Options > Trust Center > Trust Center Settings > Macro Settings\n";
 
+        // Hack to load configuration from external configuration file instead of embedded one.
+        private static System.Configuration.Configuration Config
+        {
+            get
+            {
+                var configMap = new ExeConfigurationFileMap
+                {
+                    ExeConfigFilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AutoLoadPyxelRestAddIn.dll.config")
+                };
+
+                return ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            }
+        }
+
+        public static string GetSetting(string key)
+        {
+            if (Config.AppSettings.Settings[key] == null)
+                return string.Empty;
+            return Config.AppSettings.Settings[key].Value;
+        }
+
+        public static void SetSetting(string key, string value)
+        {
+            var settings = Config.AppSettings.Settings;
+            if (settings[key] == null)
+                settings.Add(key, value);
+            else
+                settings[key].Value = value;
+            Config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(Config.AppSettings.SectionInformation.Name);
+        }
+
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
+            // TODO Load configuration from LocalConfig
             log4net.Config.XmlConfigurator.Configure();
             Log.DebugFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
             Application.WorkbookOpen += OnOpenWorkBook;
