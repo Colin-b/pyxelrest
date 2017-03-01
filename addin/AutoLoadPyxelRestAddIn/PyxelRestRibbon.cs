@@ -2,21 +2,46 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using System;
+using System.Configuration;
+using log4net;
 
 namespace AutoLoadPyxelRestAddIn
 {
     public partial class PyxelRestRibbon
     {
+        private static readonly ILog Log = LogManager.GetLogger("PyxelRestRibbon");
         private static readonly string UDF_IMPORT_FAILURE_MSG = 
             "User Defined Functions cannot be loaded.\n"+
             "Check logs for more details or contact your support team.\n";
 
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
-            developerGroup.Label = string.Format("Version {0}", Globals.ThisAddIn.GetVersion()); 
+            developerGroup.Label = string.Format("Version {0}", Globals.ThisAddIn.GetVersion());
+            autoUpdateButton.Checked = "True".Equals(ConfigurationManager.AppSettings["AutoCheckForUpdates"]);
+            autoUpdateButton.Click += ActivateOrDeactivateAutoUpdate;
             importButton.Click += ImportUserDefinedFunctions;
             configureButton.Click += ConfigureServices;
             openFolderButton.Click += OpenPyxelRestFolder;
+        }
+
+        private void ActivateOrDeactivateAutoUpdate(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+                if (settings["AutoCheckForUpdates"] == null)
+                    settings.Add("AutoCheckForUpdates", "" + autoUpdateButton.Checked);
+                else
+                    settings["AutoCheckForUpdates"].Value = "" + autoUpdateButton.Checked;
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+                Log.DebugFormat("Auto check for update set to {0}", autoUpdateButton.Checked);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                Log.Error("Unable to update configuration.", ex);
+            }
         }
 
         private void OpenPyxelRestFolder(object sender, RibbonControlEventArgs e)

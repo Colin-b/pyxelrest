@@ -36,10 +36,11 @@
         {
             this.pyxelrestTab = this.Factory.CreateRibbonTab();
             this.udfGroup = this.Factory.CreateRibbonGroup();
+            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.importButton = this.Factory.CreateRibbonButton();
             this.configureButton = this.Factory.CreateRibbonButton();
-            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.openFolderButton = this.Factory.CreateRibbonButton();
+            this.autoUpdateButton = this.Factory.CreateRibbonToggleButton();
             this.pyxelrestTab.SuspendLayout();
             this.udfGroup.SuspendLayout();
             this.developerGroup.SuspendLayout();
@@ -59,6 +60,13 @@
             this.udfGroup.Label = "User Defined Functions";
             this.udfGroup.Name = "udfGroup";
             // 
+            // developerGroup
+            // 
+            this.developerGroup.Items.Add(this.autoUpdateButton);
+            this.developerGroup.Items.Add(this.openFolderButton);
+            this.developerGroup.Label = "Version X.Y";
+            this.developerGroup.Name = "developerGroup";
+            // 
             // importButton
             // 
             this.importButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -67,7 +75,9 @@
             this.importButton.ImageName = "Update Functions";
             this.importButton.Label = "Update Functions";
             this.importButton.Name = "importButton";
+            this.importButton.ScreenTip = "Update Functions";
             this.importButton.ShowImage = true;
+            this.importButton.SuperTip = "Reload the list of available UDFs.";
             // 
             // configureButton
             // 
@@ -77,13 +87,20 @@
             this.configureButton.ImageName = "Configure Services";
             this.configureButton.Label = "Configure Services";
             this.configureButton.Name = "configureButton";
+            this.configureButton.ScreenTip = "Configure Services";
             this.configureButton.ShowImage = true;
+            this.configureButton.SuperTip = "Open a window to configure available services.";
             // 
-            // developerGroup
+            // autoUpdateButton
             // 
-            this.developerGroup.Items.Add(this.openFolderButton);
-            this.developerGroup.Label = "Version X.Y";
-            this.developerGroup.Name = "developerGroup";
+            this.autoUpdateButton.Checked = true;
+            this.autoUpdateButton.Image = global::AutoLoadPyxelRestAddIn.Properties.Resources.data_transfer_download_128;
+            this.autoUpdateButton.ImageName = "Automatic check for update";
+            this.autoUpdateButton.Label = "Check for update on close";
+            this.autoUpdateButton.Name = "autoUpdateButton";
+            this.autoUpdateButton.ScreenTip = "Check for update on close";
+            this.autoUpdateButton.ShowImage = true;
+            this.autoUpdateButton.SuperTip = "Check for update once Microsoft Excel is closed.";
             // 
             // openFolderButton
             // 
@@ -93,7 +110,9 @@
             this.openFolderButton.ImageName = "Open Logs Folder";
             this.openFolderButton.Label = "Open Logs";
             this.openFolderButton.Name = "openFolderButton";
+            this.openFolderButton.ScreenTip = "Open Logs";
             this.openFolderButton.ShowImage = true;
+            this.openFolderButton.SuperTip = "Open the folder containing PyxelRest logs.";
             // 
             // PyxelRestRibbon
             // 
@@ -118,6 +137,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton importButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton configureButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup developerGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton autoUpdateButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton openFolderButton;
     }
 

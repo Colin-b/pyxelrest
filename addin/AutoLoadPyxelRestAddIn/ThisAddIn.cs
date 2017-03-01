@@ -6,7 +6,6 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
-using System.Configuration;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -41,7 +40,8 @@ namespace AutoLoadPyxelRestAddIn
             Log.Debug("Stop Auto Load PyxelRest Addin...");
             try
             {
-                if("true".Equals(ConfigurationManager.AppSettings["AutoCheckForUpdates"]))
+                // Do not read configuration to perform the action requested by the user even if saving it in configuration failed.
+                if(Globals.Ribbons.PyxelRestRibbon.autoUpdateButton.Checked)
                     new Updater().CheckUpdate();
             }
             catch (Exception ex)
