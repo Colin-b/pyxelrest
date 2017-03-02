@@ -9,6 +9,10 @@
 - Microsoft Excel Auto-Load add-in is now always generating files prefixed with the date.
 - Default logging configuration now keep only the last 10 files (others are dropped to save disk space).
 
+### Bug fixes ###
+
+- Auto updater was not working as he was logging the update result in a log file we are trying to remove.
+
 ## 0.53 (2017-03-01) ##
 
 ### Release Notes ###
