@@ -1,6 +1,13 @@
 # PyxelRest Changelog #
 
-## 0.54 (upcoming) ##
+## 0.54 (2017-03-02) ##
+
+### Enhancements ###
+
+- Logging is not performed in DEBUG anymore by default. Consider PyxelRest as stable enough.
+- It is now possible to deactivate the "Auto Check for Update" feature by removing the property from the configuration file.
+- Microsoft Excel Auto-Load add-in is now always generating files prefixed with the date.
+- Default logging configuration now keep only the last 10 files (others are dropped to save disk space).
 
 ## 0.53 (2017-03-01) ##
 

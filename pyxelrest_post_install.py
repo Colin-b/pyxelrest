@@ -113,7 +113,7 @@ class PostInstall:
         self._clear_logs()
         self._create_pyxelrest_configuration_folder()
         self._create_services_configuration()
-        self._create_logging_configuration()
+        self._create_pyxelrest_logging_configuration()
         self._create_auto_update_logging_configuration()
         # Assert that Microsoft Excel is closed
         # otherwise ClickOnce cache of will still contains the add-in application manifest
@@ -156,11 +156,17 @@ class PostInstall:
             raise Exception('Default services configuration file cannot be found in provided PyxelRest directory. {0}'
                             .format(default_config_file))
 
-    def _create_logging_configuration(self):
+    def _create_pyxelrest_logging_configuration(self):
+        self._create_logging_configuration('pyxelrest.log', 'logging.ini')
+
+    def _create_auto_update_logging_configuration(self):
+        self._create_logging_configuration('pyxelrest_auto_update.log', 'auto_update_logging.ini')
+
+    def _create_logging_configuration(self, log_file_name, config_file_name):
         # TODO Use regular expressions to update settings
         def write_logging_configuration_line(logging_settings_line, logging_settings_file):
             if 'FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in logging_settings_line:
-                default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest.log')
+                default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', log_file_name)
                 new_line = logging_settings_line.replace('FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
                                                          default_log_file_path)
                 logging_settings_file.write(new_line)
@@ -171,7 +177,7 @@ class PostInstall:
                                            'pyxelrest',
                                            'default_logging_configuration.ini')
         if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'logging.ini')
+            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
             if not os.path.isfile(user_config_file):
                 with open(user_config_file, 'w') as new_file:
                     with open(default_config_file) as default_file:
@@ -179,31 +185,6 @@ class PostInstall:
                             write_logging_configuration_line(line, new_file)
         else:
             raise Exception('Default logging configuration file cannot be found in provided pyxelrest directory. {0}'
-                            .format(default_config_file))
-
-    def _create_auto_update_logging_configuration(self):
-        # TODO Use regular expressions to update settings
-        def write_logging_configuration_line(logging_settings_line, logging_settings_file):
-            if 'FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in logging_settings_line:
-                default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auto_update.log')
-                new_line = logging_settings_line.replace('FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
-                                                         default_log_file_path)
-                logging_settings_file.write(new_line)
-            else:
-                logging_settings_file.write(logging_settings_line)
-
-        default_config_file = os.path.join(self.installation_files_folder,
-                                           'pyxelrest',
-                                           'default_auto_update_logging_configuration.ini')
-        if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'auto_update_logging.ini')
-            if not os.path.isfile(user_config_file):
-                with open(user_config_file, 'w') as new_file:
-                    with open(default_config_file) as default_file:
-                        for line in default_file:
-                            write_logging_configuration_line(line, new_file)
-        else:
-            raise Exception('Default auto update logging configuration file cannot be found in provided pyxelrest directory. {0}'
                             .format(default_config_file))
 
     def _install_pyxelrest_vb_addin(self):

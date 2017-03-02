@@ -82,7 +82,8 @@ namespace AutoLoadPyxelRestAddIn
             try
             {
                 // Do not read configuration to perform the action requested by the user even if saving it in configuration failed.
-                if(Globals.Ribbons.PyxelRestRibbon.autoUpdateButton.Checked)
+                var autoUpdateButton = Globals.Ribbons.PyxelRestRibbon.autoUpdateButton;
+                if (autoUpdateButton.Enabled && autoUpdateButton.Checked)
                     new Updater().CheckUpdate();
             }
             catch (Exception ex)
