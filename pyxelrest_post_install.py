@@ -219,7 +219,6 @@ class PostInstall:
             raise
         self._update_auto_load_addin_config()
 
-
     def _update_auto_load_addin_config(self):
         # TODO Use regular expressions to update settings
         def write_addin_configuration_line(addin_settings_line, addin_settings_file):

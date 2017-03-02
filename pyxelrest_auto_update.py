@@ -42,6 +42,7 @@ class PyxelRestUpdater:
                     # As closing Microsoft Excel is a manual user action, wait for 1 second between each check.
                     time.sleep(1)
                 logging.debug('Microsoft Excel is closed. Installing update.')
+                self._end_logging()
                 self._update_pyxelrest()
             else:
                 logging.info('Update rejected.')
@@ -68,8 +69,13 @@ class PyxelRestUpdater:
     def _update_pyxelrest(self):
         subprocess.call([self._pip_path, 'install', 'pyxelrest', '--upgrade'])
 
+    def _end_logging(self):
+        for handler in logging.getLogger().handlers[:]:
+            handler.close()
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
+    parser.add_argument('path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
     options = parser.parse_args(sys.argv[1:])
     PyxelRestUpdater(options.path_to_pip).check_update()

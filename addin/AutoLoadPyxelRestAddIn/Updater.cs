@@ -32,7 +32,7 @@ namespace AutoLoadPyxelRestAddIn
             Log.Debug("Check for PyxelRest update.");
             Process updateScript = new Process();
             updateScript.StartInfo.FileName = pythonPath;
-            updateScript.StartInfo.Arguments = string.Format("{0} --path_to_pip {1}", update_script, pipPath);
+            updateScript.StartInfo.Arguments = string.Format("{0} {1}", update_script, pipPath);
             updateScript.StartInfo.UseShellExecute = false;
             updateScript.StartInfo.CreateNoWindow = true;
             updateScript.Start();
