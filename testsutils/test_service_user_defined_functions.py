@@ -33,8 +33,7 @@ def valid_swagger_test_get_test_dict_with_empty_nested_list():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -66,8 +65,7 @@ def valid_swagger_test_get_test_dict_with_four_imbricated_levels():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -99,8 +97,7 @@ def valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplica
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -132,8 +129,7 @@ def valid_swagger_test_get_test_dict_with_three_imbricated_levels():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -165,8 +161,7 @@ def valid_swagger_test_get_test_empty_dict():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -198,8 +193,7 @@ def valid_swagger_test_get_test_empty_list():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -243,8 +237,7 @@ def valid_swagger_test_post_test_form_parameter(form_string):
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -288,8 +281,7 @@ def valid_swagger_test_get_test_header_parameter(header_string):
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -577,8 +569,7 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -866,8 +857,7 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -1155,8 +1145,7 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -1444,8 +1433,7 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -1811,8 +1799,7 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -2178,8 +2165,7 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -2545,8 +2531,7 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -2912,8 +2897,7 @@ def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer,
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3076,8 +3060,7 @@ def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_int
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3240,8 +3223,7 @@ def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_in
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3404,8 +3386,7 @@ def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_int
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3568,8 +3549,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3602,8 +3582,7 @@ def valid_swagger_test_get_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3636,8 +3615,7 @@ def valid_swagger_test_post_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3670,8 +3648,7 @@ def valid_swagger_test_put_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3704,8 +3681,7 @@ def valid_swagger_test_delete_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3737,8 +3713,7 @@ def valid_swagger_test_get_test_list_of_dict():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3770,8 +3745,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3803,8 +3777,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3836,8 +3809,7 @@ def valid_swagger_test_get_test_one_level_dict():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -3869,8 +3841,7 @@ def valid_swagger_test_get_test_one_level_list():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -4157,8 +4128,7 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -4445,8 +4415,7 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -4733,8 +4702,7 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -5021,8 +4989,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -5387,8 +5354,7 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -5753,8 +5719,7 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -6119,8 +6084,7 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -6485,8 +6449,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_in
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -6648,8 +6611,7 @@ def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, pa
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -6811,8 +6773,7 @@ def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, p
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -6974,8 +6935,7 @@ def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, pa
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7137,8 +7097,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7170,8 +7129,7 @@ def valid_swagger_test_get_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7203,8 +7161,7 @@ def valid_swagger_test_post_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7236,8 +7193,7 @@ def valid_swagger_test_put_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7269,8 +7225,7 @@ def valid_swagger_test_delete_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7314,8 +7269,7 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7367,8 +7321,7 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7420,8 +7373,7 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7473,8 +7425,7 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7526,8 +7477,7 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -7814,8 +7764,7 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -8102,8 +8051,7 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -8390,8 +8338,7 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -8678,8 +8625,7 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -9044,8 +8990,7 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -9410,8 +9355,7 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -9776,8 +9720,7 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10142,8 +10085,7 @@ def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, quer
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10305,8 +10247,7 @@ def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer3
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10468,8 +10409,7 @@ def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10631,8 +10571,7 @@ def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer3
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10794,8 +10733,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10827,8 +10765,7 @@ def valid_swagger_test_get_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10860,8 +10797,7 @@ def valid_swagger_test_post_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10893,8 +10829,7 @@ def valid_swagger_test_put_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10926,8 +10861,7 @@ def valid_swagger_test_delete_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10959,8 +10893,7 @@ def filtered_tags_test_get_test_with_tags():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -10992,8 +10925,7 @@ def filtered_tags_test_post_test_with_tags():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -11025,8 +10957,7 @@ def filtered_tags_test_put_test_with_tags():
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -11044,6 +10975,13 @@ def filtered_tags_test_put_test_with_tags():
         if response:
             response.close()
 
+
+def msgpackpandas_as_list(msgpack_pandas):
+    logging.debug('Converting message pack pandas to list...')
+    data = pandas.read_msgpack(msgpack_pandas)
+    flatten_data = [data.columns.values.tolist()] + data.values.tolist()
+    logging.debug('Data converted to list.')
+    return flatten_data
 
 
 def describe_error(response, error):

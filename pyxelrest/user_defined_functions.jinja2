@@ -424,12 +424,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
-{% if support_pandas %}
-            data = pandas.read_msgpack(response.content)
-            return [data.columns.values.tolist()] + data.values.tolist()
-{% else %}
-            return ['Please install pandas module to be able to decode result.']
-{% endif %}
+            return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
@@ -480,6 +475,18 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         {%- endif -%}
     {%- endfor %}
 {% endfor %}
+
+def msgpackpandas_as_list(msgpack_pandas):
+{% if support_pandas %}
+    logging.debug('Converting message pack pandas to list...')
+    data = pandas.read_msgpack(msgpack_pandas)
+    flatten_data = [data.columns.values.tolist()] + data.values.tolist()
+    logging.debug('Data converted to list.')
+    return flatten_data
+{% else %}
+    logging.warning('Pandas module is required to decode response.')
+    return ['Please install pandas module to be able to decode result.']
+{% endif %}
 
 
 def describe_error(response, error):

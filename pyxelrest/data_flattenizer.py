@@ -122,5 +122,5 @@ class Flattenizer:
             return self.__all_flatten_rows if self.__all_flatten_rows and self.__all_flatten_rows != [[]] else ['']
         flatten_data = [self.__flatten_header]
         flatten_data.extend(self.__all_flatten_rows)
-        logging.debug('Data converted to a flat list...')
+        logging.debug('Data converted to a flat list.')
         return flatten_data
