@@ -81,36 +81,36 @@ The following options are available for each section:
 
 <table>
     <th>
-        <td>Description</td>
-        <td>Mandatory</td>
-        <td>Possible values</td>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td>swagger_url</td>
+        <td><strong>swagger_url</strong></td>
         <td>Complete URL to the Swagger definition.</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
     <tr>
-        <td>proxy_url</td>
+        <td><strong>proxy_url</strong></td>
         <td>Proxy that should be used to reach service.</td>
         <td>Optional</td>
         <td></td>
     </tr>
     <tr>
-        <td>service_host</td>
+        <td><strong>service_host</strong></td>
         <td>Service host in case your service is behind a reverse proxy.</td>
         <td>Optional</td>
         <td></td>
     </tr>
     <tr>
-        <td>methods</td>
+        <td><strong>methods</strong></td>
         <td>List of services methods to be exposed as UDFs.</td>
         <td>Optional</td>
         <td>get, post, put, delete</td>
     </tr>
     <tr>
-        <td>tags</td>
+        <td><strong>tags</strong></td>
         <td>Swagger tags that should be retrieved. If not specified, no filtering is applied.</td>
         <td>Optional</td>
         <td>any value separated by ','</td>
@@ -143,30 +143,30 @@ The following application settings are available:
 
 <table>
     <th>
-        <td>Description</td>
-        <td>Mandatory</td>
-        <td>Possible values</td>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td>PathToPIP</td>
+        <td><strong>PathToPIP</strong></td>
         <td>Path to the pip.exe (including) executable that should be used to update PyxelRest.</td>
         <td>Mandatory</td>
         <td>Installation script is already setting this value properly.</td>
     </tr>
     <tr>
-        <td>PathToPython</td>
+        <td><strong>PathToPython</strong></td>
         <td>Path to the python.exe (including) executable that should be used to launch the update script.</td>
         <td>Mandatory</td>
         <td>Installation script is already setting this value properly.</td>
     </tr>
     <tr>
-        <td>PathToUpdateScript</td>
+        <td><strong>PathToUpdateScript</strong></td>
         <td>Path to the Python script used to update PyxelRest.</td>
         <td>Mandatory</td>
         <td>Installation script is already setting this value properly.</td>
     </tr>
     <tr>
-        <td>AutoCheckForUpdates</td>
+        <td><strong>AutoCheckForUpdates</strong></td>
         <td>Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.</td>
         <td>Optional</td>
         <td>True (default), False</td>
