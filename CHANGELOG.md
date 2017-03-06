@@ -7,6 +7,7 @@
 ### Release notes ###
 
 - Log more client deserialization details.
+- Installer is not assuming anymore that provided paths are valid to avoid failures afterwards and ease debugging.
 
 ### Bug fixes ###
 
