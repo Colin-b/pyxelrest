@@ -8,6 +8,10 @@
 
 - Add more logging to debug performances issues on client deserialization.
 
+### Bug fixes ###
+
+- Path to PIP was wrong in case the user is not using a Python virtual environment, leading to updates not being performed.
+
 ## 0.54 (2017-03-02) ##
 
 ### Enhancements ###

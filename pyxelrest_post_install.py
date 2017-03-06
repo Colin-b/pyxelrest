@@ -224,7 +224,11 @@ class PostInstall:
         def write_addin_configuration_line(addin_settings_line, addin_settings_file):
             if 'PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
+                # PIP is in the same folder as python executable in a virtual environment
                 pip_path = os.path.join(python_executable_folder_path, 'pip.exe')
+                if not os.path.exists(pip_path):
+                    # PIP is in the Scripts folder in a non virtual environment
+                    pip_path = os.path.join(python_executable_folder_path, 'Scripts', 'pip.exe')
                 new_line = addin_settings_line.replace('PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', pip_path)
                 addin_settings_file.write(new_line)
             elif 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
