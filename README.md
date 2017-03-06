@@ -22,7 +22,13 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 
 ## Installation ##
 
-### User installation ###
+### Pre requisites ###
+
+* [Python](https://www.python.org/downloads/) must be installed.
+* [Microsoft Excel](https://products.office.com/en-us/excel) must be installed.
+* [Microsoft .NET Framework 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+
+### User installation (using PIP) ###
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
@@ -30,13 +36,7 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 
         pip install pyxelrest
 
-### User upgrade ###
-
-1. Microsoft Excel must be closed while executing the following command:
-
-        pip install pyxelrest --upgrade
-
-### User uninstall ###
+### User uninstall (using PIP) ###
 
 1. Go to `Control Panel/Programs and Features` and uninstall AutoLoadPyxelRestAddIn.
 2. Execute the following command:
@@ -45,7 +45,7 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 3. Remove `%APPDATA%\pyxelrest` folder.
 4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
 
-### Developer Installation/Upgrade ###
+### Developer Installation (using PIP) ###
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
