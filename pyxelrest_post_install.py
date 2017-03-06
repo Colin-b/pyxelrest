@@ -60,7 +60,10 @@ class XlWingsConfig:
         """
         import xlwings
         xlwings_path = xlwings.__path__[0]
-        with open(os.path.join(xlwings_path, 'xlwings.bas')) as previous_settings:
+        xlwings_bas_path = os.path.join(xlwings_path, 'xlwings.bas')
+        if not os.path.isfile(xlwings_bas_path):
+            raise Exception('XLWings BAS file cannot be found in {0}'.format(xlwings_bas_path))
+        with open(xlwings_bas_path) as previous_settings:
             for line in previous_settings:
                 self._write_pyxelrest_settings_line(line, pyxelrest_settings)
 
@@ -75,12 +78,20 @@ class XlWingsConfig:
         # In case this installation is not performed using the default python executable in the system
         if '    PYTHON_WIN = ""\n' == xlwings_settings_line:
             python_path = os.path.dirname(sys.executable)
-            pyxelrest_settings.write('    PYTHON_WIN = "' + os.path.join(python_path, 'pythonw.exe') + '"\n')
+            pythonw_path = os.path.join(python_path, 'pythonw.exe')
+            if not os.path.isfile(pythonw_path):
+                raise Exception('Python executable cannot be found in {0}'.format(pythonw_path))
+            pyxelrest_settings.write('    PYTHON_WIN = "' + pythonw_path + '"\n')
         # Allow to call pyxelrest from any Excel file
         elif '    PYTHONPATH = ThisWorkbook.Path\n' == xlwings_settings_line:
+            if not os.path.exists(self.pyxelrest_module_dir):
+                raise Exception('PyxelRest module directory cannot be found in {0}'.format(self.pyxelrest_module_dir))
             pyxelrest_settings.write('    PYTHONPATH = "' + self.pyxelrest_module_dir + '"\n')
         # Allow to call pyxelrest
         elif '    UDF_MODULES = ""\n' == xlwings_settings_line:
+            pyxelrest_python_path = os.path.join(self.pyxelrest_module_dir, 'pyxelrestgenerator.py')
+            if not os.path.isfile(pyxelrest_python_path):
+                raise Exception('PyxelRest module cannot be found in {0}'.format(pyxelrest_python_path))
             pyxelrest_settings.write('    UDF_MODULES = "pyxelrestgenerator"\n')
         else:
             pyxelrest_settings.write(xlwings_settings_line)
@@ -196,7 +207,7 @@ class PostInstall:
         if not os.path.exists(xlstart_folder):
             os.makedirs(xlstart_folder)
         loaded_pyxelrest_vb_file = os.path.join(xlstart_folder, 'pyxelrest.xlam')
-        if not os.path.exists(loaded_pyxelrest_vb_file):
+        if not os.path.isfile(loaded_pyxelrest_vb_file):
             shutil.copyfile(pyxelrest_vb_file_path, loaded_pyxelrest_vb_file)
 
     def _install_auto_load_addin(self):
@@ -226,29 +237,38 @@ class PostInstall:
                 python_executable_folder_path = os.path.dirname(sys.executable)
                 # PIP is in the same folder as python executable in a virtual environment
                 pip_path = os.path.join(python_executable_folder_path, 'pip.exe')
-                if not os.path.exists(pip_path):
+                if not os.path.isfile(pip_path):
                     # PIP is in the Scripts folder in a non virtual environment
                     pip_path = os.path.join(python_executable_folder_path, 'Scripts', 'pip.exe')
-                new_line = addin_settings_line.replace('PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', pip_path)
-                addin_settings_file.write(new_line)
+                # Do not set pip path to a value that we know wrong, this case should not happen but you never know
+                # Do not raise an exception here as the auto update feature is optional
+                if os.path.isfile(pip_path):
+                    new_line = addin_settings_line.replace('PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', pip_path)
+                    addin_settings_file.write(new_line)
             elif 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
                 python_path = os.path.join(python_executable_folder_path, 'python.exe')
-                new_line = addin_settings_line.replace('PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', python_path)
-                addin_settings_file.write(new_line)
+                # Do not set python path to a value that we know wrong, this case should not happen but you never know
+                # Do not raise an exception here as the auto update feature is optional
+                if os.path.isfile(python_path):
+                    new_line = addin_settings_line.replace('PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', python_path)
+                    addin_settings_file.write(new_line)
             elif 'AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
                 auto_update_script_path = os.path.join(self.scripts_folder, 'pyxelrest_auto_update.py')
-                new_line = addin_settings_line.replace('AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
-                                                       auto_update_script_path)
-                addin_settings_file.write(new_line)
+                # Do not set script path to a value that we know wrong, this case should not happen but you never know
+                # Do not raise an exception here as the auto update feature is optional
+                if os.path.isfile(auto_update_script_path):
+                    new_line = addin_settings_line.replace('AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
+                                                           auto_update_script_path)
+                    addin_settings_file.write(new_line)
             else:
                 addin_settings_file.write(addin_settings_line)
 
         config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, 'addin.config')
-        if not os.path.exists(config_file_path):
+        if not os.path.isfile(config_file_path):
             default_config_file_path = os.path.join(self.pyxelrest_appdata_addin_folder,
                                                     'AutoLoadPyxelRestAddIn.dll.config')
-            if os.path.exists(default_config_file_path):
+            if os.path.isfile(default_config_file_path):
                 with open(config_file_path, 'w') as new_file:
                     with open(default_config_file_path) as default_file:
                         for line in default_file:
