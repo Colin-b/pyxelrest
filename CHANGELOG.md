@@ -6,7 +6,7 @@
 
 ### Release notes ###
 
-- Add more logging to debug performances issues on client deserialization.
+- Log more client deserialization details.
 
 ### Bug fixes ###
 
