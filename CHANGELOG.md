@@ -1,6 +1,12 @@
 # PyxelRest Changelog #
 
-## 0.55 (upcoming) ##
+## 0.56 (incoming) ##
+
+## 0.55 (2017-03-06) ##
+
+### Release notes ###
+
+- Add more logging to debug performances issues on client deserialization.
 
 ## 0.54 (2017-03-02) ##
 
@@ -34,7 +40,7 @@
 
 ## 0.52 (2017-02-24) ##
 
-### Release Notes ###
+### Release notes ###
 
 Default configuration is now using the official OpenAPI example.
 Configuration files are now located in a specific configuration folder.
@@ -51,7 +57,7 @@ Configuration files are now located in a specific configuration folder.
 
 ## 0.50 (2017-02-22) ##
 
-### Release Notes ###
+### Release notes ###
 
 This version breaks compatibility with previous ones.
 To ensure that you update properly please follow uninstall procedure first.
