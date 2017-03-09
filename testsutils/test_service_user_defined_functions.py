@@ -26,7 +26,7 @@ def valid_swagger_test_get_test_dict_with_empty_nested_list():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/empty/nested/list'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_dict_with_empty_nested_list ({0}).".format(response.request.url))
@@ -58,7 +58,7 @@ def valid_swagger_test_get_test_dict_with_four_imbricated_levels():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/four/imbricated/levels'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_dict_with_four_imbricated_levels ({0}).".format(response.request.url))
@@ -90,7 +90,7 @@ def valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplica
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/multiple/imbricated/levels/and/duplicate/keys'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys ({0}).".format(response.request.url))
@@ -122,7 +122,7 @@ def valid_swagger_test_get_test_dict_with_three_imbricated_levels():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/three/imbricated/levels'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_dict_with_three_imbricated_levels ({0}).".format(response.request.url))
@@ -154,7 +154,7 @@ def valid_swagger_test_get_test_empty_dict():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/empty/dict'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_empty_dict ({0}).".format(response.request.url))
@@ -186,7 +186,7 @@ def valid_swagger_test_get_test_empty_list():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/empty/list'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_empty_list ({0}).".format(response.request.url))
@@ -230,7 +230,7 @@ def valid_swagger_test_post_test_form_parameter(form_string):
     response = None
     try:
         response = requests.post('http://localhost:8943/test/form/parameter'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_form_parameter ({0}).".format(response.request.url))
@@ -274,7 +274,7 @@ def valid_swagger_test_get_test_header_parameter(header_string):
     response = None
     try:
         response = requests.get('http://localhost:8943/test/header/parameter'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_header_parameter ({0}).".format(response.request.url))
@@ -562,7 +562,7 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
     response = None
     try:
         response = requests.get('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -850,7 +850,7 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1138,7 +1138,7 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1426,7 +1426,7 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1792,7 +1792,7 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
     response = None
     try:
         response = requests.get('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2158,7 +2158,7 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2524,7 +2524,7 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2890,7 +2890,7 @@ def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer,
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -3053,7 +3053,7 @@ def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_int
     response = None
     try:
         response = requests.get('http://localhost:8943/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_with_all_paths_types ({0}).".format(response.request.url))
@@ -3216,7 +3216,7 @@ def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_in
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_paths_types ({0}).".format(response.request.url))
@@ -3379,7 +3379,7 @@ def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_int
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_paths_types ({0}).".format(response.request.url))
@@ -3542,7 +3542,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_paths_types ({0}).".format(response.request.url))
@@ -3575,7 +3575,7 @@ def valid_swagger_test_get_test_json_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/json/without/parameter'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_json_without_parameter ({0}).".format(response.request.url))
@@ -3608,7 +3608,7 @@ def valid_swagger_test_post_test_json_without_parameter():
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_without_parameter ({0}).".format(response.request.url))
@@ -3641,7 +3641,7 @@ def valid_swagger_test_put_test_json_without_parameter():
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_without_parameter ({0}).".format(response.request.url))
@@ -3674,7 +3674,7 @@ def valid_swagger_test_delete_test_json_without_parameter():
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_without_parameter ({0}).".format(response.request.url))
@@ -3706,7 +3706,7 @@ def valid_swagger_test_get_test_list_of_dict():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/list/of/dict'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_list_of_dict ({0}).".format(response.request.url))
@@ -3738,7 +3738,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/dict/entry/with/a/list'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list ({0}).".format(response.request.url))
@@ -3770,7 +3770,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/dict/entry/with/a/list/of/dict'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict ({0}).".format(response.request.url))
@@ -3802,7 +3802,7 @@ def valid_swagger_test_get_test_one_level_dict():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/level/dict'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_one_level_dict ({0}).".format(response.request.url))
@@ -3834,7 +3834,7 @@ def valid_swagger_test_get_test_one_level_list():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/level/list'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_one_level_list ({0}).".format(response.request.url))
@@ -4121,7 +4121,7 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
     response = None
     try:
         response = requests.get('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -4408,7 +4408,7 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -4695,7 +4695,7 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -4982,7 +4982,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -5347,7 +5347,7 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
     response = None
     try:
         response = requests.get('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -5712,7 +5712,7 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -6077,7 +6077,7 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -6442,7 +6442,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_in
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -6604,7 +6604,7 @@ def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, pa
     response = None
     try:
         response = requests.get('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
@@ -6766,7 +6766,7 @@ def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, p
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
@@ -6928,7 +6928,7 @@ def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, pa
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
@@ -7090,7 +7090,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
@@ -7122,7 +7122,7 @@ def valid_swagger_test_get_test_plain_text_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/plain/text/without/parameter'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_plain_text_without_parameter ({0}).".format(response.request.url))
@@ -7154,7 +7154,7 @@ def valid_swagger_test_post_test_plain_text_without_parameter():
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_without_parameter ({0}).".format(response.request.url))
@@ -7186,7 +7186,7 @@ def valid_swagger_test_put_test_plain_text_without_parameter():
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_without_parameter ({0}).".format(response.request.url))
@@ -7218,7 +7218,7 @@ def valid_swagger_test_delete_test_plain_text_without_parameter():
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_without_parameter ({0}).".format(response.request.url))
@@ -7262,7 +7262,7 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
     response = None
     try:
         response = requests.get('http://localhost:8943/test/string/array/parameter'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_string_array_parameter ({0}).".format(response.request.url))
@@ -7314,7 +7314,7 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
     response = None
     try:
         response = requests.get('http://localhost:8943/test/vba/restricted/keywords'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7366,7 +7366,7 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
     response = None
     try:
         response = requests.post('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7418,7 +7418,7 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
     response = None
     try:
         response = requests.put('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7470,7 +7470,7 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7757,7 +7757,7 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8044,7 +8044,7 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8331,7 +8331,7 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8618,7 +8618,7 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8983,7 +8983,7 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={})
+), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -9348,7 +9348,7 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -9713,7 +9713,7 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -10078,7 +10078,7 @@ def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, quer
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={})
+), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -10240,7 +10240,7 @@ def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer3
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_with_all_paths_types ({0}).".format(response.request.url))
@@ -10402,7 +10402,7 @@ def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_paths_types ({0}).".format(response.request.url))
@@ -10564,7 +10564,7 @@ def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer3
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_paths_types ({0}).".format(response.request.url))
@@ -10726,7 +10726,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={})
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_paths_types ({0}).".format(response.request.url))
@@ -10758,7 +10758,7 @@ def valid_swagger_test_get_test_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/without/parameter'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_get_test_without_parameter ({0}).".format(response.request.url))
@@ -10790,7 +10790,7 @@ def valid_swagger_test_post_test_without_parameter():
     response = None
     try:
         response = requests.post('http://localhost:8943/test/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_without_parameter ({0}).".format(response.request.url))
@@ -10822,7 +10822,7 @@ def valid_swagger_test_put_test_without_parameter():
     response = None
     try:
         response = requests.put('http://localhost:8943/test/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_without_parameter ({0}).".format(response.request.url))
@@ -10854,7 +10854,7 @@ def valid_swagger_test_delete_test_without_parameter():
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/without/parameter'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_without_parameter ({0}).".format(response.request.url))
@@ -10886,7 +10886,7 @@ def filtered_tags_test_get_test_with_tags():
     response = None
     try:
         response = requests.get('http://localhost:8944/test/with/tags'.format(
-), stream=True, headers=request_header, proxies={})
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_get_test_with_tags ({0}).".format(response.request.url))
@@ -10918,7 +10918,7 @@ def filtered_tags_test_post_test_with_tags():
     response = None
     try:
         response = requests.post('http://localhost:8944/test/with/tags'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_post_test_with_tags ({0}).".format(response.request.url))
@@ -10950,7 +10950,7 @@ def filtered_tags_test_put_test_with_tags():
     response = None
     try:
         response = requests.put('http://localhost:8944/test/with/tags'.format(
-), proxies={})
+), proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_put_test_with_tags ({0}).".format(response.request.url))

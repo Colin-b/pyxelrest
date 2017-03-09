@@ -2,6 +2,11 @@
 
 ## 0.56 (incoming) ##
 
+### Enhancements ###
+
+- Connection timeout can now be specified per service (1 second by default)
+- Read timeout can now be specified per service (no timeout by default)
+
 ## 0.55 (2017-03-06) ##
 
 ### Release notes ###

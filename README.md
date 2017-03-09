@@ -115,6 +115,18 @@ The following options are available for each section:
         <td>Optional</td>
         <td>any value separated by ','</td>
     </tr>
+    <tr>
+        <td><strong>connect_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default.</td>
+        <td>Optional</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.</td>
+        <td>Optional</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
 </table>
 
 ### Logging Configuration ###

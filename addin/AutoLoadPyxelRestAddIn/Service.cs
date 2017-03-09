@@ -1,6 +1,7 @@
 ﻿using IniParser.Model;
 using log4net;
 using System;
+using System.Globalization;
 using System.Text;
 
 namespace AutoLoadPyxelRestAddIn
@@ -14,6 +15,8 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
         private static readonly string TAGS_PROPERTY = "tags";
+        private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
+        private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -29,6 +32,8 @@ namespace AutoLoadPyxelRestAddIn
         public bool Put;
         public bool Delete;
         public string Tags;
+        public float? ConnectTimeout;
+        public float? ReadTimeout;
 
         public Service(string name)
         {
@@ -55,6 +60,19 @@ namespace AutoLoadPyxelRestAddIn
             Put = Array.Exists(methods, s => PUT.Equals(s));
             Delete = Array.Exists(methods, s => DELETE.Equals(s));
             Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
+            ConnectTimeout = GetFloatProperty(serviceConfig, CONNECT_TIMEOUT_PROPERTY, 1);
+            ReadTimeout = GetFloatProperty(serviceConfig, READ_TIMEOUT_PROPERTY, null);
+        }
+
+        private float? GetFloatProperty(KeyDataCollection serviceConfig, string property, float? defaultValue)
+        {
+            if (serviceConfig.ContainsKey(property))
+            {
+                float parsed;
+                if (float.TryParse(serviceConfig[property], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out parsed))
+                    return parsed;
+            }
+            return defaultValue;
         }
 
         internal SectionData ToConfig()
@@ -90,6 +108,20 @@ namespace AutoLoadPyxelRestAddIn
                 section.Keys.SetKeyData(tags);
             }
 
+            if (ConnectTimeout.HasValue)
+            {
+                KeyData connectTimeout = new KeyData(CONNECT_TIMEOUT_PROPERTY);
+                connectTimeout.Value = ConnectTimeout.Value.ToString(CultureInfo.InvariantCulture);
+                section.Keys.SetKeyData(connectTimeout);
+            }
+
+            if (ReadTimeout.HasValue)
+            {
+                KeyData readTimeout = new KeyData(READ_TIMEOUT_PROPERTY);
+                readTimeout.Value = ReadTimeout.Value.ToString(CultureInfo.InvariantCulture);
+                section.Keys.SetKeyData(readTimeout);
+            }
+
             return section;
         }
 
@@ -103,6 +135,8 @@ namespace AutoLoadPyxelRestAddIn
             Put = true;
             Delete = true;
             Tags = "";
+            ConnectTimeout = 1;
+            ReadTimeout = null;
         }
 
         private string GetMethods()

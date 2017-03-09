@@ -64,6 +64,10 @@ class SwaggerService:
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
         self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
+        self.connect_timeout = float(self.get_item_default(config, 'connect_timeout', 1))
+        self.read_timeout = self.get_item_default(config, 'read_timeout', None)
+        if self.read_timeout:
+            self.read_timeout = float(self.read_timeout)
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
@@ -121,7 +125,7 @@ class SwaggerService:
         :param swagger_url: URI of the service swagger JSON.
         :return: Dictionary representation of the retrieved swagger JSON.
         """
-        response = requests.get(swagger_url, proxies=self.proxy, timeout=1)
+        response = requests.get(swagger_url, proxies=self.proxy, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         swagger = response.json()
         self._update_vba_restricted_keywords(swagger)

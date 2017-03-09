@@ -29,13 +29,13 @@ from data_flattenizer import Flattenizer
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% else %}
     response = requests.delete('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), proxies={{ service.proxy }})
+), proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% endif %}
 {% endmacro -%}
 
@@ -45,13 +45,13 @@ from data_flattenizer import Flattenizer
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, stream=True, headers=request_header, proxies={{ service.proxy }})
+), request_parameters, stream=True, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% else %}
     response = requests.get('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), stream=True, headers=request_header, proxies={{ service.proxy }})
+), stream=True, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% endif %}
 {% endmacro -%}
 
@@ -61,13 +61,13 @@ from data_flattenizer import Flattenizer
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% else %}
     response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), proxies={{ service.proxy }})
+), proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% endif %}
 {% endmacro -%}
 
@@ -77,13 +77,13 @@ from data_flattenizer import Flattenizer
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }})
+), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% else %}
     response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), proxies={{ service.proxy }})
+), proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% endif %}
 {% endmacro -%}
 
