@@ -119,6 +119,7 @@ class Flattenizer:
             self.__flatten_header = self.__flatten_header[1:]
             self.__all_flatten_rows = [flatten_row[1:] for flatten_row in self.__all_flatten_rows]
         if not self.__flatten_header or self.__flatten_header == ['']:
+            logging.debug('Data converted to a flat list without header.')
             return self.__all_flatten_rows if self.__all_flatten_rows and self.__all_flatten_rows != [[]] else ['']
         flatten_data = [self.__flatten_header]
         flatten_data.extend(self.__all_flatten_rows)
