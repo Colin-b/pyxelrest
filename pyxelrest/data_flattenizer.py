@@ -29,15 +29,16 @@ class Flattenizer:
         self._set_values_per_level(0, 0, '', data, 0)
 
     def _set_values_per_level(self, row, level, header, value, column_index):
-        if value:
+        # Because "0" or "False" are considered as "not value", this condition cannot be smaller
+        if value is None or value == [] or value == {}:
+            self._set_value_on_level(row, level, header, value='')
+        else:
             if isinstance(value, dict):
                 self._set_values_per_level_for_dict(row, level, value, column_index)
             elif isinstance(value, list):
                 self._set_values_per_level_for_list(row, level, header, value, column_index)
             else:
                 self._set_value_on_level(row, level, header, value)
-        else:
-            self._set_value_on_level(row, level, header, value='')
 
     def _set_value_on_level(self, row, level, header, value):
         self._init_values_per_level(row, level)

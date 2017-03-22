@@ -43,6 +43,8 @@ class PyxelRestTest(unittest.TestCase):
         cls.service_processes.append(multiprocessing.Process(target=test_service.start_server, args=(8943,)))
         import testsutils.filtered_tags_test_service as filtered_tags_test_service
         cls.service_processes.append(multiprocessing.Process(target=filtered_tags_test_service.start_server, args=(8944,)))
+        import testsutils.float_zero_value_test_service as float_zero_value_test_service
+        cls.service_processes.append(multiprocessing.Process(target=float_zero_value_test_service.start_server, args=(8945,)))
         for service_process in cls.service_processes:
             service_process.start()
 
@@ -3184,3 +3186,11 @@ class PyxelRestTest(unittest.TestCase):
     def test_delete_test_with_tags(self):
         import pyxelrestgenerator
         self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_test_delete_test_with_tags'))
+
+    def test_get_test_with_float_zero(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            ['float_zero'],
+            [0]
+        ],
+            pyxelrestgenerator.float_zero_value_test_get_test_with_float_zero())

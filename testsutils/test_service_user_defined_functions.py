@@ -10975,6 +10975,38 @@ def filtered_tags_test_put_test_with_tags():
         if response:
             response.close()
 
+@xw.func(category='float_zero_value_test', call_in_wizard=False)
+def float_zero_value_test_get_test_with_float_zero():
+    logging.info("Calling float_zero_value_test_get_test_with_float_zero...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8945/test/with/float/zero'.format(
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+
+        response.raise_for_status()
+        logging.info("Valid response received for float_zero_value_test_get_test_with_float_zero ({0}).".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling float_zero_value_test_get_test_with_float_zero.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling float_zero_value_test_get_test_with_float_zero response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling float_zero_value_test_get_test_with_float_zero.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
 
 def msgpackpandas_as_list(msgpack_pandas):
     logging.debug('Converting message pack pandas to list...')
