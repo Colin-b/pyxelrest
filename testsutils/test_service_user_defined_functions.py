@@ -10975,17 +10975,17 @@ def filtered_tags_test_put_test_with_tags():
         if response:
             response.close()
 
-@xw.func(category='float_zero_value_test', call_in_wizard=False)
-def float_zero_value_test_get_test_with_float_zero():
-    logging.info("Calling float_zero_value_test_get_test_with_float_zero...")
+@xw.func(category='values_false_test', call_in_wizard=False)
+def values_false_test_get_test_with_empty_dictionary():
+    logging.info("Calling values_false_test_get_test_with_empty_dictionary...")
     request_header = {}
     response = None
     try:
-        response = requests.get('http://localhost:8945/test/with/float/zero'.format(
+        response = requests.get('http://localhost:8945/test/with/empty/dictionary'.format(
 ), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
-        logging.info("Valid response received for float_zero_value_test_get_test_with_float_zero ({0}).".format(response.request.url))
+        logging.info("Valid response received for values_false_test_get_test_with_empty_dictionary ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10993,14 +10993,174 @@ def float_zero_value_test_get_test_with_float_zero():
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling float_zero_value_test_get_test_with_float_zero.")
+        logging.exception("Connection error occurred while calling values_false_test_get_test_with_empty_dictionary.")
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
         if response:
-            logging.exception("Error occurred while handling float_zero_value_test_get_test_with_float_zero response: {0}.".format(response.text))
+            logging.exception("Error occurred while handling values_false_test_get_test_with_empty_dictionary response: {0}.".format(response.text))
         else:
-            logging.exception("Error occurred while calling float_zero_value_test_get_test_with_float_zero.")
+            logging.exception("Error occurred while calling values_false_test_get_test_with_empty_dictionary.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='values_false_test', call_in_wizard=False)
+def values_false_test_get_test_with_empty_list():
+    logging.info("Calling values_false_test_get_test_with_empty_list...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8945/test/with/empty/list'.format(
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+
+        response.raise_for_status()
+        logging.info("Valid response received for values_false_test_get_test_with_empty_list ({0}).".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling values_false_test_get_test_with_empty_list.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling values_false_test_get_test_with_empty_list response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling values_false_test_get_test_with_empty_list.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='values_false_test', call_in_wizard=False)
+def values_false_test_get_test_with_empty_string():
+    logging.info("Calling values_false_test_get_test_with_empty_string...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8945/test/with/empty/string'.format(
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+
+        response.raise_for_status()
+        logging.info("Valid response received for values_false_test_get_test_with_empty_string ({0}).".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling values_false_test_get_test_with_empty_string.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling values_false_test_get_test_with_empty_string response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling values_false_test_get_test_with_empty_string.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='values_false_test', call_in_wizard=False)
+def values_false_test_get_test_with_false_boolean():
+    logging.info("Calling values_false_test_get_test_with_false_boolean...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8945/test/with/false/boolean'.format(
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+
+        response.raise_for_status()
+        logging.info("Valid response received for values_false_test_get_test_with_false_boolean ({0}).".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling values_false_test_get_test_with_false_boolean.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling values_false_test_get_test_with_false_boolean response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling values_false_test_get_test_with_false_boolean.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='values_false_test', call_in_wizard=False)
+def values_false_test_get_test_with_zero_float():
+    logging.info("Calling values_false_test_get_test_with_zero_float...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8945/test/with/zero/float'.format(
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+
+        response.raise_for_status()
+        logging.info("Valid response received for values_false_test_get_test_with_zero_float ({0}).".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling values_false_test_get_test_with_zero_float.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling values_false_test_get_test_with_zero_float response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling values_false_test_get_test_with_zero_float.")
+        return describe_error(response, error)
+
+    finally:
+        if response:
+            response.close()
+
+@xw.func(category='values_false_test', call_in_wizard=False)
+def values_false_test_get_test_with_zero_integer():
+    logging.info("Calling values_false_test_get_test_with_zero_integer...")
+    request_header = {}
+    response = None
+    try:
+        response = requests.get('http://localhost:8945/test/with/zero/integer'.format(
+), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+
+        response.raise_for_status()
+        logging.info("Valid response received for values_false_test_get_test_with_zero_integer ({0}).".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logging.exception("Connection error occurred while calling values_false_test_get_test_with_zero_integer.")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        if response:
+            logging.exception("Error occurred while handling values_false_test_get_test_with_zero_integer response: {0}.".format(response.text))
+        else:
+            logging.exception("Error occurred while calling values_false_test_get_test_with_zero_integer.")
         return describe_error(response, error)
 
     finally:

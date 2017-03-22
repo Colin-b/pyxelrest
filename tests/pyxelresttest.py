@@ -43,8 +43,8 @@ class PyxelRestTest(unittest.TestCase):
         cls.service_processes.append(multiprocessing.Process(target=test_service.start_server, args=(8943,)))
         import testsutils.filtered_tags_test_service as filtered_tags_test_service
         cls.service_processes.append(multiprocessing.Process(target=filtered_tags_test_service.start_server, args=(8944,)))
-        import testsutils.float_zero_value_test_service as float_zero_value_test_service
-        cls.service_processes.append(multiprocessing.Process(target=float_zero_value_test_service.start_server, args=(8945,)))
+        import testsutils.values_false_test_service as values_false_test_service
+        cls.service_processes.append(multiprocessing.Process(target=values_false_test_service.start_server, args=(8945,)))
         for service_process in cls.service_processes:
             service_process.start()
 
@@ -3187,10 +3187,50 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_test_delete_test_with_tags'))
 
-    def test_get_test_with_float_zero(self):
+    def test_get_test_with_zero_integer(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['float_zero'],
+            ['zero_integer'],
             [0]
         ],
-            pyxelrestgenerator.float_zero_value_test_get_test_with_float_zero())
+            pyxelrestgenerator.values_false_test_get_test_with_zero_integer())
+
+    def test_get_test_with_zero_float(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            ['zero_float'],
+            [0.0]
+        ],
+            pyxelrestgenerator.values_false_test_get_test_with_zero_float())
+
+    def test_get_test_with_false_boolean(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            ['false_boolean'],
+            [False]
+        ],
+            pyxelrestgenerator.values_false_test_get_test_with_false_boolean())
+
+    def test_get_test_with_empty_string(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            ['empty_string'],
+            ['']
+        ],
+            pyxelrestgenerator.values_false_test_get_test_with_empty_string())
+
+    def test_get_test_with_empty_list(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            ['empty_list'],
+            ['']
+        ],
+            pyxelrestgenerator.values_false_test_get_test_with_empty_list())
+
+    def test_get_test_with_empty_dictionary(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            ['empty_dictionary'],
+            ['']
+        ],
+            pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
