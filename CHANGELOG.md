@@ -7,6 +7,10 @@
 - Connection timeout can now be specified per service (1 second by default)
 - Read timeout can now be specified per service (no timeout by default)
 
+### Bug fixes ###
+
+- "0" and "False" where converted to an empty string before sent to Microsoft Excel.
+
 ## 0.55 (2017-03-06) ##
 
 ### Release notes ###
