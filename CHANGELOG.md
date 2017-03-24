@@ -11,6 +11,7 @@
 ### Bug fixes ###
 
 - "0" and "False" where converted to an empty string before sent to Microsoft Excel.
+- Post installation script was not setting PathToUpdateScript property. Leading to updated not being performed.
 
 ## 0.55 (2017-03-06) ##
 

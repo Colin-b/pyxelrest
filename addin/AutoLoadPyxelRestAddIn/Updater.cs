@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System.Diagnostics;
 using System.IO;
+using System;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -16,15 +17,15 @@ namespace AutoLoadPyxelRestAddIn
         {
             pipPath = ThisAddIn.GetSetting("PathToPIP");
             if (!File.Exists(pipPath))
-                throw new FileNotFoundException("Path to PIP cannot be found.", pipPath);
+                throw new Exception(string.Format("Path to PIP '{0}' cannot be found.", pipPath));
 
             pythonPath = ThisAddIn.GetSetting("PathToPython");
             if (!File.Exists(pythonPath))
-                throw new FileNotFoundException("Path to Python cannot be found.", pythonPath);
+                throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
 
             update_script = ThisAddIn.GetSetting("PathToUpdateScript");
             if (!File.Exists(update_script))
-                throw new FileNotFoundException("PyxelRest auto update script cannot be found.", update_script);
+                throw new Exception(string.Format("PyxelRest auto update script '{0}' cannot be found.", update_script));
         }
 
         internal void CheckUpdate()
