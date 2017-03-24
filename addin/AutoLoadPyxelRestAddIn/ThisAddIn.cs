@@ -201,40 +201,17 @@ namespace AutoLoadPyxelRestAddIn
         private bool TryToLoadXlWingsModule()
         {
             if (!ContainsXlWingsModule())
-            {
-                string pathToBasFile = GetPathToXlWingsBasFile();
-                if (pathToBasFile == null)
-                {
-                    Log.Warn("No XLWings module can be found to load.");
-                    return false;
-                }
-                return ImportXlWingsBasFile(pathToBasFile);
-            }
+                return ImportXlWingsBasFile();
             return true;
         }
 
         private void ActivatePyxelRest()
         {
-            string pathToBasFile = GetPathToXlWingsBasFile();
-            if (pathToBasFile == null)
-            {
-                Log.Warn("No XLWings module can be found to load.");
-                return;
-            }
-
-            if(ImportXlWingsBasFile(pathToBasFile))
+            if(ImportXlWingsBasFile())
                 ImportUserDefinedFunctions();
         }
 
-        private string GetPathToXlWingsBasFile()
-        {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (appDataFolder != null)
-                return Path.Combine(appDataFolder, "pyxelrest", "configuration", "xlwings.bas");
-            return null;
-        }
-
-        private bool ImportXlWingsBasFile(string pathToBasFile)
+        private bool ImportXlWingsBasFile()
         {
             try
             {
@@ -248,6 +225,10 @@ namespace AutoLoadPyxelRestAddIn
                 }
                 if(RemoveXlWingsModule(vbProject))
                 {
+                    string pathToBasFile = GetPathToXlWingsBasFile();
+                    if (pathToBasFile == null)
+                        return false;
+
                     vbProject.VBComponents.Import(pathToBasFile);
                     Log.Debug("XLWings module imported.");
                 }
@@ -262,6 +243,17 @@ namespace AutoLoadPyxelRestAddIn
                 Log.Error("XlWings module could not be imported.", ex);
                 return false;
             };
+        }
+
+        private string GetPathToXlWingsBasFile()
+        {
+            string pathToBasFile = GetSetting("PathToXlWingsBasFile");
+            if (!File.Exists(pathToBasFile))
+            {
+                Log.WarnFormat("No XLWings module can be found to load in '{0}'.", pathToBasFile);
+                return null;
+            }
+            return pathToBasFile;
         }
 
         private VBProject GetPyxelRestVBProject()
