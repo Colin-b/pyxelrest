@@ -60,7 +60,7 @@ setup(name='pyxelrest',
       package_data={
          'pyxelrest': [
              'default_services_configuration.ini',
-             'default_logging_configuration.ini',
+             'default_logging_configuration.ini.jinja2',
              'user_defined_functions.jinja2'
          ]
       },

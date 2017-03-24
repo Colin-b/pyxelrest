@@ -183,6 +183,12 @@ The following application settings are available:
         <td>Optional</td>
         <td>True (default), False</td>
     </tr>
+    <tr>
+        <td><strong>PathToXlWingsBasFile</strong></td>
+        <td>Path to the Python script used to update PyxelRest.</td>
+        <td>Mandatory</td>
+        <td>Default value is already set.</td>
+    </tr>
 </table>
 
 ## Frequently Asked Question ##

@@ -174,29 +174,15 @@ class PostInstall:
         self._create_logging_configuration('pyxelrest_auto_update.log', 'auto_update_logging.ini')
 
     def _create_logging_configuration(self, log_file_name, config_file_name):
-        # TODO Use regular expressions to update settings
-        def write_logging_configuration_line(logging_settings_line, logging_settings_file):
-            if 'FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in logging_settings_line:
-                default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', log_file_name)
-                new_line = logging_settings_line.replace('FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
-                                                         default_log_file_path)
-                logging_settings_file.write(new_line)
-            else:
-                logging_settings_file.write(logging_settings_line)
-
-        default_config_file = os.path.join(self.installation_files_folder,
-                                           'pyxelrest',
-                                           'default_logging_configuration.ini')
-        if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
-            if not os.path.isfile(user_config_file):
-                with open(user_config_file, 'w') as new_file:
-                    with open(default_config_file) as default_file:
-                        for line in default_file:
-                            write_logging_configuration_line(line, new_file)
-        else:
-            raise Exception('Default logging configuration file cannot be found in provided pyxelrest directory. {0}'
-                            .format(default_config_file))
+        config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
+        if not os.path.isfile(config_file_path):
+            import jinja2
+            template_folder = os.path.join(self.installation_files_folder, 'pyxelrest')
+            renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(template_folder), trim_blocks=True)
+            log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', log_file_name)
+            with open(config_file_path, 'w') as generated_file:
+                generated_file.write(renderer.get_template('default_logging_configuration.ini.jinja2')
+                                     .render(path_to_log_file=log_file_path))
 
     def _install_pyxelrest_vb_addin(self):
         pyxelrest_vb_file_path = os.path.join(self.vba_add_in_folder, 'pyxelrest.xlam')

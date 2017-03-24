@@ -7,7 +7,7 @@ handlers:
     class: logging.handlers.TimedRotatingFileHandler
     level: INFO
     formatter: clean
-    filename: FILE_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION
+    filename: {{ path_to_log_file }}
     when: 'D'
     backupCount: 10
 root:
