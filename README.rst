@@ -156,3 +156,13 @@ The following application settings are available:
 +---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | AutoCheckForUpdates | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.        | Optional  | True (default), False                                       |
 +---------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+
+Frequently Asked Question
+-------------------------
+
+Microsoft Excel Wizard does not show any parameter
+--------------------------------------------------
+
+In case your UDF has a lot of parameters, then Microsoft Excel is unable to display them all in the function wizard.
+
+Try reducing the number of parameters in your service.

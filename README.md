@@ -184,3 +184,11 @@ The following application settings are available:
         <td>True (default), False</td>
     </tr>
 </table>
+
+## Frequently Asked Question ##
+
+### Microsoft Excel Wizard does not show any parameter ###
+
+In case your UDF has a lot of parameters, then Microsoft Excel is unable to display them all in the function wizard.
+
+Try reducing the number of parameters in your service.
