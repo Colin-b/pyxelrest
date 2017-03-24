@@ -4,8 +4,9 @@
 
 ### Enhancements ###
 
-- Connection timeout can now be specified per service (1 second by default)
-- Read timeout can now be specified per service (no timeout by default)
+- Connection timeout can now be specified per service (1 second by default).
+- Read timeout can now be specified per service (no timeout by default).
+- Path to XlWings module can be configured by user.
 
 ### Bug fixes ###
 
