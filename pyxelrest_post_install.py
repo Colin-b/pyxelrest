@@ -246,6 +246,11 @@ class PostInstall:
                 new_line = addin_settings_line.replace('AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
                                                        auto_update_script_path)
                 addin_settings_file.write(new_line)
+            elif 'XLWINGS_BAS_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
+                xlwings_bas_path = os.path.join(self.pyxelrest_appdata_config_folder, 'xlwings.bas')
+                new_line = addin_settings_line.replace('XLWINGS_BAS_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
+                                                       xlwings_bas_path)
+                addin_settings_file.write(new_line)
             else:
                 addin_settings_file.write(addin_settings_line)
 
