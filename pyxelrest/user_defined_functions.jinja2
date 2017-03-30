@@ -480,6 +480,7 @@ def msgpackpandas_as_list(msgpack_pandas):
 {% if support_pandas %}
     logging.debug('Converting message pack pandas to list...')
     data = pandas.read_msgpack(msgpack_pandas)
+    logging.debug('Converting dictionary to list...')
     flatten_data = [data.columns.values.tolist()] + data.values.tolist()
     logging.debug('Data converted to list.')
     return flatten_data
