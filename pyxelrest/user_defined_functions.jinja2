@@ -13,6 +13,7 @@ from collections import OrderedDict
 import pandas
 {% endif %}
 from data_flattenizer import Flattenizer
+import authentication_responses_server
 
 
 {% macro convert_to_return_type(str_value, method) %}
@@ -418,6 +419,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
+{% if service.authentication_url %}
+        authentication_responses_server.add_auth_to_header('{{ service.name }}', '{{ service.authentication_url }}', request_header)
+{% endif %}
     {{ request_macro(service, method_path, contains_parameters, path_parameters, method) }}
         response.raise_for_status()
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }} ({0}).".format(response.request.url))

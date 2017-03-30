@@ -1,0 +1,81 @@
+import flask
+import webbrowser
+import threading
+import socket
+import logging
+import logging.config
+import logging.handlers
+import yaml
+import os
+
+
+logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'auth_server_logging.ini')
+if os.path.isfile(logging_configuration_file_path):
+    with open(logging_configuration_file_path, 'r') as config_file:
+        log_config_dict = yaml.load(config_file)
+        logging.config.dictConfig(log_config_dict)
+else:
+    default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auth_server.log')
+    logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
+                        handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
+                        level=logging.INFO)
+    logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
+        logging_configuration_file_path))
+
+
+auth_tokens = {}
+authentication_response = threading.Lock()
+# Lock the authentication response
+authentication_response.acquire()
+app = flask.Flask(__name__)
+
+
+def get_open_port():
+    # 8000 is the only allowed port for a redirection?
+    return 8000
+
+server_port = get_open_port()
+
+
+{% for service in services %}
+{% if service.authentication_url %}
+@app.route("/{{ service.name }}", methods=['POST'])
+def {{ service.name }}_post():
+    auth_tokens['{{ service.name }}'] = flask.request.form['id_token']
+    logging.debug('{{ service.name }} authentication response received: "{0}".'.format(flask.request.form['id_token']))
+    authentication_response.release()
+    return "You are now authenticated on {{ service.name }}. You may close this tab."
+{% endif %}
+{% endfor %}
+
+
+def add_auth_to_header(service_name, authentication_url, header):
+    if not authentication_url:
+        logging.debug('No authentication required.')
+        return
+
+    if service_name in auth_tokens:
+        logging.debug('Using already received authentication.')
+        header['Bearer'] = auth_tokens[service_name]
+        return
+
+    auth_response_uri = 'http%3A%2F%2Flocalhost:{0}/{1}'.format(server_port, service_name)
+    logging.debug('Requesting user authentication...')
+    webbrowser.open(authentication_url.replace('{pyxelrest_auth_response_url}', auth_response_uri))
+    # TODO Use a timeout but it is only available in Py3
+    logging.debug('Waiting for user authentication...')
+    authentication_response.acquire()
+    if service_name in auth_tokens:
+        logging.debug('User authenticated.')
+        header['Bearer'] = auth_tokens[service_name]
+    else:
+        logging.debug('User was not authenticated.')
+
+
+def start_server():
+    logging.debug('Starting Authentication Responses Server...')
+    app.run(port=server_port)
+
+
+if __name__ == "__main__":
+    start_server()

@@ -11,6 +11,7 @@ import logging
 import logging.config
 import logging.handlers
 from importlib import import_module
+import threading
 
 
 try:
@@ -71,6 +72,7 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
+        self.authentication_url = self.get_item_default(config, 'authentication_url', None)
         logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.name, self.uri, self.methods))
 
     def _extract_uri(self, swagger_url_parsed, config):
@@ -206,6 +208,18 @@ def user_defined_functions(loaded_services):
     )
 
 
+def authentication_resp_server(loaded_services):
+    """
+    Create server according to authentication_responses_server template.
+    :return: A string containing python code with authentication responses server.
+    """
+    renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
+    return renderer.get_template('authentication_responses_server.jinja2').render(
+        current_utc_time=datetime.datetime.utcnow().isoformat(),
+        services=loaded_services
+    )
+
+
 def support_pandas():
     try:
         import pandas
@@ -231,9 +245,15 @@ def generate_user_defined_functions():
     Create user_defined_functions.py python file containing generated xlwings User Defined Functions.
     :return: None
     """
+    services = load_services()
     logging.debug('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
-        generated_file.write(user_defined_functions(load_services()))
+        generated_file.write(user_defined_functions(services))
+
+    logging.debug('Generating authentication responses server.')
+    with open(os.path.join(os.path.dirname(__file__), 'authentication_responses_server.py'), 'w') as generated_file:
+        generated_file.write(authentication_resp_server(services))
+
 
 try:
     generate_user_defined_functions()
@@ -251,6 +271,10 @@ try:
 except:
     logging.exception('Error while importing UDFs.')
 
+import authentication_responses_server
+if authentication_responses_server.app.url_map:
+    threading.Thread(target=authentication_responses_server.start_server).start()
+
 # Uncomment to debug Microsoft Excel UDF calls.
-# if __name__ == '__main__':
-#     xw.serve()
+if __name__ == '__main__':
+    xw.serve()
