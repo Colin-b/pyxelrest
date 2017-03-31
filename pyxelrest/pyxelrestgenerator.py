@@ -276,5 +276,5 @@ if authentication_responses_server.app.url_map:
     threading.Thread(target=authentication_responses_server.start_server).start()
 
 # Uncomment to debug Microsoft Excel UDF calls.
-if __name__ == '__main__':
-    xw.serve()
+# if __name__ == '__main__':
+#     xw.serve()

@@ -7,6 +7,7 @@ import logging.config
 import logging.handlers
 import yaml
 import os
+import base64
 
 
 logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'auth_server_logging.ini')
@@ -41,10 +42,22 @@ server_port = get_open_port()
 {% if service.authentication_url %}
 @app.route("/{{ service.name }}", methods=['POST'])
 def {{ service.name }}_post():
-    auth_tokens['{{ service.name }}'] = flask.request.form['id_token']
-    logging.debug('{{ service.name }} authentication response received: "{0}".'.format(flask.request.form['id_token']))
-    authentication_response.release()
-    return "You are now authenticated on {{ service.name }}. You may close this tab."
+    try:
+        if 'id_token' not in flask.request.form:
+            raise Exception('id_token not provided.')
+        id_token = flask.request.form['id_token']
+        if not 'id_token':
+            raise Exception('id_token is invalid.')
+        base64_header = id_token.split('.')[0]
+        base64_body = id_token[len(base64_header):]
+#        body = base64.decodebytes(bytes(base64_body, 'utf-8'))
+        auth_tokens['{{ service.name }}'] = id_token
+        logging.debug('{{ service.name }} authentication response received: "{0}".'.format(flask.request.form['id_token']))
+        return "You are now authenticated on {{ service.name }}. You may close this tab."
+    except Exception as e:
+        return "Unable to properly perform authentication on {{ service.name }}: " + str(e)
+    finally:
+        authentication_response.release()
 {% endif %}
 {% endfor %}
 
@@ -74,7 +87,7 @@ def add_auth_to_header(service_name, authentication_url, header):
 
 def start_server():
     logging.debug('Starting Authentication Responses Server...')
-    app.run(port=server_port)
+    app.run('0.0.0.0', port=server_port)
 
 
 if __name__ == "__main__":
