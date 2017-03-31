@@ -244,3 +244,4 @@ ModelManifest.xml
 # Python Virtual Env
 env/
 /.eggs/
+/pyxelrest/authentication_responses_server.py
