@@ -1,27 +1,11 @@
 import flask
 import webbrowser
 import threading
-import socket
 import logging
-import logging.config
-import logging.handlers
-import yaml
 import os
 import base64
-
-
-logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'auth_server_logging.ini')
-if os.path.isfile(logging_configuration_file_path):
-    with open(logging_configuration_file_path, 'r') as config_file:
-        log_config_dict = yaml.load(config_file)
-        logging.config.dictConfig(log_config_dict)
-else:
-    default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auth_server.log')
-    logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
-                        handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
-                        level=logging.INFO)
-    logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
-        logging_configuration_file_path))
+import json
+import datetime
 
 
 auth_tokens = {}
@@ -38,6 +22,19 @@ def get_open_port():
 server_port = get_open_port()
 
 
+def decode_base64(base64_encoded_string):
+    """
+    Decode base64, padding being optional.
+
+    :param base64_encoded_string: Base64 data as an ASCII byte string
+    :returns: The decoded byte string.
+    """
+    missing_padding = len(base64_encoded_string) % 4
+    if missing_padding != 0:
+        base64_encoded_string += b'=' * (4 - missing_padding)
+    return base64.b64decode(base64_encoded_string)
+
+
 {% for service in services %}
 {% if service.authentication_url %}
 @app.route("/{{ service.name }}", methods=['POST'])
@@ -48,18 +45,33 @@ def {{ service.name }}_post():
         id_token = flask.request.form['id_token']
         if not 'id_token':
             raise Exception('id_token is invalid.')
-        base64_header = id_token.split('.')[0]
-        base64_body = id_token[len(base64_header):]
-#        body = base64.decodebytes(bytes(base64_body, 'utf-8'))
-        auth_tokens['{{ service.name }}'] = id_token
-        logging.debug('{{ service.name }} authentication response received: "{0}".'.format(flask.request.form['id_token']))
+        header, body, other = id_token.split('.')
+        body = json.loads(decode_base64(body))
+        if 'exp' not in body:
+            raise Exception('Expiry (exp) is not provided in {0}.'.format(body))
+        token_expiry_datetime = datetime.datetime.fromtimestamp(body['exp'])
+        auth_tokens['{{ service.name }}'] = id_token, token_expiry_datetime
+        logging.debug('{{ service.name }} authentication response received: "{0}".'.format(id_token))
         return "You are now authenticated on {{ service.name }}. You may close this tab."
     except Exception as e:
+        logging.exception('Unable to properly perform authentication on {{ service.name }}.')
         return "Unable to properly perform authentication on {{ service.name }}: " + str(e)
     finally:
         authentication_response.release()
 {% endif %}
 {% endfor %}
+
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    logging.info('Shutdown authentication responses server...')
+    flask_server_shutdown = flask.request.environ.get('werkzeug.server.shutdown')
+    if flask_server_shutdown is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    logging.info('Start shutdown...')
+    flask_server_shutdown()
+    logging.info('Shutdown completed')
+    return ''
 
 
 def add_auth_to_header(service_name, authentication_url, header):
@@ -68,21 +80,37 @@ def add_auth_to_header(service_name, authentication_url, header):
         return
 
     if service_name in auth_tokens:
-        logging.debug('Using already received authentication.')
-        header['Bearer'] = auth_tokens[service_name]
-        return
+        token_id, expiry = auth_tokens[service_name]
+        if expiry < datetime.datetime.utcnow():
+            logging.debug('Authentication token is expired.')
+            del auth_tokens[service_name]
+        else:
+            logging.debug('Using already received authentication.')
+            header['Bearer'] = token_id
+            return
 
+    request_new_token(service_name, authentication_url, header)
+
+
+def request_new_token(service_name, authentication_url, header):
     auth_response_uri = 'http%3A%2F%2Flocalhost:{0}/{1}'.format(server_port, service_name)
     logging.debug('Requesting user authentication...')
     webbrowser.open(authentication_url.replace('{pyxelrest_auth_response_url}', auth_response_uri))
-    # TODO Use a timeout but it is only available in Py3
     logging.debug('Waiting for user authentication...')
-    authentication_response.acquire()
+{% if run_with_python_3 %}
+    response_received = authentication_response.acquire(timeout=10)
+{% else %}
+    response_received = authentication_response.acquire()
+{% endif %}
+    if not response_received:
+        logging.debug('No response received within 10 seconds. Aborting...')
     if service_name in auth_tokens:
         logging.debug('User authenticated.')
-        header['Bearer'] = auth_tokens[service_name]
+        token_id, expiry = auth_tokens[service_name]
+        header['Bearer'] = token_id
     else:
         logging.debug('User was not authenticated.')
+        raise Exception('User was not authenticated')
 
 
 def start_server():

@@ -12,6 +12,7 @@ import logging.config
 import logging.handlers
 from importlib import import_module
 import threading
+import sys
 
 
 try:
@@ -216,6 +217,7 @@ def authentication_resp_server(loaded_services):
     renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
     return renderer.get_template('authentication_responses_server.jinja2').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
+        run_with_python_3=sys.version_info[0] == 3,
         services=loaded_services
     )
 
@@ -271,9 +273,21 @@ try:
 except:
     logging.exception('Error while importing UDFs.')
 
+
+# Shutdown authentication server thread if needed (in case module is reloaded)
+def stop_authentication_responses_server():
+    try:
+        requests.post('htt://localhost:8000/shutdown')
+    except:
+        pass
+
+stop_authentication_responses_server()
+reload(import_module('authentication_responses_server'))
 import authentication_responses_server
-if authentication_responses_server.app.url_map:
-    threading.Thread(target=authentication_responses_server.start_server).start()
+# Flask URL map contains shutdown and static by default
+if len(authentication_responses_server.app.url_map._rules) > 2:
+    auth_server_thread = threading.Thread(target=authentication_responses_server.start_server)
+    auth_server_thread.start()
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':
