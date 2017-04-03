@@ -2,6 +2,10 @@
 
 ## 0.57 (next) ##
 
+### Enhancements ###
+
+- Microsoft Authentication support (beta)
+
 ## 0.56 (2017-03-24) ##
 
 ### Enhancements ###

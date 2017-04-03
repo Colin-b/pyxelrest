@@ -127,6 +127,12 @@ The following options are available for each section:
         <td>Optional</td>
         <td>any float value (decimal separator is .)</td>
     </tr>
+    <tr>
+        <td><strong>authentication_url</strong></td>
+        <td>Authentication URL to be called in order to retrieve token_id. redirect_uri argument must be {pyxelrest_auth_response_url}.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 ### Logging Configuration ###
