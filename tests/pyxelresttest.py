@@ -1,5 +1,3 @@
-# -*- coding: utf8 -*-
-
 import datetime
 import multiprocessing
 import os
@@ -3026,11 +3024,8 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator
-        str1 = "'str1'"
-        str2 = "'str2'"
-        query = 'query_array_string="['
-        self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_string_array_parameter(['str1', 'str2']).encode('ascii'),
-                         query.encode('unicode') + str1.encode('unicode')+', '+str2.encode('unicode')+']"')
+        self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_string_array_parameter(['str1', 'str2']),
+                         'query_array_string="[\'str1\', \'str2\']"')
 
     def test_plain_text_without_parameter(self):
         import pyxelrestgenerator
