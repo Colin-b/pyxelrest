@@ -61,7 +61,7 @@ from data_flattenizer import Flattenizer
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
+), json=payload, params=request_parameters, files=file, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% else %}
     response = requests.post('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -77,7 +77,7 @@ from data_flattenizer import Flattenizer
 {% for path_parameter in path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_body, params=request_parameters, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
+), json=payload, params=request_parameters, headers=request_header, proxies={{ service.proxy }}, timeout=({{ service.connect_timeout }}, {{ service.read_timeout }}))
 {% else %}
     response = requests.put('{{ service.uri }}{{ method_path }}'.format(
 {% for path_parameter in path_parameters %}
@@ -297,6 +297,7 @@ from data_flattenizer import Flattenizer
 {% macro validate_required_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
+{% set param_type = parameter['type'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
         logging.error('{{ param_name }} is required.')
@@ -310,9 +311,13 @@ from data_flattenizer import Flattenizer
 {% if param_in == 'query' %}
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'body' %}
-        request_body['{{ server_param_name }}'] = {{ param_name }}
+        payload['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'formData' %}
-        request_form['{{ server_param_name }}'] = {{ param_name }}
+    {% if param_type == 'file' %}
+            file['{{ server_param_name }}'] = {{ param_name }}
+    {% else %}
+            payload['{{ server_param_name }}'] = {{ param_name }}
+    {% endif %}
 {% elif param_in == 'header' %}
         request_header['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
@@ -332,15 +337,20 @@ from data_flattenizer import Flattenizer
 {% macro validate_optional_parameter(parameter, method) %}
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
+{% set param_type = parameter['type'] %}
 {% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
     if {{ param_name }} is not None:
         {{ validate_parameter_value(parameter, method) }}
 {% if param_in == 'query' %}
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'body' %}
-        request_body['{{ server_param_name }}'] = {{ param_name }}
+        payload['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'formData' %}
-        request_form['{{ server_param_name }}'] = {{ param_name }}
+    {% if param_type == 'file' %}
+            file['{{ server_param_name }}'] = {{ param_name }}
+    {% else %}
+            payload['{{ server_param_name }}'] = {{ param_name }}
+    {% endif %}
 {% elif param_in == 'header' %}
         request_header['{{ server_param_name }}'] = {{ param_name }}
 {% endif %}
@@ -398,9 +408,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% endif %}
 {% set contains_parameters = nb_required_parameters > 0 or nb_optional_parameters > 0 %}
 {% if contains_parameters %}
+    payload = {}
+    file = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
 {% endif %}
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
@@ -415,6 +425,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% for parameter in optional_parameters %}
 {{ validate_optional_parameter(parameter, method) }}
 {% endfor %}
+
     response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
