@@ -23,6 +23,7 @@ from data_flattenizer import Flattenizer
 def valid_swagger_test_get_test_dict_with_empty_nested_list():
     logging.info("Calling valid_swagger_test_get_test_dict_with_empty_nested_list...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/empty/nested/list'.format(
@@ -55,6 +56,7 @@ def valid_swagger_test_get_test_dict_with_empty_nested_list():
 def valid_swagger_test_get_test_dict_with_four_imbricated_levels():
     logging.info("Calling valid_swagger_test_get_test_dict_with_four_imbricated_levels...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/four/imbricated/levels'.format(
@@ -87,6 +89,7 @@ def valid_swagger_test_get_test_dict_with_four_imbricated_levels():
 def valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys():
     logging.info("Calling valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/multiple/imbricated/levels/and/duplicate/keys'.format(
@@ -119,6 +122,7 @@ def valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplica
 def valid_swagger_test_get_test_dict_with_three_imbricated_levels():
     logging.info("Calling valid_swagger_test_get_test_dict_with_three_imbricated_levels...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/dict/with/three/imbricated/levels'.format(
@@ -151,6 +155,7 @@ def valid_swagger_test_get_test_dict_with_three_imbricated_levels():
 def valid_swagger_test_get_test_empty_dict():
     logging.info("Calling valid_swagger_test_get_test_empty_dict...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/empty/dict'.format(
@@ -183,6 +188,7 @@ def valid_swagger_test_get_test_empty_dict():
 def valid_swagger_test_get_test_empty_list():
     logging.info("Calling valid_swagger_test_get_test_empty_list...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/empty/list'.format(
@@ -216,21 +222,22 @@ def valid_swagger_test_get_test_empty_list():
 def valid_swagger_test_post_test_form_parameter(form_string):
     logging.info("Calling valid_swagger_test_post_test_form_parameter...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if form_string is None or isinstance(form_string, list) and all(x is None for x in form_string):
         logging.error('form_string is required.')
         return 'form_string is required.'
     if form_string is not None:
         
-        request_form['form_string'] = form_string
+                request_payload['form_string'] = form_string
+    
 
     response = None
     try:
         response = requests.post('http://localhost:8943/test/form/parameter'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_form_parameter ({0}).".format(response.request.url))
@@ -260,9 +267,9 @@ def valid_swagger_test_post_test_form_parameter(form_string):
 def valid_swagger_test_get_test_header_parameter(header_string):
     logging.info("Calling valid_swagger_test_get_test_header_parameter...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if header_string is None or isinstance(header_string, list) and all(x is None for x in header_string):
         logging.error('header_string is required.')
@@ -270,6 +277,7 @@ def valid_swagger_test_get_test_header_parameter(header_string):
     if header_string is not None:
         
         request_header['header_string'] = header_string
+
 
     response = None
     try:
@@ -330,9 +338,9 @@ def valid_swagger_test_get_test_header_parameter(header_string):
 def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_get_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -558,6 +566,7 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
     if query_array_password is not None:
         
         request_parameters['query_array_password'] = query_array_password
+
 
     response = None
     try:
@@ -618,9 +627,9 @@ def valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_in
 def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_post_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -847,10 +856,11 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -906,9 +916,9 @@ def valid_swagger_test_post_test_json_with_all_optional_parameters_types(query_i
 def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_put_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -1135,10 +1145,11 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1194,9 +1205,9 @@ def valid_swagger_test_put_test_json_with_all_optional_parameters_types(query_in
 def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_delete_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -1423,10 +1434,11 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1482,9 +1494,9 @@ def valid_swagger_test_delete_test_json_with_all_optional_parameters_types(query
 def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_get_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -1788,6 +1800,7 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
     if query_array_password is not None:
         
         request_parameters['query_array_password'] = query_array_password
+
 
     response = None
     try:
@@ -1848,9 +1861,9 @@ def valid_swagger_test_get_test_json_with_all_parameters_types(query_integer, qu
 def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_post_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -2155,10 +2168,11 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2214,9 +2228,9 @@ def valid_swagger_test_post_test_json_with_all_parameters_types(query_integer, q
 def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_put_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -2521,10 +2535,11 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2580,9 +2595,9 @@ def valid_swagger_test_put_test_json_with_all_parameters_types(query_integer, qu
 def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_delete_test_json_with_all_parameters_types...")
     request_header = {'content-type':'application/json'}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -2887,10 +2902,11 @@ def valid_swagger_test_delete_test_json_with_all_parameters_types(query_integer,
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -3049,6 +3065,7 @@ def valid_swagger_test_get_test_json_with_all_paths_types(path_integer, path_int
     if path_array_password is None or isinstance(path_array_password, list) and all(x is None for x in path_array_password):
         logging.error('path_array_password is required.')
         return ['path_array_password is required.']
+
 
     response = None
     try:
@@ -3213,6 +3230,7 @@ def valid_swagger_test_post_test_json_with_all_paths_types(path_integer, path_in
         logging.error('path_array_password is required.')
         return ['path_array_password is required.']
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/with/all/paths/types'.format(
@@ -3375,6 +3393,7 @@ def valid_swagger_test_put_test_json_with_all_paths_types(path_integer, path_int
     if path_array_password is None or isinstance(path_array_password, list) and all(x is None for x in path_array_password):
         logging.error('path_array_password is required.')
         return ['path_array_password is required.']
+
 
     response = None
     try:
@@ -3539,6 +3558,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
         logging.error('path_array_password is required.')
         return ['path_array_password is required.']
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/with/all/paths/types'.format(
@@ -3572,6 +3592,7 @@ def valid_swagger_test_delete_test_json_with_all_paths_types(path_integer, path_
 def valid_swagger_test_get_test_json_without_parameter():
     logging.info("Calling valid_swagger_test_get_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/json/without/parameter'.format(
@@ -3605,6 +3626,7 @@ def valid_swagger_test_get_test_json_without_parameter():
 def valid_swagger_test_post_test_json_without_parameter():
     logging.info("Calling valid_swagger_test_post_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/json/without/parameter'.format(
@@ -3638,6 +3660,7 @@ def valid_swagger_test_post_test_json_without_parameter():
 def valid_swagger_test_put_test_json_without_parameter():
     logging.info("Calling valid_swagger_test_put_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/json/without/parameter'.format(
@@ -3671,6 +3694,7 @@ def valid_swagger_test_put_test_json_without_parameter():
 def valid_swagger_test_delete_test_json_without_parameter():
     logging.info("Calling valid_swagger_test_delete_test_json_without_parameter...")
     request_header = {'content-type':'application/json'}
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/json/without/parameter'.format(
@@ -3703,6 +3727,7 @@ def valid_swagger_test_delete_test_json_without_parameter():
 def valid_swagger_test_get_test_list_of_dict():
     logging.info("Calling valid_swagger_test_get_test_list_of_dict...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/list/of/dict'.format(
@@ -3735,6 +3760,7 @@ def valid_swagger_test_get_test_list_of_dict():
 def valid_swagger_test_get_test_one_dict_entry_with_a_list():
     logging.info("Calling valid_swagger_test_get_test_one_dict_entry_with_a_list...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/dict/entry/with/a/list'.format(
@@ -3767,6 +3793,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list():
 def valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict():
     logging.info("Calling valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/dict/entry/with/a/list/of/dict'.format(
@@ -3799,6 +3826,7 @@ def valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict():
 def valid_swagger_test_get_test_one_level_dict():
     logging.info("Calling valid_swagger_test_get_test_one_level_dict...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/level/dict'.format(
@@ -3831,6 +3859,7 @@ def valid_swagger_test_get_test_one_level_dict():
 def valid_swagger_test_get_test_one_level_list():
     logging.info("Calling valid_swagger_test_get_test_one_level_list...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/one/level/list'.format(
@@ -3889,9 +3918,9 @@ def valid_swagger_test_get_test_one_level_list():
 def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -4117,6 +4146,7 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
     if query_array_password is not None:
         
         request_parameters['query_array_password'] = query_array_password
+
 
     response = None
     try:
@@ -4176,9 +4206,9 @@ def valid_swagger_test_get_test_plain_text_with_all_optional_parameters_types(qu
 def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -4405,10 +4435,11 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -4463,9 +4494,9 @@ def valid_swagger_test_post_test_plain_text_with_all_optional_parameters_types(q
 def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -4692,10 +4723,11 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -4750,9 +4782,9 @@ def valid_swagger_test_put_test_plain_text_with_all_optional_parameters_types(qu
 def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -4979,10 +5011,11 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -5037,9 +5070,9 @@ def valid_swagger_test_delete_test_plain_text_with_all_optional_parameters_types
 def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_get_test_plain_text_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -5343,6 +5376,7 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
     if query_array_password is not None:
         
         request_parameters['query_array_password'] = query_array_password
+
 
     response = None
     try:
@@ -5402,9 +5436,9 @@ def valid_swagger_test_get_test_plain_text_with_all_parameters_types(query_integ
 def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_post_test_plain_text_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -5709,10 +5743,11 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -5767,9 +5802,9 @@ def valid_swagger_test_post_test_plain_text_with_all_parameters_types(query_inte
 def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_put_test_plain_text_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -6074,10 +6109,11 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -6132,9 +6168,9 @@ def valid_swagger_test_put_test_plain_text_with_all_parameters_types(query_integ
 def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_delete_test_plain_text_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -6439,10 +6475,11 @@ def valid_swagger_test_delete_test_plain_text_with_all_parameters_types(query_in
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -6600,6 +6637,7 @@ def valid_swagger_test_get_test_plain_text_with_all_paths_types(path_integer, pa
     if path_array_password is None or isinstance(path_array_password, list) and all(x is None for x in path_array_password):
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
+
 
     response = None
     try:
@@ -6763,6 +6801,7 @@ def valid_swagger_test_post_test_plain_text_with_all_paths_types(path_integer, p
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
@@ -6924,6 +6963,7 @@ def valid_swagger_test_put_test_plain_text_with_all_paths_types(path_integer, pa
     if path_array_password is None or isinstance(path_array_password, list) and all(x is None for x in path_array_password):
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
+
 
     response = None
     try:
@@ -7087,6 +7127,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/with/all/paths/types'.format(
@@ -7119,6 +7160,7 @@ def valid_swagger_test_delete_test_plain_text_with_all_paths_types(path_integer,
 def valid_swagger_test_get_test_plain_text_without_parameter():
     logging.info("Calling valid_swagger_test_get_test_plain_text_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -7151,6 +7193,7 @@ def valid_swagger_test_get_test_plain_text_without_parameter():
 def valid_swagger_test_post_test_plain_text_without_parameter():
     logging.info("Calling valid_swagger_test_post_test_plain_text_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -7183,6 +7226,7 @@ def valid_swagger_test_post_test_plain_text_without_parameter():
 def valid_swagger_test_put_test_plain_text_without_parameter():
     logging.info("Calling valid_swagger_test_put_test_plain_text_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -7215,6 +7259,7 @@ def valid_swagger_test_put_test_plain_text_without_parameter():
 def valid_swagger_test_delete_test_plain_text_without_parameter():
     logging.info("Calling valid_swagger_test_delete_test_plain_text_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/plain/text/without/parameter'.format(
@@ -7248,9 +7293,9 @@ def valid_swagger_test_delete_test_plain_text_without_parameter():
 def valid_swagger_test_get_test_string_array_parameter(query_array_string):
     logging.info("Calling valid_swagger_test_get_test_string_array_parameter...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_array_string is None or isinstance(query_array_string, list) and all(x is None for x in query_array_string):
         logging.error('query_array_string is required.')
@@ -7258,6 +7303,7 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
     if query_array_string is not None:
         
         request_parameters['query_array_string'] = query_array_string
+
 
     response = None
     try:
@@ -7293,9 +7339,9 @@ def valid_swagger_test_get_test_string_array_parameter(query_array_string):
 def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling valid_swagger_test_get_test_vba_restricted_keywords...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -7310,6 +7356,7 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
     if end_visual_basic is not None:
         
         request_parameters['end'] = end_visual_basic
+
 
     response = None
     try:
@@ -7345,9 +7392,9 @@ def valid_swagger_test_get_test_vba_restricted_keywords(currency_visual_basic, e
 def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling valid_swagger_test_post_test_vba_restricted_keywords...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -7363,10 +7410,11 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
         
         request_parameters['end'] = end_visual_basic
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7397,9 +7445,9 @@ def valid_swagger_test_post_test_vba_restricted_keywords(currency_visual_basic, 
 def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling valid_swagger_test_put_test_vba_restricted_keywords...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -7415,10 +7463,11 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
         
         request_parameters['end'] = end_visual_basic
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7449,9 +7498,9 @@ def valid_swagger_test_put_test_vba_restricted_keywords(currency_visual_basic, e
 def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
     logging.info("Calling valid_swagger_test_delete_test_vba_restricted_keywords...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if currency_visual_basic is None or isinstance(currency_visual_basic, list) and all(x is None for x in currency_visual_basic):
         logging.error('currency_visual_basic is required.')
@@ -7467,10 +7516,11 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
         
         request_parameters['end'] = end_visual_basic
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/vba/restricted/keywords'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7525,9 +7575,9 @@ def valid_swagger_test_delete_test_vba_restricted_keywords(currency_visual_basic
 def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_get_test_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -7753,6 +7803,7 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
     if query_array_password is not None:
         
         request_parameters['query_array_password'] = query_array_password
+
 
     response = None
     try:
@@ -7812,9 +7863,9 @@ def valid_swagger_test_get_test_with_all_optional_parameters_types(query_integer
 def valid_swagger_test_post_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_post_test_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -8041,10 +8092,11 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8099,9 +8151,9 @@ def valid_swagger_test_post_test_with_all_optional_parameters_types(query_intege
 def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_put_test_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -8328,10 +8380,11 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8386,9 +8439,9 @@ def valid_swagger_test_put_test_with_all_optional_parameters_types(query_integer
 def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling valid_swagger_test_delete_test_with_all_optional_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is not None:
         if not isinstance(query_integer, int):
@@ -8615,10 +8668,11 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8673,9 +8727,9 @@ def valid_swagger_test_delete_test_with_all_optional_parameters_types(query_inte
 def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_get_test_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -8979,6 +9033,7 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
     if query_array_password is not None:
         
         request_parameters['query_array_password'] = query_array_password
+
 
     response = None
     try:
@@ -9038,9 +9093,9 @@ def valid_swagger_test_get_test_with_all_parameters_types(query_integer, query_i
 def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_post_test_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -9345,10 +9400,11 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, files=request_form, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_post_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -9403,9 +9459,9 @@ def valid_swagger_test_post_test_with_all_parameters_types(query_integer, query_
 def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_put_test_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -9710,10 +9766,11 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_put_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -9768,9 +9825,9 @@ def valid_swagger_test_put_test_with_all_parameters_types(query_integer, query_i
 def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling valid_swagger_test_delete_test_with_all_parameters_types...")
     request_header = {}
+    request_payload = {}
+    request_files = {}
     request_parameters = {}
-    request_body = {}
-    request_form = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
         logging.error('query_integer is required.')
@@ -10075,10 +10132,11 @@ def valid_swagger_test_delete_test_with_all_parameters_types(query_integer, quer
         
         request_parameters['query_array_password'] = query_array_password
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_body, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for valid_swagger_test_delete_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -10236,6 +10294,7 @@ def valid_swagger_test_get_test_with_all_paths_types(path_integer, path_integer3
     if path_array_password is None or isinstance(path_array_password, list) and all(x is None for x in path_array_password):
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
+
 
     response = None
     try:
@@ -10399,6 +10458,7 @@ def valid_swagger_test_post_test_with_all_paths_types(path_integer, path_integer
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
 
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/paths/types'.format(
@@ -10560,6 +10620,7 @@ def valid_swagger_test_put_test_with_all_paths_types(path_integer, path_integer3
     if path_array_password is None or isinstance(path_array_password, list) and all(x is None for x in path_array_password):
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
+
 
     response = None
     try:
@@ -10723,6 +10784,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
         logging.error('path_array_password is required.')
         return 'path_array_password is required.'
 
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/paths/types'.format(
@@ -10755,6 +10817,7 @@ def valid_swagger_test_delete_test_with_all_paths_types(path_integer, path_integ
 def valid_swagger_test_get_test_without_parameter():
     logging.info("Calling valid_swagger_test_get_test_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8943/test/without/parameter'.format(
@@ -10787,6 +10850,7 @@ def valid_swagger_test_get_test_without_parameter():
 def valid_swagger_test_post_test_without_parameter():
     logging.info("Calling valid_swagger_test_post_test_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.post('http://localhost:8943/test/without/parameter'.format(
@@ -10819,6 +10883,7 @@ def valid_swagger_test_post_test_without_parameter():
 def valid_swagger_test_put_test_without_parameter():
     logging.info("Calling valid_swagger_test_put_test_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.put('http://localhost:8943/test/without/parameter'.format(
@@ -10851,6 +10916,7 @@ def valid_swagger_test_put_test_without_parameter():
 def valid_swagger_test_delete_test_without_parameter():
     logging.info("Calling valid_swagger_test_delete_test_without_parameter...")
     request_header = {}
+
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/without/parameter'.format(
@@ -10883,6 +10949,7 @@ def valid_swagger_test_delete_test_without_parameter():
 def filtered_tags_test_get_test_with_tags():
     logging.info("Calling filtered_tags_test_get_test_with_tags...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8944/test/with/tags'.format(
@@ -10915,6 +10982,7 @@ def filtered_tags_test_get_test_with_tags():
 def filtered_tags_test_post_test_with_tags():
     logging.info("Calling filtered_tags_test_post_test_with_tags...")
     request_header = {}
+
     response = None
     try:
         response = requests.post('http://localhost:8944/test/with/tags'.format(
@@ -10947,6 +11015,7 @@ def filtered_tags_test_post_test_with_tags():
 def filtered_tags_test_put_test_with_tags():
     logging.info("Calling filtered_tags_test_put_test_with_tags...")
     request_header = {}
+
     response = None
     try:
         response = requests.put('http://localhost:8944/test/with/tags'.format(
@@ -10979,6 +11048,7 @@ def filtered_tags_test_put_test_with_tags():
 def values_false_test_get_test_with_empty_dictionary():
     logging.info("Calling values_false_test_get_test_with_empty_dictionary...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/dictionary'.format(
@@ -11011,6 +11081,7 @@ def values_false_test_get_test_with_empty_dictionary():
 def values_false_test_get_test_with_empty_list():
     logging.info("Calling values_false_test_get_test_with_empty_list...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/list'.format(
@@ -11043,6 +11114,7 @@ def values_false_test_get_test_with_empty_list():
 def values_false_test_get_test_with_empty_string():
     logging.info("Calling values_false_test_get_test_with_empty_string...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/string'.format(
@@ -11075,6 +11147,7 @@ def values_false_test_get_test_with_empty_string():
 def values_false_test_get_test_with_false_boolean():
     logging.info("Calling values_false_test_get_test_with_false_boolean...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/false/boolean'.format(
@@ -11107,6 +11180,7 @@ def values_false_test_get_test_with_false_boolean():
 def values_false_test_get_test_with_zero_float():
     logging.info("Calling values_false_test_get_test_with_zero_float...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/zero/float'.format(
@@ -11139,6 +11213,7 @@ def values_false_test_get_test_with_zero_float():
 def values_false_test_get_test_with_zero_integer():
     logging.info("Calling values_false_test_get_test_with_zero_integer...")
     request_header = {}
+
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/zero/integer'.format(

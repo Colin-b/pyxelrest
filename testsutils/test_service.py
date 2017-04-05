@@ -1,5 +1,4 @@
-from flask import Flask, jsonify, request
-import ast
+from flask import Flask, jsonify, request, Response
 
 app = Flask(__name__)
 
@@ -12189,7 +12188,7 @@ def get_test_header_parameter():
 
 @app.route('/test/form/parameter', methods=['POST'])
 def post_test_form_parameter():
-    return jsonify(ast.literal_eval(request.data))
+    return Response(request.data, mimetype='application/json')
 
 
 def _request_args(args):
