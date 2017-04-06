@@ -108,7 +108,9 @@ setup(name='pyxelrest',
           # Used to run a test service
           'flask',
           # Used to run tests
-          'nose'
+          'nose',
+          # Used to generate a jwt token
+          'pyjwt'
       ],
       install_requires=[
           # Used to generate UDFs python file from a template

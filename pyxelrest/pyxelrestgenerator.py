@@ -277,7 +277,7 @@ except:
 # Shutdown authentication server thread if needed (in case module is reloaded)
 def stop_authentication_responses_server():
     try:
-        requests.post('htt://localhost:8000/shutdown')
+        requests.post('http://localhost:8000/shutdown')
     except:
         pass
 
@@ -291,4 +291,4 @@ if len(authentication_responses_server.app.url_map._rules) > 2:
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':
-#     xw.serve()
+#      xw.serve()

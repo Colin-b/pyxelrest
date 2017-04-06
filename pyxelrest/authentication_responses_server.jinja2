@@ -32,18 +32,23 @@ def decode_base64(base64_encoded_string):
     missing_padding = len(base64_encoded_string) % 4
     if missing_padding != 0:
         base64_encoded_string += '=' * (4 - missing_padding)
-    return base64.b64decode(base64_encoded_string)
+    return base64.b64decode(base64_encoded_string).decode('unicode_escape')
 
 
 {% for service in services %}
 {% if service.authentication_url %}
-@app.route("/{{ service.name }}", methods=['POST'])
+@app.route("/{{ service.name }}", methods=['POST', 'GET'])
 def {{ service.name }}_post():
     try:
-        if 'id_token' not in flask.request.form:
-            raise Exception('id_token not provided.')
-        id_token = flask.request.form['id_token']
-        if not 'id_token':
+        if flask.request.method == "POST":
+            if 'id_token' not in flask.request.form:
+                raise Exception('id_token not provided.')
+            id_token = flask.request.form['id_token']
+        else:
+            if 'id_token' not in flask.request.args:
+                raise Exception('id_token not provided.')
+            id_token = flask.request.args['id_token']
+        if not id_token:
             raise Exception('id_token is invalid.')
         header, body, other = id_token.split('.')
         body = json.loads(decode_base64(body))
@@ -82,7 +87,7 @@ def add_auth_to_header(service_name, authentication_url, header):
     if service_name in auth_tokens:
         token_id, expiry = auth_tokens[service_name]
         if expiry < datetime.datetime.utcnow():
-            logging.debug('Authentication token is expired.')
+            logging.debug('Authentication token is expired.')  
             del auth_tokens[service_name]
         else:
             logging.debug('Using already received authentication.')
@@ -95,7 +100,10 @@ def add_auth_to_header(service_name, authentication_url, header):
 def request_new_token(service_name, authentication_url, header):
     auth_response_uri = 'http%3A%2F%2Flocalhost:{0}/{1}'.format(server_port, service_name)
     logging.debug('Requesting user authentication...')
-    webbrowser.open(authentication_url.replace('{pyxelrest_auth_response_url}', auth_response_uri))
+    url = authentication_url.replace('{pyxelrest_auth_response_url}', auth_response_uri)
+    success = webbrowser.open(url)
+    if not success:
+        response = requests.get(url)
     logging.debug('Waiting for user authentication...')
 {% if run_with_python_3 %}
     response_received = authentication_response.acquire(timeout=10)
