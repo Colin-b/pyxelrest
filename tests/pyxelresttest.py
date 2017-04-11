@@ -4,8 +4,8 @@ import os
 import os.path
 import shutil
 import unittest
+import platform
 from importlib import import_module
-
 
 try:
     # Python 3
@@ -42,9 +42,14 @@ class PyxelRestTest(unittest.TestCase):
         import testsutils.test_service as test_service
         cls.service_processes.append(multiprocessing.Process(target=test_service.start_server, args=(8943,)))
         import testsutils.filtered_tags_test_service as filtered_tags_test_service
-        cls.service_processes.append(multiprocessing.Process(target=filtered_tags_test_service.start_server, args=(8944,)))
+        cls.service_processes.append(
+            multiprocessing.Process(target=filtered_tags_test_service.start_server, args=(8944,)))
         import testsutils.values_false_test_service as values_false_test_service
-        cls.service_processes.append(multiprocessing.Process(target=values_false_test_service.start_server, args=(8945,)))
+        cls.service_processes.append(
+            multiprocessing.Process(target=values_false_test_service.start_server, args=(8945,)))
+        import testsutils.output_order_test_service as output_order_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=output_order_test_service.start_server, args=(8946,)))
         for service_process in cls.service_processes:
             service_process.start()
 
@@ -53,7 +58,7 @@ class PyxelRestTest(unittest.TestCase):
         for service_process in cls.service_processes:
             service_process.terminate()
             service_process.join(timeout=0.5)
-        cls.service_processes.clear()
+        cls.service_processes[:] = []
 
     @classmethod
     def _add_test_config(cls):
@@ -122,7 +127,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_integer is required.'])
+            ['query_integer is required.'])
 
     def test_mandatory_integer_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -193,7 +198,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer is required.'])
+            ['query_array_integer is required.'])
 
     def test_mandatory_array_integer_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -226,7 +231,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer is required.'])
+            ['query_array_integer is required.'])
 
     def test_mandatory_array_integer_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -259,7 +264,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer is required.'])
+            ['query_array_integer is required.'])
 
     def test_mandatory_array_integer_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -292,7 +297,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer must be an integer.'])
+            ['query_array_integer must be an integer.'])
 
     def test_mandatory_array_integer_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -313,7 +318,7 @@ class PyxelRestTest(unittest.TestCase):
             query_date_time=today_datetime,
             query_password='str value',
             query_array_integer=[
-            'str value'
+                'str value'
             ],
             query_array_integer32=None,
             query_array_integer64=None,
@@ -327,7 +332,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer must contain integers.'])
+            ['query_array_integer must contain integers.'])
 
     def test_optional_array_integer_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -371,7 +376,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_integer32 is required.'])
+            ['query_integer32 is required.'])
 
     def test_mandatory_integer32_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -402,7 +407,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_integer32 must be an integer.'])
+            ['query_integer32 must be an integer.'])
 
     def test_optional_integer32_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -442,7 +447,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer32 is required.'])
+            ['query_array_integer32 is required.'])
 
     def test_mandatory_array_integer32_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -475,7 +480,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer32 is required.'])
+            ['query_array_integer32 is required.'])
 
     def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -508,7 +513,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer32 is required.'])
+            ['query_array_integer32 is required.'])
 
     def test_mandatory_array_integer32_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -541,7 +546,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer32 must be an integer.'])
+            ['query_array_integer32 must be an integer.'])
 
     def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -563,7 +568,7 @@ class PyxelRestTest(unittest.TestCase):
             query_password='str value',
             query_array_integer=[0],
             query_array_integer32=[
-             'str value'],
+                'str value'],
             query_array_integer64=None,
             query_array_number=None,
             query_array_float=None,
@@ -575,7 +580,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_integer32 must contain integers.'])
+            ['query_array_integer32 must contain integers.'])
 
     def test_optional_array_integer32_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -593,68 +598,69 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=None,
-                                                                                         query_number=None,
-                                                                                         query_float=None,
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_integer64 is required.'])
+            query_integer32=0,
+            query_integer64=None,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_integer64 is required.'])
 
     def test_mandatory_integer64_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64='str value',
-                                                                                         query_number=None,
-                                                                                         query_float=None,
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_integer64 must be an integer.'])
+            query_integer32=0,
+            query_integer64='str value',
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_integer64 must be an integer.'])
 
     def test_optional_integer64_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_integer64='str value'),
+            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(
+                query_integer64='str value'),
             ['query_integer64 must be an integer.'])
 
     def test_mandatory_array_integer64_parameter_not_provided(self):
@@ -663,32 +669,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_integer64 is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_integer64 is required.'])
 
     def test_mandatory_array_integer64_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -696,32 +702,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[],
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_integer64 is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_integer64 is required.'])
 
     def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -729,32 +735,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[None],
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_integer64 is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[None],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_integer64 is required.'])
 
     def test_mandatory_array_integer64_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -762,32 +768,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64='str value',
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_integer64 must be an integer.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64='str value',
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_integer64 must be an integer.'])
 
     def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -795,33 +801,33 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[
-                                                                                             'str value'],
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_integer64 must contain integers.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[
+                'str value'],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_integer64 must contain integers.'])
 
     def test_optional_array_integer64_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -839,68 +845,69 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=None,
-                                                                                         query_float=None,
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_number is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_number is required.'])
 
     def test_mandatory_number_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number='str value',
-                                                                                         query_float=None,
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_number must be a number.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number='str value',
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_number must be a number.'])
 
     def test_optional_number_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_number='str value'),
+            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(
+                query_number='str value'),
             ['query_number must be a number.'])
 
     def test_mandatory_array_number_parameter_not_provided(self):
@@ -909,32 +916,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_number is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_number is required.'])
 
     def test_mandatory_array_number_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -942,32 +949,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[],
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_number is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_number is required.'])
 
     def test_mandatory_array_number_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -975,32 +982,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[None],
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_number is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[None],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_number is required.'])
 
     def test_mandatory_array_number_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1008,32 +1015,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number='str value',
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_number must be a number.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number='str value',
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_number must be a number.'])
 
     def test_mandatory_array_number_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -1041,33 +1048,33 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[
-                                                                                             'str value'],
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_number must contain numbers.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[
+                'str value'],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_number must contain numbers.'])
 
     def test_optional_array_number_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1085,68 +1092,69 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=None,
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_float is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_float is required.'])
 
     def test_mandatory_float_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float='str value',
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_float must be a number.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float='str value',
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_float must be a number.'])
 
     def test_optional_float_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_float='str value'),
+            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(
+                query_float='str value'),
             ['query_float must be a number.'])
 
     def test_mandatory_array_float_number_parameter_not_provided(self):
@@ -1155,32 +1163,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_float is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_float is required.'])
 
     def test_mandatory_array_float_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -1188,32 +1196,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[],
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_float is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_float is required.'])
 
     def test_mandatory_array_float_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -1221,32 +1229,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[None],
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_float is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[None],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_float is required.'])
 
     def test_mandatory_array_float_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1254,32 +1262,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float='str value',
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_float must be a number.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float='str value',
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_float must be a number.'])
 
     def test_mandatory_array_float_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -1287,33 +1295,33 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[
-                                                                                             'str value'],
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_float must contain numbers.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[
+                'str value'],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_float must contain numbers.'])
 
     def test_optional_array_float_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1332,63 +1340,63 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=None,
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_double is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_double is required.'])
 
     def test_mandatory_double_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double='str value',
-                                                                                         query_string=None,
-                                                                                         query_string_byte=None,
-                                                                                         query_string_binary=None,
-                                                                                         query_boolean=None,
-                                                                                         query_date=None,
-                                                                                         query_date_time=None,
-                                                                                         query_password=None,
-                                                                                         query_array_integer=None,
-                                                                                         query_array_integer32=None,
-                                                                                         query_array_integer64=None,
-                                                                                         query_array_number=None,
-                                                                                         query_array_float=None,
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_double must be a number.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double='str value',
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_double must be a number.'])
 
     def test_optional_double_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1403,32 +1411,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[0.0],
-                                                                                         query_array_double=None,
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_double is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_double is required.'])
 
     def test_mandatory_array_double_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -1436,32 +1444,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[0.0],
-                                                                                         query_array_double=[],
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_double is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[],
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_double is required.'])
 
     def test_mandatory_array_double_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -1469,32 +1477,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[0.0],
-                                                                                         query_array_double=[None],
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_double is required.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[None],
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_double is required.'])
 
     def test_mandatory_array_double_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1502,32 +1510,32 @@ class PyxelRestTest(unittest.TestCase):
         today_datetime = datetime.datetime.today()
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_parameters_types(
             query_integer=0,
-                                                                                         query_integer32=0,
-                                                                                         query_integer64=0,
-                                                                                         query_number=0.0,
-                                                                                         query_float=0.0,
-                                                                                         query_double=0.0,
-                                                                                         query_string='str value',
-                                                                                         query_string_byte='str value',
-                                                                                         query_string_binary='str value',
-                                                                                         query_boolean='true',
-                                                                                         query_date=today_date,
-                                                                                         query_date_time=today_datetime,
-                                                                                         query_password='str value',
-                                                                                         query_array_integer=[0],
-                                                                                         query_array_integer32=[0],
-                                                                                         query_array_integer64=[0],
-                                                                                         query_array_number=[0.0],
-                                                                                         query_array_float=[0.0],
-                                                                                         query_array_double='str value',
-                                                                                         query_array_string=None,
-                                                                                         query_array_string_byte=None,
-                                                                                         query_array_string_binary=None,
-                                                                                         query_array_boolean=None,
-                                                                                         query_array_date=None,
-                                                                                         query_array_date_time=None,
-                                                                                         query_array_password=None),
-                         ['query_array_double must be a number.'])
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string='str value',
+            query_string_byte='str value',
+            query_string_binary='str value',
+            query_boolean='true',
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password='str value',
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double='str value',
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None),
+            ['query_array_double must be a number.'])
 
     def test_mandatory_array_double_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -1553,7 +1561,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_number=[0.0],
             query_array_float=[0.0],
             query_array_double=[
-             'str value'],
+                'str value'],
             query_array_string=None,
             query_array_string_byte=None,
             query_array_string_binary=None,
@@ -1561,7 +1569,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_double must contain numbers.'])
+            ['query_array_double must contain numbers.'])
 
     def test_optional_array_double_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -1604,7 +1612,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string is required.'])
+            ['query_string is required.'])
 
     def test_mandatory_string_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -1635,7 +1643,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string is required.'])
+            ['query_string is required.'])
 
     def test_mandatory_string_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -1666,7 +1674,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string is required.'])
+            ['query_string is required.'])
 
     def test_mandatory_array_string_parameter_not_provided(self):
         import pyxelrestgenerator
@@ -1699,7 +1707,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string is required.'])
+            ['query_array_string is required.'])
 
     def test_mandatory_array_string_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -1732,7 +1740,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string is required.'])
+            ['query_array_string is required.'])
 
     def test_mandatory_array_string_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -1765,7 +1773,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string is required.'])
+            ['query_array_string is required.'])
 
     def test_mandatory_string_byte_parameter_not_provided(self):
         import pyxelrestgenerator
@@ -1796,7 +1804,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string_byte is required.'])
+            ['query_string_byte is required.'])
 
     def test_mandatory_string_byte_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -1827,7 +1835,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string_byte is required.'])
+            ['query_string_byte is required.'])
 
     def test_mandatory_string_byte_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -1858,7 +1866,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string_byte is required.'])
+            ['query_string_byte is required.'])
 
     def test_mandatory_array_string_byte_parameter_not_provided(self):
         import pyxelrestgenerator
@@ -1885,14 +1893,14 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=None,
             query_array_string_binary=None,
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string_byte is required.'])
+            ['query_array_string_byte is required.'])
 
     def test_mandatory_array_string_byte_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -1919,14 +1927,14 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[],
             query_array_string_binary=None,
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string_byte is required.'])
+            ['query_array_string_byte is required.'])
 
     def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -1953,14 +1961,14 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-            'str value'],
+                'str value'],
             query_array_string_byte=[None],
             query_array_string_binary=None,
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string_byte is required.'])
+            ['query_array_string_byte is required.'])
 
     def test_mandatory_string_binary_parameter_not_provided(self):
         import pyxelrestgenerator
@@ -1991,7 +1999,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string_binary is required.'])
+            ['query_string_binary is required.'])
 
     def test_mandatory_string_binary_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -2022,7 +2030,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string_binary is required.'])
+            ['query_string_binary is required.'])
 
     def test_mandatory_string_binary_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -2053,7 +2061,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_string_binary is required.'])
+            ['query_string_binary is required.'])
 
     def test_mandatory_array_string_binary_parameter_not_provided(self):
         import pyxelrestgenerator
@@ -2080,15 +2088,15 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=None,
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string_binary is required.'])
+            ['query_array_string_binary is required.'])
 
     def test_mandatory_array_string_binary_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -2115,15 +2123,15 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[],
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string_binary is required.'])
+            ['query_array_string_binary is required.'])
 
     def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -2150,16 +2158,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             None],
+                None],
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_string_binary is required.'])
+            ['query_array_string_binary is required.'])
 
     def test_mandatory_boolean_parameter_not_provided(self):
         import pyxelrestgenerator
@@ -2190,7 +2198,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_boolean is required.'])
+            ['query_boolean is required.'])
 
     def test_mandatory_boolean_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2221,7 +2229,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_boolean must be either "true" or "false".'])
+            ['query_boolean must be either "true" or "false".'])
 
     def test_optional_boolean_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2255,16 +2263,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=None,
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_boolean is required.'])
+            ['query_array_boolean is required.'])
 
     def test_mandatory_array_boolean_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -2291,16 +2299,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=[],
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_boolean is required.'])
+            ['query_array_boolean is required.'])
 
     def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -2327,16 +2335,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=[None],
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_boolean is required.'])
+            ['query_array_boolean is required.'])
 
     def test_mandatory_array_boolean_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2363,16 +2371,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-            'str value'],
+                'str value'],
             query_array_string_byte=[
-            'str value'],
+                'str value'],
             query_array_string_binary=[
-            'str value'],
+                'str value'],
             query_array_boolean='non boolean',
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_boolean must contain "true" or "false".'])
+            ['query_array_boolean must contain "true" or "false".'])
 
     def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -2399,17 +2407,17 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=[
-             'non boolean'],
+                'non boolean'],
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_boolean must be either "true" or "false".'])
+            ['query_array_boolean must be either "true" or "false".'])
 
     def test_optional_array_boolean_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2452,7 +2460,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_date is required.'])
+            ['query_date is required.'])
 
     def test_mandatory_date_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2483,12 +2491,13 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_date must be a date.'])
+            ['query_date must be a date.'])
 
     def test_optional_date_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_date='str value'),
+            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(
+                query_date='str value'),
             ['query_date must be a date.'])
 
     def test_mandatory_array_date_parameter_not_provided(self):
@@ -2516,16 +2525,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_date is required.'])
+            ['query_array_date is required.'])
 
     def test_mandatory_array_date_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -2552,16 +2561,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[],
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_date is required.'])
+            ['query_array_date is required.'])
 
     def test_mandatory_array_date_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -2588,16 +2597,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[None],
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_date is required.'])
+            ['query_array_date is required.'])
 
     def test_mandatory_array_date_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2624,16 +2633,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date='str value',
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_date must be a date.'])
+            ['query_array_date must be a date.'])
 
     def test_mandatory_array_date_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -2660,21 +2669,22 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=['str value'],
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_date must contain dates.'])
+            ['query_array_date must contain dates.'])
 
     def test_optional_array_date_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_array_date='str value'),
+            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(
+                query_array_date='str value'),
             ['query_array_date must be a date.'])
 
     def test_optional_array_date_parameter_with_wrong_type_in_array(self):
@@ -2713,7 +2723,7 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_date_time is required.'])
+            ['query_date_time is required.'])
 
     def test_mandatory_date_time_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2745,12 +2755,13 @@ class PyxelRestTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_date_time must be a date time.'])
+            ['query_date_time must be a date time.'])
 
     def test_optional_date_time_parameter_with_wrong_type(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(query_date_time='str value'),
+            pyxelrestgenerator.valid_swagger_test_get_test_json_with_all_optional_parameters_types(
+                query_date_time='str value'),
             ['query_date_time must be a date time.'])
 
     def test_mandatory_array_date_time_parameter_not_provided(self):
@@ -2778,16 +2789,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[today_date],
             query_array_date_time=None,
             query_array_password=None),
-                         ['query_array_date_time is required.'])
+            ['query_array_date_time is required.'])
 
     def test_mandatory_array_date_time_parameter_provided_as_empty_array(self):
         import pyxelrestgenerator
@@ -2814,16 +2825,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[today_date],
             query_array_date_time=[],
             query_array_password=None),
-                         ['query_array_date_time is required.'])
+            ['query_array_date_time is required.'])
 
     def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(self):
         import pyxelrestgenerator
@@ -2850,16 +2861,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[today_date],
             query_array_date_time=[None],
             query_array_password=None),
-                         ['query_array_date_time is required.'])
+            ['query_array_date_time is required.'])
 
     def test_mandatory_array_date_time_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -2886,16 +2897,16 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[today_date],
             query_array_date_time='str value',
             query_array_password=None),
-                         ['query_array_date_time must be a date time.'])
+            ['query_array_date_time must be a date time.'])
 
     def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(self):
         import pyxelrestgenerator
@@ -2922,17 +2933,17 @@ class PyxelRestTest(unittest.TestCase):
             query_array_float=[0.0],
             query_array_double=[0.0],
             query_array_string=[
-             'str value'],
+                'str value'],
             query_array_string_byte=[
-             'str value'],
+                'str value'],
             query_array_string_binary=[
-             'str value'],
+                'str value'],
             query_array_boolean=['true'],
             query_array_date=[today_date],
             query_array_date_time=[
-             'str value'],
+                'str value'],
             query_array_password=None),
-                         ['query_array_date_time must contain date times.'])
+            ['query_array_date_time must contain date times.'])
 
     def test_valid_mandatory_parameters(self):
         import pyxelrestgenerator
@@ -2957,58 +2968,58 @@ class PyxelRestTest(unittest.TestCase):
             query_array_integer=[1, 2],
             query_array_integer32=[10, 20],
             query_array_integer64=[100,
-                                200],
+                                   200],
             query_array_number=[0.1, 0.2],
             query_array_float=[1.01, 2.01],
             query_array_double=[1.1, 2.1],
             query_array_string=[
-             'string 1',
-             'string 2'
+                'string 1',
+                'string 2'
             ],
             query_array_string_byte=[
-             'string bytes 1',
-             'string bytes 2'
+                'string bytes 1',
+                'string bytes 2'
             ],
             query_array_string_binary=[
-             'string binary 1',
-             'string binary 2'
+                'string binary 1',
+                'string binary 2'
             ],
             query_array_boolean=['true',
-                              'false'],
+                                 'false'],
             query_array_date=[
-             today_date,
-             tomorrow_date
+                today_date,
+                tomorrow_date
             ],
             query_array_date_time=[
-             today_datetime,
-             tomorrow_datetime
+                today_datetime,
+                tomorrow_datetime
             ],
             query_array_password=[
-             'password 1',
-             'password 2'
+                'password 1',
+                'password 2'
             ]),
-                         [
-                             [
-                                 'query_array_boolean', 'query_array_date', 'query_array_date_time',
-                                 'query_array_double', 'query_array_float', 'query_array_integer',
-                                 'query_array_integer32', 'query_array_integer64',
-                                 'query_array_number', 'query_array_password', 'query_array_string',
-                                 'query_array_string_binary', 'query_array_string_byte', 'query_boolean',
-                                 'query_date', 'query_date_time', 'query_double', 'query_float', 'query_integer',
-                                 'query_integer32', 'query_integer64', 'query_number', 'query_password',
-                                 'query_string', 'query_string_binary', 'query_string_byte'
-                             ],
-                             [
-                                 'true', str(today_date), str(today_datetime),
-                                 '1.1', '1.01', '1',
-                                 '10', '100',
-                                 '0.1', 'password 1', 'string 1',
-                                 'string binary 1', 'string bytes 1', 'True',
-                                 str(today_date), str(today_datetime), '1.1', '1.01', '1',
-                                 '10', '100', '0.1', 'password',
-                                 'string', 'string binary', 'string bytes'
-                             ]
-                         ])
+            [
+                [
+                    'query_array_boolean', 'query_array_date', 'query_array_date_time',
+                    'query_array_double', 'query_array_float', 'query_array_integer',
+                    'query_array_integer32', 'query_array_integer64',
+                    'query_array_number', 'query_array_password', 'query_array_string',
+                    'query_array_string_binary', 'query_array_string_byte', 'query_boolean',
+                    'query_date', 'query_date_time', 'query_double', 'query_float', 'query_integer',
+                    'query_integer32', 'query_integer64', 'query_number', 'query_password',
+                    'query_string', 'query_string_binary', 'query_string_byte'
+                ],
+                [
+                    'true', str(today_date), str(today_datetime),
+                    '1.1', '1.01', '1',
+                    '10', '100',
+                    '0.1', 'password 1', 'string 1',
+                    'string binary 1', 'string bytes 1', 'True',
+                    str(today_date), str(today_datetime), '1.1', '1.01', '1',
+                    '10', '100', '0.1', 'password',
+                    'string', 'string binary', 'string bytes'
+                ]
+            ])
 
     def test_optional_array_date_time_parameter_with_wrong_type(self):
         import pyxelrestgenerator
@@ -3024,8 +3035,12 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'query_array_string="[\'str1\', \'str2\']"'
+        else:
+            result = u'query_array_string="[u\'str1\', u\'str2\']"'
         self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_string_array_parameter(['str1', 'str2']),
-                         'query_array_string="[\'str1\', \'str2\']"')
+                         result)
 
     def test_plain_text_without_parameter(self):
         import pyxelrestgenerator
@@ -3070,10 +3085,13 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 2.1', 'Column 2.2', 'Column 3.1', 'Column 3.2', 'Column 3.3', 'Column 2.3', 'Column 3'],
+            ['Column 1', 'Column 2', 'Column 2.1', 'Column 2.2', 'Column 3.1', 'Column 3.2', 'Column 3.3', 'Column 2.3',
+             'Column 3'],
             ['0-0-1', '', '0-0-2 / 1-0-1', '', '', '', '', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3',
+             '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3',
+             '0-0-3']
         ],
             pyxelrestgenerator.valid_swagger_test_get_test_dict_with_empty_nested_list())
 
@@ -3081,11 +3099,16 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 2.1', 'Column 2.2', 'Column 3.1', 'Column 3.2', 'Column 3.3', 'Column 2.3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2', 'Column 2.1', 'Column 2.2', 'Column 3.1', 'Column 3.2', 'Column 3.3', 'Column 2.3',
+             'Column 3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3',
+             '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3',
+             '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3',
+             '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3',
+             '0-0-3']
         ],
             pyxelrestgenerator.valid_swagger_test_get_test_dict_with_three_imbricated_levels())
 
@@ -3093,12 +3116,18 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 2.1', 'Column 2.2', 'Column 3.1', 'Column 3.2', 'Column 4.1', 'Column 4.2', 'Column 4.3', 'Column 3.3', 'Column 2.3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2', 'Column 2.1', 'Column 2.2', 'Column 3.1', 'Column 3.2', 'Column 4.1', 'Column 4.2',
+             'Column 4.3', 'Column 3.3', 'Column 2.3', 'Column 3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '',
+             '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '',
+             '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-0-2 / 2-1-3',
+             '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-0-3',
+             '0-0-2 / 1-1-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3',
+             '0-0-2 / 1-1-3', '0-0-3']
         ],
             pyxelrestgenerator.valid_swagger_test_get_test_dict_with_four_imbricated_levels())
 
@@ -3106,24 +3135,30 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3',
+             'Column 3', 'Column 3', 'Column 3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '',
+             '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '',
+             '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-0-2 / 2-1-3',
+             '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-0-3',
+             '0-0-2 / 1-1-3', '0-0-3'],
+            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3',
+             '0-0-2 / 1-1-3', '0-0-3']
         ],
             pyxelrestgenerator.valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys())
 
     def test_get_test_empty_dict(self):
         import pyxelrestgenerator
         self.assertEqual([''],
-            pyxelrestgenerator.valid_swagger_test_get_test_empty_dict())
+                         pyxelrestgenerator.valid_swagger_test_get_test_empty_dict())
 
     def test_get_test_empty_list(self):
         import pyxelrestgenerator
         self.assertEqual([''],
-            pyxelrestgenerator.valid_swagger_test_get_test_empty_list())
+                         pyxelrestgenerator.valid_swagger_test_get_test_empty_list())
 
     def test_get_test_one_level_dict(self):
         import pyxelrestgenerator
@@ -3234,3 +3269,9 @@ class PyxelRestTest(unittest.TestCase):
             ['']
         ],
             pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
+
+    def test_get_test_compare_output_order(self):
+        import pyxelrestgenerator
+        result_unordered = pyxelrestgenerator.output_order_test_get_test_price_unordered()
+        header_definition = [u'ts', u'date', u'curve', u'mat']
+        self.assertEqual(result_unordered[0], header_definition)
