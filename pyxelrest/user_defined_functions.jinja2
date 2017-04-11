@@ -433,7 +433,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         response.raise_for_status()
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }} ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            return Flattenizer().to_list(ujson.loads(response.text), liste_param)
+            return Flattenizer().to_list(ujson.loads(response.text))
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
