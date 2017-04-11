@@ -93,7 +93,8 @@ class PyxelRestUdfsTest(unittest.TestCase):
     def _add_test_config(cls):
         this_dir = os.path.abspath(os.path.dirname(__file__))
         shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir, 'test_services_configuration.ini'), cls.services_config_file_path)
+        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_generated_udfs_services_configuration.ini'),
+                        cls.services_config_file_path)
 
     @classmethod
     def _add_back_initial_config(cls):

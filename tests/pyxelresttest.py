@@ -48,9 +48,6 @@ class PyxelRestTest(unittest.TestCase):
         import testsutils.output_order_test_service as output_order_test_service
         cls.service_processes.append(
             multiprocessing.Process(target=output_order_test_service.start_server, args=(8946,)))
-        import testsutils.swagger_parsing_test_service as swagger_parsing_test_service
-        cls.service_processes.append(
-            multiprocessing.Process(target=swagger_parsing_test_service.start_server, args=(8948,)))
         import testsutils.vba_keywords_test_service as vba_keywords_test_service
         cls.service_processes.append(
             multiprocessing.Process(target=vba_keywords_test_service.start_server, args=(8949,)))
@@ -80,7 +77,8 @@ class PyxelRestTest(unittest.TestCase):
     def _add_test_config(cls):
         this_dir = os.path.abspath(os.path.dirname(__file__))
         shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir, 'test_services_configuration.ini'), cls.services_config_file_path)
+        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_services_configuration.ini'),
+                        cls.services_config_file_path)
 
     @classmethod
     def _add_back_initial_config(cls):

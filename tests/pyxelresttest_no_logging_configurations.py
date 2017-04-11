@@ -54,7 +54,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
                                                              'configuration',
                                                              'services.ini.back')
         shutil.copyfile(self.services_config_file_path, self.backup_services_config_file_path)
-        shutil.copyfile('test_services_configuration.ini', self.services_config_file_path)
+        shutil.copyfile('pyxelresttest_no_logging_services_configuration.ini', self.services_config_file_path)
 
     def _add_back_initial_config(self):
         shutil.move(self.backup_services_config_file_path, self.services_config_file_path)
