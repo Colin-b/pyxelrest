@@ -7,9 +7,12 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/with/all/parameters/types': {
+                       '/test/plain/text/with/all/parameters/types': {
                             'get': {
-                                'operationId': 'get_test_with_all_parameters_types',
+                                'operationId': 'get_test_plain_text_with_all_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -253,7 +256,10 @@ def swagger():
                                 ]
                             },
                             'post': {
-                                'operationId': 'post_test_with_all_parameters_types',
+                                'operationId': 'post_test_plain_text_with_all_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -497,7 +503,10 @@ def swagger():
                                 ]
                             },
                             'put': {
-                                'operationId': 'put_test_with_all_parameters_types',
+                                'operationId': 'put_test_plain_text_with_all_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -741,7 +750,10 @@ def swagger():
                                 ]
                             },
                             'delete': {
-                                'operationId': 'delete_test_with_all_parameters_types',
+                                'operationId': 'delete_test_plain_text_with_all_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -985,9 +997,12 @@ def swagger():
                                 ]
                             }
                         },
-                       '/test/with/all/optional/parameters/types': {
+                       '/test/plain/text/with/all/optional/parameters/types': {
                             'get': {
-                                'operationId': 'get_test_with_all_optional_parameters_types',
+                                'operationId': 'get_test_plain_text_with_all_optional_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1231,7 +1246,10 @@ def swagger():
                                 ]
                             },
                             'post': {
-                                'operationId': 'post_test_with_all_optional_parameters_types',
+                                'operationId': 'post_test_plain_text_with_all_optional_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1475,7 +1493,10 @@ def swagger():
                                 ]
                             },
                             'put': {
-                                'operationId': 'put_test_with_all_optional_parameters_types',
+                                'operationId': 'put_test_plain_text_with_all_optional_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1719,7 +1740,10 @@ def swagger():
                                 ]
                             },
                             'delete': {
-                                'operationId': 'delete_test_with_all_optional_parameters_types',
+                                'operationId': 'delete_test_plain_text_with_all_optional_parameters_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1963,9 +1987,12 @@ def swagger():
                                 ]
                             }
                         },
-                       '/test/with/all/paths/types': {
+                       '/test/plain/text/with/all/paths/types': {
                             'get': {
-                                'operationId': 'get_test_with_all_paths_types',
+                                'operationId': 'get_test_plain_text_with_all_paths_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2209,7 +2236,10 @@ def swagger():
                                 ]
                             },
                             'post': {
-                                'operationId': 'post_test_with_all_paths_types',
+                                'operationId': 'post_test_plain_text_with_all_paths_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2453,7 +2483,10 @@ def swagger():
                                 ]
                             },
                             'put': {
-                                'operationId': 'put_test_with_all_paths_types',
+                                'operationId': 'put_test_plain_text_with_all_paths_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2697,7 +2730,10 @@ def swagger():
                                 ]
                             },
                             'delete': {
-                                'operationId': 'delete_test_with_all_paths_types',
+                                'operationId': 'delete_test_plain_text_with_all_paths_types',
+                                'produces': [
+                                    'text/plain'
+                                ],
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2948,4 +2984,4 @@ def start_server(port):
     app.run(port=port)
 
 if __name__ == '__main__':
-    start_server(8943)
+    start_server(8955)
