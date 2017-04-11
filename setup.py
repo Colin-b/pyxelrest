@@ -120,7 +120,9 @@ setup(name='pyxelrest',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.3',
           # Used to parse logging configuration file
-          'pyaml==16.12.2'
+          'pyaml==16.12.2',
+          # Used to parse JSON faster than the embedded json module
+          'ujson==1.35'
       ],
       scripts=[
           'pyxelrest_auto_update.py',
