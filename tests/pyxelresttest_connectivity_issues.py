@@ -30,8 +30,8 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         self._add_back_initial_config()
 
     def start_services(self):
-        from testsutils.test_service import start_server
-        self.service_process = multiprocessing.Process(target=start_server, args=(8943,))
+        from testsutils.without_parameter_test_service import start_server
+        self.service_process = multiprocessing.Process(target=start_server, args=(8950,))
         self.service_process.start()
 
     def stop_services(self):
@@ -51,5 +51,5 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         reload(import_module('pyxelrestgenerator'))
         import pyxelrestgenerator
         self.stop_services()
-        self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_plain_text_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
                          'Cannot connect to service. Please retry once connection is re-established.')

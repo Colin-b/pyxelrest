@@ -24,7 +24,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         self._add_back_initial_config()
 
     def start_services(self):
-        from testsutils.test_service import start_server
+        from testsutils.usual_parameters_test_service import start_server
         self.service_process = multiprocessing.Process(target=start_server, args=(8943,))
         self.service_process.start()
 

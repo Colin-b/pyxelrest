@@ -11867,20 +11867,6 @@ def swagger():
                                     }
                                 ]
                             }
-                       },
-                       '/test/form/parameter': {
-                            'post': {
-                                'operationId': 'post_test_form_parameter',
-                                'parameters': [
-                                    {
-                                        'description': 'form parameter',
-                                        'in': 'formData',
-                                        'name': 'form_string',
-                                        'required': True,
-                                        'type': 'string'
-                                    }
-                                ]
-                            }
                        }
     })
 
@@ -11898,11 +11884,6 @@ def get_test_json_with_all_optional_parameters_types():
 @app.route('/test/string/array/parameter', methods=['GET'])
 def get_test_string_array_parameter():
     return ', '.join(_request_args(request.args))
-
-
-@app.route('/test/form/parameter', methods=['POST'])
-def post_test_form_parameter():
-    return Response(request.data, mimetype='application/json')
 
 
 def _request_args(args):
