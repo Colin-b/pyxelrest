@@ -97,6 +97,35 @@ class SwaggerService:
                 return True
         return False
 
+    def definition(self, responses):
+        valid_response = responses.get('200')
+        if not valid_response:
+            if 'default' not in responses:
+                raise Exception('At least a default response MUST be defined in {0}'.format(responses))
+            valid_response = responses['default']
+
+        if '$ref' in valid_response:
+            return self.definition(valid_response['$ref'])
+
+        if 'description' not in valid_response:
+            raise Exception('Responses must contains a description or a $ref: {0}'.format(responses))
+
+        if 'schema' not in valid_response:
+            return [valid_response['description']]
+
+        valid_response_schema = valid_response['schema']
+        if valid_response_schema['type'] == 'array':
+            return self._definition(valid_response_schema['items']['$ref'])
+        return self._definition(valid_response_schema['$ref'])
+
+    def _definition(self, definition_path):
+        """
+        :param definition_path: Formatted as #/definitions/TheDefinition
+        """
+        definition_name = definition_path[len('#/definitions/'):]
+        definition = self.swagger['definitions'][definition_name]
+        return list(definition['properties'].keys())
+
     def get_item(self, config, key):
         try:
             # Python 3

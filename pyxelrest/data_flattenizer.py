@@ -81,7 +81,7 @@ class Flattenizer:
                 self.__values_per_level[new_row][previous_level] = self.__values_per_level[row][previous_level]
             self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1)
 
-    def to_list(self, data):
+    def to_list(self, data, definition_fields):
         logging.debug('Converting data to list...')
         self._extract_values_and_level(data)
         # Extract Header and Rows
