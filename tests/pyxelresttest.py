@@ -50,6 +50,21 @@ class PyxelRestTest(unittest.TestCase):
         import testsutils.output_order_test_service as output_order_test_service
         cls.service_processes.append(
             multiprocessing.Process(target=output_order_test_service.start_server, args=(8946,)))
+        import testsutils.nested_data_test_service as nested_data_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=nested_data_test_service.start_server, args=(8947,)))
+        import testsutils.swagger_parsing_test_service as swagger_parsing_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=swagger_parsing_test_service.start_server, args=(8948,)))
+        import testsutils.vba_keywords_test_service as vba_keywords_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=vba_keywords_test_service.start_server, args=(8949,)))
+        import testsutils.without_parameter_test_service as without_parameter_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=without_parameter_test_service.start_server, args=(8950,)))
+        import testsutils.header_parameter_test_service as header_parameter_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=header_parameter_test_service.start_server, args=(8951,)))
         for service_process in cls.service_processes:
             service_process.start()
 
@@ -93,7 +108,7 @@ class PyxelRestTest(unittest.TestCase):
     def test_vba_restricted_keywords(self):
         import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.valid_swagger_test_get_test_vba_restricted_keywords(
+            pyxelrestgenerator.vba_keywords_test_get_test_vba_restricted_keywords(
                 currency_visual_basic='currency value',
                 end_visual_basic='end value'),
             [['currency', 'end'], ['currency value', 'end value']])
@@ -3044,29 +3059,29 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_plain_text_without_parameter(self):
         import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.valid_swagger_test_get_test_plain_text_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
                          'string value returned should be truncated so that the following information cannot be seen by'
                          ' user, because of the fact that Excel does not allow more than 255 characters in a cell. '
                          'Only the 255 characters will be returned by the user defined functions:  ')
 
     def test_post_test_without_parameter(self):
         import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.valid_swagger_test_post_test_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.without_parameter_test_post_test_without_parameter(),
                          'POST performed properly')
 
     def test_put_test_without_parameter(self):
         import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.valid_swagger_test_put_test_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.without_parameter_test_put_test_without_parameter(),
                          'PUT performed properly')
 
     def test_delete_test_without_parameter(self):
         import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.valid_swagger_test_delete_test_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.without_parameter_test_delete_test_without_parameter(),
                          'DELETE performed properly')
 
     def test_get_test_header_parameter(self):
         import pyxelrestgenerator
-        headers = pyxelrestgenerator.valid_swagger_test_get_test_header_parameter('sent header')
+        headers = pyxelrestgenerator.header_parameter_test_get_test_header_parameter('sent header')
         header_param_index = None
         for header_index in range(0, len(headers[0])):
             if headers[0][header_index] == 'Header-String':
@@ -3093,7 +3108,7 @@ class PyxelRestTest(unittest.TestCase):
             ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3',
              '0-0-3']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_dict_with_empty_nested_list())
+            pyxelrestgenerator.nested_data_test_get_test_dict_with_empty_nested_list())
 
     def test_get_test_dict_with_three_imbricated_levels(self):
         import pyxelrestgenerator
@@ -3110,7 +3125,7 @@ class PyxelRestTest(unittest.TestCase):
             ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3',
              '0-0-3']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_dict_with_three_imbricated_levels())
+            pyxelrestgenerator.nested_data_test_get_test_dict_with_three_imbricated_levels())
 
     def test_get_test_dict_with_four_imbricated_levels(self):
         import pyxelrestgenerator
@@ -3129,7 +3144,7 @@ class PyxelRestTest(unittest.TestCase):
             ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3',
              '0-0-2 / 1-1-3', '0-0-3']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_dict_with_four_imbricated_levels())
+            pyxelrestgenerator.nested_data_test_get_test_dict_with_four_imbricated_levels())
 
     def test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys(self):
         import pyxelrestgenerator
@@ -3148,17 +3163,17 @@ class PyxelRestTest(unittest.TestCase):
             ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3',
              '0-0-2 / 1-1-3', '0-0-3']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys())
+            pyxelrestgenerator.nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys())
 
     def test_get_test_empty_dict(self):
         import pyxelrestgenerator
         self.assertEqual([''],
-                         pyxelrestgenerator.valid_swagger_test_get_test_empty_dict())
+                         pyxelrestgenerator.nested_data_test_get_test_empty_dict())
 
     def test_get_test_empty_list(self):
         import pyxelrestgenerator
         self.assertEqual([''],
-                         pyxelrestgenerator.valid_swagger_test_get_test_empty_list())
+                         pyxelrestgenerator.nested_data_test_get_test_empty_list())
 
     def test_get_test_one_level_dict(self):
         import pyxelrestgenerator
@@ -3166,7 +3181,7 @@ class PyxelRestTest(unittest.TestCase):
             ['Column 1', 'Column 2'],
             ['value 1', 'value 2']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_one_level_dict())
+            pyxelrestgenerator.nested_data_test_get_test_one_level_dict())
 
     def test_get_test_one_level_list(self):
         import pyxelrestgenerator
@@ -3174,7 +3189,7 @@ class PyxelRestTest(unittest.TestCase):
             ['value 1'],
             ['value 2']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_one_level_list())
+            pyxelrestgenerator.nested_data_test_get_test_one_level_list())
 
     def test_get_test_one_dict_entry_with_a_list(self):
         import pyxelrestgenerator
@@ -3183,7 +3198,7 @@ class PyxelRestTest(unittest.TestCase):
             ['', 'value 1'],
             ['', 'value 2']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_one_dict_entry_with_a_list())
+            pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list())
 
     def test_get_test_one_dict_entry_with_a_list_of_dict(self):
         import pyxelrestgenerator
@@ -3192,7 +3207,7 @@ class PyxelRestTest(unittest.TestCase):
             ['', 'value 12', 'value 13'],
             ['', 'value 22', 'value 23']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_one_dict_entry_with_a_list_of_dict())
+            pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list_of_dict())
 
     def test_get_test_list_of_dict(self):
         import pyxelrestgenerator
@@ -3201,7 +3216,7 @@ class PyxelRestTest(unittest.TestCase):
             ['value 11', 'value 12'],
             ['value 21', 'value 22']
         ],
-            pyxelrestgenerator.valid_swagger_test_get_test_list_of_dict())
+            pyxelrestgenerator.nested_data_test_get_test_list_of_dict())
 
     def test_get_test_with_tags(self):
         import pyxelrestgenerator
