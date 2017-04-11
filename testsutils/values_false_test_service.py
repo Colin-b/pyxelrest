@@ -6,10 +6,31 @@ app = Flask(__name__)
 @app.route('/')
 def swagger():
     return jsonify(swagger='2.0',
+                   definitions={
+                       'ZeroInteger': {
+                           'properties': {
+                               'zero_integer': {
+                                   'type': 'integer',
+                                   'format': 'int32'
+                               }
+                           }
+                       }
+                   },
                    paths={
                        '/test/with/zero/integer': {
                            'get': {
-                               'operationId': 'get_test_with_zero_integer'
+                               'operationId': 'get_test_with_zero_integer',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': '#/definitions/ZeroInteger'
+                                           }
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/with/zero/float': {
