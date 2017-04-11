@@ -98,7 +98,9 @@ class SwaggerService:
         return False
 
     def definition(self, responses):
-        valid_response = responses.get('200')
+        if not responses:
+            raise Exception('At least one response must be specified.')
+        valid_response = responses.get('200', responses.get('204'))
         if not valid_response:
             if 'default' not in responses:
                 raise Exception('At least a default response MUST be defined in {0}'.format(responses))
@@ -110,13 +112,16 @@ class SwaggerService:
         if 'description' not in valid_response:
             raise Exception('Responses must contains a description or a $ref: {0}'.format(responses))
 
-        if 'schema' not in valid_response:
-            return [valid_response['description']]
+        if 'schema' in valid_response:
+            valid_response_schema = valid_response['schema']
+            if valid_response_schema['type'] == 'array':
+                return self._definition(valid_response_schema['items']['$ref'])
+            if '$ref' not in valid_response_schema:
+                return [valid_response['description']]
+            return self._definition(valid_response_schema['$ref'])
 
-        valid_response_schema = valid_response['schema']
-        if valid_response_schema['type'] == 'array':
-            return self._definition(valid_response_schema['items']['$ref'])
-        return self._definition(valid_response_schema['$ref'])
+        return [valid_response['description']]
+
 
     def _definition(self, definition_path):
         """

@@ -82,6 +82,13 @@ class Flattenizer:
             self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1)
 
     def to_list(self, data, definition_fields):
+        """
+        Return data formatted as a valid Excel return.
+        
+        :param data: JSON formatted data
+        :param definition_fields: Ordered list of fields that are expected. 
+        :return: Array (of Array) of primitive typed fields
+        """
         logging.debug('Converting data to list...')
         self._extract_values_and_level(data)
         # Extract Header and Rows
@@ -126,3 +133,37 @@ class Flattenizer:
         flatten_data.extend(self.__all_flatten_rows)
         logging.debug('Data converted to a flat list.')
         return flatten_data
+
+    def to_list2(self, data, definition_fields):
+        final_rows = []
+        self.to_list_new(final_rows, data, definition_fields)
+        return final_rows
+
+    def to_list_new(self, final_rows, data, definition_fields):
+        if isinstance(data, dict):
+            # Fast solution if no nested level
+            # TODO Handle nested levels
+            sorted_row = sorted(data.values(), key=lambda value: definition_fields.index(value))
+            final_rows.append(definition_fields)
+            final_rows.append(sorted_row)
+        elif isinstance(data, list):
+            # Consider a list of dicts
+            if isinstance(data[0], dict):
+                # Fast solution if no nested level
+                # TODO Handle nested levels
+                final_rows.append(definition_fields)
+                for unsorted_dict in data:
+                    sorted_row = sorted(unsorted_dict.values(), key=lambda value: definition_fields.index(value))
+                    final_rows.append(sorted_row)
+            else:
+                # Fast solution if no nested level
+                # TODO Handle nested levels
+                final_rows.extend(data)
+        else:
+            final_rows.append(data)
+
+
+
+
+
+
