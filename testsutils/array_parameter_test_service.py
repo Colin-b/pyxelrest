@@ -6,23 +6,46 @@ app = Flask(__name__)
 @app.route('/')
 def swagger():
     return jsonify(swagger='2.0',
+                   definitions={
+                       'Test': {
+                           'type': 'object',
+                           'properties': {
+                               'tags': {
+                                   'type': 'string',
+                                   'description': 'test',
+                               }
+                           },
+                           'title': 'Test'
+                       }
+                   },
                    paths={
                        '/test/string/array/parameter': {
-                            'get': {
-                                'operationId': 'get_test_string_array_parameter',
-                                'parameters': [
-                                    {
-                                        'description': 'string array parameter',
-                                        'in': 'query',
-                                        'name': 'query_array_string',
-                                        'required': True,
-                                        'items': {
-                                            'type': 'string'
-                                        },
-                                        'type': 'array'
-                                    }
-                                ]
-                            }
+                           'get': {
+                               'operationId': 'get_test_string_array_parameter',
+                               'parameters': [
+                                   {
+                                       'description': 'string array parameter',
+                                       'in': 'query',
+                                       'name': 'query_array_string',
+                                       'required': True,
+                                       'items': {
+                                           'type': 'string'
+                                       },
+                                       'type': 'array'
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Test'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
                        }
                    })
 
@@ -38,6 +61,7 @@ def _request_args(args):
 
 def start_server(port):
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8953)
