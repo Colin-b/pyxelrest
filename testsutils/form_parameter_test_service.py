@@ -7,12 +7,11 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    definitions={
-                       'TestObject': {
+                       'Form': {
                            'type': 'object',
                            'properties': {
-                               'test': {
-                                   'type': 'string',
-                                   'description': 'test',
+                               'form_string': {
+                                   'type': 'string'
                                }
                            },
                            'title': 'Test'
@@ -36,7 +35,7 @@ def swagger():
                                        'description': 'successful operation',
                                        'schema': {
                                            'items': {
-                                               '$ref': '#/definitions/TestObject'
+                                               '$ref': '#/definitions/Form'
                                            },
                                            'type': 'array'
                                        }
