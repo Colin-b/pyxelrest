@@ -7,12 +7,32 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    definitions={
-                       'TestObject': {
+                       'Header': {
                            'type': 'object',
                            'properties': {
-                               'test': {
-                                   'type': 'string',
-                                   'description': 'test',
+                               'Accept': {
+                                   'type': 'string'
+                               },
+                               'Accept-Encoding': {
+                                   'type': 'string'
+                               },
+                               'Connection': {
+                                   'type': 'string'
+                               },
+                               'Content-Length': {
+                                   'type': 'string'
+                               },
+                               'Content-Type': {
+                                   'type': 'string'
+                               },
+                               'Header-String': {
+                                   'type': 'string'
+                               },
+                               'Host': {
+                                   'type': 'string'
+                               },
+                               'User-Agent': {
+                                   'type': 'string'
                                }
                            },
                            'title': 'Test'
@@ -36,7 +56,7 @@ def swagger():
                                        'description': 'successful operation',
                                        'schema': {
                                            'items': {
-                                               '$ref': '#/definitions/TestObject'
+                                               '$ref': '#/definitions/Header'
                                            },
                                            'type': 'array'
                                        }

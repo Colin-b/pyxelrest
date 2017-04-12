@@ -126,11 +126,7 @@ class PyxelRestTest(unittest.TestCase):
     def test_get_test_header_parameter(self):
         import pyxelrestgenerator
         headers = pyxelrestgenerator.header_parameter_test_get_test_header_parameter('sent header')
-        header_param_index = None
-        for header_index in range(0, len(headers[0])):
-            if headers[0][header_index] == 'Header-String':
-                header_param_index = header_index
-                break
+        header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
     def test_post_test_form_parameter(self):
