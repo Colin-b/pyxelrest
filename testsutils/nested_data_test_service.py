@@ -6,60 +6,200 @@ app = Flask(__name__)
 @app.route('/')
 def swagger():
     return jsonify(swagger='2.0',
+                   definitions={
+                       'Column': {
+                           'type': 'object',
+                           'properties': {
+                               'Column1': {
+                                   'type': 'string',
+                                   'description': 'column1',
+                               },
+                               'Column2': {
+                                   '$ref': '#/definitions/Column'
+                               },
+                               'Column3': {
+                                   'type': 'string',
+                                   'description': 'column3',
+                               }
+                           },
+                           'title': 'Column'
+                       }
+                   },
                    paths={
                        '/test/dict/with/empty/nested/list': {
                            'get': {
-                               'operationId': 'get_test_dict_with_empty_nested_list'
+                               'operationId': 'get_test_dict_with_empty_nested_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/dict/with/three/imbricated/levels': {
                            'get': {
-                               'operationId': 'get_test_dict_with_three_imbricated_levels'
+                               'operationId': 'get_test_dict_with_three_imbricated_levels',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/dict/with/four/imbricated/levels': {
                            'get': {
-                               'operationId': 'get_test_dict_with_four_imbricated_levels'
+                               'operationId': 'get_test_dict_with_four_imbricated_levels',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/dict/with/multiple/imbricated/levels/and/duplicate/keys': {
                            'get': {
-                               'operationId': 'get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys'
+                               'operationId': 'get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/empty/dict': {
                            'get': {
-                               'operationId': 'get_test_empty_dict'
+                               'operationId': 'get_test_empty_dict',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/empty/list': {
                            'get': {
-                               'operationId': 'get_test_empty_list'
+                               'operationId': 'get_test_empty_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/one/level/dict': {
                            'get': {
-                               'operationId': 'get_test_one_level_dict'
+                               'operationId': 'get_test_one_level_dict',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/one/level/list': {
                            'get': {
-                               'operationId': 'get_test_one_level_list'
+                               'operationId': 'get_test_one_level_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/one/dict/entry/with/a/list': {
                            'get': {
-                               'operationId': 'get_test_one_dict_entry_with_a_list'
+                               'operationId': 'get_test_one_dict_entry_with_a_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/one/dict/entry/with/a/list/of/dict': {
                            'get': {
-                               'operationId': 'get_test_one_dict_entry_with_a_list_of_dict'
+                               'operationId': 'get_test_one_dict_entry_with_a_list_of_dict',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/list/of/dict': {
                            'get': {
-                               'operationId': 'get_test_list_of_dict'
+                               'operationId': 'get_test_list_of_dict',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Column'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        }
                    })
@@ -278,9 +418,9 @@ def get_test_one_level_list():
 def get_test_one_dict_entry_with_a_list():
     return jsonify({
         'Column 1': [
-        "value 1",
-        "value 2"
-    ]})
+            "value 1",
+            "value 2"
+        ]})
 
 
 @app.route('/test/one/dict/entry/with/a/list/of/dict', methods=['GET'])
@@ -302,19 +442,20 @@ def get_test_one_dict_entry_with_a_list_of_dict():
 @app.route('/test/list/of/dict', methods=['GET'])
 def get_test_list_of_dict():
     return jsonify([
-            {
-                'Column 1': "value 11",
-                'Column 2': "value 12"
-            },
-            {
-                'Column 1': "value 21",
-                'Column 2': "value 22"
-            }
-        ])
+        {
+            'Column 1': "value 11",
+            'Column 2': "value 12"
+        },
+        {
+            'Column 1': "value 21",
+            'Column 2': "value 22"
+        }
+    ])
 
 
 def start_server(port):
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8947)
