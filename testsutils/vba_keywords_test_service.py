@@ -6,6 +6,16 @@ app = Flask(__name__)
 @app.route('/')
 def swagger():
     return jsonify(swagger='2.0',
+                   definitions={
+                       'Test': {
+                           'properties': {
+                               'currency': {
+                               },
+                               'end': {
+                               }
+                           }
+                       }
+                   },
                    paths={
                        '/test/vba/restricted/keywords': {
                             'get': {
@@ -25,7 +35,13 @@ def swagger():
                                         'required': True,
                                         'type': 'string'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/Test'
+                                   }
+                                }
                             },
                             'post': {
                                 'operationId': 'post_test_vba_restricted_keywords',
@@ -44,7 +60,13 @@ def swagger():
                                         'required': True,
                                         'type': 'string'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/Test'
+                                   }
+                                }
                             },
                             'put': {
                                 'operationId': 'put_test_vba_restricted_keywords',
@@ -63,7 +85,13 @@ def swagger():
                                         'required': True,
                                         'type': 'string'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/Test'
+                                   }
+                                }
                             },
                             'delete': {
                                 'operationId': 'delete_test_vba_restricted_keywords',
@@ -82,7 +110,13 @@ def swagger():
                                         'required': True,
                                         'type': 'string'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/Test'
+                                   }
+                                }
                             }
                        }
                    })
