@@ -14,6 +14,50 @@ def swagger():
                                    'format': 'int32'
                                }
                            }
+                       },
+                       'ZeroFloat': {
+                           'properties': {
+                               'zero_float': {
+                                   'type': 'number',
+                                   'format': 'float'
+                               }
+                           }
+                       },
+                       'FalseBoolean': {
+                           'properties': {
+                               'false_boolean': {
+                                   'type': 'boolean'
+                               }
+                           }
+                       },
+                       'EmptyString': {
+                           'properties': {
+                               'empty_string': {
+                                   'type': 'string'
+                               }
+                           }
+                       },
+                       'EmptyList': {
+                           'properties': {
+                               'empty_list': {
+                                   'type': 'array',
+                                   'items': {
+                                       '$ref': '#/definitions/Empty'
+                                   }
+                               }
+                           }
+                       },
+                       'EmptyDictionary': {
+                           'properties': {
+                               'empty_dictionary': {
+                                   'type': 'object',
+                                   '$ref': '#/definitions/Empty'
+                               }
+                           }
+                       },
+                       'Empty': {
+                           'properties': {
+                           }
                        }
                    },
                    paths={
@@ -35,27 +79,82 @@ def swagger():
                        },
                        '/test/with/zero/float': {
                            'get': {
-                               'operationId': 'get_test_with_zero_float'
+                               'operationId': 'get_test_with_zero_float',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': '#/definitions/ZeroFloat'
+                                           }
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/with/false/boolean': {
                            'get': {
-                               'operationId': 'get_test_with_false_boolean'
+                               'operationId': 'get_test_with_false_boolean',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': '#/definitions/FalseBoolean'
+                                           }
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/with/empty/string': {
                            'get': {
-                               'operationId': 'get_test_with_empty_string'
+                               'operationId': 'get_test_with_empty_string',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': '#/definitions/EmptyString'
+                                           }
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/with/empty/list': {
                            'get': {
-                               'operationId': 'get_test_with_empty_list'
+                               'operationId': 'get_test_with_empty_list',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': '#/definitions/EmptyList'
+                                           }
+                                       }
+                                   }
+                               }
                            }
                        },
                        '/test/with/empty/dictionary': {
                            'get': {
-                               'operationId': 'get_test_with_empty_dictionary'
+                               'operationId': 'get_test_with_empty_dictionary',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': '#/definitions/EmptyDictionary'
+                                           }
+                                       }
+                                   }
+                               }
                            }
                        }
                    })

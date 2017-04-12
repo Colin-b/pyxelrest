@@ -250,7 +250,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'post': {
                                 'operationId': 'post_test_with_all_parameters_types',
@@ -494,7 +499,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'put': {
                                 'operationId': 'put_test_with_all_parameters_types',
@@ -738,7 +748,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'delete': {
                                 'operationId': 'delete_test_with_all_parameters_types',
@@ -982,7 +997,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             }
                         },
                        '/test/with/all/optional/parameters/types': {
@@ -1228,7 +1248,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'post': {
                                 'operationId': 'post_test_with_all_optional_parameters_types',
@@ -1472,7 +1497,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'put': {
                                 'operationId': 'put_test_with_all_optional_parameters_types',
@@ -1716,7 +1746,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'delete': {
                                 'operationId': 'delete_test_with_all_optional_parameters_types',
@@ -1960,7 +1995,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             }
                         },
                        '/test/with/all/paths/types': {
@@ -2206,7 +2246,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'post': {
                                 'operationId': 'post_test_with_all_paths_types',
@@ -2450,7 +2495,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'put': {
                                 'operationId': 'put_test_with_all_paths_types',
@@ -2694,7 +2744,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             },
                             'delete': {
                                 'operationId': 'delete_test_with_all_paths_types',
@@ -2938,7 +2993,12 @@ def swagger():
                                         },
                                         'type': 'array'
                                     }
-                                ]
+                                ],
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                }
                             }
                         }
     })
