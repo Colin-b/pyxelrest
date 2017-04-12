@@ -16,6 +16,62 @@ def swagger():
                                }
                            },
                            'title': 'Test'
+                       },
+                       'AllMandatoryParameters': {
+                           'properties': {
+                               'query_array_boolean': {
+                               },
+                               'query_array_date': {
+                               },
+                               'query_array_date_time': {
+                               },
+                               'query_array_double': {
+                               },
+                               'query_array_float': {
+                               },
+                               'query_array_integer': {
+                               },
+                               'query_array_integer32': {
+                               },
+                               'query_array_integer64': {
+                               },
+                               'query_array_number': {
+                               },
+                               'query_array_password': {
+                               },
+                               'query_array_string': {
+                               },
+                               'query_array_string_binary': {
+                               },
+                               'query_array_string_byte': {
+                               },
+                               'query_boolean': {
+                               },
+                               'query_date': {
+                               },
+                               'query_date_time': {
+                               },
+                               'query_double': {
+                               },
+                               'query_float': {
+                               },
+                               'query_integer': {
+                               },
+                               'query_integer32': {
+                               },
+                               'query_integer64': {
+                               },
+                               'query_number': {
+                               },
+                               'query_password': {
+                               },
+                               'query_string': {
+                               },
+                               'query_string_binary': {
+                               },
+                               'query_string_byte': {
+                               }
+                           }
                        }
                    },
                    paths={
@@ -271,7 +327,7 @@ def swagger():
                                        'description': 'successful operation',
                                        'schema': {
                                            'items': {
-                                               '$ref': '#/definitions/TestObject'
+                                               '$ref': '#/definitions/AllMandatoryParameters'
                                            },
                                            'type': 'array'
                                        }
