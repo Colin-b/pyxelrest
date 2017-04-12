@@ -6,11 +6,11 @@ app = Flask(__name__)
 @app.route('/')
 def swagger():
     return jsonify(swagger='2.0',
-                   definition={
-                       'Test': {
+                   definitions={
+                       'TestObject': {
                            'type': 'object',
                            'properties': {
-                               'tags': {
+                               'test': {
                                    'type': 'string',
                                    'description': 'test',
                                }
@@ -36,7 +36,7 @@ def swagger():
                                        'description': 'successful operation',
                                        'schema': {
                                            'items': {
-                                               '$ref': '#/definitions/Test'
+                                               '$ref': '#/definitions/TestObject'
                                            },
                                            'type': 'array'
                                        }
