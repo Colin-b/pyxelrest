@@ -99,7 +99,8 @@ class SwaggerService:
 
     def definition(self, responses):
         if not responses:
-            raise Exception('At least one response must be specified.')
+            raise Exception('At least one response must be specified (call in {0}).'.format(self.name))
+
         valid_response = responses.get('200', responses.get('204'))
         if not valid_response:
             if 'default' not in responses:
@@ -107,7 +108,7 @@ class SwaggerService:
             valid_response = responses['default']
 
         if '$ref' in valid_response:
-            return self.definition(valid_response['$ref'])
+            return self._definition(valid_response['$ref'])
 
         if 'description' not in valid_response:
             raise Exception('Responses must contains a description or a $ref: {0}'.format(responses))
@@ -128,7 +129,11 @@ class SwaggerService:
         :param definition_path: Formatted as #/definitions/TheDefinition
         """
         definition_name = definition_path[len('#/definitions/'):]
+        if definition_name not in self.swagger['definitions']:
+            raise Exception('No definition can be found for "{0}" in {1}'.format(definition_name, self.name))
         definition = self.swagger['definitions'][definition_name]
+        if 'properties' not in definition:
+            raise Exception('Properties are not defined for "{0}" definition in {1}.'.format(definition_name, self.name))
         return list(definition['properties'].keys())
 
     def get_item(self, config, key):

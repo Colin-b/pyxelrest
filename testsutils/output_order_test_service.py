@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/')
 def swagger():
     return jsonify(swagger='2.0',
-                   definition={
+                   definitions={
                        'Price': {
                            'required': [
                                'curve',

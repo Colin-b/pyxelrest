@@ -8,6 +8,8 @@ def swagger():
     return jsonify(swagger='2.0',
                    definitions={
                        'Test': {
+                           'properties': {
+                           }
                        }
                    },
                    paths={
