@@ -1,11 +1,13 @@
-from flask import Flask, jsonify
+from collections import OrderedDict
+from flask import Flask, Response, jsonify
+import json
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def swagger():
-    return jsonify(swagger='2.0',
+    swagger_json = json.dumps(OrderedDict(swagger='2.0',
                    definitions={
                        'Price': {
                            'required': [
@@ -89,7 +91,8 @@ def swagger():
                                }
                            }
                        }
-                   })
+                   }))
+    return Response(swagger_json, content_type='application/json')
 
 
 @app.route('/price/unordered', methods=['GET'])
