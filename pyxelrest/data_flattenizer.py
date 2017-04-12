@@ -143,7 +143,10 @@ class Flattenizer:
         if isinstance(data, dict):
             # Fast solution if no nested level
             # TODO Handle nested levels
-            sorted_row = sorted(data.values(), key=lambda value: definition_fields.index(value))
+            # Sort dictionary according to keys (create a list of tuples)
+            sorted_dict = sorted(data.items(), key=lambda entry: definition_fields.index(entry[0]))
+            # Create a list of values according to the previously created list of tuples
+            sorted_row = [entry[1] for entry in sorted_dict]
             final_rows.append(definition_fields)
             final_rows.append(sorted_row)
         elif isinstance(data, list):
@@ -153,7 +156,10 @@ class Flattenizer:
                 # TODO Handle nested levels
                 final_rows.append(definition_fields)
                 for unsorted_dict in data:
-                    sorted_row = sorted(unsorted_dict.values(), key=lambda value: definition_fields.index(value))
+                    # Sort dictionary according to keys (create a list of tuples)
+                    sorted_dict = sorted(unsorted_dict.items(), key=lambda entry: definition_fields.index(entry[0]))
+                    # Create a list of values according to the previously created list of tuples
+                    sorted_row = [entry[1] for entry in sorted_dict]
                     final_rows.append(sorted_row)
             else:
                 # Fast solution if no nested level
