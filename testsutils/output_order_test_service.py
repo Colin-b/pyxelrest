@@ -75,7 +75,18 @@ def swagger():
                                        'type': 'string',
                                        'description': 'maturity'
                                    }
-                               ]
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/Price'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
                            }
                        }
                    })
