@@ -81,12 +81,11 @@ class Flattenizer:
                 self.__values_per_level[new_row][previous_level] = self.__values_per_level[row][previous_level]
             self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1)
 
-    def to_list(self, data, definition_fields):
+    def to_list(self, data):
         """
         Return data formatted as a valid Excel return.
         
         :param data: JSON formatted data
-        :param definition_fields: Ordered list of fields that are expected. 
         :return: Array (of Array) of primitive typed fields
         """
         logging.debug('Converting data to list...')

@@ -114,14 +114,17 @@ class SwaggerService:
             raise Exception('Responses must contains a description or a $ref: {0}'.format(responses))
 
         if 'schema' in valid_response:
-            valid_response_schema = valid_response['schema']
-            if valid_response_schema.get('type') == 'array':
-                return self._definition(valid_response_schema['items']['$ref'])
-            if '$ref' not in valid_response_schema:
-                return [valid_response['description']]
-            return self._definition(valid_response_schema['$ref'])
+            ref = self._schema_ref(valid_response['schema'])
+            if ref:
+                return self._definition(ref)
 
-        return [valid_response['description']]
+        return {valid_response['description']: None}
+
+    def _schema_ref(self, schema):
+        if schema.get('type') == 'array':
+            return schema['items']['$ref']
+        if '$ref' in schema:
+            return schema['$ref']
 
     def _definition(self, definition_path):
         """
@@ -133,7 +136,8 @@ class SwaggerService:
         definition = self.swagger['definitions'][definition_name]
         if 'properties' not in definition:
             raise Exception('Properties are not defined for "{0}" definition in {1}.'.format(definition_name, self.name))
-        return list(definition['properties'].keys())
+        properties = definition['properties']
+        return {property_name: self._schema_ref(properties[property_name]) for property_name in properties.keys()}
 
     def get_item(self, config, key):
         try:
