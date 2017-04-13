@@ -115,14 +115,13 @@ class SwaggerService:
 
         if 'schema' in valid_response:
             valid_response_schema = valid_response['schema']
-            if valid_response_schema['type'] == 'array':
+            if valid_response_schema.get('type') == 'array':
                 return self._definition(valid_response_schema['items']['$ref'])
             if '$ref' not in valid_response_schema:
                 return [valid_response['description']]
             return self._definition(valid_response_schema['$ref'])
 
         return [valid_response['description']]
-
 
     def _definition(self, definition_path):
         """

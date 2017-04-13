@@ -134,42 +134,63 @@ class Flattenizer:
         logging.debug('Data converted to a flat list.')
         return flatten_data
 
-    def to_list2(self, data, definition_fields):
-        final_rows = []
-        self.to_list_new(final_rows, data, definition_fields)
-        return final_rows
 
-    def to_list_new(self, final_rows, data, definition_fields):
-        if isinstance(data, dict):
-            # Fast solution if no nested level
-            # TODO Handle nested levels
-            # Sort dictionary according to keys (create a list of tuples)
-            sorted_dict = sorted(data.items(), key=lambda entry: definition_fields.index(entry[0]))
-            # Create a list of values according to the previously created list of tuples
-            sorted_row = [to_cell(entry[1]) for entry in sorted_dict]
-            final_rows.append(definition_fields)
-            final_rows.append(sorted_row)
-        elif isinstance(data, list):
-            # Consider a list of dicts
-            if isinstance(data[0], dict):
-                # Fast solution if no nested level
-                # TODO Handle nested levels
-                final_rows.append(definition_fields)
-                for unsorted_dict in data:
-                    # Sort dictionary according to keys (create a list of tuples)
-                    sorted_dict = sorted(unsorted_dict.items(), key=lambda entry: definition_fields.index(entry[0]))
-                    # Create a list of values according to the previously created list of tuples
-                    sorted_row = [to_cell(entry[1]) for entry in sorted_dict]
-                    final_rows.append(sorted_row)
-            else:
-                # Fast solution if no nested level
-                # TODO Handle nested levels
-                final_rows.extend(data)
+class Flattenizer2:
+    def __init__(self, definitions):
+        self.__rows = []
+        self.__definitions = definitions
+        self.__should_flatten = requires_flatten(definitions)
+
+    def to_list(self, data):
+        self._fill_rows(data)
+        return self.__rows
+
+    def _fill_rows(self, data):
+        if self.__should_flatten:
+            pass  # TODO Handle flatenning
         else:
-            final_rows.append(data)
+            self._fill_rows_without_flatten(data)
+
+    def _fill_rows_without_flatten(self, data):
+        if isinstance(data, dict):
+            self._convert_dict_to_2_rows(data)
+        elif isinstance(data, list):
+            if data and isinstance(data[0], dict):
+                self._convert_list_of_dicts_to_rows(data)
+            else:
+                self._convert_list_to_rows(data)
+        else:
+            self.__rows.append(data)
+
+    def _convert_dict_to_2_rows(self, unsorted_dictionary):
+        header_row = list(self.__definitions.keys())
+        self.__rows.append(header_row)
+        self.__rows.append(convert_dict_to_row(header_row, unsorted_dictionary))
+
+    def _convert_list_of_dicts_to_rows(self, dictionaries_list):
+        header_row = list(self.__definitions.keys())
+        self.__rows.append(header_row)
+        for unsorted_dictionary in dictionaries_list:
+            self.__rows.append(convert_dict_to_row(header_row, unsorted_dictionary))
+
+    def _convert_list_to_rows(self, values_list):
+        self.__rows.extend(values_list)
+
+
+def convert_dict_to_row(ordered_header, dictionary):
+    # Sort dictionary according to keys (create a list of tuples)
+    sorted_dict = sorted(dictionary.items(), key=lambda entry: ordered_header.index(entry[0]))
+    # Create a list of values according to the previously created list of tuples
+    return [to_cell(entry[1]) for entry in sorted_dict]
 
 
 def to_cell(value):
     if value is None or value == {} or value == []:
         return ''
     return value
+
+
+def requires_flatten(definition):
+    for reference_to_another_definition in definition.values():
+        if reference_to_another_definition:
+            return True
