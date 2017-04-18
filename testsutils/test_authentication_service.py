@@ -9,7 +9,9 @@ app = Flask(__name__)
 def get_token():
     redirect_uri = request.args.get('redirect_uri')
     token = jwt.encode({'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)}, 'secret').decode('unicode_escape')
-    return redirect(redirect_uri + '?id_token=' + token, code=302)
+    requests.post(redirect_uri, data={'id_token':token})
+    return ''
+
 
 
 def start_server(port):

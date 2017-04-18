@@ -37,17 +37,12 @@ def decode_base64(base64_encoded_string):
 
 {% for service in services %}
 {% if service.authentication_url %}
-@app.route("/{{ service.name }}", methods=['POST', 'GET'])
+@app.route("/{{ service.name }}", methods=['POST'])
 def {{ service.name }}_post():
     try:
-        if flask.request.method == "POST":
-            if 'id_token' not in flask.request.form:
-                raise Exception('id_token not provided.')
-            id_token = flask.request.form['id_token']
-        else:
-            if 'id_token' not in flask.request.args:
-                raise Exception('id_token not provided.')
-            id_token = flask.request.args['id_token']
+        if 'id_token' not in flask.request.form:
+            raise Exception('id_token not provided.')
+        id_token = flask.request.form['id_token']
         if not id_token:
             raise Exception('id_token is invalid.')
         header, body, other = id_token.split('.')
@@ -101,8 +96,9 @@ def request_new_token(service_name, authentication_url, header):
     auth_response_uri = 'http%3A%2F%2Flocalhost:{0}/{1}'.format(server_port, service_name)
     logging.debug('Requesting user authentication...')
     url = authentication_url.replace('{pyxelrest_auth_response_url}', auth_response_uri)
-    success = webbrowser.open(url)
-    if not success:
+    browser_was_opened = webbrowser.open(url)
+    # fallback on simple request if no browser was opened
+    if not browser_was_opened:
         response = requests.get(url)
     logging.debug('Waiting for user authentication...')
 {% if run_with_python_3 %}
