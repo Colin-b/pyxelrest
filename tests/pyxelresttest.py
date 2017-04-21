@@ -189,19 +189,12 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_get_test_with_empty_list(self):
         import pyxelrestgenerator
-        self.assertEqual([
-            ['empty_list'],
-            ['']
-        ],
+        self.assertEqual([''],
             pyxelrestgenerator.values_false_test_get_test_with_empty_list())
 
     def test_get_test_with_empty_dictionary(self):
         import pyxelrestgenerator
-        self.assertEqual([
-            ['empty_dictionary'],
-            ['']
-        ],
-            pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
+        self.assertEqual([''], pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
 
     def test_get_test_compare_output_order(self):
         import pyxelrestgenerator

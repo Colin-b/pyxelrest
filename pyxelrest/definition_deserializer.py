@@ -37,7 +37,7 @@ class RowsMerger:
         
         :param new_data: Either a value, a list of values or a list of list of values
         """
-        if new_merging_data is None:
+        if new_merging_data.rows is None:
             return
 
         if self.rows is None:
@@ -239,7 +239,7 @@ class Response:
             return [str(data)[:255]]
         merger = self.field.convert(None, data)
         if merger.header:
-            rows = [merger.header]
+            rows = [merger.header] if isinstance(merger.header, list) else [[merger.header]]
             if isinstance(merger.rows, list):
                 if isinstance(merger.rows[0], list):
                     rows.extend(merger.rows)
@@ -259,60 +259,20 @@ class Response:
 
 if __name__ == '__main__':
     response = {
-                                       'description': 'successful operation',
-                                       'schema': {
-                                           '$ref': '#/definitions/Column'
-                                       }
-                                   }
+                   'description': 'successful operation',
+                   'schema': {
+                       '$ref': '#/definitions/EmptyDictionary'
+                   }
+               }
     definitions = {
-        'Column': {
-                           'type': 'object',
-                           'properties': {
-                               'Column 1': {
-                                   'type': 'string',
-                                   'description': 'column1',
-                               },
-                               'Column 2': {
-                                   'type': 'array',
-                                   'description': 'column2',
-                                   'items': {
-                                       '$ref': '#/definitions/Column'
-                                   }
-                               },
-                               'Column 3': {
-                                   'type': 'string',
-                                   'description': 'column3',
-                               }
-                           },
-                           'title': 'Column'
-                       }
+       'EmptyDictionary': {
+           'properties': {
+               'empty_field': {
+                   'type': 'string'
+               }
+           }
+       }
     }
-    data = {
-        "Column 1": "0-0-1",
-        "Column 2": [
-            {
-                "Column 1": "0-0-2 / 1-0-1",
-                "Column 2": [],
-                "Column 3": "0-0-2 / 1-0-3"
-            },
-            {
-                "Column 1": "0-0-2 / 1-1-1",
-                "Column 2": [
-                    {
-                        "Column 1": "0-0-2 / 1-1-2 / 2-0-1",
-                        "Column 2": [],
-                        "Column 3": "0-0-2 / 1-1-2 / 2-0-3"
-                    },
-                    {
-                        "Column 1": "0-0-2 / 1-1-2 / 2-1-1",
-                        "Column 2": [],
-                        "Column 3": "0-0-2 / 1-1-2 / 2-1-3"
-                    }
-                ],
-                "Column 3": "0-0-2 / 1-1-3"
-            }
-        ],
-        "Column 3": "0-0-3"
-    }
+    data = {'empty_field': 'uhydghi'}
     rows = Response(response, definitions).rows(data)
     print('\n'.join([str(row) for row in rows]))
