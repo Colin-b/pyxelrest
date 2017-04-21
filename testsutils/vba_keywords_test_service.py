@@ -39,7 +39,9 @@ def swagger():
                                 'responses': {
                                    '200': {
                                        'description': 'return value',
-                                       '$ref': '#/definitions/Test'
+                                       'schema': {
+                                           '$ref': '#/definitions/Test'
+                                       }
                                    }
                                 }
                             },

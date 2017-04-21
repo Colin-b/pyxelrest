@@ -34,10 +34,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Form'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Form'
                                        }
                                    }
                                }

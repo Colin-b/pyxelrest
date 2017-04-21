@@ -55,10 +55,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Header'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Header'
                                        }
                                    }
                                }
