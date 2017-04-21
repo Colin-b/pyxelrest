@@ -97,7 +97,10 @@ class SwaggerService:
                 return True
         return False
 
-    def definition(self, responses):
+    def definitions(self):
+        return self.swagger['definitions']
+
+    def response(self, responses):
         if not responses:
             raise Exception('At least one response must be specified (call in {0}).'.format(self.name))
 
@@ -106,38 +109,60 @@ class SwaggerService:
             if 'default' not in responses:
                 raise Exception('At least a default response MUST be defined in {0}'.format(responses))
             valid_response = responses['default']
+        return valid_response
 
+    def definition(self, responses):
+        valid_response = self.response(responses)
         if '$ref' in valid_response:
-            return self._definition(valid_response['$ref'])
-
-        if 'description' not in valid_response:
-            raise Exception('Responses must contains a description or a $ref: {0}'.format(responses))
+            ref = valid_response['$ref']
+            return self._definition(ref), ref
 
         if 'schema' in valid_response:
             ref = self._schema_ref(valid_response['schema'])
             if ref:
-                return self._definition(ref)
+                return self._definition(ref), ref
 
-        return {valid_response['description']: None}
+        if 'description' not in valid_response:
+            raise Exception('Responses must contains a description or a $ref: {0}'.format(responses))
+
+        # No need to read description, this case corresponds to single cell return
+        return None, None
 
     def _schema_ref(self, schema):
         if schema.get('type') == 'array':
-            return schema['items']['$ref']
-        if '$ref' in schema:
+            if '$ref' in schema['items']:
+                return schema['items']['$ref']
+        elif '$ref' in schema:
             return schema['$ref']
 
-    def _definition(self, definition_path):
+    def _definition(self, response_reference):
         """
-        :param definition_path: Formatted as #/definitions/TheDefinition
+        :param response_reference: Formatted as #/definitions/TheDefinition
         """
-        definition_name = definition_path[len('#/definitions/'):]
-        if definition_name not in self.swagger['definitions']:
-            raise Exception('No definition can be found for "{0}" in {1}'.format(definition_name, self.name))
-        definition = self.swagger['definitions'][definition_name]
-        if 'properties' not in definition:
-            raise Exception('Properties are not defined for "{0}" definition in {1}.'.format(definition_name, self.name))
-        properties = definition['properties']
-        return {property_name: self._schema_ref(properties[property_name]) for property_name in properties.keys()}
+        definitions = {response_reference: self.reference_as_dict(response_reference)}
+        self._add_additional_definitions(definitions, response_reference)
+        return definitions
+
+    def reference_as_dict(self, reference):
+        """
+        :param reference: Formatted as #/definitions/TheDefinition
+        """
+        reference_name = reference[len('#/definitions/'):]
+        if reference_name not in self.swagger['definitions']:
+            raise Exception('No definition can be found for "{0}" in {1}'.format(reference_name, self.name))
+        definition = self.swagger['definitions'][reference_name]
+        if 'properties' in definition:
+            properties = definition['properties']
+            return {property_name: self._schema_ref(properties[property_name]) for property_name in properties.keys()}
+
+        raise Exception('Properties are not defined for "{0}" definition in {1}.'.format(reference_name, self.name))
+
+    def _add_additional_definitions(self, definitions, definition_reference):
+        """Fill definitions with all definitions required for this definition_reference"""
+        for reference in definitions[definition_reference].values():
+            if reference and reference not in definitions:
+                definitions[reference] = self.reference_as_dict(reference)
+                self._add_additional_definitions(definitions, reference)
 
     def get_item(self, config, key):
         try:

@@ -27,6 +27,44 @@ def swagger():
                                }
                            },
                            'title': 'Column'
+                       },
+                       'Column1': {
+                           'type': 'object',
+                           'properties': {
+                               'Column 1': {
+                                   'type': 'array',
+                                   'items': {
+                                       '$ref': '#/definitions/Column2And3'
+                                   },
+                               }
+                           },
+                           'title': 'Column1'
+                       },
+                       'Column2And3': {
+                           'type': 'object',
+                           'properties': {
+                               'Column 2': {
+                                   'type': 'string',
+                                   'description': 'column1',
+                               },
+                               'Column 3': {
+                                   'type': 'string',
+                                   'description': 'column3',
+                               }
+                           },
+                           'title': 'Column2+3'
+                       },
+                       'Column1List': {
+                           'type': 'object',
+                           'properties': {
+                               'Column 1': {
+                                   'type': 'array',
+                                   'items': {
+                                       'type': 'string'
+                                   },
+                               }
+                           },
+                           'title': 'Column1'
                        }
                    },
                    paths={
@@ -37,10 +75,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column'
                                        }
                                    }
                                }
@@ -53,10 +88,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column'
                                        }
                                    }
                                }
@@ -69,10 +101,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column'
                                        }
                                    }
                                }
@@ -85,10 +114,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column'
                                        }
                                    }
                                }
@@ -101,10 +127,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column'
                                        }
                                    }
                                }
@@ -133,10 +156,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column2And3'
                                        }
                                    }
                                }
@@ -150,7 +170,7 @@ def swagger():
                                        'description': 'successful operation',
                                        'schema': {
                                            'items': {
-                                               '$ref': '#/definitions/Column'
+                                               'type': 'string'
                                            },
                                            'type': 'array'
                                        }
@@ -165,10 +185,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column1List'
                                        }
                                    }
                                }
@@ -181,10 +198,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/Column'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/Column1'
                                        }
                                    }
                                }
@@ -198,7 +212,7 @@ def swagger():
                                        'description': 'successful operation',
                                        'schema': {
                                            'items': {
-                                               '$ref': '#/definitions/Column'
+                                               '$ref': '#/definitions/Column2And3'
                                            },
                                            'type': 'array'
                                        }
@@ -405,8 +419,8 @@ def get_test_empty_list():
 @app.route('/test/one/level/dict', methods=['GET'])
 def get_test_one_level_dict():
     return jsonify({
-        "Column 1": "value 1",
-        "Column 2": "value 2"
+        "Column 2": "value 1",
+        "Column 3": "value 2"
     })
 
 
@@ -447,12 +461,12 @@ def get_test_one_dict_entry_with_a_list_of_dict():
 def get_test_list_of_dict():
     return jsonify([
         {
-            'Column 1': "value 11",
-            'Column 2': "value 12"
+            'Column 2': "value 11",
+            'Column 3': "value 12"
         },
         {
-            'Column 1': "value 21",
-            'Column 2': "value 22"
+            'Column 2': "value 21",
+            'Column 3': "value 22"
         }
     ])
 

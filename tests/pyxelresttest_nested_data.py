@@ -121,7 +121,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
     def test_get_test_one_level_dict(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['Column 1', 'Column 2'],
+            ['Column 2', 'Column 3'],
             ['value 1', 'value 2']
         ],
             pyxelrestgenerator.nested_data_test_get_test_one_level_dict())
@@ -137,25 +137,25 @@ class PyxelRestNestedDataTest(unittest.TestCase):
     def test_get_test_one_dict_entry_with_a_list(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['Column 1', 'Column 1'],
-            ['', 'value 1'],
-            ['', 'value 2']
+            ['Column 1'],
+            ['value 1'],
+            ['value 2']
         ],
             pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list())
 
     def test_get_test_one_dict_entry_with_a_list_of_dict(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 3'],
-            ['', 'value 12', 'value 13'],
-            ['', 'value 22', 'value 23']
+            ['Column 1 / Column 2', 'Column 1 / Column 3'],
+            ['value 12', 'value 13'],
+            ['value 22', 'value 23']
         ],
             pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list_of_dict())
 
     def test_get_test_list_of_dict(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['Column 1', 'Column 2'],
+            ['Column 2', 'Column 3'],
             ['value 11', 'value 12'],
             ['value 21', 'value 22']
         ],

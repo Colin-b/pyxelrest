@@ -1,6 +1,5 @@
 import logging
 
-
 class Flattenizer:
     def __init__(self):
         self.__values_per_level = {}
@@ -137,50 +136,163 @@ class Flattenizer:
 class Flattenizer2:
     def __init__(self, definitions):
         self.__rows = []
-        self.__definitions = definitions
-        self.__should_flatten = requires_flatten(definitions)
+        self.__definitions = definitions[0]
+        self.__object_definition_key = definitions[1]
+        # This variable is here to fasten flattening as it is not required most of the time
+        self.__should_flatten = requires_flatten(definitions[0])
 
     def to_list(self, data):
         self._fill_rows(data)
         return self.__rows
 
     def _fill_rows(self, data):
-        if self.__should_flatten:
-            pass  # TODO Handle flatenning
-        else:
-            self._fill_rows_without_flatten(data)
-
-    def _fill_rows_without_flatten(self, data):
         if isinstance(data, dict):
-            self._convert_dict_to_2_rows(data)
+            if self.__should_flatten:
+                self._convert_dict_to_flatten_rows(data)
+            else:
+                self._convert_dict_to_2_rows(data)
         elif isinstance(data, list):
             if data and isinstance(data[0], dict):
-                self._convert_list_of_dicts_to_rows(data)
+                if self.__should_flatten:
+                    self._convert_list_of_dicts_to_flatten_rows(data)
+                else:
+                    self._convert_list_of_dicts_to_rows(data)
             else:
                 self._convert_list_to_rows(data)
         else:
             self.__rows.append(data)
 
     def _convert_dict_to_2_rows(self, unsorted_dictionary):
-        header_row = list(self.__definitions.keys())
+        header_row = self.header_row_without_flatten()
         self.__rows.append(header_row)
-        self.__rows.append(convert_dict_to_row(header_row, unsorted_dictionary))
+        self.__rows.extend(convert_dict_to_rows(header_row, unsorted_dictionary))
+
+    def _object_to_columns(self, list_or_dict, definition_reference, columns, prefix):
+        if isinstance(list_or_dict, list):
+            for dictionary in list_or_dict:
+                self._dictionary_to_columns(dictionary, definition_reference, columns, prefix)
+        else:
+            self._dictionary_to_columns(list_or_dict, definition_reference, columns, prefix)
+
+    def _dictionary_to_columns(self, dictionary, definition_reference, columns, prefix):
+        object_definition = self.__definitions[definition_reference]
+
+        filled_columns = []
+        for property_name in dictionary.keys():
+            column_name = self._column_name(prefix, property_name)
+            value = dictionary[property_name]
+            property_reference = object_definition[property_name]
+            if property_reference:
+                self._object_to_columns(value, property_reference, columns, column_name)
+            else:
+                column = columns.setdefault(column_name, ['' for i in range(self._nb_value_rows(columns) - 1)])
+                self._fill_previous_columns(columns, column)
+                column.append(value)
+                filled_columns.append(column_name)
+
+        # TODO Ensure that all unfilled columns are filled with ''
+        # for column_name, column_values in columns.items():
+        #     if column_name not in filled_columns:
+        #         column_values.append('')
+
+    def _column_name(self, prefix, property_name):
+        return prefix + ' / ' + property_name if prefix else property_name
+
+    def _fill_previous_columns(self, columns, column):
+        column_previous_length = len(column)
+        # Fill previous columns if needed
+        for column_values in columns.values():
+            # Only run through previous columns
+            if column_values is column:
+                break
+            # As new column length will be incremented by one (new value to be added)
+            if len(column_values) == column_previous_length:
+                column_values.append('')
+
+    def _order_columns(self, definition_reference, columns):
+        # TODO Order Columns
+        # index_by_column = {}
+        # current_index = 0
+        # for property_name in object_definition.keys():
+        #     property_reference = object_definition[property_name]
+        #     if property_reference:
+        #         pass  # TODO Handle imbricated levels
+        #     else:
+        #         index_by_column[property_name] = current_index
+        #         current_index += 1
+        pass
+
+    def _nb_value_rows(self, columns):
+        # Counting the number of rows in first column is enough as they should be equals
+        for column in columns.values():
+            return len(column)
+        return 0
+
+    def _columns_to_rows(self, columns):
+        # Initialize rows (add 1 header row)
+        self.__rows = [[] for index in range(self._nb_value_rows(columns) + 1)]
+        # Convert columns to rows
+        for column_name in columns:
+            # Header row
+            row_index = 0
+            self.__rows[row_index].append(column_name)
+            # Values rows
+            for column_value in columns[column_name]:
+                row_index += 1
+                self.__rows[row_index].append(column_value)
+
+    def _convert_dict_to_flatten_rows(self, unsorted_dictionary):
+        columns = {}
+
+        self._object_to_columns(unsorted_dictionary, self.__object_definition_key, columns, '')
+
+        self._order_columns(self.__object_definition_key, columns)
+        self._columns_to_rows(columns)
 
     def _convert_list_of_dicts_to_rows(self, dictionaries_list):
-        header_row = list(self.__definitions.keys())
+        header_row = self.header_row_without_flatten()
         self.__rows.append(header_row)
         for unsorted_dictionary in dictionaries_list:
-            self.__rows.append(convert_dict_to_row(header_row, unsorted_dictionary))
+            self.__rows.extend(convert_dict_to_rows(header_row, unsorted_dictionary))
+
+    def _convert_list_of_dicts_to_flatten_rows(self, dictionaries_list):
+        columns = {}
+
+        for unsorted_dictionary in dictionaries_list:
+            self._object_to_columns(unsorted_dictionary, self.__object_definition_key, columns, '')
+
+        self._order_columns(self.__object_definition_key, columns)
+        self._columns_to_rows(columns)
+
+    def header_row_without_flatten(self):
+        if not self.__definitions:
+            raise Exception('No definition found to guess header.')
+        # There should be only one definition if there is no flatten
+        for definition in self.__definitions.values():
+            return list(definition.keys())
 
     def _convert_list_to_rows(self, values_list):
         self.__rows.extend(values_list)
 
 
-def convert_dict_to_row(ordered_header, dictionary):
+def convert_dict_to_rows(ordered_header, dictionary):
     # Sort dictionary according to keys (create a list of tuples)
     sorted_dict = sorted(dictionary.items(), key=lambda entry: ordered_header.index(entry[0]))
     # Create a list of values according to the previously created list of tuples
-    return [to_cell(entry[1]) for entry in sorted_dict]
+    rows = [[]]
+    for entry in sorted_dict:
+        value = entry[1]
+        if isinstance(value, list) and value:
+            for i in range(len(rows), len(value)):
+                rows.append(rows[0])
+            index = 0
+            for list_value in value:
+                rows[index].append(to_cell(list_value))
+                index += 1
+        else:
+            for row in rows:
+                row.append(to_cell(value))
+    return rows
 
 
 def to_cell(value):
@@ -189,7 +301,14 @@ def to_cell(value):
     return value
 
 
-def requires_flatten(definition):
-    for reference_to_another_definition in definition.values():
-        if reference_to_another_definition:
-            return True
+def requires_flatten(definitions):
+    if not definitions:
+        return False
+    # If there is more than one object definition then there is imbricated levels
+    if len(definitions) > 1:
+        return True
+    # Also check for recursive definitions
+    for definition in definitions.values():
+        for inner_reference in definition.values():
+            if inner_reference:
+                return True
