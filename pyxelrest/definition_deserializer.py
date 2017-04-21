@@ -2,6 +2,10 @@ from collections import OrderedDict
 
 
 def append_prefix(prefix, values_list):
+    """
+    Append the prefix to each item in the values_list.
+    This method is used to update header for inner fields.
+    """
     if prefix:
         return ['{0} / {1}'.format(prefix, value) if value else prefix for value in values_list]
     return values_list
