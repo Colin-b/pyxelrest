@@ -198,6 +198,10 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_get_test_compare_output_order(self):
         import pyxelrestgenerator
-        result_unordered = pyxelrestgenerator.output_order_test_get_test_price_unordered()
-        header_definition = [u'ts', u'date', u'curve', u'mat']
-        self.assertEqual(result_unordered[0], header_definition)
+        self.assertEqual([
+            [u'ts', u'date', u'curve', u'mat'],
+            [u'', u'2017-04-05', u'PW_FR', u'H01'],
+            [u'2017-04-05 12:03:15', u'2017-04-05', u'PW_FR', u'H02'],
+            [u'', u'2017-04-05', u'PW_FR', u'H03']
+        ],
+            pyxelrestgenerator.output_order_test_get_test_price_unordered())

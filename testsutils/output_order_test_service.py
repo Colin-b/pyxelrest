@@ -105,10 +105,16 @@ def get_test_price_unordered():
             'mat': 'H01'
         },
         {
-            'ts': None,
+            'ts': '2017-04-05 12:03:15',
             'curve': 'PW_FR',
             'date': '2017-04-05',
             'mat': 'H02'
+        },
+        {
+            'ts': None,
+            'curve': 'PW_FR',
+            'date': '2017-04-05',
+            'mat': 'H03'
         }
     ])
 

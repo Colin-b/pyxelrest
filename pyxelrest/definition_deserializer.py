@@ -91,18 +91,8 @@ class RowsMerger:
         :param new_list: Either a list of values or a list of list of values
         """
         if isinstance(self.rows, list):
-            if isinstance(self.rows[0], list):
-                self.append_list_to_list_of_list(new_header, new_list)
-            else:
-                self.append_list_to_list(new_header, new_list)
-        else:
-            self.append_list_to_value(new_header, new_list)
-
-    def append_list_to_list_of_list(self, new_header, new_list):
-        pass  # TODO
-
-    def append_list_to_list(self, new_header, new_list):
-        pass  # TODO
+            raise Exception('Merging a list to a list is not handled for now.')
+        self.append_list_to_value(new_header, new_list)
 
     def append_list_to_value(self, new_header, new_list):
         """
@@ -220,11 +210,16 @@ class Definition:
             raise Exception('{0} is supposed to be a dict: {1}'.format(self.title, data))
 
         merger = RowsMerger()
-        for field_name, field_value in data.items():
-            field = self.fields.get(field_name)
-            if not field:
-                raise Exception('{0} is not defined.'.format(field_name))
+
+        for field_name in self.fields.keys():
+            field_value = data.get(field_name)
+            field = self.fields[field_name]
             merger.merge(field_name if not field.array_field else None, field.convert(field_name, field_value))
+
+        undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields]
+        if undefined_fields:
+            raise Exception('The following fields are not part of the definition: {0}'.format(undefined_fields))
+
         return merger
 
 
@@ -255,24 +250,3 @@ class Response:
                 return merger.rows
             else:
                 return [merger.rows]
-
-
-if __name__ == '__main__':
-    response = {
-                   'description': 'successful operation',
-                   'schema': {
-                       '$ref': '#/definitions/EmptyDictionary'
-                   }
-               }
-    definitions = {
-       'EmptyDictionary': {
-           'properties': {
-               'empty_field': {
-                   'type': 'string'
-               }
-           }
-       }
-    }
-    data = {'empty_field': 'uhydghi'}
-    rows = Response(response, definitions).rows(data)
-    print('\n'.join([str(row) for row in rows]))
