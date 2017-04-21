@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 
 app = Flask(__name__)
 
@@ -12188,8 +12188,7 @@ def get_test_header_parameter():
 
 @app.route('/test/form/parameter', methods=['POST'])
 def post_test_form_parameter():
-    all_files = {file[0].name: file[0].stream.read().decode("utf-8") for file in dict(request.files).values()}
-    return jsonify(all_files)
+    return Response(request.data, mimetype='application/json')
 
 
 def _request_args(args):
