@@ -8,13 +8,12 @@ import requests
 import requests.exceptions
 import datetime
 import logging
+import ujson
 from collections import OrderedDict
 {% if support_pandas %}
 import pandas
 {% endif %}
-from data_flattenizer import Flattenizer
 from definition_deserializer import Response
-import ujson
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
