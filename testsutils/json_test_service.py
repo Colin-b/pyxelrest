@@ -326,10 +326,7 @@ def swagger():
                                    200: {
                                        'description': 'successful operation',
                                        'schema': {
-                                           'items': {
-                                               '$ref': '#/definitions/AllMandatoryParameters'
-                                           },
-                                           'type': 'array'
+                                           '$ref': '#/definitions/AllMandatoryParameters'
                                        }
                                    }
                                }
