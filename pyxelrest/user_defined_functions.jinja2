@@ -311,7 +311,7 @@ from definition_deserializer import Response
 {% if param_in == 'query' %}
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'body' %}
-        request_payload['{{ server_param_name }}'] = {{ param_name }}
+        request_payload = {{ param_name }}
 {% elif param_in == 'formData' %}
     {% if param_type == 'file' %}
             request_files['{{ server_param_name }}'] = {{ param_name }}
@@ -344,7 +344,7 @@ from definition_deserializer import Response
 {% if param_in == 'query' %}
         request_parameters['{{ server_param_name }}'] = {{ param_name }}
 {% elif param_in == 'body' %}
-        request_payload['{{ server_param_name }}'] = {{ param_name }}
+        request_payload = {{ param_name }}
 {% elif param_in == 'formData' %}
     {% if param_type == 'file' %}
             request_files['{{ server_param_name }}'] = {{ param_name }}
