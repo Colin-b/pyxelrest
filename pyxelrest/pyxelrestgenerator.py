@@ -98,18 +98,12 @@ class SwaggerService:
         return False
 
     def definitions(self):
-        return self.swagger['definitions']
+        return self.swagger.get('definitions')
 
-    def response(self, responses):
+    def responses(self, responses):
         if not responses:
             raise Exception('At least one response must be specified (call in {0}).'.format(self.name))
-
-        valid_response = responses.get('200', responses.get('204'))
-        if not valid_response:
-            if 'default' not in responses:
-                raise Exception('At least a default response MUST be defined in {0}'.format(responses))
-            valid_response = responses['default']
-        return valid_response
+        return responses
 
     def definition(self, responses):
         valid_response = self.response(responses)

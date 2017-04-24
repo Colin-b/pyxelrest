@@ -95,7 +95,7 @@ class RowsMerger:
         :param new_list: Either a list of values or a list of list of values
         """
         if isinstance(self.rows, list):
-            raise Exception('Merging a list to a list is not handled for now.')
+            raise Exception('Merging a list to a list is not handled for now: {0}\nMerged to:\n{1}'.format(new_list, self.rows))
         self.append_list_to_value(new_header, new_list)
 
     def append_list_to_value(self, new_header, new_list):
@@ -134,6 +134,23 @@ class RowsMerger:
         else:
             self.header = [self.header, value_name]
             self.rows = [self.rows, value]
+
+    def header_and_rows(self):
+        if self.header:
+            header_and_rows = [self.header] if isinstance(self.header, list) else [[self.header]]
+            if isinstance(self.rows, list):
+                if isinstance(self.rows[0], list):
+                    header_and_rows.extend(self.rows)
+                else:
+                    header_and_rows.append(self.rows)
+            else:
+                header_and_rows.append([self.rows])
+            return header_and_rows
+        if self.rows is None:
+            return ['']
+        if isinstance(self.rows, list):
+            return self.rows
+        return [self.rows]
 
 all_definitions = {}
 
@@ -174,10 +191,57 @@ class Field:
             merger.header = [name]
         return merger
 
-    def convert_simple_type(self, data):
+    def convert_simple_type(self, value):
         merger = RowsMerger()
         # TODO Handle type conversion for dates, ...
-        merger.rows = data
+        if isinstance(value, str):
+            # Return first 255 characters otherwise value will not be valid
+            value = value[:255]
+        merger.rows = value
+        return merger
+
+
+class DefaultField(object):
+    """
+    Used to perform deserialization of responses without schema.
+    """
+    def convert(self, name, value):
+        if isinstance(value, dict):
+            return DefaultField.convert_dict(value)
+        if isinstance(value, list):
+            return DefaultField.convert_list(name, value)
+        return DefaultField.convert_simple_type(value)
+
+    @staticmethod
+    def convert_dict(dictionary):
+        merger = RowsMerger()
+
+        for field_name in dictionary.keys():
+            field_value = dictionary.get(field_name)
+            merger.merge(field_name if not isinstance(field_value, list) else None, DefaultField().convert(field_name, field_value))
+
+        return merger
+
+    @staticmethod
+    def convert_list(name, values):
+        # An empty list should not add any extra information
+        if not values:
+            return RowsMerger()
+
+        merger = RowsMerger()
+        for value in values:
+            merger.merge_new_list_item(name, DefaultField().convert(name, value))
+        if merger.header is None and name is not None:
+            merger.header = [name]
+        return merger
+
+    @staticmethod
+    def convert_simple_type(value):
+        merger = RowsMerger()
+        if isinstance(value, str):
+            # Return first 255 characters otherwise value will not be valid
+            value = value[:255]
+        merger.rows = value
         return merger
 
 
@@ -228,29 +292,16 @@ class Definition:
 
 
 class Response:
-    def __init__(self, json_response, json_definitions={}):
-        schema = json_response.get('schema')
-        self.field = Field(schema, json_definitions) if schema else None
+    def __init__(self, all_responses, status_code, json_definitions):
+        json_response = response(status_code, all_responses)
+        schema = json_response.get('schema') if json_response else None
+        self.field = Field(schema, json_definitions if json_definitions is not None else {}) if schema else DefaultField()
 
     def rows(self, data):
-        if not self.field:
-            # Return first 255 characters of the response by default
-            return [str(data)[:255]]
-        merger = self.field.convert(None, data)
-        if merger.header:
-            rows = [merger.header] if isinstance(merger.header, list) else [[merger.header]]
-            if isinstance(merger.rows, list):
-                if isinstance(merger.rows[0], list):
-                    rows.extend(merger.rows)
-                else:
-                    rows.append(merger.rows)
-            else:
-                rows.append([merger.rows])
-            return rows
-        elif merger.rows is None:
-            return ['']
-        else:
-            if isinstance(merger.rows, list):
-                return merger.rows
-            else:
-                return [merger.rows]
+        return self.field.convert(None, data).header_and_rows()
+
+
+def response(status_code, responses):
+    if str(status_code) in responses:
+        return responses[str(status_code)]
+    return responses.get('default')
