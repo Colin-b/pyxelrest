@@ -2,6 +2,19 @@
 
 ## 0.57 (next) ##
 
+### Release notes ###
+
+- As Swagger responses sections is now read, it's content is validated. Meaning non compliant Swagger files (not providing any response) are now rejected.
+
+### Enhancements ###
+
+- JSON deserialization is now performed using ujson. (performance improvement)
+
+### Bug fixes ###
+
+- Results were not provided in case a cell value was expected to contains more than 255 characters. (Only first 255 characters are now provided)
+- Field ordering is now following received Swagger definition.
+
 ## 0.56 (2017-03-24) ##
 
 ### Enhancements ###
