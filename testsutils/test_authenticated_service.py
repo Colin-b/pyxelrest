@@ -9,10 +9,26 @@ def swagger():
                    paths={
                        '/test/with/auth': {
                            'get': {
-                               'operationId': 'get_test_with_auth'
+                               'operationId': 'get_test_with_auth',
+                               'security': [
+                                   {
+                                       'custom_auth': [
+                                           'custom_label'
+                                       ]
+                                   }
+                               ]
                            }
                        }
-
+                   },
+                   securityDefinitions={
+                       'custom_auth': {
+                           "type": "oauth2",
+                           "authorizationUrl": 'http://localhost:8947/auth',
+                           "flow": "implicit",
+                           "scopes": {
+                               "custom_label": "custom category"
+                           }
+                       }
                    })
 
 

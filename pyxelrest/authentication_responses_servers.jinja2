@@ -1,0 +1,32 @@
+"""
+This file was generated. DO NOT EDIT manually.
+Source file: {{ self._TemplateReference__context.name }}
+Generation date (UTC): {{ current_utc_time }}
+"""
+import threading
+from importlib import import_module
+{% if run_with_python_3 %}
+from importlib import reload
+{% else %}
+from imp import reload
+{% endif %}
+
+{% for port in ports %}
+import authentication_responses_server_{{ port }}
+{% endfor %}
+
+
+def start_servers():
+{% for port in ports %}
+    reload(import_module('authentication_responses_server_{{ port }}'))
+    # Flask URL map contains shutdown and static by default
+    if len(authentication_responses_server_{{ port }}.app.url_map._rules) > 2:
+        threading.Thread(target=authentication_responses_server_{{ port }}.start_server).start()
+{% endfor %}
+
+
+servers = {
+{% for port in ports %}
+    {{ port }}: authentication_responses_server_{{ port }}
+{% endfor %}
+}

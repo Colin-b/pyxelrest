@@ -1,4 +1,3 @@
-import datetime
 import multiprocessing
 import os
 import os.path
@@ -34,8 +33,8 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        import pyxelrestgenerator
-        pyxelrestgenerator.stop_authentication_responses_server()
+        import authentication
+        authentication.stop_servers()
         cls.stop_services()
         cls._add_back_initial_config()
 
@@ -46,6 +45,8 @@ class PyxelRestTest(unittest.TestCase):
         cls.service_processes.append(multiprocessing.Process(target=test_authenticated_service.start_server, args=(8946,)))
         import testsutils.test_authentication_service as test_authentication_service
         cls.service_processes.append(multiprocessing.Process(target=test_authentication_service.start_server, args=(8947,)))
+        import testsutils.test_non_authenticated_service as test_non_authenticated_service
+        cls.service_processes.append(multiprocessing.Process(target=test_non_authenticated_service.start_server, args=(8948,)))
         for service_process in cls.service_processes:
             service_process.start()
         time.sleep(5)
@@ -81,4 +82,4 @@ class PyxelRestTest(unittest.TestCase):
             ['received token'],
             [0]
         ],
-            pyxelrestgenerator.auth_test_no_auth_get_test_with_auth())
+            pyxelrestgenerator.auth_test_no_auth_get_test_without_auth())

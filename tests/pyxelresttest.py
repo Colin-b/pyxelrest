@@ -34,8 +34,8 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        import pyxelrestgenerator
-        pyxelrestgenerator.stop_authentication_responses_server()
+        import authentication
+        authentication.stop_servers()
         cls.stop_services()
         cls._add_back_initial_config()
 

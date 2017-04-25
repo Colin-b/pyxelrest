@@ -1,0 +1,123 @@
+import logging
+import os
+import jinja2
+import datetime
+import sys
+import requests
+from importlib import import_module
+try:
+    # Python 3
+    from importlib import reload
+except ImportError:
+    # Python 2
+    from imp import reload
+
+DEFAULT_SERVER_PORT = 5000
+
+# Key is a tuple 'service name, security key'
+security_definitions = {}
+# Key is port
+security_definitions_by_port = {}
+
+
+def get_detail(detail_key, details_string):
+    """
+    Retrieve authentication detail from configuration.
+    
+    :param detail_key: Authentication detail to be retrieved
+    :param details_string: Authentication details string
+    :return: Authentication detail as a string, or None if not found
+    """
+    if details_string:
+        # TODO Use regex instead of this split mechanism
+        details_dict = {
+            detail_entry.split('=')[0]: detail_entry.split('=')[1] for detail_entry in details_string.split(',')
+        }
+        return details_dict.get(detail_key)
+
+
+class OAuth2:
+    def __init__(self, security_definition_key, security_definition, service_name, auth_details):
+        self.scopes = security_definition['scopes']
+        port = get_detail('port', auth_details)
+        self.port = int(port) if port else DEFAULT_SERVER_PORT  # Default port is 5000
+        self.key = service_name, security_definition_key
+        self.service_name = service_name
+        self.security_definition_key = security_definition_key
+        redirect_uri = 'http%3A%2F%2Flocalhost:{0}/{1}/{2}'.format(self.port, service_name, security_definition_key)
+        self.authorization_url = '{0}?redirect_uri={1}'.format(security_definition['authorizationUrl'], redirect_uri)
+
+
+def add_service_security(service_name, swagger, authentication_details):
+    json_security_definitions = swagger.get('securityDefinitions')
+    if json_security_definitions:
+        for security_definition_key in json_security_definitions.keys():
+            security_definition = json_security_definitions[security_definition_key]
+            if security_definition.get('type') == 'oauth2':
+                if security_definition.get('flow') == 'implicit':
+                    authentication_definition = OAuth2(security_definition_key, security_definition, service_name, authentication_details)
+            if not authentication_definition:
+                logging.warning('Security definition is not supported: {0}'.format(security_definition))
+                continue
+
+            security_definitions[service_name, security_definition_key] = authentication_definition
+            if authentication_definition.port not in security_definitions_by_port:
+                security_definitions_by_port[authentication_definition.port] = []
+            security_definitions_by_port[authentication_definition.port].append(authentication_definition)
+
+
+def start_servers():
+    logging.debug('Generating authentication responses servers.')
+    for port in security_definitions_by_port.keys():
+        create_server_module(port)
+    if security_definitions_by_port:
+        reload_server_modules()
+
+
+def create_server_module(port):
+    with open(os.path.join(os.path.dirname(__file__), 'authentication_responses_server_{0}.py'.format(port)), 'w') as generated_file:
+        renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
+        generated_file.write(
+            renderer.get_template('authentication_responses_server.jinja2').render(
+                current_utc_time=datetime.datetime.utcnow().isoformat(),
+                run_with_python_3=sys.version_info[0] == 3,
+                security_definitions=security_definitions_by_port[port],
+                port=port
+            )
+        )
+
+
+def reload_server_modules():
+    with open(os.path.join(os.path.dirname(__file__), 'authentication_responses_servers.py'), 'w') as generated_file:
+        renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
+        generated_file.write(
+            renderer.get_template('authentication_responses_servers.jinja2').render(
+                current_utc_time=datetime.datetime.utcnow().isoformat(),
+                run_with_python_3=sys.version_info[0] == 3,
+                ports=security_definitions_by_port.keys()
+            )
+        )
+
+    reload(import_module('authentication_responses_servers'))
+    import authentication_responses_servers
+    authentication_responses_servers.start_servers()
+
+
+def stop_servers():
+    for port in security_definitions_by_port.keys():
+        # Shutdown authentication server thread if needed (in case module is reloaded)
+        try:
+            requests.post('http://localhost:{0}/shutdown'.format(port))
+        except:
+            pass
+
+
+def add_auth(service_name, securities, header):
+    for security in securities:
+        for security_definition_key in security.keys():
+            security_definition = security_definitions.get((service_name, security_definition_key))
+            if security_definition:
+                import authentication_responses_servers
+                server = authentication_responses_servers.servers[security_definition.port]
+                server.add_auth(security_definition, header)
+                return
