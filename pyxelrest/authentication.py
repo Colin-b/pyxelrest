@@ -48,7 +48,7 @@ class OAuth2:
         self.key = service_name, security_definition_key
         self.service_name = service_name
         self.security_definition_key = security_definition_key
-        redirect_uri = 'http%3A%2F%2Flocalhost:{0}/{1}/{2}'.format(self.port, service_name, security_definition_key)
+        redirect_uri = 'http://localhost:{0}/{1}/{2}'.format(self.port, service_name, security_definition_key)
         authorization_url = security_definition['authorizationUrl']
         self.full_url = create_auth_url(authorization_url, redirect_uri)
         self.token_name = get_query_parameter(authorization_url, 'response_type') or 'token'
