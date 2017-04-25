@@ -23,6 +23,7 @@ namespace AutoLoadPyxelRestAddIn
         private TextBox tagsTextBox;
         private TextBox connectTimeoutTextBox;
         private TextBox readTimeoutTextBox;
+        private TextBox securityDetailsTextBox;
 
         private readonly ServiceConfigurationForm configurationForm;
         private long? swaggerUrlModificationTicks;
@@ -95,17 +96,26 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(serviceHostTextBox, 1, 2);
             #endregion
 
+            #region Security Details
+            servicePanel.Controls.Add(new Label { Text = "Security Details", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+            securityDetailsTextBox = new TextBox() { Text = service.SecurityDetails };
+            securityDetailsTextBox.Dock = DockStyle.Fill;
+            securityDetailsTextBox.AutoSize = true;
+            securityDetailsTextBox.TextChanged += SecurityDetailsTextBox_TextChanged;
+            servicePanel.Controls.Add(securityDetailsTextBox, 1, 3);
+            #endregion
+
             #region Tags
-            servicePanel.Controls.Add(new Label { Text = "Tags", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+            servicePanel.Controls.Add(new Label { Text = "Tags", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
             tagsTextBox = new TextBox() { Text = service.Tags };
             tagsTextBox.Dock = DockStyle.Fill;
             tagsTextBox.AutoSize = true;
             tagsTextBox.TextChanged += TagsTextBox_TextChanged;
-            servicePanel.Controls.Add(tagsTextBox, 1, 3);
+            servicePanel.Controls.Add(tagsTextBox, 1, 4);
             #endregion
 
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -121,11 +131,11 @@ namespace AutoLoadPyxelRestAddIn
             delete = new CheckBox() { Text = "delete", Checked = service.Delete };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 4);
+            servicePanel.Controls.Add(methodsPanel, 1, 5);
             #endregion
 
             #region Timeouts
-            servicePanel.Controls.Add(new Label { Text = "Timeouts", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+            servicePanel.Controls.Add(new Label { Text = "Timeouts", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
             TableLayoutPanel timeoutsPanel = new TableLayoutPanel();
             timeoutsPanel.Dock = DockStyle.Fill;
             timeoutsPanel.AutoSize = true;
@@ -137,7 +147,7 @@ namespace AutoLoadPyxelRestAddIn
             readTimeoutTextBox = new TextBox() { Text = service.ReadTimeout.HasValue ? service.ReadTimeout.Value.ToString(CultureInfo.InvariantCulture) : string.Empty };
             readTimeoutTextBox.TextChanged += ReadTimeoutTextBox_TextChanged;
             timeoutsPanel.Controls.Add(readTimeoutTextBox, 3, 0);
-            servicePanel.Controls.Add(timeoutsPanel, 1, 5);
+            servicePanel.Controls.Add(timeoutsPanel, 1, 6);
             #endregion
 
             #region Delete
@@ -152,6 +162,11 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             return servicePanel;
+        }
+
+        private void SecurityDetailsTextBox_TextChanged(object sender, EventArgs e)
+        {
+            service.SecurityDetails = securityDetailsTextBox.Text;
         }
 
         private void ReadTimeoutTextBox_TextChanged(object sender, EventArgs e)

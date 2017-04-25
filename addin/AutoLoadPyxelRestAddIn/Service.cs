@@ -17,6 +17,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string TAGS_PROPERTY = "tags";
         private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
+        private static readonly string SECURITY_DETAILS_PROPERTY = "security_details";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -34,6 +35,7 @@ namespace AutoLoadPyxelRestAddIn
         public string Tags;
         public float? ConnectTimeout;
         public float? ReadTimeout;
+        public string SecurityDetails;
 
         public Service(string name)
         {
@@ -62,6 +64,7 @@ namespace AutoLoadPyxelRestAddIn
             Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
             ConnectTimeout = GetFloatProperty(serviceConfig, CONNECT_TIMEOUT_PROPERTY, 1);
             ReadTimeout = GetFloatProperty(serviceConfig, READ_TIMEOUT_PROPERTY, null);
+            SecurityDetails = serviceConfig.ContainsKey(SECURITY_DETAILS_PROPERTY) ? serviceConfig[SECURITY_DETAILS_PROPERTY] : string.Empty;
         }
 
         private float? GetFloatProperty(KeyDataCollection serviceConfig, string property, float? defaultValue)
@@ -122,6 +125,13 @@ namespace AutoLoadPyxelRestAddIn
                 section.Keys.SetKeyData(readTimeout);
             }
 
+            if (!string.IsNullOrEmpty(SecurityDetails))
+            {
+                KeyData securityDetails = new KeyData(SECURITY_DETAILS_PROPERTY);
+                securityDetails.Value = SecurityDetails;
+                section.Keys.SetKeyData(securityDetails);
+            }
+
             return section;
         }
 
@@ -137,6 +147,7 @@ namespace AutoLoadPyxelRestAddIn
             Tags = "";
             ConnectTimeout = 1;
             ReadTimeout = null;
+            SecurityDetails = "";
         }
 
         private string GetMethods()

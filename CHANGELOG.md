@@ -4,7 +4,8 @@
 
 ### Enhancements ###
 
-- Microsoft Authentication support (beta)
+- OAuth 2 Security definition support.
+- It is possible to force the port used by server to retrieve the OAuth 2 authentication token using security_details property.
 
 ## 0.56 (2017-03-24) ##
 
