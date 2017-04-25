@@ -8,9 +8,13 @@ from importlib import import_module
 try:
     # Python 3
     from importlib import reload
+    from urllib.parse import parse_qs, urlsplit, urlunsplit, urlencode
 except ImportError:
     # Python 2
     from imp import reload
+    from urllib import urlencode
+    from urlparse import parse_qs, urlsplit, urlunsplit
+
 
 DEFAULT_SERVER_PORT = 5000
 
@@ -45,7 +49,28 @@ class OAuth2:
         self.service_name = service_name
         self.security_definition_key = security_definition_key
         redirect_uri = 'http%3A%2F%2Flocalhost:{0}/{1}/{2}'.format(self.port, service_name, security_definition_key)
-        self.authorization_url = '{0}?redirect_uri={1}'.format(security_definition['authorizationUrl'], redirect_uri)
+        authorization_url = security_definition['authorizationUrl']
+        self.full_url = create_auth_url(authorization_url, redirect_uri)
+        self.token_name = get_query_parameter(authorization_url, 'response_type') or 'token'
+
+
+def get_query_parameter(url, param_name):
+    scheme, netloc, path, query_string, fragment = urlsplit(url)
+    query_params = parse_qs(query_string)
+    return query_params.get(param_name)
+
+
+def create_auth_url(url, redirect_url):
+    scheme, netloc, path, query_string, fragment = urlsplit(url)
+    query_params = parse_qs(query_string)
+
+    query_params['redirect_uri'] = [redirect_url]
+    # Force Form Post as get is only providing token in anchor and anchor is not provided to server
+    # (interpreted on client side only)
+    query_params['response_mode'] = ['form_post']
+    new_query_string = urlencode(query_params, doseq=True)
+
+    return urlunsplit((scheme, netloc, path, new_query_string, fragment))
 
 
 def add_service_security(service_name, swagger, security_details):

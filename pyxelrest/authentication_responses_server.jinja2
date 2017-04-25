@@ -32,32 +32,32 @@ def decode_base64(base64_encoded_string):
     if missing_padding != 0:
         base64_encoded_string += '=' * (4 - missing_padding)
     return base64.b64decode(base64_encoded_string).decode('unicode_escape')
-
 {% for security_definition in security_definitions %}
+
 
 @app.route("/{{ security_definition.service_name }}/{{ security_definition.security_definition_key }}", methods=['POST'])
 def {{ security_definition.service_name }}_{{ security_definition.security_definition_key }}_post():
     try:
-        if 'id_token' not in flask.request.form:
-            raise Exception('id_token not provided.')
-        id_token = flask.request.form['id_token']
-        if not id_token:
-            raise Exception('id_token is invalid.')
-        header, body, other = id_token.split('.')
+        if '{{ security_definition.token_name }}' not in flask.request.form:
+            raise Exception('{{ security_definition.token_name }} not provided.')
+        {{ security_definition.token_name }} = flask.request.form['{{ security_definition.token_name }}']
+        if not {{ security_definition.token_name }}:
+            raise Exception('{{ security_definition.token_name }} is invalid.')
+        header, body, other = {{ security_definition.token_name }}.split('.')
         body = json.loads(decode_base64(body))
         if 'exp' not in body:
             raise Exception('Expiry (exp) is not provided in {0}.'.format(body))
         token_expiry_datetime = datetime.datetime.fromtimestamp(body['exp'])
-        auth_tokens['{{ security_definition.service_name }}', '{{ security_definition.security_definition_key }}'] = id_token, token_expiry_datetime
-        logging.debug("{{ security_definition.key }} authentication response received: '{0}'.".format(id_token))
+        auth_tokens['{{ security_definition.service_name }}', '{{ security_definition.security_definition_key }}'] = {{ security_definition.token_name }}, token_expiry_datetime
+        logging.debug("{{ security_definition.key }} authentication response received: '{0}'.".format({{ security_definition.token_name }}))
         return "You are now authenticated on {{ security_definition.key }}. You may close this tab."
     except Exception as e:
         logging.exception("Unable to properly perform authentication on {{ security_definition.key }}.")
         return "Unable to properly perform authentication on {{ security_definition.key }}: {0}".format(e)
     finally:
         authentication_response.release()
-
 {% endfor %}
+
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
@@ -73,13 +73,13 @@ def shutdown():
 
 def add_auth(security_definition, header):
     if security_definition.key in auth_tokens:
-        token_id, expiry = auth_tokens[security_definition.key]
+        bearer, expiry = auth_tokens[security_definition.key]
         if expiry < datetime.datetime.utcnow():
             logging.debug('Authentication token is expired.')  
             del auth_tokens[security_definition.key]
         else:
             logging.debug('Using already received authentication.')
-            header['Bearer'] = token_id
+            header['Bearer'] = bearer
             return
 
     request_new_token(security_definition, header)
@@ -101,8 +101,8 @@ def request_new_token(security_definition, header):
         logging.debug('No response received within 10 seconds. Aborting...')
     if security_definition.key in auth_tokens:
         logging.debug('User authenticated.')
-        token_id, expiry = auth_tokens[security_definition.key]
-        header['Bearer'] = token_id
+        bearer, expiry = auth_tokens[security_definition.key]
+        header['Bearer'] = bearer
     else:
         logging.debug('User was not authenticated.')
         raise Exception('User was not authenticated')
