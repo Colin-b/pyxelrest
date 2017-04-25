@@ -57,7 +57,8 @@ class OAuth2:
 def get_query_parameter(url, param_name):
     scheme, netloc, path, query_string, fragment = urlsplit(url)
     query_params = parse_qs(query_string)
-    return query_params.get(param_name)
+    all_values = query_params.get(param_name)
+    return all_values[0] if all_values else None
 
 
 def create_auth_url(url, redirect_url):

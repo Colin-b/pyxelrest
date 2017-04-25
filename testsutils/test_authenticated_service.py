@@ -23,7 +23,7 @@ def swagger():
                    securityDefinitions={
                        'custom_auth': {
                            "type": "oauth2",
-                           "authorizationUrl": 'http://localhost:8947/auth',
+                           "authorizationUrl": 'http://localhost:8947/auth?response_type=id_token',
                            "flow": "implicit",
                            "scopes": {
                                "custom_label": "custom category"
