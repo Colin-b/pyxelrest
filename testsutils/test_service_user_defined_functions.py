@@ -9,9 +9,8 @@ import requests.exceptions
 import datetime
 import logging
 from collections import OrderedDict
-import pandas
 from data_flattenizer import Flattenizer
-import authentication_responses_server
+import authentication
 
 
 
@@ -11245,12 +11244,8 @@ def values_false_test_get_test_with_zero_integer():
 
 
 def msgpackpandas_as_list(msgpack_pandas):
-    logging.debug('Converting message pack pandas to list...')
-    data = pandas.read_msgpack(msgpack_pandas)
-    logging.debug('Converting dictionary to list...')
-    flatten_data = [data.columns.values.tolist()] + data.values.tolist()
-    logging.debug('Data converted to list.')
-    return flatten_data
+    logging.warning('Pandas module is required to decode response.')
+    return ['Please install pandas module to be able to decode result.']
 
 
 def describe_error(response, error):
