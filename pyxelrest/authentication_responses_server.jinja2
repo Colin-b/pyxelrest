@@ -87,10 +87,10 @@ def add_auth(security_definition, header):
 
 def request_new_token(security_definition, header):
     logging.debug('Requesting user authentication...')
-    browser_was_opened = webbrowser.open(security_definition.authorization_url)
+    browser_was_opened = webbrowser.open(security_definition.full_url)
     # fallback on simple request if no browser was opened
     if not browser_was_opened:
-        response = requests.get(security_definition.authorization_url)
+        response = requests.get(security_definition.full_url)
     logging.debug('Waiting for user authentication...')
 {% if run_with_python_3 %}
     response_received = authentication_response.acquire(timeout=10)
