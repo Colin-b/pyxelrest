@@ -24,6 +24,7 @@ class install_pyxelrest_data(install_data):
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
 
+# More information on properties: https://packaging.python.org/distributing
 setup(name='pyxelrest',
       version=open("pyxelrest/_version.py").readlines()[-1].split()[-1].strip("\"'"),
       author='Engie',
@@ -38,7 +39,7 @@ setup(name='pyxelrest',
       # TODO Package to artifactory and assert that bamboo will keep it up to date
       download_url='http://www.engie.com',
       classifiers=[
-          "Development Status :: 3 - Alpha",
+          "Development Status :: 5 - Production/Stable",
           "Intended Audience :: Developers"
           "Programming Language :: Python",
           "Programming Language :: Python :: 2",
@@ -59,8 +60,10 @@ setup(name='pyxelrest',
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
-             'default_services_configuration.ini',
+             'authentication_responses_server.jinja2',
+             'authentication_responses_servers.jinja2',
              'default_logging_configuration.ini.jinja2',
+             'default_services_configuration.ini',
              'user_defined_functions.jinja2'
          ]
       },
@@ -119,6 +122,8 @@ setup(name='pyxelrest',
           'requests==2.13.0',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
+          # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
+          'comtypes==1.1.3',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.3',
           # Used to parse logging configuration file
