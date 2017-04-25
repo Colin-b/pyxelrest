@@ -123,7 +123,7 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
           # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
-          'comtypes==1.1.3',
+          'comtypes==1.1.3-2',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.3',
           # Used to parse logging configuration file
