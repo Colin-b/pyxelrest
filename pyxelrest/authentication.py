@@ -37,9 +37,9 @@ def get_detail(detail_key, details_string):
 
 
 class OAuth2:
-    def __init__(self, security_definition_key, security_definition, service_name, auth_details):
+    def __init__(self, security_definition_key, security_definition, service_name, security_details):
         self.scopes = security_definition['scopes']
-        port = get_detail('port', auth_details)
+        port = get_detail('port', security_details)
         self.port = int(port) if port else DEFAULT_SERVER_PORT  # Default port is 5000
         self.key = service_name, security_definition_key
         self.service_name = service_name
@@ -48,7 +48,7 @@ class OAuth2:
         self.authorization_url = '{0}?redirect_uri={1}'.format(security_definition['authorizationUrl'], redirect_uri)
 
 
-def add_service_security(service_name, swagger, authentication_details):
+def add_service_security(service_name, swagger, security_details):
     json_security_definitions = swagger.get('securityDefinitions')
     if json_security_definitions:
         for security_definition_key in json_security_definitions.keys():
@@ -56,7 +56,7 @@ def add_service_security(service_name, swagger, authentication_details):
             # TODO Handle basic and apiKey types
             if security_definition.get('type') == 'oauth2':
                 if security_definition.get('flow') == 'implicit':
-                    authentication_definition = OAuth2(security_definition_key, security_definition, service_name, authentication_details)
+                    authentication_definition = OAuth2(security_definition_key, security_definition, service_name, security_details)
             if not authentication_definition:
                 logging.warning('Security definition is not supported: {0}'.format(security_definition))
                 continue

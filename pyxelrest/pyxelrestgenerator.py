@@ -74,8 +74,8 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
-        authentication_details = self.get_item_default(config, 'authentication_details', None)
-        authentication.add_service_security(self.name, self.swagger, authentication_details)
+        security_details = self.get_item_default(config, 'security_details', None)
+        authentication.add_service_security(self.name, self.swagger, security_details)
         logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.name, self.uri, self.methods))
 
     def _extract_uri(self, swagger_url_parsed, config):
