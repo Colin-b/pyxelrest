@@ -9,7 +9,12 @@ def swagger():
                    paths={
                        '/test/without/auth': {
                            'get': {
-                               'operationId': 'get_test_without_auth'
+                               'operationId': 'get_test_without_auth',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               }
                            }
                        }
                    })

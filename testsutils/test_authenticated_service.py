@@ -10,6 +10,11 @@ def swagger():
                        '/test/with/auth': {
                            'get': {
                                'operationId': 'get_test_with_auth',
+                                'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                                },
                                'security': [
                                    {
                                        'custom_auth': [
