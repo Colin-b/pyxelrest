@@ -50,10 +50,10 @@ def {{ security_definition.service_name }}_{{ security_definition.security_defin
         token_expiry_datetime = datetime.datetime.fromtimestamp(body['exp'])
         auth_tokens['{{ security_definition.service_name }}', '{{ security_definition.security_definition_key }}'] = {{ security_definition.token_name }}, token_expiry_datetime
         logging.debug("{{ security_definition.key }} authentication response received: '{0}'.".format({{ security_definition.token_name }}))
-        return "You are now authenticated on {{ security_definition.key }}. You may close this tab."
+        return success_page("You are now authenticated on {{ security_definition.key }}. You may close this tab.")
     except Exception as e:
         logging.exception("Unable to properly perform authentication on {{ security_definition.key }}.")
-        return "Unable to properly perform authentication on {{ security_definition.key }}: {0}".format(e)
+        return error_page("Unable to properly perform authentication on {{ security_definition.key }}: {0}".format(e))
     finally:
         authentication_response.release()
 {% endfor %}
@@ -68,7 +68,7 @@ def shutdown():
     logging.info('Start shutdown...')
     flask_server_shutdown()
     logging.info('Shutdown completed')
-    return ''
+    return success_page('Server is now closed.')
 
 
 def add_auth(security_definition, header):
@@ -106,6 +106,30 @@ def request_new_token(security_definition, header):
     else:
         logging.debug('User was not authenticated.')
         raise Exception('User was not authenticated')
+
+
+def success_page(text):
+    return '<body style="' \
+           'color: #4F8A10; ' \
+           'background-color: #DFF2BF; ' \
+           'font-size: xx-large; ' \
+           'display: flex; ' \
+           'align-items: center; ' \
+           'justify-content: center;">' \
+           '<div style="border: 1px solid;">{0}</div>' \
+           '</body>'.format(text)
+
+
+def error_page(text):
+    return '<body style="' \
+           'color: #D8000C; ' \
+           'background-color: #FFBABA; ' \
+           'font-size: xx-large; ' \
+           'display: flex; ' \
+           'align-items: center; ' \
+           'justify-content: center;">' \
+           '<div style="border: 1px solid;">{0}</div>' \
+           '</body>'.format(text)
 
 
 def start_server():
