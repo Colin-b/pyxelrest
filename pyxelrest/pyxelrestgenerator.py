@@ -11,6 +11,8 @@ import logging
 import logging.config
 import logging.handlers
 from importlib import import_module
+import threading
+import sys
 
 
 try:
@@ -27,6 +29,7 @@ except ImportError:
 import vba
 import _version
 from pyxelresterrors import *
+import authentication
 
 logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.ini')
 if os.path.isfile(logging_configuration_file_path):
@@ -71,6 +74,8 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
+        security_details = self.get_item_default(config, 'security_details', None)
+        authentication.add_service_security(self.name, self.swagger, security_details)
         logging.info('"{0}" service ({1}) will be available ({2}).'.format(self.name, self.uri, self.methods))
 
     def _extract_uri(self, swagger_url_parsed, config):
@@ -240,11 +245,17 @@ def generate_user_defined_functions():
     :return: None
     """
     logging.debug('Generating user defined functions.')
+    services = load_services()
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
-        generated_file.write(user_defined_functions(load_services()))
+        generated_file.write(user_defined_functions(services))
+
 
 try:
+    authentication.stop_servers()
+    authentication.security_definitions_by_port = {}
+    authentication.security_definitions = {}
     generate_user_defined_functions()
+    authentication.start_servers()
 except:
     logging.exception('Cannot generate user defined functions.')
     raise
@@ -259,6 +270,7 @@ try:
 except:
     logging.exception('Error while importing UDFs.')
 
+
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':
-#     xw.serve()
+#      xw.serve()

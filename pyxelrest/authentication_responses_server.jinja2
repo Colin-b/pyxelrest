@@ -1,0 +1,141 @@
+"""
+This file was generated. DO NOT EDIT manually.
+Source file: {{ self._TemplateReference__context.name }}
+Generation date (UTC): {{ current_utc_time }}
+"""
+import flask
+import webbrowser
+import threading
+import logging
+import os
+import base64
+import json
+import datetime
+import requests
+
+
+auth_tokens = {}
+authentication_response = threading.Lock()
+# Lock the authentication response
+authentication_response.acquire()
+app = flask.Flask(__name__)
+
+
+def decode_base64(base64_encoded_string):
+    """
+    Decode base64, padding being optional.
+
+    :param base64_encoded_string: Base64 data as an ASCII byte string
+    :returns: The decoded byte string.
+    """
+    missing_padding = len(base64_encoded_string) % 4
+    if missing_padding != 0:
+        base64_encoded_string += '=' * (4 - missing_padding)
+    return base64.b64decode(base64_encoded_string).decode('unicode_escape')
+{% for security_definition in security_definitions %}
+
+
+@app.route("/{{ security_definition.service_name }}/{{ security_definition.security_definition_key }}", methods=['POST'])
+def {{ security_definition.service_name }}_{{ security_definition.security_definition_key }}_post():
+    try:
+        if '{{ security_definition.token_name }}' not in flask.request.form:
+            raise Exception('{{ security_definition.token_name }} not provided.')
+        {{ security_definition.token_name }} = flask.request.form['{{ security_definition.token_name }}']
+        if not {{ security_definition.token_name }}:
+            raise Exception('{{ security_definition.token_name }} is invalid.')
+        header, body, other = {{ security_definition.token_name }}.split('.')
+        body = json.loads(decode_base64(body))
+        if 'exp' not in body:
+            raise Exception('Expiry (exp) is not provided in {0}.'.format(body))
+        token_expiry_datetime = datetime.datetime.fromtimestamp(body['exp'])
+        auth_tokens['{{ security_definition.service_name }}', '{{ security_definition.security_definition_key }}'] = {{ security_definition.token_name }}, token_expiry_datetime
+        logging.debug("{{ security_definition.key }} authentication response received: '{0}'.".format({{ security_definition.token_name }}))
+        return success_page("You are now authenticated on {{ security_definition.key }}. You may close this tab.")
+    except Exception as e:
+        logging.exception("Unable to properly perform authentication on {{ security_definition.key }}.")
+        return error_page("Unable to properly perform authentication on {{ security_definition.key }}: {0}".format(e))
+    finally:
+        authentication_response.release()
+{% endfor %}
+
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    logging.info('Shutdown authentication responses server...')
+    flask_server_shutdown = flask.request.environ.get('werkzeug.server.shutdown')
+    if flask_server_shutdown is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    logging.info('Start shutdown...')
+    flask_server_shutdown()
+    logging.info('Shutdown completed')
+    return success_page('Server is now closed.')
+
+
+def add_auth(security_definition, header):
+    if security_definition.key in auth_tokens:
+        bearer, expiry = auth_tokens[security_definition.key]
+        if expiry < datetime.datetime.utcnow():
+            logging.debug('Authentication token is expired.')  
+            del auth_tokens[security_definition.key]
+        else:
+            logging.debug('Using already received authentication.')
+            header['Bearer'] = bearer
+            return
+
+    request_new_token(security_definition, header)
+
+
+def request_new_token(security_definition, header):
+    logging.debug('Requesting user authentication...')
+    browser_was_opened = webbrowser.open(security_definition.full_url)
+    # fallback on simple request if no browser was opened
+    if not browser_was_opened:
+        response = requests.get(security_definition.full_url)
+    logging.debug('Waiting for user authentication...')
+{% if run_with_python_3 %}
+    response_received = authentication_response.acquire(timeout=10)
+{% else %}
+    response_received = authentication_response.acquire()
+{% endif %}
+    if not response_received:
+        logging.debug('No response received within 10 seconds. Aborting...')
+    if security_definition.key in auth_tokens:
+        logging.debug('User authenticated.')
+        bearer, expiry = auth_tokens[security_definition.key]
+        header['Bearer'] = bearer
+    else:
+        logging.debug('User was not authenticated.')
+        raise Exception('User was not authenticated')
+
+
+def success_page(text):
+    return '<body style="' \
+           'color: #4F8A10; ' \
+           'background-color: #DFF2BF; ' \
+           'font-size: xx-large; ' \
+           'display: flex; ' \
+           'align-items: center; ' \
+           'justify-content: center;">' \
+           '<div style="border: 1px solid;">{0}</div>' \
+           '</body>'.format(text)
+
+
+def error_page(text):
+    return '<body style="' \
+           'color: #D8000C; ' \
+           'background-color: #FFBABA; ' \
+           'font-size: xx-large; ' \
+           'display: flex; ' \
+           'align-items: center; ' \
+           'justify-content: center;">' \
+           '<div style="border: 1px solid;">{0}</div>' \
+           '</body>'.format(text)
+
+
+def start_server():
+    logging.debug('Starting Authentication Responses Server...')
+    app.run(port={{ port }})
+
+
+if __name__ == "__main__":
+    start_server()

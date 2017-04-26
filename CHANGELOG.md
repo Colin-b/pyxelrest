@@ -8,6 +8,8 @@
 
 ### Enhancements ###
 
+- OAuth 2 Security definition support.
+- It is possible to force the port used by server to retrieve the OAuth 2 authentication token using security_details property.
 - JSON deserialization is now performed using ujson. (performance improvement)
 
 ### Bug fixes ###

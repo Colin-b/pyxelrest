@@ -14,6 +14,7 @@ from collections import OrderedDict
 import pandas
 {% endif %}
 from definition_deserializer import Response
+import authentication
 
 {% macro convert_to_return_type(str_value, method) %}
 {% if 'application/json' in method['produces'] -%}
@@ -429,6 +430,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     response = None
     try:
 {% set path_parameters = method_parameters|selectattr('in', 'equalto', 'path') %}
+{% if method['security'] %}
+        authentication.add_auth('{{ service.name }}', {{ method['security'] }}, request_header)
+{% endif %}
     {{ request_macro(service, method_path, contains_parameters, path_parameters, method) }}
         response.raise_for_status()
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }} ({0}).".format(response.request.url))
@@ -492,6 +496,7 @@ def msgpackpandas_as_list(msgpack_pandas):
 {% if support_pandas %}
     logging.debug('Converting message pack pandas to list...')
     data = pandas.read_msgpack(msgpack_pandas)
+    logging.debug('Converting dictionary to list...')
     flatten_data = [data.columns.values.tolist()] + data.values.tolist()
     logging.debug('Data converted to list.')
     return flatten_data

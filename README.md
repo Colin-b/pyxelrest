@@ -127,6 +127,12 @@ The following options are available for each section:
         <td>Optional</td>
         <td>any float value (decimal separator is .)</td>
     </tr>
+    <tr>
+        <td><strong>security_details</strong></td>
+        <td>Extra security information not provided by swagger.</td>
+        <td>Optional</td>
+        <td>port=XX</td>
+    </tr>
 </table>
 
 ### Logging Configuration ###
