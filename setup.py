@@ -108,8 +108,6 @@ setup(name='pyxelrest',
           )
       ],
       tests_require=[
-          # Used to run a test service
-          'flask',
           # Used to run tests
           'nose',
           # Used to generate a jwt token
@@ -127,7 +125,9 @@ setup(name='pyxelrest',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.3',
           # Used to parse logging configuration file
-          'pyaml==16.12.2'
+          'pyaml==16.12.2',
+          # Used to run authentication services (also used in test cases)
+          'flask'
       ],
       scripts=[
           'pyxelrest_auto_update.py',
