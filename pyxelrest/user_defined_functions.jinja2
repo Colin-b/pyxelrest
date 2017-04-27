@@ -438,8 +438,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         logging.info("Valid response received for {{ service.udf_prefix }}_{{ method['operationId'] }} ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ service.responses(method['responses']) }}
+            all_definitions = {{ service.definitions() }}
             response_text = response.text
-            return Response(all_responses, response.status_code, {{ service.definitions() }}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
+            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
