@@ -27,12 +27,13 @@ class PyxelRestPetstoreTest(unittest.TestCase):
     def setUpClass(cls):
         cls._add_test_config()
         reload(import_module('pyxelrestgenerator'))
-        cls._add_pet()
         cls._add_order()
         cls._add_user()
 
     @classmethod
     def tearDownClass(cls):
+        import authentication
+        authentication.stop_servers()
         cls._add_back_initial_config()
 
     @classmethod
@@ -41,27 +42,6 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
         shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_petstore_services_configuration.ini'),
                         cls.services_config_file_path)
-
-    @classmethod
-    def _add_pet(cls):
-        import pyxelrestgenerator
-        new_pet = {
-            'id': 222222,
-            'category': {
-                'id': 222,
-                'name': 'doggy'
-            },
-            'name': 'canigou',
-            'photoUrls': [],
-            'tags': [
-                {
-                    'id': 1,
-                    'name': 'dog'
-                }
-            ],
-            'status': '3'
-        }
-        pyxelrestgenerator.petstore_test_addPet(new_pet)
 
     @classmethod
     def _add_order(cls):
@@ -74,7 +54,11 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             'status': 'placed',
             'complete': False
         }
-        pyxelrestgenerator.petstore_test_placeOrder(new_order)
+        if pyxelrestgenerator.petstore_test_placeOrder(new_order) != [
+            ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
+            [444444, 222222, 1, '2017-04-24T13:29:32.019+0000', 'placed', False]
+        ]:
+            raise Exception('Order was not placed')
 
     @classmethod
     def _add_user(cls):
@@ -89,25 +73,18 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             'phone': '0123456789',
             'userStatus': 0
         }
-        pyxelrestgenerator.petstore_test_createUser(new_user)
+        if pyxelrestgenerator.petstore_test_createUser(new_user) != ['']:
+            raise Exception('User was not created')
 
     @classmethod
     def _add_back_initial_config(cls):
         shutil.move(cls.backup_services_config_file_path, cls.services_config_file_path)
 
-    def test_get_pet_by_id(self):
-        import pyxelrestgenerator
-        expected_result = [
-            ['id', 'category/id', 'category/name', 'name', 'photoUrls/0', 'tags/0/id', 'tags/0/name', 'status'],
-            [222222, 222, 'doggy', 'canigou', None, 1, 'dog', 'sold']
-        ]
-        self.assertEqual(pyxelrestgenerator.petstore_test_getPetById(222222), expected_result)
-
     def test_get_order_by_id(self):
         import pyxelrestgenerator
         expected_result = [
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
-            [444444, 222222, 1, '2017-04-24T13:29:32.019Z', 'placed', False]
+            [444444, 222222, 1, '2017-04-24T13:29:32.019+0000', 'placed', False]
         ]
         self.assertEqual(pyxelrestgenerator.petstore_test_getOrderById(444444), expected_result)
 
