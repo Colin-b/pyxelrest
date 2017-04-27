@@ -54,11 +54,12 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             'status': 'placed',
             'complete': False
         }
-        if pyxelrestgenerator.petstore_test_placeOrder(new_order) != [
+        order_response = pyxelrestgenerator.petstore_test_placeOrder(new_order)
+        if order_response != [
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
             [444444, 222222, 1, '2017-04-24T13:29:32.019+0000', 'placed', False]
         ]:
-            raise Exception('Order was not placed')
+            raise Exception('Order was not placed: ' + str(order_response))
 
     @classmethod
     def _add_user(cls):
@@ -73,8 +74,9 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             'phone': '0123456789',
             'userStatus': 0
         }
-        if pyxelrestgenerator.petstore_test_createUser(new_user) != ['']:
-            raise Exception('User was not created')
+        user_response = pyxelrestgenerator.petstore_test_createUser(new_user)
+        if user_response != ['']:
+            raise Exception('User was not created: ' + str(user_response))
 
     @classmethod
     def _add_back_initial_config(cls):
