@@ -79,18 +79,20 @@ def add_service_security(service_name, swagger, security_details):
     if json_security_definitions:
         for security_definition_key in json_security_definitions.keys():
             security_definition = json_security_definitions[security_definition_key]
-            # TODO Handle basic and apiKey types
             if security_definition.get('type') == 'oauth2':
                 if security_definition.get('flow') == 'implicit':
                     authentication_definition = OAuth2(security_definition_key, security_definition, service_name, security_details)
-            if not authentication_definition:
-                logging.warning('Security definition is not supported: {0}'.format(security_definition))
-                continue
+                    add_service_security_definition(service_name, security_definition_key, authentication_definition)
+                    continue
+            # TODO Handle basic and apiKey types
+            logging.warning('Security definition is not supported: {0}'.format(security_definition))
 
-            security_definitions[service_name, security_definition_key] = authentication_definition
-            if authentication_definition.port not in security_definitions_by_port:
-                security_definitions_by_port[authentication_definition.port] = []
-            security_definitions_by_port[authentication_definition.port].append(authentication_definition)
+
+def add_service_security_definition(service_name, security_definition_key, authentication_definition):
+    security_definitions[service_name, security_definition_key] = authentication_definition
+    if authentication_definition.port not in security_definitions_by_port:
+        security_definitions_by_port[authentication_definition.port] = []
+    security_definitions_by_port[authentication_definition.port].append(authentication_definition)
 
 
 def start_servers():
