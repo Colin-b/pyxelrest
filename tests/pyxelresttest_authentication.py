@@ -56,7 +56,7 @@ class PyxelRestTest(unittest.TestCase):
         for service_process in cls.service_processes:
             service_process.terminate()
             service_process.join(timeout=0.5)
-        cls.service_processes.clear()
+        cls.service_processes[:] = []
 
     @classmethod
     def _add_test_config(cls):
