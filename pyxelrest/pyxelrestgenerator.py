@@ -12,6 +12,7 @@ import logging.config
 import logging.handlers
 from importlib import import_module
 import threading
+from collections import OrderedDict
 import sys
 
 
@@ -140,7 +141,8 @@ class SwaggerService:
         """
         response = requests.get(swagger_url, proxies=self.proxy, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
-        swagger = response.json()
+        # Always keep the order provided by server (for definitions)
+        swagger = response.json(object_pairs_hook=OrderedDict)
         self._update_vba_restricted_keywords(swagger)
         return swagger
 
