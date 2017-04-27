@@ -288,7 +288,8 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -577,7 +578,8 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -866,7 +868,8 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -1155,7 +1158,8 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -1522,7 +1526,8 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -1889,7 +1894,8 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2256,7 +2262,8 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2623,7 +2630,8 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2787,7 +2795,8 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2951,7 +2960,8 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3115,7 +3125,8 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3279,7 +3290,8 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3313,7 +3325,8 @@ def filtered_tags_test_get_test_with_tags():
         logging.info("Valid response received for filtered_tags_test_get_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3347,7 +3360,8 @@ def filtered_tags_test_post_test_with_tags():
         logging.info("Valid response received for filtered_tags_test_post_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3381,7 +3395,8 @@ def filtered_tags_test_put_test_with_tags():
         logging.info("Valid response received for filtered_tags_test_put_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3415,7 +3430,8 @@ def values_false_test_get_test_with_empty_dictionary():
         logging.info("Valid response received for values_false_test_get_test_with_empty_dictionary ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'items': {'$ref': '#/definitions/EmptyDictionary'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3449,7 +3465,8 @@ def values_false_test_get_test_with_empty_list():
         logging.info("Valid response received for values_false_test_get_test_with_empty_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'items': {'$ref': '#/definitions/EmptyList'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3483,7 +3500,8 @@ def values_false_test_get_test_with_empty_string():
         logging.info("Valid response received for values_false_test_get_test_with_empty_string ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'items': {'$ref': '#/definitions/EmptyString'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3517,7 +3535,8 @@ def values_false_test_get_test_with_false_boolean():
         logging.info("Valid response received for values_false_test_get_test_with_false_boolean ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'items': {'$ref': '#/definitions/FalseBoolean'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3551,7 +3570,8 @@ def values_false_test_get_test_with_zero_float():
         logging.info("Valid response received for values_false_test_get_test_with_zero_float ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'items': {'$ref': '#/definitions/ZeroFloat'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3585,7 +3605,8 @@ def values_false_test_get_test_with_zero_integer():
         logging.info("Valid response received for values_false_test_get_test_with_zero_integer ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'items': {'$ref': '#/definitions/ZeroInteger'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Empty': {'properties': {}}, 'EmptyDictionary': {'properties': {'empty_dictionary': {'$ref': '#/definitions/Empty', 'type': 'object'}}}, 'EmptyList': {'properties': {'empty_list': {'items': {'$ref': '#/definitions/Empty'}, 'type': 'array'}}}, 'EmptyString': {'properties': {'empty_string': {'type': 'string'}}}, 'FalseBoolean': {'properties': {'false_boolean': {'type': 'boolean'}}}, 'ZeroFloat': {'properties': {'zero_float': {'format': 'float', 'type': 'number'}}}, 'ZeroInteger': {'properties': {'zero_integer': {'format': 'int32', 'type': 'integer'}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3646,7 +3667,8 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
         logging.info("Valid response received for output_order_test_get_test_price_unordered ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/Price'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Price': {'required': ['curve', 'date', 'mat', 'ts'], 'type': 'object', 'properties': {'ts': {'type': 'string', 'description': 'timeslot', 'maxLength': 2}, 'date': {'type': 'string', 'description': 'date', 'format': 'date'}, 'curve': {'type': 'string', 'description': 'curvename', 'maxLength': 20}, 'mat': {'type': 'string', 'description': 'maturity', 'maxLength': 4}}, 'title': 'RealizedPrice'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Price': {'required': ['curve', 'date', 'mat', 'ts'], 'type': 'object', 'properties': {'ts': {'type': 'string', 'description': 'timeslot', 'maxLength': 2}, 'date': {'type': 'string', 'description': 'date', 'format': 'date'}, 'curve': {'type': 'string', 'description': 'curvename', 'maxLength': 20}, 'mat': {'type': 'string', 'description': 'maturity', 'maxLength': 4}}, 'title': 'RealizedPrice'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3680,7 +3702,8 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         logging.info("Valid response received for nested_data_test_get_test_dict_with_empty_nested_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3714,7 +3737,8 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         logging.info("Valid response received for nested_data_test_get_test_dict_with_four_imbricated_levels ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3748,7 +3772,8 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         logging.info("Valid response received for nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3782,7 +3807,8 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         logging.info("Valid response received for nested_data_test_get_test_dict_with_three_imbricated_levels ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3816,7 +3842,8 @@ def nested_data_test_get_test_empty_dict():
         logging.info("Valid response received for nested_data_test_get_test_empty_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3850,7 +3877,8 @@ def nested_data_test_get_test_empty_list():
         logging.info("Valid response received for nested_data_test_get_test_empty_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3884,7 +3912,8 @@ def nested_data_test_get_test_list_of_dict():
         logging.info("Valid response received for nested_data_test_get_test_list_of_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3918,7 +3947,8 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column1List'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3952,7 +3982,8 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list_of_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column1'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3986,7 +4017,8 @@ def nested_data_test_get_test_one_level_dict():
         logging.info("Valid response received for nested_data_test_get_test_one_level_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Column2And3'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4020,7 +4052,8 @@ def nested_data_test_get_test_one_level_list():
         logging.info("Valid response received for nested_data_test_get_test_one_level_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'type': 'string'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Column': {'properties': {'Column 1': {'description': 'column1', 'type': 'string'}, 'Column 2': {'description': 'column2', 'items': {'$ref': '#/definitions/Column'}, 'type': 'array'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column', 'type': 'object'}, 'Column1': {'properties': {'Column 1': {'items': {'$ref': '#/definitions/Column2And3'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column1List': {'properties': {'Column 1': {'items': {'type': 'string'}, 'type': 'array'}}, 'title': 'Column1', 'type': 'object'}, 'Column2And3': {'properties': {'Column 2': {'description': 'column1', 'type': 'string'}, 'Column 3': {'description': 'column3', 'type': 'string'}}, 'title': 'Column2+3', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4074,7 +4107,8 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
         logging.info("Valid response received for vba_keywords_test_get_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'$ref': '#/definitions/Test'}}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4128,7 +4162,8 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         logging.info("Valid response received for vba_keywords_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4182,7 +4217,8 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         logging.info("Valid response received for vba_keywords_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4236,7 +4272,8 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         logging.info("Valid response received for vba_keywords_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {'currency': {}, 'end': {}}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4271,7 +4308,8 @@ def without_parameter_test_get_test_json_without_parameter():
         logging.info("Valid response received for without_parameter_test_get_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4306,7 +4344,8 @@ def without_parameter_test_post_test_json_without_parameter():
         logging.info("Valid response received for without_parameter_test_post_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4341,7 +4380,8 @@ def without_parameter_test_put_test_json_without_parameter():
         logging.info("Valid response received for without_parameter_test_put_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4376,7 +4416,8 @@ def without_parameter_test_delete_test_json_without_parameter():
         logging.info("Valid response received for without_parameter_test_delete_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'$ref': '#/definitions/Test', 'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4410,7 +4451,8 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         logging.info("Valid response received for without_parameter_test_get_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'type': 'string'}}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4444,7 +4486,8 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         logging.info("Valid response received for without_parameter_test_post_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4478,7 +4521,8 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         logging.info("Valid response received for without_parameter_test_put_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4512,7 +4556,8 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         logging.info("Valid response received for without_parameter_test_delete_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4546,7 +4591,8 @@ def without_parameter_test_get_test_without_parameter():
         logging.info("Valid response received for without_parameter_test_get_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value', 'schema': {'type': 'string'}}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4580,7 +4626,8 @@ def without_parameter_test_post_test_without_parameter():
         logging.info("Valid response received for without_parameter_test_post_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'POST performed properly'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4614,7 +4661,8 @@ def without_parameter_test_put_test_without_parameter():
         logging.info("Valid response received for without_parameter_test_put_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'PUT performed properly'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4648,7 +4696,8 @@ def without_parameter_test_delete_test_without_parameter():
         logging.info("Valid response received for without_parameter_test_delete_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'DELETE performed properly'}}
-            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Test': {'properties': {}}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4694,7 +4743,8 @@ def header_parameter_test_get_test_header_parameter(header_string):
         logging.info("Valid response received for header_parameter_test_get_test_header_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Header'}}}
-            return Response(all_responses, response.status_code, {'Header': {'properties': {'Accept': {'type': 'string'}, 'Accept-Encoding': {'type': 'string'}, 'Connection': {'type': 'string'}, 'Content-Length': {'type': 'string'}, 'Content-Type': {'type': 'string'}, 'Header-String': {'type': 'string'}, 'Host': {'type': 'string'}, 'User-Agent': {'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Header': {'properties': {'Accept': {'type': 'string'}, 'Accept-Encoding': {'type': 'string'}, 'Connection': {'type': 'string'}, 'Content-Length': {'type': 'string'}, 'Content-Type': {'type': 'string'}, 'Header-String': {'type': 'string'}, 'Host': {'type': 'string'}, 'User-Agent': {'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4740,7 +4790,8 @@ def form_parameter_test_post_test_form_parameter(form_string):
         logging.info("Valid response received for form_parameter_test_post_test_form_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/Form'}}}
-            return Response(all_responses, response.status_code, {'Form': {'properties': {'form_string': {'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'Form': {'properties': {'form_string': {'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4786,7 +4837,8 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         logging.info("Valid response received for array_parameter_test_get_test_string_array_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5076,7 +5128,8 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         logging.info("Valid response received for json_test_get_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5366,7 +5419,8 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         logging.info("Valid response received for json_test_post_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5656,7 +5710,8 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         logging.info("Valid response received for json_test_put_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5946,7 +6001,8 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         logging.info("Valid response received for json_test_delete_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -6314,7 +6370,8 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.info("Valid response received for json_test_get_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'$ref': '#/definitions/AllMandatoryParameters'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -6682,7 +6739,8 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.info("Valid response received for json_test_post_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7050,7 +7108,8 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.info("Valid response received for json_test_put_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7418,7 +7477,8 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.info("Valid response received for json_test_delete_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7583,7 +7643,8 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         logging.info("Valid response received for json_test_get_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7748,7 +7809,8 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         logging.info("Valid response received for json_test_post_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7913,7 +7975,8 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         logging.info("Valid response received for json_test_put_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8078,7 +8141,8 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
         logging.info("Valid response received for json_test_delete_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'successful operation', 'schema': {'items': {'$ref': '#/definitions/TestObject'}, 'type': 'array'}}}
-            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, {'AllMandatoryParameters': {'properties': {'query_array_boolean': {}, 'query_array_date': {}, 'query_array_date_time': {}, 'query_array_double': {}, 'query_array_float': {}, 'query_array_integer': {}, 'query_array_integer32': {}, 'query_array_integer64': {}, 'query_array_number': {}, 'query_array_password': {}, 'query_array_string': {}, 'query_array_string_binary': {}, 'query_array_string_byte': {}, 'query_boolean': {}, 'query_date': {}, 'query_date_time': {}, 'query_double': {}, 'query_float': {}, 'query_integer': {}, 'query_integer32': {}, 'query_integer64': {}, 'query_number': {}, 'query_password': {}, 'query_string': {}, 'query_string_binary': {}, 'query_string_byte': {}}}, 'TestObject': {'properties': {'test': {'description': 'test', 'type': 'string'}}, 'title': 'Test', 'type': 'object'}}).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8367,7 +8431,8 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8656,7 +8721,8 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8945,7 +9011,8 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -9234,7 +9301,8 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -9601,7 +9669,8 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -9968,7 +10037,8 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -10335,7 +10405,8 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -10702,7 +10773,8 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -10866,7 +10938,8 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11030,7 +11103,8 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11194,7 +11268,8 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11358,7 +11433,8 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {'200': {'description': 'return value'}}
-            return Response(all_responses, response.status_code, None).rows(ujson.loads(response.text))
+            response_text = response.text
+            return Response(all_responses, response.status_code, None).rows(ujson.loads(response_text) if response_text is not '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
