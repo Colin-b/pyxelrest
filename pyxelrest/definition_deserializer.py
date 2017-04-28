@@ -95,7 +95,14 @@ class RowsMerger:
         :param new_list: Either a list of values or a list of list of values
         """
         if isinstance(self.rows, list):
-            raise Exception('Merging a list to a list is not handled for now: {0}\nMerged to:\n{1}'.format(new_list, self.rows))
+            if len(self.rows) != len(new_list):
+                raise Exception('Merging lists with different size is not handled for now: {0}\nMerged to:\n{1}'.format(new_list, self.rows))
+            if isinstance(self.rows[0], list) and isinstance(new_list[0], list):
+                self.header.extend(new_header)
+                for row_index in range(len(new_list)):
+                    self.rows[row_index].extend(new_list[row_index])
+                return
+            raise Exception('Merging "list of list" and "list" is not handled for now: {0}\nMerged to:\n{1}'.format(new_list, self.rows))
         self.append_list_to_value(new_header, new_list)
 
     def append_list_to_value(self, new_header, new_list):
@@ -181,12 +188,18 @@ class Field:
         # An empty list should not add any extra information
         if value is None or value == []:
             return RowsMerger()
-        if not isinstance(value, list):
+        if isinstance(value, dict):
             raise Exception('{0} is supposed to be a list: {1}'.format(self.description, value))
 
         merger = RowsMerger()
-        for array_item in value:
-            merger.merge_new_list_item(name, self.array_field.convert(name, array_item))
+
+        # Allow lists to be a single value
+        if not isinstance(value, list):
+            merger.merge_new_list_item(name, self.array_field.convert(name, value))
+        else:
+            for array_item in value:
+                merger.merge_new_list_item(name, self.array_field.convert(name, array_item))
+
         if merger.header is None and name is not None:
             merger.header = [name]
         return merger

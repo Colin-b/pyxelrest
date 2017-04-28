@@ -22,8 +22,18 @@ def swagger():
                                'query_array_boolean': {
                                },
                                'query_array_date': {
+                                   'type': 'array',
+                                   'items': {
+                                       'type': 'string',
+                                       'format': 'date'
+                                   }
                                },
                                'query_array_date_time': {
+                                   'type': 'array',
+                                   'items': {
+                                       'type': 'string',
+                                       'format': 'date-time'
+                                   }
                                },
                                'query_array_double': {
                                },
@@ -48,8 +58,12 @@ def swagger():
                                'query_boolean': {
                                },
                                'query_date': {
+                                   'type': 'string',
+                                   'format': 'date'
                                },
                                'query_date_time': {
+                                   'type': 'string',
+                                   'format': 'date-time'
                                },
                                'query_double': {
                                },
