@@ -67,6 +67,17 @@ class PyxelRestTest(unittest.TestCase):
     def _add_back_initial_config(cls):
         shutil.move(cls.backup_services_config_file_path, cls.services_config_file_path)
 
+    def test_authentication_on_custom_server_port(self):
+        import pyxelrestgenerator
+        first_token = pyxelrestgenerator.authenticated_second_test_get_test_authentication_success()
+        # Wait for 1 second and send a second request from another server to the same auth server (should request another token)
+        import time
+        time.sleep(1)
+        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
+        self.assertEqual(first_token[0], ['Bearer'])
+        self.assertEqual(second_token[0], ['Bearer'])
+        self.assertNotEqual(first_token[1], second_token[1])
+
     def test_authentication_success(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()

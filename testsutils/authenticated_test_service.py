@@ -109,7 +109,7 @@ def swagger():
                            "scopes": {
                                "custom_label": "custom category"
                            }
-                       },
+                       }
                    })
 
 
