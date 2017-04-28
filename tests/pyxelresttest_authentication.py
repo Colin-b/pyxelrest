@@ -40,12 +40,12 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def start_services(cls):
-        import testsutils.test_authenticated_service as test_authenticated_service
-        cls.service_processes.append(multiprocessing.Process(target=test_authenticated_service.start_server, args=(8946,)))
-        import testsutils.test_authentication_service as test_authentication_service
-        cls.service_processes.append(multiprocessing.Process(target=test_authentication_service.start_server, args=(8947,)))
-        import testsutils.test_non_authenticated_service as test_non_authenticated_service
-        cls.service_processes.append(multiprocessing.Process(target=test_non_authenticated_service.start_server, args=(8948,)))
+        import testsutils.authenticated_test_service as authenticated_test_service
+        cls.service_processes.append(multiprocessing.Process(target=authenticated_test_service.start_server, args=(8946,)))
+        import testsutils.authentication_test_service as authentication_test_service
+        cls.service_processes.append(multiprocessing.Process(target=authentication_test_service.start_server, args=(8947,)))
+        import testsutils.non_authenticated_test_service as non_authenticated_test_service
+        cls.service_processes.append(multiprocessing.Process(target=non_authenticated_test_service.start_server, args=(8948,)))
         for service_process in cls.service_processes:
             service_process.start()
         time.sleep(5)
@@ -69,18 +69,18 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_authentication_success(self):
         import pyxelrestgenerator
-        first_token = pyxelrestgenerator.auth_test_get_test_authentication_success()
-        second_token = pyxelrestgenerator.auth_test_get_test_authentication_success()
+        first_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
+        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
         self.assertEqual(first_token, second_token)
 
     def test_authentication_failure(self):
         import pyxelrestgenerator
-        self.assertEqual('User was not authenticated', pyxelrestgenerator.auth_test_get_test_authentication_failure())
+        self.assertEqual('User was not authenticated', pyxelrestgenerator.authenticated_test_get_test_authentication_failure())
 
     def test_authentication_timeout(self):
         import pyxelrestgenerator
-        self.assertEqual('User was not authenticated', pyxelrestgenerator.auth_test_get_test_authentication_timeout())
+        self.assertEqual('User was not authenticated', pyxelrestgenerator.authenticated_test_get_test_authentication_timeout())
 
     def test_without_authentication(self):
         import pyxelrestgenerator
@@ -88,12 +88,12 @@ class PyxelRestTest(unittest.TestCase):
             ['received token'],
             [False]
         ],
-            pyxelrestgenerator.auth_test_no_auth_get_test_without_auth())
+            pyxelrestgenerator.non_authenticated_test_get_test_without_auth())
 
     def test_authentication_expiry(self):
         import pyxelrestgenerator
-        first_token = pyxelrestgenerator.auth_test_get_test_authentication_success_quick_expiry()
-        second_token = pyxelrestgenerator.auth_test_get_test_authentication_success_quick_expiry()
+        first_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success_quick_expiry()
+        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
