@@ -57,6 +57,23 @@ def swagger():
                                    }
                                ]
                            }
+                       },
+                       '/test/authentication/success/quick/expiry': {
+                           'get': {
+                               'operationId': 'get_test_authentication_success_quick_expiry',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               },
+                               'security': [
+                                   {
+                                       'auth_success_quick_expiry': [
+                                           'custom_label'
+                                       ]
+                                   }
+                               ]
+                           }
                        }
                    },
                    securityDefinitions={
@@ -84,13 +101,21 @@ def swagger():
                            "scopes": {
                                "custom_label": "custom category"
                            }
-                       }
+                       },
+                       'auth_success_quick_expiry': {
+                           "type": "oauth2",
+                           "authorizationUrl": 'http://localhost:8947/auth_success_quick_expiry?response_type=id_token',
+                           "flow": "implicit",
+                           "scopes": {
+                               "custom_label": "custom category"
+                           }
+                       },
                    })
 
 
 @app.route('/test/authentication/success', methods=['GET'])
 def get_test_authentication_success():
-    return jsonify([{'received token': request.headers.get('Bearer') is not None}])
+    return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 
 @app.route('/test/authentication/failure', methods=['GET'])
@@ -101,6 +126,13 @@ def get_test_authentication_failure():
 @app.route('/test/authentication/timeout', methods=['GET'])
 def get_test_authentication_timeout():
     return 'You should never receive this message as authentication should timeout.'
+
+
+@app.route('/test/authentication/success/quick/expiry', methods=['GET'])
+def get_test_authentication_success_quick_expiry():
+    return jsonify([{
+        'Bearer': request.headers.get('Bearer')
+    }])
 
 
 def start_server(port):

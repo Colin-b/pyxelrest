@@ -5,6 +5,8 @@ import requests
 
 app = flask.Flask(__name__)
 
+already_asked_for_quick_expiry = [False]
+
 
 @app.route('/auth_success')
 def post_token():
@@ -19,6 +21,19 @@ def post_token():
 def post_without_token():
     redirect_uri = flask.request.args.get('redirect_uri')
     requests.post(redirect_uri, data={})
+    return ''
+
+
+@app.route('/auth_success_quick_expiry')
+def post_token_quick_expiry():
+    if already_asked_for_quick_expiry[0]:
+        expiry_now = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    else:
+        already_asked_for_quick_expiry[0] = True
+        expiry_now = datetime.datetime.utcnow()
+    redirect_uri = flask.request.args.get('redirect_uri')
+    token = jwt.encode({'exp': expiry_now}, 'secret').decode('unicode_escape')
+    requests.post(redirect_uri, data={'id_token': token})
     return ''
 
 

@@ -38,7 +38,6 @@ class PyxelRestTest(unittest.TestCase):
         cls.stop_services()
         cls._add_back_initial_config()
 
-
     @classmethod
     def start_services(cls):
         import testsutils.test_authenticated_service as test_authenticated_service
@@ -70,11 +69,10 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_authentication_success(self):
         import pyxelrestgenerator
-        self.assertEqual([
-            ['received token'],
-            [1]
-        ],
-            pyxelrestgenerator.auth_test_get_test_authentication_success())
+        first_token = pyxelrestgenerator.auth_test_get_test_authentication_success()
+        second_token = pyxelrestgenerator.auth_test_get_test_authentication_success()
+        self.assertEqual(first_token[0], ['Bearer'])
+        self.assertEqual(first_token, second_token)
 
     def test_authentication_failure(self):
         import pyxelrestgenerator
@@ -88,6 +86,14 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual([
             ['received token'],
-            [0]
+            [False]
         ],
             pyxelrestgenerator.auth_test_no_auth_get_test_without_auth())
+
+    def test_authentication_expiry(self):
+        import pyxelrestgenerator
+        first_token = pyxelrestgenerator.auth_test_get_test_authentication_success_quick_expiry()
+        second_token = pyxelrestgenerator.auth_test_get_test_authentication_success_quick_expiry()
+        self.assertEqual(first_token[0], ['Bearer'])
+        self.assertEqual(second_token[0], ['Bearer'])
+        self.assertNotEqual(first_token[1], second_token[1])
