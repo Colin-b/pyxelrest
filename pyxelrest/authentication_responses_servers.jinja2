@@ -27,6 +27,6 @@ def start_servers():
 
 servers = {
 {% for port in ports %}
-    {{ port }}: authentication_responses_server_{{ port }}
+    {{ port }}: authentication_responses_server_{{ port }},
 {% endfor %}
 }
