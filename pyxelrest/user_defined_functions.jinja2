@@ -14,6 +14,7 @@ from collections import OrderedDict
 import pandas
 {% endif %}
 from definition_deserializer import Response
+import definition_deserializer
 import authentication
 
 {% macro convert_to_return_type(str_value, method) %}
@@ -440,6 +441,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
             all_responses = {{ service.responses(method['responses']) }}
             all_definitions = {{ service.definitions() }}
             response_text = response.text
+            definition_deserializer.all_definitions = {}
             return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
