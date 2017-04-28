@@ -7,17 +7,34 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/with/auth': {
+                       '/test/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_with_auth',
-                                'responses': {
+                               'operationId': 'get_test_authentication_success',
+                               'responses': {
                                    '200': {
                                        'description': 'return value'
                                    }
-                                },
+                               },
                                'security': [
                                    {
-                                       'custom_auth': [
+                                       'auth_success': [
+                                           'custom_label'
+                                       ]
+                                   }
+                               ]
+                           }
+                       },
+                       '/test/authentication/failure': {
+                           'get': {
+                               'operationId': 'get_test_authentication_failure',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               },
+                               'security': [
+                                   {
+                                       'auth_failure': [
                                            'custom_label'
                                        ]
                                    }
@@ -26,9 +43,17 @@ def swagger():
                        }
                    },
                    securityDefinitions={
-                       'custom_auth': {
+                       'auth_success': {
                            "type": "oauth2",
-                           "authorizationUrl": 'http://localhost:8947/auth?response_type=id_token',
+                           "authorizationUrl": 'http://localhost:8947/auth_success?response_type=id_token',
+                           "flow": "implicit",
+                           "scopes": {
+                               "custom_label": "custom category"
+                           }
+                       },
+                       'auth_failure': {
+                           "type": "oauth2",
+                           "authorizationUrl": 'http://localhost:8947/auth_failure?response_type=id_token',
                            "flow": "implicit",
                            "scopes": {
                                "custom_label": "custom category"
@@ -37,9 +62,14 @@ def swagger():
                    })
 
 
-@app.route('/test/with/auth', methods=['GET'])
-def get_test_with_auth():
+@app.route('/test/authentication/success', methods=['GET'])
+def get_test_authentication_success():
     return jsonify([{'received token': request.headers.get('Bearer') is not None}])
+
+
+@app.route('/test/authentication/failure', methods=['GET'])
+def get_test_authentication_failure():
+    return 'You should never receive this message as authentication should fail.'
 
 
 def start_server(port):

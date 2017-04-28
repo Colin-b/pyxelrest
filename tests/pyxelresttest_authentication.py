@@ -68,15 +68,19 @@ class PyxelRestTest(unittest.TestCase):
     def _add_back_initial_config(cls):
         shutil.move(cls.backup_services_config_file_path, cls.services_config_file_path)
 
-    def test_authentication_token_sent(self):
+    def test_authentication_success(self):
         import pyxelrestgenerator
         self.assertEqual([
             ['received token'],
             [1]
         ],
-            pyxelrestgenerator.auth_test_get_test_with_auth())
+            pyxelrestgenerator.auth_test_get_test_authentication_success())
 
-    def test_authentication_no_token_sent(self):
+    def test_authentication_failure(self):
+        import pyxelrestgenerator
+        self.assertEqual('User was not authenticated', pyxelrestgenerator.auth_test_get_test_authentication_failure())
+
+    def test_without_authentication(self):
         import pyxelrestgenerator
         self.assertEqual([
             ['received token'],
