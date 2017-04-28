@@ -13,6 +13,14 @@ except ImportError:
     from imp import reload
 
 
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
+
+
 class PyxelRestUdfsTest(unittest.TestCase):
     service_processes = []
     services_config_file_path = os.path.join(os.getenv('APPDATA'),
@@ -105,10 +113,9 @@ class PyxelRestUdfsTest(unittest.TestCase):
         Assert content of generated file.
         This test is mainly here to be aware that a change broke generated file.
         """
-        expected_file = open(os.path.join(os.path.dirname(__file__),
-                                          '..',
-                                          'testsutils',
-                                          'test_service_user_defined_functions.py'), 'r')
+        # TODO Also handle the difference when tests are run using python 2.7
+        filename = 'user_defined_functions_python36_pandas.py' if support_pandas() else 'user_defined_functions_python36.py'
+        expected_file = open(os.path.join(os.path.dirname(__file__), '..', 'testsutils', filename), 'r')
         expected = expected_file.readlines()
         expected_file.close()
         actual_file = open(os.path.join(os.path.dirname(__file__),
