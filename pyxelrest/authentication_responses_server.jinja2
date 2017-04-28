@@ -47,15 +47,19 @@ def {{ security_definition.service_name }}_{{ security_definition.security_defin
         body = json.loads(decode_base64(body))
         if 'exp' not in body:
             raise Exception('Expiry (exp) is not provided in {0}.'.format(body))
-        token_expiry_datetime = datetime.datetime.fromtimestamp(body['exp'])
+        token_expiry_datetime = datetime.datetime.utcfromtimestamp(body['exp'])
         auth_tokens['{{ security_definition.service_name }}', '{{ security_definition.security_definition_key }}'] = {{ security_definition.token_name }}, token_expiry_datetime
-        logging.debug("{{ security_definition.key }} authentication response received: '{0}'.".format({{ security_definition.token_name }}))
+        logging.debug("{{ security_definition.key }} authentication response received: '{0}'. Expiry is {1} (UTC).".format({{ security_definition.token_name }}, token_expiry_datetime))
         return success_page("You are now authenticated on {{ security_definition.key }}. You may close this tab.")
     except Exception as e:
         logging.exception("Unable to properly perform authentication on {{ security_definition.key }}.")
         return error_page("Unable to properly perform authentication on {{ security_definition.key }}: {0}".format(e))
     finally:
-        authentication_response.release()
+        try:
+            authentication_response.release()
+        except:
+            logging.error('An error occurred while signaling that an authentication was received.')
+            pass
 {% endfor %}
 
 
@@ -78,7 +82,7 @@ def add_auth(security_definition, header):
             logging.debug('Authentication token is expired.')  
             del auth_tokens[security_definition.key]
         else:
-            logging.debug('Using already received authentication.')
+            logging.debug('Using already received authentication, will expire in {0} (UTC).'.format(expiry))
             header['Bearer'] = bearer
             return
 
