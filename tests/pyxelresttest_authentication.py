@@ -80,6 +80,10 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual('User was not authenticated', pyxelrestgenerator.auth_test_get_test_authentication_failure())
 
+    def test_authentication_timeout(self):
+        import pyxelrestgenerator
+        self.assertEqual('User was not authenticated', pyxelrestgenerator.auth_test_get_test_authentication_timeout())
+
     def test_without_authentication(self):
         import pyxelrestgenerator
         self.assertEqual([
