@@ -2971,12 +2971,12 @@ class PyxelRestJsonTest(unittest.TestCase):
                     'query_string', 'query_string_binary', 'query_string_byte'
                 ],
                 [
-                    'true', str(today_date), str(today_datetime),
+                    'true', today_date, today_datetime,
                     '1.1', '1.01', '1',
                     '10', '100',
                     '0.1', 'password 1', 'string 1',
                     'string binary 1', 'string bytes 1', 'True',
-                    str(today_date), str(today_datetime), '1.1', '1.01', '1',
+                    today_date, today_datetime, '1.1', '1.01', '1',
                     '10', '100', '0.1', 'password',
                     'string', 'string binary', 'string bytes'
                 ]

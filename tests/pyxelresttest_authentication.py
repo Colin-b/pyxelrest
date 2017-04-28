@@ -41,11 +41,14 @@ class PyxelRestTest(unittest.TestCase):
     @classmethod
     def start_services(cls):
         import testsutils.authenticated_test_service as authenticated_test_service
-        cls.service_processes.append(multiprocessing.Process(target=authenticated_test_service.start_server, args=(8946,)))
+        cls.service_processes.append(multiprocessing.Process(target=authenticated_test_service.start_server,
+                                                             args=(8946,)))
         import testsutils.authentication_test_service as authentication_test_service
-        cls.service_processes.append(multiprocessing.Process(target=authentication_test_service.start_server, args=(8947,)))
+        cls.service_processes.append(multiprocessing.Process(target=authentication_test_service.start_server,
+                                                             args=(8947,)))
         import testsutils.non_authenticated_test_service as non_authenticated_test_service
-        cls.service_processes.append(multiprocessing.Process(target=non_authenticated_test_service.start_server, args=(8948,)))
+        cls.service_processes.append(multiprocessing.Process(target=non_authenticated_test_service.start_server,
+                                                             args=(8948,)))
         for service_process in cls.service_processes:
             service_process.start()
         time.sleep(5)
@@ -61,7 +64,9 @@ class PyxelRestTest(unittest.TestCase):
     def _add_test_config(cls):
         this_dir = os.path.abspath(os.path.dirname(__file__))
         shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_authentication_services_configuration.ini'), cls.services_config_file_path)
+        shutil.copyfile(os.path.join(this_dir,
+                                     'pyxelresttest_authentication_services_configuration.ini'),
+                        cls.services_config_file_path)
 
     @classmethod
     def _add_back_initial_config(cls):
@@ -70,7 +75,8 @@ class PyxelRestTest(unittest.TestCase):
     def test_authentication_on_custom_server_port(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_second_test_get_test_authentication_success()
-        # Wait for 1 second and send a second request from another server to the same auth server (should request another token)
+        # Wait for 1 second and send a second request from another server to the same auth server
+        # (should request another token)
         import time
         time.sleep(1)
         second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
@@ -87,11 +93,13 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_authentication_failure(self):
         import pyxelrestgenerator
-        self.assertEqual('User was not authenticated', pyxelrestgenerator.authenticated_test_get_test_authentication_failure())
+        self.assertEqual('User was not authenticated',
+                         pyxelrestgenerator.authenticated_test_get_test_authentication_failure())
 
     def test_authentication_timeout(self):
         import pyxelrestgenerator
-        self.assertEqual('User was not authenticated', pyxelrestgenerator.authenticated_test_get_test_authentication_timeout())
+        self.assertEqual('User was not authenticated',
+                         pyxelrestgenerator.authenticated_test_get_test_authentication_timeout())
 
     def test_without_authentication(self):
         import pyxelrestgenerator
