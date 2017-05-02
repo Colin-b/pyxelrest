@@ -229,6 +229,16 @@ def swagger():
                                    }
                                }
                            }
+                       },
+                       '/test/dict/with/list/of/different/size': {
+                           'get': {
+                               'operationId': 'get_test_dict_with_list_of_different_size',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation'
+                                   }
+                               }
+                           }
                        }
                    })
 
@@ -491,6 +501,20 @@ def get_test_dict_with_list():
             'is',
             'a',
             'test'
+        ]
+    }
+    return jsonify(dict_with_list)
+
+
+@app.route('/test/dict/with/list/of/different/size', methods=['GET'])
+def get_test_dict_with_list_of_different_size():
+    dict_with_list = {
+        "Column 1": [23],
+        "Column 2": [24],
+        "Column 3": [
+            'value 1',
+            'value 2',
+            'value 3'
         ]
     }
     return jsonify(dict_with_list)
