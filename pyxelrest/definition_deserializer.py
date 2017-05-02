@@ -111,15 +111,43 @@ class RowsMerger:
         :param new_list: Either a list of values or a list of list of values
         """
         if isinstance(self.rows, list):
-            if len(self.rows) != len(new_list):
-                raise Exception('Merging lists with different size is not handled for now: {0}\nMerged to:\n{1}'.format(new_list, self.rows))
-            if isinstance(self.rows[0], list) and isinstance(new_list[0], list):
-                self.header.extend(new_header)
-                for row_index in range(len(new_list)):
-                    self.rows[row_index].extend(new_list[row_index])
-                return
-            raise Exception('Merging "list of list" and "list" is not handled for now: {0}\nMerged to:\n{1}'.format(new_list, self.rows))
-        self.append_list_to_value(new_header, new_list)
+            self.merge_list_to_list(new_header, new_list)
+        else:
+            self.append_list_to_value(new_header, new_list)
+
+    def merge_list_to_list(self, new_header, new_list):
+        if not isinstance(self.rows[0], list):
+            if isinstance(new_list[0], list):
+                self.append_list_of_list_to_list(new_header, new_list)
+            else:
+                self.append_list_to_list(new_header, new_list)
+        else:
+            if isinstance(new_list[0], list):
+                self.append_list_of_list_to_list_of_list(new_header, new_list)
+            else:
+                self.append_list_to_list_of_list(new_header, new_list)
+
+    def append_list_of_list_to_list(self, new_header, new_list_of_list):
+        self.header.extend(new_header)
+        new_rows = []
+        for new_list in new_list_of_list:
+            new_row = self.rows.copy()
+            new_row.extend(new_list)
+            new_rows.append(new_row)
+        self.rows = new_rows
+
+    def append_list_to_list(self, new_header, new_list):
+        raise Exception('Merging two lists is not handled for now. {0} merged to {1}'.format(new_list, self.rows))
+
+    def append_list_of_list_to_list_of_list(self, new_header, new_list_of_list):
+        if len(self.rows) != len(new_list_of_list):
+            raise Exception('Merging two lists of different length is not handled for now. {0} merged to {1}'.format(new_list_of_list, self.rows))
+        self.header.extend(new_header)
+        for row_index in range(len(new_list_of_list)):
+            self.rows[row_index].extend(new_list_of_list[row_index])
+
+    def append_list_to_list_of_list(self, new_header, new_list):
+        raise Exception('Merging two lists is not handled for now. {0} merged to {1}'.format(new_list, self.rows))
 
     def append_list_to_value(self, new_header, new_list):
         """
@@ -174,6 +202,7 @@ class RowsMerger:
         if isinstance(self.rows, list):
             return self.rows
         return [self.rows]
+
 
 all_definitions = {}
 

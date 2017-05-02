@@ -3,6 +3,8 @@ import os.path
 import shutil
 import unittest
 from importlib import import_module
+import datetime
+from dateutil.tz import tzutc
 
 try:
     # Python 3
@@ -57,7 +59,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         order_response = pyxelrestgenerator.petstore_test_placeOrder(new_order)
         if order_response != [
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
-            [444444, 222222, 1, '2017-04-24T13:29:32.019+0000', 'placed', False]
+            [444444, 222222, 1, datetime.datetime(2017, 4, 24, 13, 29, 32, 19000, tzinfo=tzutc()), 'placed', False]
         ]:
             raise Exception('Order was not placed: ' + str(order_response))
 
@@ -86,7 +88,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         import pyxelrestgenerator
         expected_result = [
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
-            [444444, 222222, 1, '2017-04-24T13:29:32.019+0000', 'placed', False]
+            [444444, 222222, 1, datetime.datetime(2017, 4, 24, 13, 29, 32, 19000, tzinfo=tzutc()), 'placed', False]
         ]
         self.assertEqual(pyxelrestgenerator.petstore_test_getOrderById(444444), expected_result)
 
