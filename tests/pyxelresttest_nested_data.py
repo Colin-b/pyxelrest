@@ -160,3 +160,15 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             ['value 21', 'value 22']
         ],
             pyxelrestgenerator.nested_data_test_get_test_list_of_dict())
+
+    def test_get_test_dict_with_list(self):
+        import pyxelrestgenerator
+        self.maxDiff = None
+        self.assertEqual([
+            ['Column 1', 'Column 2', 'Column 3'],
+            [23, True, 'this'],
+            [23, True, 'is'],
+            [23, True, 'a'],
+            [23, True, 'test']
+        ],
+            pyxelrestgenerator.nested_data_test_get_test_dict_with_list())

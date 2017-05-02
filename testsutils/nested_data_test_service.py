@@ -219,6 +219,16 @@ def swagger():
                                    }
                                }
                            }
+                       },
+                       '/test/dict/with/list': {
+                           'get': {
+                               'operationId': 'get_test_dict_with_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation'
+                                   }
+                               }
+                           }
                        }
                    })
 
@@ -469,6 +479,21 @@ def get_test_list_of_dict():
             'Column 3': "value 22"
         }
     ])
+
+
+@app.route('/test/dict/with/list', methods=['GET'])
+def get_test_dict_with_list():
+    dict_with_list = {
+        "Column 1": 23,
+        "Column 2": True,
+        "Column 3": [
+            'this',
+            'is',
+            'a',
+            'test'
+        ]
+    }
+    return jsonify(dict_with_list)
 
 
 def start_server(port):
