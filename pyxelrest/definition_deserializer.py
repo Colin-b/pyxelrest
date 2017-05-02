@@ -1,4 +1,6 @@
 from collections import OrderedDict
+import datetime
+from dateutil.parser import parse as dateutil_parse
 
 
 def append_prefix(prefix, values_list):
@@ -9,6 +11,20 @@ def append_prefix(prefix, values_list):
     if prefix:
         return ['{0} / {1}'.format(prefix, value) if value else prefix for value in values_list]
     return values_list
+
+
+def to_date_time(value):
+    """
+    Convert to date-time or date as described in https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14
+    :param value: string representation of the date-time or date
+    :return: date or datetime instance or string if None
+    """
+    if not value:
+        return ''
+    # dateutil does not handle timezone lower cased
+    if value[-1:] == 'z':
+        value = value[:-1] + 'Z'
+    return dateutil_parse(value)
 
 
 class RowsMerger:
@@ -206,10 +222,12 @@ class Field:
 
     def convert_simple_type(self, value):
         merger = RowsMerger()
-        # TODO Handle type conversion for dates, ...
         if isinstance(value, str):
-            # Return first 255 characters otherwise value will not be valid
-            value = value[:255]
+            if self.format == 'date-time' or self.format == 'date':
+                value = to_date_time(value)
+            else:
+                # Return first 255 characters otherwise value will not be valid
+                value = value[:255]
         merger.rows = value
         return merger
 

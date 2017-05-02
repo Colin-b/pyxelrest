@@ -2910,8 +2910,8 @@ class PyxelRestJsonTest(unittest.TestCase):
         import pyxelrestgenerator
         today_date = datetime.date.today()
         tomorrow_date = today_date + datetime.timedelta(days=1)
-        today_datetime = datetime.datetime.today()
-        tomorrow_datetime = today_datetime + datetime.timedelta(days=1)
+        today_datetime = datetime.datetime.combine(today_date, datetime.datetime.min.time())
+        tomorrow_datetime = datetime.datetime.combine(tomorrow_date, datetime.datetime.min.time())
         self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
             query_integer=1,
             query_integer32=10,
@@ -2971,12 +2971,12 @@ class PyxelRestJsonTest(unittest.TestCase):
                     'query_string', 'query_string_binary', 'query_string_byte'
                 ],
                 [
-                    'true', today_date, today_datetime,
+                    'true', today_datetime, today_datetime,
                     '1.1', '1.01', '1',
                     '10', '100',
                     '0.1', 'password 1', 'string 1',
                     'string binary 1', 'string bytes 1', 'True',
-                    today_date, today_datetime, '1.1', '1.01', '1',
+                    today_datetime, today_datetime, '1.1', '1.01', '1',
                     '10', '100', '0.1', 'password',
                     'string', 'string binary', 'string bytes'
                 ]

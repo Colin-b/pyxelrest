@@ -129,7 +129,9 @@ setup(name='pyxelrest',
           # Used to run authentication services (also used in test cases)
           'flask',
           # Used to parse JSON faster than the embedded json module
-          'ujson==1.35'
+          'ujson==1.35',
+          # Used to parse all date-time formats in a easy way
+          'python-dateutil==2.6.0'
       ],
       scripts=[
           'pyxelrest_auto_update.py',

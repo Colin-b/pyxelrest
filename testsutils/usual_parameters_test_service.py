@@ -3000,8 +3000,56 @@ def swagger():
                                    }
                                 }
                             }
-                        }
+                        },
+                       '/test/date': {
+                           'get': {
+                               'operationId': 'get_test_date',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'string',
+                                           'format': 'date'
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/test/datetime': {
+                           'get': {
+                               'operationId': 'get_test_date_time',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               'type': 'string',
+                                               'format': 'date-time'
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       }
     })
+
+
+@app.route('/test/date', methods=['GET'])
+def get_test_date():
+    return jsonify('2014-03-05')
+
+
+@app.route('/test/datetime', methods=['GET'])
+def get_test_date_time():
+    return jsonify([
+        '2014-03-05T15:59:58.20198Z',
+        '2014-03-05T15:59:58.20198z',
+        '2014-03-05 15:59:58.20198Z',
+        '2014-03-05t15:59:58.20198Z',
+        '2014-03-05t15:59:58.20198z',
+        # TODO Add other date-time specific cases
+    ])
 
 
 def start_server(port):

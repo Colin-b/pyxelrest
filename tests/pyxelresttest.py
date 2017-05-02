@@ -6,6 +6,7 @@ import shutil
 import unittest
 import platform
 from importlib import import_module
+from dateutil.tz import tzutc
 
 try:
     # Python 3
@@ -42,6 +43,9 @@ class PyxelRestTest(unittest.TestCase):
 
     @classmethod
     def start_services(cls):
+        import testsutils.usual_parameters_test_service as usual_parameters_test_service
+        cls.service_processes.append(
+            multiprocessing.Process(target=usual_parameters_test_service.start_server, args=(8943,)))
         import testsutils.filtered_tags_test_service as filtered_tags_test_service
         cls.service_processes.append(
             multiprocessing.Process(target=filtered_tags_test_service.start_server, args=(8944,)))
@@ -203,8 +207,24 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual([
             [u'ts', u'date', u'curve', u'mat'],
-            [u'', u'2017-04-05', u'PW_FR', u'H01'],
-            [u'2017-04-05 12:03:15', u'2017-04-05', u'PW_FR', u'H02'],
-            [u'', u'2017-04-05', u'PW_FR', u'H03']
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H01'],
+            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H02'],
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H03']
         ],
             pyxelrestgenerator.output_order_test_get_test_price_unordered())
+
+    def test_get_test_date(self):
+        import pyxelrestgenerator
+        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
+            pyxelrestgenerator.usual_parameters_test_get_test_date())
+
+    def test_get_test_datetime(self):
+        import pyxelrestgenerator
+        self.assertEqual([
+            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
+            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
+            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
+            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
+            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())]
+        ],
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time())
