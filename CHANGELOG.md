@@ -16,6 +16,7 @@
 
 - Results were not provided in case a cell value was expected to contains more than 255 characters. (Only first 255 characters are now provided)
 - Field ordering is now following received Swagger definition.
+- All date times fields are now displayed as date times within Excel (some were still interpreted as text)
 
 ## 0.56 (2017-03-24) ##
 
