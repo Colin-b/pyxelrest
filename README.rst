@@ -115,6 +115,23 @@ The following options are available for each section:
 | security_details       | Extra security information not provided by swagger.                                                                         | Optional  | port=XX,timeout=YY                       |
 +------------------------+-----------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------+
 
+Security Details
+----------------
+
+Additional security details can be provided thanks to ``security_details`` property.
+
+This property is supposed to contains key=value information. Separator is ',' (comma).
+
+The following keys are available:
+
++---------+----------------------------------------------------------------------------------------------------------------+
+|         | Description                                                                                                    |
++=========+================================================================================================================+
+| port    | Port on which the authentication response is supposed to be received. Default value is 5000.                   |
++---------+----------------------------------------------------------------------------------------------------------------+
+| timeout | Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds. |
++---------+----------------------------------------------------------------------------------------------------------------+
+
 Logging Configuration
 ---------------------
 
