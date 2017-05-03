@@ -112,7 +112,7 @@ The following options are available for each section:
 +------------------------+-----------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------+
 | read_timeout           | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.                            | Optional  | any float value (decimal separator is .) |
 +------------------------+-----------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------+
-| security_details       | Extra security information not provided by swagger.                                                                         | Optional  | port=XX                                  |
+| security_details       | Extra security information not provided by swagger.                                                                         | Optional  | port=XX,timeout=YY                       |
 +------------------------+-----------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------+
 
 Logging Configuration

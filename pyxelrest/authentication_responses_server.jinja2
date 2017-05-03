@@ -97,7 +97,7 @@ def request_new_token(security_definition, header):
         response = requests.get(security_definition.full_url)
     logging.debug('Waiting for user authentication...')
 {% if run_with_python_3 %}
-    response_received = authentication_response.acquire(timeout=10)
+    response_received = authentication_response.acquire(timeout=security_definition.timeout)
 {% else %}
     response_received = authentication_response.acquire()
 {% endif %}

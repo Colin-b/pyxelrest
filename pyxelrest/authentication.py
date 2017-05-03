@@ -17,6 +17,7 @@ except ImportError:
 
 
 DEFAULT_SERVER_PORT = 5000
+DEFAULT_AUTHENTICATION_TIMEOUT = 20
 
 # Key is a tuple 'service name, security key'
 security_definitions = {}
@@ -44,7 +45,7 @@ class OAuth2:
     def __init__(self, security_definition_key, security_definition, service_name, security_details):
         self.scopes = security_definition['scopes']
         port = get_detail('port', security_details)
-        self.port = int(port) if port else DEFAULT_SERVER_PORT  # Default port is 5000
+        self.port = int(port) if port else DEFAULT_SERVER_PORT
         self.key = service_name, security_definition_key
         self.service_name = service_name
         self.security_definition_key = security_definition_key
@@ -52,6 +53,8 @@ class OAuth2:
         authorization_url = security_definition['authorizationUrl']
         self.full_url = create_auth_url(authorization_url, redirect_uri)
         self.token_name = get_query_parameter(authorization_url, 'response_type') or 'token'
+        timeout = get_detail('timeout', security_details)
+        self.timeout = int(timeout) if timeout else DEFAULT_AUTHENTICATION_TIMEOUT
 
 
 def get_query_parameter(url, param_name):

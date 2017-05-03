@@ -131,7 +131,7 @@ The following options are available for each section:
         <td><strong>security_details</strong></td>
         <td>Extra security information not provided by swagger.</td>
         <td>Optional</td>
-        <td>port=XX</td>
+        <td>port=XX,timeout=YY</td>
     </tr>
 </table>
 
