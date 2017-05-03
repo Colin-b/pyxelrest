@@ -84,10 +84,11 @@ class RowsMerger:
             self.rows.append([new_merging_data.rows])
 
     def merge_header(self, new_header, new_columns, missing_columns):
-        # TODO Handle the fact that there might be new AND missing at the same time
         if new_columns and missing_columns:
-            raise Exception('Merging rows that contains both new and missing columns is not handled for now.')
-        if new_columns or not self.header:
+            # TODO Add new columns at the right place instead of the end
+            self.header.extend(new_columns)
+            raise Exception('Addition of new columns to header is not handled properly')
+        elif new_columns or not self.header:
             self.header = new_header
 
     def get_new_columns(self, new_header):
@@ -140,11 +141,14 @@ class RowsMerger:
         raise Exception('Merging two lists is not handled for now. {0} merged to {1}'.format(new_list, self.rows))
 
     def append_list_of_list_to_list_of_list(self, new_header, new_list_of_list):
-        if len(self.rows) != len(new_list_of_list):
-            raise Exception('Merging two lists of different length is not handled for now. {0} merged to {1}'.format(new_list_of_list, self.rows))
         self.header.extend(new_header)
-        for row_index in range(len(new_list_of_list)):
-            self.rows[row_index].extend(new_list_of_list[row_index])
+        new_rows = []
+        for row in self.rows:
+            for new_list in new_list_of_list:
+                new_row = row.copy()
+                new_row.extend(new_list)
+                new_rows.append(new_row)
+        self.rows = new_rows
 
     def append_list_to_list_of_list(self, new_header, new_list):
         raise Exception('Merging two lists is not handled for now. {0} merged to {1}'.format(new_list, self.rows))

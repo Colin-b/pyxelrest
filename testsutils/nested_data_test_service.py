@@ -239,6 +239,16 @@ def swagger():
                                    }
                                }
                            }
+                       },
+                       '/test/dict/with/various/columns': {
+                           'get': {
+                               'operationId': 'get_test_dict_with_various_columns',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation'
+                                   }
+                               }
+                           }
                        }
                    })
 
@@ -515,6 +525,37 @@ def get_test_dict_with_list_of_different_size():
             'value 1',
             'value 2',
             'value 3'
+        ]
+    }
+    return jsonify(dict_with_list)
+
+
+@app.route('/test/dict/with/various/columns', methods=['GET'])
+def get_test_dict_with_various_columns():
+    dict_with_list = {
+        "Column 1": [
+            [
+                'value 1',
+                'value 2',
+                {
+                    'column 20': ['value 20'],
+                    'column 21': ['value 21-1','value 21-2']
+                }
+            ],
+            [
+                'value 3',
+                {
+                    'column 23': ['value 23']
+                }
+            ]
+        ],
+        "Column 2": [
+            [
+                'value 4',
+                {
+                    'column 24': ['value 24']
+                }
+            ]
         ]
     }
     return jsonify(dict_with_list)
