@@ -183,24 +183,3 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             [23, 24, 'value 3']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list_of_different_size())
-
-    def test_get_test_dict_with_various_columns(self):
-        import pyxelrestgenerator
-        self.maxDiff = None
-        self.assertEqual([
-            ['Column 1 / Column 1 / column 20', 'Column 1 / Column 1 / column 21', 'Column 1 / Column 1 / column 23', 'Column 2 / Column 2 / column 24'],
-            ['value 1', '', 'value 4'],
-            ['value 1', '', 'value 24'],
-            ['value 2', '', 'value 4'],
-            ['value 2', '', 'value 24'],
-            ['value 20', 'value 21-1', '', 'value 4'],
-            ['value 20', 'value 21-1', '', 'value 24'],
-            ['value 20', 'value 21-2', '', 'value 4'],
-            ['value 20', 'value 21-2', '', 'value 24'],
-            ['', '', 'value 3', 'value 4'],
-            ['', '', 'value 3', 'value 24'],
-            ['', '', 'value 23', 'value 4'],
-            ['', '', 'value 23', 'value 24']
-        ],
-            pyxelrestgenerator.nested_data_test_get_test_dict_with_various_columns())
-
