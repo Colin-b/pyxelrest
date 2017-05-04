@@ -86,7 +86,6 @@ class RowsMerger:
     def merge_header(self, new_header, new_columns, missing_columns):
         if new_columns and missing_columns:
             # TODO Add new columns at the right place instead of the end
-            self.header.extend(new_columns)
             raise Exception('Addition of new columns to header is not handled properly')
         elif new_columns or not self.header:
             self.header = new_header

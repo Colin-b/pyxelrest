@@ -131,7 +131,29 @@ The following options are available for each section:
         <td><strong>security_details</strong></td>
         <td>Extra security information not provided by swagger.</td>
         <td>Optional</td>
-        <td>port=XX</td>
+        <td>port=XX,timeout=YY</td>
+    </tr>
+</table>
+
+#### Security Details ####
+
+Additional security details can be provided thanks to `security_details` property.
+
+This property is supposed to contains key=value information. Separator is ',' (comma).
+
+The following keys are available:
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+    </th>
+    <tr>
+        <td><strong>port</strong></td>
+        <td>Port on which the authentication response is supposed to be received. Default value is 5000.</td>
+    </tr>
+    <tr>
+        <td><strong>timeout</strong></td>
+        <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.</td>
     </tr>
 </table>
 
