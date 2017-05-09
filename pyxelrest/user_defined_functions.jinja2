@@ -500,10 +500,12 @@ def json_as_list(response, all_responses, all_definitions, rely_on_definitions=F
         response_text = response.text
         definition_deserializer.all_definitions = {}
         logging.debug('Converting JSON string to corresponding python structure...')
-        return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+        json_data = ujson.loads(response_text) if response_text != '' else response_text
+        return Response(all_responses, response.status_code, all_definitions).rows(json_data)
 
     logging.debug('Converting JSON string to corresponding python structure...')
-    return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
+    json_data = response.json(object_pairs_hook=OrderedDict)
+    return Flattenizer(all_responses, response.status_code, all_definitions).to_list(json_data)
 
 
 def msgpackpandas_as_list(msgpack_pandas):

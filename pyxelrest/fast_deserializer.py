@@ -1,14 +1,36 @@
 import logging
+import dateutil.parser
+import dateutil.tz
+
+
+def to_date_time(value):
+    """
+    Convert to date-time or date as described in https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14
+    :param value: string representation of the date-time or date
+    :return: date or datetime instance or string if None
+    """
+    if not value:
+        return ''
+    # dateutil does not handle lower cased timezone
+    if value[-1:] == 'z':
+        value = value[:-1] + 'Z'
+    datetime_with_service_timezone = dateutil.parser.parse(value)
+    if datetime_with_service_timezone:
+        return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
+    return value
 
 
 class Flattenizer:
-    def __init__(self):
+    def __init__(self, all_responses, status_code, json_definitions):
         self.__values_per_level = {}
         self.__indexes_per_level = {}
         self.__header_per_level = {}
         self.__all_rows = []
         self.__flatten_header = []
         self.__all_flatten_rows = []
+        json_response = response(status_code, all_responses)
+        self.schema = json_response.get('schema', json_response) if json_response else {}
+        self.json_definitions = json_definitions if json_definitions is not None and self.schema else {}
 
     def _reset(self):
         self.__values_per_level = {}
@@ -26,33 +48,51 @@ class Flattenizer:
 
     def _extract_values_and_level(self, data):
         self._reset()
-        self._set_values_per_level(0, 0, '', data, 0)
+        self._set_values_per_level(0, 0, '', data, 0, self.schema)
 
-    def _set_values_per_level(self, row, level, header, value, column_index):
+    def _set_values_per_level(self, row, level, header, value, column_index, json_definition):
         # Because "0" or "False" are considered as "not value", this condition cannot be smaller
         if value is None or value == [] or value == {}:
-            self._set_value_on_level(row, level, header, value='')
+            self._set_value_on_level(row, level, header, '', json_definition)
         else:
             if isinstance(value, dict):
-                self._set_values_per_level_for_dict(row, level, value, column_index)
+                self._set_values_per_level_for_dict(row, level, value, column_index, json_definition)
             elif isinstance(value, list):
-                self._set_values_per_level_for_list(row, level, header, value, column_index)
+                self._set_values_per_level_for_list(row, level, header, value, column_index, json_definition)
             else:
-                self._set_value_on_level(row, level, header, value)
+                self._set_value_on_level(row, level, header, value, json_definition)
 
-    def _set_value_on_level(self, row, level, header, value):
+    def _set_value_on_level(self, row, level, header, value, json_definition):
         self._init_values_per_level(row, level)
-        self.__values_per_level[row][level].append({'header': header, 'value': value})
+        self.__values_per_level[row][level].append({'header': header, 'value': self.convert_simple_type(value, json_definition)})
 
-    def _set_values_per_level_for_dict(self, row, level, dict_value, column_index):
+    def convert_simple_type(self, value, json_definition):
+        if isinstance(value, str):
+            field_format = json_definition.get('format') if json_definition else None
+            if field_format == 'date-time' or field_format == 'date':
+                value = to_date_time(value)
+            else:
+                # Return first 255 characters otherwise value will not be valid
+                value = value[:255]
+        return value
+
+    def _set_values_per_level_for_dict(self, row, level, dict_value, column_index, json_definition):
         """
         For a dict, each value is set on the current row and level.
         """
+        ref = json_definition.get('$ref')
+        if ref:
+            ref = ref[len('#/definitions/'):]
+            json_definition = self.json_definitions.get(ref)
+            properties = json_definition.get('properties')
+        else:
+            properties = {}
         for dict_key in dict_value.keys():
-            self._set_values_per_level(row, level, header=dict_key, value=dict_value[dict_key],
-                                       column_index=column_index + 1)
+            json_definition = properties.get(dict_key, {})
+            self._set_values_per_level(row, level, dict_key, dict_value[dict_key],
+                                       column_index + 1, json_definition)
 
-    def _set_values_per_level_for_list(self, row, level, header, list_values, column_index):
+    def _set_values_per_level_for_list(self, row, level, header, list_values, column_index, json_definition):
         """
         Each item of a list corresponds to a row.
         The first item belongs to the current row.
@@ -66,9 +106,11 @@ class Flattenizer:
         self._init_values_per_level(row, level)
         self.__values_per_level[row][level].append({'header': header, 'value': ''})
 
+        json_definition = json_definition.get('items', {})
+
         # Iterate through the list
         # Create and Update all required rows for the first list value
-        self._set_values_per_level(row, level + 1, header, list_values[0], column_index + 1)
+        self._set_values_per_level(row, level + 1, header, list_values[0], column_index + 1, json_definition)
 
         # Create and Update all required rows for the other list values
         # As other rows might have been created, always recompute the actual row number
@@ -79,7 +121,7 @@ class Flattenizer:
             for previous_level in range(0, level + 1):
                 self._init_values_per_level(new_row, previous_level)
                 self.__values_per_level[new_row][previous_level] = self.__values_per_level[row][previous_level]
-            self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1)
+            self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1, json_definition)
 
     def to_list(self, data):
         logging.debug('Converting response to list...')
@@ -126,3 +168,9 @@ class Flattenizer:
         flatten_data.extend(self.__all_flatten_rows)
         logging.debug('Response converted to list.')
         return flatten_data
+
+
+def response(status_code, responses):
+    if str(status_code) in responses:
+        return responses[str(status_code)]
+    return responses.get('default')
