@@ -518,6 +518,6 @@ def msgpackpandas_as_list(msgpack_pandas):
 
 
 def describe_error(response, error):
-    if response:
-        return 'An error occurred: "{0}" for value "{1}"'.format(str(error)[:66], response.text[:155])
-    return str(error)[:255]
+    if response is not None:
+        return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
+    return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
