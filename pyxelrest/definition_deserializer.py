@@ -1,5 +1,5 @@
 from collections import OrderedDict
-import datetime
+import logging
 from dateutil.parser import parse as dateutil_parse
 
 
@@ -361,7 +361,10 @@ class Response:
         self.field = Field(schema, json_definitions if json_definitions is not None else {}) if schema else DefaultField()
 
     def rows(self, data):
-        return self.field.convert(None, data).header_and_rows()
+        logging.debug('Converting response to list...')
+        rows = self.field.convert(None, data).header_and_rows()
+        logging.debug('Response converted to list.')
+        return rows
 
 
 def response(status_code, responses):

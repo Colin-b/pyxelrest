@@ -440,9 +440,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ service.responses(method['responses']) }}
             all_definitions = {{ service.definitions() }}
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -495,6 +493,13 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         {%- endif -%}
     {%- endfor %}
 {% endfor %}
+
+def json_as_list(response, all_responses, all_definitions):
+    response_text = response.text
+    definition_deserializer.all_definitions = {}
+    logging.debug('Converting JSON string to corresponding python structure...')
+    return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+
 
 def msgpackpandas_as_list(msgpack_pandas):
 {% if support_pandas %}
