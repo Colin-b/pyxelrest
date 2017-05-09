@@ -68,6 +68,7 @@ class SwaggerService:
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
         self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
+        self.rely_on_definitions = bool(self.get_item_default(config, 'rely_on_definitions', False))
         self.connect_timeout = float(self.get_item_default(config, 'connect_timeout', 1))
         self.read_timeout = self.get_item_default(config, 'read_timeout', None)
         if self.read_timeout:

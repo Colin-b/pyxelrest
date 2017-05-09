@@ -10,6 +10,7 @@ import datetime
 import logging
 import ujson
 from collections import OrderedDict
+from fast_deserializer import Flattenizer
 from definition_deserializer import Response
 import definition_deserializer
 import authentication
@@ -35,9 +36,7 @@ def usual_parameters_test_get_test_date():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('format', 'date'), ('type', 'string')]))]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -47,14 +46,14 @@ def usual_parameters_test_get_test_date():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_date response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_get_test_date.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -72,9 +71,7 @@ def usual_parameters_test_get_test_date_time():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')]))]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -84,14 +81,14 @@ def usual_parameters_test_get_test_date_time():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_date_time response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_get_test_date_time.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -171,15 +168,15 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -205,7 +202,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -293,15 +290,15 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -350,7 +347,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -364,9 +361,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -376,14 +371,14 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_get_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -463,15 +458,15 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -497,7 +492,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -585,15 +580,15 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -642,7 +637,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -656,9 +651,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -668,14 +661,14 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_post_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_post_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -755,15 +748,15 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -789,7 +782,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -877,15 +870,15 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -934,7 +927,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -948,9 +941,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -960,14 +951,14 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_put_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_put_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -1047,15 +1038,15 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -1081,7 +1072,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -1169,15 +1160,15 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -1226,7 +1217,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -1240,9 +1231,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -1252,14 +1241,14 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_delete_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_delete_test_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -1360,21 +1349,21 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -1412,7 +1401,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -1521,21 +1510,21 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -1596,7 +1585,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -1610,9 +1599,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -1622,14 +1609,14 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_get_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -1730,21 +1717,21 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -1782,7 +1769,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -1891,21 +1878,21 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -1966,7 +1953,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -1980,9 +1967,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -1992,14 +1977,14 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_post_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_post_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -2100,21 +2085,21 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -2152,7 +2137,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -2261,21 +2246,21 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -2336,7 +2321,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -2350,9 +2335,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2362,14 +2345,14 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_put_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_put_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -2470,21 +2453,21 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -2522,7 +2505,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -2631,21 +2614,21 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -2706,7 +2689,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -2720,9 +2703,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2732,14 +2713,14 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_delete_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_delete_test_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -2887,9 +2868,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -2899,14 +2878,14 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_get_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -3054,9 +3033,7 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3066,14 +3043,14 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_post_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_post_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -3221,9 +3198,7 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3233,14 +3208,14 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_put_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_put_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
@@ -3388,9 +3363,7 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3400,14 +3373,14 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_delete_test_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling usual_parameters_test_delete_test_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='filtered_tags_test', call_in_wizard=False)
@@ -3425,9 +3398,7 @@ def filtered_tags_test_get_test_with_tags():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3437,14 +3408,14 @@ def filtered_tags_test_get_test_with_tags():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling filtered_tags_test_get_test_with_tags response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling filtered_tags_test_get_test_with_tags.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='filtered_tags_test', call_in_wizard=False)
@@ -3462,9 +3433,7 @@ def filtered_tags_test_post_test_with_tags():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3474,14 +3443,14 @@ def filtered_tags_test_post_test_with_tags():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling filtered_tags_test_post_test_with_tags response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling filtered_tags_test_post_test_with_tags.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='filtered_tags_test', call_in_wizard=False)
@@ -3499,9 +3468,7 @@ def filtered_tags_test_put_test_with_tags():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3511,14 +3478,14 @@ def filtered_tags_test_put_test_with_tags():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling filtered_tags_test_put_test_with_tags response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling filtered_tags_test_put_test_with_tags.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='values_false_test', call_in_wizard=False)
@@ -3536,9 +3503,7 @@ def values_false_test_get_test_with_empty_dictionary():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/EmptyDictionary')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3548,14 +3513,14 @@ def values_false_test_get_test_with_empty_dictionary():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_empty_dictionary response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling values_false_test_get_test_with_empty_dictionary.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='values_false_test', call_in_wizard=False)
@@ -3573,9 +3538,7 @@ def values_false_test_get_test_with_empty_list():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/EmptyList')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3585,14 +3548,14 @@ def values_false_test_get_test_with_empty_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_empty_list response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling values_false_test_get_test_with_empty_list.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='values_false_test', call_in_wizard=False)
@@ -3610,9 +3573,7 @@ def values_false_test_get_test_with_empty_string():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/EmptyString')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3622,14 +3583,14 @@ def values_false_test_get_test_with_empty_string():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_empty_string response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling values_false_test_get_test_with_empty_string.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='values_false_test', call_in_wizard=False)
@@ -3647,9 +3608,7 @@ def values_false_test_get_test_with_false_boolean():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/FalseBoolean')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3659,14 +3618,14 @@ def values_false_test_get_test_with_false_boolean():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_false_boolean response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling values_false_test_get_test_with_false_boolean.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='values_false_test', call_in_wizard=False)
@@ -3684,9 +3643,7 @@ def values_false_test_get_test_with_zero_float():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/ZeroFloat')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3696,14 +3653,14 @@ def values_false_test_get_test_with_zero_float():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_zero_float response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling values_false_test_get_test_with_zero_float.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='values_false_test', call_in_wizard=False)
@@ -3721,9 +3678,7 @@ def values_false_test_get_test_with_zero_integer():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/ZeroInteger')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3733,14 +3688,14 @@ def values_false_test_get_test_with_zero_integer():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_zero_integer response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling values_false_test_get_test_with_zero_integer.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='output_order_test', call_in_wizard=False)
@@ -3763,15 +3718,15 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
         request_parameters['date'] = date
 
     if curve is not None:
-
+        
         request_parameters['curve'] = curve
 
     if ts is not None:
-
+        
         request_parameters['ts'] = ts
 
     if mat is not None:
-
+        
         request_parameters['mat'] = mat
 
 
@@ -3785,9 +3740,7 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Price')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Price', OrderedDict([('required', ['curve', 'date', 'mat', 'ts']), ('type', 'object'), ('properties', OrderedDict([('ts', OrderedDict([('type', 'string'), ('description', 'timeslot'), ('maxLength', 2)])), ('date', OrderedDict([('type', 'string'), ('description', 'date'), ('format', 'date')])), ('curve', OrderedDict([('type', 'string'), ('description', 'curvename'), ('maxLength', 20)])), ('mat', OrderedDict([('type', 'string'), ('description', 'maturity'), ('maxLength', 4)]))])), ('title', 'RealizedPrice')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3797,14 +3750,14 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling output_order_test_get_test_price_unordered response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling output_order_test_get_test_price_unordered.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -3822,9 +3775,7 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3834,14 +3785,14 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_empty_nested_list response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_empty_nested_list.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -3859,9 +3810,7 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3871,14 +3820,14 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_four_imbricated_levels response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_four_imbricated_levels.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -3896,9 +3845,7 @@ def nested_data_test_get_test_dict_with_list():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation')]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3908,14 +3855,14 @@ def nested_data_test_get_test_dict_with_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_list response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_list.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -3933,9 +3880,7 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation')]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3945,14 +3890,14 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_list_of_different_size response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_list_of_different_size.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -3970,9 +3915,7 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -3982,14 +3925,14 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4007,9 +3950,7 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4019,14 +3960,14 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_three_imbricated_levels response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_three_imbricated_levels.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4044,9 +3985,7 @@ def nested_data_test_get_test_dict_with_various_columns():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation')]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4056,14 +3995,14 @@ def nested_data_test_get_test_dict_with_various_columns():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_various_columns response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_dict_with_various_columns.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4081,9 +4020,7 @@ def nested_data_test_get_test_empty_dict():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4093,14 +4030,14 @@ def nested_data_test_get_test_empty_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_empty_dict response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_empty_dict.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4118,9 +4055,7 @@ def nested_data_test_get_test_empty_list():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4130,14 +4065,14 @@ def nested_data_test_get_test_empty_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_empty_list response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_empty_list.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4155,9 +4090,7 @@ def nested_data_test_get_test_list_of_dict():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4167,14 +4100,14 @@ def nested_data_test_get_test_list_of_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_list_of_dict response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_list_of_dict.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4192,9 +4125,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column1List')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4204,14 +4135,14 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_dict_entry_with_a_list response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_one_dict_entry_with_a_list.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4229,9 +4160,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column1')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4241,14 +4170,14 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_dict_entry_with_a_list_of_dict response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_one_dict_entry_with_a_list_of_dict.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4266,9 +4195,7 @@ def nested_data_test_get_test_one_level_dict():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column2And3')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4278,14 +4205,14 @@ def nested_data_test_get_test_one_level_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_level_dict response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_one_level_dict.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='nested_data_test', call_in_wizard=False)
@@ -4303,9 +4230,7 @@ def nested_data_test_get_test_one_level_list():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4315,14 +4240,14 @@ def nested_data_test_get_test_one_level_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_level_list response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling nested_data_test_get_test_one_level_list.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
@@ -4339,14 +4264,14 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-
+        
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-
+        
         request_parameters['end'] = end_visual_basic
 
 
@@ -4360,9 +4285,7 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('$ref', '#/definitions/Test')]))]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4372,14 +4295,14 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_get_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling vba_keywords_test_get_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
@@ -4396,14 +4319,14 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-
+        
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-
+        
         request_parameters['end'] = end_visual_basic
 
 
@@ -4417,9 +4340,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4429,14 +4350,14 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_post_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling vba_keywords_test_post_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
@@ -4453,14 +4374,14 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-
+        
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-
+        
         request_parameters['end'] = end_visual_basic
 
 
@@ -4474,9 +4395,7 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4486,14 +4405,14 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_put_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling vba_keywords_test_put_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
@@ -4510,14 +4429,14 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-
+        
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-
+        
         request_parameters['end'] = end_visual_basic
 
 
@@ -4531,9 +4450,7 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4543,14 +4460,14 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_delete_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling vba_keywords_test_delete_test_vba_restricted_keywords.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4569,9 +4486,7 @@ def without_parameter_test_get_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4581,14 +4496,14 @@ def without_parameter_test_get_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_get_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_get_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4607,9 +4522,7 @@ def without_parameter_test_post_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4619,14 +4532,14 @@ def without_parameter_test_post_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_post_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_post_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4645,9 +4558,7 @@ def without_parameter_test_put_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4657,14 +4568,14 @@ def without_parameter_test_put_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_put_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_put_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4683,9 +4594,7 @@ def without_parameter_test_delete_test_json_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4695,14 +4604,14 @@ def without_parameter_test_delete_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_delete_test_json_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_delete_test_json_without_parameter.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4720,9 +4629,7 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('type', 'string')]))]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4732,14 +4639,14 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_get_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_get_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4757,9 +4664,7 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4769,14 +4674,14 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_post_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_post_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4794,9 +4699,7 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4806,14 +4709,14 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_put_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_put_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4831,9 +4734,7 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4843,14 +4744,14 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_delete_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_delete_test_plain_text_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4868,9 +4769,7 @@ def without_parameter_test_get_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('type', 'string')]))]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4880,14 +4779,14 @@ def without_parameter_test_get_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_get_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_get_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4905,9 +4804,7 @@ def without_parameter_test_post_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'POST performed properly')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4917,14 +4814,14 @@ def without_parameter_test_post_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_post_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_post_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4942,9 +4839,7 @@ def without_parameter_test_put_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'PUT performed properly')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4954,14 +4849,14 @@ def without_parameter_test_put_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_put_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_put_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='without_parameter_test', call_in_wizard=False)
@@ -4979,9 +4874,7 @@ def without_parameter_test_delete_test_without_parameter():
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'DELETE performed properly')]))])
             all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -4991,14 +4884,14 @@ def without_parameter_test_delete_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_delete_test_without_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling without_parameter_test_delete_test_without_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='header_parameter_test', call_in_wizard=False)
@@ -5014,7 +4907,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
         logging.error('header_string is required.')
         return 'header_string is required.'
     if header_string is not None:
-
+        
         request_header['header_string'] = header_string
 
 
@@ -5028,9 +4921,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Header')]))]))])
             all_definitions = OrderedDict([('Header', OrderedDict([('properties', OrderedDict([('Accept', OrderedDict([('type', 'string')])), ('Accept-Encoding', OrderedDict([('type', 'string')])), ('Connection', OrderedDict([('type', 'string')])), ('Content-Length', OrderedDict([('type', 'string')])), ('Content-Type', OrderedDict([('type', 'string')])), ('Header-String', OrderedDict([('type', 'string')])), ('Host', OrderedDict([('type', 'string')])), ('User-Agent', OrderedDict([('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5040,14 +4931,14 @@ def header_parameter_test_get_test_header_parameter(header_string):
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling header_parameter_test_get_test_header_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling header_parameter_test_get_test_header_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='form_parameter_test', call_in_wizard=False)
@@ -5063,9 +4954,9 @@ def form_parameter_test_post_test_form_parameter(form_string):
         logging.error('form_string is required.')
         return 'form_string is required.'
     if form_string is not None:
-
+        
                 request_payload['form_string'] = form_string
-
+    
 
     response = None
     try:
@@ -5077,9 +4968,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Form')]))]))])
             all_definitions = OrderedDict([('Form', OrderedDict([('properties', OrderedDict([('form_string', OrderedDict([('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5089,14 +4978,14 @@ def form_parameter_test_post_test_form_parameter(form_string):
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling form_parameter_test_post_test_form_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling form_parameter_test_post_test_form_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='array_parameter_test', call_in_wizard=False)
@@ -5112,7 +5001,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
 
@@ -5126,9 +5015,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5138,14 +5025,14 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling array_parameter_test_get_test_string_array_parameter response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling array_parameter_test_get_test_string_array_parameter.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -5226,15 +5113,15 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -5260,7 +5147,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -5348,15 +5235,15 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -5405,7 +5292,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -5419,9 +5306,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5431,14 +5316,14 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_get_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_get_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -5519,15 +5404,15 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -5553,7 +5438,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -5641,15 +5526,15 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -5698,7 +5583,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -5712,9 +5597,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -5724,14 +5607,14 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_post_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_post_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -5812,15 +5695,15 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -5846,7 +5729,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -5934,15 +5817,15 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -5991,7 +5874,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -6005,9 +5888,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -6017,14 +5898,14 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_put_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_put_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -6105,15 +5986,15 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -6139,7 +6020,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -6227,15 +6108,15 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -6284,7 +6165,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -6298,9 +6179,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -6310,14 +6189,14 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_delete_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_delete_test_json_with_all_optional_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -6419,21 +6298,21 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -6471,7 +6350,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -6580,21 +6459,21 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -6655,7 +6534,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -6669,9 +6548,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/AllMandatoryParameters')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -6681,14 +6558,14 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_get_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_get_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -6790,21 +6667,21 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -6842,7 +6719,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -6951,21 +6828,21 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -7026,7 +6903,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -7040,9 +6917,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7052,14 +6927,14 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_post_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_post_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -7161,21 +7036,21 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -7213,7 +7088,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -7322,21 +7197,21 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -7397,7 +7272,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -7411,9 +7286,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7423,14 +7296,14 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_put_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_put_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -7532,21 +7405,21 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -7584,7 +7457,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -7693,21 +7566,21 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -7768,7 +7641,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -7782,9 +7655,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7794,14 +7665,14 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_delete_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_delete_test_json_with_all_parameters_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -7950,9 +7821,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -7962,14 +7831,14 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_get_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_get_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -8118,9 +7987,7 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8130,14 +7997,14 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_post_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_post_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -8286,9 +8153,7 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8298,14 +8163,14 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_put_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_put_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='json_test', call_in_wizard=False)
@@ -8454,9 +8319,7 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
             all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8466,14 +8329,14 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling json_test_delete_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling json_test_delete_test_json_with_all_paths_types.")
         return [describe_error(response, error)]
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -8553,15 +8416,15 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -8587,7 +8450,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -8675,15 +8538,15 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -8732,7 +8595,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -8746,9 +8609,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -8758,14 +8619,14 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_get_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_get_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -8845,15 +8706,15 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -8879,7 +8740,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -8967,15 +8828,15 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -9024,7 +8885,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -9038,9 +8899,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -9050,14 +8909,14 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_post_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_post_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -9137,15 +8996,15 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -9171,7 +9030,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -9259,15 +9118,15 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -9316,7 +9175,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -9330,9 +9189,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -9342,14 +9199,14 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_put_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_put_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -9429,15 +9286,15 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -9463,7 +9320,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -9551,15 +9408,15 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -9608,7 +9465,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -9622,9 +9479,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -9634,14 +9489,14 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_delete_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_delete_test_plain_text_with_all_optional_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -9742,21 +9597,21 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -9794,7 +9649,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -9903,21 +9758,21 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -9978,7 +9833,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -9992,9 +9847,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -10004,14 +9857,14 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_get_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_get_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -10112,21 +9965,21 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -10164,7 +10017,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -10273,21 +10126,21 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -10348,7 +10201,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -10362,9 +10215,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -10374,14 +10225,14 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_post_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_post_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -10482,21 +10333,21 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -10534,7 +10385,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -10643,21 +10494,21 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -10718,7 +10569,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -10732,9 +10583,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -10744,14 +10593,14 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_put_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_put_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -10852,21 +10701,21 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-
+        
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-
+        
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-
+        
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -10904,7 +10753,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-
+        
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -11013,21 +10862,21 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-
+        
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-
+        
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-
+        
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -11088,7 +10937,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-
+        
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -11102,9 +10951,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11114,14 +10961,14 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_delete_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_delete_test_plain_text_with_all_parameters_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -11269,9 +11116,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11281,14 +11126,14 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_get_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_get_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -11436,9 +11281,7 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11448,14 +11291,14 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_post_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_post_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -11603,9 +11446,7 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11615,14 +11456,14 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_put_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_put_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
 
 @xw.func(category='plain_text_test', call_in_wizard=False)
@@ -11770,9 +11611,7 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
             all_definitions = None
-            response_text = response.text
-            definition_deserializer.all_definitions = {}
-            return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+            return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -11782,15 +11621,28 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
-        if response:
+        if response is not None:
             logging.exception("Error occurred while handling plain_text_test_delete_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
             logging.exception("Error occurred while calling plain_text_test_delete_test_plain_text_with_all_paths_types.")
         return describe_error(response, error)
 
     finally:
-        if response:
+        if response is not None:
             response.close()
+
+
+def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
+    if rely_on_definitions:
+        response_text = response.text
+        definition_deserializer.all_definitions = {}
+        logging.debug('Converting JSON string to corresponding python structure...')
+        json_data = ujson.loads(response_text) if response_text != '' else response_text
+        return Response(all_responses, response.status_code, all_definitions).rows(json_data)
+
+    logging.debug('Converting JSON string to corresponding python structure...')
+    json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
+    return Flattenizer(all_responses, response.status_code, all_definitions).to_list(json_data)
 
 
 def msgpackpandas_as_list(msgpack_pandas):
@@ -11799,6 +11651,6 @@ def msgpackpandas_as_list(msgpack_pandas):
 
 
 def describe_error(response, error):
-    if response:
-        return 'An error occurred: "{0}" for value "{1}"'.format(str(error)[:66], response.text[:155])
-    return str(error)[:255]
+    if response is not None:
+        return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
+    return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])

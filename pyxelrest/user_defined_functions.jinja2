@@ -441,7 +441,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ service.responses(method['responses']) }}
             all_definitions = {{ service.definitions() }}
-            return json_as_list(response, all_responses, all_definitions)
+            return json_as_list(response, all_responses, all_definitions, {{ service.rely_on_definitions }})
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -495,7 +495,7 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     {%- endfor %}
 {% endfor %}
 
-def json_as_list(response, all_responses, all_definitions, rely_on_definitions=False):
+def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
     if rely_on_definitions:
         response_text = response.text
         definition_deserializer.all_definitions = {}

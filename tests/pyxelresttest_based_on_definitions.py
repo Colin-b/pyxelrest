@@ -6,7 +6,7 @@ import shutil
 import unittest
 import platform
 from importlib import import_module
-from dateutil.tz import tzutc
+from dateutil.tz import tzutc, tzlocal
 
 try:
     # Python 3
@@ -84,7 +84,7 @@ class PyxelRestTest(unittest.TestCase):
     def _add_test_config(cls):
         this_dir = os.path.abspath(os.path.dirname(__file__))
         shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_services_configuration.ini'),
+        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_based_on_definitions_services_configuration.ini'),
                         cls.services_config_file_path)
 
     @classmethod
@@ -207,15 +207,15 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual([
             [u'ts', u'date', u'curve', u'mat'],
-            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H01'],
-            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H02'],
-            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H03']
+            [u'', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H01'],
+            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H02'],
+            [u'', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H03']
         ],
             pyxelrestgenerator.output_order_test_get_test_price_unordered())
 
     def test_get_test_date(self):
         import pyxelrestgenerator
-        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
+        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0, tzinfo=tzlocal())],
             pyxelrestgenerator.usual_parameters_test_get_test_date())
 
     def test_get_test_datetime(self):

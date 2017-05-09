@@ -133,6 +133,12 @@ The following options are available for each section:
         <td>Optional</td>
         <td>port=XX,timeout=YY</td>
     </tr>
+    <tr>
+        <td><strong>rely_on_definitions</strong></td>
+        <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
+        <td>Optional</td>
+        <td>True or False</td>
+    </tr>
 </table>
 
 #### Security Details ####
