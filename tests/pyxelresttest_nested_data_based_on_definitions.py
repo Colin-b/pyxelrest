@@ -63,10 +63,10 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '', '', '', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2 / Column 1', 'Column 2 / Column 2 / Column 1', 'Column 2 / Column 2 / Column 3', 'Column 2 / Column 3', 'Column 3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '', '', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-0-1', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-1-1', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_empty_nested_list())
 
@@ -74,11 +74,11 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2 / Column 1', 'Column 2 / Column 2 / Column 1', 'Column 2 / Column 2 / Column 3', 'Column 2 / Column 3', 'Column 3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-0-1', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-1-1', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-0-1', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-1-1', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_three_imbricated_levels())
 
@@ -86,12 +86,12 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2 / Column 1', 'Column 2 / Column 2 / Column 1', 'Column 2 / Column 2 / Column 2 / Column 1', 'Column 2 / Column 2 / Column 2 / Column 3', 'Column 2 / Column 2 / Column 3', 'Column 2 / Column 3', 'Column 3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-0-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-0-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-1-1', '', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-0-1', '', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-1-1', '', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_four_imbricated_levels())
 
@@ -99,12 +99,12 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3', 'Column 3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-0-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-0-1', '', '0-0-2 / 1-0-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-0-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
-            ['0-0-1', '', '0-0-2 / 1-1-1', '', '0-0-2 / 1-1-2 / 2-1-1', '', '', '', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
+            ['Column 1', 'Column 2 / Column 1', 'Column 2 / Column 2 / Column 1', 'Column 2 / Column 2 / Column 2 / Column 1', 'Column 2 / Column 2 / Column 2 / Column 3', 'Column 2 / Column 2 / Column 3', 'Column 2 / Column 3', 'Column 3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-0-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-0-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-0-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-1', '0-0-2 / 1-0-2 / 2-0-2 / 3-1-3', '0-0-2 / 1-0-2 / 2-0-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-0-1', '0-0-2 / 1-0-2 / 2-1-1', '', '', '0-0-2 / 1-0-2 / 2-1-3', '0-0-2 / 1-0-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-0-1', '', '', '0-0-2 / 1-1-2 / 2-0-3', '0-0-2 / 1-1-3', '0-0-3'],
+            ['0-0-1', '0-0-2 / 1-1-1', '0-0-2 / 1-1-2 / 2-1-1', '', '', '0-0-2 / 1-1-2 / 2-1-3', '0-0-2 / 1-1-3', '0-0-3']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys())
 
@@ -137,18 +137,18 @@ class PyxelRestNestedDataTest(unittest.TestCase):
     def test_get_test_one_dict_entry_with_a_list(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['Column 1', 'Column 1'],
-            ['', 'value 1'],
-            ['', 'value 2']
+            ['Column 1'],
+            ['value 1'],
+            ['value 2']
         ],
             pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list())
 
     def test_get_test_one_dict_entry_with_a_list_of_dict(self):
         import pyxelrestgenerator
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 3'],
-            ['', 'value 12', 'value 13'],
-            ['', 'value 22', 'value 23']
+            ['Column 1 / Column 2', 'Column 1 / Column 3'],
+            ['value 12', 'value 13'],
+            ['value 22', 'value 23']
         ],
             pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list_of_dict())
 
@@ -165,11 +165,11 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 3', 'Column 3'],
-            [23, True, 'this', ''],
-            [23, True, 'is', ''],
-            [23, True, 'a', ''],
-            [23, True, 'test', '']
+            ['Column 1', 'Column 2', 'Column 3'],
+            [23, True, 'this'],
+            [23, True, 'is'],
+            [23, True, 'a'],
+            [23, True, 'test']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list())
 
@@ -177,9 +177,9 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
-            ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3'],
-            ['', '', 23, 24, 'value 1', ''],
-            ['', '', 'value 2', ''],
-            ['', '', 'value 3', '']
+            ['Column 1', 'Column 2', 'Column 3'],
+            [23, 24, 'value 1'],
+            [23, 24, 'value 2'],
+            [23, 24, 'value 3']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list_of_different_size())

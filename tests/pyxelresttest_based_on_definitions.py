@@ -6,7 +6,7 @@ import shutil
 import unittest
 import platform
 from importlib import import_module
-from dateutil.tz import tzutc, tzlocal
+from dateutil.tz import tzutc
 
 try:
     # Python 3
@@ -196,20 +196,20 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_get_test_with_empty_list(self):
         import pyxelrestgenerator
-        self.assertEqual([['empty_list'], ['']],
+        self.assertEqual([''],
             pyxelrestgenerator.values_false_test_get_test_with_empty_list())
 
     def test_get_test_with_empty_dictionary(self):
         import pyxelrestgenerator
-        self.assertEqual([['empty_dictionary'], ['']], pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
+        self.assertEqual([''], pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
 
     def test_get_test_compare_output_order(self):
         import pyxelrestgenerator
         self.assertEqual([
-            [u'curve', u'date', u'mat', u'ts'],
-            [u'PW_FR', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'H01', u''],
-            [u'PW_FR', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'H02', u'2017-04-05 12:03:15'],
-            [u'PW_FR', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'H03', u'']
+            [u'ts', u'date', u'curve', u'mat'],
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H01'],
+            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H02'],
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H03']
         ],
             pyxelrestgenerator.output_order_test_get_test_price_unordered())
 

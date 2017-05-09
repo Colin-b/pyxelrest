@@ -504,7 +504,7 @@ def json_as_list(response, all_responses, all_definitions, rely_on_definitions=F
         return Response(all_responses, response.status_code, all_definitions).rows(json_data)
 
     logging.debug('Converting JSON string to corresponding python structure...')
-    json_data = response.json(object_pairs_hook=OrderedDict)
+    json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
     return Flattenizer(all_responses, response.status_code, all_definitions).to_list(json_data)
 
 
