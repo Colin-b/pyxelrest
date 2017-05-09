@@ -13,6 +13,7 @@ from collections import OrderedDict
 {% if support_pandas %}
 import pandas
 {% endif %}
+from fast_deserializer import Flattenizer
 from definition_deserializer import Response
 import definition_deserializer
 import authentication
@@ -494,11 +495,15 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
     {%- endfor %}
 {% endfor %}
 
-def json_as_list(response, all_responses, all_definitions):
-    response_text = response.text
-    definition_deserializer.all_definitions = {}
+def json_as_list(response, all_responses, all_definitions, rely_on_definitions=False):
+    if rely_on_definitions:
+        response_text = response.text
+        definition_deserializer.all_definitions = {}
+        logging.debug('Converting JSON string to corresponding python structure...')
+        return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+
     logging.debug('Converting JSON string to corresponding python structure...')
-    return Response(all_responses, response.status_code, all_definitions).rows(ujson.loads(response_text) if response_text != '' else response_text)
+    return Flattenizer().to_list(response.json(object_pairs_hook=OrderedDict))
 
 
 def msgpackpandas_as_list(msgpack_pandas):
