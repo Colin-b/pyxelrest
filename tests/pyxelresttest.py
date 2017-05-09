@@ -215,7 +215,7 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_get_test_date(self):
         import pyxelrestgenerator
-        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
+        self.assertEqual([[datetime.datetime(2014, 3, 5, 0, 0, tzinfo=tzlocal())]],
             pyxelrestgenerator.usual_parameters_test_get_test_date())
 
     def test_get_test_datetime(self):

@@ -77,7 +77,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             'userStatus': 0
         }
         user_response = pyxelrestgenerator.petstore_test_createUser(new_user)
-        if user_response != ['']:
+        if user_response != [['']]:
             raise Exception('User was not created: ' + str(user_response))
 
     @classmethod

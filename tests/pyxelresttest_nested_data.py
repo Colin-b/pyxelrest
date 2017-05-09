@@ -110,12 +110,12 @@ class PyxelRestNestedDataTest(unittest.TestCase):
 
     def test_get_test_empty_dict(self):
         import pyxelrestgenerator
-        self.assertEqual([''],
+        self.assertEqual([['']],
                          pyxelrestgenerator.nested_data_test_get_test_empty_dict())
 
     def test_get_test_empty_list(self):
         import pyxelrestgenerator
-        self.assertEqual([''],
+        self.assertEqual([['']],
                          pyxelrestgenerator.nested_data_test_get_test_empty_list())
 
     def test_get_test_one_level_dict(self):

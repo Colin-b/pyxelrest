@@ -69,6 +69,8 @@ class Flattenizer:
     def convert_simple_type(self, value, json_definition):
         if isinstance(value, str):
             field_format = json_definition.get('format') if json_definition else None
+            if not field_format and 'items' in json_definition:  # Sometimes it can happen that array definition is returned as a single element
+                return self.convert_simple_type(value, json_definition.get('items', {}))
             if field_format == 'date-time' or field_format == 'date':
                 value = to_date_time(value)
             else:
@@ -158,7 +160,7 @@ class Flattenizer:
                 else:
                     flatten_row.extend(row[level])
         # Remove unnecessary columns that may appear for lists TODO Avoid adding this in the first place
-        if not self.__flatten_header[0]:
+        if self.__flatten_header != [''] and not self.__flatten_header[0]:
             self.__flatten_header = self.__flatten_header[1:]
             self.__all_flatten_rows = [flatten_row[1:] for flatten_row in self.__all_flatten_rows]
         if not self.__flatten_header or self.__flatten_header == ['']:

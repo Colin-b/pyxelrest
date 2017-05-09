@@ -6,6 +6,7 @@ import shutil
 import unittest
 import platform
 from importlib import import_module
+from dateutil.tz import tzlocal
 
 try:
     # Python 3
@@ -2911,7 +2912,9 @@ class PyxelRestJsonTest(unittest.TestCase):
         today_date = datetime.date.today()
         tomorrow_date = today_date + datetime.timedelta(days=1)
         today_datetime = datetime.datetime.combine(today_date, datetime.datetime.min.time())
+        today_datetime_local = today_datetime.astimezone(tz=tzlocal())
         tomorrow_datetime = datetime.datetime.combine(tomorrow_date, datetime.datetime.min.time())
+        tomorrow_datetime_local = tomorrow_datetime.astimezone(tz=tzlocal())
         self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
             query_integer=1,
             query_integer32=10,
@@ -2971,12 +2974,12 @@ class PyxelRestJsonTest(unittest.TestCase):
                     'query_string', 'query_string_binary', 'query_string_byte'
                 ],
                 [
-                    'true', today_datetime, today_datetime,
+                    'true', today_datetime_local, today_datetime_local,
                     '1.1', '1.01', '1',
                     '10', '100',
                     '0.1', 'password 1', 'string 1',
                     'string binary 1', 'string bytes 1', 'True',
-                    today_datetime, today_datetime, '1.1', '1.01', '1',
+                    today_datetime_local, today_datetime_local, '1.1', '1.01', '1',
                     '10', '100', '0.1', 'password',
                     'string', 'string binary', 'string bytes'
                 ]
