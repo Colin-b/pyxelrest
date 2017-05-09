@@ -4,19 +4,18 @@
 
 ### Release notes ###
 
-- As Swagger responses sections is now read, it's content is validated. Meaning non compliant Swagger files (not providing any response) are now rejected.
+- As Swagger responses sections is now read, content is validated. Meaning non compliant Swagger files (not providing any response) are now rejected.
 
 ### Enhancements ###
 
 - OAuth 2 Security definition support.
-- It is possible to force the port used by server to retrieve the OAuth 2 authentication token using security_details property.
-- JSON deserialization can now be performed using uJSON. (performance improvement can be activated thanks to rely_on_definitions property)
+- It is possible to force the port and the timeout used by server to retrieve the OAuth 2 authentication token using security_details property.
+- JSON deserialization can now be performed using uJSON following swagger definitions field ordering. This can be activated thanks to rely_on_definitions property.
 
 ### Bug fixes ###
 
-- Results were not provided in case a cell value was expected to contains more than 255 characters. (Only first 255 characters are now provided)
-- Field ordering is now following received Swagger definition (only if rely_on_definitions is set to True).
-- All date times fields are now displayed as local date times within Excel (some were still interpreted as text)
+- Results were not provided in case a cell value was expected to contains more than 255 characters (Only first 255 characters are now provided).
+- All date times fields are now displayed as local date times within Excel (some were still interpreted as text).
 
 ## 0.56 (2017-03-24) ##
 
