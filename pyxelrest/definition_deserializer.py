@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import logging
-from dateutil.parser import parse as dateutil_parse
+import dateutil.tz
+import dateutil.parser
 
 
 def append_prefix(prefix, values_list):
@@ -21,10 +22,13 @@ def to_date_time(value):
     """
     if not value:
         return ''
-    # dateutil does not handle timezone lower cased
+    # dateutil does not handle lower cased timezone
     if value[-1:] == 'z':
         value = value[:-1] + 'Z'
-    return dateutil_parse(value)
+    datetime_with_service_timezone = dateutil.parser.parse(value)
+    if datetime_with_service_timezone:
+        return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
+    return value
 
 
 class RowsMerger:
