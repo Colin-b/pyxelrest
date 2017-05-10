@@ -8,7 +8,9 @@ import requests
 import requests.exceptions
 import datetime
 import logging
+{% if support_ujson %}
 import ujson
+{% endif %}
 from collections import OrderedDict
 {% if support_pandas %}
 import pandas
@@ -497,10 +499,15 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 
 def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
     if rely_on_definitions:
-        response_text = response.text
         definition_deserializer.all_definitions = {}
-        logging.debug('Converting JSON string to corresponding python structure...')
+{% if support_ujson %}
+        response_text = response.text
+        logging.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
         json_data = ujson.loads(response_text) if response_text != '' else response_text
+{% else %}
+        logging.debug('Converting JSON string to corresponding python structure (relying on definitions)...')
+        json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
+{% endif %}
         return Response(all_responses, response.status_code, all_definitions).rows(json_data)
 
     logging.debug('Converting JSON string to corresponding python structure...')

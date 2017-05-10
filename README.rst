@@ -69,6 +69,9 @@ Optional Dependencies
 - Support for ``application/msgpackpandas``
     - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
 
+- Support for ``ujson``
+    - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
+
 Configuration
 -------------
 

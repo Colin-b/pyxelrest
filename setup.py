@@ -128,8 +128,6 @@ setup(name='pyxelrest',
           'pyaml==16.12.2',
           # Used to run authentication services (also used in test cases)
           'flask',
-          # Used to parse JSON faster than the embedded json module
-          'ujson==1.35',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0'
       ],

@@ -218,6 +218,7 @@ def user_defined_functions(loaded_services):
         services=loaded_services,
         modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
         support_pandas=support_pandas(),
+        support_ujson=support_ujson(),
         extract_url=extract_url
     )
 
@@ -225,6 +226,14 @@ def user_defined_functions(loaded_services):
 def support_pandas():
     try:
         import pandas
+        return True
+    except:
+        return False
+
+
+def support_ujson():
+    try:
+        import ujson
         return True
     except:
         return False
