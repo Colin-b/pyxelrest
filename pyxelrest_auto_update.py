@@ -34,6 +34,7 @@ class PyxelRestUpdater:
         self._pip_path = pip_path
 
     def check_update(self):
+        logging.debug('Checking if an update is available...')
         if self._is_update_available():
             logging.info('Update available.')
             if self._want_update():
@@ -75,7 +76,12 @@ class PyxelRestUpdater:
 
 
 if __name__ == '__main__':
+    logging.debug('Starting auto update script...')
     parser = argparse.ArgumentParser()
     parser.add_argument('path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
     options = parser.parse_args(sys.argv[1:])
-    PyxelRestUpdater(options.path_to_pip).check_update()
+    try:
+        PyxelRestUpdater(options.path_to_pip).check_update()
+    except:
+        logging.exception('An error occurred while checking for update.')
+        raise
