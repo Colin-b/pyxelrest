@@ -1,10 +1,7 @@
-import multiprocessing
-import os
-import os.path
-import shutil
 import unittest
 from importlib import import_module
-import time
+import testsutils.confighandler as confighandler
+import testsutils.serviceshandler as serviceshandler
 
 try:
     # Python 3
@@ -15,62 +12,28 @@ except ImportError:
 
 
 class PyxelRestTest(unittest.TestCase):
-    service_processes = []
-    services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                             'pyxelrest',
-                                             'configuration',
-                                             'services.ini')
-    backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                    'pyxelrest',
-                                                    'configuration',
-                                                    'services.ini.back')
-
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        cls._add_test_config()
+        confighandler.set_new_configuration('pyxelresttest_authentication_services_configuration.ini')
         reload(import_module('pyxelrestgenerator'))
 
     @classmethod
     def tearDownClass(cls):
         import authentication
         authentication.stop_servers()
-        cls.stop_services()
-        cls._add_back_initial_config()
+        serviceshandler.stop_services()
+        confighandler.set_initial_configuration()
 
     @classmethod
     def start_services(cls):
         import testsutils.authenticated_test_service as authenticated_test_service
-        cls.service_processes.append(multiprocessing.Process(target=authenticated_test_service.start_server,
-                                                             args=(8946,)))
         import testsutils.authentication_test_service as authentication_test_service
-        cls.service_processes.append(multiprocessing.Process(target=authentication_test_service.start_server,
-                                                             args=(8947,)))
         import testsutils.non_authenticated_test_service as non_authenticated_test_service
-        cls.service_processes.append(multiprocessing.Process(target=non_authenticated_test_service.start_server,
-                                                             args=(8948,)))
-        for service_process in cls.service_processes:
-            service_process.start()
-        time.sleep(5)
-
-    @classmethod
-    def stop_services(cls):
-        for service_process in cls.service_processes:
-            service_process.terminate()
-            service_process.join(timeout=0.5)
-        cls.service_processes[:] = []
-
-    @classmethod
-    def _add_test_config(cls):
-        this_dir = os.path.abspath(os.path.dirname(__file__))
-        shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir,
-                                     'pyxelresttest_authentication_services_configuration.ini'),
-                        cls.services_config_file_path)
-
-    @classmethod
-    def _add_back_initial_config(cls):
-        shutil.move(cls.backup_services_config_file_path, cls.services_config_file_path)
+        serviceshandler.start_services((authenticated_test_service, 8946),
+                                       (authentication_test_service, 8947),
+                                       (non_authenticated_test_service, 8948)
+                                       )
 
     def test_authentication_on_custom_server_port(self):
         import pyxelrestgenerator

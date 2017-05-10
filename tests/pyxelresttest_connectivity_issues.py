@@ -1,8 +1,7 @@
-import multiprocessing
-import os
-import shutil
 import unittest
 from importlib import import_module
+import testsutils.confighandler as confighandler
+import testsutils.serviceshandler as serviceshandler
 
 
 try:
@@ -14,43 +13,17 @@ except ImportError:
 
 
 class PyxelRestConnectivityIssuesTest(unittest.TestCase):
-    services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                             'pyxelrest',
-                                             'configuration',
-                                             'services.ini')
-    backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                    'pyxelrest',
-                                                    'configuration',
-                                                    'services.ini.back')
-
     def setUp(self):
-        self._add_test_config()
+        confighandler.set_new_configuration('pyxelresttest_connectivity_issues_services_configuration.ini')
 
     def tearDown(self):
-        self._add_back_initial_config()
-
-    def start_services(self):
-        from testsutils.without_parameter_test_service import start_server
-        self.service_process = multiprocessing.Process(target=start_server, args=(8950,))
-        self.service_process.start()
-
-    def stop_services(self):
-        self.service_process.terminate()
-        self.service_process.join(timeout=0.5)
-
-    def _add_test_config(self):
-        this_dir = os.path.abspath(os.path.dirname(__file__))
-        shutil.copyfile(self.services_config_file_path, self.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_connectivity_issues_services_configuration.ini'),
-                        self.services_config_file_path)
-
-    def _add_back_initial_config(self):
-        shutil.move(self.backup_services_config_file_path, self.services_config_file_path)
+        confighandler.set_initial_configuration()
 
     def test_get_test_plain_text_with_service_down(self):
-        self.start_services()
+        import testsutils.without_parameter_test_service as without_parameter_test_service
+        serviceshandler.start_services((without_parameter_test_service, 8950))
         reload(import_module('pyxelrestgenerator'))
         import pyxelrestgenerator
-        self.stop_services()
+        serviceshandler.stop_services()
         self.assertEqual(pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
                          'Cannot connect to service. Please retry once connection is re-established.')

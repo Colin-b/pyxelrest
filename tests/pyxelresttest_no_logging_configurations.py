@@ -1,8 +1,7 @@
-import multiprocessing
-import os
-import shutil
 import unittest
 from importlib import import_module
+import testsutils.confighandler as confighandler
+import testsutils.serviceshandler as serviceshandler
 
 
 try:
@@ -15,52 +14,14 @@ except ImportError:
 
 class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
     def setUp(self):
-        self.start_services()
-        self._remove_logging_config()
-        self._add_services_config()
+        import testsutils.usual_parameters_test_service as usual_parameters_test_service
+        serviceshandler.start_services((usual_parameters_test_service, 8943))
+        confighandler.set_new_configuration('pyxelresttest_no_logging_services_configuration.ini',
+                                            remove_logging_config=True)
 
     def tearDown(self):
-        self.stop_services()
-        self._add_back_initial_config()
-
-    def start_services(self):
-        from testsutils.usual_parameters_test_service import start_server
-        self.service_process = multiprocessing.Process(target=start_server, args=(8943,))
-        self.service_process.start()
-
-    def stop_services(self):
-        self.service_process.terminate()
-        self.service_process.join(timeout=0.5)
-
-    def _remove_logging_config(self):
-        self.logging_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                     'pyxelrest',
-                                                     'configuration',
-                                                     'logging.ini')
-        if os.path.isfile(self.logging_config_file_path):
-            self.backup_logging_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                                'pyxelrest',
-                                                                'configuration',
-                                                                'logging.ini.back')
-            shutil.move(self.logging_config_file_path, self.backup_logging_config_file_path)
-
-    def _add_services_config(self):
-        self.services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                      'pyxelrest',
-                                                      'configuration',
-                                                      'services.ini')
-        self.backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                             'pyxelrest',
-                                                             'configuration',
-                                                             'services.ini.back')
-        shutil.copyfile(self.services_config_file_path, self.backup_services_config_file_path)
-        shutil.copyfile('pyxelresttest_no_logging_services_configuration.ini', self.services_config_file_path)
-
-    def _add_back_initial_config(self):
-        shutil.move(self.backup_services_config_file_path, self.services_config_file_path)
-        if hasattr(self, 'backup_logging_config_file_path') and os.path.isfile(self.backup_logging_config_file_path):
-            shutil.move(self.backup_logging_config_file_path, self.logging_config_file_path)
-        # TODO else remove it
+        serviceshandler.stop_services()
+        confighandler.set_initial_configuration()
 
     def test_without_logging_configuration_file(self):
         """

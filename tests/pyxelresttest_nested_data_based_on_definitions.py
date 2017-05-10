@@ -1,11 +1,7 @@
-import datetime
-import multiprocessing
-import os
-import os.path
-import shutil
 import unittest
-import platform
 from importlib import import_module
+import testsutils.confighandler as confighandler
+import testsutils.serviceshandler as serviceshandler
 
 try:
     # Python 3
@@ -17,47 +13,18 @@ except ImportError:
 
 class PyxelRestNestedDataTest(unittest.TestCase):
     service_process = None
-    services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                             'pyxelrest',
-                                             'configuration',
-                                             'services.ini')
-    backup_services_config_file_path = os.path.join(os.getenv('APPDATA'),
-                                                    'pyxelrest',
-                                                    'configuration',
-                                                    'services.ini.back')
 
     @classmethod
     def setUpClass(cls):
-        cls.start_services()
-        cls._add_test_config()
+        import testsutils.nested_data_test_service as nested_data_test_service
+        serviceshandler.start_services((nested_data_test_service, 8947))
+        confighandler.set_new_configuration('pyxelresttest_nested_data_based_on_definitions_services_configuration.ini')
         reload(import_module('pyxelrestgenerator'))
 
     @classmethod
     def tearDownClass(cls):
-        cls.stop_services()
-        cls._add_back_initial_config()
-
-    @classmethod
-    def start_services(cls):
-        import testsutils.nested_data_test_service as nested_data_test_service
-        cls.service_process = multiprocessing.Process(target=nested_data_test_service.start_server, args=(8947,))
-        cls.service_process.start()
-
-    @classmethod
-    def stop_services(cls):
-        cls.service_process.terminate()
-        cls.service_process.join(timeout=0.5)
-
-    @classmethod
-    def _add_test_config(cls):
-        this_dir = os.path.abspath(os.path.dirname(__file__))
-        shutil.copyfile(cls.services_config_file_path, cls.backup_services_config_file_path)
-        shutil.copyfile(os.path.join(this_dir, 'pyxelresttest_nested_data_based_on_definitions_services_configuration.ini'),
-                        cls.services_config_file_path)
-
-    @classmethod
-    def _add_back_initial_config(cls):
-        shutil.move(cls.backup_services_config_file_path, cls.services_config_file_path)
+        serviceshandler.stop_services()
+        confighandler.set_initial_configuration()
 
     def test_get_test_dict_with_empty_nested_list(self):
         import pyxelrestgenerator
