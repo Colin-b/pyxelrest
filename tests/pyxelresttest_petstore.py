@@ -1,30 +1,19 @@
 import unittest
-from importlib import import_module
 import datetime
 from dateutil.tz import tzutc
-import testsutils.confighandler as confighandler
-
-try:
-    # Python 3
-    from importlib import reload
-except ImportError:
-    # Python 2
-    from imp import reload
+import testsutils.loader as loader
 
 
 class PyxelRestPetstoreTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        confighandler.set_new_configuration('pyxelresttest_petstore_services_configuration.ini')
-        reload(import_module('pyxelrestgenerator'))
+        loader.load('pyxelresttest_petstore_services_configuration.ini')
         cls._add_order()
         cls._add_user()
 
     @classmethod
     def tearDownClass(cls):
-        import authentication
-        authentication.stop_servers()
-        confighandler.set_initial_configuration()
+        loader.unload()
 
     @classmethod
     def _add_order(cls):

@@ -1,30 +1,19 @@
 import unittest
-from importlib import import_module
-import testsutils.confighandler as confighandler
 import testsutils.serviceshandler as serviceshandler
-
-try:
-    # Python 3
-    from importlib import reload
-except ImportError:
-    # Python 2
-    from imp import reload
+import testsutils.loader as loader
 
 
 class PyxelRestNestedDataTest(unittest.TestCase):
-    service_process = None
-
     @classmethod
     def setUpClass(cls):
         import testsutils.nested_data_test_service as nested_data_test_service
         serviceshandler.start_services((nested_data_test_service, 8947))
-        confighandler.set_new_configuration('pyxelresttest_nested_data_based_on_definitions_services_configuration.ini')
-        reload(import_module('pyxelrestgenerator'))
+        loader.load('pyxelresttest_nested_data_based_on_definitions_services_configuration.ini')
 
     @classmethod
     def tearDownClass(cls):
+        loader.unload()
         serviceshandler.stop_services()
-        confighandler.set_initial_configuration()
 
     def test_get_test_dict_with_empty_nested_list(self):
         import pyxelrestgenerator

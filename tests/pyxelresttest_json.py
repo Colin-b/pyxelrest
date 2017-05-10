@@ -1,16 +1,8 @@
 import datetime
 import unittest
-from importlib import import_module
 from dateutil.tz import tzlocal
-import testsutils.confighandler as confighandler
 import testsutils.serviceshandler as serviceshandler
-
-try:
-    # Python 3
-    from importlib import reload
-except ImportError:
-    # Python 2
-    from imp import reload
+import testsutils.loader as loader
 
 
 class PyxelRestJsonTest(unittest.TestCase):
@@ -18,13 +10,12 @@ class PyxelRestJsonTest(unittest.TestCase):
     def setUpClass(cls):
         import testsutils.json_test_service as json_test_service
         serviceshandler.start_services((json_test_service, 8954))
-        confighandler.set_new_configuration('pyxelresttest_json_services_configuration.ini')
-        reload(import_module('pyxelrestgenerator'))
+        loader.load('pyxelresttest_json_services_configuration.ini')
 
     @classmethod
     def tearDownClass(cls):
+        loader.unload()
         serviceshandler.stop_services()
-        confighandler.set_initial_configuration()
 
     def test_mandatory_integer_parameter_not_provided(self):
         import pyxelrestgenerator

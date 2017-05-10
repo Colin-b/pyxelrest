@@ -1,29 +1,18 @@
 import unittest
-from importlib import import_module
-import testsutils.confighandler as confighandler
 import testsutils.serviceshandler as serviceshandler
-
-try:
-    # Python 3
-    from importlib import reload
-except ImportError:
-    # Python 2
-    from imp import reload
+import testsutils.loader as loader
 
 
 class PyxelRestTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        confighandler.set_new_configuration('pyxelresttest_authentication_services_configuration.ini')
-        reload(import_module('pyxelrestgenerator'))
+        loader.load('pyxelresttest_authentication_services_configuration.ini')
 
     @classmethod
     def tearDownClass(cls):
-        import authentication
-        authentication.stop_servers()
+        loader.unload()
         serviceshandler.stop_services()
-        confighandler.set_initial_configuration()
 
     @classmethod
     def start_services(cls):

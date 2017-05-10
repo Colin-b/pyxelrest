@@ -8,7 +8,7 @@ logging_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'conf
 backup_logging_config_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.ini.back')
 
 
-def set_new_configuration(new_configuration_file_name, remove_logging_config=False):
+def set_new_configuration(new_configuration_file_name, remove_logging_config):
     if new_configuration_file_name:
         shutil.copyfile(services_config_file_path, backup_services_config_file_path)
         this_dir = os.path.abspath(os.path.dirname(__file__))

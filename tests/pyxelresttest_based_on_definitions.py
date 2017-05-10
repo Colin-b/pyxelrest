@@ -1,32 +1,21 @@
 import datetime
 import unittest
 import platform
-from importlib import import_module
 from dateutil.tz import tzutc, tzlocal
-import testsutils.confighandler as confighandler
 import testsutils.serviceshandler as serviceshandler
-
-try:
-    # Python 3
-    from importlib import reload
-except ImportError:
-    # Python 2
-    from imp import reload
+import testsutils.loader as loader
 
 
 class PyxelRestTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        confighandler.set_new_configuration('pyxelresttest_based_on_definitions_services_configuration.ini')
-        reload(import_module('pyxelrestgenerator'))
+        loader.load('pyxelresttest_based_on_definitions_services_configuration.ini')
 
     @classmethod
     def tearDownClass(cls):
-        import authentication
-        authentication.stop_servers()
+        loader.unload()
         serviceshandler.stop_services()
-        confighandler.set_initial_configuration()
 
     @classmethod
     def start_services(cls):
