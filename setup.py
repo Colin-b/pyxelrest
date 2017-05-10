@@ -39,7 +39,7 @@ setup(name='pyxelrest',
       # TODO Package to artifactory and assert that bamboo will keep it up to date
       download_url='http://www.engie.com',
       classifiers=[
-          "Development Status :: 5 - Production/Stable",
+          "Development Status :: 4 - Beta",
           "Intended Audience :: Developers"
           "Programming Language :: Python",
           "Programming Language :: Python :: 2",
