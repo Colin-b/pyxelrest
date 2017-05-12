@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AutoLoadPyxelRestAddIn
@@ -166,7 +167,16 @@ namespace AutoLoadPyxelRestAddIn
 
         private void SecurityDetailsTextBox_TextChanged(object sender, EventArgs e)
         {
-            service.SecurityDetails = securityDetailsTextBox.Text;
+            var securityDetailsRegex = new Regex("^(([^\n,]+)=([^\n,]*))(,([^\n,]+)=([^\n,]*))*$");
+            if(securityDetailsRegex.IsMatch(securityDetailsTextBox.Text)) {
+                securityDetailsTextBox.BackColor = Color.LightGreen;
+                service.SecurityDetails = securityDetailsTextBox.Text;
+            }
+            else
+            {
+                securityDetailsTextBox.BackColor = string.IsNullOrEmpty(securityDetailsTextBox.Text) ? Color.Empty : Color.Red;
+                service.SecurityDetails = string.Empty;
+            }
         }
 
         private void ReadTimeoutTextBox_TextChanged(object sender, EventArgs e)
