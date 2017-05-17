@@ -144,22 +144,39 @@ class SwaggerService:
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)
-        self._update_vba_restricted_keywords(swagger)
+        self._normalize_parameters(swagger)
         return swagger
 
     @classmethod
-    def _update_vba_restricted_keywords(cls, swagger_json):
+    def _normalize_parameters(cls, swagger_json):
         """
-        Update name of parameters in the swagger JSON to avoid using VBA restricted keywords as parameter names.
+        Normalize method parameters from dict representing the swagger JSON to:
+        - rename parameters name that are VBA restricted keywords 
+        - rename parameters name that uses '-' (to '_')
+        - cascade parameters defined at path level to operation level
+
         :param swagger_json: Dictionary representing the swagger JSON.
         :return: None
         """
         for methods in swagger_json['paths'].values():
-            for method in methods.values():
+            # retrieve parameters listed at the path level
+            global_parameters = methods.get("parameters", [])
+            for mode, method in methods.items():
+                # mode is 'parameters', skip it as not a real method
+                if mode == "parameters": continue
+
+                assert mode in ['get', 'put', 'post', 'delete'], "{} should be one of ['get','put','post','delete']".format(mode)
+
+                method['parameters'] = global_parameters + method.get('parameters', [])
+
                 if 'parameters' in method:
                     for parameter in method['parameters']:
+                        # replace vba restricted keywords
                         if parameter['name'] in vba.vba_restricted_keywords:
                             parameter['name'] = vba.vba_restricted_keywords[parameter['name']]
+                        # replace '-'
+                        if "-" in parameter['name']:
+                            parameter['name'] = parameter['name'].replace("-", "_")
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
