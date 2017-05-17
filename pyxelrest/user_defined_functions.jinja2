@@ -303,7 +303,7 @@ import authentication
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
 {% set param_type = parameter['type'] %}
-{% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
+{% set server_param_name = parameter['server_param_name'] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
         logging.error('{{ param_name }} is required.')
 {% if method['produces'] is table_result %}
@@ -343,7 +343,7 @@ import authentication
 {% set param_name = parameter['name'] %}
 {% set param_in = parameter['in'] %}
 {% set param_type = parameter['type'] %}
-{% set server_param_name = param_name if param_name not in modified_parameters else modified_parameters[param_name] %}
+{% set server_param_name = parameter['server_param_name'] %}
     if {{ param_name }} is not None:
         {{ validate_parameter_value(parameter, method) }}
 {% if param_in == 'query' %}

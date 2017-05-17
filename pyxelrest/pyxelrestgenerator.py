@@ -171,12 +171,16 @@ class SwaggerService:
 
                 if 'parameters' in method:
                     for parameter in method['parameters']:
+                        # backup original name of parameter
+                        parameter['server_param_name'] = parameter['name']
+
                         # replace vba restricted keywords
                         if parameter['name'] in vba.vba_restricted_keywords:
                             parameter['name'] = vba.vba_restricted_keywords[parameter['name']]
                         # replace '-'
                         if "-" in parameter['name']:
                             parameter['name'] = parameter['name'].replace("-", "_")
+
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
