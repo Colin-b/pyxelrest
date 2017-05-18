@@ -13,6 +13,7 @@ import json
 import datetime
 import requests
 
+import ie
 
 auth_tokens = {}
 authentication_response = threading.Lock()
@@ -91,7 +92,9 @@ def add_auth(security_definition, header):
 
 def request_new_token(security_definition, header):
     logging.debug('Requesting user authentication...')
-    browser_was_opened = webbrowser.open(security_definition.full_url)
+    #browser_was_opened = webbrowser.open(security_definition.full_url)
+    browser_was_opened = ie.call_till_redirect(security_definition.full_url,
+                                               security_definition.redirect_url)
     # fallback on simple request if no browser was opened
     if not browser_was_opened:
         response = requests.get(security_definition.full_url)
