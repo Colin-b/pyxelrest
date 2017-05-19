@@ -16,7 +16,11 @@ def to_date_time(value):
         value = value[:-1] + 'Z'
     datetime_with_service_timezone = dateutil.parser.parse(value)
     if datetime_with_service_timezone:
-        return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
+        try:
+            return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
+        except:
+            logging.exception('Unable to convert {0} to local timezone.'.format(datetime_with_service_timezone))
+            raise
     return value
 
 
