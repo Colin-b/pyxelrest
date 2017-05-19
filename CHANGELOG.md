@@ -2,13 +2,10 @@
 
 ## 0.59 (next) ##
 
-### Enhancements ###
-
-- Log more details when a naive datetime is received while a timezone is always expected.
-
 ### Bug fixes ###
 
 - security_details invalid value cannot be set anymore using Microsoft Excel Auto-Load add-in.
+- Regression since 0.58, PyxelRest was not compatible with Python < 3.6 
 
 ## 0.58 (2017-05-11) ##
 
