@@ -319,9 +319,9 @@ import authentication
         request_payload = {{ param_name }}
 {% elif param_in == 'formData' %}
     {% if param_type == 'file' %}
-            request_files['{{ server_param_name }}'] = {{ param_name }}
+        request_files['{{ server_param_name }}'] = {{ param_name }}
     {% else %}
-            request_payload['{{ server_param_name }}'] = {{ param_name }}
+        request_payload['{{ server_param_name }}'] = {{ param_name }}
     {% endif %}
 {% elif param_in == 'header' %}
         request_header['{{ server_param_name }}'] = {{ param_name }}
@@ -352,9 +352,9 @@ import authentication
         request_payload = {{ param_name }}
 {% elif param_in == 'formData' %}
     {% if param_type == 'file' %}
-            request_files['{{ server_param_name }}'] = {{ param_name }}
+        request_files['{{ server_param_name }}'] = {{ param_name }}
     {% else %}
-            request_payload['{{ server_param_name }}'] = {{ param_name }}
+        request_payload['{{ server_param_name }}'] = {{ param_name }}
     {% endif %}
 {% elif param_in == 'header' %}
         request_header['{{ server_param_name }}'] = {{ param_name }}
