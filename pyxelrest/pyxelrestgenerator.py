@@ -171,6 +171,7 @@ class SwaggerService:
                     parameter['name'] = parameter['name'].replace("-", "_")
                 if parameter['name'].startswith("_"):
                     parameter['name'] = parameter['name'][1:]
+            return parameters
 
         for methods in swagger_json['paths'].values():
             # retrieve parameters listed at the path level
