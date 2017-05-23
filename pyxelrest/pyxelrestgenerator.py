@@ -158,29 +158,33 @@ class SwaggerService:
         :param swagger_json: Dictionary representing the swagger JSON.
         :return: None
         """
+
+        def _normalise_names(parameters):
+            for parameter in parameters:
+                parameter["server_param_name"] = parameter["name"]
+
+                # replace vba restricted keywords
+                if parameter['name'].lower() in vba.vba_restricted_keywords:
+                    parameter['name'] = vba.vba_restricted_keywords[parameter['name'].lower()]
+                # replace '-'
+                if "-" in parameter['name']:
+                    parameter['name'] = parameter['name'].replace("-", "_")
+                if parameter['name'].startswith("_"):
+                    parameter['name'] = parameter['name'][1:]
+
         for methods in swagger_json['paths'].values():
             # retrieve parameters listed at the path level
-            global_parameters = methods.get("parameters", [])
+            global_parameters = _normalise_names(methods.get("parameters", []))
             for mode, method in methods.items():
                 # mode is 'parameters', skip it as not a real method
                 if mode == "parameters": continue
 
-                assert mode in ['get', 'put', 'post', 'delete'], "{} should be one of ['get','put','post','delete']".format(mode)
+                # assert mode in ['get', 'put', 'post', 'delete'], "{} should be one of ['get','put','post','delete']".format(mode)
 
-                method['parameters'] = global_parameters + method.get('parameters', [])
+                method['parameters'] = global_parameters + _normalise_names(method.get('parameters', []))
 
-                if 'parameters' in method:
-                    for parameter in method['parameters']:
-                        # backup original name of parameter
-                        parameter['server_param_name'] = parameter['name']
-
-                        # replace vba restricted keywords
-                        if parameter['name'] in vba.vba_restricted_keywords:
-                            parameter['name'] = vba.vba_restricted_keywords[parameter['name']]
-                        # replace '-'
-                        if "-" in parameter['name']:
-                            parameter['name'] = parameter['name'].replace("-", "_")
-
+                check_names = [parameter['name'] for parameter in method['parameters']]
+                assert len(set(check_names)) == len(check_names), "Name collision in parameters!!!"
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
