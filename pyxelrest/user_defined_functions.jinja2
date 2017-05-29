@@ -405,9 +405,9 @@ def {{ service.udf_prefix }}_{{ method['operationId'] }}(
 {% endif %}
     logging.info("Calling {{ service.udf_prefix }}_{{ method['operationId'] }}...")
 {% if 'application/msgpackpandas' in method['produces'] and support_pandas %}
-    request_header = {'content-type':'application/msgpackpandas'}
+    request_header = {'content-type': 'application/msgpackpandas'}
 {% elif 'application/json' in method['produces']  %}
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
 {% else %}
     request_header = {}
 {% endif %}

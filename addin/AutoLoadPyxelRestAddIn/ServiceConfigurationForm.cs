@@ -237,7 +237,14 @@ namespace AutoLoadPyxelRestAddIn
 
         private void Save(object sender, EventArgs e)
         {
-            configuration.Save();
+            try
+            {
+                configuration.Save();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to save services.", ex);
+            }
         }
 
         internal void Removed(ServicePanel service)
