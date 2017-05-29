@@ -29,7 +29,7 @@ def usual_parameters_test_get_test_date():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/date'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_date ({0}).".format(response.request.url))
@@ -64,7 +64,7 @@ def usual_parameters_test_get_test_date_time():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/datetime'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_date_time ({0}).".format(response.request.url))
@@ -168,15 +168,15 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -202,7 +202,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -290,15 +290,15 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -347,14 +347,14 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -458,15 +458,15 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -492,7 +492,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -580,15 +580,15 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -637,7 +637,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -748,15 +748,15 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -782,7 +782,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -870,15 +870,15 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -927,7 +927,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -1038,15 +1038,15 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -1072,7 +1072,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -1160,15 +1160,15 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -1217,7 +1217,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -1349,21 +1349,21 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -1401,7 +1401,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -1510,21 +1510,21 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -1585,14 +1585,14 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -1717,21 +1717,21 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -1769,7 +1769,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -1878,21 +1878,21 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -1953,7 +1953,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -2085,21 +2085,21 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -2137,7 +2137,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -2246,21 +2246,21 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -2321,7 +2321,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -2453,21 +2453,21 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -2505,7 +2505,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -2614,21 +2614,21 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -2689,7 +2689,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -2861,7 +2861,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_paths_types ({0}).".format(response.request.url))
@@ -3391,7 +3391,7 @@ def filtered_tags_test_get_test_with_tags():
     response = None
     try:
         response = requests.get('http://localhost:8944/test/with/tags'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_get_test_with_tags ({0}).".format(response.request.url))
@@ -3496,7 +3496,7 @@ def values_false_test_get_test_with_empty_dictionary():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/dictionary'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_dictionary ({0}).".format(response.request.url))
@@ -3531,7 +3531,7 @@ def values_false_test_get_test_with_empty_list():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_list ({0}).".format(response.request.url))
@@ -3566,7 +3566,7 @@ def values_false_test_get_test_with_empty_string():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/string'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_string ({0}).".format(response.request.url))
@@ -3601,7 +3601,7 @@ def values_false_test_get_test_with_false_boolean():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/false/boolean'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_false_boolean ({0}).".format(response.request.url))
@@ -3636,7 +3636,7 @@ def values_false_test_get_test_with_zero_float():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/zero/float'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_zero_float ({0}).".format(response.request.url))
@@ -3671,7 +3671,7 @@ def values_false_test_get_test_with_zero_integer():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/zero/integer'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_zero_integer ({0}).".format(response.request.url))
@@ -3718,22 +3718,22 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
         request_parameters['date'] = date
 
     if curve is not None:
-        
+
         request_parameters['curve'] = curve
 
     if ts is not None:
-        
+
         request_parameters['ts'] = ts
 
     if mat is not None:
-        
+
         request_parameters['mat'] = mat
 
 
     response = None
     try:
         response = requests.get('http://localhost:8946/price/unordered'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for output_order_test_get_test_price_unordered ({0}).".format(response.request.url))
@@ -3768,7 +3768,7 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/empty/nested/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_empty_nested_list ({0}).".format(response.request.url))
@@ -3803,7 +3803,7 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/four/imbricated/levels'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_four_imbricated_levels ({0}).".format(response.request.url))
@@ -3838,7 +3838,7 @@ def nested_data_test_get_test_dict_with_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_list ({0}).".format(response.request.url))
@@ -3873,7 +3873,7 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/list/of/different/size'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_list_of_different_size ({0}).".format(response.request.url))
@@ -3908,7 +3908,7 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/multiple/imbricated/levels/and/duplicate/keys'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys ({0}).".format(response.request.url))
@@ -3943,7 +3943,7 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/three/imbricated/levels'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_three_imbricated_levels ({0}).".format(response.request.url))
@@ -3978,7 +3978,7 @@ def nested_data_test_get_test_dict_with_various_columns():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/various/columns'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_various_columns ({0}).".format(response.request.url))
@@ -4013,7 +4013,7 @@ def nested_data_test_get_test_empty_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/empty/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_empty_dict ({0}).".format(response.request.url))
@@ -4048,7 +4048,7 @@ def nested_data_test_get_test_empty_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/empty/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_empty_list ({0}).".format(response.request.url))
@@ -4083,7 +4083,7 @@ def nested_data_test_get_test_list_of_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/list/of/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_list_of_dict ({0}).".format(response.request.url))
@@ -4118,7 +4118,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/dict/entry/with/a/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list ({0}).".format(response.request.url))
@@ -4153,7 +4153,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/dict/entry/with/a/list/of/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list_of_dict ({0}).".format(response.request.url))
@@ -4188,7 +4188,7 @@ def nested_data_test_get_test_one_level_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/level/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_level_dict ({0}).".format(response.request.url))
@@ -4223,7 +4223,7 @@ def nested_data_test_get_test_one_level_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/level/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_level_list ({0}).".format(response.request.url))
@@ -4253,7 +4253,8 @@ def nested_data_test_get_test_one_level_list():
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+@xw.arg('type_visual_basic', doc='type parameter')
+def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic, type_visual_basic):
     logging.info("Calling vba_keywords_test_get_test_vba_restricted_keywords...")
     request_header = {}
     request_payload = {}
@@ -4264,27 +4265,34 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-        
+
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-        
+
         request_parameters['end'] = end_visual_basic
+
+    if type_visual_basic is None or isinstance(type_visual_basic, list) and all(x is None for x in type_visual_basic):
+        logging.error('type_visual_basic is required.')
+        return 'type_visual_basic is required.'
+    if type_visual_basic is not None:
+
+        request_parameters['type'] = type_visual_basic
 
 
     response = None
     try:
         response = requests.get('http://localhost:8949/test/vba/restricted/keywords'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_get_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('$ref', '#/definitions/Test')]))]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
+            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4308,7 +4316,8 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+@xw.arg('type_visual_basic', doc='type parameter')
+def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic, type_visual_basic):
     logging.info("Calling vba_keywords_test_post_test_vba_restricted_keywords...")
     request_header = {}
     request_payload = {}
@@ -4319,15 +4328,22 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-        
+
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-        
+
         request_parameters['end'] = end_visual_basic
+
+    if type_visual_basic is None or isinstance(type_visual_basic, list) and all(x is None for x in type_visual_basic):
+        logging.error('type_visual_basic is required.')
+        return 'type_visual_basic is required.'
+    if type_visual_basic is not None:
+
+        request_parameters['type'] = type_visual_basic
 
 
     response = None
@@ -4339,7 +4355,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         logging.info("Valid response received for vba_keywords_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
+            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4363,7 +4379,8 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+@xw.arg('type_visual_basic', doc='type parameter')
+def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic, type_visual_basic):
     logging.info("Calling vba_keywords_test_put_test_vba_restricted_keywords...")
     request_header = {}
     request_payload = {}
@@ -4374,15 +4391,22 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-        
+
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-        
+
         request_parameters['end'] = end_visual_basic
+
+    if type_visual_basic is None or isinstance(type_visual_basic, list) and all(x is None for x in type_visual_basic):
+        logging.error('type_visual_basic is required.')
+        return 'type_visual_basic is required.'
+    if type_visual_basic is not None:
+
+        request_parameters['type'] = type_visual_basic
 
 
     response = None
@@ -4394,7 +4418,7 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         logging.info("Valid response received for vba_keywords_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
+            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4418,7 +4442,8 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('currency_visual_basic', doc='currency parameter')
 @xw.arg('end_visual_basic', doc='end parameter')
-def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic):
+@xw.arg('type_visual_basic', doc='type parameter')
+def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic, end_visual_basic, type_visual_basic):
     logging.info("Calling vba_keywords_test_delete_test_vba_restricted_keywords...")
     request_header = {}
     request_payload = {}
@@ -4429,15 +4454,22 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         logging.error('currency_visual_basic is required.')
         return 'currency_visual_basic is required.'
     if currency_visual_basic is not None:
-        
+
         request_parameters['currency'] = currency_visual_basic
 
     if end_visual_basic is None or isinstance(end_visual_basic, list) and all(x is None for x in end_visual_basic):
         logging.error('end_visual_basic is required.')
         return 'end_visual_basic is required.'
     if end_visual_basic is not None:
-        
+
         request_parameters['end'] = end_visual_basic
+
+    if type_visual_basic is None or isinstance(type_visual_basic, list) and all(x is None for x in type_visual_basic):
+        logging.error('type_visual_basic is required.')
+        return 'type_visual_basic is required.'
+    if type_visual_basic is not None:
+
+        request_parameters['type'] = type_visual_basic
 
 
     response = None
@@ -4449,7 +4481,7 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         logging.info("Valid response received for vba_keywords_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict())]))]))])
+            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4474,12 +4506,12 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
 @xw.ret(expand='table')
 def without_parameter_test_get_test_json_without_parameter():
     logging.info("Calling without_parameter_test_get_test_json_without_parameter...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
 
     response = None
     try:
         response = requests.get('http://localhost:8950/test/json/without/parameter'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_json_without_parameter ({0}).".format(response.request.url))
@@ -4510,7 +4542,7 @@ def without_parameter_test_get_test_json_without_parameter():
 @xw.ret(expand='table')
 def without_parameter_test_post_test_json_without_parameter():
     logging.info("Calling without_parameter_test_post_test_json_without_parameter...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
 
     response = None
     try:
@@ -4546,7 +4578,7 @@ def without_parameter_test_post_test_json_without_parameter():
 @xw.ret(expand='table')
 def without_parameter_test_put_test_json_without_parameter():
     logging.info("Calling without_parameter_test_put_test_json_without_parameter...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
 
     response = None
     try:
@@ -4582,7 +4614,7 @@ def without_parameter_test_put_test_json_without_parameter():
 @xw.ret(expand='table')
 def without_parameter_test_delete_test_json_without_parameter():
     logging.info("Calling without_parameter_test_delete_test_json_without_parameter...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
 
     response = None
     try:
@@ -4622,7 +4654,7 @@ def without_parameter_test_get_test_plain_text_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8950/test/plain/text/without/parameter'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_plain_text_without_parameter ({0}).".format(response.request.url))
@@ -4762,7 +4794,7 @@ def without_parameter_test_get_test_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8950/test/without/parameter'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_without_parameter ({0}).".format(response.request.url))
@@ -4907,14 +4939,14 @@ def header_parameter_test_get_test_header_parameter(header_string):
         logging.error('header_string is required.')
         return 'header_string is required.'
     if header_string is not None:
-        
+
         request_header['header_string'] = header_string
 
 
     response = None
     try:
         response = requests.get('http://localhost:8951/test/header/parameter'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for header_parameter_test_get_test_header_parameter ({0}).".format(response.request.url))
@@ -4954,9 +4986,9 @@ def form_parameter_test_post_test_form_parameter(form_string):
         logging.error('form_string is required.')
         return 'form_string is required.'
     if form_string is not None:
-        
+
                 request_payload['form_string'] = form_string
-    
+
 
     response = None
     try:
@@ -5001,14 +5033,14 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
 
     response = None
     try:
         response = requests.get('http://localhost:8953/test/string/array/parameter'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for array_parameter_test_get_test_string_array_parameter ({0}).".format(response.request.url))
@@ -5065,7 +5097,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
 @xw.ret(expand='table')
 def json_test_get_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_get_test_json_with_all_optional_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -5113,15 +5145,15 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -5147,7 +5179,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -5235,15 +5267,15 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -5292,14 +5324,14 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
     response = None
     try:
         response = requests.get('http://localhost:8954/test/json/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -5356,7 +5388,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
 @xw.ret(expand='table')
 def json_test_post_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_post_test_json_with_all_optional_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -5404,15 +5436,15 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -5438,7 +5470,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -5526,15 +5558,15 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -5583,7 +5615,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -5647,7 +5679,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
 @xw.ret(expand='table')
 def json_test_put_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_put_test_json_with_all_optional_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -5695,15 +5727,15 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -5729,7 +5761,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -5817,15 +5849,15 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -5874,7 +5906,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -5938,7 +5970,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
 @xw.ret(expand='table')
 def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_delete_test_json_with_all_optional_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -5986,15 +6018,15 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -6020,7 +6052,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -6108,15 +6140,15 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -6165,7 +6197,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -6229,7 +6261,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
 @xw.ret(expand='table')
 def json_test_get_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_get_test_json_with_all_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -6298,21 +6330,21 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -6350,7 +6382,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -6459,21 +6491,21 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -6534,14 +6566,14 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
     response = None
     try:
         response = requests.get('http://localhost:8954/test/json/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -6598,7 +6630,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
 @xw.ret(expand='table')
 def json_test_post_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_post_test_json_with_all_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -6667,21 +6699,21 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -6719,7 +6751,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -6828,21 +6860,21 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -6903,7 +6935,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -6967,7 +6999,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
 @xw.ret(expand='table')
 def json_test_put_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_put_test_json_with_all_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -7036,21 +7068,21 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -7088,7 +7120,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -7197,21 +7229,21 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -7272,7 +7304,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -7336,7 +7368,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
 @xw.ret(expand='table')
 def json_test_delete_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_delete_test_json_with_all_parameters_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     request_payload = {}
     request_files = {}
     request_parameters = {}
@@ -7405,21 +7437,21 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_string is required.')
         return ['query_string is required.']
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return ['query_string_byte is required.']
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return ['query_string_binary is required.']
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -7457,7 +7489,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_password is required.')
         return ['query_password is required.']
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -7566,21 +7598,21 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_array_string is required.')
         return ['query_array_string is required.']
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return ['query_array_string_byte is required.']
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return ['query_array_string_binary is required.']
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -7641,7 +7673,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         logging.error('query_array_password is required.')
         return ['query_array_password is required.']
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -7705,7 +7737,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
 @xw.ret(expand='table')
 def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling json_test_get_test_json_with_all_paths_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -7814,7 +7846,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
     response = None
     try:
         response = requests.get('http://localhost:8954/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_paths_types ({0}).".format(response.request.url))
@@ -7871,7 +7903,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
 @xw.ret(expand='table')
 def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling json_test_post_test_json_with_all_paths_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -8037,7 +8069,7 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
 @xw.ret(expand='table')
 def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling json_test_put_test_json_with_all_paths_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -8203,7 +8235,7 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
 @xw.ret(expand='table')
 def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32, path_integer64, path_number, path_float, path_double, path_string, path_string_byte, path_string_binary, path_boolean, path_date, path_date_time, path_password, path_array_integer, path_array_integer32, path_array_integer64, path_array_number, path_array_float, path_array_double, path_array_string, path_array_string_byte, path_array_string_binary, path_array_boolean, path_array_date, path_array_date_time, path_array_password):
     logging.info("Calling json_test_delete_test_json_with_all_paths_types...")
-    request_header = {'content-type':'application/json'}
+    request_header = {'content-type': 'application/json'}
     if path_integer is None or isinstance(path_integer, list) and all(x is None for x in path_integer):
         logging.error('path_integer is required.')
         return ['path_integer is required.']
@@ -8416,15 +8448,15 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -8450,7 +8482,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -8538,15 +8570,15 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -8595,14 +8627,14 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
     response = None
     try:
         response = requests.get('http://localhost:8955/test/plain/text/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -8706,15 +8738,15 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -8740,7 +8772,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -8828,15 +8860,15 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -8885,7 +8917,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -8996,15 +9028,15 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -9030,7 +9062,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -9118,15 +9150,15 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -9175,7 +9207,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -9286,15 +9318,15 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_double'] = query_double
 
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is not None:
@@ -9320,7 +9352,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_date_time'] = query_date_time
 
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is not None:
@@ -9408,15 +9440,15 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_array_double'] = query_array_double
 
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is not None:
@@ -9465,7 +9497,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         request_parameters['query_array_date_time'] = query_array_date_time
 
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -9597,21 +9629,21 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -9649,7 +9681,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -9758,21 +9790,21 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -9833,14 +9865,14 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
     response = None
     try:
         response = requests.get('http://localhost:8955/test/plain/text/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -9965,21 +9997,21 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -10017,7 +10049,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -10126,21 +10158,21 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -10201,7 +10233,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -10333,21 +10365,21 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -10385,7 +10417,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -10494,21 +10526,21 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -10569,7 +10601,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -10701,21 +10733,21 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_string is required.')
         return 'query_string is required.'
     if query_string is not None:
-        
+
         request_parameters['query_string'] = query_string
 
     if query_string_byte is None or isinstance(query_string_byte, list) and all(x is None for x in query_string_byte):
         logging.error('query_string_byte is required.')
         return 'query_string_byte is required.'
     if query_string_byte is not None:
-        
+
         request_parameters['query_string_byte'] = query_string_byte
 
     if query_string_binary is None or isinstance(query_string_binary, list) and all(x is None for x in query_string_binary):
         logging.error('query_string_binary is required.')
         return 'query_string_binary is required.'
     if query_string_binary is not None:
-        
+
         request_parameters['query_string_binary'] = query_string_binary
 
     if query_boolean is None or isinstance(query_boolean, list) and all(x is None for x in query_boolean):
@@ -10753,7 +10785,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_password is required.')
         return 'query_password is required.'
     if query_password is not None:
-        
+
         request_parameters['query_password'] = query_password
 
     if query_array_integer is None or isinstance(query_array_integer, list) and all(x is None for x in query_array_integer):
@@ -10862,21 +10894,21 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_array_string is required.')
         return 'query_array_string is required.'
     if query_array_string is not None:
-        
+
         request_parameters['query_array_string'] = query_array_string
 
     if query_array_string_byte is None or isinstance(query_array_string_byte, list) and all(x is None for x in query_array_string_byte):
         logging.error('query_array_string_byte is required.')
         return 'query_array_string_byte is required.'
     if query_array_string_byte is not None:
-        
+
         request_parameters['query_array_string_byte'] = query_array_string_byte
 
     if query_array_string_binary is None or isinstance(query_array_string_binary, list) and all(x is None for x in query_array_string_binary):
         logging.error('query_array_string_binary is required.')
         return 'query_array_string_binary is required.'
     if query_array_string_binary is not None:
-        
+
         request_parameters['query_array_string_binary'] = query_array_string_binary
 
     if query_array_boolean is None or isinstance(query_array_boolean, list) and all(x is None for x in query_array_boolean):
@@ -10937,7 +10969,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         logging.error('query_array_password is required.')
         return 'query_array_password is required.'
     if query_array_password is not None:
-        
+
         request_parameters['query_array_password'] = query_array_password
 
 
@@ -11109,7 +11141,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
     response = None
     try:
         response = requests.get('http://localhost:8955/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
@@ -11634,9 +11666,9 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
 
 def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
     if rely_on_definitions:
-        response_text = response.text
         definition_deserializer.all_definitions = {}
-        logging.debug('Converting JSON string to corresponding python structure...')
+        response_text = response.text
+        logging.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
         json_data = ujson.loads(response_text) if response_text != '' else response_text
         return Response(all_responses, response.status_code, all_definitions).rows(json_data)
 

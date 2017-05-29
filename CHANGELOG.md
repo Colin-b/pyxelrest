@@ -2,6 +2,10 @@
 
 ## 0.59 (next) ##
 
+### Enhancements ###
+
+- Add support for HTTPS services (do not validate certificate though)
+
 ### Bug fixes ###
 
 - security_details invalid value cannot be set anymore using Microsoft Excel Auto-Load add-in.
