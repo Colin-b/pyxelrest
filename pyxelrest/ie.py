@@ -13,6 +13,7 @@ class IE:
 
     def __init__(self):
         ie = Dispatch("InternetExplorer.Application")
+        ie.Visible = 1
         object.__setattr__(self, "_hwnd", ie.HWND)
 
     def __getattr__(self, item):
@@ -31,8 +32,15 @@ class IE:
 
     def wait(self):
         """Wait for end of page loading"""
-        while (self.ReadyState != 4):
+        while self.Busy or (self.ReadyState != 4):
             time.sleep(0.25)
+
+    @property
+    def location_url(self):
+        url = self.LocationURL
+        if url == "about:blank":
+            del self.ie
+        return url
 
     @property
     def ie(self):
@@ -50,45 +58,50 @@ class IE:
         sh = Dispatch("Shell.Application")
 
         found = False
+        count = 0
         while not found:
             for ie in sh.Windows():
                 if ie.HWND == self._hwnd:
                     found = True
                     break
-            else:
-                found = False
             time.sleep(0.1)
+
+            count += 1
+            if count > 100:
+                break
 
         sh = None
 
         if not found:
-            raise ValueError("Could not find IE instance with uuid={}".format(hwnd))
+            raise ValueError("Could not find IE instance with uuid={}".format(self._hwnd))
 
         return ie
 
+
 def call_till_redirect(url_origin,
-                       url_redirect):
-    """Open IE on url_origin and close IE once url_redirect is loaded."""
-    logging.info("Opening IE")
+                       url_redirect,
+                       max_time=30.
+                       ):
+    """Open IE on url_origin and close IE once url_redirect is loaded if within max_time seconds"""
+    logging.debug("Opening IE")
     try:
         ie = IE()
     except pywintypes.com_error:
         return False
 
-
-    logging.info("Navigating to {}".format(url_origin))
+    logging.debug("Navigating to {}".format(url_origin))
     ie.navigate(url_origin)
 
     ie.wait()
 
     count = 0.
-    sleep_time = 1
-    max_time = 20.
+    sleep_time = 1.
     # exit loop after max_time seconds
-    while (ie.LocationURL != url_redirect) and (count <= max_time):
-        logging.info("Waiting to land on {}, still on {} : {} / {}".format(
-            url_redirect, ie.LocationURL,
-            url_redirect != ie.LocationURL,
+    while (ie.location_url != url_redirect) and (count <= max_time):
+        logging.debug("Waiting to land on {}, still on {} [{}] : {} / {}".format(
+            url_redirect, ie.location_url,
+            ie.Document.Title,
+            url_redirect != ie.location_url,
             count
         ))
         time.sleep(sleep_time)
@@ -96,11 +109,13 @@ def call_till_redirect(url_origin,
 
     if count > max_time:
         ie.Quit()
+        logging.debug("Log failed within time constraints!")
         return False
 
+    logging.debug("Log successfully finished!")
     ie.wait()
 
-    logging.info("Closing IE")
+    logging.debug("Closing IE")
     ie.Quit()
 
     ie = None
@@ -109,6 +124,6 @@ def call_till_redirect(url_origin,
 
 
 if __name__ == '__main__':
-    call('https://developer.gemservices.io/',
-         # msg_auth_asked="Sign in below with your internal account",
-         msg_auth_done="You are now authenticated")
+    logging.basicConfig(level=logging.DEBUG)
+    call_till_redirect('https://gemgo.gemservices.io/',
+                       'https://gemgo.gemservices.io/')
