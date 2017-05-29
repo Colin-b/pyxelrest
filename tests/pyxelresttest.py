@@ -42,10 +42,13 @@ class PyxelRestTest(unittest.TestCase):
     def test_vba_restricted_keywords(self):
         import pyxelrestgenerator
         self.assertEqual(
-            [['currency', 'end'], ['currency value', 'end value']],
+            [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
             pyxelrestgenerator.vba_keywords_test_get_test_vba_restricted_keywords(
                 currency_visual_basic='currency value',
-                end_visual_basic='end value'))
+                end_visual_basic='end value',
+                type_visual_basic='type value'
+            )
+        )
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator

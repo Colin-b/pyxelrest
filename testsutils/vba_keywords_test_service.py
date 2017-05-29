@@ -12,6 +12,8 @@ def swagger():
                                'currency': {
                                },
                                'end': {
+                               },
+                               'type': {
                                }
                            }
                        }
@@ -32,6 +34,13 @@ def swagger():
                                         'description': 'end parameter',
                                         'in': 'query',
                                         'name': 'end',
+                                        'required': True,
+                                        'type': 'string'
+                                    },
+                                    {
+                                        'description': 'type parameter',
+                                        'in': 'query',
+                                        'name': 'type',
                                         'required': True,
                                         'type': 'string'
                                     }
@@ -61,6 +70,13 @@ def swagger():
                                         'name': 'end',
                                         'required': True,
                                         'type': 'string'
+                                    },
+                                    {
+                                        'description': 'type parameter',
+                                        'in': 'query',
+                                        'name': 'type',
+                                        'required': True,
+                                        'type': 'string'
                                     }
                                 ],
                                 'responses': {
@@ -86,6 +102,13 @@ def swagger():
                                         'name': 'end',
                                         'required': True,
                                         'type': 'string'
+                                    },
+                                    {
+                                        'description': 'type parameter',
+                                        'in': 'query',
+                                        'name': 'type',
+                                        'required': True,
+                                        'type': 'string'
                                     }
                                 ],
                                 'responses': {
@@ -109,6 +132,13 @@ def swagger():
                                         'description': 'end parameter',
                                         'in': 'query',
                                         'name': 'end',
+                                        'required': True,
+                                        'type': 'string'
+                                    },
+                                    {
+                                        'description': 'type parameter',
+                                        'in': 'query',
+                                        'name': 'type',
                                         'required': True,
                                         'type': 'string'
                                     }
