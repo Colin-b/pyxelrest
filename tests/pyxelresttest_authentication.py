@@ -45,12 +45,12 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_authentication_failure(self):
         import pyxelrestgenerator
-        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated"',
+        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
                          pyxelrestgenerator.authenticated_test_get_test_authentication_failure())
 
     def test_authentication_timeout(self):
         import pyxelrestgenerator
-        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated"',
+        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
                          pyxelrestgenerator.authenticated_test_get_test_authentication_timeout())
 
     def test_without_authentication(self):

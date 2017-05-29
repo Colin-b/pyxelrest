@@ -1,6 +1,6 @@
 class InvalidSwaggerDefinition(Exception):
     """ Invalid Swagger Definition. """
-    def __init__(self, message, *args, **kwargs): # real signature unknown
+    def __init__(self, message, *args, **kwargs):  # real signature unknown
         Exception.__init__(self, 'Invalid Definition: ' + message)
 
 
@@ -39,3 +39,33 @@ class DuplicatedParameters(Exception):
     def __init__(self, method, *args, **kwargs):
         Exception.__init__(self, '"{0}" parameters are not unique: {1}.'.format(method['operationId'],
                                                                                 method['parameters']))
+
+
+class EmptyResponses(InvalidSwaggerDefinition):
+    """ Responses are not set in Swagger. """
+    def __init__(self, service_name, *args, **kwargs):
+        Exception.__init__(self, 'At least one response must be specified (call in {0}).'.format(service_name))
+
+
+class AuthenticationFailed(Exception):
+    """ User was not authenticated. """
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, 'User was not authenticated.')
+
+
+class InvalidToken(Exception):
+    """ Token is invalid. """
+    def __init__(self, token_name, *args, **kwargs):
+        Exception.__init__(self, '{0} is invalid.'.format(token_name))
+
+
+class TokenNotProvided(Exception):
+    """ Token was not provided. """
+    def __init__(self, token_name, *args, **kwargs):
+        Exception.__init__(self, '{0} not provided.'.format(token_name))
+
+
+class TokenExpiryNotProvided(Exception):
+    """ Token expiry was not provided. """
+    def __init__(self, token_body, *args, **kwargs):
+        Exception.__init__(self, 'Expiry (exp) is not provided in {0}.'.format(token_body))

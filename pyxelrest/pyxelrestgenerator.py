@@ -109,7 +109,7 @@ class SwaggerService:
 
     def responses(self, responses):
         if not responses:
-            raise Exception('At least one response must be specified (call in {0}).'.format(self.name))
+            raise EmptyResponses(self.name)
         return responses
 
     def get_item(self, config, key):
