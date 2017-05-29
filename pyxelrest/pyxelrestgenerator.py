@@ -175,17 +175,18 @@ class SwaggerService:
 
         for methods in swagger_json['paths'].values():
             # retrieve parameters listed at the path level
-            global_parameters = _normalise_names(methods.get("parameters", []))
+            global_parameters = _normalise_names(methods.pop("parameters", []))
             for mode, method in methods.items():
-                # mode is 'parameters', skip it as not a real method
-                if mode == "parameters": continue
-
-                # assert mode in ['get', 'put', 'post', 'delete'], "{} should be one of ['get','put','post','delete']".format(mode)
+                if mode not in ['get', 'post', 'put', 'delete']:
+                    logging.warning("'{0}' mode is not supported for now. Supported ones are "
+                                    "['get', 'post', 'put', 'delete']".format(mode))
 
                 method['parameters'] = global_parameters + _normalise_names(method.get('parameters', []))
 
-                check_names = [parameter['name'] for parameter in method['parameters']]
-                assert len(set(check_names)) == len(check_names), "Name collision in parameters!!!"
+                method_parameters_names = [parameter['name'] for parameter in method['parameters']]
+                if len(set(method_parameters_names)) != len(method_parameters_names):
+                    raise Exception('"{0}" parameters are not unique: {1}.'.format(method['operationId'],
+                                                                                   method_parameters_names))
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
