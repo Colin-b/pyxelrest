@@ -2,6 +2,11 @@
 
 ## 0.59 (next) ##
 
+### Bug fixes ###
+
+- security_details invalid value cannot be set anymore using Microsoft Excel Auto-Load add-in.
+- Regression since 0.58, PyxelRest was not compatible with Python < 3.6 
+
 ## 0.58 (2017-05-11) ##
 
 ### Release notes ###
@@ -17,7 +22,7 @@
 ### Bug fixes ###
 
 - Results were not provided in case a cell value was expected to contains more than 255 characters (Only first 255 characters are now provided).
-- All date times fields are now displayed as local date times within Excel (some were still interpreted as text).
+- All date times fields are now displayed as local date times within Microsoft Excel (some were still interpreted as text).
 
 ## 0.56 (2017-03-24) ##
 

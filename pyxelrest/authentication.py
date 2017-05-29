@@ -35,10 +35,10 @@ def get_detail(detail_key, details_string):
     """
     if details_string:
         # TODO Use regex instead of this split mechanism
-        details_dict = {
-            detail_entry.split('=')[0]: detail_entry.split('=')[1] for detail_entry in details_string.split(',')
-        }
-        return details_dict.get(detail_key)
+        for detail_entry in details_string.split(','):
+            detail_entry = detail_entry.split('=')
+            if detail_key == detail_entry[0]:
+                return detail_entry[1] if len(detail_entry) == 2 else None
 
 
 class OAuth2:
