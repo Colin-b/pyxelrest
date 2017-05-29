@@ -3,6 +3,7 @@ import os.path
 import unittest
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
+import sys
 
 
 def support_pandas():
@@ -60,8 +61,10 @@ class PyxelRestUdfsTest(unittest.TestCase):
         Assert content of generated file.
         This test is mainly here to be aware that a change broke generated file.
         """
-        # TODO Also handle the difference when tests are run using python 2.7
-        filename = 'user_defined_functions_python36_pandas.py' if support_pandas() else 'user_defined_functions_python36.py'
+        if sys.version_info[0] == 2:
+            filename = 'user_defined_functions_python27_pandas.py' if support_pandas() else 'user_defined_functions_python27.py'
+        else:
+            filename = 'user_defined_functions_python36_pandas.py' if support_pandas() else 'user_defined_functions_python36.py'
         expected_file = open(os.path.join(os.path.dirname(__file__), '..', 'testsutils', filename), 'r')
         expected = expected_file.readlines()
         expected_file.close()
