@@ -185,8 +185,7 @@ class SwaggerService:
 
                 method_parameters_names = [parameter['name'] for parameter in method['parameters']]
                 if len(set(method_parameters_names)) != len(method_parameters_names):
-                    raise Exception('"{0}" parameters are not unique: {1}.'.format(method['operationId'],
-                                                                                   method_parameters_names))
+                    raise DuplicatedParameters(method)
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:

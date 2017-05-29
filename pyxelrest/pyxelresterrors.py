@@ -32,3 +32,10 @@ class ConfigurationFileNotFound(Exception):
     """ Configuration file not found. """
     def __init__(self, file_path, *args, **kwargs):
         Exception.__init__(self, '"{0}" configuration file cannot be read.'.format(file_path))
+
+
+class DuplicatedParameters(Exception):
+    """ Method contains duplicated parameters. """
+    def __init__(self, method, *args, **kwargs):
+        Exception.__init__(self, '"{0}" parameters are not unique: {1}.'.format(method['operationId'],
+                                                                                method['parameters']))
