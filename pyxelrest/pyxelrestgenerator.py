@@ -14,7 +14,7 @@ from importlib import import_module
 import threading
 from collections import OrderedDict
 import sys
-
+from builtins import open
 
 try:
     # Python 3
