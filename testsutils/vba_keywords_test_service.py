@@ -1385,33 +1385,42 @@ def swagger():
                                }
                            ],
                            'get': {
-                                'operationId': 'get_test_vba_restricted_keywords',
-                                'responses': {
+                               'operationId': 'get_test_vba_restricted_keywords',
+                               'responses': {
                                    '200': {
                                        'description': 'return value',
                                        'schema': {
                                            '$ref': '#/definitions/VBAKeywords'
                                        }
                                    }
-                                }
+                               },
+                               'produces': [
+                                   "application/json"
+                               ]
                            },
                            'post': {
-                                'operationId': 'post_test_vba_restricted_keywords',
-                                'responses': {
+                               'operationId': 'post_test_vba_restricted_keywords',
+                               'responses': {
                                    '200': {
                                        'description': 'return value',
                                        '$ref': '#/definitions/VBAKeywords'
                                    }
-                                }
+                               },
+                               'produces': [
+                                   "application/json"
+                               ]
                            },
                            'put': {
-                                'operationId': 'put_test_vba_restricted_keywords',
-                                'responses': {
+                               'operationId': 'put_test_vba_restricted_keywords',
+                               'responses': {
                                    '200': {
                                        'description': 'return value',
                                        '$ref': '#/definitions/VBAKeywords'
                                    }
-                                }
+                                },
+                               'produces': [
+                                   "application/json"
+                               ]
                            },
                            'delete': {
                                'operationId': 'delete_test_vba_restricted_keywords',
@@ -1420,7 +1429,10 @@ def swagger():
                                        'description': 'return value',
                                        '$ref': '#/definitions/VBAKeywords'
                                    }
-                               }
+                               },
+                               'produces': [
+                                   "application/json"
+                               ]
                            }
                        }
                    })
