@@ -19,7 +19,7 @@ class IE:
     def __getattr__(self, item):
         try:
             return getattr(self.ie, item)
-        except pywintypes.com_error as e:
+        except:
             del self.ie
             return getattr(self, item)
 
@@ -33,12 +33,9 @@ class IE:
     def wait(self, timeout, check_interval=0.25):
         """Wait for end of page loading"""
         awaited_time = 0
-        try:
-            while awaited_time < timeout and (self.Busy or (self.ReadyState != 4)):
-                time.sleep(check_interval)
-                awaited_time += check_interval
-        except:
-            logging.exception('An error occurred while trying to wait. Considering wait is over.')
+        while awaited_time < timeout and (self.Busy or (self.ReadyState != 4)):
+            time.sleep(check_interval)
+            awaited_time += check_interval
         return awaited_time
 
     @property
