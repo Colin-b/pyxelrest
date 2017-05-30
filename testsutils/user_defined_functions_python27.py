@@ -29,7 +29,7 @@ def usual_parameters_test_get_test_date():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/date'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_date ({0}).".format(response.request.url))
@@ -64,7 +64,7 @@ def usual_parameters_test_get_test_date_time():
     response = None
     try:
         response = requests.get('http://localhost:8943/test/datetime'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_date_time ({0}).".format(response.request.url))
@@ -354,7 +354,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1592,7 +1592,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2861,7 +2861,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
     response = None
     try:
         response = requests.get('http://localhost:8943/test/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_paths_types ({0}).".format(response.request.url))
@@ -3391,7 +3391,7 @@ def filtered_tags_test_get_test_with_tags():
     response = None
     try:
         response = requests.get('http://localhost:8944/test/with/tags'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_get_test_with_tags ({0}).".format(response.request.url))
@@ -3496,7 +3496,7 @@ def values_false_test_get_test_with_empty_dictionary():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/dictionary'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_dictionary ({0}).".format(response.request.url))
@@ -3531,7 +3531,7 @@ def values_false_test_get_test_with_empty_list():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_list ({0}).".format(response.request.url))
@@ -3566,7 +3566,7 @@ def values_false_test_get_test_with_empty_string():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/empty/string'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_string ({0}).".format(response.request.url))
@@ -3601,7 +3601,7 @@ def values_false_test_get_test_with_false_boolean():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/false/boolean'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_false_boolean ({0}).".format(response.request.url))
@@ -3636,7 +3636,7 @@ def values_false_test_get_test_with_zero_float():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/zero/float'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_zero_float ({0}).".format(response.request.url))
@@ -3671,7 +3671,7 @@ def values_false_test_get_test_with_zero_integer():
     response = None
     try:
         response = requests.get('http://localhost:8945/test/with/zero/integer'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_zero_integer ({0}).".format(response.request.url))
@@ -3733,7 +3733,7 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
     response = None
     try:
         response = requests.get('http://localhost:8946/price/unordered'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for output_order_test_get_test_price_unordered ({0}).".format(response.request.url))
@@ -3768,7 +3768,7 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/empty/nested/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_empty_nested_list ({0}).".format(response.request.url))
@@ -3803,7 +3803,7 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/four/imbricated/levels'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_four_imbricated_levels ({0}).".format(response.request.url))
@@ -3838,7 +3838,7 @@ def nested_data_test_get_test_dict_with_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_list ({0}).".format(response.request.url))
@@ -3873,7 +3873,7 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/list/of/different/size'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_list_of_different_size ({0}).".format(response.request.url))
@@ -3908,7 +3908,7 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/multiple/imbricated/levels/and/duplicate/keys'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys ({0}).".format(response.request.url))
@@ -3943,7 +3943,7 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/three/imbricated/levels'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_three_imbricated_levels ({0}).".format(response.request.url))
@@ -3978,7 +3978,7 @@ def nested_data_test_get_test_dict_with_various_columns():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/dict/with/various/columns'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_various_columns ({0}).".format(response.request.url))
@@ -4013,7 +4013,7 @@ def nested_data_test_get_test_empty_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/empty/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_empty_dict ({0}).".format(response.request.url))
@@ -4048,7 +4048,7 @@ def nested_data_test_get_test_empty_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/empty/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_empty_list ({0}).".format(response.request.url))
@@ -4083,7 +4083,7 @@ def nested_data_test_get_test_list_of_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/list/of/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_list_of_dict ({0}).".format(response.request.url))
@@ -4118,7 +4118,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/dict/entry/with/a/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list ({0}).".format(response.request.url))
@@ -4153,7 +4153,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/dict/entry/with/a/list/of/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list_of_dict ({0}).".format(response.request.url))
@@ -4188,7 +4188,7 @@ def nested_data_test_get_test_one_level_dict():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/level/dict'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_level_dict ({0}).".format(response.request.url))
@@ -4223,7 +4223,7 @@ def nested_data_test_get_test_one_level_list():
     response = None
     try:
         response = requests.get('http://localhost:8947/test/one/level/list'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_level_list ({0}).".format(response.request.url))
@@ -4286,7 +4286,7 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
     response = None
     try:
         response = requests.get('http://localhost:8949/test/vba/restricted/keywords'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_get_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -4511,7 +4511,7 @@ def without_parameter_test_get_test_json_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8950/test/json/without/parameter'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_json_without_parameter ({0}).".format(response.request.url))
@@ -4654,7 +4654,7 @@ def without_parameter_test_get_test_plain_text_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8950/test/plain/text/without/parameter'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_plain_text_without_parameter ({0}).".format(response.request.url))
@@ -4794,7 +4794,7 @@ def without_parameter_test_get_test_without_parameter():
     response = None
     try:
         response = requests.get('http://localhost:8950/test/without/parameter'.format(
-), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_without_parameter ({0}).".format(response.request.url))
@@ -4946,7 +4946,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
     response = None
     try:
         response = requests.get('http://localhost:8951/test/header/parameter'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for header_parameter_test_get_test_header_parameter ({0}).".format(response.request.url))
@@ -4987,7 +4987,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
         return 'form_string is required.'
     if form_string is not None:
 
-                request_payload['form_string'] = form_string
+        request_payload['form_string'] = form_string
 
 
     response = None
@@ -5040,7 +5040,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
     response = None
     try:
         response = requests.get('http://localhost:8953/test/string/array/parameter'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for array_parameter_test_get_test_string_array_parameter ({0}).".format(response.request.url))
@@ -5331,7 +5331,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
     response = None
     try:
         response = requests.get('http://localhost:8954/test/json/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -6573,7 +6573,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
     response = None
     try:
         response = requests.get('http://localhost:8954/test/json/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -7846,7 +7846,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
     response = None
     try:
         response = requests.get('http://localhost:8954/test/json/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_paths_types ({0}).".format(response.request.url))
@@ -8634,7 +8634,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
     response = None
     try:
         response = requests.get('http://localhost:8955/test/plain/text/with/all/optional/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -9872,7 +9872,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
     response = None
     try:
         response = requests.get('http://localhost:8955/test/plain/text/with/all/parameters/types'.format(
-), request_parameters, stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -11141,7 +11141,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
     response = None
     try:
         response = requests.get('http://localhost:8955/test/plain/text/with/all/paths/types'.format(
-        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, headers=request_header, proxies={}, timeout=(1.0, None))
+        path_integer=path_integer,         path_integer32=path_integer32,         path_integer64=path_integer64,         path_number=path_number,         path_float=path_float,         path_double=path_double,         path_string=path_string,         path_string_byte=path_string_byte,         path_string_binary=path_string_binary,         path_boolean=path_boolean,         path_date=path_date,         path_date_time=path_date_time,         path_password=path_password,         path_array_integer=path_array_integer,         path_array_integer32=path_array_integer32,         path_array_integer64=path_array_integer64,         path_array_number=path_array_number,         path_array_float=path_array_float,         path_array_double=path_array_double,         path_array_string=path_array_string,         path_array_string_byte=path_array_string_byte,         path_array_string_binary=path_array_string_binary,         path_array_boolean=path_array_boolean,         path_array_date=path_array_date,         path_array_date_time=path_array_date_time,         path_array_password=path_array_password), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
