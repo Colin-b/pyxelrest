@@ -316,6 +316,9 @@ def swagger():
                            }
                        }
                    },
+                   produces=[
+                       "application/json"
+                   ],
                    paths={
                        '/test/vba/restricted/keywords': {
                            'parameters': [
@@ -1393,10 +1396,7 @@ def swagger():
                                            '$ref': '#/definitions/VBAKeywords'
                                        }
                                    }
-                               },
-                               'produces': [
-                                   "application/json"
-                               ]
+                               }
                            },
                            'post': {
                                'operationId': 'post_test_vba_restricted_keywords',
