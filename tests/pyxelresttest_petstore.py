@@ -31,6 +31,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
             [444444, 222222, 1, datetime.datetime(2017, 4, 24, 13, 29, 32, 19000, tzinfo=tzutc()), 'placed', False]
         ]:
+            loader.unload()
             raise Exception('Order was not placed: ' + str(order_response))
 
     @classmethod
@@ -48,6 +49,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         }
         user_response = pyxelrestgenerator.petstore_test_createUser(new_user)
         if user_response != [['']]:
+            loader.unload()
             raise Exception('User was not created: ' + str(user_response))
 
     def test_get_order_by_id(self):

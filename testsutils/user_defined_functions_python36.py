@@ -4987,7 +4987,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
         return 'form_string is required.'
     if form_string is not None:
 
-                request_payload['form_string'] = form_string
+        request_payload['form_string'] = form_string
 
 
     response = None
