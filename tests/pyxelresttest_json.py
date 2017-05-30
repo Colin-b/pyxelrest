@@ -1,6 +1,5 @@
 import datetime
 import unittest
-from dateutil.tz import tzlocal
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
@@ -2869,9 +2868,9 @@ class PyxelRestJsonTest(unittest.TestCase):
         today_date = datetime.date.today()
         tomorrow_date = today_date + datetime.timedelta(days=1)
         today_datetime = datetime.datetime.combine(today_date, datetime.datetime.min.time())
-        today_datetime_local = today_datetime.astimezone(tz=tzlocal())
+        today_datetime_local = today_datetime
         tomorrow_datetime = datetime.datetime.combine(tomorrow_date, datetime.datetime.min.time())
-        tomorrow_datetime_local = tomorrow_datetime.astimezone(tz=tzlocal())
+        tomorrow_datetime_local = tomorrow_datetime
         self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
             query_integer=1,
             query_integer32=10,

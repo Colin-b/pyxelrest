@@ -2,6 +2,18 @@
 
 ## 0.59 (next) ##
 
+### Enhancements ###
+
+- Add support for HTTPS services (do not validate certificate though)
+
+### Bug fixes ###
+
+- security_details invalid value cannot be set anymore using Microsoft Excel Auto-Load add-in.
+- Regression since 0.58, PyxelRest was not compatible with Python < 3.6
+- Handle all restricted VBA Keywords described here: https://msdn.microsoft.com/en-us/library/ksh7h19t(v=vs.90).aspx?f=255&MSPPError=-2147217396
+- Handle "type" restricted VBA keyword.
+- All date times fields were still displayed as string in Microsoft Excel for Python 2.7 users.
+
 ## 0.58 (2017-05-11) ##
 
 ### Release notes ###
@@ -17,7 +29,7 @@
 ### Bug fixes ###
 
 - Results were not provided in case a cell value was expected to contains more than 255 characters (Only first 255 characters are now provided).
-- All date times fields are now displayed as local date times within Excel (some were still interpreted as text).
+- All date times fields are now displayed as local date times within Microsoft Excel (some were still interpreted as text).
 
 ## 0.56 (2017-03-24) ##
 

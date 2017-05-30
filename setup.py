@@ -129,7 +129,9 @@ setup(name='pyxelrest',
           # Used to run authentication services (also used in test cases)
           'flask',
           # Used to parse all date-time formats in a easy way
-          'python-dateutil==2.6.0'
+          'python-dateutil==2.6.0',
+          # Used to maintain compatibility with Python 2.7 and Python 3.X
+          'future==0.16.0'
       ],
       scripts=[
           'pyxelrest_auto_update.py',

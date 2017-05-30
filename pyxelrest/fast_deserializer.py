@@ -1,6 +1,7 @@
 import logging
 import dateutil.parser
 import dateutil.tz
+from past.builtins import basestring
 
 
 def to_date_time(value):
@@ -16,6 +17,10 @@ def to_date_time(value):
         value = value[:-1] + 'Z'
     datetime_with_service_timezone = dateutil.parser.parse(value)
     if datetime_with_service_timezone:
+        # Changed in python 3.6: The astimezone() method can now be called on naive instances
+        # that are presumed to represent system local time.
+        if not datetime_with_service_timezone.tzinfo:
+            return datetime_with_service_timezone
         return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
     return value
 
@@ -67,7 +72,7 @@ class Flattenizer:
         self.__values_per_level[row][level].append({'header': header, 'value': self.convert_simple_type(value, json_definition)})
 
     def convert_simple_type(self, value, json_definition):
-        if isinstance(value, str):
+        if isinstance(value, basestring):
             field_format = json_definition.get('format') if json_definition else None
             if not field_format and 'items' in json_definition:  # Sometimes it can happen that array definition is returned as a single element
                 return self.convert_simple_type(value, json_definition.get('items', {}))

@@ -1,7 +1,7 @@
 import datetime
 import unittest
 import platform
-from dateutil.tz import tzutc, tzlocal
+from dateutil.tz import tzutc
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
@@ -23,7 +23,6 @@ class PyxelRestTest(unittest.TestCase):
         import testsutils.filtered_tags_test_service as filtered_tags_test_service
         import testsutils.values_false_test_service as values_false_test_service
         import testsutils.output_order_test_service as output_order_test_service
-        import testsutils.vba_keywords_test_service as vba_keywords_test_service
         import testsutils.without_parameter_test_service as without_parameter_test_service
         import testsutils.header_parameter_test_service as header_parameter_test_service
         import testsutils.form_parameter_test_service as form_parameter_test_service
@@ -32,20 +31,11 @@ class PyxelRestTest(unittest.TestCase):
                                        (filtered_tags_test_service, 8944),
                                        (values_false_test_service, 8945),
                                        (output_order_test_service, 8946),
-                                       (vba_keywords_test_service, 8949),
                                        (without_parameter_test_service, 8950),
                                        (header_parameter_test_service, 8951),
                                        (form_parameter_test_service, 8952),
                                        (array_parameter_test_service, 8953)
                                        )
-
-    def test_vba_restricted_keywords(self):
-        import pyxelrestgenerator
-        self.assertEqual(
-            [['currency', 'end'], ['currency value', 'end value']],
-            pyxelrestgenerator.vba_keywords_test_get_test_vba_restricted_keywords(
-                currency_visual_basic='currency value',
-                end_visual_basic='end value'))
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator
@@ -155,15 +145,15 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual([
             [u'ts', u'date', u'curve', u'mat'],
-            [u'', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H01'],
-            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H02'],
-            [u'', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H03']
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H01'],
+            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H02'],
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H03']
         ],
             pyxelrestgenerator.output_order_test_get_test_price_unordered())
 
     def test_get_test_date(self):
         import pyxelrestgenerator
-        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0, tzinfo=tzlocal())],
+        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
             pyxelrestgenerator.usual_parameters_test_get_test_date())
 
     def test_get_test_datetime(self):
