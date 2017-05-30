@@ -1,5 +1,6 @@
 # Some parameter names might be VBA keywords, this dictionary is used to use valid VBA parameter names.
 # Values should be lower cased
+# Source: https://msdn.microsoft.com/en-us/library/ksh7h19t(v=vs.90).aspx?f=255&MSPPError=-2147217396
 keywords = [
     'addhandler',
     'addressof',
