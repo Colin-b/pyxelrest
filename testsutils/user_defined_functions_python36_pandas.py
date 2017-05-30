@@ -47,6 +47,7 @@ def usual_parameters_test_get_test_date():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_date response: {0}.".format(response.text))
         else:
@@ -54,6 +55,7 @@ def usual_parameters_test_get_test_date():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -82,6 +84,7 @@ def usual_parameters_test_get_test_date_time():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_date_time response: {0}.".format(response.text))
         else:
@@ -89,6 +92,7 @@ def usual_parameters_test_get_test_date_time():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -372,6 +376,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -379,6 +384,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -662,6 +668,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_post_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -669,6 +676,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -952,6 +960,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_put_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -959,6 +968,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -1242,6 +1252,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_delete_test_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -1249,6 +1260,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -1610,6 +1622,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -1617,6 +1630,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -1978,6 +1992,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_post_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -1985,6 +2000,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -2346,6 +2362,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_put_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -2353,6 +2370,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -2714,6 +2732,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_delete_test_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -2721,6 +2740,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -2879,6 +2899,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_get_test_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -2886,6 +2907,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3044,6 +3066,7 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_post_test_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -3051,6 +3074,7 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3209,6 +3233,7 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_put_test_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -3216,6 +3241,7 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3374,6 +3400,7 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling usual_parameters_test_delete_test_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -3381,6 +3408,7 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3409,6 +3437,7 @@ def filtered_tags_test_get_test_with_tags():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling filtered_tags_test_get_test_with_tags response: {0}.".format(response.text))
         else:
@@ -3416,6 +3445,7 @@ def filtered_tags_test_get_test_with_tags():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3444,6 +3474,7 @@ def filtered_tags_test_post_test_with_tags():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling filtered_tags_test_post_test_with_tags response: {0}.".format(response.text))
         else:
@@ -3451,6 +3482,7 @@ def filtered_tags_test_post_test_with_tags():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3479,6 +3511,7 @@ def filtered_tags_test_put_test_with_tags():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling filtered_tags_test_put_test_with_tags response: {0}.".format(response.text))
         else:
@@ -3486,6 +3519,7 @@ def filtered_tags_test_put_test_with_tags():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3514,6 +3548,7 @@ def values_false_test_get_test_with_empty_dictionary():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_empty_dictionary response: {0}.".format(response.text))
         else:
@@ -3521,6 +3556,7 @@ def values_false_test_get_test_with_empty_dictionary():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3549,6 +3585,7 @@ def values_false_test_get_test_with_empty_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_empty_list response: {0}.".format(response.text))
         else:
@@ -3556,6 +3593,7 @@ def values_false_test_get_test_with_empty_list():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3584,6 +3622,7 @@ def values_false_test_get_test_with_empty_string():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_empty_string response: {0}.".format(response.text))
         else:
@@ -3591,6 +3630,7 @@ def values_false_test_get_test_with_empty_string():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3619,6 +3659,7 @@ def values_false_test_get_test_with_false_boolean():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_false_boolean response: {0}.".format(response.text))
         else:
@@ -3626,6 +3667,7 @@ def values_false_test_get_test_with_false_boolean():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3654,6 +3696,7 @@ def values_false_test_get_test_with_zero_float():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_zero_float response: {0}.".format(response.text))
         else:
@@ -3661,6 +3704,7 @@ def values_false_test_get_test_with_zero_float():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3689,6 +3733,7 @@ def values_false_test_get_test_with_zero_integer():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling values_false_test_get_test_with_zero_integer response: {0}.".format(response.text))
         else:
@@ -3696,6 +3741,7 @@ def values_false_test_get_test_with_zero_integer():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3751,6 +3797,7 @@ def output_order_test_get_test_price_unordered(date_visual_basic=None, curve=Non
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling output_order_test_get_test_price_unordered response: {0}.".format(response.text))
         else:
@@ -3758,6 +3805,7 @@ def output_order_test_get_test_price_unordered(date_visual_basic=None, curve=Non
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3786,6 +3834,7 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_empty_nested_list response: {0}.".format(response.text))
         else:
@@ -3793,6 +3842,7 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3821,6 +3871,7 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_four_imbricated_levels response: {0}.".format(response.text))
         else:
@@ -3828,6 +3879,7 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3856,6 +3908,7 @@ def nested_data_test_get_test_dict_with_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_list response: {0}.".format(response.text))
         else:
@@ -3863,6 +3916,7 @@ def nested_data_test_get_test_dict_with_list():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3891,6 +3945,7 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_list_of_different_size response: {0}.".format(response.text))
         else:
@@ -3898,6 +3953,7 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3926,6 +3982,7 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys response: {0}.".format(response.text))
         else:
@@ -3933,6 +3990,7 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3961,6 +4019,7 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_three_imbricated_levels response: {0}.".format(response.text))
         else:
@@ -3968,6 +4027,7 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -3996,6 +4056,7 @@ def nested_data_test_get_test_dict_with_various_columns():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_dict_with_various_columns response: {0}.".format(response.text))
         else:
@@ -4003,6 +4064,7 @@ def nested_data_test_get_test_dict_with_various_columns():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4031,6 +4093,7 @@ def nested_data_test_get_test_empty_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_empty_dict response: {0}.".format(response.text))
         else:
@@ -4038,6 +4101,7 @@ def nested_data_test_get_test_empty_dict():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4066,6 +4130,7 @@ def nested_data_test_get_test_empty_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_empty_list response: {0}.".format(response.text))
         else:
@@ -4073,6 +4138,7 @@ def nested_data_test_get_test_empty_list():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4101,6 +4167,7 @@ def nested_data_test_get_test_list_of_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_list_of_dict response: {0}.".format(response.text))
         else:
@@ -4108,6 +4175,7 @@ def nested_data_test_get_test_list_of_dict():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4136,6 +4204,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_dict_entry_with_a_list response: {0}.".format(response.text))
         else:
@@ -4143,6 +4212,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4171,6 +4241,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_dict_entry_with_a_list_of_dict response: {0}.".format(response.text))
         else:
@@ -4178,6 +4249,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4206,6 +4278,7 @@ def nested_data_test_get_test_one_level_dict():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_level_dict response: {0}.".format(response.text))
         else:
@@ -4213,6 +4286,7 @@ def nested_data_test_get_test_one_level_dict():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -4241,6 +4315,7 @@ def nested_data_test_get_test_one_level_list():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling nested_data_test_get_test_one_level_list response: {0}.".format(response.text))
         else:
@@ -4248,6 +4323,7 @@ def nested_data_test_get_test_one_level_list():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -5497,6 +5573,7 @@ def vba_keywords_test_get_test_vba_restricted_keywords(addhandler_visual_basic, 
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_get_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
@@ -5504,6 +5581,7 @@ def vba_keywords_test_get_test_vba_restricted_keywords(addhandler_visual_basic, 
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -6753,6 +6831,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_post_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
@@ -6760,6 +6839,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -8009,6 +8089,7 @@ def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, 
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_put_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
@@ -8016,6 +8097,7 @@ def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, 
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9265,6 +9347,7 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(addhandler_visual_basi
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling vba_keywords_test_delete_test_vba_restricted_keywords response: {0}.".format(response.text))
         else:
@@ -9272,6 +9355,7 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(addhandler_visual_basi
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9301,6 +9385,7 @@ def without_parameter_test_get_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_get_test_json_without_parameter response: {0}.".format(response.text))
         else:
@@ -9308,6 +9393,7 @@ def without_parameter_test_get_test_json_without_parameter():
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9337,6 +9423,7 @@ def without_parameter_test_post_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_post_test_json_without_parameter response: {0}.".format(response.text))
         else:
@@ -9344,6 +9431,7 @@ def without_parameter_test_post_test_json_without_parameter():
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9373,6 +9461,7 @@ def without_parameter_test_put_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_put_test_json_without_parameter response: {0}.".format(response.text))
         else:
@@ -9380,6 +9469,7 @@ def without_parameter_test_put_test_json_without_parameter():
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9409,6 +9499,7 @@ def without_parameter_test_delete_test_json_without_parameter():
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_delete_test_json_without_parameter response: {0}.".format(response.text))
         else:
@@ -9416,6 +9507,7 @@ def without_parameter_test_delete_test_json_without_parameter():
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9444,6 +9536,7 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_get_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
@@ -9451,6 +9544,7 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9479,6 +9573,7 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_post_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
@@ -9486,6 +9581,7 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9514,6 +9610,7 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_put_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
@@ -9521,6 +9618,7 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9549,6 +9647,7 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_delete_test_plain_text_without_parameter response: {0}.".format(response.text))
         else:
@@ -9556,6 +9655,7 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9584,6 +9684,7 @@ def without_parameter_test_get_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_get_test_without_parameter response: {0}.".format(response.text))
         else:
@@ -9591,6 +9692,7 @@ def without_parameter_test_get_test_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9619,6 +9721,7 @@ def without_parameter_test_post_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_post_test_without_parameter response: {0}.".format(response.text))
         else:
@@ -9626,6 +9729,7 @@ def without_parameter_test_post_test_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9654,6 +9758,7 @@ def without_parameter_test_put_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_put_test_without_parameter response: {0}.".format(response.text))
         else:
@@ -9661,6 +9766,7 @@ def without_parameter_test_put_test_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9689,6 +9795,7 @@ def without_parameter_test_delete_test_without_parameter():
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling without_parameter_test_delete_test_without_parameter response: {0}.".format(response.text))
         else:
@@ -9696,6 +9803,7 @@ def without_parameter_test_delete_test_without_parameter():
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9736,6 +9844,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling header_parameter_test_get_test_header_parameter response: {0}.".format(response.text))
         else:
@@ -9743,6 +9852,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9783,6 +9893,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling form_parameter_test_post_test_form_parameter response: {0}.".format(response.text))
         else:
@@ -9790,6 +9901,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -9830,6 +9942,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling array_parameter_test_get_test_string_array_parameter response: {0}.".format(response.text))
         else:
@@ -9837,6 +9950,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -10121,6 +10235,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_get_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -10128,6 +10243,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -10412,6 +10528,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_post_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -10419,6 +10536,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -10703,6 +10821,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_put_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -10710,6 +10829,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -10994,6 +11114,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_delete_test_json_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -11001,6 +11122,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -11363,6 +11485,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_get_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -11370,6 +11493,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -11732,6 +11856,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_post_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -11739,6 +11864,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -12101,6 +12227,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_put_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -12108,6 +12235,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -12470,6 +12598,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_delete_test_json_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -12477,6 +12606,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -12636,6 +12766,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_get_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -12643,6 +12774,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -12802,6 +12934,7 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_post_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -12809,6 +12942,7 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -12968,6 +13102,7 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_put_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -12975,6 +13110,7 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -13134,6 +13270,7 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
         return ['Cannot connect to service. Please retry once connection is re-established.']
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling json_test_delete_test_json_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -13141,6 +13278,7 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
         return [describe_error(response, error)]
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -13424,6 +13562,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_get_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -13431,6 +13570,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -13714,6 +13854,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_post_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -13721,6 +13862,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -14004,6 +14146,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_put_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -14011,6 +14154,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -14294,6 +14438,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_delete_test_plain_text_with_all_optional_parameters_types response: {0}.".format(response.text))
         else:
@@ -14301,6 +14446,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -14662,6 +14808,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_get_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -14669,6 +14816,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -15030,6 +15178,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_post_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -15037,6 +15186,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -15398,6 +15548,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_put_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -15405,6 +15556,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -15766,6 +15918,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_delete_test_plain_text_with_all_parameters_types response: {0}.".format(response.text))
         else:
@@ -15773,6 +15926,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -15931,6 +16085,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_get_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -15938,6 +16093,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -16096,6 +16252,7 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_post_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -16103,6 +16260,7 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -16261,6 +16419,7 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_put_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -16268,6 +16427,7 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -16426,6 +16586,7 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
         return 'Cannot connect to service. Please retry once connection is re-established.'
 
     except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             logging.exception("Error occurred while handling plain_text_test_delete_test_plain_text_with_all_paths_types response: {0}.".format(response.text))
         else:
@@ -16433,6 +16594,7 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
         return describe_error(response, error)
 
     finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -16462,6 +16624,7 @@ def msgpackpandas_as_list(msgpack_pandas):
 
 
 def describe_error(response, error):
+    # Check "is not None" because response.ok is overrided according to HTTP status code.
     if response is not None:
         return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
     return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
