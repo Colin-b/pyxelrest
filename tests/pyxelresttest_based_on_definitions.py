@@ -6,7 +6,7 @@ import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
 
-class PyxelRestTest(unittest.TestCase):
+class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()

@@ -30,10 +30,16 @@ class IE:
             del self.ie
             setattr(self, item, value)
 
-    def wait(self):
+    def wait(self, timeout, check_interval=0.25):
         """Wait for end of page loading"""
-        while self.Busy or (self.ReadyState != 4):
-            time.sleep(0.25)
+        awaited_time = 0
+        try:
+            while awaited_time < timeout and (self.Busy or (self.ReadyState != 4)):
+                time.sleep(check_interval)
+                awaited_time += check_interval
+        except:
+            logging.exception('An error occurred while trying to wait. Considering wait is over.')
+        return awaited_time
 
     @property
     def location_url(self):
@@ -104,12 +110,11 @@ def close(ie):
 
 
 def wait_until_url_is(ie, url, timeout, time_between_checks=1):
-    ie.wait()
+    current_awaited_time = ie.wait(timeout)
 
-    current_awaited_time = 0
     # exit loop after max_time seconds
     while (ie.location_url != url) and (current_awaited_time <= timeout):
-        logging.debug("Waiting for URL to be {0}... Current one is still {1} ({2}), Awaited {3} seconds on {4}.".format(
+        logging.debug("Waiting for URL to be {0}... Current one is still '{1}' ({2}), Awaited {3} seconds on {4}.".format(
             url,
             ie.Document.Title,
             ie.location_url,
@@ -124,7 +129,6 @@ def wait_until_url_is(ie, url, timeout, time_between_checks=1):
         return False
 
     logging.debug("URL is now {0}.".format(url))
-    ie.wait()
     return True
 
 
@@ -142,7 +146,7 @@ def call_till_redirect(url_origin, url_redirect, max_time):
     if ie:
         was_redirected = wait_until_url_is(ie, url_redirect, max_time)
         if was_redirected:
-            ie.wait()  # Wait for page to be fully loaded
+            ie.wait(max_time)  # TODO Wait for page to be fully loaded with another timeout
         close(ie)
         return was_redirected
 

@@ -3,7 +3,7 @@ import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
 
-class PyxelRestNestedDataTest(unittest.TestCase):
+class PyxelRestNestedDataBasedOnDefinitionsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         import testsutils.nested_data_test_service as nested_data_test_service

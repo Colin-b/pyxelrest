@@ -3,7 +3,8 @@ import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 import sys
 
-class PyxelRestTest(unittest.TestCase):
+
+class PyxelRestAuthenticationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
@@ -27,20 +28,20 @@ class PyxelRestTest(unittest.TestCase):
     def test_authentication_on_custom_server_port(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_second_test_get_test_authentication_success()
+        self.assertEqual(first_token[0], ['Bearer'])
         # Wait for 1 second and send a second request from another server to the same auth server
         # (should request another token)
         import time
         time.sleep(1)
         second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
-        self.assertEqual(first_token[0], ['Bearer'])
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
 
     def test_authentication_success(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
-        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
+        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success()
         self.assertEqual(first_token, second_token)
 
     def test_authentication_failure(self):
@@ -67,7 +68,7 @@ class PyxelRestTest(unittest.TestCase):
     def test_authentication_expiry(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success_quick_expiry()
-        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
+        second_token = pyxelrestgenerator.authenticated_test_get_test_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
