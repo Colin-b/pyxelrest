@@ -2,10 +2,16 @@
 
 ## 0.59 (next) ##
 
+### Enhancements ###
+
+- Add support for HTTPS services (do not validate certificate though)
+
 ### Bug fixes ###
 
 - security_details invalid value cannot be set anymore using Microsoft Excel Auto-Load add-in.
-- Regression since 0.58, PyxelRest was not compatible with Python < 3.6 
+- Regression since 0.58, PyxelRest was not compatible with Python < 3.6
+- "type" is a restricted VBA keyword that was not handled.
+- All date times fields were still displayed as string in Microsoft Excel for Python 2.7 users.
 
 ## 0.58 (2017-05-11) ##
 

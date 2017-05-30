@@ -34,7 +34,7 @@ def usual_parameters_test_get_test_date():
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_date ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('format', 'date'), ('type', 'string')]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'format', u'date'), (u'type', u'string')]))]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -69,7 +69,7 @@ def usual_parameters_test_get_test_date_time():
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_date_time ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')]))]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -359,7 +359,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -649,7 +649,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -939,7 +939,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1229,7 +1229,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1597,7 +1597,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -1965,7 +1965,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2333,7 +2333,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2701,7 +2701,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -2866,7 +2866,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_get_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3031,7 +3031,7 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3196,7 +3196,7 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3361,7 +3361,7 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -3396,8 +3396,8 @@ def filtered_tags_test_get_test_with_tags():
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_get_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3431,8 +3431,8 @@ def filtered_tags_test_post_test_with_tags():
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_post_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3466,8 +3466,8 @@ def filtered_tags_test_put_test_with_tags():
         response.raise_for_status()
         logging.info("Valid response received for filtered_tags_test_put_test_with_tags ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3501,8 +3501,8 @@ def values_false_test_get_test_with_empty_dictionary():
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_dictionary ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/EmptyDictionary')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/EmptyDictionary')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3536,8 +3536,8 @@ def values_false_test_get_test_with_empty_list():
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/EmptyList')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/EmptyList')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3571,8 +3571,8 @@ def values_false_test_get_test_with_empty_string():
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_empty_string ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/EmptyString')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/EmptyString')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3606,8 +3606,8 @@ def values_false_test_get_test_with_false_boolean():
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_false_boolean ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/FalseBoolean')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/FalseBoolean')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3641,8 +3641,8 @@ def values_false_test_get_test_with_zero_float():
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_zero_float ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/ZeroFloat')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/ZeroFloat')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3676,8 +3676,8 @@ def values_false_test_get_test_with_zero_integer():
         response.raise_for_status()
         logging.info("Valid response received for values_false_test_get_test_with_zero_integer ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/ZeroInteger')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Empty', OrderedDict([('properties', OrderedDict())])), ('EmptyDictionary', OrderedDict([('properties', OrderedDict([('empty_dictionary', OrderedDict([('$ref', '#/definitions/Empty'), ('type', 'object')]))]))])), ('EmptyList', OrderedDict([('properties', OrderedDict([('empty_list', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Empty')])), ('type', 'array')]))]))])), ('EmptyString', OrderedDict([('properties', OrderedDict([('empty_string', OrderedDict([('type', 'string')]))]))])), ('FalseBoolean', OrderedDict([('properties', OrderedDict([('false_boolean', OrderedDict([('type', 'boolean')]))]))])), ('ZeroFloat', OrderedDict([('properties', OrderedDict([('zero_float', OrderedDict([('format', 'float'), ('type', 'number')]))]))])), ('ZeroInteger', OrderedDict([('properties', OrderedDict([('zero_integer', OrderedDict([('format', 'int32'), ('type', 'integer')]))]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/ZeroInteger')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3738,8 +3738,8 @@ def output_order_test_get_test_price_unordered(date=None, curve=None, ts=None, m
         response.raise_for_status()
         logging.info("Valid response received for output_order_test_get_test_price_unordered ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Price')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Price', OrderedDict([('required', ['curve', 'date', 'mat', 'ts']), ('type', 'object'), ('properties', OrderedDict([('ts', OrderedDict([('type', 'string'), ('description', 'timeslot'), ('maxLength', 2)])), ('date', OrderedDict([('type', 'string'), ('description', 'date'), ('format', 'date')])), ('curve', OrderedDict([('type', 'string'), ('description', 'curvename'), ('maxLength', 20)])), ('mat', OrderedDict([('type', 'string'), ('description', 'maturity'), ('maxLength', 4)]))])), ('title', 'RealizedPrice')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Price')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Price', OrderedDict([(u'required', [u'curve', u'date', u'mat', u'ts']), (u'type', u'object'), (u'properties', OrderedDict([(u'ts', OrderedDict([(u'type', u'string'), (u'description', u'timeslot'), (u'maxLength', 2)])), (u'date', OrderedDict([(u'type', u'string'), (u'description', u'date'), (u'format', u'date')])), (u'curve', OrderedDict([(u'type', u'string'), (u'description', u'curvename'), (u'maxLength', 20)])), (u'mat', OrderedDict([(u'type', u'string'), (u'description', u'maturity'), (u'maxLength', 4)]))])), (u'title', u'RealizedPrice')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3773,8 +3773,8 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_empty_nested_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3808,8 +3808,8 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_four_imbricated_levels ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3843,8 +3843,8 @@ def nested_data_test_get_test_dict_with_list():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation')]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation')]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3878,8 +3878,8 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_list_of_different_size ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation')]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation')]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3913,8 +3913,8 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3948,8 +3948,8 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_three_imbricated_levels ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -3983,8 +3983,8 @@ def nested_data_test_get_test_dict_with_various_columns():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_dict_with_various_columns ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation')]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation')]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4018,8 +4018,8 @@ def nested_data_test_get_test_empty_dict():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_empty_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4053,8 +4053,8 @@ def nested_data_test_get_test_empty_list():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_empty_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4088,8 +4088,8 @@ def nested_data_test_get_test_list_of_dict():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_list_of_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4123,8 +4123,8 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column1List')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column1List')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4158,8 +4158,8 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_dict_entry_with_a_list_of_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column1')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column1')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4193,8 +4193,8 @@ def nested_data_test_get_test_one_level_dict():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_level_dict ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Column2And3')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Column2And3')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4228,8 +4228,8 @@ def nested_data_test_get_test_one_level_list():
         response.raise_for_status()
         logging.info("Valid response received for nested_data_test_get_test_one_level_list ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('Column', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 2', OrderedDict([('description', 'column2'), ('items', OrderedDict([('$ref', '#/definitions/Column')])), ('type', 'array')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column'), ('type', 'object')])), ('Column1', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/Column2And3')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column1List', OrderedDict([('properties', OrderedDict([('Column 1', OrderedDict([('items', OrderedDict([('type', 'string')])), ('type', 'array')]))])), ('title', 'Column1'), ('type', 'object')])), ('Column2And3', OrderedDict([('properties', OrderedDict([('Column 2', OrderedDict([('description', 'column1'), ('type', 'string')])), ('Column 3', OrderedDict([('description', 'column3'), ('type', 'string')]))])), ('title', 'Column2+3'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4291,8 +4291,8 @@ def vba_keywords_test_get_test_vba_restricted_keywords(currency_visual_basic, en
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_get_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('$ref', '#/definitions/Test')]))]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Test')]))]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict([(u'currency', OrderedDict()), (u'end', OrderedDict()), (u'type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4354,8 +4354,8 @@ def vba_keywords_test_post_test_vba_restricted_keywords(currency_visual_basic, e
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict([(u'currency', OrderedDict()), (u'end', OrderedDict()), (u'type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4417,8 +4417,8 @@ def vba_keywords_test_put_test_vba_restricted_keywords(currency_visual_basic, en
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict([(u'currency', OrderedDict()), (u'end', OrderedDict()), (u'type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4480,8 +4480,8 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(currency_visual_basic,
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict([('currency', OrderedDict()), ('end', OrderedDict()), ('type', OrderedDict())]))]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict([(u'currency', OrderedDict()), (u'end', OrderedDict()), (u'type', OrderedDict())]))]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4516,8 +4516,8 @@ def without_parameter_test_get_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4552,8 +4552,8 @@ def without_parameter_test_post_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_post_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4588,8 +4588,8 @@ def without_parameter_test_put_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_put_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4624,8 +4624,8 @@ def without_parameter_test_delete_test_json_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_delete_test_json_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('$ref', '#/definitions/Test'), ('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'$ref', u'#/definitions/Test'), (u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4659,8 +4659,8 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('type', 'string')]))]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'type', u'string')]))]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4694,8 +4694,8 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_post_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4729,8 +4729,8 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_put_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4764,8 +4764,8 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_delete_test_plain_text_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4799,8 +4799,8 @@ def without_parameter_test_get_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_get_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('type', 'string')]))]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value'), (u'schema', OrderedDict([(u'type', u'string')]))]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4834,8 +4834,8 @@ def without_parameter_test_post_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_post_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'POST performed properly')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'POST performed properly')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4869,8 +4869,8 @@ def without_parameter_test_put_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_put_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'PUT performed properly')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'PUT performed properly')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4904,8 +4904,8 @@ def without_parameter_test_delete_test_without_parameter():
         response.raise_for_status()
         logging.info("Valid response received for without_parameter_test_delete_test_without_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'DELETE performed properly')]))])
-            all_definitions = OrderedDict([('Test', OrderedDict([('properties', OrderedDict())]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'DELETE performed properly')]))])
+            all_definitions = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4951,8 +4951,8 @@ def header_parameter_test_get_test_header_parameter(header_string):
         response.raise_for_status()
         logging.info("Valid response received for header_parameter_test_get_test_header_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Header')]))]))])
-            all_definitions = OrderedDict([('Header', OrderedDict([('properties', OrderedDict([('Accept', OrderedDict([('type', 'string')])), ('Accept-Encoding', OrderedDict([('type', 'string')])), ('Connection', OrderedDict([('type', 'string')])), ('Content-Length', OrderedDict([('type', 'string')])), ('Content-Type', OrderedDict([('type', 'string')])), ('Header-String', OrderedDict([('type', 'string')])), ('Host', OrderedDict([('type', 'string')])), ('User-Agent', OrderedDict([('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Header')]))]))])
+            all_definitions = OrderedDict([(u'Header', OrderedDict([(u'properties', OrderedDict([(u'Accept', OrderedDict([(u'type', u'string')])), (u'Accept-Encoding', OrderedDict([(u'type', u'string')])), (u'Connection', OrderedDict([(u'type', u'string')])), (u'Content-Length', OrderedDict([(u'type', u'string')])), (u'Content-Type', OrderedDict([(u'type', u'string')])), (u'Header-String', OrderedDict([(u'type', u'string')])), (u'Host', OrderedDict([(u'type', u'string')])), (u'User-Agent', OrderedDict([(u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -4998,8 +4998,8 @@ def form_parameter_test_post_test_form_parameter(form_string):
         response.raise_for_status()
         logging.info("Valid response received for form_parameter_test_post_test_form_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/Form')]))]))])
-            all_definitions = OrderedDict([('Form', OrderedDict([('properties', OrderedDict([('form_string', OrderedDict([('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/Form')]))]))])
+            all_definitions = OrderedDict([(u'Form', OrderedDict([(u'properties', OrderedDict([(u'form_string', OrderedDict([(u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -5045,8 +5045,8 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
         response.raise_for_status()
         logging.info("Valid response received for array_parameter_test_get_test_string_array_parameter ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -5336,8 +5336,8 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -5627,8 +5627,8 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         response.raise_for_status()
         logging.info("Valid response received for json_test_post_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -5918,8 +5918,8 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         response.raise_for_status()
         logging.info("Valid response received for json_test_put_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -6209,8 +6209,8 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         response.raise_for_status()
         logging.info("Valid response received for json_test_delete_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -6578,8 +6578,8 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('$ref', '#/definitions/AllMandatoryParameters')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'$ref', u'#/definitions/AllMandatoryParameters')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -6947,8 +6947,8 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         response.raise_for_status()
         logging.info("Valid response received for json_test_post_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -7316,8 +7316,8 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         response.raise_for_status()
         logging.info("Valid response received for json_test_put_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -7685,8 +7685,8 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         response.raise_for_status()
         logging.info("Valid response received for json_test_delete_test_json_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -7851,8 +7851,8 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         response.raise_for_status()
         logging.info("Valid response received for json_test_get_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -8017,8 +8017,8 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         response.raise_for_status()
         logging.info("Valid response received for json_test_post_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -8183,8 +8183,8 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         response.raise_for_status()
         logging.info("Valid response received for json_test_put_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -8349,8 +8349,8 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
         response.raise_for_status()
         logging.info("Valid response received for json_test_delete_test_json_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'successful operation'), ('schema', OrderedDict([('items', OrderedDict([('$ref', '#/definitions/TestObject')])), ('type', 'array')]))]))])
-            all_definitions = OrderedDict([('AllMandatoryParameters', OrderedDict([('properties', OrderedDict([('query_array_boolean', OrderedDict()), ('query_array_date', OrderedDict([('items', OrderedDict([('format', 'date'), ('type', 'string')])), ('type', 'array')])), ('query_array_date_time', OrderedDict([('items', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('type', 'array')])), ('query_array_double', OrderedDict()), ('query_array_float', OrderedDict()), ('query_array_integer', OrderedDict()), ('query_array_integer32', OrderedDict()), ('query_array_integer64', OrderedDict()), ('query_array_number', OrderedDict()), ('query_array_password', OrderedDict()), ('query_array_string', OrderedDict()), ('query_array_string_binary', OrderedDict()), ('query_array_string_byte', OrderedDict()), ('query_boolean', OrderedDict()), ('query_date', OrderedDict([('format', 'date'), ('type', 'string')])), ('query_date_time', OrderedDict([('format', 'date-time'), ('type', 'string')])), ('query_double', OrderedDict()), ('query_float', OrderedDict()), ('query_integer', OrderedDict()), ('query_integer32', OrderedDict()), ('query_integer64', OrderedDict()), ('query_number', OrderedDict()), ('query_password', OrderedDict()), ('query_string', OrderedDict()), ('query_string_binary', OrderedDict()), ('query_string_byte', OrderedDict())]))])), ('TestObject', OrderedDict([('properties', OrderedDict([('test', OrderedDict([('description', 'test'), ('type', 'string')]))])), ('title', 'Test'), ('type', 'object')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'successful operation'), (u'schema', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/TestObject')])), (u'type', u'array')]))]))])
+            all_definitions = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
@@ -8639,7 +8639,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -8929,7 +8929,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9219,7 +9219,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9509,7 +9509,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -9877,7 +9877,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10245,7 +10245,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10613,7 +10613,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -10981,7 +10981,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -11146,7 +11146,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_get_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -11311,7 +11311,7 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -11476,7 +11476,7 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -11641,7 +11641,7 @@ def plain_text_test_delete_test_plain_text_with_all_paths_types(path_integer, pa
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_paths_types ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
-            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            all_responses = OrderedDict([(u'200', OrderedDict([(u'description', u'return value')]))])
             all_definitions = None
             return json_as_list(response, all_responses, all_definitions, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':

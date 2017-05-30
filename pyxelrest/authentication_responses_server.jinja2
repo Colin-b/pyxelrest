@@ -100,6 +100,7 @@ def request_new_token(security_definition, header):
 {% if run_with_python_3 %}
     response_received = authentication_response.acquire(timeout=security_definition.timeout)
 {% else %}
+    # TODO Find a mechanism to also have a timeout on Python 2.7
     response_received = authentication_response.acquire()
 {% endif %}
     if not response_received:

@@ -21,5 +21,6 @@ vba_restricted_keywords = {k.lower(): k.lower() + "_visual_basic" for k in keywo
 
 vba_restricted_keywords.update({
     'currency': 'currency_visual_basic',
+    'end': 'end_visual_basic',
     'type': 'type_visual_basic'
 })

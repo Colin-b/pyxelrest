@@ -42,10 +42,13 @@ class PyxelRestTest(unittest.TestCase):
     def test_vba_restricted_keywords(self):
         import pyxelrestgenerator
         self.assertEqual(
-            [['currency', 'end'], ['currency value', 'end value']],
+            [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
             pyxelrestgenerator.vba_keywords_test_get_test_vba_restricted_keywords(
                 currency_visual_basic='currency value',
-                end_visual_basic='end value'))
+                end_visual_basic='end value',
+                type_visual_basic='type value'
+            )
+        )
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator
@@ -155,15 +158,15 @@ class PyxelRestTest(unittest.TestCase):
         import pyxelrestgenerator
         self.assertEqual([
             [u'ts', u'date', u'curve', u'mat'],
-            [u'', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H01'],
-            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H02'],
-            [u'', datetime.datetime(2017, 4, 5, 0, 0, tzinfo=tzlocal()), u'PW_FR', u'H03']
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H01'],
+            [u'2017-04-05 12:03:15', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H02'],
+            [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H03']
         ],
             pyxelrestgenerator.output_order_test_get_test_price_unordered())
 
     def test_get_test_date(self):
         import pyxelrestgenerator
-        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0, tzinfo=tzlocal())],
+        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
             pyxelrestgenerator.usual_parameters_test_get_test_date())
 
     def test_get_test_datetime(self):

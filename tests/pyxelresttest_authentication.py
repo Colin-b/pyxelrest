@@ -1,7 +1,7 @@
 import unittest
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
-
+import sys
 
 class PyxelRestTest(unittest.TestCase):
     @classmethod
@@ -49,9 +49,12 @@ class PyxelRestTest(unittest.TestCase):
                          pyxelrestgenerator.authenticated_test_get_test_authentication_failure())
 
     def test_authentication_timeout(self):
-        import pyxelrestgenerator
-        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
-                         pyxelrestgenerator.authenticated_test_get_test_authentication_timeout())
+        if sys.version_info[0] == 2:
+            self.fail('Authentication timeout is not handled in Python 2.7 for now')
+        else:
+            import pyxelrestgenerator
+            self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
+                             pyxelrestgenerator.authenticated_test_get_test_authentication_timeout())
 
     def test_without_authentication(self):
         import pyxelrestgenerator

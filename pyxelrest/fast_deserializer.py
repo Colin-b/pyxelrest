@@ -1,6 +1,7 @@
 import logging
 import dateutil.parser
 import dateutil.tz
+from past.builtins import basestring
 
 
 def to_date_time(value):
@@ -71,7 +72,7 @@ class Flattenizer:
         self.__values_per_level[row][level].append({'header': header, 'value': self.convert_simple_type(value, json_definition)})
 
     def convert_simple_type(self, value, json_definition):
-        if isinstance(value, str):
+        if isinstance(value, basestring):
             field_format = json_definition.get('format') if json_definition else None
             if not field_format and 'items' in json_definition:  # Sometimes it can happen that array definition is returned as a single element
                 return self.convert_simple_type(value, json_definition.get('items', {}))

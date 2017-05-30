@@ -14,7 +14,7 @@ from importlib import import_module
 import threading
 from collections import OrderedDict
 import sys
-
+from builtins import open
 
 try:
     # Python 3
@@ -140,7 +140,7 @@ class SwaggerService:
         :param swagger_url: URI of the service swagger JSON.
         :return: Dictionary representation of the retrieved swagger JSON.
         """
-        response = requests.get(swagger_url, proxies=self.proxy, timeout=(self.connect_timeout, self.read_timeout))
+        response = requests.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)
@@ -236,7 +236,12 @@ def user_defined_functions(loaded_services):
     Create xlwings User Defined Functions according to user_defined_functions template.
     :return: A string containing python code with all xlwings UDFs.
     """
-    renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
+    renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__),
+                                                                 encoding="utf-8"),
+                                  trim_blocks=True,
+                                  lstrip_blocks =True,
+                                  )
+
     renderer.tests['table_result'] = lambda produces: \
         produces and ('application/json' in produces or 'application/msqpack' in produces)
     return renderer.get_template('user_defined_functions.jinja2').render(
@@ -284,7 +289,9 @@ def generate_user_defined_functions():
     """
     logging.debug('Generating user defined functions.')
     services = load_services()
-    with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w') as generated_file:
+    with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'),
+              'w',
+              encoding='utf-8') as generated_file:
         generated_file.write(user_defined_functions(services))
 
 
