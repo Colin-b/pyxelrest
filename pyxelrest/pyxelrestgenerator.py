@@ -144,16 +144,20 @@ class SwaggerService:
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)
-        self._normalize_parameters(swagger)
+        self._normalize_methods(swagger)
         return swagger
 
+    # TODO Clean this method as it is too big and a smart refactoring of SwaggerService might be needed
     @classmethod
-    def _normalize_parameters(cls, swagger_json):
+    def _normalize_methods(cls, swagger_json):
         """
         Normalize method parameters from dict representing the swagger JSON to:
         - rename parameters name that are VBA restricted keywords 
         - rename parameters name that uses '-' (to '_')
         - cascade parameters defined at path level to operation level
+
+        Normalize method produces from dict representing the swagger JSON to:
+        - cascade produces defined at root level to operation level
 
         :param swagger_json: Dictionary representing the swagger JSON.
         :return: None
@@ -173,6 +177,18 @@ class SwaggerService:
                     parameter['name'] = parameter['name'][1:]
             return parameters
 
+        def _update_method_parameters(method, global_parameters):
+            method['parameters'] = global_parameters + _normalise_names(method.get('parameters', []))
+
+            method_parameters_names = [parameter['name'] for parameter in method['parameters']]
+            if len(set(method_parameters_names)) != len(method_parameters_names):
+                raise DuplicatedParameters(method)
+
+        def _update_method_produces(method, global_produces):
+            method['produces'] = global_produces + method.get('produces', [])
+
+        global_produces = swagger_json.get('produces', [])
+
         for methods in swagger_json['paths'].values():
             # retrieve parameters listed at the path level
             global_parameters = _normalise_names(methods.pop("parameters", []))
@@ -181,11 +197,8 @@ class SwaggerService:
                     logging.warning("'{0}' mode is not supported for now. Supported ones are "
                                     "['get', 'post', 'put', 'delete']".format(mode))
 
-                method['parameters'] = global_parameters + _normalise_names(method.get('parameters', []))
-
-                method_parameters_names = [parameter['name'] for parameter in method['parameters']]
-                if len(set(method_parameters_names)) != len(method_parameters_names):
-                    raise DuplicatedParameters(method)
+                _update_method_parameters(method, global_parameters)
+                _update_method_produces(method, global_produces)
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:

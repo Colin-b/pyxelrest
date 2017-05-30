@@ -13,6 +13,7 @@
 - Handle all restricted VBA Keywords described here: https://msdn.microsoft.com/en-us/library/ksh7h19t(v=vs.90).aspx?f=255&MSPPError=-2147217396
 - Handle "type" restricted VBA keyword.
 - All date times fields were still displayed as string in Microsoft Excel for Python 2.7 users.
+- Handle produces section defined at Swagger root level instead (or in addition) of operation level.
 
 ## 0.58 (2017-05-11) ##
 
