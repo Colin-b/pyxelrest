@@ -1,6 +1,5 @@
 import datetime
 import unittest
-from dateutil.tz import tzlocal
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 

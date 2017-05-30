@@ -1,7 +1,7 @@
 import datetime
 import unittest
 import platform
-from dateutil.tz import tzutc, tzlocal
+from dateutil.tz import tzutc
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
@@ -23,7 +23,6 @@ class PyxelRestTest(unittest.TestCase):
         import testsutils.filtered_tags_test_service as filtered_tags_test_service
         import testsutils.values_false_test_service as values_false_test_service
         import testsutils.output_order_test_service as output_order_test_service
-        import testsutils.vba_keywords_test_service as vba_keywords_test_service
         import testsutils.without_parameter_test_service as without_parameter_test_service
         import testsutils.header_parameter_test_service as header_parameter_test_service
         import testsutils.form_parameter_test_service as form_parameter_test_service
@@ -32,23 +31,11 @@ class PyxelRestTest(unittest.TestCase):
                                        (filtered_tags_test_service, 8944),
                                        (values_false_test_service, 8945),
                                        (output_order_test_service, 8946),
-                                       (vba_keywords_test_service, 8949),
                                        (without_parameter_test_service, 8950),
                                        (header_parameter_test_service, 8951),
                                        (form_parameter_test_service, 8952),
                                        (array_parameter_test_service, 8953)
                                        )
-
-    def test_vba_restricted_keywords(self):
-        import pyxelrestgenerator
-        self.assertEqual(
-            [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
-            pyxelrestgenerator.vba_keywords_test_get_test_vba_restricted_keywords(
-                currency_visual_basic='currency value',
-                end_visual_basic='end value',
-                type_visual_basic='type value'
-            )
-        )
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator
