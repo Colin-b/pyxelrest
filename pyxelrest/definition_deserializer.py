@@ -2,7 +2,8 @@ from collections import OrderedDict
 import logging
 import dateutil.tz
 import dateutil.parser
-import requests.compat
+from past.builtins import basestring
+
 
 def append_prefix(prefix, values_list):
     """
@@ -262,7 +263,7 @@ class Field:
 
     def convert_simple_type(self, value):
         merger = RowsMerger()
-        if isinstance(value, requests.compat.basestring):
+        if isinstance(value, basestring):
             if self.format == 'date-time' or self.format == 'date':
                 value = to_date_time(value)
             else:
@@ -309,7 +310,7 @@ class DefaultField(object):
     @staticmethod
     def convert_simple_type(value):
         merger = RowsMerger()
-        if isinstance(value, requests.compat.basestring):
+        if isinstance(value, basestring):
             # Return first 255 characters otherwise value will not be valid
             value = value[:255]
         merger.rows = value
