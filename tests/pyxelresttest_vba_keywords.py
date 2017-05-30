@@ -15,11 +15,44 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
         loader.unload()
         serviceshandler.stop_services()
 
-    def test_vba_restricted_keywords(self):
+    def test_get_vba_restricted_keywords(self):
         import pyxelrestgenerator
         self.assertEqual(
             [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
             pyxelrestgenerator.vba_keywords_test_get_test_vba_restricted_keywords(
+                currency_visual_basic='currency value',
+                end_visual_basic='end value',
+                type_visual_basic='type value'
+            )
+        )
+
+    def test_post_vba_restricted_keywords(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
+            pyxelrestgenerator.vba_keywords_test_post_test_vba_restricted_keywords(
+                currency_visual_basic='currency value',
+                end_visual_basic='end value',
+                type_visual_basic='type value'
+            )
+        )
+
+    def test_put_vba_restricted_keywords(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
+            pyxelrestgenerator.vba_keywords_test_put_test_vba_restricted_keywords(
+                currency_visual_basic='currency value',
+                end_visual_basic='end value',
+                type_visual_basic='type value'
+            )
+        )
+
+    def test_delete_vba_restricted_keywords(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            [['currency', 'end', 'type'], ['currency value', 'end value', 'type value']],
+            pyxelrestgenerator.vba_keywords_test_delete_test_vba_restricted_keywords(
                 currency_visual_basic='currency value',
                 end_visual_basic='end value',
                 type_visual_basic='type value'
