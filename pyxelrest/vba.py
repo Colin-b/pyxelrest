@@ -1,26 +1,30 @@
 # Some parameter names might be VBA keywords, this dictionary is used to use valid VBA parameter names.
-keywords = "AddHandler,AddressOf,Alias,And,AndAlso,As,Boolean,ByRef,Byte," \
-           "ByVal,Call,Case,Catch,CBool,CByte,CChar,CDate,CDbl,CDec,Char," \
-           "CInt,Class,CLng,CObj,Const,Continue,CSByte,CShort,CSng,CStr," \
-           "CType,CUInt,CULng,CUShort,Date,Decimal,Declare,Default,Delegate," \
-           "Dim,DirectCast,Do,Double,Each,Else,ElseIf,End,EndIf,Enum,Erase," \
-           "Error,Event,Exit,Finally,For,Friend,Function,Get,GetType," \
-           "GetXMLNamespace,Global,GoSub,GoTo,Handles,If,Implements,Imports," \
-           "In,Inherits,Integer,Interface,Is,IsNot,Let,Lib,Like,Long,Loop,Me," \
-           "Mod,Module,MustInherit,MustOverride,MyBase,MyClass,Namespace," \
-           "Narrowing,New,Next,Not,Nothing,NotInheritable,NotOverridable," \
-           "Object,Of,On,Operator,Option,Optional,Or,OrElse,Overloads," \
-           "Overridable,Overrides,ParamArray,Partial,Private,Property," \
-           "Protected,Public,RaiseEvent,ReadOnly,ReDim,REM,RemoveHandler," \
-           "Resume,Return,SByte,Select,Set,Shadows,Shared,Short,Single,Static," \
-           "Step,Stop,String,Structure,Sub,SyncLock,Then,Throw,To,Try,TryCast," \
-           "TypeOf,UInteger,ULong,UShort,Using,Variant,Wend,When,While," \
-           "Widening,With,WithEvents,WriteOnly,Xor".split(",")
+# Values should be lower cased
+keywords = ['addhandler', 'addressof', 'alias', 'and', 'andalso', 'as',
+            'boolean', 'byref', 'byte', 'byval',
+            'call', 'case', 'catch', 'cbool', 'cbyte', 'cchar', 'cdate', 'cdbl', 'cdec', 'char', 'cint', 'class',
+            'clng', 'cobj', 'const', 'continue', 'csbyte', 'cshort', 'csng', 'cstr', 'ctype', 'cuint', 'culng',
+            'currency', 'cushort',
+            'date', 'decimal', 'declare', 'default', 'delegate', 'dim', 'directcast', 'do', 'double',
+            'each', 'else', 'elseif', 'end', 'endif', 'enum', 'erase', 'error', 'event', 'exit',
+            'finally', 'for', 'friend', 'function',
+            'get', 'gettype', 'getxmlnamespace', 'global', 'gosub', 'goto',
+            'handles',
+            'if', 'implements', 'imports', 'in', 'inherits', 'integer', 'interface', 'is', 'isnot',
+            'let', 'lib', 'like', 'long', 'loop',
+            'me', 'mod', 'module', 'mustinherit', 'mustoverride', 'mybase', 'myclass',
+            'namespace', 'narrowing', 'new', 'next', 'not', 'nothing', 'notinheritable', 'notoverridable',
+            'object', 'of', 'on', 'operator', 'option', 'optional', 'or', 'orelse', 'overloads', 'overridable',
+            'overrides',
+            'paramarray', 'partial', 'private', 'property', 'protected', 'public',
+            'raiseevent', 'readonly', 'redim', 'rem', 'removehandler', 'resume', 'return',
+            'sbyte', 'select', 'set', 'shadows', 'shared', 'short', 'single', 'static', 'step', 'stop', 'string',
+            'structure', 'sub', 'synclock',
+            'then', 'throw', 'to', 'try', 'trycast', 'type', 'typeof',
+            'uinteger', 'ulong', 'ushort', 'using',
+            'variant',
+            'wend', 'when', 'while', 'widening', 'with', 'withevents', 'writeonly',
+            'xor'
+            ]
 
-vba_restricted_keywords = {k.lower(): k.lower() + "_visual_basic" for k in keywords}
-
-vba_restricted_keywords.update({
-    'currency': 'currency_visual_basic',
-    'end': 'end_visual_basic',
-    'type': 'type_visual_basic'
-})
+vba_restricted_keywords = {keyword: keyword + "_visual_basic" for keyword in keywords}
