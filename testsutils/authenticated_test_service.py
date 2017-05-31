@@ -74,6 +74,22 @@ def swagger():
                                    }
                                ]
                            }
+                       },
+                       '/test/api/key/authentication/success': {
+                           'get': {
+                               'operationId': 'get_test_api_key_authentication_success',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               },
+                               'security': [
+                                   {
+                                       'api_key_auth_success': [
+                                       ]
+                                   }
+                               ]
+                           }
                        }
                    },
                    securityDefinitions={
@@ -109,6 +125,11 @@ def swagger():
                            "scopes": {
                                "custom_label": "custom category"
                            }
+                       },
+                       'api_key_auth_success': {
+                           "type": "apiKey",
+                           "in": "header",
+                           "name": "X-API-KEY"
                        }
                    })
 
@@ -130,9 +151,12 @@ def get_test_oauth2_authentication_timeout():
 
 @app.route('/test/oauth2/authentication/success/quick/expiry', methods=['GET'])
 def get_test_oauth2_authentication_success_quick_expiry():
-    return jsonify([{
-        'Bearer': request.headers.get('Bearer')
-    }])
+    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+
+
+@app.route('/test/api/key/authentication/success', methods=['GET'])
+def get_test_api_key_authentication_success():
+    return jsonify([{'X-API-KEY': request.headers.get('X-API-KEY')}])
 
 
 def start_server(port):

@@ -72,3 +72,11 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
+
+    def test_api_key_authentication_success(self):
+        import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_api_key_authentication_success(),
+                         [
+                             ['X-API-KEY'],
+                             ['my_provided_api_key']
+                         ])
