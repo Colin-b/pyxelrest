@@ -1,6 +1,12 @@
 # PyxelRest Changelog #
 
-## 0.59 (next) ##
+## 0.60 (next) ##
+
+### Enhancements ###
+
+- API Key Security definition support.
+
+## 0.59 (2017-05-31) ##
 
 ### Enhancements ###
 

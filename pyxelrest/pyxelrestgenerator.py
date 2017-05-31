@@ -310,7 +310,7 @@ def generate_user_defined_functions():
 
 try:
     authentication.stop_servers()
-    authentication.security_definitions_by_port = {}
+    authentication.oauth2_security_definitions_by_port = {}
     authentication.security_definitions = {}
     generate_user_defined_functions()
     authentication.start_servers()

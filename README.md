@@ -155,14 +155,22 @@ The following keys are available:
 <table>
     <th>
         <td><em>Description</em></td>
+        <td><em>Type of security</em></td>
     </th>
     <tr>
         <td><strong>port</strong></td>
         <td>Port on which the authentication response is supposed to be received. Default value is 5000.</td>
+        <td>OAuth 2</td>
     </tr>
     <tr>
         <td><strong>timeout</strong></td>
         <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.</td>
+        <td>OAuth 2</td>
+    </tr>
+    <tr>
+        <td><strong>api_key</strong></td>
+        <td>User API Key.</td>
+        <td>API Key</td>
     </tr>
 </table>
 

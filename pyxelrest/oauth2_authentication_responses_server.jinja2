@@ -67,7 +67,7 @@ def {{ security_definition.service_name }}_{{ security_definition.security_defin
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
-    logging.info('Shutdown authentication responses server...')
+    logging.info('Shutdown OAuth2 authentication responses server...')
     flask_server_shutdown = flask.request.environ.get('werkzeug.server.shutdown')
     if flask_server_shutdown is None:
         raise RuntimeError('Not running with the Werkzeug Server')
@@ -145,7 +145,7 @@ def error_page(text):
 
 
 def start_server():
-    logging.debug('Starting Authentication Responses Server...')
+    logging.debug('Starting OAuth2 authentication responses server...')
     app.run(port={{ port }})
 
 

@@ -12,21 +12,21 @@ from imp import reload
 {% endif %}
 
 {% for port in ports %}
-import authentication_responses_server_{{ port }}
+import oauth2_authentication_responses_server_{{ port }}
 {% endfor %}
 
 
 def start_servers():
 {% for port in ports %}
-    reload(import_module('authentication_responses_server_{{ port }}'))
+    reload(import_module('oauth2_authentication_responses_server_{{ port }}'))
     # Flask URL map contains shutdown and static by default
-    if len(authentication_responses_server_{{ port }}.app.url_map._rules) > 2:
-        threading.Thread(target=authentication_responses_server_{{ port }}.start_server).start()
+    if len(oauth2_authentication_responses_server_{{ port }}.app.url_map._rules) > 2:
+        threading.Thread(target=oauth2_authentication_responses_server_{{ port }}.start_server).start()
 {% endfor %}
 
 
 servers = {
 {% for port in ports %}
-    {{ port }}: authentication_responses_server_{{ port }},
+    {{ port }}: oauth2_authentication_responses_server_{{ port }},
 {% endfor %}
 }
