@@ -5,6 +5,7 @@
 ### Enhancements ###
 
 - Add support for HTTPS services (do not validate certificate though)
+- Focus will come back to Microsoft Excel after successful authentication (now performed using Microsoft Internet Explorer by default).
 
 ### Bug fixes ###
 
