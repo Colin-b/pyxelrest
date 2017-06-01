@@ -96,8 +96,8 @@ def generate_user_defined_functions():
     Create user_defined_functions.py python file containing generated xlwings User Defined Functions.
     :return: None
     """
-    logging.debug('Generating user defined functions.')
     services = swagger.load_services()
+    logging.debug('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w', encoding='utf-8') \
             as generated_file:
         generated_file.write(user_defined_functions(services))
