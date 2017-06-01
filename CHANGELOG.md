@@ -5,6 +5,7 @@
 ### Enhancements ###
 
 - API Key Security definition support. You should specify your API Key thanks to api_key keyword in security_details property.
+- Slight performance improvement on UDFs loading
 
 ## 0.59 (2017-05-31) ##
 

@@ -43,8 +43,8 @@ class DuplicatedParameters(Exception):
 
 class EmptyResponses(InvalidSwaggerDefinition):
     """ Responses are not set in Swagger. """
-    def __init__(self, service_name, *args, **kwargs):
-        Exception.__init__(self, 'At least one response must be specified (call in {0}).'.format(service_name))
+    def __init__(self, method_name, *args, **kwargs):
+        Exception.__init__(self, 'At least one response must be specified for "{0}".'.format(method_name))
 
 
 class AuthenticationFailed(Exception):

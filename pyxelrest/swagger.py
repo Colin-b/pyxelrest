@@ -67,21 +67,31 @@ class SwaggerService:
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
-    def should_provide_tags(self, tags):
-        if not self.tags:
-            return True
-        for tag in tags:
-            if tag in self.tags:
-                return True
-        return False
-
     def definitions(self):
         return self.swagger.get('definitions')
 
-    def responses(self, responses):
-        if not responses:
-            raise EmptyResponses(self.name)
-        return responses
+    def method(self, swagger_method, method_path):
+        return SwaggerMethod(self, swagger_method, method_path)
+
+    def should_provide_method(self, swagger_methods, http_verb):
+        if http_verb not in self.methods:
+            return False
+        swagger_method = swagger_methods.get(http_verb)
+        if not swagger_method:
+            return False
+        return self._allow_tags(swagger_method.get('tags')) and \
+               self.return_type_can_be_handled(swagger_method.get('produces', []))
+
+    def _allow_tags(self, method_tags):
+        if not self.tags or not method_tags:
+            return True
+        for method_tag in method_tags:
+            if method_tag in self.tags:
+                return True
+        return False
+
+    def return_type_can_be_handled(self, method_produces):
+        return 'application/octet-stream' not in method_produces
 
     def get_item(self, config, key):
         try:
@@ -179,6 +189,77 @@ class SwaggerService:
 
     def __str__(self):
         return '[{0}] service. {1}'.format(self.name, self.uri)
+
+
+class SwaggerMethod:
+    def __init__(self, service, swagger_method, path):
+        self.uri = '{0}{1}'.format(service.uri, path)
+        self.service = service
+        self.swagger_method = swagger_method
+        self.parameters = swagger_method.get('parameters', [])
+        self.path_parameters = []
+        self.required_parameters = []
+        self.optional_parameters = []
+        for parameter in self.parameters:
+            if parameter['in'] == 'path':
+                self.path_parameters.append(parameter)
+            # Required but not in path
+            elif parameter.get('required'):
+                self.required_parameters.append(parameter)
+            else:
+                self.optional_parameters.append(parameter)
+        # Uses "or" in case swagger contains None in description (explicitly set by service)
+        self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
+        self.udf_name = '{0}_{1}'.format(service.udf_prefix, swagger_method['operationId'])
+        self.responses = swagger_method.get('responses')
+        if not self.responses:
+            raise EmptyResponses(self.udf_name)
+
+    def return_a_list(self):
+        return ('application/json' in self.swagger_method['produces']) or \
+               ('application/msqpack' in self.swagger_method['produces'])
+
+    def security(self):
+        return self.swagger_method.get('security')
+
+    def summary(self):
+        return self.swagger_method.get('summary')
+
+    def initial_header(self):
+        """
+        Initial header content
+        For more details refer to https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+        """
+        # TODO Only set content-type when there is a body
+        # TODO Set Accept header
+        if 'application/msgpackpandas' in self.swagger_method['produces'] and support_pandas:
+            return {'content-type': 'application/msgpackpandas'}
+        if 'application/json' in self.swagger_method['produces']:
+            return {'content-type': 'application/json'}
+        return {}
+
+    def contains_parameters(self):
+        # TODO This method is only temporary as a transition from ugly Jinja template to cleaner code
+        return len(self.required_parameters) > 0 or len(self.optional_parameters) > 0
+
+    @staticmethod
+    def extract_url(text):
+        """
+        Swagger URLs are interpreted thanks to the following format:
+        [description of the url](url)
+        :return: URL or None if no URL can be found.
+        """
+        urls = re.findall('^.*\[.*\]\((.*)\).*$', text)
+        if urls:
+            return urls[0]
+
+
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
 
 
 def load_services():

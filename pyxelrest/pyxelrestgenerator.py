@@ -50,25 +50,13 @@ def user_defined_functions(loaded_services):
         trim_blocks=True,
         lstrip_blocks=True
     )
-
-    renderer.tests['table_result'] = lambda produces: \
-        produces and ('application/json' in produces or 'application/msqpack' in produces)
     return renderer.get_template('user_defined_functions.jinja2').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
         services=loaded_services,
         modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
-        support_pandas=support_pandas(),
-        support_ujson=support_ujson(),
-        extract_url=extract_url
+        support_pandas=swagger.support_pandas(),
+        support_ujson=support_ujson()
     )
-
-
-def support_pandas():
-    try:
-        import pandas
-        return True
-    except:
-        return False
 
 
 def support_ujson():
@@ -77,18 +65,6 @@ def support_ujson():
         return True
     except:
         return False
-
-
-def extract_url(text):
-    """
-    Swagger URLs are interpreted thanks to the following format:
-    [description of the url](url)
-    :return: URL or None if no URL can be found.
-    """
-    if text:
-        urls = re.findall('^.*\[.*\]\((.*)\).*$', text)
-        if urls:
-            return urls[0]
 
 
 def generate_user_defined_functions():
