@@ -29,67 +29,35 @@ import authentication
 {% endmacro %}
 
 {%- macro delete(swagger_method) %}
-{% if swagger_method.contains_parameters() %}
     response = requests.delete('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_payload, params=request_parameters, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% else %}
-    response = requests.delete('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-), proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endif %}
+){% if swagger_method.should_send_body() %}, json=request_payload{% endif %}{% if swagger_method.should_send_parameters() %}, params=request_parameters{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {%- macro get(swagger_method) %}
-{% if swagger_method.contains_parameters() %}
     response = requests.get('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), request_parameters, stream=True, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% else %}
-    response = requests.get('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-), stream=True, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endif %}
+){% if swagger_method.should_send_parameters() %}, request_parameters{% endif %}, stream=True, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {%- macro post(swagger_method) %}
-{% if swagger_method.contains_parameters() %}
     response = requests.post('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% else %}
-    response = requests.post('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-), proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endif %}
+){% if swagger_method.should_send_body() %}, json=request_payload{% endif %}{% if swagger_method.should_send_parameters() %}, params=request_parameters{% endif %}{% if swagger_method.should_send_body() %}, files=request_files{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {%- macro put(swagger_method) %}
-{% if swagger_method.contains_parameters() %}
     response = requests.put('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-), json=request_payload, params=request_parameters, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% else %}
-    response = requests.put('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-), proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endif %}
+){% if swagger_method.should_send_body() %}, json=request_payload{% endif %}{% if swagger_method.should_send_parameters() %}, params=request_parameters{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {% macro validate_parameter_value(parameter, swagger_method) %}
@@ -387,23 +355,23 @@ import authentication
 {% if swagger_method.return_a_list() %}
 @xw.ret(expand='table')
 {% endif %}
-{% set nb_required_parameters = swagger_method.required_parameters|count %}
-{% set nb_optional_parameters = swagger_method.optional_parameters|count %}
 def {{ swagger_method.udf_name }}(
-    {%- for parameter in swagger_method.path_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_required_parameters > 0 or nb_optional_parameters > 0 %}, {% endif %}{% endfor %}
-    {%- for parameter in swagger_method.required_parameters %}{{ parameter['name'] }}{% if not loop.last or nb_optional_parameters > 0 %}, {% endif %}{% endfor %}
+    {%- for parameter in swagger_method.path_parameters %}{{ parameter['name'] }}{% if not loop.last or swagger_method.has_required_parameters() or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in swagger_method.required_parameters %}{{ parameter['name'] }}{% if not loop.last or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
     {%- for parameter in swagger_method.optional_parameters %}{{ parameter['name'] }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
 {% if swagger_method.summary() %}
     """{{ swagger_method.summary() }}"""
 {% endif %}
     logging.info("Calling {{ swagger_method.udf_name }}...")
     request_header = {{ swagger_method.initial_header() }}
-{% if swagger_method.contains_parameters() %}
+{% if swagger_method.should_send_body() %}
     request_payload = {}
     request_files = {}
-    request_parameters = {}
-
 {% endif %}
+{% if swagger_method.should_send_parameters() %}
+    request_parameters = {}
+{% endif %}
+
 {% for parameter in swagger_method.path_parameters %}
 {{ validate_path_parameter(parameter, swagger_method) }}
 {% endfor %}

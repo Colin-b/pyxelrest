@@ -238,9 +238,19 @@ class SwaggerMethod:
             return {'content-type': 'application/json'}
         return {}
 
-    def contains_parameters(self):
-        # TODO This method is only temporary as a transition from ugly Jinja template to cleaner code
-        return len(self.required_parameters) > 0 or len(self.optional_parameters) > 0
+    def has_required_parameters(self):
+        return len(self.required_parameters) > 0
+
+    def has_optional_parameters(self):
+        return len(self.optional_parameters) > 0
+
+    def should_send_body(self):
+        # TODO Check those parameters "in" content
+        return self.has_required_parameters() or self.has_optional_parameters()
+
+    def should_send_parameters(self):
+        # TODO Check those parameters "in" content
+        return self.has_required_parameters() or self.has_optional_parameters()
 
     @staticmethod
     def extract_url(text):
