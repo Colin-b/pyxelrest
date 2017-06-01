@@ -19,23 +19,26 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
 
     @classmethod
     def start_services(cls):
-        import testsutils.usual_parameters_test_service as usual_parameters_test_service
-        import testsutils.filtered_tags_test_service as filtered_tags_test_service
-        import testsutils.values_false_test_service as values_false_test_service
-        import testsutils.output_order_test_service as output_order_test_service
-        import testsutils.without_parameter_test_service as without_parameter_test_service
-        import testsutils.header_parameter_test_service as header_parameter_test_service
-        import testsutils.form_parameter_test_service as form_parameter_test_service
-        import testsutils.array_parameter_test_service as array_parameter_test_service
-        serviceshandler.start_services((usual_parameters_test_service, 8943),
-                                       (filtered_tags_test_service, 8944),
-                                       (values_false_test_service, 8945),
-                                       (output_order_test_service, 8946),
-                                       (without_parameter_test_service, 8950),
-                                       (header_parameter_test_service, 8951),
-                                       (form_parameter_test_service, 8952),
-                                       (array_parameter_test_service, 8953)
-                                       )
+        from testsutils import (
+            usual_parameters_test_service,
+            filtered_tags_test_service,
+            values_false_test_service,
+            output_order_test_service,
+            without_parameter_test_service,
+            header_parameter_test_service,
+            form_parameter_test_service,
+            array_parameter_test_service
+        )
+        serviceshandler.start_services(
+            (usual_parameters_test_service, 8943),
+            (filtered_tags_test_service, 8944),
+            (values_false_test_service, 8945),
+            (output_order_test_service, 8946),
+            (without_parameter_test_service, 8950),
+            (header_parameter_test_service, 8951),
+            (form_parameter_test_service, 8952),
+            (array_parameter_test_service, 8953)
+        )
 
     def test_string_array_parameter(self):
         import pyxelrestgenerator

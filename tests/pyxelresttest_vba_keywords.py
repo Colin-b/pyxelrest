@@ -6,7 +6,7 @@ import testsutils.loader as loader
 class PyxelRestVBAKeywordsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        import testsutils.vba_keywords_test_service as vba_keywords_test_service
+        from testsutils import vba_keywords_test_service
         serviceshandler.start_services((vba_keywords_test_service, 8949))
         loader.load('pyxelresttest_vba_keywords_services_configuration.ini')
 

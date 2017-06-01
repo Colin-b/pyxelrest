@@ -17,13 +17,16 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     @classmethod
     def start_services(cls):
-        import testsutils.authenticated_test_service as authenticated_test_service
-        import testsutils.oauth2_authentication_test_service as oauth2_authentication_test_service
-        import testsutils.non_authenticated_test_service as non_authenticated_test_service
-        serviceshandler.start_services((authenticated_test_service, 8946),
-                                       (oauth2_authentication_test_service, 8947),
-                                       (non_authenticated_test_service, 8948)
-                                       )
+        from testsutils import (
+            authenticated_test_service,
+            oauth2_authentication_test_service,
+            non_authenticated_test_service
+        )
+        serviceshandler.start_services(
+            (authenticated_test_service, 8946),
+            (oauth2_authentication_test_service, 8947),
+            (non_authenticated_test_service, 8948)
+        )
 
     def test_oauth2_authentication_on_custom_server_port(self):
         import pyxelrestgenerator
