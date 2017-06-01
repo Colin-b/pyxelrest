@@ -131,10 +131,10 @@ def add_basic_security_definition(security_definition, service_name, security_de
 
 
 def start_servers():
-    logging.debug('Generating OAuth 2 authentication responses servers.')
-    for port in oauth2_security_definitions_by_port.keys():
-        create_server_module(port)
     if oauth2_security_definitions_by_port:
+        logging.debug('Generating OAuth 2 authentication responses servers.')
+        for port in oauth2_security_definitions_by_port.keys():
+            create_server_module(port)
         reload_server_modules()
 
 
@@ -168,12 +168,14 @@ def reload_server_modules():
 
 
 def stop_servers():
-    for port in oauth2_security_definitions_by_port.keys():
-        # Shutdown authentication server thread if needed (in case module is reloaded)
-        try:
-            requests.post('http://localhost:{0}/shutdown'.format(port))
-        except:
-            pass
+    if oauth2_security_definitions_by_port:
+        logging.debug('Stopping OAuth 2 authentication responses servers...')
+        for port in oauth2_security_definitions_by_port.keys():
+            # Shutdown authentication server thread if needed (in case module is reloaded)
+            try:
+                requests.post('http://localhost:{0}/shutdown'.format(port))
+            except:
+                pass
 
 
 def add_auth(service_name, securities, header):
