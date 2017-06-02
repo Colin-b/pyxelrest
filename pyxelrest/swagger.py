@@ -16,6 +16,7 @@ except ImportError:
 import vba
 from pyxelresterrors import *
 import authentication
+import fileadapter
 
 
 def to_valid_python_vba(str_value):
@@ -121,7 +122,9 @@ class SwaggerService:
         :param swagger_url: URI of the service swagger JSON.
         :return: Dictionary representation of the retrieved swagger JSON.
         """
-        response = requests.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
+        requests_session = requests.session()
+        requests_session.mount('file://', fileadapter.LocalFileAdapter())
+        response = requests_session.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)

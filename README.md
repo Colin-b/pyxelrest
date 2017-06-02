@@ -90,7 +90,7 @@ The following options are available for each section:
     </th>
     <tr>
         <td><strong>swagger_url</strong></td>
-        <td>Complete URL to the Swagger definition.</td>
+        <td>Complete URL to the Swagger definition. It can also be a system file path if specified using file:// prefix.</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
