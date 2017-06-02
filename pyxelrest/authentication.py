@@ -99,6 +99,14 @@ class ApiKeyAuth(requests.auth.AuthBase):
         return r
 
 
+class BasicAuth(requests.auth.HTTPBasicAuth):
+    """Describes a basic security definition."""
+    def __init__(self, security_details):
+        username = get_detail('username', security_details)
+        password = get_detail('password', security_details)
+        requests.auth.HTTPBasicAuth.__init__(self, username, password)
+
+
 class MultipleAuth(requests.auth.AuthBase):
     """Authentication using multiple authentication methods."""
     def __init__(self, authentication_modes):
@@ -149,8 +157,7 @@ def add_api_key_security_definition(security_definition, service_name, security_
 
 
 def add_basic_security_definition(security_definition, service_name, security_details, security_definition_key):
-    # TODO Handle basic authentication
-    logging.warning('Basic security definition is not supported: {0}'.format(security_definition))
+    security_definitions[service_name, security_definition_key] = BasicAuth(security_details)
 
 
 def start_servers():

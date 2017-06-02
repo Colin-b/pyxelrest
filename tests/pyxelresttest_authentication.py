@@ -83,3 +83,35 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                              ['X-API-KEY'],
                              ['my_provided_api_key']
                          ])
+
+    def test_basic_authentication_success(self):
+        import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_basic_authentication_success(),
+                         [
+                             ['Authorization'],
+                             ['Basic dGVzdF91c2VyOnRlc3RfcHdk']
+                         ])
+
+    def test_basic_and_api_key_authentication_success(self):
+        import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_basic_and_api_key_authentication_success(),
+                         [
+                             ['Authorization', 'X-API-KEY'],
+                             ['Basic dGVzdF91c2VyOnRlc3RfcHdk', 'my_provided_api_key']
+                         ])
+
+    def test_basic_or_api_key_authentication_success(self):
+        import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_basic_or_api_key_authentication_success(),
+                         [
+                             ['Authorization', 'X-API-KEY'],
+                             ['Basic dGVzdF91c2VyOnRlc3RfcHdk', '']
+                         ])
+
+    def test_api_key_or_basic_authentication_success(self):
+        import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_api_key_or_basic_authentication_success(),
+                         [
+                             ['Authorization', 'X-API-KEY'],
+                             ['', 'my_provided_api_key']
+                         ])

@@ -172,6 +172,16 @@ The following keys are available:
         <td>User API Key.</td>
         <td>API Key</td>
     </tr>
+    <tr>
+        <td><strong>username</strong></td>
+        <td>User name.</td>
+        <td>Basic</td>
+    </tr>
+    <tr>
+        <td><strong>password</strong></td>
+        <td>User password.</td>
+        <td>Basic</td>
+    </tr>
 </table>
 
 ### Logging Configuration ###
