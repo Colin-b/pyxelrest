@@ -109,13 +109,13 @@ def request_new_token(security_definition):
     response_received = authentication_response.acquire()
 {% endif %}
     if not response_received:
-        logging.debug('No response received within 10 seconds. Aborting...')
+        logging.warning('No response received within {0} seconds. Aborting...'.format(security_definition.timeout))
     if security_definition.key in auth_tokens:
         logging.debug('User authenticated.')
         bearer, expiry = auth_tokens[security_definition.key]
         return bearer
 
-    logging.debug('User was not authenticated.')
+    logging.error('User was not authenticated.')
     raise AuthenticationFailed()
 
 
