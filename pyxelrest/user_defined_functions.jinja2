@@ -394,8 +394,7 @@ def {{ swagger_method.udf_name }}(
         logging.info("Valid response received for {{ swagger_method.udf_name }} ({0}).".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ swagger_method.responses }}
-            all_definitions = {{ swagger_method.service.definitions() }}
-            return json_as_list(response, all_responses, all_definitions, {{ swagger_method.service.rely_on_definitions }})
+            return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.name }}'), {{ swagger_method.service.rely_on_definitions }})
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -416,9 +415,13 @@ def {{ swagger_method.udf_name }}(
             response.close()
 
 {% endmacro %}
+all_definitions = {}
 
 {% for service in services %}
-    {%- for method_path, methods in service.swagger['paths'].items() %}
+all_definitions['{{ service.name }}'] = {{ service.definitions() }}
+
+
+    {% for method_path, methods in service.swagger['paths'].items() %}
         {%- if service.should_provide_method(methods, 'get') -%}
             {{- add_udf(service.method(methods['get'], method_path), get) -}}
         {%- endif -%}

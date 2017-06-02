@@ -11,6 +11,7 @@
 
 - content-type header was sent instead of accept.
 - content-type header is now set to the proper value according to Swagger "consumes" field.
+- produces, consumes, parameters and security are now handled even if defined at root or methods level.
 
 ## 0.59 (2017-05-31) ##
 

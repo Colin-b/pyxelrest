@@ -158,28 +158,43 @@ class SwaggerService:
                     parameter['name'] = parameter['name'][1:]
             return parameters
 
-        def _update_method_parameters(method, global_parameters):
-            method['parameters'] = global_parameters + _normalise_names(method.get('parameters', []))
+        def _update_method_parameters():
+            method['parameters'] = root_parameters + methods_parameters + _normalise_names(method.get('parameters', []))
 
             method_parameters_names = [parameter['name'] for parameter in method['parameters']]
             if len(set(method_parameters_names)) != len(method_parameters_names):
                 raise DuplicatedParameters(method)
 
-        def _update_method_produces(method, global_produces):
-            method['produces'] = global_produces + method.get('produces', [])
+        def _update_method_produces():
+            method['produces'] = root_produces + methods_produces + method.get('produces', [])
 
-        global_produces = swagger_json.get('produces', [])
+        def _update_method_security():
+            method['security'] = root_security + methods_security + method.get('security', [])
+
+        def _update_method_consumes():
+            method['consumes'] = root_consumes + methods_consumes + method.get('consumes', [])
+
+        root_parameters = _normalise_names(swagger_json.get('parameters', []))
+        root_produces = swagger_json.get('produces', [])
+        root_security = swagger_json.get('security', [])
+        root_consumes = swagger_json.get('consumes', [])
 
         for methods in swagger_json['paths'].values():
             # retrieve parameters listed at the path level
-            global_parameters = _normalise_names(methods.pop("parameters", []))
+            methods_parameters = _normalise_names(methods.pop('parameters', []))
+            methods_produces = methods.pop('produces', [])
+            methods_security = methods.pop('security', [])
+            methods_consumes = methods.pop('consumes', [])
+
             for mode, method in methods.items():
                 if mode not in ['get', 'post', 'put', 'delete']:
                     logging.warning("'{0}' mode is not supported for now. Supported ones are "
                                     "['get', 'post', 'put', 'delete']".format(mode))
 
-                _update_method_parameters(method, global_parameters)
-                _update_method_produces(method, global_produces)
+                _update_method_parameters()
+                _update_method_produces()
+                _update_method_security()
+                _update_method_consumes()
 
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
