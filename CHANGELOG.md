@@ -5,7 +5,8 @@
 ### Enhancements ###
 
 - API Key Security definition support. You should specify your API Key thanks to api_key keyword in security_details property.
-- Slight performance improvement on UDFs loading
+- Slight performance improvement on UDFs loading.
+- If more than one supported authentication step is required, all steps are now performed.
 
 ### Bug fixes ###
 
@@ -17,7 +18,7 @@
 
 ### Enhancements ###
 
-- Add support for HTTPS services (do not validate certificate though)
+- Add support for HTTPS services (do not validate certificate though).
 - Focus will come back to Microsoft Excel after successful authentication (now performed using Microsoft Internet Explorer by default).
 
 ### Bug fixes ###

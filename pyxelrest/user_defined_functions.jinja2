@@ -33,7 +33,7 @@ import authentication
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
+){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.security() %}, auth=authentication.get_auth('{{ swagger_method.service.name }}', {{ swagger_method.security() }}){% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {%- macro get(swagger_method) %}
@@ -41,7 +41,7 @@ import authentication
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-){% if swagger_method.contains_query_parameters %}, request_parameters{% endif %}, stream=True, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
+){% if swagger_method.contains_query_parameters %}, request_parameters{% endif %}{% if swagger_method.security() %}, auth=authentication.get_auth('{{ swagger_method.service.name }}', {{ swagger_method.security() }}){% endif %}, stream=True, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {%- macro post(swagger_method) %}
@@ -49,7 +49,7 @@ import authentication
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
+){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.security() %}, auth=authentication.get_auth('{{ swagger_method.service.name }}', {{ swagger_method.security() }}){% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {%- macro put(swagger_method) %}
@@ -57,7 +57,7 @@ import authentication
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
-){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
+){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.security() %}, auth=authentication.get_auth('{{ swagger_method.service.name }}', {{ swagger_method.security() }}){% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
 {% endmacro -%}
 
 {% macro validate_parameter_value(parameter, swagger_method) %}
@@ -386,9 +386,6 @@ def {{ swagger_method.udf_name }}(
 
     response = None
     try:
-{% if swagger_method.security() %}
-        authentication.add_auth('{{ swagger_method.service.name }}', {{ swagger_method.security() }}, request_header)
-{% endif %}
     {{ request_macro(swagger_method) }}
         response.raise_for_status()
         logging.info("Valid response received for {{ swagger_method.udf_name }} ({0}).".format(response.request.url))

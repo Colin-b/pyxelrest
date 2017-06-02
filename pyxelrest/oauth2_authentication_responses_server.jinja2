@@ -77,21 +77,20 @@ def shutdown():
     return success_page('Server is now closed.')
 
 
-def add_auth(security_definition, header):
+def get_bearer(security_definition):
     if security_definition.key in auth_tokens:
         bearer, expiry = auth_tokens[security_definition.key]
         if expiry < datetime.datetime.utcnow():
-            logging.debug('Authentication token is expired.')  
+            logging.debug('Authentication token is expired.')
             del auth_tokens[security_definition.key]
         else:
             logging.debug('Using already received authentication, will expire in {0} (UTC).'.format(expiry))
-            header['Bearer'] = bearer
-            return
+            return bearer
 
-    request_new_token(security_definition, header)
+    return request_new_token(security_definition)
 
 
-def request_new_token(security_definition, header):
+def request_new_token(security_definition):
     logging.debug('Requesting user authentication...')
     # use IE to do the auth
     browser_was_opened = ie.call_till_redirect(security_definition.full_url, security_definition.redirect_uri, security_definition.timeout)
@@ -114,10 +113,10 @@ def request_new_token(security_definition, header):
     if security_definition.key in auth_tokens:
         logging.debug('User authenticated.')
         bearer, expiry = auth_tokens[security_definition.key]
-        header['Bearer'] = bearer
-    else:
-        logging.debug('User was not authenticated.')
-        raise AuthenticationFailed()
+        return bearer
+
+    logging.debug('User was not authenticated.')
+    raise AuthenticationFailed()
 
 
 def success_page(text):
