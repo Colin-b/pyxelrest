@@ -51,6 +51,7 @@ class SwaggerService:
         self.uri = self._extract_uri(swagger_url_parsed, config)
         security_details = self.get_item_default(config, 'security_details', None)
         authentication.add_service_security(self.name, self.swagger, security_details)
+        self.auth = authentication.add_service_custom_authentication(self.name, security_details)
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
@@ -206,6 +207,8 @@ class SwaggerService:
             raise UnsupportedSwaggerVersion(self.swagger['swagger'])
 
     def __str__(self):
+        if self.auth:
+            return '[{0}] service. {1} (custom {2} authentication)'.format(self.name, self.uri, self.auth)
         return '[{0}] service. {1}'.format(self.name, self.uri)
 
 
@@ -253,6 +256,9 @@ class SwaggerMethod:
     def return_a_list(self):
         return ('application/json' in self.swagger_method['produces']) or \
                ('application/msqpack' in self.swagger_method['produces'])
+
+    def requires_authentication(self):
+        return self.security() or self.service.auth
 
     def security(self):
         return self.swagger_method.get('security')

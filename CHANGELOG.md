@@ -9,6 +9,7 @@
 - Slight performance improvement on UDFs loading.
 - If more than one supported authentication step is required, all steps are now performed.
 - Swagger URI can now contains a path to a swagger file on the file system using file:// prefix.
+- Services requiring NTLM authentication are now accessible thanks to auth=ntlm within security_details property. Note that username and password are mandatory in such a case.
 
 ### Bug fixes ###
 

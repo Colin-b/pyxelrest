@@ -64,6 +64,9 @@ In order to do so, you need to add a test certificate.
 - Support for ``ujson``
     - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
 
+- Support for ``requests_ntlm``
+    - ``requests_ntlm`` is required in case auth=ntlm is set in ``security_details`` property.
+
 ## Configuration ##
 
 ### Services Configuration ###
@@ -155,32 +158,44 @@ The following keys are available:
 <table>
     <th>
         <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
         <td><em>Type of security</em></td>
     </th>
     <tr>
         <td><strong>port</strong></td>
         <td>Port on which the authentication response is supposed to be received. Default value is 5000.</td>
+        <td>Optional</td>
         <td>OAuth 2</td>
     </tr>
     <tr>
         <td><strong>timeout</strong></td>
         <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.</td>
+        <td>Optional</td>
         <td>OAuth 2</td>
     </tr>
     <tr>
         <td><strong>api_key</strong></td>
         <td>User API Key.</td>
+        <td>Mandatory</td>
         <td>API Key</td>
     </tr>
     <tr>
         <td><strong>username</strong></td>
-        <td>User name.</td>
-        <td>Basic</td>
+        <td>User name. Should be of the form domain\\user for NTLM.</td>
+        <td>Mandatory</td>
+        <td>Basic / NTLM</td>
     </tr>
     <tr>
         <td><strong>password</strong></td>
         <td>User password.</td>
-        <td>Basic</td>
+        <td>Mandatory</td>
+        <td>Basic / NTLM</td>
+    </tr>
+    <tr>
+        <td><strong>auth</strong></td>
+        <td>Custom authentication mechanism. Valid value is ntlm (requiring requests_ntlm).</td>
+        <td></td>
+        <td></td>
     </tr>
 </table>
 

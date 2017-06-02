@@ -86,6 +86,7 @@ try:
     authentication.stop_servers()
     authentication.oauth2_security_definitions_by_port = {}
     authentication.security_definitions = {}
+    authentication.custom_authentications = {}
     generate_user_defined_functions()
     authentication.start_servers()
 except:

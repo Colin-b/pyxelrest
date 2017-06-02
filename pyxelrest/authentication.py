@@ -21,6 +21,8 @@ except ImportError:
 security_definitions = {}
 # Key is port
 oauth2_security_definitions_by_port = {}
+# Key is service_name
+custom_authentications = {}
 
 
 def get_detail(detail_key, details_string):
@@ -107,6 +109,26 @@ class BasicAuth(requests.auth.HTTPBasicAuth):
         requests.auth.HTTPBasicAuth.__init__(self, username, password)
 
 
+class NTLMAuth:
+    """Describes a NTLM authentication."""
+    def __init__(self, security_details):
+        username = get_detail('username', security_details)
+        if not username:
+            raise Exception('NTLM authentication requires username to be provided in security_details.')
+        password = get_detail('password', security_details)
+        if not password:
+            raise Exception('NTLM authentication requires password to be provided in security_details.')
+        try:
+            import requests_ntlm
+            self.auth = requests_ntlm.HttpNtlmAuth(username, password)
+        except ImportError:
+            raise Exception('NTLM Authentication requires requests_ntlm module.')
+
+    def __call__(self, r):
+        self.auth.__call__(r)
+        return r
+
+
 class MultipleAuth(requests.auth.AuthBase):
     """Authentication using multiple authentication methods."""
     def __init__(self, authentication_modes):
@@ -116,6 +138,13 @@ class MultipleAuth(requests.auth.AuthBase):
         for authentication_mode in self.authentication_modes:
             authentication_mode.__call__(r)
         return r
+
+
+def add_service_custom_authentication(service_name, security_details):
+    auth = get_detail('auth', security_details)
+    if 'ntlm' == auth:
+        custom_authentications[service_name] = NTLMAuth(security_details)
+        return auth
 
 
 def add_service_security(service_name, swagger, security_details):
@@ -209,9 +238,11 @@ def stop_servers():
 
 
 def get_auth(service_name, securities):
+    custom_authentication = custom_authentications.get(service_name)
+
     # Run through all available securities
     for security in securities:
-        authentication_modes = []
+        authentication_modes = [custom_authentication] if custom_authentication else []
         for security_definition_key in security.keys():
             auth = security_definitions.get((service_name, security_definition_key))
             if auth:
@@ -223,3 +254,6 @@ def get_auth(service_name, securities):
         if len(authentication_modes) > 1:
             return MultipleAuth(authentication_modes)
         # Otherwise check if there is another security available
+
+    # Default to custom authentication if no security is supported
+    return custom_authentication
