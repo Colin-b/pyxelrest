@@ -268,11 +268,13 @@ class SwaggerMethod:
         header = {}
 
         if self.contains_body_parameters:
-            if 'application/json' in self.swagger_method.get('consumes', ['application/json']):
+            consumes = self.swagger_method.get('consumes')
+            if not consumes or 'application/json' in consumes:
                 header['Content-Type'] = 'application/json'
             else:
-                logging.warning('Service is expecting {0} encoded body. '
+                logging.warning('{0} is expecting {0} encoded body. '
                                 'For now PyxelRest only send JSON body so request might fail.'.format(
+                    self.uri,
                     self.swagger_method['consumes']
                 ))
 
