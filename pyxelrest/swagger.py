@@ -200,13 +200,18 @@ class SwaggerMethod:
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
+        self.contains_body_parameters = False
+        self.contains_file_parameters = False
+        self.contains_query_parameters = False
         for parameter in self.parameters:
             if parameter['in'] == 'path':
                 self.path_parameters.append(parameter)
             # Required but not in path
             elif parameter.get('required'):
+                self.update_information_on_parameter_type(parameter)
                 self.required_parameters.append(parameter)
             else:
+                self.update_information_on_parameter_type(parameter)
                 self.optional_parameters.append(parameter)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
@@ -214,6 +219,18 @@ class SwaggerMethod:
         self.responses = swagger_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
+
+    def update_information_on_parameter_type(self, parameter):
+        parameter_in = parameter['in']
+        if parameter_in == 'body':
+            self.contains_body_parameters = True
+        elif parameter_in == 'formData':
+            if parameter['type'] == 'file':
+                self.contains_file_parameters = True
+            else:
+                self.contains_body_parameters = True
+        elif parameter_in == 'query':
+            self.contains_query_parameters = True
 
     def return_a_list(self):
         return ('application/json' in self.swagger_method['produces']) or \
@@ -243,14 +260,6 @@ class SwaggerMethod:
 
     def has_optional_parameters(self):
         return len(self.optional_parameters) > 0
-
-    def should_send_body(self):
-        # TODO Check those parameters "in" content
-        return self.has_required_parameters() or self.has_optional_parameters()
-
-    def should_send_parameters(self):
-        # TODO Check those parameters "in" content
-        return self.has_required_parameters() or self.has_optional_parameters()
 
     @staticmethod
     def extract_url(text):

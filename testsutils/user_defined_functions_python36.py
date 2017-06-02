@@ -127,8 +127,6 @@ def usual_parameters_test_get_test_date_time():
 def usual_parameters_test_get_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling usual_parameters_test_get_test_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -419,8 +417,6 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
 def usual_parameters_test_post_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling usual_parameters_test_post_test_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -652,7 +648,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -711,8 +707,6 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
 def usual_parameters_test_put_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling usual_parameters_test_put_test_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -944,7 +938,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1003,8 +997,6 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
 def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling usual_parameters_test_delete_test_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -1236,7 +1228,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -1295,8 +1287,6 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
 def usual_parameters_test_get_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling usual_parameters_test_get_test_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -1665,8 +1655,6 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
 def usual_parameters_test_post_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling usual_parameters_test_post_test_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -1976,7 +1964,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
     response = None
     try:
         response = requests.post('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_post_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2035,8 +2023,6 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
 def usual_parameters_test_put_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling usual_parameters_test_put_test_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -2346,7 +2332,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
     response = None
     try:
         response = requests.put('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_put_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -2405,8 +2391,6 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
 def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling usual_parameters_test_delete_test_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -2716,7 +2700,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
     response = None
     try:
         response = requests.delete('http://localhost:8943/test/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for usual_parameters_test_delete_test_with_all_parameters_types ({0}).".format(response.request.url))
@@ -3767,8 +3751,6 @@ def values_false_test_get_test_with_zero_integer():
 def output_order_test_get_test_price_unordered(date_visual_basic=None, curve=None, ts=None, mat=None):
     logging.info("Calling output_order_test_get_test_price_unordered...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if date_visual_basic is not None:
@@ -4512,8 +4494,6 @@ def nested_data_test_get_test_one_level_list():
 def vba_keywords_test_get_test_vba_restricted_keywords(addhandler_visual_basic, addressof_visual_basic, alias_visual_basic, and_visual_basic, andalso_visual_basic, as_visual_basic, boolean_visual_basic, byref_visual_basic, byte_visual_basic, byval_visual_basic, call_visual_basic, case_visual_basic, catch_visual_basic, cbool_visual_basic, cbyte_visual_basic, cchar_visual_basic, cdate_visual_basic, cdbl_visual_basic, cdec_visual_basic, char_visual_basic, cint_visual_basic, class_visual_basic, clng_visual_basic, cobj_visual_basic, const_visual_basic, continue_visual_basic, csbyte_visual_basic, cshort_visual_basic, csng_visual_basic, cstr_visual_basic, ctype_visual_basic, cuint_visual_basic, culng_visual_basic, currency_visual_basic, cushort_visual_basic, date_visual_basic, decimal_visual_basic, declare_visual_basic, default_visual_basic, delegate_visual_basic, dim_visual_basic, directcast_visual_basic, do_visual_basic, double_visual_basic, each_visual_basic, else_visual_basic, elseif_visual_basic, end_visual_basic, endif_visual_basic, enum_visual_basic, erase_visual_basic, error_visual_basic, event_visual_basic, exit_visual_basic, finally_visual_basic, for_visual_basic, friend_visual_basic, function_visual_basic, get_visual_basic, gettype_visual_basic, getxmlnamespace_visual_basic, global_visual_basic, gosub_visual_basic, goto_visual_basic, handles_visual_basic, if_visual_basic, implements_visual_basic, imports_visual_basic, in_visual_basic, inherits_visual_basic, integer_visual_basic, interface_visual_basic, is_visual_basic, isnot_visual_basic, let_visual_basic, lib_visual_basic, like_visual_basic, long_visual_basic, loop_visual_basic, me_visual_basic, mod_visual_basic, module_visual_basic, mustinherit_visual_basic, mustoverride_visual_basic, mybase_visual_basic, myclass_visual_basic, namespace_visual_basic, narrowing_visual_basic, new_visual_basic, next_visual_basic, not_visual_basic, nothing_visual_basic, notinheritable_visual_basic, notoverridable_visual_basic, object_visual_basic, of_visual_basic, on_visual_basic, operator_visual_basic, option_visual_basic, optional_visual_basic, or_visual_basic, orelse_visual_basic, overloads_visual_basic, overridable_visual_basic, overrides_visual_basic, paramarray_visual_basic, partial_visual_basic, private_visual_basic, property_visual_basic, protected_visual_basic, public_visual_basic, raiseevent_visual_basic, readonly_visual_basic, redim_visual_basic, rem_visual_basic, removehandler_visual_basic, resume_visual_basic, return_visual_basic, sbyte_visual_basic, select_visual_basic, set_visual_basic, shadows_visual_basic, shared_visual_basic, short_visual_basic, single_visual_basic, static_visual_basic, step_visual_basic, stop_visual_basic, string_visual_basic, structure_visual_basic, sub_visual_basic, synclock_visual_basic, then_visual_basic, throw_visual_basic, to_visual_basic, try_visual_basic, trycast_visual_basic, type_visual_basic, typeof_visual_basic, uinteger_visual_basic, ulong_visual_basic, ushort_visual_basic, using_visual_basic, variant_visual_basic, wend_visual_basic, when_visual_basic, while_visual_basic, widening_visual_basic, with_visual_basic, withevents_visual_basic, writeonly_visual_basic, xor_visual_basic):
     logging.info("Calling vba_keywords_test_get_test_vba_restricted_keywords...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if addhandler_visual_basic is None or isinstance(addhandler_visual_basic, list) and all(x is None for x in addhandler_visual_basic):
@@ -5770,8 +5750,6 @@ def vba_keywords_test_get_test_vba_restricted_keywords(addhandler_visual_basic, 
 def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic, addressof_visual_basic, alias_visual_basic, and_visual_basic, andalso_visual_basic, as_visual_basic, boolean_visual_basic, byref_visual_basic, byte_visual_basic, byval_visual_basic, call_visual_basic, case_visual_basic, catch_visual_basic, cbool_visual_basic, cbyte_visual_basic, cchar_visual_basic, cdate_visual_basic, cdbl_visual_basic, cdec_visual_basic, char_visual_basic, cint_visual_basic, class_visual_basic, clng_visual_basic, cobj_visual_basic, const_visual_basic, continue_visual_basic, csbyte_visual_basic, cshort_visual_basic, csng_visual_basic, cstr_visual_basic, ctype_visual_basic, cuint_visual_basic, culng_visual_basic, currency_visual_basic, cushort_visual_basic, date_visual_basic, decimal_visual_basic, declare_visual_basic, default_visual_basic, delegate_visual_basic, dim_visual_basic, directcast_visual_basic, do_visual_basic, double_visual_basic, each_visual_basic, else_visual_basic, elseif_visual_basic, end_visual_basic, endif_visual_basic, enum_visual_basic, erase_visual_basic, error_visual_basic, event_visual_basic, exit_visual_basic, finally_visual_basic, for_visual_basic, friend_visual_basic, function_visual_basic, get_visual_basic, gettype_visual_basic, getxmlnamespace_visual_basic, global_visual_basic, gosub_visual_basic, goto_visual_basic, handles_visual_basic, if_visual_basic, implements_visual_basic, imports_visual_basic, in_visual_basic, inherits_visual_basic, integer_visual_basic, interface_visual_basic, is_visual_basic, isnot_visual_basic, let_visual_basic, lib_visual_basic, like_visual_basic, long_visual_basic, loop_visual_basic, me_visual_basic, mod_visual_basic, module_visual_basic, mustinherit_visual_basic, mustoverride_visual_basic, mybase_visual_basic, myclass_visual_basic, namespace_visual_basic, narrowing_visual_basic, new_visual_basic, next_visual_basic, not_visual_basic, nothing_visual_basic, notinheritable_visual_basic, notoverridable_visual_basic, object_visual_basic, of_visual_basic, on_visual_basic, operator_visual_basic, option_visual_basic, optional_visual_basic, or_visual_basic, orelse_visual_basic, overloads_visual_basic, overridable_visual_basic, overrides_visual_basic, paramarray_visual_basic, partial_visual_basic, private_visual_basic, property_visual_basic, protected_visual_basic, public_visual_basic, raiseevent_visual_basic, readonly_visual_basic, redim_visual_basic, rem_visual_basic, removehandler_visual_basic, resume_visual_basic, return_visual_basic, sbyte_visual_basic, select_visual_basic, set_visual_basic, shadows_visual_basic, shared_visual_basic, short_visual_basic, single_visual_basic, static_visual_basic, step_visual_basic, stop_visual_basic, string_visual_basic, structure_visual_basic, sub_visual_basic, synclock_visual_basic, then_visual_basic, throw_visual_basic, to_visual_basic, try_visual_basic, trycast_visual_basic, type_visual_basic, typeof_visual_basic, uinteger_visual_basic, ulong_visual_basic, ushort_visual_basic, using_visual_basic, variant_visual_basic, wend_visual_basic, when_visual_basic, while_visual_basic, widening_visual_basic, with_visual_basic, withevents_visual_basic, writeonly_visual_basic, xor_visual_basic):
     logging.info("Calling vba_keywords_test_post_test_vba_restricted_keywords...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if addhandler_visual_basic is None or isinstance(addhandler_visual_basic, list) and all(x is None for x in addhandler_visual_basic):
@@ -6842,7 +6820,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
     response = None
     try:
         response = requests.post('http://localhost:8949/test/vba/restricted/keywords'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_post_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -7028,8 +7006,6 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
 def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, addressof_visual_basic, alias_visual_basic, and_visual_basic, andalso_visual_basic, as_visual_basic, boolean_visual_basic, byref_visual_basic, byte_visual_basic, byval_visual_basic, call_visual_basic, case_visual_basic, catch_visual_basic, cbool_visual_basic, cbyte_visual_basic, cchar_visual_basic, cdate_visual_basic, cdbl_visual_basic, cdec_visual_basic, char_visual_basic, cint_visual_basic, class_visual_basic, clng_visual_basic, cobj_visual_basic, const_visual_basic, continue_visual_basic, csbyte_visual_basic, cshort_visual_basic, csng_visual_basic, cstr_visual_basic, ctype_visual_basic, cuint_visual_basic, culng_visual_basic, currency_visual_basic, cushort_visual_basic, date_visual_basic, decimal_visual_basic, declare_visual_basic, default_visual_basic, delegate_visual_basic, dim_visual_basic, directcast_visual_basic, do_visual_basic, double_visual_basic, each_visual_basic, else_visual_basic, elseif_visual_basic, end_visual_basic, endif_visual_basic, enum_visual_basic, erase_visual_basic, error_visual_basic, event_visual_basic, exit_visual_basic, finally_visual_basic, for_visual_basic, friend_visual_basic, function_visual_basic, get_visual_basic, gettype_visual_basic, getxmlnamespace_visual_basic, global_visual_basic, gosub_visual_basic, goto_visual_basic, handles_visual_basic, if_visual_basic, implements_visual_basic, imports_visual_basic, in_visual_basic, inherits_visual_basic, integer_visual_basic, interface_visual_basic, is_visual_basic, isnot_visual_basic, let_visual_basic, lib_visual_basic, like_visual_basic, long_visual_basic, loop_visual_basic, me_visual_basic, mod_visual_basic, module_visual_basic, mustinherit_visual_basic, mustoverride_visual_basic, mybase_visual_basic, myclass_visual_basic, namespace_visual_basic, narrowing_visual_basic, new_visual_basic, next_visual_basic, not_visual_basic, nothing_visual_basic, notinheritable_visual_basic, notoverridable_visual_basic, object_visual_basic, of_visual_basic, on_visual_basic, operator_visual_basic, option_visual_basic, optional_visual_basic, or_visual_basic, orelse_visual_basic, overloads_visual_basic, overridable_visual_basic, overrides_visual_basic, paramarray_visual_basic, partial_visual_basic, private_visual_basic, property_visual_basic, protected_visual_basic, public_visual_basic, raiseevent_visual_basic, readonly_visual_basic, redim_visual_basic, rem_visual_basic, removehandler_visual_basic, resume_visual_basic, return_visual_basic, sbyte_visual_basic, select_visual_basic, set_visual_basic, shadows_visual_basic, shared_visual_basic, short_visual_basic, single_visual_basic, static_visual_basic, step_visual_basic, stop_visual_basic, string_visual_basic, structure_visual_basic, sub_visual_basic, synclock_visual_basic, then_visual_basic, throw_visual_basic, to_visual_basic, try_visual_basic, trycast_visual_basic, type_visual_basic, typeof_visual_basic, uinteger_visual_basic, ulong_visual_basic, ushort_visual_basic, using_visual_basic, variant_visual_basic, wend_visual_basic, when_visual_basic, while_visual_basic, widening_visual_basic, with_visual_basic, withevents_visual_basic, writeonly_visual_basic, xor_visual_basic):
     logging.info("Calling vba_keywords_test_put_test_vba_restricted_keywords...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if addhandler_visual_basic is None or isinstance(addhandler_visual_basic, list) and all(x is None for x in addhandler_visual_basic):
@@ -8100,7 +8076,7 @@ def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, 
     response = None
     try:
         response = requests.put('http://localhost:8949/test/vba/restricted/keywords'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_put_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -8286,8 +8262,6 @@ def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, 
 def vba_keywords_test_delete_test_vba_restricted_keywords(addhandler_visual_basic, addressof_visual_basic, alias_visual_basic, and_visual_basic, andalso_visual_basic, as_visual_basic, boolean_visual_basic, byref_visual_basic, byte_visual_basic, byval_visual_basic, call_visual_basic, case_visual_basic, catch_visual_basic, cbool_visual_basic, cbyte_visual_basic, cchar_visual_basic, cdate_visual_basic, cdbl_visual_basic, cdec_visual_basic, char_visual_basic, cint_visual_basic, class_visual_basic, clng_visual_basic, cobj_visual_basic, const_visual_basic, continue_visual_basic, csbyte_visual_basic, cshort_visual_basic, csng_visual_basic, cstr_visual_basic, ctype_visual_basic, cuint_visual_basic, culng_visual_basic, currency_visual_basic, cushort_visual_basic, date_visual_basic, decimal_visual_basic, declare_visual_basic, default_visual_basic, delegate_visual_basic, dim_visual_basic, directcast_visual_basic, do_visual_basic, double_visual_basic, each_visual_basic, else_visual_basic, elseif_visual_basic, end_visual_basic, endif_visual_basic, enum_visual_basic, erase_visual_basic, error_visual_basic, event_visual_basic, exit_visual_basic, finally_visual_basic, for_visual_basic, friend_visual_basic, function_visual_basic, get_visual_basic, gettype_visual_basic, getxmlnamespace_visual_basic, global_visual_basic, gosub_visual_basic, goto_visual_basic, handles_visual_basic, if_visual_basic, implements_visual_basic, imports_visual_basic, in_visual_basic, inherits_visual_basic, integer_visual_basic, interface_visual_basic, is_visual_basic, isnot_visual_basic, let_visual_basic, lib_visual_basic, like_visual_basic, long_visual_basic, loop_visual_basic, me_visual_basic, mod_visual_basic, module_visual_basic, mustinherit_visual_basic, mustoverride_visual_basic, mybase_visual_basic, myclass_visual_basic, namespace_visual_basic, narrowing_visual_basic, new_visual_basic, next_visual_basic, not_visual_basic, nothing_visual_basic, notinheritable_visual_basic, notoverridable_visual_basic, object_visual_basic, of_visual_basic, on_visual_basic, operator_visual_basic, option_visual_basic, optional_visual_basic, or_visual_basic, orelse_visual_basic, overloads_visual_basic, overridable_visual_basic, overrides_visual_basic, paramarray_visual_basic, partial_visual_basic, private_visual_basic, property_visual_basic, protected_visual_basic, public_visual_basic, raiseevent_visual_basic, readonly_visual_basic, redim_visual_basic, rem_visual_basic, removehandler_visual_basic, resume_visual_basic, return_visual_basic, sbyte_visual_basic, select_visual_basic, set_visual_basic, shadows_visual_basic, shared_visual_basic, short_visual_basic, single_visual_basic, static_visual_basic, step_visual_basic, stop_visual_basic, string_visual_basic, structure_visual_basic, sub_visual_basic, synclock_visual_basic, then_visual_basic, throw_visual_basic, to_visual_basic, try_visual_basic, trycast_visual_basic, type_visual_basic, typeof_visual_basic, uinteger_visual_basic, ulong_visual_basic, ushort_visual_basic, using_visual_basic, variant_visual_basic, wend_visual_basic, when_visual_basic, while_visual_basic, widening_visual_basic, with_visual_basic, withevents_visual_basic, writeonly_visual_basic, xor_visual_basic):
     logging.info("Calling vba_keywords_test_delete_test_vba_restricted_keywords...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if addhandler_visual_basic is None or isinstance(addhandler_visual_basic, list) and all(x is None for x in addhandler_visual_basic):
@@ -9358,7 +9332,7 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(addhandler_visual_basi
     response = None
     try:
         response = requests.delete('http://localhost:8949/test/vba/restricted/keywords'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for vba_keywords_test_delete_test_vba_restricted_keywords ({0}).".format(response.request.url))
@@ -9852,9 +9826,6 @@ def without_parameter_test_delete_test_without_parameter():
 def header_parameter_test_get_test_header_parameter(header_string):
     logging.info("Calling header_parameter_test_get_test_header_parameter...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
-    request_parameters = {}
 
     if header_string is None or isinstance(header_string, list) and all(x is None for x in header_string):
         logging.error('header_string is required.')
@@ -9867,7 +9838,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
     response = None
     try:
         response = requests.get('http://localhost:8951/test/header/parameter'.format(
-), request_parameters, stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
+), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for header_parameter_test_get_test_header_parameter ({0}).".format(response.request.url))
@@ -9902,8 +9873,6 @@ def form_parameter_test_post_test_form_parameter(form_string):
     logging.info("Calling form_parameter_test_post_test_form_parameter...")
     request_header = {}
     request_payload = {}
-    request_files = {}
-    request_parameters = {}
 
     if form_string is None or isinstance(form_string, list) and all(x is None for x in form_string):
         logging.error('form_string is required.')
@@ -9916,7 +9885,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
     response = None
     try:
         response = requests.post('http://localhost:8952/test/form/parameter'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), json=request_payload, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for form_parameter_test_post_test_form_parameter ({0}).".format(response.request.url))
@@ -9950,8 +9919,6 @@ def form_parameter_test_post_test_form_parameter(form_string):
 def array_parameter_test_get_test_string_array_parameter(query_array_string):
     logging.info("Calling array_parameter_test_get_test_string_array_parameter...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_array_string is None or isinstance(query_array_string, list) and all(x is None for x in query_array_string):
@@ -10025,8 +9992,6 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
 def json_test_get_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_get_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -10318,8 +10283,6 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
 def json_test_post_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_post_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -10551,7 +10514,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
     response = None
     try:
         response = requests.post('http://localhost:8954/test/json/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_post_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -10611,8 +10574,6 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
 def json_test_put_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_put_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -10844,7 +10805,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
     response = None
     try:
         response = requests.put('http://localhost:8954/test/json/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_put_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -10904,8 +10865,6 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
 def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling json_test_delete_test_json_with_all_optional_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -11137,7 +11096,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
     response = None
     try:
         response = requests.delete('http://localhost:8954/test/json/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_delete_test_json_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -11197,8 +11156,6 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
 def json_test_get_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_get_test_json_with_all_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -11568,8 +11525,6 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
 def json_test_post_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_post_test_json_with_all_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -11879,7 +11834,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
     response = None
     try:
         response = requests.post('http://localhost:8954/test/json/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_post_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -11939,8 +11894,6 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
 def json_test_put_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_put_test_json_with_all_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -12250,7 +12203,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
     response = None
     try:
         response = requests.put('http://localhost:8954/test/json/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_put_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -12310,8 +12263,6 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
 def json_test_delete_test_json_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling json_test_delete_test_json_with_all_parameters_types...")
     request_header = {'content-type': 'application/json'}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -12621,7 +12572,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
     response = None
     try:
         response = requests.delete('http://localhost:8954/test/json/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for json_test_delete_test_json_with_all_parameters_types ({0}).".format(response.request.url))
@@ -13356,8 +13307,6 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
 def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling plain_text_test_get_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -13648,8 +13597,6 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
 def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling plain_text_test_post_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -13881,7 +13828,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
     response = None
     try:
         response = requests.post('http://localhost:8955/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -13940,8 +13887,6 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
 def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling plain_text_test_put_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -14173,7 +14118,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
     response = None
     try:
         response = requests.put('http://localhost:8955/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -14232,8 +14177,6 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
 def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(query_integer=None, query_integer32=None, query_integer64=None, query_number=None, query_float=None, query_double=None, query_string=None, query_string_byte=None, query_string_binary=None, query_boolean=None, query_date=None, query_date_time=None, query_password=None, query_array_integer=None, query_array_integer32=None, query_array_integer64=None, query_array_number=None, query_array_float=None, query_array_double=None, query_array_string=None, query_array_string_byte=None, query_array_string_binary=None, query_array_boolean=None, query_array_date=None, query_array_date_time=None, query_array_password=None):
     logging.info("Calling plain_text_test_delete_test_plain_text_with_all_optional_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is not None:
@@ -14465,7 +14408,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
     response = None
     try:
         response = requests.delete('http://localhost:8955/test/plain/text/with/all/optional/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_optional_parameters_types ({0}).".format(response.request.url))
@@ -14524,8 +14467,6 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
 def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling plain_text_test_get_test_plain_text_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -14894,8 +14835,6 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
 def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling plain_text_test_post_test_plain_text_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -15205,7 +15144,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
     response = None
     try:
         response = requests.post('http://localhost:8955/test/plain/text/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, files=request_files, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_post_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -15264,8 +15203,6 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
 def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling plain_text_test_put_test_plain_text_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -15575,7 +15512,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
     response = None
     try:
         response = requests.put('http://localhost:8955/test/plain/text/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_put_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
@@ -15634,8 +15571,6 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
 def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integer, query_integer32, query_integer64, query_number, query_float, query_double, query_string, query_string_byte, query_string_binary, query_boolean, query_date, query_date_time, query_password, query_array_integer, query_array_integer32, query_array_integer64, query_array_number, query_array_float, query_array_double, query_array_string, query_array_string_byte, query_array_string_binary, query_array_boolean, query_array_date, query_array_date_time, query_array_password):
     logging.info("Calling plain_text_test_delete_test_plain_text_with_all_parameters_types...")
     request_header = {}
-    request_payload = {}
-    request_files = {}
     request_parameters = {}
 
     if query_integer is None or isinstance(query_integer, list) and all(x is None for x in query_integer):
@@ -15945,7 +15880,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
     response = None
     try:
         response = requests.delete('http://localhost:8955/test/plain/text/with/all/parameters/types'.format(
-), json=request_payload, params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
+), params=request_parameters, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
         logging.info("Valid response received for plain_text_test_delete_test_plain_text_with_all_parameters_types ({0}).".format(response.request.url))
