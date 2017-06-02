@@ -247,13 +247,23 @@ class SwaggerMethod:
         Initial header content
         For more details refer to https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
         """
-        # TODO Only set content-type when there is a body
-        # TODO Set Accept header
+        header = {}
+
+        if self.contains_body_parameters:
+            if 'application/json' in self.swagger_method.get('consumes', ['application/json']):
+                header['Content-Type'] = 'application/json'
+            else:
+                logging.warning('Service is expecting {0} encoded body. '
+                                'For now PyxelRest only send JSON body so request might fail.'.format(
+                    self.swagger_method['consumes']
+                ))
+
         if 'application/msgpackpandas' in self.swagger_method['produces'] and support_pandas:
-            return {'content-type': 'application/msgpackpandas'}
-        if 'application/json' in self.swagger_method['produces']:
-            return {'content-type': 'application/json'}
-        return {}
+            header['Accept'] = 'application/msgpackpandas'
+        elif 'application/json' in self.swagger_method['produces']:
+            header['Accept'] = 'application/json'
+
+        return header
 
     def has_required_parameters(self):
         return len(self.required_parameters) > 0

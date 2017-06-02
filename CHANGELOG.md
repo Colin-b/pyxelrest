@@ -7,6 +7,11 @@
 - API Key Security definition support. You should specify your API Key thanks to api_key keyword in security_details property.
 - Slight performance improvement on UDFs loading
 
+### Bug fixes ###
+
+- content-type header was sent instead of accept.
+- content-type header is now set to the proper value according to Swagger "consumes" field.
+
 ## 0.59 (2017-05-31) ##
 
 ### Enhancements ###
