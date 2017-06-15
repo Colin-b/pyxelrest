@@ -75,9 +75,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/api/key/authentication/success': {
+                       '/test/api/key/header/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_api_key_authentication_success',
+                               'operationId': 'get_test_api_key_header_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -85,7 +85,23 @@ def swagger():
                                },
                                'security': [
                                    {
-                                       'api_key_auth_success': [
+                                       'api_key_header_auth_success': [
+                                       ]
+                                   }
+                               ]
+                           }
+                       },
+                       '/test/api/key/query/authentication/success': {
+                           'get': {
+                               'operationId': 'get_test_api_key_query_authentication_success',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               },
+                               'security': [
+                                   {
+                                       'api_key_query_auth_success': [
                                        ]
                                    }
                                ]
@@ -119,7 +135,7 @@ def swagger():
                                    {
                                        'basic_auth_success': [
                                        ],
-                                       'api_key_auth_success': [
+                                       'api_key_header_auth_success': [
                                        ]
                                    }
                                ]
@@ -139,7 +155,7 @@ def swagger():
                                        ]
                                    },
                                    {
-                                       'api_key_auth_success': [
+                                       'api_key_header_auth_success': [
                                        ]
                                    }
                                ]
@@ -155,7 +171,7 @@ def swagger():
                                },
                                'security': [
                                    {
-                                       'api_key_auth_success': [
+                                       'api_key_header_auth_success': [
                                        ]
                                    },
                                    {
@@ -200,10 +216,15 @@ def swagger():
                                "custom_label": "custom category"
                            }
                        },
-                       'api_key_auth_success': {
+                       'api_key_header_auth_success': {
                            "type": "apiKey",
                            "in": "header",
-                           "name": "X-API-KEY"
+                           "name": "X-API-HEADER-KEY"
+                       },
+                       'api_key_query_auth_success': {
+                           "type": "apiKey",
+                           "in": "query",
+                           "name": "X-API-QUERY-KEY"
                        },
                        'basic_auth_success': {
                            "type": "basic"
@@ -231,9 +252,14 @@ def get_test_oauth2_authentication_success_quick_expiry():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 
-@app.route('/test/api/key/authentication/success', methods=['GET'])
-def get_test_api_key_authentication_success():
-    return jsonify([{'X-API-KEY': request.headers.get('X-API-KEY')}])
+@app.route('/test/api/key/header/authentication/success', methods=['GET'])
+def get_test_api_key_header_authentication_success():
+    return jsonify([{'X-API-HEADER-KEY': request.headers.get('X-API-HEADER-KEY')}])
+
+
+@app.route('/test/api/key/query/authentication/success', methods=['GET'])
+def get_test_api_key_query_authentication_success():
+    return jsonify([{'X-API-QUERY-KEY': request.args.get('X-API-QUERY-KEY')}])
 
 
 @app.route('/test/basic/authentication/success', methods=['GET'])
@@ -246,7 +272,7 @@ def get_test_basic_and_api_key_authentication_success():
     return jsonify([
         {
             'Authorization': request.headers.get('Authorization'),
-            'X-API-KEY': request.headers.get('X-API-KEY')
+            'X-API-HEADER-KEY': request.headers.get('X-API-HEADER-KEY')
         }
     ])
 
@@ -256,7 +282,7 @@ def get_test_basic_or_api_key_authentication_success():
     return jsonify([
         {
             'Authorization': request.headers.get('Authorization'),
-            'X-API-KEY': request.headers.get('X-API-KEY')
+            'X-API-HEADER-KEY': request.headers.get('X-API-HEADER-KEY')
         }
     ])
 
@@ -266,7 +292,7 @@ def get_test_api_key_or_basic_authentication_success():
     return jsonify([
         {
             'Authorization': request.headers.get('Authorization'),
-            'X-API-KEY': request.headers.get('X-API-KEY')
+            'X-API-HEADER-KEY': request.headers.get('X-API-HEADER-KEY')
         }
     ])
 

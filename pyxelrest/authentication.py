@@ -90,15 +90,31 @@ class OAuth2Auth(requests.auth.AuthBase):
 class ApiKeyAuth(requests.auth.AuthBase):
     """Describes an API Key security definition."""
     def __init__(self, security_definition, security_details):
-        self.header_field_name = security_definition['name']
+        self.field_name = security_definition['name']
+        self.value_in = security_definition['in']
         self.api_key = get_detail('api_key', security_details)
 
     def __call__(self, r):
         if not self.api_key:
             logging.warning('api_key is not defined. Call might be rejected by server.')
         else:
-            r.headers[self.header_field_name] = self.api_key
+            if self.value_in == 'header':
+                r.headers[self.field_name] = self.api_key
+            elif self.value_in == 'query':
+                r.url = ApiKeyAuth.add_query_parameter(r.url, self.field_name, self.api_key)
+            else:
+                logging.warning('api_key "{0}" destination is not supported.'.format(self.value_in))
         return r
+
+    @staticmethod
+    def add_query_parameter(url, parameter_name, parameter_value):
+        scheme, netloc, path, query_string, fragment = urlsplit(url)
+        query_params = parse_qs(query_string)
+
+        query_params[parameter_name] = [parameter_value]
+        new_query_string = urlencode(query_params, doseq=True)
+
+        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
 
 
 class BasicAuth(requests.auth.HTTPBasicAuth):
@@ -178,11 +194,7 @@ def add_oauth2_security_definition(security_definition, service_name, security_d
 
 
 def add_api_key_security_definition(security_definition, service_name, security_details, security_definition_key):
-    if security_definition.get('in') == 'header':
-        security_definitions[service_name, security_definition_key] = ApiKeyAuth(security_definition, security_details)
-    else:
-        # TODO Handle all API Key destination
-        logging.warning('API Key destination is not supported: {0}'.format(security_definition))
+    security_definitions[service_name, security_definition_key] = ApiKeyAuth(security_definition, security_details)
 
 
 def add_basic_security_definition(security_definition, service_name, security_details, security_definition_key):

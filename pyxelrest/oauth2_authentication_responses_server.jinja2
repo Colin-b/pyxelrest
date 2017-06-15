@@ -14,8 +14,6 @@ import datetime
 import requests
 from pyxelresterrors import *
 
-import ie
-
 auth_tokens = {}
 authentication_response = threading.Lock()
 # Lock the authentication response
@@ -92,15 +90,14 @@ def get_bearer(security_definition):
 
 def request_new_token(security_definition):
     logging.debug('Requesting user authentication...')
-    # use IE to do the auth
-    browser_was_opened = ie.call_till_redirect(security_definition.full_url, security_definition.redirect_uri, security_definition.timeout)
-    # if fails, use default browser
-    if not browser_was_opened :
-        browser_was_opened = webbrowser.open(security_definition.full_url)
+    # Default to Microsoft Internet Explorer to be able to open a new window
+    # otherwise this parameter is not taken into account by most browsers
+    # Opening a new window allows to focus back to Microsoft Excel once authenticated (Javascript is closing the only tab)
+    ie = webbrowser.get(webbrowser.iexplore)
+    if not ie.open(security_definition.full_url, 1):
+        # fallback on simple request if no browser was opened
+        requests.get(security_definition.full_url)
 
-    # fallback on simple request if no browser was opened
-    if not browser_was_opened:
-        response = requests.get(security_definition.full_url)
     logging.debug('Waiting for user authentication...')
 {% if run_with_python_3 %}
     response_received = authentication_response.acquire(timeout=security_definition.timeout)
@@ -120,7 +117,7 @@ def request_new_token(security_definition):
 
 
 def success_page(text):
-    return '<body style="' \
+    return '<body onload="window.setTimeout(close, 2000)" style="' \
            'color: #4F8A10; ' \
            'background-color: #DFF2BF; ' \
            'font-size: xx-large; ' \
@@ -132,7 +129,7 @@ def success_page(text):
 
 
 def error_page(text):
-    return '<body style="' \
+    return '<body onload="window.setTimeout(close, 5000)" style="' \
            'color: #D8000C; ' \
            'background-color: #FFBABA; ' \
            'font-size: xx-large; ' \
