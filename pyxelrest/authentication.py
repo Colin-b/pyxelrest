@@ -41,15 +41,21 @@ def get_detail(detail_key, details_string):
                 return detail_entry[1] if len(detail_entry) == 2 else None
 
 
+def get_detail_int(detail_key, details_string, default_value):
+    value = get_detail(detail_key, details_string)
+    return int(value) if value else default_value
+
+
 class OAuth2Auth(requests.auth.AuthBase):
     """Describes an OAuth 2 security definition."""
 
     DEFAULT_OAUTH2_SERVER_PORT = 5000
-    DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT = 20
+    DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT = 20  # Time is expressed in seconds
+    DEFAULT_SUCCESS_DISPLAY_TIME = 1  # Time is expressed in milliseconds
+    DEFAULT_FAILURE_DISPLAY_TIME = 5000  # Time is expressed in milliseconds
 
     def __init__(self, security_definition_key, security_definition, service_name, security_details):
-        port = get_detail('port', security_details)
-        self.port = int(port) if port else OAuth2Auth.DEFAULT_OAUTH2_SERVER_PORT
+        self.port = get_detail_int('port', security_details, OAuth2Auth.DEFAULT_OAUTH2_SERVER_PORT)
         self.key = service_name, security_definition_key
         self.service_name = service_name
         self.security_definition_key = security_definition_key
@@ -57,8 +63,9 @@ class OAuth2Auth(requests.auth.AuthBase):
         authorization_url = security_definition['authorizationUrl']
         self.full_url = OAuth2Auth.create_auth_url(authorization_url, self.redirect_uri)
         self.token_name = OAuth2Auth.get_query_parameter(authorization_url, 'response_type') or 'token'
-        timeout = get_detail('timeout', security_details)
-        self.timeout = int(timeout) if timeout else OAuth2Auth.DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT
+        self.timeout = get_detail_int('timeout', security_details, OAuth2Auth.DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT)
+        self.success_display_time = get_detail_int('success_display_time', security_details, OAuth2Auth.DEFAULT_SUCCESS_DISPLAY_TIME)
+        self.failure_display_time = get_detail_int('failure_display_time', security_details, OAuth2Auth.DEFAULT_FAILURE_DISPLAY_TIME)
 
     def __call__(self, r):
         import oauth2_authentication_responses_servers

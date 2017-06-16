@@ -174,6 +174,18 @@ The following keys are available:
         <td>OAuth 2</td>
     </tr>
     <tr>
+        <td><strong>success_display_time</strong></td>
+        <td>Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel. Default value is 1 millisecond.</td>
+        <td>Optional</td>
+        <td>OAuth 2</td>
+    </tr>
+    <tr>
+        <td><strong>failure_display_time</strong></td>
+        <td>Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel. Default value is 5 seconds.</td>
+        <td>Optional</td>
+        <td>OAuth 2</td>
+    </tr>
+    <tr>
         <td><strong>api_key</strong></td>
         <td>User API Key.</td>
         <td>Mandatory</td>

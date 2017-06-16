@@ -11,6 +11,7 @@
 - Swagger URI can now contains a path to a swagger file on the file system using file:// prefix.
 - Services requiring NTLM authentication are now accessible thanks to auth=ntlm within security_details property. Note that username and password are mandatory in such a case.
 - Dependencies are now up-to-date (jinja2, requests, xlwings and flask upgraded to latest version)
+- Oauth2 authentication response display time can be tweaked thanks to success_display_time and failure_display_time keys within security_details property.
 
 ### Bug fixes ###
 
