@@ -44,12 +44,7 @@ class AuthTokenMap:
             with self.lock:
                 if name in self.data:
                     bearer, expiry = self.data[name]
-                    if datetime.datetime.utcfromtimestamp(expiry) < datetime.datetime.utcnow():
-                        logging.debug('Authentication token is expired.')
-                        del self.data[name]
-                    else:
-                        logging.debug('User authenticated.')
-                        return bearer
+                    return bearer
         logging.debug('User was not authenticated.')
         raise AuthenticationFailed()
 
@@ -70,6 +65,15 @@ class AuthTokenMap:
             self.data[name] = token, expiry
             self.save_tokens()
             logging.debug("{0} authentication response received: '{1}'. Expiry is {2} (UTC).".format(name, token, expiry))
+
+    def clear(self):
+        with self.lock:
+            self.data = {}
+            self.last_modif = 0
+            try:
+                os.remove(self.tokens_path)
+            except:
+                pass
 
     # private methods
 

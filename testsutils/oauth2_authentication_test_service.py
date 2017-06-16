@@ -30,7 +30,7 @@ def post_token_quick_expiry():
         expiry_now = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     else:
         already_asked_for_quick_expiry[0] = True
-        expiry_now = datetime.datetime.utcnow()
+        expiry_now = datetime.datetime.utcnow() - datetime.timedelta(hours=1)
     redirect_uri = flask.request.args.get('redirect_uri')
     token = jwt.encode({'exp': expiry_now}, 'secret').decode('unicode_escape')
     requests.post(redirect_uri, data={'id_token': token})

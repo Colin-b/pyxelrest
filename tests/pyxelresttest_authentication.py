@@ -1,4 +1,8 @@
 import unittest
+
+import time
+
+import oauth2_authentication_responses_server
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 import sys
@@ -14,6 +18,9 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
     def tearDownClass(cls):
         loader.unload()
         serviceshandler.stop_services()
+
+    def setUp(self):
+        oauth2_authentication_responses_server.auth_tokens.clear()
 
     @classmethod
     def start_services(cls):
@@ -69,6 +76,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
+        time.sleep(1)
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
