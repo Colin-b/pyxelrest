@@ -2,43 +2,26 @@
 Each time this module is loaded it will generate xlwings User Defined Functions.
 """
 import os
-import re
-import datetime
+import sys
 import jinja2
-import yaml
-import logging
 import logging.config
 import logging.handlers
+import datetime
+import authentication
+import pyxelrest.custom_logging
 from importlib import import_module
 from builtins import open
 
-try:
+if sys.version_info.major > 2:
     # Python 3
     from importlib import reload
-except ImportError:
+else:
     # Python 2
     from imp import reload
 
 import vba
-import _version
 import authentication
 import swagger
-
-
-def init_logging():
-    logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.ini')
-    if os.path.isfile(logging_configuration_file_path):
-        with open(logging_configuration_file_path, 'r') as config_file:
-            log_config_dict = yaml.load(config_file)
-            logging.config.dictConfig(log_config_dict)
-    else:
-        default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest.log')
-        logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
-                            handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
-                            level=logging.INFO)
-        logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
-            logging_configuration_file_path))
-
 
 def user_defined_functions(loaded_services):
     """
@@ -55,7 +38,8 @@ def user_defined_functions(loaded_services):
         services=loaded_services,
         modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
         support_pandas=swagger.support_pandas(),
-        support_ujson=support_ujson()
+        support_ujson=support_ujson(),
+        authentication=authentication
     )
 
 
@@ -78,17 +62,10 @@ def generate_user_defined_functions():
             as generated_file:
         generated_file.write(user_defined_functions(services))
 
-
-init_logging()
-logging.debug('Loading PyxelRest version {}'.format(_version.__version__))
-
 try:
-    authentication.stop_servers()
-    authentication.oauth2_security_definitions_by_port = {}
     authentication.security_definitions = {}
     generate_user_defined_functions()
-    authentication.start_servers()
-except:
+except Exception as e:
     logging.exception('Cannot generate user defined functions.')
     raise
 
@@ -97,8 +74,8 @@ try:
     # Force reload of module (even if this is first time, it should not take long)
     # as reloading pyxelrest does not reload UDFs otherwise
     # TODO This is temporary until xlwings force a python reload instead
-    reload(import_module('user_defined_functions'))
-    from user_defined_functions import *
+    reload(import_module('pyxelrest.user_defined_functions'))
+    from pyxelrest.user_defined_functions import *
 except:
     logging.exception('Error while importing UDFs.')
 

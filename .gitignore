@@ -244,4 +244,8 @@ ModelManifest.xml
 # Python Virtual Env
 env/
 /.eggs/
-pyxelrest/oauth2_authentication_responses_server*.py
+*.csproj
+sonar*.xml
+
+pyxelrest/user_defined_functions.py
+.idea
