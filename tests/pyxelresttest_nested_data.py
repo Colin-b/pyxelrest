@@ -139,3 +139,6 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             ['', '', 'value 3', '']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list_of_different_size())
+
+if __name__ == '__main__':
+    unittest.main()

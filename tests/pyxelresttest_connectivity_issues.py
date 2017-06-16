@@ -17,3 +17,6 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         serviceshandler.stop_services()
         self.assertEqual(pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
                          'Cannot connect to service. Please retry once connection is re-established.')
+
+if __name__ == '__main__':
+    unittest.main()

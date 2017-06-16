@@ -666,3 +666,6 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
                 xor_visual_basic='xor value'
             )
         )
+
+if __name__ == '__main__':
+    unittest.main()

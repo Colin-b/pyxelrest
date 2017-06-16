@@ -220,3 +220,6 @@ class PyxelRestTest(unittest.TestCase):
             'success',
             pyxelrestgenerator.swagger_loaded_from_file_test_get_test_static_file_call()
         )
+
+if __name__ == '__main__':
+    unittest.main()

@@ -2952,3 +2952,6 @@ class PyxelRestJsonTest(unittest.TestCase):
         self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
             query_array_date_time=['str value']),
             ['query_array_date_time must contain date times.'])
+
+if __name__ == '__main__':
+    unittest.main()

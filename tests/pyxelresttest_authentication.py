@@ -127,3 +127,6 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                              ['Authorization', 'X-API-HEADER-KEY'],
                              ['', 'my_provided_api_key']
                          ])
+
+if __name__ == '__main__':
+    unittest.main()

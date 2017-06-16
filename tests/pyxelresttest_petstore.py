@@ -53,3 +53,6 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'phone', 'userStatus'],
             [666666, 'JD', 'John', 'Doe', 'jdoe@petstore.com', 'azerty', '0123456789', 0]
         ])
+
+if __name__ == '__main__':
+    unittest.main()
