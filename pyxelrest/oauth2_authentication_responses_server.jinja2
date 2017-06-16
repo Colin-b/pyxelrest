@@ -117,27 +117,27 @@ def request_new_token(security_definition):
 
 
 def success_page(text):
-    return '<body onload="window.setTimeout(close, 2000)" style="' \
-           'color: #4F8A10; ' \
-           'background-color: #DFF2BF; ' \
-           'font-size: xx-large; ' \
-           'display: flex; ' \
-           'align-items: center; ' \
-           'justify-content: center;">' \
-           '<div style="border: 1px solid;">{0}</div>' \
-           '</body>'.format(text)
+    return """<body onload="window.open('', '_self', ''); window.setTimeout(close, 2000)" style="
+color: #4F8A10;
+background-color: #DFF2BF;
+font-size: xx-large;
+display: flex;
+align-items: center;
+justify-content: center;">
+    <div style="border: 1px solid;">{0}</div>
+</body>""".format(text)
 
 
 def error_page(text):
-    return '<body onload="window.setTimeout(close, 5000)" style="' \
-           'color: #D8000C; ' \
-           'background-color: #FFBABA; ' \
-           'font-size: xx-large; ' \
-           'display: flex; ' \
-           'align-items: center; ' \
-           'justify-content: center;">' \
-           '<div style="border: 1px solid;">{0}</div>' \
-           '</body>'.format(text)
+    return """<body onload="window.open('', '_self', ''); window.setTimeout(close, 5000)" style="
+color: #D8000C;
+background-color: #FFBABA;
+font-size: xx-large;
+display: flex;
+align-items: center;
+justify-content: center;">
+    <div style="border: 1px solid;">{0}</div>
+</body>""".format(text)
 
 
 def start_server():
