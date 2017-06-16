@@ -140,7 +140,7 @@ class RowsMerger:
         self.header.extend(new_header)
         new_rows = []
         for new_list in new_list_of_list:
-            new_row = self.rows.copy()
+            new_row = list(self.rows)
             new_row.extend(new_list)
             new_rows.append(new_row)
         self.rows = new_rows

@@ -18,6 +18,7 @@
 - content-type header is now set to the proper value according to Swagger "consumes" field.
 - produces, consumes, parameters and security are now handled even if defined at root or methods level.
 - Microsoft Internet Explorer should now be properly opened and closed to perform authentication.
+- rely_on_definitions property was not working on Python 2.7
 
 ## 0.59 (2017-05-31) ##
 
