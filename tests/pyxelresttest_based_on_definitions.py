@@ -169,3 +169,6 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())]
         ],
             pyxelrestgenerator.usual_parameters_test_get_test_date_time())
+
+if __name__ == '__main__':
+    unittest.main()

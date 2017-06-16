@@ -17,10 +17,10 @@ import socket
 import time
 from contextlib import closing
 
-import pyxelrest.auth_token_map
+import auth_token_map
 from pyxelresterrors import *
 
-auth_tokens = pyxelrest.auth_token_map.AuthTokenMap()
+auth_tokens = auth_token_map.AuthTokenMap()
 authentication_server = threading.Semaphore(value=0)
 authentication_response = threading.Semaphore(value=0)
 app = flask.Flask(__name__)

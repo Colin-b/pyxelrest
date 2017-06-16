@@ -6,7 +6,7 @@ import sys
 import requests
 import requests.auth
 
-from pyxelrest import oauth2_authentication_responses_server
+import oauth2_authentication_responses_server
 
 if sys.version_info.major > 2:
     # Python 3

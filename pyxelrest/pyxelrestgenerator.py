@@ -8,7 +8,7 @@ import logging.config
 import logging.handlers
 import datetime
 import authentication
-import pyxelrest.custom_logging
+import custom_logging
 from importlib import import_module
 from builtins import open
 
