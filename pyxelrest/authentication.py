@@ -147,7 +147,7 @@ def add_service_custom_authentication(service_name, security_details):
     if not password:
         raise Exception('NTLM authentication requires password to be provided in security_details.')
     if 'ntlm' == auth:
-        custom_authentications[service_name] = "NTLMAuth('{0}','{1}')".format(username, password)
+        custom_authentications[service_name] = "authentication.NTLMAuth('{0}','{1}')".format(username, password)
         return auth
 
 
@@ -191,7 +191,7 @@ def add_api_key_security_definition(security_definition, service_name, security_
 def add_basic_security_definition(security_definition, service_name, security_details, security_definition_key):
     username = get_detail('username', security_details)
     password = get_detail('password', security_details)
-    security_definitions[service_name, security_definition_key] = "BasicAuth('{0}','{1}')".format(username,password)
+    security_definitions[service_name, security_definition_key] = "authentication.BasicAuth('{0}','{1}')".format(username, password)
 
 
 def get_auth(service_name, securities):
