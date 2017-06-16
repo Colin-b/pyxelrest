@@ -65,7 +65,10 @@ In order to do so, you need to add a test certificate.
     - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
 
 - Support for ``requests_ntlm``
-    - ``requests_ntlm`` is required in case auth=ntlm is set in ``security_details`` property.
+    - ``requests_ntlm`` is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
+
+- Support for ``requests_negotiate_sspi``
+    - ``requests_negotiate_sspi`` is required in case auth=ntlm is set in ``security_details`` property and logged in user credentials should be used.
 
 ## Configuration ##
 
@@ -153,61 +156,100 @@ Additional security details can be provided thanks to `security_details` propert
 
 This property is supposed to contains key=value information. Separator is ',' (comma).
 
-The following keys are available:
+Depending on the type of authentication, the following keys are available:
+
+##### Common #####
 
 <table>
     <th>
         <td><em>Description</em></td>
         <td><em>Mandatory</em></td>
-        <td><em>Type of security</em></td>
+    </th>
+    <tr>
+        <td><strong>auth</strong></td>
+        <td>Custom authentication mechanism. Valid value is ntlm (requiring requests_ntlm or requests_negotiate_sspi).</td>
+        <td></td>
+    </tr>
+</table>
+
+##### OAuth 2 #####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
     </th>
     <tr>
         <td><strong>port</strong></td>
         <td>Port on which the authentication response is supposed to be received. Default value is 5000.</td>
         <td>Optional</td>
-        <td>OAuth 2</td>
     </tr>
     <tr>
         <td><strong>timeout</strong></td>
         <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.</td>
         <td>Optional</td>
-        <td>OAuth 2</td>
     </tr>
     <tr>
         <td><strong>success_display_time</strong></td>
         <td>Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel. Default value is 1 millisecond.</td>
         <td>Optional</td>
-        <td>OAuth 2</td>
     </tr>
     <tr>
         <td><strong>failure_display_time</strong></td>
         <td>Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel. Default value is 5 seconds.</td>
         <td>Optional</td>
-        <td>OAuth 2</td>
     </tr>
+</table>
+
+##### API Key #####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+    </th>
     <tr>
         <td><strong>api_key</strong></td>
         <td>User API Key.</td>
         <td>Mandatory</td>
-        <td>API Key</td>
     </tr>
+</table>
+
+##### Basic #####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+    </th>
     <tr>
         <td><strong>username</strong></td>
-        <td>User name. Should be of the form domain\\user for NTLM.</td>
+        <td>User name.</td>
         <td>Mandatory</td>
-        <td>Basic / NTLM</td>
     </tr>
     <tr>
         <td><strong>password</strong></td>
         <td>User password.</td>
         <td>Mandatory</td>
-        <td>Basic / NTLM</td>
+    </tr>
+</table>
+
+##### NTLM #####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+    </th>
+    <tr>
+        <td><strong>username</strong></td>
+        <td>User name. Should be of the form domain\\user. Default value is the logged in user name.</td>
+        <td>Optional</td>
     </tr>
     <tr>
-        <td><strong>auth</strong></td>
-        <td>Custom authentication mechanism. Valid value is ntlm (requiring requests_ntlm).</td>
-        <td></td>
-        <td></td>
+        <td><strong>password</strong></td>
+        <td>User password. Default value is the logged in user password.</td>
+        <td>Optional</td>
     </tr>
 </table>
 

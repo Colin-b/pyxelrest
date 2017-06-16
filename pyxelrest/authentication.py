@@ -136,16 +136,23 @@ class NTLMAuth:
     """Describes a NTLM authentication."""
     def __init__(self, security_details):
         username = get_detail('username', security_details)
-        if not username:
-            raise Exception('NTLM authentication requires username to be provided in security_details.')
         password = get_detail('password', security_details)
-        if not password:
-            raise Exception('NTLM authentication requires password to be provided in security_details.')
-        try:
-            import requests_ntlm
-            self.auth = requests_ntlm.HttpNtlmAuth(username, password)
-        except ImportError:
-            raise Exception('NTLM Authentication requires requests_ntlm module.')
+        if not username and not password:
+            try:
+                import requests_negotiate_sspi
+                self.auth = requests_negotiate_sspi.HttpNegotiateAuth()
+            except ImportError:
+                raise Exception('NTLM Authentication without providing credentials requires requests_negotiate_sspi module.')
+        else:
+            if not username:
+                raise Exception('NTLM authentication requires username to be provided in security_details.')
+            if not password:
+                raise Exception('NTLM authentication requires password to be provided in security_details.')
+            try:
+                import requests_ntlm
+                self.auth = requests_ntlm.HttpNtlmAuth(username, password)
+            except ImportError:
+                raise Exception('NTLM Authentication with provided credentials requires requests_ntlm module.')
 
     def __call__(self, r):
         self.auth.__call__(r)
