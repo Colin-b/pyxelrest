@@ -64,6 +64,7 @@ def generate_user_defined_functions():
 
 try:
     authentication.security_definitions = {}
+    authentication.custom_authentications = {}
     generate_user_defined_functions()
 except Exception as e:
     logging.exception('Cannot generate user defined functions.')

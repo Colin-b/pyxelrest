@@ -16,6 +16,7 @@ except ImportError:
 import vba
 from pyxelresterrors import *
 import authentication
+import fileadapter
 
 
 def to_valid_python_vba(str_value):
@@ -50,6 +51,7 @@ class SwaggerService:
         self.uri = self._extract_uri(swagger_url_parsed, config)
         security_details = self.get_item_default(config, 'security_details', None)
         authentication.add_service_security(self.name, self.swagger, security_details)
+        self.auth = authentication.add_service_custom_authentication(self.name, security_details)
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
@@ -121,7 +123,9 @@ class SwaggerService:
         :param swagger_url: URI of the service swagger JSON.
         :return: Dictionary representation of the retrieved swagger JSON.
         """
-        response = requests.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
+        requests_session = requests.session()
+        requests_session.mount('file://', fileadapter.LocalFileAdapter())
+        response = requests_session.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)
@@ -203,6 +207,8 @@ class SwaggerService:
             raise UnsupportedSwaggerVersion(self.swagger['swagger'])
 
     def __str__(self):
+        if self.auth:
+            return '[{0}] service. {1} (custom {2} authentication)'.format(self.name, self.uri, self.auth)
         return '[{0}] service. {1}'.format(self.name, self.uri)
 
 
@@ -251,6 +257,9 @@ class SwaggerMethod:
         return ('application/json' in self.swagger_method['produces']) or \
                ('application/msqpack' in self.swagger_method['produces'])
 
+    def requires_authentication(self):
+        return self.security() or self.service.auth
+
     def security(self):
         return self.swagger_method.get('security')
 
@@ -265,11 +274,13 @@ class SwaggerMethod:
         header = {}
 
         if self.contains_body_parameters:
-            if 'application/json' in self.swagger_method.get('consumes', ['application/json']):
+            consumes = self.swagger_method.get('consumes')
+            if not consumes or 'application/json' in consumes:
                 header['Content-Type'] = 'application/json'
             else:
-                logging.warning('Service is expecting {0} encoded body. '
+                logging.warning('{0} is expecting {0} encoded body. '
                                 'For now PyxelRest only send JSON body so request might fail.'.format(
+                    self.uri,
                     self.swagger_method['consumes']
                 ))
 

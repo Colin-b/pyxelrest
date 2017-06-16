@@ -5,14 +5,18 @@
 ### Enhancements ###
 
 - API Key Security definition support. You should specify your API Key thanks to api_key keyword in security_details property.
+- Basic security definition support. You should specify your username and password thanks to username and password keywords in security_details property.
 - Slight performance improvement on UDFs loading.
 - If more than one supported authentication step is required, all steps are now performed.
+- Swagger URI can now contains a path to a swagger file on the file system using file:// prefix.
+- Services requiring NTLM authentication are now accessible thanks to auth=ntlm within security_details property. Note that username and password are mandatory in such a case.
 
 ### Bug fixes ###
 
 - content-type header was sent instead of accept.
 - content-type header is now set to the proper value according to Swagger "consumes" field.
 - produces, consumes, parameters and security are now handled even if defined at root or methods level.
+- Microsoft Internet Explorer should now be properly opened and closed to perform authentication.
 
 ## 0.59 (2017-05-31) ##
 

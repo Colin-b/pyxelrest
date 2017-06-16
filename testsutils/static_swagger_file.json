@@ -1,0 +1,20 @@
+{
+  "swagger": "2.0",
+  "schemes": [
+    "http"
+  ],
+  "host": "localhost:8954",
+  "basePath": "/sub",
+  "paths": {
+    "/test/static/file/call": {
+      "get": {
+        "operationId": "get_test_static_file_call",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}

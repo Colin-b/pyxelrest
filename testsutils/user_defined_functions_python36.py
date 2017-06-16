@@ -9844,7 +9844,7 @@ all_definitions['form_parameter_test'] = OrderedDict([('Form', OrderedDict([('pr
 @xw.arg('form_string', doc='form parameter')
 def form_parameter_test_post_test_form_parameter(form_string):
     logging.info("Calling form_parameter_test_post_test_form_parameter...")
-    request_header = {}
+    request_header = {'Content-Type': 'application/json'}
     request_payload = {}
 
     if form_string is None or isinstance(form_string, list) and all(x is None for x in form_string):

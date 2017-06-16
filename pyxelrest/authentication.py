@@ -19,6 +19,7 @@ else:
 
 # Key is a tuple 'service name, security key'
 security_definitions = {}
+custom_authentications = {}
 
 
 def get_detail(detail_key, details_string):
@@ -78,14 +79,51 @@ class OAuth2Auth(requests.auth.AuthBase):
 
 class ApiKeyAuth(requests.auth.AuthBase):
     """Describes an API Key security definition."""
-    def __init__(self, header_field_name, api_key):
-        self.header_field_name = header_field_name
+    def __init__(self, field_name, value_in, api_key):
+        self.field_name = field_name
+        self.value_in = value_in
         self.api_key = api_key
-        if not self.api_key:
-            logging.error('api_key is not defined. Call might be rejected by server.')
 
     def __call__(self, r):
-        r.headers[self.header_field_name] = self.api_key
+        if not self.api_key:
+            logging.error('api_key is not defined. Call might be rejected by server.')
+        else:
+            if self.value_in == 'header':
+                r.headers[self.field_name] = self.api_key
+            elif self.value_in == 'query':
+                r.url = ApiKeyAuth.add_query_parameter(r.url, self.field_name, self.api_key)
+            else:
+                logging.warning('api_key "{0}" destination is not supported.'.format(self.value_in))
+        return r
+
+    @staticmethod
+    def add_query_parameter(url, parameter_name, parameter_value):
+        scheme, netloc, path, query_string, fragment = urlsplit(url)
+        query_params = parse_qs(query_string)
+
+        query_params[parameter_name] = [parameter_value]
+        new_query_string = urlencode(query_params, doseq=True)
+
+        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
+
+
+class BasicAuth(requests.auth.HTTPBasicAuth):
+    """Describes a basic security definition."""
+    def __init__(self, username, password):
+        requests.auth.HTTPBasicAuth.__init__(self, username, password)
+
+
+class NTLMAuth:
+    """Describes a NTLM authentication."""
+    def __init__(self, username, password):
+        try:
+            import requests_ntlm
+            self.auth = requests_ntlm.HttpNtlmAuth(username, password)
+        except ImportError:
+            raise Exception('NTLM Authentication requires requests_ntlm module.')
+
+    def __call__(self, r):
+        self.auth.__call__(r)
         return r
 
 
@@ -98,6 +136,19 @@ class MultipleAuth(requests.auth.AuthBase):
         for authentication_mode in self.authentication_modes:
             authentication_mode.__call__(r)
         return r
+
+
+def add_service_custom_authentication(service_name, security_details):
+    auth = get_detail('auth', security_details)
+    username = get_detail('username', security_details)
+    if not username:
+        raise Exception('NTLM authentication requires username to be provided in security_details.')
+    password = get_detail('password', security_details)
+    if not password:
+        raise Exception('NTLM authentication requires password to be provided in security_details.')
+    if 'ntlm' == auth:
+        custom_authentications[service_name] = "NTLMAuth('{0}','{1}')".format(username, password)
+        return auth
 
 
 def add_service_security(service_name, swagger, security_details):
@@ -131,24 +182,24 @@ def add_oauth2_security_definition(security_definition, service_name, security_d
 
 
 def add_api_key_security_definition(security_definition, service_name, security_details, security_definition_key):
-    if security_definition.get('in') == 'header':
-        header_field_name = security_definition['name']
-        api_key = get_detail('api_key', security_details)
-        security_definitions[service_name, security_definition_key] = "authentication.ApiKeyAuth('{0}','{1}')".format(header_field_name, api_key)
-    else:
-        # TODO Handle all API Key destination
-        logging.warning('API Key destination is not supported: {0}'.format(security_definition))
+    field_name = security_definition['name']
+    value_in = security_definition['in']
+    api_key = get_detail('api_key', security_details)
+    security_definitions[service_name, security_definition_key] = "authentication.ApiKeyAuth('{0}','{1}','{2}')".format(field_name, value_in, api_key)
 
 
 def add_basic_security_definition(security_definition, service_name, security_details, security_definition_key):
-    # TODO Handle basic authentication
-    logging.warning('Basic security definition is not supported: {0}'.format(security_definition))
+    username = get_detail('username', security_details)
+    password = get_detail('password', security_details)
+    security_definitions[service_name, security_definition_key] = "BasicAuth('{0}','{1}')".format(username,password)
 
 
 def get_auth(service_name, securities):
+    custom_authentication = custom_authentications.get(service_name)
+
     # Run through all available securities
     for security in securities:
-        authentication_modes = []
+        authentication_modes = [custom_authentication] if custom_authentication else []
         for security_definition_key in security.keys():
             auth = security_definitions.get((service_name, security_definition_key))
             if auth:
@@ -160,4 +211,6 @@ def get_auth(service_name, securities):
         if len(authentication_modes) > 1:
             return "authentication.MultipleAuth(" + ",".join(authentication_modes) + ")"
         # Otherwise check if there is another security available
-    return None
+
+    # Default to custom authentication if no security is supported
+    return custom_authentication

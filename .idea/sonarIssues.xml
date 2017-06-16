@@ -113,6 +113,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/pyxelrest/swagger.py">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/pyxelrest/user_defined_functions.jinja2">
           <value>
             <set />
