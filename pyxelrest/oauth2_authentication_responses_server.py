@@ -72,9 +72,8 @@ def acquire_with_timeout(obj, timeout):
 
 
 def auto_release(obj, res):
-    if obj.locked():
-        obj.release()
-        res[0] = False
+    obj.release()
+    res[0] = False
 
 
 def get_bearer(security_definition):
@@ -97,12 +96,6 @@ def request_new_token(security_definition):
     if not res:
         requests.post('http://localhost:{0}/shutdown'.format(security_definition.port))
         logging.debug('No response received within {0} seconds. Aborting...'.format(security_definition.timeout))
-
-    if security_definition.key in auth_tokens:
-        logging.debug('User authenticated.')
-    else:
-        logging.debug('User was not authenticated.')
-        raise AuthenticationFailed()
 
 
 def success_page(text):

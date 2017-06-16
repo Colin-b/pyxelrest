@@ -129,7 +129,7 @@ class NTLMAuth:
 
 class MultipleAuth(requests.auth.AuthBase):
     """Authentication using multiple authentication methods."""
-    def __init__(self, authentication_modes):
+    def __init__(self, *authentication_modes):
         self.authentication_modes = authentication_modes
 
     def __call__(self, r):
@@ -140,13 +140,13 @@ class MultipleAuth(requests.auth.AuthBase):
 
 def add_service_custom_authentication(service_name, security_details):
     auth = get_detail('auth', security_details)
-    username = get_detail('username', security_details)
-    if not username:
-        raise Exception('NTLM authentication requires username to be provided in security_details.')
-    password = get_detail('password', security_details)
-    if not password:
-        raise Exception('NTLM authentication requires password to be provided in security_details.')
     if 'ntlm' == auth:
+        username = get_detail('username', security_details)
+        if not username:
+            raise Exception('NTLM authentication requires username to be provided in security_details.')
+        password = get_detail('password', security_details)
+        if not password:
+            raise Exception('NTLM authentication requires password to be provided in security_details.')
         custom_authentications[service_name] = "authentication.NTLMAuth('{0}','{1}')".format(username, password)
         return auth
 

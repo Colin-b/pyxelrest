@@ -53,12 +53,9 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_failure())
 
     def test_oauth2_authentication_timeout(self):
-        if sys.version_info[0] == 2:
-            self.fail('Authentication timeout is not handled in Python 2.7 for now')
-        else:
-            import pyxelrestgenerator
-            self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
-                             pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_timeout())
+        import pyxelrestgenerator
+        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
+                         pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_timeout())
 
     def test_without_authentication(self):
         import pyxelrestgenerator
