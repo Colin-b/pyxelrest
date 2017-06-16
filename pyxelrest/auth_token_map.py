@@ -43,6 +43,7 @@ class AuthTokenMap:
             func(*args)
             with self.lock:
                 if name in self.data:
+
                     bearer, expiry = self.data[name]
                     return bearer
         logging.debug('User was not authenticated.')

@@ -86,12 +86,14 @@ def request_new_token(security_definition):
     # if not browser_was_opened :
 
     start_server(security_definition.port)
-    browser_was_opened = webbrowser.open(security_definition.full_url)
-    # fallback on simple request if no browser was opened (unit tests only)
-    if not browser_was_opened:
+    # Default to Microsoft Internet Explorer to be able to open a new window
+    # otherwise this parameter is not taken into account by most browsers
+    # Opening a new window allows to focus back to Microsoft Excel once authenticated (Javascript is closing the only tab)
+    ie = webbrowser.get(webbrowser.iexplore)
+    if not ie.open(security_definition.full_url, 1):
         response = requests.get(security_definition.full_url)
-    logging.debug('Waiting for user authentication...')
 
+    logging.debug('Waiting for user authentication...')
     res = acquire_with_timeout(authentication_response, security_definition.timeout)
     if not res:
         requests.post('http://localhost:{0}/shutdown'.format(security_definition.port))
