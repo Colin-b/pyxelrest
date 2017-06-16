@@ -2,6 +2,7 @@ import unittest
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 import sys
+import time
 
 
 class PyxelRestAuthenticationTest(unittest.TestCase):
@@ -34,7 +35,6 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertEqual(first_token[0], ['Bearer'])
         # Wait for 1 second and send a second request from another server to the same auth server
         # (should request another token)
-        import time
         time.sleep(1)
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(second_token[0], ['Bearer'])
@@ -44,6 +44,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
+        # As the token should not be expired, this call should use the same token
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token, second_token)
 
@@ -70,8 +71,11 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     def test_oauth2_authentication_expiry(self):
         import pyxelrestgenerator
+        # This token will expires in 5 seconds
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
+        time.sleep(5)
+        # Token should now be expired, a new one should be requested
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
