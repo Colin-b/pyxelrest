@@ -245,3 +245,9 @@ ModelManifest.xml
 env/
 /.eggs/
 pyxelrest/oauth2_authentication_responses_server*.py
+.coverage
+.idea/
+addin/packages/
+dist/
+pyxelrest.egg-info/
+pyxelrest/user_defined_functions.py
