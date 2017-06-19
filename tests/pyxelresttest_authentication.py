@@ -36,8 +36,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
             (non_authenticated_test_service, 8948)
         )
 
-    # the IE modification for the test auth server is NOK
-    def not_working_test_oauth2_authentication_on_custom_server_port(self):
+    def test_oauth2_authentication_on_custom_server_port(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_second_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
@@ -49,7 +48,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertNotEqual(first_token[1], second_token[1])
 
     # the IE modification for the test auth server is NOK
-    def not_working_test_oauth2_authentication_success(self):
+    def test_oauth2_authentication_success(self):
         import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(token[0], ['Bearer'])

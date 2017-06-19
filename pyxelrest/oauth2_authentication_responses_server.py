@@ -19,19 +19,20 @@ auth_tokens = auth_token_map.AuthTokenMap()
 authentication_server = threading.Semaphore(value=0)
 authentication_response = threading.Semaphore(value=0)
 app = flask.Flask(__name__)
+token_name = 'id_token'
+success_display_time = 1
+failure_display_time = 2000
 
 
 @app.route("/<service_name>/<security_definition_key>", methods=['POST'])
 def auth_post(service_name, security_definition_key):
     try:
+        global token_name, success_display_time, failure_display_time
         key = service_name + '/' + security_definition_key
         # TODO pickup the data from the service definition
-        token = 'id_token'
-        success_display_time = 5000
-        failure_display_time = 2000
-        if token not in flask.request.form:
-            raise TokenNotProvided(token)
-        id_token = flask.request.form[token]
+        if token_name not in flask.request.form:
+            raise TokenNotProvided(token_name)
+        id_token = flask.request.form[token_name]
         auth_tokens.set_token(key, id_token)
         return success_page("You are now authenticated on {0}. You may close this tab.".format(key), success_display_time)
     except Exception as e:
@@ -81,6 +82,8 @@ def get_bearer(security_definition):
 def request_new_token(security_definition):
     logging.debug('Requesting user authentication...')
     start_server(security_definition.port)
+    global token_name
+    token_name = security_definition.token_name
 
     # Default to Microsoft Internet Explorer to be able to open a new window
     # otherwise this parameter is not taken into account by most browsers
