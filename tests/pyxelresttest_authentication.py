@@ -1,4 +1,8 @@
 import unittest
+
+import time
+
+import oauth2_authentication_responses_server
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 import sys
@@ -15,6 +19,9 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
     def tearDownClass(cls):
         loader.unload()
         serviceshandler.stop_services()
+
+    def setUp(self):
+        oauth2_authentication_responses_server.auth_tokens.clear()
 
     @classmethod
     def start_services(cls):
@@ -40,7 +47,20 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
 
+    # the IE modification for the test auth server is NOK
     def test_oauth2_authentication_success(self):
+        import pyxelrestgenerator
+        token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
+        self.assertEqual(token[0], ['Bearer'])
+        self.assertIsNotNone(token[1])
+
+    def test_oauth2_authentication_success_with_custom_response_type(self):
+        import pyxelrestgenerator
+        token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_with_custom_response_type()
+        self.assertEqual(token[0], ['Bearer'])
+        self.assertIsNotNone(token[1])
+
+    def test_oauth2_authentication_token_reuse(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
@@ -54,12 +74,9 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_failure())
 
     def test_oauth2_authentication_timeout(self):
-        if sys.version_info[0] == 2:
-            self.fail('Authentication timeout is not handled in Python 2.7 for now')
-        else:
-            import pyxelrestgenerator
-            self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
-                             pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_timeout())
+        import pyxelrestgenerator
+        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
+                         pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_timeout())
 
     def test_without_authentication(self):
         import pyxelrestgenerator
@@ -74,7 +91,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         # This token will expires in 5 seconds
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
-        time.sleep(5)
+        time.sleep(6)
         # Token should now be expired, a new one should be requested
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])

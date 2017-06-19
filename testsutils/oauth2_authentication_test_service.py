@@ -14,6 +14,12 @@ def post_token():
     return submit_token(expiry_in_1_hour)
 
 
+@app.route('/auth_success_with_custom_response_type')
+def post_token_with_custom_response_type():
+    expiry_in_1_hour = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    return submit_token(expiry_in_1_hour)
+
+
 @app.route('/auth_failure')
 def post_without_token():
     return submit_no_token()
@@ -26,20 +32,21 @@ def post_token_quick_expiry():
         return submit_token(expiry_in_1_hour)
     else:
         already_asked_for_quick_expiry[0] = True
-        expiry_in_5_seconds = datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
-        return submit_token(expiry_in_5_seconds)
+        expiry_in_1_second = datetime.datetime.utcnow() + datetime.timedelta(seconds=1)
+        return submit_token(expiry_in_1_second)
 
 
 def submit_token(expiry):
     redirect_uri = flask.request.args.get('redirect_uri')
+    response_type = flask.request.args.get('response_type')
     token = jwt.encode({'exp': expiry}, 'secret').decode('unicode_escape')
     return """
         <body onload="document.querySelector('#token_form').submit();">
             <form action="{0}" method="post" id="token_form">
-                <input type="hidden" name="id_token" value="{1}" />
+                <input type="hidden" name="{1}" value="{2}" />
             </form>
         </body>
-        """.format(redirect_uri, token)
+        """.format(redirect_uri, response_type, token)
 
 
 def submit_no_token():

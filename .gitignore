@@ -244,7 +244,6 @@ ModelManifest.xml
 # Python Virtual Env
 env/
 /.eggs/
-pyxelrest/oauth2_authentication_responses_server*.py
 .coverage
 .idea/
 addin/packages/

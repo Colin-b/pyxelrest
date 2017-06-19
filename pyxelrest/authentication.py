@@ -5,23 +5,20 @@ import datetime
 import sys
 import requests
 import requests.auth
-from importlib import import_module
-try:
+
+import oauth2_authentication_responses_server
+
+if sys.version_info.major > 2:
     # Python 3
-    from importlib import reload
     from urllib.parse import parse_qs, urlsplit, urlunsplit, urlencode
-except ImportError:
+else:
     # Python 2
-    from imp import reload
     from urllib import urlencode
     from urlparse import parse_qs, urlsplit, urlunsplit
 
 
 # Key is a tuple 'service name, security key'
 security_definitions = {}
-# Key is port
-oauth2_security_definitions_by_port = {}
-# Key is service_name
 custom_authentications = {}
 
 
@@ -54,23 +51,16 @@ class OAuth2Auth(requests.auth.AuthBase):
     DEFAULT_SUCCESS_DISPLAY_TIME = 1  # Time is expressed in milliseconds
     DEFAULT_FAILURE_DISPLAY_TIME = 5000  # Time is expressed in milliseconds
 
-    def __init__(self, security_definition_key, security_definition, service_name, security_details):
-        self.port = get_detail_int('port', security_details, OAuth2Auth.DEFAULT_OAUTH2_SERVER_PORT)
-        self.key = service_name, security_definition_key
-        self.service_name = service_name
-        self.security_definition_key = security_definition_key
-        self.redirect_uri = 'http://localhost:{0}/{1}/{2}'.format(self.port, service_name, security_definition_key)
-        authorization_url = security_definition['authorizationUrl']
+    def __init__(self, key, port, authorization_url, timeout):
+        self.port = int(port) if port else OAuth2Auth.DEFAULT_OAUTH2_SERVER_PORT
+        self.key = key
+        self.redirect_uri = 'http://localhost:{0}/{1}'.format(self.port, self.key)
         self.full_url = OAuth2Auth.create_auth_url(authorization_url, self.redirect_uri)
         self.token_name = OAuth2Auth.get_query_parameter(authorization_url, 'response_type') or 'token'
-        self.timeout = get_detail_int('timeout', security_details, OAuth2Auth.DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT)
-        self.success_display_time = get_detail_int('success_display_time', security_details, OAuth2Auth.DEFAULT_SUCCESS_DISPLAY_TIME)
-        self.failure_display_time = get_detail_int('failure_display_time', security_details, OAuth2Auth.DEFAULT_FAILURE_DISPLAY_TIME)
+        self.timeout = int(timeout) if timeout else OAuth2Auth.DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT
 
     def __call__(self, r):
-        import oauth2_authentication_responses_servers
-        server = oauth2_authentication_responses_servers.servers[self.port]
-        r.headers['Bearer'] = server.get_bearer(self)
+        r.headers['Bearer'] = oauth2_authentication_responses_server.get_bearer(self)
         return r
 
     @staticmethod
@@ -96,14 +86,14 @@ class OAuth2Auth(requests.auth.AuthBase):
 
 class ApiKeyAuth(requests.auth.AuthBase):
     """Describes an API Key security definition."""
-    def __init__(self, security_definition, security_details):
-        self.field_name = security_definition['name']
-        self.value_in = security_definition['in']
-        self.api_key = get_detail('api_key', security_details)
+    def __init__(self, field_name, value_in, api_key):
+        self.field_name = field_name
+        self.value_in = value_in
+        self.api_key = api_key
 
     def __call__(self, r):
         if not self.api_key:
-            logging.warning('api_key is not defined. Call might be rejected by server.')
+            logging.error('api_key is not defined. Call might be rejected by server.')
         else:
             if self.value_in == 'header':
                 r.headers[self.field_name] = self.api_key
@@ -126,17 +116,13 @@ class ApiKeyAuth(requests.auth.AuthBase):
 
 class BasicAuth(requests.auth.HTTPBasicAuth):
     """Describes a basic security definition."""
-    def __init__(self, security_details):
-        username = get_detail('username', security_details)
-        password = get_detail('password', security_details)
+    def __init__(self, username, password):
         requests.auth.HTTPBasicAuth.__init__(self, username, password)
 
 
 class NTLMAuth:
     """Describes a NTLM authentication."""
-    def __init__(self, security_details):
-        username = get_detail('username', security_details)
-        password = get_detail('password', security_details)
+    def __init__(self, username, password):
         if not username and not password:
             try:
                 import requests_negotiate_sspi
@@ -152,7 +138,7 @@ class NTLMAuth:
                 import requests_ntlm
                 self.auth = requests_ntlm.HttpNtlmAuth(username, password)
             except ImportError:
-                raise Exception('NTLM Authentication with provided credentials requires requests_ntlm module.')
+                raise Exception('NTLM Authentication requires requests_ntlm module.')
 
     def __call__(self, r):
         self.auth.__call__(r)
@@ -161,7 +147,7 @@ class NTLMAuth:
 
 class MultipleAuth(requests.auth.AuthBase):
     """Authentication using multiple authentication methods."""
-    def __init__(self, authentication_modes):
+    def __init__(self, *authentication_modes):
         self.authentication_modes = authentication_modes
 
     def __call__(self, r):
@@ -173,7 +159,13 @@ class MultipleAuth(requests.auth.AuthBase):
 def add_service_custom_authentication(service_name, security_details):
     auth = get_detail('auth', security_details)
     if 'ntlm' == auth:
-        custom_authentications[service_name] = NTLMAuth(security_details)
+        username = get_detail('username', security_details)
+        if not username:
+            raise Exception('NTLM authentication requires username to be provided in security_details.')
+        password = get_detail('password', security_details)
+        if not password:
+            raise Exception('NTLM authentication requires password to be provided in security_details.')
+        custom_authentications[service_name] = "authentication.NTLMAuth('{0}','{1}')".format(username, password)
         return auth
 
 
@@ -197,10 +189,10 @@ def add_service_security_definition(security_definition, service_name, security_
 
 def add_oauth2_security_definition(security_definition, service_name, security_details, security_definition_key):
     if security_definition.get('flow') == 'implicit':
-        authentication_definition = OAuth2Auth(security_definition_key, security_definition, service_name, security_details)
-        if authentication_definition.port not in oauth2_security_definitions_by_port:
-            oauth2_security_definitions_by_port[authentication_definition.port] = []
-        oauth2_security_definitions_by_port[authentication_definition.port].append(authentication_definition)
+        port = get_detail('port', security_details)
+        authorization_url = security_definition['authorizationUrl']
+        timeout = get_detail('timeout', security_details)
+        authentication_definition = "authentication.OAuth2Auth('{0}/{1}',{2},'{3}',{4})".format(service_name, security_definition_key, port, authorization_url, timeout)
         security_definitions[service_name, security_definition_key] = authentication_definition
     else:
         # TODO Handle all OAuth2 flows
@@ -208,59 +200,16 @@ def add_oauth2_security_definition(security_definition, service_name, security_d
 
 
 def add_api_key_security_definition(security_definition, service_name, security_details, security_definition_key):
-    security_definitions[service_name, security_definition_key] = ApiKeyAuth(security_definition, security_details)
+    field_name = security_definition['name']
+    value_in = security_definition['in']
+    api_key = get_detail('api_key', security_details)
+    security_definitions[service_name, security_definition_key] = "authentication.ApiKeyAuth('{0}','{1}','{2}')".format(field_name, value_in, api_key)
 
 
 def add_basic_security_definition(security_definition, service_name, security_details, security_definition_key):
-    security_definitions[service_name, security_definition_key] = BasicAuth(security_details)
-
-
-def start_servers():
-    if oauth2_security_definitions_by_port:
-        logging.debug('Generating OAuth 2 authentication responses servers.')
-        for port in oauth2_security_definitions_by_port.keys():
-            create_server_module(port)
-        reload_server_modules()
-
-
-def create_server_module(port):
-    with open(os.path.join(os.path.dirname(__file__), 'oauth2_authentication_responses_server_{0}.py'.format(port)), 'w') as generated_file:
-        renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
-        generated_file.write(
-            renderer.get_template('oauth2_authentication_responses_server.jinja2').render(
-                current_utc_time=datetime.datetime.utcnow().isoformat(),
-                run_with_python_3=sys.version_info[0] == 3,
-                security_definitions=oauth2_security_definitions_by_port[port],
-                port=port
-            )
-        )
-
-
-def reload_server_modules():
-    with open(os.path.join(os.path.dirname(__file__), 'oauth2_authentication_responses_servers.py'), 'w') as generated_file:
-        renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), trim_blocks=True)
-        generated_file.write(
-            renderer.get_template('oauth2_authentication_responses_servers.jinja2').render(
-                current_utc_time=datetime.datetime.utcnow().isoformat(),
-                run_with_python_3=sys.version_info[0] == 3,
-                ports=oauth2_security_definitions_by_port.keys()
-            )
-        )
-
-    reload(import_module('oauth2_authentication_responses_servers'))
-    import oauth2_authentication_responses_servers
-    oauth2_authentication_responses_servers.start_servers()
-
-
-def stop_servers():
-    if oauth2_security_definitions_by_port:
-        logging.debug('Stopping OAuth 2 authentication responses servers...')
-        for port in oauth2_security_definitions_by_port.keys():
-            # Shutdown authentication server thread if needed (in case module is reloaded)
-            try:
-                requests.post('http://localhost:{0}/shutdown'.format(port))
-            except:
-                pass
+    username = get_detail('username', security_details)
+    password = get_detail('password', security_details)
+    security_definitions[service_name, security_definition_key] = "authentication.BasicAuth('{0}','{1}')".format(username, password)
 
 
 def get_auth(service_name, securities):
@@ -278,7 +227,7 @@ def get_auth(service_name, securities):
             return authentication_modes[0]
         # Multiple authentication methods are required and PyxelRest support it
         if len(authentication_modes) > 1:
-            return MultipleAuth(authentication_modes)
+            return "authentication.MultipleAuth(" + ",".join(authentication_modes) + ")"
         # Otherwise check if there is another security available
 
     # Default to custom authentication if no security is supported
