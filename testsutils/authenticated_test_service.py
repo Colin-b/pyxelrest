@@ -24,6 +24,23 @@ def swagger():
                                ]
                            }
                        },
+                       '/test/oauth2/authentication/success/with/custom/response/type': {
+                           'get': {
+                               'operationId': 'get_test_oauth2_authentication_success_with_custom_response_type',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               },
+                               'security': [
+                                   {
+                                       'oauth2_auth_success_with_custom_response_type': [
+                                           'custom_label'
+                                       ]
+                                   }
+                               ]
+                           }
+                       },
                        '/test/oauth2/authentication/failure': {
                            'get': {
                                'operationId': 'get_test_oauth2_authentication_failure',
@@ -191,6 +208,14 @@ def swagger():
                                "custom_label": "custom category"
                            }
                        },
+                       'auth_success_with_custom_response_type': {
+                           "type": "oauth2",
+                           "authorizationUrl": 'http://localhost:8947/auth_success?response_type=my_custom_token',
+                           "flow": "implicit",
+                           "scopes": {
+                               "custom_label": "custom category"
+                           }
+                       },
                        'oauth2_auth_failure': {
                            "type": "oauth2",
                            "authorizationUrl": 'http://localhost:8947/auth_failure?response_type=id_token',
@@ -234,6 +259,11 @@ def swagger():
 
 @app.route('/test/oauth2/authentication/success', methods=['GET'])
 def get_test_oauth2_authentication_success():
+    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+
+
+@app.route('/test/oauth2/authentication/success/with/custom/response/type', methods=['GET'])
+def get_test_oauth2_authentication_success_with_custom_response_type():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 

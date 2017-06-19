@@ -51,6 +51,18 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
     # the IE modification for the test auth server is NOK
     def not_working_test_oauth2_authentication_success(self):
         import pyxelrestgenerator
+        token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
+        self.assertEqual(token[0], ['Bearer'])
+        self.assertIsNotNone(token[1])
+
+    def test_oauth2_authentication_success_with_custom_response_type(self):
+        import pyxelrestgenerator
+        token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_with_custom_response_type()
+        self.assertEqual(token[0], ['Bearer'])
+        self.assertIsNotNone(token[1])
+
+    def test_oauth2_authentication_token_reuse(self):
+        import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
         # As the token should not be expired, this call should use the same token
@@ -80,7 +92,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         # This token will expires in 5 seconds
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
-        time.sleep(5)
+        time.sleep(6)
         # Token should now be expired, a new one should be requested
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])
