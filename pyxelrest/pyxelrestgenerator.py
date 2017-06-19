@@ -75,8 +75,8 @@ try:
     # Force reload of module (even if this is first time, it should not take long)
     # as reloading pyxelrest does not reload UDFs otherwise
     # TODO This is temporary until xlwings force a python reload instead
-    reload(import_module('pyxelrest.user_defined_functions'))
-    from pyxelrest.user_defined_functions import *
+    reload(import_module('user_defined_functions'))
+    from user_defined_functions import *
 except:
     logging.exception('Error while importing UDFs.')
 

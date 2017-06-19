@@ -1,8 +1,3 @@
-"""
-This file was generated. DO NOT EDIT manually.
-Source file: oauth2_authentication_responses_server.jinja2
-Generation date (UTC): 2017-06-13T14:04:07.067000
-"""
 import flask
 import webbrowser
 import threading
@@ -30,19 +25,22 @@ app = flask.Flask(__name__)
 def auth_post(service_name, security_definition_key):
     try:
         key = service_name + '/' + security_definition_key
+        # TODO pickup the data from the service definition
         token = 'id_token'
+        success_display_time = 5000
+        failure_display_time = 2000
         if token not in flask.request.form:
             raise TokenNotProvided(token)
         id_token = flask.request.form[token]
         auth_tokens.set_token(key, id_token)
-        shutdown()
-        return success_page("You are now authenticated on {0}. You may close this tab.".format(key))
+        return success_page("You are now authenticated on {0}. You may close this tab.".format(key), success_display_time)
     except Exception as e:
         logging.exception("Unable to properly perform authentication on {0}.".format(key))
-        return error_page("Unable to properly perform authentication on {0}: {1}".format(key, e))
+        return error_page("Unable to properly perform authentication on {0}: {1}".format(key, e), failure_display_time)
     finally:
         try:
             authentication_response.release()
+            shutdown()
         except:
             logging.error('An error occurred while signaling that an authentication was received.')
             pass
@@ -54,25 +52,25 @@ def shutdown():
     if flask_server_shutdown is None:
         raise RuntimeError('Not running with the Werkzeug Server')
     flask_server_shutdown()
-    logging.info('Starting OAuth2 authentication responses server')
+    logging.info('Stopping OAuth2 authentication responses server')
 
 
-def acquire_with_timeout(obj, timeout):
+def acquire_with_timeout(lock_obj, timeout):
     if sys.version_info.major > 2:
         # Python 3
-        return obj.acquire(timeout=timeout)
+        return lock_obj.acquire(timeout=timeout)
     else:
         # Python 2
         res = [True]
-        t = threading.Timer(timeout, function=auto_release, args=(obj, res))
+        t = threading.Timer(timeout, function=auto_release, args=(lock_obj, res))
         t.start()
-        obj.acquire()
+        lock_obj.acquire()
         t.cancel()
         return res[0]
 
 
-def auto_release(obj, res):
-    obj.release()
+def auto_release(lock_obj, res):
+    lock_obj.release()
     res[0] = False
 
 
@@ -82,10 +80,8 @@ def get_bearer(security_definition):
 
 def request_new_token(security_definition):
     logging.debug('Requesting user authentication...')
-    # if fails, use default browser
-    # if not browser_was_opened :
-
     start_server(security_definition.port)
+
     # Default to Microsoft Internet Explorer to be able to open a new window
     # otherwise this parameter is not taken into account by most browsers
     # Opening a new window allows to focus back to Microsoft Excel once authenticated (Javascript is closing the only tab)
@@ -96,37 +92,41 @@ def request_new_token(security_definition):
     logging.debug('Waiting for user authentication...')
     res = acquire_with_timeout(authentication_response, security_definition.timeout)
     if not res:
-        requests.post('http://localhost:{0}/shutdown'.format(security_definition.port))
         logging.debug('No response received within {0} seconds. Aborting...'.format(security_definition.timeout))
+        try:
+            requests.post('http://localhost:{0}/shutdown'.format(security_definition.port), json='', timeout=1)
+        except:
+            pass
 
 
-def success_page(text):
-    return """<body onload="window.open('', '_self', ''); window.setTimeout(close, 2000)" style="
+def success_page(text, display_time):
+    return """<body onload="window.open('', '_self', ''); window.setTimeout(close, {0})" style="
     color: #4F8A10;
     background-color: #DFF2BF;
     font-size: xx-large;
     display: flex;
     align-items: center;
     justify-content: center;">
-        <div style="border: 1px solid;">{0}</div>
-    </body>""".format(text)
+        <div style="border: 1px solid;">{1}</div>
+    </body>""".format(display_time, text)
 
 
-def error_page(text):
-    return """<body onload="window.open('', '_self', ''); window.setTimeout(close, 5000)" style="
+def error_page(text, display_time):
+    return """<body onload="window.open('', '_self', ''); window.setTimeout(close, {0})" style="
     color: #D8000C;
     background-color: #FFBABA;
     font-size: xx-large;
     display: flex;
     align-items: center;
     justify-content: center;">
-        <div style="border: 1px solid;">{0}</div>
-    </body>""".format(text)
+        <div style="border: 1px solid;">{1}</div>
+    </body>""".format(display_time, text)
 
 
 def start_server(port):
     threading.Thread(target=start_server_sync, args=[port]).start()
     authentication_server.acquire()
+    time.sleep(0.1)
 
 
 def start_server_sync(port):

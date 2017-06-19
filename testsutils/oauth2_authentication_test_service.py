@@ -26,8 +26,8 @@ def post_token_quick_expiry():
         return submit_token(expiry_in_1_hour)
     else:
         already_asked_for_quick_expiry[0] = True
-        expiry_in_5_seconds = datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
-        return submit_token(expiry_in_5_seconds)
+        expiry_in_1_second = datetime.datetime.utcnow() + datetime.timedelta(seconds=1)
+        return submit_token(expiry_in_1_second)
 
 
 def submit_token(expiry):

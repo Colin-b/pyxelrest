@@ -29,7 +29,7 @@ class NoMethodsProvided(Exception):
 
 
 class PortNotAvailable(Exception):
-    """ No Methods provided. """
+    """ Port is already taken. """
     def __init__(self, port, *args, **kwargs):
         Exception.__init__(self, 'The port {0} is not available.'.format(port))
 

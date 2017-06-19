@@ -16,6 +16,7 @@ class AuthTokenMap:
     data = {}
     tokens_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'tokens.json')
     lock = threading.Lock()
+    lock2 = threading.Lock()
     last_modif = 0
 
     def __init__(self):
@@ -37,13 +38,13 @@ class AuthTokenMap:
                     logging.debug('Authentication token is expired.')
                     del self.data[name]
                 else:
-                    logging.debug('Using already received authentication, will expire in {0} (UTC).'.format(expiry))
+                    logging.debug('Using already received authentication, will expire on {0} (UTC).'.format(expiry))
                     return bearer
         if func is not None:
-            func(*args)
+            with self.lock2:
+                func(*args)
             with self.lock:
                 if name in self.data:
-
                     bearer, expiry = self.data[name]
                     return bearer
         logging.debug('User was not authenticated.')
