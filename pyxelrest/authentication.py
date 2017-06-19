@@ -38,11 +38,18 @@ def get_detail(detail_key, details_string):
                 return detail_entry[1] if len(detail_entry) == 2 else None
 
 
+def get_detail_int(detail_key, details_string, default_value):
+    value = get_detail(detail_key, details_string)
+    return int(value) if value else default_value
+
+
 class OAuth2Auth(requests.auth.AuthBase):
     """Describes an OAuth 2 security definition."""
 
     DEFAULT_OAUTH2_SERVER_PORT = 5000
-    DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT = 20
+    DEFAULT_OAUTH2_AUTHENTICATION_TIMEOUT = 20  # Time is expressed in seconds
+    DEFAULT_SUCCESS_DISPLAY_TIME = 1  # Time is expressed in milliseconds
+    DEFAULT_FAILURE_DISPLAY_TIME = 5000  # Time is expressed in milliseconds
 
     def __init__(self, key, port, authorization_url, timeout):
         self.port = int(port) if port else OAuth2Auth.DEFAULT_OAUTH2_SERVER_PORT
@@ -116,11 +123,22 @@ class BasicAuth(requests.auth.HTTPBasicAuth):
 class NTLMAuth:
     """Describes a NTLM authentication."""
     def __init__(self, username, password):
-        try:
-            import requests_ntlm
-            self.auth = requests_ntlm.HttpNtlmAuth(username, password)
-        except ImportError:
-            raise Exception('NTLM Authentication requires requests_ntlm module.')
+        if not username and not password:
+            try:
+                import requests_negotiate_sspi
+                self.auth = requests_negotiate_sspi.HttpNegotiateAuth()
+            except ImportError:
+                raise Exception('NTLM Authentication without providing credentials requires requests_negotiate_sspi module.')
+        else:
+            if not username:
+                raise Exception('NTLM authentication requires username to be provided in security_details.')
+            if not password:
+                raise Exception('NTLM authentication requires password to be provided in security_details.')
+            try:
+                import requests_ntlm
+                self.auth = requests_ntlm.HttpNtlmAuth(username, password)
+            except ImportError:
+                raise Exception('NTLM Authentication requires requests_ntlm module.')
 
     def __call__(self, r):
         self.auth.__call__(r)

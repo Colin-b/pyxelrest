@@ -244,8 +244,9 @@ ModelManifest.xml
 # Python Virtual Env
 env/
 /.eggs/
-*.csproj
-sonar*.xml
-
+.coverage
+.idea/
+addin/packages/
+dist/
+pyxelrest.egg-info/
 pyxelrest/user_defined_functions.py
-.idea
