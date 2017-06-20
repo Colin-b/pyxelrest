@@ -47,7 +47,6 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertEqual(second_token[0], ['Bearer'])
         self.assertNotEqual(first_token[1], second_token[1])
 
-    # the IE modification for the test auth server is NOK
     def test_oauth2_authentication_success(self):
         import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
