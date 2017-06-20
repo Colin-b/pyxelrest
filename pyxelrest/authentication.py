@@ -54,6 +54,7 @@ class OAuth2Auth(requests.auth.AuthBase):
         self.redirect_uri = 'http://localhost:{0}/{1}'.format(self.port, self.key)
         self.full_url = OAuth2Auth.create_auth_url(authorization_url, self.redirect_uri)
         self.token_name = OAuth2Auth.get_query_parameter(authorization_url, 'response_type') or \
+                          get_detail('response_type', security_details) or \
                           oauth2_authentication_responses_server.DEFAULT_TOKEN_NAME
         self.timeout = get_detail_int('timeout', security_details,
                                       oauth2_authentication_responses_server.DEFAULT_AUTHENTICATION_TIMEOUT)

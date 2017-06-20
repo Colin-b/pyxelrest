@@ -5,6 +5,7 @@
 ### Enhancements ###
 
 - Generated UDFs can now be called from VBA (Using RunPython).
+- response_type can be provided in security_details property in case it is not provided in authorization_url and it is not default value (token).
 
 ## 0.60 (2017-06-19) ##
 

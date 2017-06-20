@@ -190,6 +190,11 @@ Depending on the type of authentication, the following keys are available:
         <td>Optional</td>
     </tr>
     <tr>
+        <td><strong>response_type</strong></td>
+        <td>Name of the field that will contains the token. Default value is 'token'.</td>
+        <td>Optional</td>
+    </tr>
+    <tr>
         <td><strong>success_display_time</strong></td>
         <td>Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel. Default value is 1 millisecond.</td>
         <td>Optional</td>
