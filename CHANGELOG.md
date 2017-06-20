@@ -2,6 +2,10 @@
 
 ## 0.61 (next) ##
 
+### Enhancements ###
+
+- Generated UDFs can now be called from VBA (Using RunPython).
+
 ## 0.60 (2017-06-19) ##
 
 ### Enhancements ###
