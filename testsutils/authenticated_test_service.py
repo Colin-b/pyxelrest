@@ -201,8 +201,7 @@ def swagger():
                        },
                        'oauth2_auth_timeout': {
                            "type": "oauth2",
-                           # Server should not exists to simulate a timeout
-                           "authorizationUrl": 'http://localhost:8949/auth_timeout?response_type=id_token',
+                           "authorizationUrl": 'http://localhost:8947/auth_timeout?response_type=id_token',
                            "flow": "implicit",
                            "scopes": {
                                "custom_label": "custom category"
