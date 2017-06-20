@@ -18,6 +18,4 @@ def load(new_configuration_file_name, remove_logging_config=False):
 
 
 def unload():
-    import authentication
-    authentication.stop_servers()
     confighandler.set_initial_configuration()

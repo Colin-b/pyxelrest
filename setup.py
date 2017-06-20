@@ -60,8 +60,6 @@ setup(name='pyxelrest',
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
-             'oauth2_authentication_responses_server.jinja2',
-             'oauth2_authentication_responses_servers.jinja2',
              'default_logging_configuration.ini.jinja2',
              'default_services_configuration.ini',
              'user_defined_functions.jinja2'

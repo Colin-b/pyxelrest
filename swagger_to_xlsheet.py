@@ -1,4 +1,4 @@
-from pyxelrest.pyxelrestgenerator import load_services
+from pyxelrestgenerator import load_services
 import xlsxwriter
 import string
 

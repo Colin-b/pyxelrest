@@ -28,6 +28,12 @@ class NoMethodsProvided(Exception):
         Exception.__init__(self, 'At least one method must be provided amongst [get, post, put, delete].')
 
 
+class PortNotAvailable(Exception):
+    """ Port is already taken. """
+    def __init__(self, port, *args, **kwargs):
+        Exception.__init__(self, 'The port {0} is not available.'.format(port))
+
+
 class ConfigurationFileNotFound(Exception):
     """ Configuration file not found. """
     def __init__(self, file_path, *args, **kwargs):
