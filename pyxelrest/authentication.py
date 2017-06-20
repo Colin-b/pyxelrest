@@ -1,7 +1,4 @@
 import logging
-import os
-import jinja2
-import datetime
 import sys
 import requests
 import requests.auth
