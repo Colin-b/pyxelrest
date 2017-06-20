@@ -88,10 +88,10 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     def test_oauth2_authentication_expiry(self):
         import pyxelrestgenerator
-        # This token will expires in 5 seconds
+        # This token will expires in 1 seconds
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
-        time.sleep(6)
+        time.sleep(2)
         # Token should now be expired, a new one should be requested
         second_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(second_token[0], ['Bearer'])
