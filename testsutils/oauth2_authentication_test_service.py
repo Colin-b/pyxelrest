@@ -14,12 +14,6 @@ def post_token():
     return submit_token(expiry_in_1_hour)
 
 
-@app.route('/auth_success_with_custom_response_type')
-def post_token_with_custom_response_type():
-    expiry_in_1_hour = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-    return submit_token(expiry_in_1_hour)
-
-
 @app.route('/auth_failure')
 def post_without_token():
     return submit_no_token()
@@ -37,7 +31,7 @@ def post_token_quick_expiry():
 
 
 @app.route('/auth_timeout')
-def post_token_after_client_timeout():
+def close_page_so_that_client_timeout_waiting_for_token():
     return close_page()
 
 
