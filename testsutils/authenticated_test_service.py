@@ -41,6 +41,23 @@ def swagger():
                                ]
                            }
                        },
+                       '/test/oauth2/authentication/success/without/response/type': {
+                           'get': {
+                               'operationId': 'get_test_oauth2_authentication_success_without_response_type',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value'
+                                   }
+                               },
+                               'security': [
+                                   {
+                                       'oauth2_auth_success_without_response_type': [
+                                           'custom_label'
+                                       ]
+                                   }
+                               ]
+                           }
+                       },
                        '/test/oauth2/authentication/failure': {
                            'get': {
                                'operationId': 'get_test_oauth2_authentication_failure',
@@ -208,9 +225,17 @@ def swagger():
                                "custom_label": "custom category"
                            }
                        },
-                       'auth_success_with_custom_response_type': {
+                       'oauth2_auth_success_with_custom_response_type': {
                            "type": "oauth2",
-                           "authorizationUrl": 'http://localhost:8947/auth_success?response_type=my_custom_token',
+                           "authorizationUrl": 'http://localhost:8947/auth_success_with_custom_token?response_type=my_custom_token',
+                           "flow": "implicit",
+                           "scopes": {
+                               "custom_label": "custom category"
+                           }
+                       },
+                       'oauth2_auth_success_without_response_type': {
+                           "type": "oauth2",
+                           "authorizationUrl": 'http://localhost:8947/auth_success_without_response_type',
                            "flow": "implicit",
                            "scopes": {
                                "custom_label": "custom category"
@@ -263,6 +288,11 @@ def get_test_oauth2_authentication_success():
 
 @app.route('/test/oauth2/authentication/success/with/custom/response/type', methods=['GET'])
 def get_test_oauth2_authentication_success_with_custom_response_type():
+    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+
+
+@app.route('/test/oauth2/authentication/success/without/response/type', methods=['GET'])
+def get_test_oauth2_authentication_success_without_response_type():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 

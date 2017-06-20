@@ -60,6 +60,12 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertEqual(token[0], ['Bearer'])
         self.assertIsNotNone(token[1])
 
+    def test_oauth2_authentication_success_without_response_type(self):
+        import pyxelrestgenerator
+        token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_without_response_type()
+        self.assertEqual(token[0], ['Bearer'])
+        self.assertIsNotNone(token[1])
+
     def test_oauth2_authentication_token_reuse(self):
         import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()

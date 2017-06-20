@@ -11,7 +11,19 @@ already_asked_for_quick_expiry = [False]
 @app.route('/auth_success')
 def post_token():
     expiry_in_1_hour = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-    return submit_a_form_with_a_token(expiry_in_1_hour)
+    return submit_a_form_with_a_token(expiry_in_1_hour, 'id_token')
+
+
+@app.route('/auth_success_with_custom_token')
+def post_token_as_my_custom_token():
+    expiry_in_1_hour = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    return submit_a_form_with_a_token(expiry_in_1_hour, 'my_custom_token')
+
+
+@app.route('/auth_success_without_response_type')
+def post_token_as_token():
+    expiry_in_1_hour = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    return submit_a_form_with_a_token(expiry_in_1_hour, 'token')
 
 
 @app.route('/auth_failure')
@@ -21,13 +33,14 @@ def post_without_token():
 
 @app.route('/auth_success_quick_expiry')
 def post_token_quick_expiry():
+    response_type = flask.request.args.get('response_type')
     if already_asked_for_quick_expiry[0]:
         expiry_in_1_hour = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-        return submit_a_form_with_a_token(expiry_in_1_hour)
+        return submit_a_form_with_a_token(expiry_in_1_hour, response_type)
     else:
         already_asked_for_quick_expiry[0] = True
         expiry_in_1_second = datetime.datetime.utcnow() + datetime.timedelta(seconds=1)
-        return submit_a_form_with_a_token(expiry_in_1_second)
+        return submit_a_form_with_a_token(expiry_in_1_second, response_type)
 
 
 @app.route('/auth_timeout')
@@ -35,9 +48,8 @@ def close_page_so_that_client_timeout_waiting_for_token():
     return close_page()
 
 
-def submit_a_form_with_a_token(token_expiry):
+def submit_a_form_with_a_token(token_expiry, response_type):
     redirect_uri = flask.request.args.get('redirect_uri')
-    response_type = flask.request.args.get('response_type')
     token = jwt.encode({'exp': token_expiry}, 'secret').decode('unicode_escape')
     return """
 <html>
