@@ -38,8 +38,8 @@ class PyxelRestCacheTest(unittest.TestCase):
 
     def test_dbm_caching(self):
         from caching import caching, init_shelve
-        os.remove("c:\\tmp\\cache.dbm")
-        init_shelve("c:\\tmp\\cache.dbm")
+        os.remove("c:\\tmp\\cache.shelve")
+        init_shelve("c:\\tmp\\cache.shelve")
 
         @caching
         def toto3(x):
