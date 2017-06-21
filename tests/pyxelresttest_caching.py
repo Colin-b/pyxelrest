@@ -3,7 +3,7 @@ import os
 import time
 
 
-class PyxelRestAuthenticationTest(unittest.TestCase):
+class PyxelRestCacheTest(unittest.TestCase):
     mod = 0
 
     def test_no_caching(self):
