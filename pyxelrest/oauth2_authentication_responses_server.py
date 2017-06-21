@@ -157,12 +157,12 @@ def start_server_sync(port):
 
 
 def wait_for_port(host, port):
-    n = 0
+    retry_number = 0
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
         while check_bind(sock, host, port):
             time.sleep(0.1)
-            n += 1
-            if n > 20:
+            retry_number += 1
+            if retry_number > 20:
                 raise PortNotAvailable(port)
 
 
