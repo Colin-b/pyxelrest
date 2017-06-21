@@ -8,7 +8,7 @@ Global caching decorator
 global_caching = None
 
 
-def init_dbm(filename):
+def init_shelve(filename):
     import shelve
     global global_caching
     global_caching = shelve.open(filename, 'c')

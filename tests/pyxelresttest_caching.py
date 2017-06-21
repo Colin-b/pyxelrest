@@ -37,9 +37,9 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertEqual(toto2(2), 5)
 
     def test_dbm_caching(self):
-        from caching import caching, init_dbm
+        from caching import caching, init_shelve
         os.remove("c:\\tmp\\cache.dbm")
-        init_dbm("c:\\tmp\\cache.dbm")
+        init_shelve("c:\\tmp\\cache.dbm")
 
         @caching
         def toto3(x):
