@@ -20,8 +20,8 @@ class PyxelRestCacheTest(unittest.TestCase):
         self.assertEqual(toto1(2), 5)
 
     def test_lru_caching(self):
-        from caching import caching, init_lru_cache
-        init_lru_cache(5, 1)
+        from caching import caching, init_memory_cache
+        init_memory_cache(5, 1)
 
         @caching
         def toto2(x):

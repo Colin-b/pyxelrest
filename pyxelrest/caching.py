@@ -9,23 +9,40 @@ global_caching = None
 
 
 def init_disk_cache(filename):
+    """
+    Initialize for a disk cache
+    :param filename: filename for the cache
+    """
     import shelve
     global global_caching
     global_caching = shelve.open(filename)
 
 
-def init_lru_cache(size, ttl):
+def init_memory_cache(size, ttl):
+    """
+    Initialize for a memory lru cache
+    :param size: max number of items
+    :param ttl: max time to live for items
+    """
     import cachetools
     global global_caching
     global_caching = cachetools.TTLCache(size, ttl)
 
 
 def no_cache():
+    """
+    Deactivate caching
+    """
     global global_caching
     global_caching = None
 
 
 def caching(f):
+    """
+    Decorator for caching results
+    :param f: the function to decorate
+    :return: the decorated function if caching is activated before
+    """
     if global_caching is not None:
         def wrapper(*args, **kwargs):
             global global_caching
