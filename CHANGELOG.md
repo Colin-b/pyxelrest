@@ -7,6 +7,10 @@
 - Generated UDFs can now be called from VBA (Using RunPython).
 - response_type can be provided in security_details property in case it is not provided in authorization_url and it is not default value (token).
 
+### Bug fixes ###
+
+- Retry up to 100 times instead of 10 times when a COM Retry error is received while sending results to Microsoft Excel (depends on xlwings-0.10.4.1).
+
 ## 0.60 (2017-06-19) ##
 
 ### Enhancements ###
