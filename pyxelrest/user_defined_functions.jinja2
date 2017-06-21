@@ -8,6 +8,7 @@ import requests
 import requests.exceptions
 import datetime
 import logging
+from caching import caching
 {% if support_ujson %}
 import ujson
 {% endif %}
@@ -348,6 +349,7 @@ import authentication
 
 {# Macro generating the UDF related to provided method #}
 {% macro add_udf(swagger_method, request_macro) %}
+@caching
 @xw.func(category='{{ swagger_method.service.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
 {% for parameter in swagger_method.parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
