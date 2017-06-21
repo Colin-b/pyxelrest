@@ -1,7 +1,7 @@
 """
 Global caching decorator
 - init_disk_cache(filename) => stores all the data in the shelve file <filename>, marshalling is done via pickle
-- init_lru_cache(size,ttl) => stores up to <size> results for <ttl> seconds
+- init_memory_cache(size,ttl) => stores up to <size> results for <ttl> seconds
 - nothing or no_cache() => no decoration and no caching
 """
 
@@ -22,7 +22,7 @@ def init_memory_cache(size, ttl):
     """
     Initialize for a memory lru cache
     :param size: max number of items
-    :param ttl: max time to live for items
+    :param ttl: max time to live for items in seconds
     """
     import cachetools
     global global_caching
