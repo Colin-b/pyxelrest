@@ -1,26 +1,26 @@
 """
 Global caching decorator
-- init_dbm(filename) => stores all the data in the shelve file <filename>, marshalling is done via pickle
-- init_lru(size,ttl) => stores up to <size> results for <ttl> seconds
-- nothing or init_nothing() => no decoration and no caching
+- init_disk_cache(filename) => stores all the data in the shelve file <filename>, marshalling is done via pickle
+- init_lru_cache(size,ttl) => stores up to <size> results for <ttl> seconds
+- nothing or no_cache() => no decoration and no caching
 """
 
 global_caching = None
 
 
-def init_shelve(filename):
+def init_disk_cache(filename):
     import shelve
     global global_caching
-    global_caching = shelve.open(filename, 'c')
+    global_caching = shelve.open(filename)
 
 
-def init_lru(size, ttl):
+def init_lru_cache(size, ttl):
     import cachetools
     global global_caching
     global_caching = cachetools.TTLCache(size, ttl)
 
 
-def init_nothing():
+def no_cache():
     global global_caching
     global_caching = None
 

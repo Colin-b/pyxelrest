@@ -7,8 +7,8 @@ class PyxelRestCacheTest(unittest.TestCase):
     mod = 0
 
     def test_no_caching(self):
-        from caching import caching, init_nothing
-        init_nothing()
+        from caching import caching, no_cache
+        no_cache()
 
         @caching
         def toto1(x):
@@ -20,8 +20,8 @@ class PyxelRestCacheTest(unittest.TestCase):
         self.assertEqual(toto1(2), 5)
 
     def test_lru_caching(self):
-        from caching import caching, init_lru
-        init_lru(5, 1)
+        from caching import caching, init_lru_cache
+        init_lru_cache(5, 1)
 
         @caching
         def toto2(x):
@@ -36,10 +36,12 @@ class PyxelRestCacheTest(unittest.TestCase):
         time.sleep(2)
         self.assertEqual(toto2(2), 5)
 
-    def test_dbm_caching(self):
-        from caching import caching, init_shelve
-        os.remove("c:\\tmp\\cache.shelve")
-        init_shelve("c:\\tmp\\cache.shelve")
+    def test_disk_caching(self):
+        from caching import caching, init_disk_cache
+        filename = "c:\\tmp\\cache.shelve"
+        if os.path.exists(filename):
+            os.remove(filename)
+        init_disk_cache(filename)
 
         @caching
         def toto3(x):

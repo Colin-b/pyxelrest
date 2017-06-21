@@ -111,7 +111,9 @@ setup(name='pyxelrest',
           # Used to run tests
           'nose',
           # Used to generate a jwt token
-          'pyjwt'
+          'pyjwt',
+          # used for caching results
+          'cachetools==2.0.0'
       ],
       install_requires=[
           # Used to generate UDFs python file from a template
@@ -131,9 +133,7 @@ setup(name='pyxelrest',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
-          'future==0.16.0',
-          # used for caching results
-          'cachetools==2.0.0'
+          'future==0.16.0'
       ],
       scripts=[
           'pyxelrest_auto_update.py',
