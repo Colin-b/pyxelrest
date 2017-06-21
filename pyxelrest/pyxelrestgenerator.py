@@ -82,8 +82,8 @@ try:
 except:
     logging.exception('Error while importing UDFs.')
 
-# When multiples UDFs depends on the same Microsoft Excel cell change, the number of retry needs to be high...
-xlwings.udfs.DelayWrite.MAX_NUMBER_RETRY = 100
+# Retry at max 1000 times before considering a call as failed
+xlwings.udfs.DelayWrite.MAX_NUMBER_RETRY = 1000
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':
