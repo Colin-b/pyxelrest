@@ -4,23 +4,15 @@
 
 ### Enhancements ###
 
-- The authentication server is now started on demand and is no longer always running so that multiple python scripts can
-  use pyxelrest along with the excel addon.
-- The JWT tokens are stored in a json file. Python scripts can now reuse the tokens and do not pop up the web browser
-  with an authentication page. 
-- The HTTP requests can be cached on disk for testing purpose. This serves as an automatic mocking feature when using
-  python scripts with pyxelrest. The call to caching init_disk_cache(<filename>) must be done before importing the
-  generated functions.
-- The HTTP requests can be cached in memory for UDFs or scripts, so that the EXCEL automatic recomputation does not
-  resend the same requests again. This cache has an expiry in second and a maximum size. The call to caching
-  init_memory_cache(<maxsize>,<expiry>) must be done before importing the generated functions. The cachetools package
-  must be installed since pyxelrest setup.py has it only in test requirements.
-- The OAuth code is no longer jinja based.
-- The 'import pyxelrestgenerator' is no longer mandatory in order to use the generated functions and removes the http
-  call to get the swagger file and code generation. The 'import pyxelrestgenerator' is still necessary to update the
-  generated functions.
+- Generated UDFs can now be called from VBA (Using RunPython).
+- response_type can be provided in security_details property in case it is not provided in authorization_url and it is not default value (token).
+- You can now cache the results of an UDF call in order to avoid calling the service once again.
 
-## 0.60 (next) ##
+### Bug fixes ###
+
+- Retry up to 1000 times instead of 10 times when a COM Retry error is received while sending results to Microsoft Excel (depends on xlwings-0.10.4.1). More information about this can be found in README.
+
+## 0.60 (2017-06-19) ##
 
 ### Enhancements ###
 

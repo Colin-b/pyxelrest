@@ -38,7 +38,8 @@ class AuthTokenMap:
                     logging.debug('Authentication token is expired.')
                     del self.data[name]
                 else:
-                    logging.debug('Using already received authentication, will expire on {0} (UTC).'.format(expiry))
+                    logging.debug('Using already received authentication, will expire on {0} (UTC).'.format(
+                        datetime.datetime.utcfromtimestamp(expiry)))
                     return bearer
         if func is not None:
             with self.lock2:
@@ -66,7 +67,8 @@ class AuthTokenMap:
             expiry = body['exp']
             self.data[name] = token, expiry
             self.save_tokens()
-            logging.debug("{0} authentication response received: '{1}'. Expiry is {2} (UTC).".format(name, token, expiry))
+            logging.debug("{0} authentication response received: '{1}'. Expiry is {2} (UTC).".format(
+                name, token, datetime.datetime.utcfromtimestamp(expiry)))
 
     def clear(self):
         with self.lock:
@@ -75,6 +77,7 @@ class AuthTokenMap:
             try:
                 os.remove(self.tokens_path)
             except:
+                logging.debug('Cannot remove tokens file.')
                 pass
 
     # private methods
@@ -85,7 +88,7 @@ class AuthTokenMap:
                json.dump(self.data, f)
             self.last_modif = os.path.getmtime(self.tokens_path)
         except Exception as e:
-            logging.warn('Cannot save tokens')
+            logging.exception('Cannot save tokens.')
 
     def load_tokens(self):
         try:
@@ -95,6 +98,7 @@ class AuthTokenMap:
                 with open(self.tokens_path, 'r') as f:
                     self.data = json.load(f)
         except Exception as e:
+            logging.debug('Cannot load tokens.')
             pass
 
     @staticmethod

@@ -250,3 +250,4 @@ addin/packages/
 dist/
 pyxelrest.egg-info/
 pyxelrest/user_defined_functions.py
+!/pyxelrest/oauth2_authentication_responses_server.py

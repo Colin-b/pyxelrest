@@ -3,10 +3,6 @@ import webbrowser
 import threading
 import logging
 import sys
-import os
-import base64
-import json
-import datetime
 import requests
 import socket
 import time
@@ -19,25 +15,44 @@ auth_tokens = auth_token_map.AuthTokenMap()
 authentication_server = threading.Semaphore(value=0)
 authentication_response = threading.Semaphore(value=0)
 app = flask.Flask(__name__)
-token_name = 'id_token'
-success_display_time = 1
-failure_display_time = 2000
+
+DEFAULT_SERVER_PORT = 5000
+DEFAULT_AUTHENTICATION_TIMEOUT = 20  # Time is expressed in seconds
+DEFAULT_SUCCESS_DISPLAY_TIME = 1  # Time is expressed in milliseconds
+DEFAULT_FAILURE_DISPLAY_TIME = 5000  # Time is expressed in milliseconds
+DEFAULT_TOKEN_NAME = 'token'
+
+
+class DefaultSecurityDefinition:
+    failure_display_time = DEFAULT_FAILURE_DISPLAY_TIME
+    success_display_time = DEFAULT_SUCCESS_DISPLAY_TIME
+    token_name = DEFAULT_TOKEN_NAME
+
+current_security_definition = DefaultSecurityDefinition
+
+
+@app.route("/<service_name>/<security_definition_key>", methods=['GET'])
+def auth_get(service_name, security_definition_key):
+    key = service_name + '/' + security_definition_key
+    logging.exception("Unable to properly perform authentication on {0}. GET is not supported for now.".format(key))
+    return error_page("Unable to properly perform authentication on {0}. GET is not supported for now.".format(key),
+                      current_security_definition.failure_display_time)
 
 
 @app.route("/<service_name>/<security_definition_key>", methods=['POST'])
 def auth_post(service_name, security_definition_key):
+    key = service_name + '/' + security_definition_key
     try:
-        global token_name, success_display_time, failure_display_time
-        key = service_name + '/' + security_definition_key
-        # TODO pickup the data from the service definition
-        if token_name not in flask.request.form:
-            raise TokenNotProvided(token_name)
-        id_token = flask.request.form[token_name]
+        if current_security_definition.token_name not in flask.request.form:
+            raise TokenNotProvided(current_security_definition.token_name)
+        id_token = flask.request.form[current_security_definition.token_name]
         auth_tokens.set_token(key, id_token)
-        return success_page("You are now authenticated on {0}. You may close this tab.".format(key), success_display_time)
+        return success_page("You are now authenticated on {0}. You may close this tab.".format(key),
+                            current_security_definition.success_display_time)
     except Exception as e:
         logging.exception("Unable to properly perform authentication on {0}.".format(key))
-        return error_page("Unable to properly perform authentication on {0}: {1}".format(key, e), failure_display_time)
+        return error_page("Unable to properly perform authentication on {0}: {1}".format(key, e),
+                          current_security_definition.failure_display_time)
     finally:
         try:
             authentication_response.release()
@@ -54,6 +69,8 @@ def shutdown():
         raise RuntimeError('Not running with the Werkzeug Server')
     flask_server_shutdown()
     logging.info('Stopping OAuth2 authentication responses server')
+    return success_page("OAuth 2 authentication response server is now closed.",
+                        current_security_definition.success_display_time)
 
 
 def acquire_with_timeout(lock_obj, timeout):
@@ -82,12 +99,12 @@ def get_bearer(security_definition):
 def request_new_token(security_definition):
     logging.debug('Requesting user authentication...')
     start_server(security_definition.port)
-    global token_name
-    token_name = security_definition.token_name
+    global current_security_definition
+    current_security_definition = security_definition
 
     # Default to Microsoft Internet Explorer to be able to open a new window
     # otherwise this parameter is not taken into account by most browsers
-    # Opening a new window allows to focus back to Microsoft Excel once authenticated (Javascript is closing the only tab)
+    # Opening a new window allows to focus back to Microsoft Excel once authenticated (JS is closing the only tab)
     ie = webbrowser.get(webbrowser.iexplore)
     if not ie.open(security_definition.full_url, 1):
         response = requests.get(security_definition.full_url)
@@ -140,12 +157,12 @@ def start_server_sync(port):
 
 
 def wait_for_port(host, port):
-    n = 0
+    retry_number = 0
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
         while check_bind(sock, host, port):
             time.sleep(0.1)
-            n += 1
-            if n > 20:
+            retry_number += 1
+            if retry_number > 20:
                 raise PortNotAvailable(port)
 
 

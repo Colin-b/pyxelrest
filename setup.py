@@ -60,8 +60,6 @@ setup(name='pyxelrest',
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
-             'oauth2_authentication_responses_server.jinja2',
-             'oauth2_authentication_responses_servers.jinja2',
              'default_logging_configuration.ini.jinja2',
              'default_services_configuration.ini',
              'user_defined_functions.jinja2'
@@ -125,7 +123,7 @@ setup(name='pyxelrest',
           # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
           'comtypes==1.1.3-2',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.10.4',
+          'xlwings==0.10.4.1',
           # Used to parse logging configuration file
           'pyaml==16.12.2',
           # Used to run authentication services (also used in test cases)
