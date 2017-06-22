@@ -8,6 +8,8 @@ import requests
 import requests.exceptions
 import datetime
 import logging
+import custom_logging
+from caching import caching
 import ujson
 from collections import OrderedDict
 from fast_deserializer import Flattenizer
@@ -25,6 +27,7 @@ all_definitions = {}
 all_definitions['usual_parameters_test'] = None
 
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 def usual_parameters_test_get_test_date():
     logging.info("Calling usual_parameters_test_get_test_date...")
@@ -62,6 +65,7 @@ def usual_parameters_test_get_test_date():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 def usual_parameters_test_get_test_date_time():
     logging.info("Calling usual_parameters_test_get_test_date_time...")
@@ -99,6 +103,7 @@ def usual_parameters_test_get_test_date_time():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -388,6 +393,7 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -677,6 +683,7 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -966,6 +973,7 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -1255,6 +1263,7 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -1622,6 +1631,7 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -1989,6 +1999,7 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -2356,6 +2367,7 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -2723,6 +2735,7 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -2890,6 +2903,7 @@ def usual_parameters_test_get_test_with_all_paths_types(path_integer, path_integ
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -3057,6 +3071,7 @@ def usual_parameters_test_post_test_with_all_paths_types(path_integer, path_inte
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -3224,6 +3239,7 @@ def usual_parameters_test_put_test_with_all_paths_types(path_integer, path_integ
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -3394,6 +3410,7 @@ def usual_parameters_test_delete_test_with_all_paths_types(path_integer, path_in
 all_definitions['filtered_tags_test'] = OrderedDict([(u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
 
 
+@caching
 @xw.func(category='filtered_tags_test', call_in_wizard=False)
 def filtered_tags_test_get_test_with_tags():
     logging.info("Calling filtered_tags_test_get_test_with_tags...")
@@ -3431,6 +3448,7 @@ def filtered_tags_test_get_test_with_tags():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='filtered_tags_test', call_in_wizard=False)
 def filtered_tags_test_post_test_with_tags():
     logging.info("Calling filtered_tags_test_post_test_with_tags...")
@@ -3468,6 +3486,7 @@ def filtered_tags_test_post_test_with_tags():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='filtered_tags_test', call_in_wizard=False)
 def filtered_tags_test_put_test_with_tags():
     logging.info("Calling filtered_tags_test_put_test_with_tags...")
@@ -3508,6 +3527,7 @@ def filtered_tags_test_put_test_with_tags():
 all_definitions['values_false_test'] = OrderedDict([(u'Empty', OrderedDict([(u'properties', OrderedDict())])), (u'EmptyDictionary', OrderedDict([(u'properties', OrderedDict([(u'empty_dictionary', OrderedDict([(u'$ref', u'#/definitions/Empty'), (u'type', u'object')]))]))])), (u'EmptyList', OrderedDict([(u'properties', OrderedDict([(u'empty_list', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Empty')])), (u'type', u'array')]))]))])), (u'EmptyString', OrderedDict([(u'properties', OrderedDict([(u'empty_string', OrderedDict([(u'type', u'string')]))]))])), (u'FalseBoolean', OrderedDict([(u'properties', OrderedDict([(u'false_boolean', OrderedDict([(u'type', u'boolean')]))]))])), (u'ZeroFloat', OrderedDict([(u'properties', OrderedDict([(u'zero_float', OrderedDict([(u'format', u'float'), (u'type', u'number')]))]))])), (u'ZeroInteger', OrderedDict([(u'properties', OrderedDict([(u'zero_integer', OrderedDict([(u'format', u'int32'), (u'type', u'integer')]))]))]))])
 
 
+@caching
 @xw.func(category='values_false_test', call_in_wizard=False)
 def values_false_test_get_test_with_empty_dictionary():
     logging.info("Calling values_false_test_get_test_with_empty_dictionary...")
@@ -3545,6 +3565,7 @@ def values_false_test_get_test_with_empty_dictionary():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='values_false_test', call_in_wizard=False)
 def values_false_test_get_test_with_empty_list():
     logging.info("Calling values_false_test_get_test_with_empty_list...")
@@ -3582,6 +3603,7 @@ def values_false_test_get_test_with_empty_list():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='values_false_test', call_in_wizard=False)
 def values_false_test_get_test_with_empty_string():
     logging.info("Calling values_false_test_get_test_with_empty_string...")
@@ -3619,6 +3641,7 @@ def values_false_test_get_test_with_empty_string():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='values_false_test', call_in_wizard=False)
 def values_false_test_get_test_with_false_boolean():
     logging.info("Calling values_false_test_get_test_with_false_boolean...")
@@ -3656,6 +3679,7 @@ def values_false_test_get_test_with_false_boolean():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='values_false_test', call_in_wizard=False)
 def values_false_test_get_test_with_zero_float():
     logging.info("Calling values_false_test_get_test_with_zero_float...")
@@ -3693,6 +3717,7 @@ def values_false_test_get_test_with_zero_float():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='values_false_test', call_in_wizard=False)
 def values_false_test_get_test_with_zero_integer():
     logging.info("Calling values_false_test_get_test_with_zero_integer...")
@@ -3733,6 +3758,7 @@ def values_false_test_get_test_with_zero_integer():
 all_definitions['output_order_test'] = OrderedDict([(u'Price', OrderedDict([(u'required', [u'curve', u'date', u'mat', u'ts']), (u'type', u'object'), (u'properties', OrderedDict([(u'ts', OrderedDict([(u'type', u'string'), (u'description', u'timeslot'), (u'maxLength', 2)])), (u'date', OrderedDict([(u'type', u'string'), (u'description', u'date'), (u'format', u'date')])), (u'curve', OrderedDict([(u'type', u'string'), (u'description', u'curvename'), (u'maxLength', 20)])), (u'mat', OrderedDict([(u'type', u'string'), (u'description', u'maturity'), (u'maxLength', 4)]))])), (u'title', u'RealizedPrice')]))])
 
 
+@caching
 @xw.func(category='output_order_test', call_in_wizard=False)
 @xw.arg('date_visual_basic', dates=datetime.date, doc='date')
 @xw.arg('curve', doc='curvename')
@@ -3797,6 +3823,7 @@ def output_order_test_get_test_price_unordered(date_visual_basic=None, curve=Non
 all_definitions['nested_data_test'] = OrderedDict([(u'Column', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 2', OrderedDict([(u'description', u'column2'), (u'items', OrderedDict([(u'$ref', u'#/definitions/Column')])), (u'type', u'array')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column'), (u'type', u'object')])), (u'Column1', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'$ref', u'#/definitions/Column2And3')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column1List', OrderedDict([(u'properties', OrderedDict([(u'Column 1', OrderedDict([(u'items', OrderedDict([(u'type', u'string')])), (u'type', u'array')]))])), (u'title', u'Column1'), (u'type', u'object')])), (u'Column2And3', OrderedDict([(u'properties', OrderedDict([(u'Column 2', OrderedDict([(u'description', u'column1'), (u'type', u'string')])), (u'Column 3', OrderedDict([(u'description', u'column3'), (u'type', u'string')]))])), (u'title', u'Column2+3'), (u'type', u'object')]))])
 
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_empty_nested_list():
     logging.info("Calling nested_data_test_get_test_dict_with_empty_nested_list...")
@@ -3834,6 +3861,7 @@ def nested_data_test_get_test_dict_with_empty_nested_list():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_four_imbricated_levels():
     logging.info("Calling nested_data_test_get_test_dict_with_four_imbricated_levels...")
@@ -3871,6 +3899,7 @@ def nested_data_test_get_test_dict_with_four_imbricated_levels():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_list():
     logging.info("Calling nested_data_test_get_test_dict_with_list...")
@@ -3908,6 +3937,7 @@ def nested_data_test_get_test_dict_with_list():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_list_of_different_size():
     logging.info("Calling nested_data_test_get_test_dict_with_list_of_different_size...")
@@ -3945,6 +3975,7 @@ def nested_data_test_get_test_dict_with_list_of_different_size():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys():
     logging.info("Calling nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys...")
@@ -3982,6 +4013,7 @@ def nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_three_imbricated_levels():
     logging.info("Calling nested_data_test_get_test_dict_with_three_imbricated_levels...")
@@ -4019,6 +4051,7 @@ def nested_data_test_get_test_dict_with_three_imbricated_levels():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_dict_with_various_columns():
     logging.info("Calling nested_data_test_get_test_dict_with_various_columns...")
@@ -4056,6 +4089,7 @@ def nested_data_test_get_test_dict_with_various_columns():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_empty_dict():
     logging.info("Calling nested_data_test_get_test_empty_dict...")
@@ -4093,6 +4127,7 @@ def nested_data_test_get_test_empty_dict():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_empty_list():
     logging.info("Calling nested_data_test_get_test_empty_list...")
@@ -4130,6 +4165,7 @@ def nested_data_test_get_test_empty_list():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_list_of_dict():
     logging.info("Calling nested_data_test_get_test_list_of_dict...")
@@ -4167,6 +4203,7 @@ def nested_data_test_get_test_list_of_dict():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_one_dict_entry_with_a_list():
     logging.info("Calling nested_data_test_get_test_one_dict_entry_with_a_list...")
@@ -4204,6 +4241,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
     logging.info("Calling nested_data_test_get_test_one_dict_entry_with_a_list_of_dict...")
@@ -4241,6 +4279,7 @@ def nested_data_test_get_test_one_dict_entry_with_a_list_of_dict():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_one_level_dict():
     logging.info("Calling nested_data_test_get_test_one_level_dict...")
@@ -4278,6 +4317,7 @@ def nested_data_test_get_test_one_level_dict():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='nested_data_test', call_in_wizard=False)
 def nested_data_test_get_test_one_level_list():
     logging.info("Calling nested_data_test_get_test_one_level_list...")
@@ -4318,6 +4358,7 @@ def nested_data_test_get_test_one_level_list():
 all_definitions['vba_keywords_test'] = OrderedDict([(u'VBAKeywords', OrderedDict([(u'properties', OrderedDict([(u'addhandler', OrderedDict()), (u'addressof', OrderedDict()), (u'alias', OrderedDict()), (u'and', OrderedDict()), (u'andalso', OrderedDict()), (u'as', OrderedDict()), (u'boolean', OrderedDict()), (u'byref', OrderedDict()), (u'byte', OrderedDict()), (u'byval', OrderedDict()), (u'call', OrderedDict()), (u'case', OrderedDict()), (u'catch', OrderedDict()), (u'cbool', OrderedDict()), (u'cbyte', OrderedDict()), (u'cchar', OrderedDict()), (u'cdate', OrderedDict()), (u'cdbl', OrderedDict()), (u'cdec', OrderedDict()), (u'char', OrderedDict()), (u'cint', OrderedDict()), (u'class', OrderedDict()), (u'clng', OrderedDict()), (u'cobj', OrderedDict()), (u'const', OrderedDict()), (u'continue', OrderedDict()), (u'csbyte', OrderedDict()), (u'cshort', OrderedDict()), (u'csng', OrderedDict()), (u'cstr', OrderedDict()), (u'ctype', OrderedDict()), (u'cuint', OrderedDict()), (u'culng', OrderedDict()), (u'currency', OrderedDict()), (u'cushort', OrderedDict()), (u'date', OrderedDict()), (u'decimal', OrderedDict()), (u'declare', OrderedDict()), (u'default', OrderedDict()), (u'delegate', OrderedDict()), (u'dim', OrderedDict()), (u'directcast', OrderedDict()), (u'do', OrderedDict()), (u'double', OrderedDict()), (u'each', OrderedDict()), (u'else', OrderedDict()), (u'elseif', OrderedDict()), (u'end', OrderedDict()), (u'endif', OrderedDict()), (u'enum', OrderedDict()), (u'erase', OrderedDict()), (u'error', OrderedDict()), (u'event', OrderedDict()), (u'exit', OrderedDict()), (u'finally', OrderedDict()), (u'for', OrderedDict()), (u'friend', OrderedDict()), (u'function', OrderedDict()), (u'get', OrderedDict()), (u'gettype', OrderedDict()), (u'getxmlnamespace', OrderedDict()), (u'global', OrderedDict()), (u'gosub', OrderedDict()), (u'goto', OrderedDict()), (u'handles', OrderedDict()), (u'if', OrderedDict()), (u'implements', OrderedDict()), (u'imports', OrderedDict()), (u'in', OrderedDict()), (u'inherits', OrderedDict()), (u'integer', OrderedDict()), (u'interface', OrderedDict()), (u'is', OrderedDict()), (u'isnot', OrderedDict()), (u'let', OrderedDict()), (u'lib', OrderedDict()), (u'like', OrderedDict()), (u'long', OrderedDict()), (u'loop', OrderedDict()), (u'me', OrderedDict()), (u'mod', OrderedDict()), (u'module', OrderedDict()), (u'mustinherit', OrderedDict()), (u'mustoverride', OrderedDict()), (u'mybase', OrderedDict()), (u'myclass', OrderedDict()), (u'namespace', OrderedDict()), (u'narrowing', OrderedDict()), (u'new', OrderedDict()), (u'next', OrderedDict()), (u'not', OrderedDict()), (u'nothing', OrderedDict()), (u'notinheritable', OrderedDict()), (u'notoverridable', OrderedDict()), (u'object', OrderedDict()), (u'of', OrderedDict()), (u'on', OrderedDict()), (u'operator', OrderedDict()), (u'option', OrderedDict()), (u'optional', OrderedDict()), (u'or', OrderedDict()), (u'orelse', OrderedDict()), (u'overloads', OrderedDict()), (u'overridable', OrderedDict()), (u'overrides', OrderedDict()), (u'paramarray', OrderedDict()), (u'partial', OrderedDict()), (u'private', OrderedDict()), (u'property', OrderedDict()), (u'protected', OrderedDict()), (u'public', OrderedDict()), (u'raiseevent', OrderedDict()), (u'readonly', OrderedDict()), (u'redim', OrderedDict()), (u'rem', OrderedDict()), (u'removehandler', OrderedDict()), (u'resume', OrderedDict()), (u'return', OrderedDict()), (u'sbyte', OrderedDict()), (u'select', OrderedDict()), (u'set', OrderedDict()), (u'shadows', OrderedDict()), (u'shared', OrderedDict()), (u'short', OrderedDict()), (u'single', OrderedDict()), (u'static', OrderedDict()), (u'step', OrderedDict()), (u'stop', OrderedDict()), (u'string', OrderedDict()), (u'structure', OrderedDict()), (u'sub', OrderedDict()), (u'synclock', OrderedDict()), (u'then', OrderedDict()), (u'throw', OrderedDict()), (u'to', OrderedDict()), (u'try', OrderedDict()), (u'trycast', OrderedDict()), (u'type', OrderedDict()), (u'typeof', OrderedDict()), (u'uinteger', OrderedDict()), (u'ulong', OrderedDict()), (u'ushort', OrderedDict()), (u'using', OrderedDict()), (u'variant', OrderedDict()), (u'wend', OrderedDict()), (u'when', OrderedDict()), (u'while', OrderedDict()), (u'widening', OrderedDict()), (u'with', OrderedDict()), (u'withevents', OrderedDict()), (u'writeonly', OrderedDict()), (u'xor', OrderedDict())]))]))])
 
 
+@caching
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('addhandler_visual_basic', doc='')
 @xw.arg('addressof_visual_basic', doc='')
@@ -5573,6 +5614,7 @@ def vba_keywords_test_get_test_vba_restricted_keywords(addhandler_visual_basic, 
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('addhandler_visual_basic', doc='')
 @xw.arg('addressof_visual_basic', doc='')
@@ -6828,6 +6870,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('addhandler_visual_basic', doc='')
 @xw.arg('addressof_visual_basic', doc='')
@@ -8083,6 +8126,7 @@ def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, 
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('addhandler_visual_basic', doc='')
 @xw.arg('addressof_visual_basic', doc='')
@@ -9341,6 +9385,7 @@ def vba_keywords_test_delete_test_vba_restricted_keywords(addhandler_visual_basi
 all_definitions['without_parameter_test'] = OrderedDict([(u'Test', OrderedDict([(u'properties', OrderedDict())]))])
 
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 @xw.ret(expand='table')
 def without_parameter_test_get_test_json_without_parameter():
@@ -9379,6 +9424,7 @@ def without_parameter_test_get_test_json_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 @xw.ret(expand='table')
 def without_parameter_test_post_test_json_without_parameter():
@@ -9417,6 +9463,7 @@ def without_parameter_test_post_test_json_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 @xw.ret(expand='table')
 def without_parameter_test_put_test_json_without_parameter():
@@ -9455,6 +9502,7 @@ def without_parameter_test_put_test_json_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 @xw.ret(expand='table')
 def without_parameter_test_delete_test_json_without_parameter():
@@ -9493,6 +9541,7 @@ def without_parameter_test_delete_test_json_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_get_test_plain_text_without_parameter():
     logging.info("Calling without_parameter_test_get_test_plain_text_without_parameter...")
@@ -9530,6 +9579,7 @@ def without_parameter_test_get_test_plain_text_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_post_test_plain_text_without_parameter():
     logging.info("Calling without_parameter_test_post_test_plain_text_without_parameter...")
@@ -9567,6 +9617,7 @@ def without_parameter_test_post_test_plain_text_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_put_test_plain_text_without_parameter():
     logging.info("Calling without_parameter_test_put_test_plain_text_without_parameter...")
@@ -9604,6 +9655,7 @@ def without_parameter_test_put_test_plain_text_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_delete_test_plain_text_without_parameter():
     logging.info("Calling without_parameter_test_delete_test_plain_text_without_parameter...")
@@ -9641,6 +9693,7 @@ def without_parameter_test_delete_test_plain_text_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_get_test_without_parameter():
     logging.info("Calling without_parameter_test_get_test_without_parameter...")
@@ -9678,6 +9731,7 @@ def without_parameter_test_get_test_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_post_test_without_parameter():
     logging.info("Calling without_parameter_test_post_test_without_parameter...")
@@ -9715,6 +9769,7 @@ def without_parameter_test_post_test_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_put_test_without_parameter():
     logging.info("Calling without_parameter_test_put_test_without_parameter...")
@@ -9752,6 +9807,7 @@ def without_parameter_test_put_test_without_parameter():
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='without_parameter_test', call_in_wizard=False)
 def without_parameter_test_delete_test_without_parameter():
     logging.info("Calling without_parameter_test_delete_test_without_parameter...")
@@ -9792,6 +9848,7 @@ def without_parameter_test_delete_test_without_parameter():
 all_definitions['header_parameter_test'] = OrderedDict([(u'Header', OrderedDict([(u'properties', OrderedDict([(u'Accept', OrderedDict([(u'type', u'string')])), (u'Accept-Encoding', OrderedDict([(u'type', u'string')])), (u'Connection', OrderedDict([(u'type', u'string')])), (u'Content-Length', OrderedDict([(u'type', u'string')])), (u'Content-Type', OrderedDict([(u'type', u'string')])), (u'Header-String', OrderedDict([(u'type', u'string')])), (u'Host', OrderedDict([(u'type', u'string')])), (u'User-Agent', OrderedDict([(u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
 
 
+@caching
 @xw.func(category='header_parameter_test', call_in_wizard=False)
 @xw.arg('header_string', doc='header parameter')
 def header_parameter_test_get_test_header_parameter(header_string):
@@ -9840,6 +9897,7 @@ def header_parameter_test_get_test_header_parameter(header_string):
 all_definitions['form_parameter_test'] = OrderedDict([(u'Form', OrderedDict([(u'properties', OrderedDict([(u'form_string', OrderedDict([(u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
 
 
+@caching
 @xw.func(category='form_parameter_test', call_in_wizard=False)
 @xw.arg('form_string', doc='form parameter')
 def form_parameter_test_post_test_form_parameter(form_string):
@@ -9889,6 +9947,7 @@ def form_parameter_test_post_test_form_parameter(form_string):
 all_definitions['array_parameter_test'] = OrderedDict([(u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
 
 
+@caching
 @xw.func(category='array_parameter_test', call_in_wizard=False)
 @xw.arg('query_array_string', doc='string array parameter')
 def array_parameter_test_get_test_string_array_parameter(query_array_string):
@@ -9938,6 +9997,7 @@ def array_parameter_test_get_test_string_array_parameter(query_array_string):
 all_definitions['json_test'] = OrderedDict([(u'AllMandatoryParameters', OrderedDict([(u'properties', OrderedDict([(u'query_array_boolean', OrderedDict()), (u'query_array_date', OrderedDict([(u'items', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_date_time', OrderedDict([(u'items', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'type', u'array')])), (u'query_array_double', OrderedDict()), (u'query_array_float', OrderedDict()), (u'query_array_integer', OrderedDict()), (u'query_array_integer32', OrderedDict()), (u'query_array_integer64', OrderedDict()), (u'query_array_number', OrderedDict()), (u'query_array_password', OrderedDict()), (u'query_array_string', OrderedDict()), (u'query_array_string_binary', OrderedDict()), (u'query_array_string_byte', OrderedDict()), (u'query_boolean', OrderedDict()), (u'query_date', OrderedDict([(u'format', u'date'), (u'type', u'string')])), (u'query_date_time', OrderedDict([(u'format', u'date-time'), (u'type', u'string')])), (u'query_double', OrderedDict()), (u'query_float', OrderedDict()), (u'query_integer', OrderedDict()), (u'query_integer32', OrderedDict()), (u'query_integer64', OrderedDict()), (u'query_number', OrderedDict()), (u'query_password', OrderedDict()), (u'query_string', OrderedDict()), (u'query_string_binary', OrderedDict()), (u'query_string_byte', OrderedDict())]))])), (u'TestObject', OrderedDict([(u'properties', OrderedDict([(u'test', OrderedDict([(u'description', u'test'), (u'type', u'string')]))])), (u'title', u'Test'), (u'type', u'object')]))])
 
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -10228,6 +10288,7 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -10518,6 +10579,7 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -10808,6 +10870,7 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -11098,6 +11161,7 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -11466,6 +11530,7 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -11834,6 +11899,7 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -12202,6 +12268,7 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -12570,6 +12637,7 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -12738,6 +12806,7 @@ def json_test_get_test_json_with_all_paths_types(path_integer, path_integer32, p
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -12906,6 +12975,7 @@ def json_test_post_test_json_with_all_paths_types(path_integer, path_integer32, 
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -13074,6 +13144,7 @@ def json_test_put_test_json_with_all_paths_types(path_integer, path_integer32, p
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='json_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -13245,6 +13316,7 @@ def json_test_delete_test_json_with_all_paths_types(path_integer, path_integer32
 all_definitions['plain_text_test'] = None
 
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -13534,6 +13606,7 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -13823,6 +13896,7 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -14112,6 +14186,7 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -14401,6 +14476,7 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -14768,6 +14844,7 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -15135,6 +15212,7 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -15502,6 +15580,7 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -15869,6 +15948,7 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -16036,6 +16116,7 @@ def plain_text_test_get_test_plain_text_with_all_paths_types(path_integer, path_
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -16203,6 +16284,7 @@ def plain_text_test_post_test_plain_text_with_all_paths_types(path_integer, path
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
@@ -16370,6 +16452,7 @@ def plain_text_test_put_test_plain_text_with_all_paths_types(path_integer, path_
         if response is not None:
             response.close()
 
+@caching
 @xw.func(category='plain_text_test', call_in_wizard=False)
 @xw.arg('path_integer', numbers=int, doc='integer path')
 @xw.arg('path_integer32', numbers=int, doc='integer 32 path')
