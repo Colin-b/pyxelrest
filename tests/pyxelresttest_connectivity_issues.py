@@ -13,7 +13,7 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         loader.unload()
 
     def test_get_test_plain_text_with_service_down(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         serviceshandler.stop_services()
         self.assertEqual(pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
                          'Cannot connect to service. Please retry once connection is re-established.')

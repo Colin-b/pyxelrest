@@ -7,7 +7,7 @@ class PyxelRestCacheTest(unittest.TestCase):
     mod = 0
 
     def test_no_caching(self):
-        from caching import caching, no_cache
+        from pyxelrest.caching import caching, no_cache
         no_cache()
 
         @caching
@@ -20,7 +20,7 @@ class PyxelRestCacheTest(unittest.TestCase):
         self.assertEqual(toto1(2), 5)
 
     def test_lru_caching(self):
-        from caching import caching, init_memory_cache
+        from pyxelrest.caching import caching, init_memory_cache
         init_memory_cache(5, 1)
 
         @caching
@@ -37,7 +37,7 @@ class PyxelRestCacheTest(unittest.TestCase):
         self.assertEqual(toto2(2), 5)
 
     def test_disk_caching(self):
-        from caching import caching, init_disk_cache
+        from pyxelrest.caching import caching, init_disk_cache
         filename = "c:\\tmp\\cache.shelve"
         if os.path.exists(filename):
             os.remove(filename)

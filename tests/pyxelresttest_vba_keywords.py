@@ -16,7 +16,7 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
         serviceshandler.stop_services()
 
     def test_get_vba_restricted_keywords(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['addhandler', 'addressof', 'alias', 'and', 'andalso', 'as', 'boolean', 'byref', 'byte', 'byval', 'call', 'case', 'catch', 'cbool', 'cbyte', 'cchar', 'cdate', 'cdbl', 'cdec', 'char', 'cint', 'class', 'clng', 'cobj', 'const', 'continue', 'csbyte', 'cshort', 'csng', 'cstr', 'ctype', 'cuint', 'culng', 'currency', 'cushort', 'date', 'decimal', 'declare', 'default', 'delegate', 'dim', 'directcast', 'do', 'double', 'each', 'else', 'elseif', 'end', 'endif', 'enum', 'erase', 'error', 'event', 'exit', 'finally', 'for', 'friend', 'function', 'get', 'gettype', 'getxmlnamespace', 'global', 'gosub', 'goto', 'handles', 'if', 'implements', 'imports', 'in', 'inherits', 'integer', 'interface', 'is', 'isnot', 'let', 'lib', 'like', 'long', 'loop', 'me', 'mod', 'module', 'mustinherit', 'mustoverride', 'mybase', 'myclass', 'namespace', 'narrowing', 'new', 'next', 'not', 'nothing', 'notinheritable', 'notoverridable', 'object', 'of', 'on', 'operator', 'option', 'optional', 'or', 'orelse', 'overloads', 'overridable', 'overrides', 'paramarray', 'partial', 'private', 'property', 'protected', 'public', 'raiseevent', 'readonly', 'redim', 'rem', 'removehandler', 'resume', 'return', 'sbyte', 'select', 'set', 'shadows', 'shared', 'short', 'single', 'static', 'step', 'stop', 'string', 'structure', 'sub', 'synclock', 'then', 'throw', 'to', 'try', 'trycast', 'type', 'typeof', 'uinteger', 'ulong', 'ushort', 'using', 'variant', 'wend', 'when', 'while', 'widening', 'with', 'withevents', 'writeonly', 'xor'],
@@ -179,7 +179,7 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
         )
 
     def test_post_vba_restricted_keywords(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['addhandler', 'addressof', 'alias', 'and', 'andalso', 'as', 'boolean', 'byref', 'byte', 'byval', 'call', 'case', 'catch', 'cbool', 'cbyte', 'cchar', 'cdate', 'cdbl', 'cdec', 'char', 'cint', 'class', 'clng', 'cobj', 'const', 'continue', 'csbyte', 'cshort', 'csng', 'cstr', 'ctype', 'cuint', 'culng', 'currency', 'cushort', 'date', 'decimal', 'declare', 'default', 'delegate', 'dim', 'directcast', 'do', 'double', 'each', 'else', 'elseif', 'end', 'endif', 'enum', 'erase', 'error', 'event', 'exit', 'finally', 'for', 'friend', 'function', 'get', 'gettype', 'getxmlnamespace', 'global', 'gosub', 'goto', 'handles', 'if', 'implements', 'imports', 'in', 'inherits', 'integer', 'interface', 'is', 'isnot', 'let', 'lib', 'like', 'long', 'loop', 'me', 'mod', 'module', 'mustinherit', 'mustoverride', 'mybase', 'myclass', 'namespace', 'narrowing', 'new', 'next', 'not', 'nothing', 'notinheritable', 'notoverridable', 'object', 'of', 'on', 'operator', 'option', 'optional', 'or', 'orelse', 'overloads', 'overridable', 'overrides', 'paramarray', 'partial', 'private', 'property', 'protected', 'public', 'raiseevent', 'readonly', 'redim', 'rem', 'removehandler', 'resume', 'return', 'sbyte', 'select', 'set', 'shadows', 'shared', 'short', 'single', 'static', 'step', 'stop', 'string', 'structure', 'sub', 'synclock', 'then', 'throw', 'to', 'try', 'trycast', 'type', 'typeof', 'uinteger', 'ulong', 'ushort', 'using', 'variant', 'wend', 'when', 'while', 'widening', 'with', 'withevents', 'writeonly', 'xor'],
@@ -342,7 +342,7 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
         )
 
     def test_put_vba_restricted_keywords(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['addhandler', 'addressof', 'alias', 'and', 'andalso', 'as', 'boolean', 'byref', 'byte', 'byval', 'call', 'case', 'catch', 'cbool', 'cbyte', 'cchar', 'cdate', 'cdbl', 'cdec', 'char', 'cint', 'class', 'clng', 'cobj', 'const', 'continue', 'csbyte', 'cshort', 'csng', 'cstr', 'ctype', 'cuint', 'culng', 'currency', 'cushort', 'date', 'decimal', 'declare', 'default', 'delegate', 'dim', 'directcast', 'do', 'double', 'each', 'else', 'elseif', 'end', 'endif', 'enum', 'erase', 'error', 'event', 'exit', 'finally', 'for', 'friend', 'function', 'get', 'gettype', 'getxmlnamespace', 'global', 'gosub', 'goto', 'handles', 'if', 'implements', 'imports', 'in', 'inherits', 'integer', 'interface', 'is', 'isnot', 'let', 'lib', 'like', 'long', 'loop', 'me', 'mod', 'module', 'mustinherit', 'mustoverride', 'mybase', 'myclass', 'namespace', 'narrowing', 'new', 'next', 'not', 'nothing', 'notinheritable', 'notoverridable', 'object', 'of', 'on', 'operator', 'option', 'optional', 'or', 'orelse', 'overloads', 'overridable', 'overrides', 'paramarray', 'partial', 'private', 'property', 'protected', 'public', 'raiseevent', 'readonly', 'redim', 'rem', 'removehandler', 'resume', 'return', 'sbyte', 'select', 'set', 'shadows', 'shared', 'short', 'single', 'static', 'step', 'stop', 'string', 'structure', 'sub', 'synclock', 'then', 'throw', 'to', 'try', 'trycast', 'type', 'typeof', 'uinteger', 'ulong', 'ushort', 'using', 'variant', 'wend', 'when', 'while', 'widening', 'with', 'withevents', 'writeonly', 'xor'],
@@ -505,7 +505,7 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
         )
 
     def test_delete_vba_restricted_keywords(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['addhandler', 'addressof', 'alias', 'and', 'andalso', 'as', 'boolean', 'byref', 'byte', 'byval', 'call', 'case', 'catch', 'cbool', 'cbyte', 'cchar', 'cdate', 'cdbl', 'cdec', 'char', 'cint', 'class', 'clng', 'cobj', 'const', 'continue', 'csbyte', 'cshort', 'csng', 'cstr', 'ctype', 'cuint', 'culng', 'currency', 'cushort', 'date', 'decimal', 'declare', 'default', 'delegate', 'dim', 'directcast', 'do', 'double', 'each', 'else', 'elseif', 'end', 'endif', 'enum', 'erase', 'error', 'event', 'exit', 'finally', 'for', 'friend', 'function', 'get', 'gettype', 'getxmlnamespace', 'global', 'gosub', 'goto', 'handles', 'if', 'implements', 'imports', 'in', 'inherits', 'integer', 'interface', 'is', 'isnot', 'let', 'lib', 'like', 'long', 'loop', 'me', 'mod', 'module', 'mustinherit', 'mustoverride', 'mybase', 'myclass', 'namespace', 'narrowing', 'new', 'next', 'not', 'nothing', 'notinheritable', 'notoverridable', 'object', 'of', 'on', 'operator', 'option', 'optional', 'or', 'orelse', 'overloads', 'overridable', 'overrides', 'paramarray', 'partial', 'private', 'property', 'protected', 'public', 'raiseevent', 'readonly', 'redim', 'rem', 'removehandler', 'resume', 'return', 'sbyte', 'select', 'set', 'shadows', 'shared', 'short', 'single', 'static', 'step', 'stop', 'string', 'structure', 'sub', 'synclock', 'then', 'throw', 'to', 'try', 'trycast', 'type', 'typeof', 'uinteger', 'ulong', 'ushort', 'using', 'variant', 'wend', 'when', 'while', 'widening', 'with', 'withevents', 'writeonly', 'xor'],

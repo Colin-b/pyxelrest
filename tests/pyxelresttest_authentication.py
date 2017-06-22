@@ -2,7 +2,7 @@ import unittest
 
 import time
 
-import oauth2_authentication_responses_server
+from pyxelrest import oauth2_authentication_responses_server
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 import sys
@@ -37,7 +37,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         )
 
     def test_oauth2_authentication_on_custom_server_port(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_second_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
         # Wait for 1 second and send a second request from another server to the same auth server
@@ -48,25 +48,25 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertNotEqual(first_token[1], second_token[1])
 
     def test_oauth2_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(token[0], ['Bearer'])
         self.assertIsNotNone(token[1])
 
     def test_oauth2_authentication_success_with_custom_response_type(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_with_custom_response_type()
         self.assertEqual(token[0], ['Bearer'])
         self.assertIsNotNone(token[1])
 
     def test_oauth2_authentication_success_without_response_type(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_without_response_type()
         self.assertEqual(token[0], ['Bearer'])
         self.assertIsNotNone(token[1])
 
     def test_oauth2_authentication_token_reuse(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
         # As the token should not be expired, this call should use the same token
@@ -74,17 +74,17 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertEqual(first_token, second_token)
 
     def test_oauth2_authentication_failure(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
                          pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_failure())
 
     def test_oauth2_authentication_timeout(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
                          pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_timeout())
 
     def test_without_authentication(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['received token'],
             [False]
@@ -92,7 +92,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
             pyxelrestgenerator.non_authenticated_test_get_test_without_auth())
 
     def test_oauth2_authentication_expiry(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         # This token will expires in 1 seconds
         first_token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_quick_expiry()
         self.assertEqual(first_token[0], ['Bearer'])
@@ -103,7 +103,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         self.assertNotEqual(first_token[1], second_token[1])
 
     def test_api_key_header_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_api_key_header_authentication_success(),
                          [
                              ['X-API-HEADER-KEY'],
@@ -111,7 +111,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          ])
 
     def test_api_key_query_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_api_key_query_authentication_success(),
                          [
                              ['X-API-QUERY-KEY'],
@@ -119,7 +119,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          ])
 
     def test_basic_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_basic_authentication_success(),
                          [
                              ['Authorization'],
@@ -127,7 +127,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          ])
 
     def test_basic_and_api_key_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_basic_and_api_key_authentication_success(),
                          [
                              ['Authorization', 'X-API-HEADER-KEY'],
@@ -135,7 +135,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          ])
 
     def test_basic_or_api_key_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_basic_or_api_key_authentication_success(),
                          [
                              ['Authorization', 'X-API-HEADER-KEY'],
@@ -143,7 +143,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                          ])
 
     def test_api_key_or_basic_authentication_success(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.authenticated_test_get_test_api_key_or_basic_authentication_success(),
                          [
                              ['Authorization', 'X-API-HEADER-KEY'],

@@ -8,8 +8,9 @@ import requests
 import requests.exceptions
 import datetime
 import logging
-import custom_logging
-from caching import caching
+from pyxelrest import custom_logging
+from pyxelrest.caching import caching
+from pyxelrest import session
 {% if support_ujson %}
 import ujson
 {% endif %}
@@ -17,10 +18,10 @@ from collections import OrderedDict
 {% if support_pandas %}
 import pandas
 {% endif %}
-from fast_deserializer import Flattenizer
-from definition_deserializer import Response
-import definition_deserializer
-import authentication
+from pyxelrest.fast_deserializer import Flattenizer
+from pyxelrest.definition_deserializer import Response
+from pyxelrest import definition_deserializer
+from pyxelrest import authentication
 
 {% macro convert_to_return_type(str_value, swagger_method) %}
 {% if swagger_method.return_a_list() -%}
@@ -31,7 +32,7 @@ import authentication
 {% endmacro %}
 
 {%- macro delete(swagger_method) %}
-    response = requests.delete('{{ swagger_method.uri }}'.format(
+    response = session.get().delete('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
@@ -39,7 +40,7 @@ import authentication
 {% endmacro -%}
 
 {%- macro get(swagger_method) %}
-    response = requests.get('{{ swagger_method.uri }}'.format(
+    response = session.get().get('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
@@ -47,7 +48,7 @@ import authentication
 {% endmacro -%}
 
 {%- macro post(swagger_method) %}
-    response = requests.post('{{ swagger_method.uri }}'.format(
+    response = session.get().post('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}
@@ -55,7 +56,7 @@ import authentication
 {% endmacro -%}
 
 {%- macro put(swagger_method) %}
-    response = requests.put('{{ swagger_method.uri }}'.format(
+    response = session.get().put('{{ swagger_method.uri }}'.format(
 {% for path_parameter in swagger_method.path_parameters %}
         {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
 {% endfor %}

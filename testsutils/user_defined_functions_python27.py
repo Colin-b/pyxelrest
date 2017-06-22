@@ -8,14 +8,15 @@ import requests
 import requests.exceptions
 import datetime
 import logging
-import custom_logging
-from caching import caching
+from pyxelrest import custom_logging
+from pyxelrest.caching import caching
+from pyxelrest import session
 import ujson
 from collections import OrderedDict
-from fast_deserializer import Flattenizer
-from definition_deserializer import Response
-import definition_deserializer
-import authentication
+from pyxelrest.fast_deserializer import Flattenizer
+from pyxelrest.definition_deserializer import Response
+from pyxelrest import definition_deserializer
+from pyxelrest import authentication
 
 
 
@@ -36,7 +37,7 @@ def usual_parameters_test_get_test_date():
 
     response = None
     try:
-        response = requests.get('http://localhost:8943/test/date'.format(
+        response = session.get().get('http://localhost:8943/test/date'.format(
 ), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()
@@ -74,7 +75,7 @@ def usual_parameters_test_get_test_date_time():
 
     response = None
     try:
-        response = requests.get('http://localhost:8943/test/datetime'.format(
+        response = session.get().get('http://localhost:8943/test/datetime'.format(
 ), stream=True, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
 
         response.raise_for_status()

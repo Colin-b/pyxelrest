@@ -82,17 +82,12 @@ class XlWingsConfig:
             if not os.path.isfile(pythonw_path):
                 raise Exception('Python executable cannot be found in {0}'.format(pythonw_path))
             pyxelrest_settings.write('    PYTHON_WIN = "' + pythonw_path + '"\n')
-        # Allow to call pyxelrest from any Excel file
-        elif '    PYTHONPATH = ThisWorkbook.Path\n' == xlwings_settings_line:
-            if not os.path.exists(self.pyxelrest_module_dir):
-                raise Exception('PyxelRest module directory cannot be found in {0}'.format(self.pyxelrest_module_dir))
-            pyxelrest_settings.write('    PYTHONPATH = "' + self.pyxelrest_module_dir + '"\n')
         # Allow to call pyxelrest
         elif '    UDF_MODULES = ""\n' == xlwings_settings_line:
             pyxelrest_python_path = os.path.join(self.pyxelrest_module_dir, 'pyxelrestgenerator.py')
             if not os.path.isfile(pyxelrest_python_path):
                 raise Exception('PyxelRest module cannot be found in {0}'.format(pyxelrest_python_path))
-            pyxelrest_settings.write('    UDF_MODULES = "pyxelrestgenerator"\n')
+            pyxelrest_settings.write('    UDF_MODULES = "pyxelrest.pyxelrestgenerator"\n')
         else:
             pyxelrest_settings.write(xlwings_settings_line)
 

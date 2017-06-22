@@ -8,8 +8,8 @@ import socket
 import time
 from contextlib import closing
 
-import auth_token_map
-from pyxelresterrors import *
+from pyxelrest import auth_token_map
+from pyxelrest.pyxelresterrors import *
 
 auth_tokens = auth_token_map.AuthTokenMap()
 authentication_server = threading.Semaphore(value=0)

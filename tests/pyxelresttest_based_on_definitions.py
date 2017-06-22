@@ -41,7 +41,7 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
         )
 
     def test_string_array_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         if platform.python_version()[0] == '3':
             result = 'query_array_string="[\'str1\', \'str2\']"'
         else:
@@ -50,61 +50,61 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
                          result)
 
     def test_plain_text_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
                          'string value returned should be truncated so that the following information cannot be seen by'
                          ' user, because of the fact that Excel does not allow more than 255 characters in a cell. '
                          'Only the 255 characters will be returned by the user defined functions:  ')
 
     def test_post_test_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.without_parameter_test_post_test_without_parameter(),
                          'POST performed properly')
 
     def test_put_test_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.without_parameter_test_put_test_without_parameter(),
                          'PUT performed properly')
 
     def test_delete_test_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.without_parameter_test_delete_test_without_parameter(),
                          'DELETE performed properly')
 
     def test_get_test_header_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         headers = pyxelrestgenerator.header_parameter_test_get_test_header_parameter('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
     def test_post_test_form_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.form_parameter_test_post_test_form_parameter('sent string form data'), [
             ['form_string'],
             ['sent string form data']
         ])
 
     def test_get_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual('Second tag is one of the accepted tags',
                          pyxelrestgenerator.filtered_tags_test_get_test_with_tags())
 
     def test_post_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual('All tags are accepted',
                          pyxelrestgenerator.filtered_tags_test_post_test_with_tags())
 
     def test_put_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual('First tag is one of the accepted tags',
                          pyxelrestgenerator.filtered_tags_test_put_test_with_tags())
 
     def test_delete_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_test_delete_test_with_tags'))
 
     def test_get_test_with_zero_integer(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['zero_integer'],
             [0]
@@ -112,7 +112,7 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             pyxelrestgenerator.values_false_test_get_test_with_zero_integer())
 
     def test_get_test_with_zero_float(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['zero_float'],
             [0.0]
@@ -120,7 +120,7 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             pyxelrestgenerator.values_false_test_get_test_with_zero_float())
 
     def test_get_test_with_false_boolean(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['false_boolean'],
             [False]
@@ -128,7 +128,7 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             pyxelrestgenerator.values_false_test_get_test_with_false_boolean())
 
     def test_get_test_with_empty_string(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['empty_string'],
             ['']
@@ -136,16 +136,16 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             pyxelrestgenerator.values_false_test_get_test_with_empty_string())
 
     def test_get_test_with_empty_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([''],
             pyxelrestgenerator.values_false_test_get_test_with_empty_list())
 
     def test_get_test_with_empty_dictionary(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([''], pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary())
 
     def test_get_test_compare_output_order(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             [u'ts', u'date', u'curve', u'mat'],
             [u'', datetime.datetime(2017, 4, 5, 0, 0), u'PW_FR', u'H01'],
@@ -155,12 +155,12 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             pyxelrestgenerator.output_order_test_get_test_price_unordered())
 
     def test_get_test_date(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
             pyxelrestgenerator.usual_parameters_test_get_test_date())
 
     def test_get_test_datetime(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
             [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],

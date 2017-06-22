@@ -14,7 +14,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         loader.unload()
 
     def test_get_order_by_id(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         new_order_response = pyxelrestgenerator.petstore_test_placeOrder({
             'id': 444444,
             'petId': 222222,
@@ -36,7 +36,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
 
     # TODO This test case seems to be failing since May 2017, PetStore is returning 500 on user creation. To be checked.
     def test_get_user_by_name(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         new_user_response = pyxelrestgenerator.petstore_test_createUser({
             'id': 666666,
             'username': 'JD',

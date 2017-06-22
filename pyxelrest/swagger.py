@@ -13,10 +13,10 @@ except ImportError:
     from ConfigParser import ConfigParser
     from urlparse import urlsplit
 
-import vba
-from pyxelresterrors import *
-import authentication
-import fileadapter
+from pyxelrest import vba
+from pyxelrest.pyxelresterrors import *
+from pyxelrest import authentication
+from pyxelrest import fileadapter
 
 
 def to_valid_python_vba(str_value):

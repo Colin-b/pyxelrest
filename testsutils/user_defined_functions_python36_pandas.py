@@ -8,15 +8,16 @@ import requests
 import requests.exceptions
 import datetime
 import logging
-import custom_logging
-from caching import caching
+from pyxelrest import custom_logging
+from pyxelrest.caching import caching
+from pyxelrest import session
 import ujson
 from collections import OrderedDict
 import pandas
-from fast_deserializer import Flattenizer
-from definition_deserializer import Response
-import definition_deserializer
-import authentication
+from pyxelrest.fast_deserializer import Flattenizer
+from pyxelrest.definition_deserializer import Response
+from pyxelrest import definition_deserializer
+from pyxelrest import authentication
 
 
 

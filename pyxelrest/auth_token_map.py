@@ -5,7 +5,7 @@ import datetime
 import threading
 
 import logging
-from pyxelresterrors import TokenExpiryNotProvided, InvalidToken, AuthenticationFailed
+from pyxelrest.pyxelresterrors import TokenExpiryNotProvided, InvalidToken, AuthenticationFailed
 
 
 class AuthTokenMap:
