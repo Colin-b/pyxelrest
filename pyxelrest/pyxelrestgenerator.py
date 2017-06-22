@@ -7,7 +7,6 @@ import jinja2
 import logging.config
 import logging.handlers
 import datetime
-import authentication
 import custom_logging
 from importlib import import_module
 from builtins import open
@@ -23,6 +22,7 @@ import vba
 import authentication
 import swagger
 import xlwings.udfs
+import _version
 
 
 def user_defined_functions(loaded_services):
@@ -63,6 +63,10 @@ def generate_user_defined_functions():
     with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w', encoding='utf-8') \
             as generated_file:
         generated_file.write(user_defined_functions(services))
+
+custom_logging.init_logging()
+
+logging.debug('Loading PyxelRest version {}'.format(_version.__version__))
 
 try:
     authentication.security_definitions = {}
