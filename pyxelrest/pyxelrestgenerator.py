@@ -21,7 +21,6 @@ else:
 import vba
 import authentication
 import swagger
-import xlwings.udfs
 import _version
 
 
@@ -85,9 +84,6 @@ try:
     from user_defined_functions import *
 except:
     logging.exception('Error while importing UDFs.')
-
-# Retry at max 1000 times before considering a call as failed
-xlwings.udfs.DelayWrite.MAX_NUMBER_RETRY = 1000
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':

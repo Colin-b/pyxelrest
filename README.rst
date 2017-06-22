@@ -273,10 +273,3 @@ Microsoft Excel Wizard does not show any parameter
 In case your UDF has a lot of parameters, then Microsoft Excel is unable to display them all in the function wizard.
 
 Try reducing the number of parameters in your service.
-
-Some UDFs are not updated when an update triggered multiple UDFs at once
-------------------------------------------------------------------------
-
-Microsoft Excel is waiting for all UDFs to return prior to accepting value update.
-PyxelRest is retrying up to 1000 times before considering that the value update failed but sometimes,
-depending on your Microsoft Excel book, all your UDFs might take more than 1000 retry to be performed.
