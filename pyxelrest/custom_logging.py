@@ -3,8 +3,6 @@ import yaml
 import logging.config
 import logging.handlers
 
-from pyxelrest import _version
-
 
 def init_logging():
     logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.ini')
@@ -19,6 +17,3 @@ def init_logging():
                             level=logging.INFO)
         logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
             logging_configuration_file_path))
-    logging.debug('Loading PyxelRest version {}'.format(_version.__version__))
-
-init_logging()
