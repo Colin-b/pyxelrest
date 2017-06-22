@@ -1,5 +1,25 @@
 # PyxelRest Changelog #
 
+## 0.61 (next) ##
+
+### Enhancements ###
+
+- The authentication server is now started on demand and is no longer always running so that multiple python scripts can
+  use pyxelrest along with the excel addon.
+- The JWT tokens are stored in a json file. Python scripts can now reuse the tokens and do not pop up the web browser
+  with an authentication page. 
+- The HTTP requests can be cached on disk for testing purpose. This serves as an automatic mocking feature when using
+  python scripts with pyxelrest. The call to caching init_disk_cache(<filename>) must be done before importing the
+  generated functions.
+- The HTTP requests can be cached in memory for UDFs or scripts, so that the EXCEL automatic recomputation does not
+  resend the same requests again. This cache has an expiry in second and a maximum size. The call to caching
+  init_memory_cache(<maxsize>,<expiry>) must be done before importing the generated functions. The cachetools package
+  must be installed since pyxelrest setup.py has it only in test requirements.
+- The OAuth code is no longer jinja based.
+- The 'import pyxelrestgenerator' is no longer mandatory in order to use the generated functions and removes the http
+  call to get the swagger file and code generation. The 'import pyxelrestgenerator' is still necessary to update the
+  generated functions.
+
 ## 0.60 (next) ##
 
 ### Enhancements ###
