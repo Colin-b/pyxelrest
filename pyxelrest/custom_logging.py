@@ -1,7 +1,15 @@
 import os
+import sys
 import yaml
 import logging.config
 import logging.handlers
+from pyxelrest import gui
+
+
+def my_excepthook(excType, excValue, traceback, logger=logging):
+    logger.error("Logging an uncaught exception",
+                 exc_info=(excType, excValue, traceback))
+    gui.message_box("Python Error", str(excValue))
 
 
 def init_logging():
@@ -17,3 +25,8 @@ def init_logging():
                             level=logging.INFO)
         logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
             logging_configuration_file_path))
+    sys.excepthook = my_excepthook
+
+if __name__ == '__main__':
+    init_logging()
+    raise RuntimeError('This is the error message')

@@ -5,6 +5,10 @@ session = None
 
 
 def get():
+    """
+    Get the global session object
+    :return: the session object
+    """
     global session
     if session is None:
         session = requests.Session()
