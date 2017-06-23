@@ -29,4 +29,3 @@ def init_logging():
 
 if __name__ == '__main__':
     init_logging()
-    raise RuntimeError('This is the error message')
