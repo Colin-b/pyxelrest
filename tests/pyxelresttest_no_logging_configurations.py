@@ -5,7 +5,7 @@ import testsutils.loader as loader
 
 class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
     def setUp(self):
-        import testsutils.usual_parameters_test_service as usual_parameters_test_service
+        from testsutils import usual_parameters_test_service
         serviceshandler.start_services((usual_parameters_test_service, 8943))
         loader.load('pyxelresttest_no_logging_services_configuration.ini', remove_logging_config=True)
 

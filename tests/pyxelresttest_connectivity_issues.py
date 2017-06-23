@@ -5,7 +5,7 @@ import testsutils.loader as loader
 
 class PyxelRestConnectivityIssuesTest(unittest.TestCase):
     def setUp(self):
-        import testsutils.without_parameter_test_service as without_parameter_test_service
+        from testsutils import without_parameter_test_service
         serviceshandler.start_services((without_parameter_test_service, 8950))
         loader.load('pyxelresttest_connectivity_issues_services_configuration.ini')
 
