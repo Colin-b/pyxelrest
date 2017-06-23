@@ -193,7 +193,7 @@ If response_type is not provided in authorization_url, token is expected to be r
     </tr>
     <tr>
         <td><strong>oauth2.XXXX</strong></td>
-        <td>Where XXXX is the name of the parameter in the authorization URL.</td>
+        <td>Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1</td>
         <td>Optional</td>
     </tr>
     <tr>

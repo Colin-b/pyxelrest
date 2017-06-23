@@ -20,7 +20,7 @@ DEFAULT_SERVER_PORT = 5000
 DEFAULT_AUTHENTICATION_TIMEOUT = 20  # Time is expressed in seconds
 DEFAULT_SUCCESS_DISPLAY_TIME = 1  # Time is expressed in milliseconds
 DEFAULT_FAILURE_DISPLAY_TIME = 5000  # Time is expressed in milliseconds
-DEFAULT_TOKEN_NAME = 'token'
+DEFAULT_TOKEN_NAME = 'token'  # As described in https://tools.ietf.org/html/rfc6749#section-4.2.1
 
 
 class DefaultSecurityDefinition:
