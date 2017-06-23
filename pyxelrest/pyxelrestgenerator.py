@@ -7,7 +7,7 @@ import jinja2
 import logging.config
 import logging.handlers
 import datetime
-import custom_logging
+from pyxelrest import custom_logging
 from importlib import import_module
 from builtins import open
 
@@ -18,10 +18,10 @@ else:
     # Python 2
     from imp import reload
 
-import vba
-import authentication
-import swagger
-import _version
+from pyxelrest import vba
+from pyxelrest import authentication
+from pyxelrest import swagger
+from pyxelrest import _version
 
 
 def user_defined_functions(loaded_services):
@@ -94,7 +94,7 @@ if __init__.GENERATE_UDF_ON_IMPORT:
     try:
         logging.debug('Expose user defined functions through PyxelRest.')
         reload_user_defined_functions()
-        from user_defined_functions import *
+        from pyxelrest.user_defined_functions import *
     except:
         logging.exception('Error while importing UDFs.')
 
