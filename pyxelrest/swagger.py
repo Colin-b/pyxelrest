@@ -49,9 +49,21 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
-        security_details = self.get_item_default(config, 'security_details', None)
+        security_details = self._get_security_details(config)
         authentication.add_service_security(self.name, self.swagger, security_details)
         self.auth = authentication.add_service_custom_authentication(self.name, security_details)
+
+    def _get_security_details(self, config):
+        security_details_str = self.get_item_default(config, 'security_details', None)
+        details = {}
+        if security_details_str:
+            for detail_entry in security_details_str.split(','):
+                detail_entry = detail_entry.split('=')
+                if len(detail_entry) == 2:
+                    details[detail_entry[0]] = detail_entry[1]
+                else:
+                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        return details
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.

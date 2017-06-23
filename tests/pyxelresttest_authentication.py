@@ -38,7 +38,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     def test_oauth2_authentication_on_custom_server_port(self):
         import pyxelrestgenerator
-        first_token = pyxelrestgenerator.authenticated_second_test_get_test_oauth2_authentication_success()
+        first_token = pyxelrestgenerator.oauth_cutom_response_port_test_get_test_oauth2_authentication_success()
         self.assertEqual(first_token[0], ['Bearer'])
         # Wait for 1 second and send a second request from another server to the same auth server
         # (should request another token)
@@ -55,7 +55,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     def test_oauth2_authentication_success_with_custom_response_type(self):
         import pyxelrestgenerator
-        token = pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_success_with_custom_response_type()
+        token = pyxelrestgenerator.oauth_custom_token_name_test_get_test_oauth2_authentication_success_with_custom_response_type()
         self.assertEqual(token[0], ['Bearer'])
         self.assertIsNotNone(token[1])
 

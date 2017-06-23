@@ -2,6 +2,14 @@
 
 ## 0.62 (next) ##
 
+### Release notes ###
+
+- security_details OAuth2 response_type key is now oauth2.response_type
+
+### Enhancements ###
+
+- It is now possible to override and specify new parameters for OAuth2 authentication URL by using "oauth2." prefix in security_details key name.
+
 ## 0.61 (2017-06-22) ##
 
 ### Enhancements ###

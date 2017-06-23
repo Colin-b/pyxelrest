@@ -174,6 +174,8 @@ Depending on the type of authentication, the following keys are available:
 
 ##### OAuth 2 #####
 
+If response_type is not provided in authorization_url, token is expected to be received in "token" field.
+
 <table>
     <th>
         <td><em>Description</em></td>
@@ -190,8 +192,8 @@ Depending on the type of authentication, the following keys are available:
         <td>Optional</td>
     </tr>
     <tr>
-        <td><strong>response_type</strong></td>
-        <td>Name of the field that will contains the token. Default value is 'token'.</td>
+        <td><strong>oauth2.XXXX</strong></td>
+        <td>Where XXXX is the name of the parameter in the authorization URL.</td>
         <td>Optional</td>
     </tr>
     <tr>

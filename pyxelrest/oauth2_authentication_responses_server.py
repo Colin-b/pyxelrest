@@ -44,7 +44,7 @@ def auth_post(service_name, security_definition_key):
     key = service_name + '/' + security_definition_key
     try:
         if current_security_definition.token_name not in flask.request.form:
-            raise TokenNotProvided(current_security_definition.token_name)
+            raise TokenNotProvided(current_security_definition.token_name, flask.request.form)
         id_token = flask.request.form[current_security_definition.token_name]
         auth_tokens.set_token(key, id_token)
         return success_page("You are now authenticated on {0}. You may close this tab.".format(key),

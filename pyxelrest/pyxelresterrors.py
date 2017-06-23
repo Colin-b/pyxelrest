@@ -67,8 +67,8 @@ class InvalidToken(Exception):
 
 class TokenNotProvided(Exception):
     """ Token was not provided. """
-    def __init__(self, token_name, *args, **kwargs):
-        Exception.__init__(self, '{0} not provided.'.format(token_name))
+    def __init__(self, token_name, dictionary_without_token, *args, **kwargs):
+        Exception.__init__(self, '{0} not provided within {1}.'.format(token_name, dictionary_without_token))
 
 
 class TokenExpiryNotProvided(Exception):
