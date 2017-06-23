@@ -60,7 +60,16 @@ class SwaggerService:
             for detail_entry in security_details_str.split(','):
                 detail_entry = detail_entry.split('=')
                 if len(detail_entry) == 2:
-                    details[detail_entry[0]] = detail_entry[1]
+                    value = detail_entry[1]
+                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
+                    environment_variables_match = re.match('^%(.*)%$', value)
+                    if environment_variables_match:
+                        environment_variable = environment_variables_match.group(1)
+                        value = os.environ[environment_variable]
+                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
+                            detail_entry[0], value, environment_variable
+                        ))
+                    details[detail_entry[0]] = value
                 else:
                     logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
         return details

@@ -133,6 +133,9 @@ Additional security details can be provided thanks to ``security_details`` prope
 
 This property is supposed to contains key=value information. Separator is ',' (comma).
 
+Values cannot contains "," character.
+Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
+
 Depending on the type of authentication, the following keys are available:
 
 Common
