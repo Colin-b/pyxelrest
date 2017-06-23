@@ -12,14 +12,17 @@ scripts_dir = os.path.join(modules_dir, '..', '..', 'Scripts')
 
 class install_pyxelrest_data(install_data):
     def run(self):
-        install_data.run(self)
-        from pyxelrest_post_install import PostInstall
-        post_install = PostInstall(os.path.join(data_dir, 'pyxelrest_addin'),
-                                   os.path.join(data_dir, 'pyxelrest_vb_addin'),
-                                   installation_files_folder=this_dir,
-                                   modules_folder=modules_dir,
-                                   scripts_folder=scripts_dir)
-        post_install.perform_post_installation_tasks()
+        try:
+            install_data.run(self)
+            from pyxelrest_post_install import PostInstall
+            post_install = PostInstall(os.path.join(data_dir, 'pyxelrest_addin'),
+                                       os.path.join(data_dir, 'pyxelrest_vb_addin'),
+                                       installation_files_folder=this_dir,
+                                       modules_folder=modules_dir,
+                                       scripts_folder=scripts_dir)
+            post_install.perform_post_installation_tasks()
+        except:
+            pass
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()

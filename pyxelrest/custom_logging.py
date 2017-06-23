@@ -27,5 +27,4 @@ def init_logging():
             logging_configuration_file_path))
     sys.excepthook = my_excepthook
 
-if __name__ == '__main__':
-    init_logging()
+init_logging()

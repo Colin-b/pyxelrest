@@ -1,7 +1,7 @@
+import multiprocessing
 import sys
 import threading
 import logging
-import ctypes
 from pyxelrest import custom_logging, gui
 
 if sys.version_info.major > 2:
@@ -11,6 +11,7 @@ else:
     # Python 2
     from imp import load_source
 
+
 class PythonServer:
     """
     The Python Server COM object allows direct communication between VB and python without
@@ -19,9 +20,10 @@ class PythonServer:
 
     _reg_clsid_ = '{38CB8241-D698-11D2-B806-0060974AB8A9}'
     _reg_progid_ = 'pyxelrest.PythonServer'
-    _public_methods_ = ['import_module', 'call', 'async_call', 'running', 'result']
+    _public_methods_ = ['import_file', 'direct_call', 'thread_call', 'process_call', 'running', 'result']
 
     modules = {}
+    module_paths = {}
     threads = {}
     results = {}
 
@@ -29,7 +31,7 @@ class PythonServer:
         from pyxelrest import pyxelrestgenerator
         pass
 
-    def import_module(self, module_name, file_name):
+    def import_file(self, module_name, file_name):
         """
         Load a python file as a module
         :param module_name: name used
@@ -42,12 +44,13 @@ class PythonServer:
                 spec.loader.exec_module(m)
             else:
                 m = load_source(module_name, file_name)
+            self.module_paths[module_name] = file_name
             self.modules[module_name] = m
         except Exception as e:
             logging.exception("Logging an uncaught exception")
             gui.message_box("Python Error", str(e))
 
-    def call(self, module_name, func_name, *args):
+    def direct_call(self, module_name, func_name, *args):
         """
         Synchronous call toa function
         :param module_name: module of the function
@@ -64,6 +67,7 @@ class PythonServer:
         except Exception as e:
             logging.exception("Logging an uncaught exception")
             gui.message_box("Python Error", str(e))
+            return str(e)
 
     def call2(self, call_name, func, *args):
         try:
@@ -73,7 +77,12 @@ class PythonServer:
             self.results[call_name] = str(e)
             gui.message_box("Python Error", str(e))
 
-    def async_call(self, call_name, module_name, func_name, *args):
+    def call3(self, queue, file_name, module_name, func_name, *args):
+        self.import_file(module_name, file_name)
+        res = self.direct_call(module_name, func_name, *args)
+        queue.put(res)
+
+    def thread_call(self, call_name, module_name, func_name, *args):
         """
         Asynchronous call to a function
         :param call_name: name of the call
@@ -84,18 +93,50 @@ class PythonServer:
         if call_name in self.threads:
             p = self.threads[call_name]
             if p.is_alive():
-                return
+                return False
         try:
             if module_name not in self.modules:
                 raise Exception('module {0} not found'.format(module_name))
             m = self.modules[module_name]
             f = getattr(m, func_name)
             p = threading.Thread(target=self.call2, args=(call_name, f, *args))
-            p.start()
             self.threads[call_name] = p
+            p.start()
+            return True
         except Exception as e:
             logging.exception("Bad call")
             gui.message_box("Python Error", str(e))
+            return False
+
+    def process_call(self, call_name, module_name, func_name, *args):
+        """
+        Asynchronous call to a function using a process
+        :param call_name: name of the call
+        :param module_name: module of the function
+        :param func_name: Name of the function
+        :param args: Arguments of the function
+        """
+        if call_name in self.threads:
+            p = self.threads[call_name]
+            if p.is_alive():
+                return False
+        try:
+            if module_name not in self.modules:
+                raise Exception('module {0} not found'.format(module_name))
+            m = self.modules[module_name]
+            # check that the function exists
+            f = getattr(m, func_name)
+            q = multiprocessing.Queue()
+            p = multiprocessing.Process(target=self.call3, args=(q, self.module_paths[module_name], module_name,
+                                                                 func_name, *args))
+            self.results[call_name] = q
+            self.threads[call_name] = p
+            p.start()
+            return True
+        except Exception as e:
+            logging.exception("Bad call")
+            gui.message_box("Python Error", str(e))
+            return False
 
     def running(self, call_name):
         """
@@ -123,6 +164,8 @@ class PythonServer:
                 p.join(timeout)
             if not p.is_alive():
                 res = self.results[call_name]
+                if type(res) is multiprocessing.Queue:
+                    res = res.get()
                 del self.results[call_name]
                 del self.threads[call_name]
         return res
