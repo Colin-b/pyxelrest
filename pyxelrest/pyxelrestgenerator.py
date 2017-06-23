@@ -1,5 +1,5 @@
 """
-Each time this module is loaded it will generate xlwings User Defined Functions.
+Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will generate xlwings User Defined Functions.
 """
 import os
 import sys
@@ -54,7 +54,7 @@ def support_ujson():
 
 def generate_user_defined_functions():
     """
-    Create user_defined_functions.py python file containing generated xlwings User Defined Functions.
+    Load services and create user_defined_functions.py python file containing generated xlwings User Defined Functions.
     :return: None
     """
     services = swagger.load_services()
@@ -63,27 +63,40 @@ def generate_user_defined_functions():
             as generated_file:
         generated_file.write(user_defined_functions(services))
 
-custom_logging.init_logging()
 
-logging.debug('Loading PyxelRest version {}'.format(_version.__version__))
+def reload_user_defined_functions():
+    """
+    Force reload of module (even if this is first time, it should not take long)
+    as reloading pyxelrest does not reload UDFs otherwise
+    TODO This is temporary until xlwings force a python reload instead
+    :return: None
+    """
+    reload(import_module('user_defined_functions'))
 
-try:
+
+def reset_authentication():
     authentication.security_definitions = {}
     authentication.custom_authentications = {}
-    generate_user_defined_functions()
-except Exception as e:
-    logging.exception('Cannot generate user defined functions.')
-    raise
 
-try:
-    logging.debug('Expose user defined functions through PyxelRest.')
-    # Force reload of module (even if this is first time, it should not take long)
-    # as reloading pyxelrest does not reload UDFs otherwise
-    # TODO This is temporary until xlwings force a python reload instead
-    reload(import_module('user_defined_functions'))
-    from user_defined_functions import *
-except:
-    logging.exception('Error while importing UDFs.')
+custom_logging.load_logging_configuration()
+logging.info('Loading PyxelRest version {}'.format(_version.__version__))
+
+# TODO perform a proper import once package branch is done.
+import __init__
+if __init__.GENERATE_UDF_ON_IMPORT:
+    reset_authentication()
+    try:
+        generate_user_defined_functions()
+    except Exception as e:
+        logging.exception('Cannot generate user defined functions.')
+        raise
+
+    try:
+        logging.debug('Expose user defined functions through PyxelRest.')
+        reload_user_defined_functions()
+        from user_defined_functions import *
+    except:
+        logging.exception('Error while importing UDFs.')
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':

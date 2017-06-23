@@ -125,8 +125,10 @@ setup(name='pyxelrest',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.4.2',
           # Used to parse logging configuration file
+          # TODO It should be an optional dependency
           'pyaml==16.12.2',
           # Used to run authentication services (also used in test cases)
+          # TODO It should be an optional dependency + try to move to Werkzeug?
           'flask==0.12.2',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
