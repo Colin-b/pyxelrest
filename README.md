@@ -143,10 +143,10 @@ The following options are available for each section:
         <td>port=XX,timeout=YY</td>
     </tr>
     <tr>
-        <td><strong>rely_on_definitions</strong></td>
-        <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
+        <td><strong>advanced_configuration</strong></td>
+        <td>Additional configuration details.</td>
         <td>Optional</td>
-        <td>True or False</td>
+        <td>udf_return_type=XX,rely_on_definitions=YY</td>
     </tr>
 </table>
 
@@ -166,12 +166,10 @@ Depending on the type of authentication, the following keys are available:
 <table>
     <th>
         <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
     </th>
     <tr>
         <td><strong>auth</strong></td>
         <td>Custom authentication mechanism. Valid value is ntlm (requiring requests_ntlm or requests_negotiate_sspi).</td>
-        <td></td>
     </tr>
 </table>
 
@@ -260,6 +258,31 @@ If response_type is not provided in authorization_url, token is expected to be r
         <td><strong>password</strong></td>
         <td>User password. Default value is the logged in user password.</td>
         <td>Optional</td>
+    </tr>
+</table>
+
+#### Advanced Configuration ####
+
+Additional configuration details can be provided thanks to `advanced_configuration` property.
+
+This property is supposed to contains key=value information. Separator is ',' (comma).
+
+Values cannot contains "," character.
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Possible values</em></td>
+    </th>
+    <tr>
+        <td><strong>udf_return_type</strong></td>
+        <td>synchronous if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. asynchronous by default.</td>
+        <td>asynchronous or synchronous</td>
+    </tr>
+    <tr>
+        <td><strong>rely_on_definitions</strong></td>
+        <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
+        <td>True or False</td>
     </tr>
 </table>
 

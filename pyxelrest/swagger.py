@@ -41,7 +41,6 @@ class SwaggerService:
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
         self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
-        self.rely_on_definitions = bool(self.get_item_default(config, 'rely_on_definitions', False))
         self.connect_timeout = float(self.get_item_default(config, 'connect_timeout', 1))
         self.read_timeout = self.get_item_default(config, 'read_timeout', None)
         if self.read_timeout:
@@ -52,6 +51,25 @@ class SwaggerService:
         security_details = self._get_security_details(config)
         authentication.add_service_security(self.name, self.swagger, security_details)
         self.auth = authentication.add_service_custom_authentication(self.name, security_details)
+        advanced_configuration = self._get_advanced_configuration(config)
+        # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
+        self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
+        self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
+
+    def asynchronous_return(self):
+        return self.udf_return_type == 'asynchronous'
+
+    def _get_advanced_configuration(self, config):
+        advanced_configuration_str = self.get_item_default(config, 'advanced_configuration', None)
+        details = {}
+        if advanced_configuration_str:
+            for detail_entry in advanced_configuration_str.split(','):
+                detail_entry = detail_entry.split('=')
+                if len(detail_entry) == 2:
+                    details[detail_entry[0]] = detail_entry[1]
+                else:
+                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        return details
 
     def _get_security_details(self, config):
         security_details_str = self.get_item_default(config, 'security_details', None)
