@@ -11,7 +11,7 @@
 
 - It is now possible to override and specify new parameters for OAuth2 authentication URL by using "oauth2." prefix in security_details key name.
 - Security details values can be loaded from environment variables.
-- UDfs can now be synchronous, meaning you will need to specify the result array within Microsoft Excel before the call. Refer to documentation for more details.
+- UDFs can now be synchronous, meaning you will need to specify the result array within Microsoft Excel before the call. Refer to documentation for more details.
 
 ## 0.61 (2017-06-22) ##
 
