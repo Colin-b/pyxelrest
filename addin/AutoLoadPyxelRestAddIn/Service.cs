@@ -18,6 +18,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
         private static readonly string SECURITY_DETAILS_PROPERTY = "security_details";
+        private static readonly string ADVANCED_CONFIGURATION_PROPERTY = "advanced_configuration";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -36,6 +37,7 @@ namespace AutoLoadPyxelRestAddIn
         public float? ConnectTimeout;
         public float? ReadTimeout;
         public string SecurityDetails;
+        public string AdvancedConfiguration;
 
         public Service(string name)
         {
@@ -65,6 +67,7 @@ namespace AutoLoadPyxelRestAddIn
             ConnectTimeout = GetFloatProperty(serviceConfig, CONNECT_TIMEOUT_PROPERTY, 1);
             ReadTimeout = GetFloatProperty(serviceConfig, READ_TIMEOUT_PROPERTY, null);
             SecurityDetails = serviceConfig.ContainsKey(SECURITY_DETAILS_PROPERTY) ? serviceConfig[SECURITY_DETAILS_PROPERTY] : string.Empty;
+            AdvancedConfiguration = serviceConfig.ContainsKey(ADVANCED_CONFIGURATION_PROPERTY) ? serviceConfig[ADVANCED_CONFIGURATION_PROPERTY] : string.Empty;
         }
 
         private float? GetFloatProperty(KeyDataCollection serviceConfig, string property, float? defaultValue)
@@ -132,6 +135,13 @@ namespace AutoLoadPyxelRestAddIn
                 section.Keys.SetKeyData(securityDetails);
             }
 
+            if (!string.IsNullOrEmpty(AdvancedConfiguration))
+            {
+                KeyData advancedConfiguration = new KeyData(ADVANCED_CONFIGURATION_PROPERTY);
+                advancedConfiguration.Value = AdvancedConfiguration;
+                section.Keys.SetKeyData(advancedConfiguration);
+            }
+
             return section;
         }
 
@@ -148,6 +158,7 @@ namespace AutoLoadPyxelRestAddIn
             ConnectTimeout = 1;
             ReadTimeout = null;
             SecurityDetails = "";
+            AdvancedConfiguration = "";
         }
 
         private string GetMethods()
