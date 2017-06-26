@@ -355,7 +355,7 @@ import authentication
 {% for parameter in swagger_method.parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
-{% if swagger_method.return_a_list() and swagger_method.service.asynchronous_return() %}
+{% if swagger_method.return_a_list() and swagger_method.service.should_return_asynchronously() %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ swagger_method.udf_name }}(

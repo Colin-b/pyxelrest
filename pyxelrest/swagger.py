@@ -56,7 +56,7 @@ class SwaggerService:
         self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
         self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
 
-    def asynchronous_return(self):
+    def should_return_asynchronously(self):
         return self.udf_return_type == 'asynchronous'
 
     def _get_advanced_configuration(self, config):
