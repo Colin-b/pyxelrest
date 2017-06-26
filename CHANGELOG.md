@@ -21,7 +21,7 @@
 
 ### Bug fixes ###
 
-- Retry up to 1000 times instead of 10 times when a COM Retry error is received while sending results to Microsoft Excel (depends on xlwings-0.10.4.1). More information about this can be found in README.
+- In case a huge number of UDFs are relying on the same cell value, some UDFs might have not returned a value. This issue should be fixed in xlwings-0.10.4.2.
 
 ## 0.60 (2017-06-19) ##
 
