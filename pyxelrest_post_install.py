@@ -5,6 +5,7 @@ import subprocess
 import sys
 import distutils.dir_util as dir_util
 
+from pyxelrest import com_server
 
 def to_absolute_path(file_path):
     return file_path if os.path.isabs(file_path) else os.path.abspath(file_path)
@@ -132,6 +133,7 @@ class PostInstall:
         xlwings_config.create_pyxelrest_bas_file()
 
         self._install_auto_load_addin()
+        com_server.register_com()
 
     @staticmethod
     def _is_excel_running():

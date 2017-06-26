@@ -7,6 +7,7 @@ import jinja2
 import logging.config
 import logging.handlers
 import datetime
+from pyxelrest import GENERATE_UDF_ON_IMPORT
 from pyxelrest import custom_logging
 from importlib import import_module
 from builtins import open
@@ -82,8 +83,7 @@ custom_logging.load_logging_configuration()
 logging.info('Loading PyxelRest version {}'.format(_version.__version__))
 
 # TODO perform a proper import once package branch is done.
-import __init__
-if __init__.GENERATE_UDF_ON_IMPORT:
+if GENERATE_UDF_ON_IMPORT:
     reset_authentication()
     try:
         generate_user_defined_functions()

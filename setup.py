@@ -124,7 +124,7 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
           # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
-          'comtypes==1.1.3-2',
+          'comtypes==1.1.3',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.4.2',
           # Used to parse logging configuration file
@@ -136,7 +136,8 @@ setup(name='pyxelrest',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
-          'future==0.16.0'
+          'future==0.16.0',
+          'qtpy'
       ],
       scripts=[
           'pyxelrest_auto_update.py',
