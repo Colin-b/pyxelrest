@@ -79,11 +79,9 @@ def reset_authentication():
     authentication.security_definitions = {}
     authentication.custom_authentications = {}
 
-custom_logging.load_logging_configuration()
-logging.info('Loading PyxelRest version {}'.format(_version.__version__))
-
 # TODO perform a proper import once package branch is done.
 if GENERATE_UDF_ON_IMPORT:
+    custom_logging.load_logging_configuration()
     reset_authentication()
     try:
         generate_user_defined_functions()

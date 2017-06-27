@@ -2,6 +2,9 @@ import multiprocessing
 import sys
 import threading
 import logging
+
+import pythoncom
+
 from pyxelrest import custom_logging, alert
 
 
@@ -24,7 +27,7 @@ class PythonServer:
 
     def __init__(self):
         custom_logging.set_pid_file_logger()
-        sys.stdout = custom_logging.StreamToLogger(logging,logging.INFO)
+        sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
         sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
         pass
 
@@ -74,24 +77,28 @@ class PythonServer:
 
     def thread_call2(self, call_name, func, *args):
         try:
+            pythoncom.CoInitialize()
             import xlwings
             self.results[call_name] = func(*args)
         except Exception as e:
             logging.exception("Logging an uncaught exception")
             self.results[call_name] = str(e)
             alert.message_box("Python Error", str(e))
+        finally:
+            pythoncom.CoUninitialize()
 
     def process_call2(self, queue, sources, module_name, func_name, *args):
-        import xlwings, ctypes
         sys.path.extend(sources)
+        pythoncom.CoInitialize()
         if self.host is None:
             custom_logging.set_pid_file_logger()
         else:
-            custom_logging.set_syslog_logger(self.host,self.port)
-        sys.stdout = custom_logging.StreamToLogger(logging,logging.INFO)
+            custom_logging.set_syslog_logger(self.host, self.port)
+        sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
         sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
         res = self.direct_call(module_name, func_name, *args)
         queue.put(res)
+        pythoncom.CoUninitialize()
 
     def thread_call(self, call_name, module_name, func_name, *args):
         """
@@ -190,6 +197,9 @@ def register_com():
 
     import win32com.server.register
     win32com.server.register.UseCommandLine(PythonServer)
+
+    win32api.RegOverridePredefKey(win32con.HKEY_CLASSES_ROOT, None)
+    win32api.RegCloseKey(default_base)
 
 if __name__ == '__main__':
     register_com()

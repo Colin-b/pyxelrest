@@ -23,6 +23,6 @@ def get():
         session.headers['X-PXL-HOSTNAME'] = platform.node()
         session.headers['X-PXL-LOGIN'] = os.getlogin()
         session.headers['X-PXL-SESSION'] = datetime.datetime.today().isoformat()
-    session.headers['X-PXL-REQUEST'] = nb
+    session.headers['X-PXL-REQUEST'] = str(nb)
     nb += 1
     return session
