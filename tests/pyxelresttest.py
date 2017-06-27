@@ -28,7 +28,8 @@ class PyxelRestTest(unittest.TestCase):
             header_parameter_test_service,
             form_parameter_test_service,
             array_parameter_test_service,
-            static_file_call_test_service
+            static_file_call_test_service,
+            http_methods_test_service
         )
         serviceshandler.start_services(
             (usual_parameters_test_service, 8943),
@@ -39,7 +40,8 @@ class PyxelRestTest(unittest.TestCase):
             (header_parameter_test_service, 8951),
             (form_parameter_test_service, 8952),
             (array_parameter_test_service, 8953),
-            (static_file_call_test_service, 8954)
+            (static_file_call_test_service, 8954),
+            (http_methods_test_service, 8955)
         )
 
     def test_string_array_parameter(self):
@@ -219,6 +221,57 @@ class PyxelRestTest(unittest.TestCase):
         self.assertEqual(
             'success',
             pyxelrestgenerator.swagger_loaded_from_file_test_get_test_static_file_call()
+        )
+
+    def test_get_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'GET',
+            pyxelrestgenerator.http_methods_test_get_test_all_http_methods()
+        )
+
+    def test_post_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'POST',
+            pyxelrestgenerator.http_methods_test_post_test_all_http_methods()
+        )
+
+    def test_put_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'PUT',
+            pyxelrestgenerator.http_methods_test_put_test_all_http_methods()
+        )
+
+    def test_delete_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'DELETE',
+            pyxelrestgenerator.http_methods_test_delete_test_all_http_methods()
+        )
+
+    def test_patch_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'PATCH',
+            pyxelrestgenerator.http_methods_test_patch_test_all_http_methods()
+        )
+
+    def test_options_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            # OPTIONS is already handled by Flask
+            '',
+            pyxelrestgenerator.http_methods_test_options_test_all_http_methods()
+        )
+
+    def test_head_http_method(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            # HEAD is already handled by Flask
+            '',
+            pyxelrestgenerator.http_methods_test_head_test_all_http_methods()
         )
 
 if __name__ == '__main__':

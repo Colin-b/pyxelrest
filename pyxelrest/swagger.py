@@ -33,8 +33,8 @@ class SwaggerService:
         """
         self.name = service_name
         self.udf_prefix = to_valid_python_vba(service_name)
-        self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
-        if not self.methods:
+        self.requested_methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
+        if not self.requested_methods:
             raise NoMethodsProvided()
         self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
         swagger_url = self.get_item(config, 'swagger_url')
@@ -111,14 +111,11 @@ class SwaggerService:
     def definitions(self):
         return self.swagger.get('definitions')
 
-    def method(self, swagger_method, method_path):
-        return SwaggerMethod(self, swagger_method, method_path)
+    def method(self, requests_method, swagger_method, method_path):
+        return SwaggerMethod(self, requests_method, swagger_method, method_path)
 
-    def should_provide_method(self, swagger_methods, http_verb):
-        if http_verb not in self.methods:
-            return False
-        swagger_method = swagger_methods.get(http_verb)
-        if not swagger_method:
+    def should_provide_method(self, http_verb, swagger_method):
+        if http_verb not in self.requested_methods:
             return False
         return self._allow_tags(swagger_method.get('tags')) and \
                self.return_type_can_be_handled(swagger_method.get('produces', []))
@@ -252,9 +249,10 @@ class SwaggerService:
 
 
 class SwaggerMethod:
-    def __init__(self, service, swagger_method, path):
+    def __init__(self, service, requests_method, swagger_method, path):
         self.uri = '{0}{1}'.format(service.uri, path)
         self.service = service
+        self.requests_method = requests_method
         self.swagger_method = swagger_method
         self.parameters = swagger_method.get('parameters', [])
         self.path_parameters = []

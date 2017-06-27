@@ -20,6 +20,9 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox post;
         private CheckBox put;
         private CheckBox delete;
+        private CheckBox patch;
+        private CheckBox options;
+        private CheckBox head;
         private CheckBox checkbox;
         private TextBox tagsTextBox;
         private TextBox connectTimeoutTextBox;
@@ -130,18 +133,27 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
-            get = new CheckBox() { Text = "get", Checked = service.Get };
+            get = new CheckBox() { Text = "get", Checked = service.Get, Width = 50 };
             get.CheckedChanged += Get_CheckedChanged;
             methodsPanel.Controls.Add(get, 0, 0);
-            post = new CheckBox() { Text = "post", Checked = service.Post };
+            post = new CheckBox() { Text = "post", Checked = service.Post, Width = 50 };
             post.CheckedChanged += Post_CheckedChanged;
             methodsPanel.Controls.Add(post, 1, 0);
-            put = new CheckBox() { Text = "put", Checked = service.Put };
+            put = new CheckBox() { Text = "put", Checked = service.Put, Width = 50 };
             put.CheckedChanged += Put_CheckedChanged;
             methodsPanel.Controls.Add(put, 2, 0);
-            delete = new CheckBox() { Text = "delete", Checked = service.Delete };
+            delete = new CheckBox() { Text = "delete", Checked = service.Delete, Width = 60 };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
+            patch = new CheckBox() { Text = "patch", Checked = service.Patch, Width = 60 };
+            patch.CheckedChanged += Patch_CheckedChanged;
+            methodsPanel.Controls.Add(patch, 4, 0);
+            options = new CheckBox() { Text = "options", Checked = service.Options, Width = 60 };
+            options.CheckedChanged += Options_CheckedChanged;
+            methodsPanel.Controls.Add(options, 5, 0);
+            head = new CheckBox() { Text = "head", Checked = service.Head, Width = 50 };
+            head.CheckedChanged += Head_CheckedChanged;
+            methodsPanel.Controls.Add(head, 6, 0);
             servicePanel.Controls.Add(methodsPanel, 1, 6);
             #endregion
 
@@ -236,6 +248,21 @@ namespace AutoLoadPyxelRestAddIn
         {
             service.ProxyUrl = proxyUrlTextBox.Text;
             swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+        }
+
+        private void Head_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Head = head.Checked;
+        }
+
+        private void Options_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Options = options.Checked;
+        }
+
+        private void Patch_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Patch = patch.Checked;
         }
 
         private void Delete_CheckedChanged(object sender, EventArgs e)

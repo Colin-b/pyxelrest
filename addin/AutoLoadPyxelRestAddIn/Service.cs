@@ -24,6 +24,9 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string POST = "post";
         private static readonly string PUT = "put";
         private static readonly string DELETE = "delete";
+        private static readonly string PATCH = "patch";
+        private static readonly string OPTIONS = "options";
+        private static readonly string HEAD = "head";
 
         internal readonly string Name;
         public string SwaggerUrl;
@@ -33,6 +36,9 @@ namespace AutoLoadPyxelRestAddIn
         public bool Post;
         public bool Put;
         public bool Delete;
+        public bool Patch;
+        public bool Options;
+        public bool Head;
         public string Tags;
         public float? ConnectTimeout;
         public float? ReadTimeout;
@@ -63,6 +69,9 @@ namespace AutoLoadPyxelRestAddIn
             Post = Array.Exists(methods, s => POST.Equals(s));
             Put = Array.Exists(methods, s => PUT.Equals(s));
             Delete = Array.Exists(methods, s => DELETE.Equals(s));
+            Patch = Array.Exists(methods, s => PATCH.Equals(s));
+            Options = Array.Exists(methods, s => OPTIONS.Equals(s));
+            Head = Array.Exists(methods, s => HEAD.Equals(s));
             Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
             ConnectTimeout = GetFloatProperty(serviceConfig, CONNECT_TIMEOUT_PROPERTY, 1);
             ReadTimeout = GetFloatProperty(serviceConfig, READ_TIMEOUT_PROPERTY, null);
@@ -154,6 +163,9 @@ namespace AutoLoadPyxelRestAddIn
             Post = true;
             Put = true;
             Delete = true;
+            Patch = true;
+            Options = true;
+            Head = true;
             Tags = "";
             ConnectTimeout = 1;
             ReadTimeout = null;
@@ -172,6 +184,12 @@ namespace AutoLoadPyxelRestAddIn
                 AppendMethod(sb, PUT);
             if (Delete)
                 AppendMethod(sb, DELETE);
+            if (Patch)
+                AppendMethod(sb, PATCH);
+            if (Options)
+                AppendMethod(sb, OPTIONS);
+            if (Head)
+                AppendMethod(sb, HEAD);
             return sb.ToString();
         }
 
