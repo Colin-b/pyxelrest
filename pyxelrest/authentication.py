@@ -50,7 +50,7 @@ def get_query_parameter(url, param_name):
 class OAuth2Auth(requests.auth.AuthBase):
     """Describes an OAuth 2 security definition."""
     def __init__(self, service_name, security_definition, security_details):
-        from oauth2_authentication_responses_server import (
+        from pyxelrest.oauth2_authentication_responses_server import (
             DEFAULT_SERVER_PORT,
             DEFAULT_TOKEN_NAME,
             DEFAULT_AUTHENTICATION_TIMEOUT,
