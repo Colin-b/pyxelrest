@@ -146,7 +146,7 @@ def error_page(text, display_time):
 def start_server(port):
     threading.Thread(target=start_server_sync, args=[port]).start()
     authentication_server.acquire()
-    time.sleep(0.1)
+    time.sleep(0.3)
 
 
 def start_server_sync(port):

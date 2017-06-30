@@ -17,7 +17,7 @@ class PythonServer:
     _reg_clsid_ = '{38CB8241-D698-11D2-B806-0060974AB8A9}'
     _reg_progid_ = 'pyxelrest.PythonServer'
     _public_methods_ = ['add_path', 'import_module', 'generate_udf', 'direct_call', 'thread_call', 'process_call',
-                        'running', 'result', 'set_syslog', 'init_disk_cache', 'init_memory_cache']
+                        'running', 'result', 'set_syslog', 'set_level', 'init_disk_cache', 'init_memory_cache']
 
     threads = {}
     results = {}
@@ -26,7 +26,7 @@ class PythonServer:
     port = None
 
     def __init__(self):
-        custom_logging.set_pid_file_logger()
+        custom_logging.set_pid_file_logger(logging.DEBUG)
         sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
         sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
         pass
@@ -35,10 +35,13 @@ class PythonServer:
         from pyxelrest import pyxelrestgenerator
         pyxelrestgenerator.generate_user_defined_functions()
 
-    def set_syslog(self, host, port):
+    def set_syslog(self, host, port, level="INFO"):
         self.host = host
         self.port = port
-        custom_logging.set_syslog_logger(host, port)
+        custom_logging.set_syslog_logger(host, port, logging.getLevelName(level))
+
+    def set_level(self, level):
+        logging.getLogger().setLevel(logging.getLevelName(level))
 
     def init_disk_cache(self, filename):
         import pyxelrest.caching

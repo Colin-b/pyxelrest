@@ -42,21 +42,22 @@ def load_logging_configuration():
         logging.info('Using Python lib at {}'.format(sysconfig.get_python_lib()))
 
 
-def set_pid_file_logger():
+def set_pid_file_logger(level=logging.INFO):
     if len(logging.root.handlers) == 0:
         default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest-' + str(os.getpid())                                        + '.log')
         logging.basicConfig(
             format='%(asctime)s - %(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s',
             handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
-            level=logging.INFO)
+            level=level)
         logging.info('Loading PyxelRest version {}'.format(_version.__version__))
         logging.info('Using Python lib at {}'.format(sysconfig.get_python_lib()))
 
 
-def set_syslog_logger(host, port):
+def set_syslog_logger(host, port, level):
     handler = logging.handlers.SysLogHandler(address=(host, port))
     formatter = logging.Formatter('%(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s')
     handler.setFormatter(formatter)
+    handler.setLevel(level)
     logging.getLogger().addHandler(handler)
 
 
