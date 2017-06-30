@@ -18,11 +18,15 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
         private static readonly string SECURITY_DETAILS_PROPERTY = "security_details";
+        private static readonly string ADVANCED_CONFIGURATION_PROPERTY = "advanced_configuration";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
         private static readonly string PUT = "put";
         private static readonly string DELETE = "delete";
+        private static readonly string PATCH = "patch";
+        private static readonly string OPTIONS = "options";
+        private static readonly string HEAD = "head";
 
         internal readonly string Name;
         public string SwaggerUrl;
@@ -32,10 +36,14 @@ namespace AutoLoadPyxelRestAddIn
         public bool Post;
         public bool Put;
         public bool Delete;
+        public bool Patch;
+        public bool Options;
+        public bool Head;
         public string Tags;
         public float? ConnectTimeout;
         public float? ReadTimeout;
         public string SecurityDetails;
+        public string AdvancedConfiguration;
 
         public Service(string name)
         {
@@ -61,10 +69,14 @@ namespace AutoLoadPyxelRestAddIn
             Post = Array.Exists(methods, s => POST.Equals(s));
             Put = Array.Exists(methods, s => PUT.Equals(s));
             Delete = Array.Exists(methods, s => DELETE.Equals(s));
+            Patch = Array.Exists(methods, s => PATCH.Equals(s));
+            Options = Array.Exists(methods, s => OPTIONS.Equals(s));
+            Head = Array.Exists(methods, s => HEAD.Equals(s));
             Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
             ConnectTimeout = GetFloatProperty(serviceConfig, CONNECT_TIMEOUT_PROPERTY, 1);
             ReadTimeout = GetFloatProperty(serviceConfig, READ_TIMEOUT_PROPERTY, null);
             SecurityDetails = serviceConfig.ContainsKey(SECURITY_DETAILS_PROPERTY) ? serviceConfig[SECURITY_DETAILS_PROPERTY] : string.Empty;
+            AdvancedConfiguration = serviceConfig.ContainsKey(ADVANCED_CONFIGURATION_PROPERTY) ? serviceConfig[ADVANCED_CONFIGURATION_PROPERTY] : string.Empty;
         }
 
         private float? GetFloatProperty(KeyDataCollection serviceConfig, string property, float? defaultValue)
@@ -132,6 +144,13 @@ namespace AutoLoadPyxelRestAddIn
                 section.Keys.SetKeyData(securityDetails);
             }
 
+            if (!string.IsNullOrEmpty(AdvancedConfiguration))
+            {
+                KeyData advancedConfiguration = new KeyData(ADVANCED_CONFIGURATION_PROPERTY);
+                advancedConfiguration.Value = AdvancedConfiguration;
+                section.Keys.SetKeyData(advancedConfiguration);
+            }
+
             return section;
         }
 
@@ -144,10 +163,14 @@ namespace AutoLoadPyxelRestAddIn
             Post = true;
             Put = true;
             Delete = true;
+            Patch = true;
+            Options = true;
+            Head = true;
             Tags = "";
             ConnectTimeout = 1;
             ReadTimeout = null;
             SecurityDetails = "";
+            AdvancedConfiguration = "";
         }
 
         private string GetMethods()
@@ -161,6 +184,12 @@ namespace AutoLoadPyxelRestAddIn
                 AppendMethod(sb, PUT);
             if (Delete)
                 AppendMethod(sb, DELETE);
+            if (Patch)
+                AppendMethod(sb, PATCH);
+            if (Options)
+                AppendMethod(sb, OPTIONS);
+            if (Head)
+                AppendMethod(sb, HEAD);
             return sb.ToString();
         }
 

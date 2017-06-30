@@ -227,7 +227,7 @@ def swagger():
                        },
                        'oauth2_auth_success_with_custom_response_type': {
                            "type": "oauth2",
-                           "authorizationUrl": 'http://localhost:8947/auth_success_with_custom_token?response_type=my_custom_token',
+                           "authorizationUrl": 'http://localhost:8947/auth_success_with_custom_token',
                            "flow": "implicit",
                            "scopes": {
                                "custom_label": "custom category"

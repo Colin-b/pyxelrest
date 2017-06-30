@@ -20,11 +20,15 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox post;
         private CheckBox put;
         private CheckBox delete;
+        private CheckBox patch;
+        private CheckBox options;
+        private CheckBox head;
         private CheckBox checkbox;
         private TextBox tagsTextBox;
         private TextBox connectTimeoutTextBox;
         private TextBox readTimeoutTextBox;
         private TextBox securityDetailsTextBox;
+        private TextBox advancedConfigurationTextBox;
 
         private readonly ServiceConfigurationForm configurationForm;
         private long? swaggerUrlModificationTicks;
@@ -106,37 +110,55 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(securityDetailsTextBox, 1, 3);
             #endregion
 
+            #region Advanced Configuration
+            servicePanel.Controls.Add(new Label { Text = "Advanced Config", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+            advancedConfigurationTextBox = new TextBox() { Text = service.AdvancedConfiguration };
+            advancedConfigurationTextBox.Dock = DockStyle.Fill;
+            advancedConfigurationTextBox.AutoSize = true;
+            advancedConfigurationTextBox.TextChanged += AdvancedConfigurationTextBox_TextChanged;
+            servicePanel.Controls.Add(advancedConfigurationTextBox, 1, 4);
+            #endregion
+
             #region Tags
-            servicePanel.Controls.Add(new Label { Text = "Tags", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+            servicePanel.Controls.Add(new Label { Text = "Tags", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
             tagsTextBox = new TextBox() { Text = service.Tags };
             tagsTextBox.Dock = DockStyle.Fill;
             tagsTextBox.AutoSize = true;
             tagsTextBox.TextChanged += TagsTextBox_TextChanged;
-            servicePanel.Controls.Add(tagsTextBox, 1, 4);
+            servicePanel.Controls.Add(tagsTextBox, 1, 5);
             #endregion
 
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
-            get = new CheckBox() { Text = "get", Checked = service.Get };
+            get = new CheckBox() { Text = "get", Checked = service.Get, Width = 50 };
             get.CheckedChanged += Get_CheckedChanged;
             methodsPanel.Controls.Add(get, 0, 0);
-            post = new CheckBox() { Text = "post", Checked = service.Post };
+            post = new CheckBox() { Text = "post", Checked = service.Post, Width = 50 };
             post.CheckedChanged += Post_CheckedChanged;
             methodsPanel.Controls.Add(post, 1, 0);
-            put = new CheckBox() { Text = "put", Checked = service.Put };
+            put = new CheckBox() { Text = "put", Checked = service.Put, Width = 50 };
             put.CheckedChanged += Put_CheckedChanged;
             methodsPanel.Controls.Add(put, 2, 0);
-            delete = new CheckBox() { Text = "delete", Checked = service.Delete };
+            delete = new CheckBox() { Text = "delete", Checked = service.Delete, Width = 60 };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 5);
+            patch = new CheckBox() { Text = "patch", Checked = service.Patch, Width = 60 };
+            patch.CheckedChanged += Patch_CheckedChanged;
+            methodsPanel.Controls.Add(patch, 4, 0);
+            options = new CheckBox() { Text = "options", Checked = service.Options, Width = 60 };
+            options.CheckedChanged += Options_CheckedChanged;
+            methodsPanel.Controls.Add(options, 5, 0);
+            head = new CheckBox() { Text = "head", Checked = service.Head, Width = 50 };
+            head.CheckedChanged += Head_CheckedChanged;
+            methodsPanel.Controls.Add(head, 6, 0);
+            servicePanel.Controls.Add(methodsPanel, 1, 6);
             #endregion
 
             #region Timeouts
-            servicePanel.Controls.Add(new Label { Text = "Timeouts", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
+            servicePanel.Controls.Add(new Label { Text = "Timeouts", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
             TableLayoutPanel timeoutsPanel = new TableLayoutPanel();
             timeoutsPanel.Dock = DockStyle.Fill;
             timeoutsPanel.AutoSize = true;
@@ -148,7 +170,7 @@ namespace AutoLoadPyxelRestAddIn
             readTimeoutTextBox = new TextBox() { Text = service.ReadTimeout.HasValue ? service.ReadTimeout.Value.ToString(CultureInfo.InvariantCulture) : string.Empty };
             readTimeoutTextBox.TextChanged += ReadTimeoutTextBox_TextChanged;
             timeoutsPanel.Controls.Add(readTimeoutTextBox, 3, 0);
-            servicePanel.Controls.Add(timeoutsPanel, 1, 6);
+            servicePanel.Controls.Add(timeoutsPanel, 1, 7);
             #endregion
 
             #region Delete
@@ -176,6 +198,21 @@ namespace AutoLoadPyxelRestAddIn
             {
                 securityDetailsTextBox.BackColor = string.IsNullOrEmpty(securityDetailsTextBox.Text) ? Color.Empty : Color.Red;
                 service.SecurityDetails = string.Empty;
+            }
+        }
+
+        private void AdvancedConfigurationTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var advancedConfigurationRegex = new Regex("^(([^\n,]+)=([^\n,]*))(,([^\n,]+)=([^\n,]*))*$");
+            if (advancedConfigurationRegex.IsMatch(advancedConfigurationTextBox.Text))
+            {
+                advancedConfigurationTextBox.BackColor = Color.LightGreen;
+                service.AdvancedConfiguration = advancedConfigurationTextBox.Text;
+            }
+            else
+            {
+                advancedConfigurationTextBox.BackColor = string.IsNullOrEmpty(advancedConfigurationTextBox.Text) ? Color.Empty : Color.Red;
+                service.AdvancedConfiguration = string.Empty;
             }
         }
 
@@ -211,6 +248,21 @@ namespace AutoLoadPyxelRestAddIn
         {
             service.ProxyUrl = proxyUrlTextBox.Text;
             swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+        }
+
+        private void Head_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Head = head.Checked;
+        }
+
+        private void Options_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Options = options.Checked;
+        }
+
+        private void Patch_CheckedChanged(object sender, EventArgs e)
+        {
+            service.Patch = patch.Checked;
         }
 
         private void Delete_CheckedChanged(object sender, EventArgs e)

@@ -33,15 +33,14 @@ class SwaggerService:
         """
         self.name = service_name
         self.udf_prefix = to_valid_python_vba(service_name)
-        self.methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
-        if not self.methods:
+        self.requested_methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
+        if not self.requested_methods:
             raise NoMethodsProvided()
         self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
         swagger_url = self.get_item(config, 'swagger_url')
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
         self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
-        self.rely_on_definitions = bool(self.get_item_default(config, 'rely_on_definitions', False))
         self.connect_timeout = float(self.get_item_default(config, 'connect_timeout', 1))
         self.read_timeout = self.get_item_default(config, 'read_timeout', None)
         if self.read_timeout:
@@ -49,9 +48,49 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
-        security_details = self.get_item_default(config, 'security_details', None)
+        security_details = self._get_security_details(config)
         authentication.add_service_security(self.name, self.swagger, security_details)
         self.auth = authentication.add_service_custom_authentication(self.name, security_details)
+        advanced_configuration = self._get_advanced_configuration(config)
+        # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
+        self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
+        self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
+
+    def should_return_asynchronously(self):
+        return self.udf_return_type == 'asynchronous'
+
+    def _get_advanced_configuration(self, config):
+        advanced_configuration_str = self.get_item_default(config, 'advanced_configuration', None)
+        details = {}
+        if advanced_configuration_str:
+            for detail_entry in advanced_configuration_str.split(','):
+                detail_entry = detail_entry.split('=')
+                if len(detail_entry) == 2:
+                    details[detail_entry[0]] = detail_entry[1]
+                else:
+                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        return details
+
+    def _get_security_details(self, config):
+        security_details_str = self.get_item_default(config, 'security_details', None)
+        details = {}
+        if security_details_str:
+            for detail_entry in security_details_str.split(','):
+                detail_entry = detail_entry.split('=')
+                if len(detail_entry) == 2:
+                    value = detail_entry[1]
+                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
+                    environment_variables_match = re.match('^%(.*)%$', value)
+                    if environment_variables_match:
+                        environment_variable = environment_variables_match.group(1)
+                        value = os.environ[environment_variable]
+                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
+                            detail_entry[0], value, environment_variable
+                        ))
+                    details[detail_entry[0]] = value
+                else:
+                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        return details
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
@@ -72,14 +111,11 @@ class SwaggerService:
     def definitions(self):
         return self.swagger.get('definitions')
 
-    def method(self, swagger_method, method_path):
-        return SwaggerMethod(self, swagger_method, method_path)
+    def method(self, requests_method, swagger_method, method_path):
+        return SwaggerMethod(self, requests_method, swagger_method, method_path)
 
-    def should_provide_method(self, swagger_methods, http_verb):
-        if http_verb not in self.methods:
-            return False
-        swagger_method = swagger_methods.get(http_verb)
-        if not swagger_method:
+    def should_provide_method(self, http_verb, swagger_method):
+        if http_verb not in self.requested_methods:
             return False
         return self._allow_tags(swagger_method.get('tags')) and \
                self.return_type_can_be_handled(swagger_method.get('produces', []))
@@ -213,9 +249,10 @@ class SwaggerService:
 
 
 class SwaggerMethod:
-    def __init__(self, service, swagger_method, path):
+    def __init__(self, service, requests_method, swagger_method, path):
         self.uri = '{0}{1}'.format(service.uri, path)
         self.service = service
+        self.requests_method = requests_method
         self.swagger_method = swagger_method
         self.parameters = swagger_method.get('parameters', [])
         self.path_parameters = []

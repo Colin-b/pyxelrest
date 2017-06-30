@@ -31,38 +31,6 @@ from pyxelrest import authentication
 {% endif %}
 {% endmacro %}
 
-{%- macro delete(swagger_method) %}
-    response = session.get().delete('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endmacro -%}
-
-{%- macro get(swagger_method) %}
-    response = session.get().get('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-){% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name , swagger_method.security()) }}{% endif %}, stream=True, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endmacro -%}
-
-{%- macro post(swagger_method) %}
-    response = session.get().post('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endmacro -%}
-
-{%- macro put(swagger_method) %}
-    response = session.get().put('{{ swagger_method.uri }}'.format(
-{% for path_parameter in swagger_method.path_parameters %}
-        {{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
-{% endmacro -%}
-
 {% macro validate_parameter_value(parameter, swagger_method) %}
 {% set param_name = parameter['name'] %}
 {% set param_type = parameter['type'] %}
@@ -350,13 +318,13 @@ from pyxelrest import authentication
 {% endmacro %}
 
 {# Macro generating the UDF related to provided method #}
-{% macro add_udf(swagger_method, request_macro) %}
+{% macro add_udf(swagger_method) %}
 @caching
 @xw.func(category='{{ swagger_method.service.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
 {% for parameter in swagger_method.parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
-{% if swagger_method.return_a_list() %}
+{% if swagger_method.return_a_list() and swagger_method.service.should_return_asynchronously() %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ swagger_method.udf_name }}(
@@ -390,7 +358,9 @@ def {{ swagger_method.udf_name }}(
 
     response = None
     try:
-    {{ request_macro(swagger_method) }}
+        response = session.get().request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
+            {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}{% endfor -%}
+        ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
         response.raise_for_status()
         logging.info("Valid response received for [function=swagger_method.udf_name] [url={0}].".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
@@ -423,18 +393,11 @@ all_definitions['{{ service.name }}'] = {{ service.definitions() }}
 
 
     {% for method_path, methods in service.swagger['paths'].items() %}
-        {%- if service.should_provide_method(methods, 'get') -%}
-            {{- add_udf(service.method(methods['get'], method_path), get) -}}
-        {%- endif -%}
-        {%- if service.should_provide_method(methods, 'post') -%}
-            {{- add_udf(service.method(methods['post'], method_path), post) -}}
-        {%- endif -%}
-        {%- if service.should_provide_method(methods, 'put') -%}
-            {{- add_udf(service.method(methods['put'], method_path), put) -}}
-        {%- endif -%}
-        {%- if service.should_provide_method(methods, 'delete') -%}
-            {{- add_udf(service.method(methods['delete'], method_path), delete) -}}
-        {%- endif -%}
+        {% for http_method, swagger_method in methods.items() %}
+            {%- if service.should_provide_method(http_method, swagger_method) -%}
+                {{- add_udf(service.method(http_method, swagger_method, method_path)) -}}
+            {%- endif -%}
+        {% endfor %}
     {%- endfor %}
 {% endfor %}
 

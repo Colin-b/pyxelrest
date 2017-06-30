@@ -20,77 +20,80 @@ security_definitions = {}
 custom_authentications = {}
 
 
-def get_detail(detail_key, details_string):
+def add_parameters(initial_url, extra_parameters):
     """
-    Retrieve authentication detail from configuration.
-    
-    :param detail_key: Authentication detail to be retrieved
-    :param details_string: Authentication details string
-    :return: Authentication detail as a string, or None if not found
+    Add parameters to an URL and return the new URL.
+
+    :param initial_url:
+    :param extra_parameters: dictionary of parameters name and value.
+    :return: the new URL containing parameters.
     """
-    if details_string:
-        # TODO Use regex instead of this split mechanism
-        for detail_entry in details_string.split(','):
-            detail_entry = detail_entry.split('=')
-            if detail_key == detail_entry[0]:
-                return detail_entry[1] if len(detail_entry) == 2 else None
+    scheme, netloc, path, query_string, fragment = urlsplit(initial_url)
+    query_params = parse_qs(query_string)
+
+    for parameter_name in extra_parameters.keys():
+        # TODO Handle parameters with a list as a value and submit PR to requests or Python
+        query_params[parameter_name] = [extra_parameters[parameter_name]]
+
+    new_query_string = urlencode(query_params, doseq=True)
+
+    return urlunsplit((scheme, netloc, path, new_query_string, fragment))
 
 
-def get_detail_int(detail_key, details_string, default_value):
-    value = get_detail(detail_key, details_string)
-    return int(value) if value else default_value
+def get_query_parameter(url, param_name):
+    scheme, netloc, path, query_string, fragment = urlsplit(url)
+    query_params = parse_qs(query_string)
+    all_values = query_params.get(param_name)
+    return all_values[0] if all_values else None
 
 
 class OAuth2Auth(requests.auth.AuthBase):
     """Describes an OAuth 2 security definition."""
     def __init__(self, service_name, security_definition, security_details):
+        from oauth2_authentication_responses_server import (
+            DEFAULT_SERVER_PORT,
+            DEFAULT_TOKEN_NAME,
+            DEFAULT_AUTHENTICATION_TIMEOUT,
+            DEFAULT_SUCCESS_DISPLAY_TIME,
+            DEFAULT_FAILURE_DISPLAY_TIME
+        )
         self.service_name = service_name
         self.security_definition = security_definition
         self.security_details = security_details
-        authorization_url = security_definition['authorizationUrl']
         self.key = '{0}/{1}'.format(service_name, security_definition['security_definition_key'])
-        self.port = get_detail_int('port', security_details,
-                                   oauth2_authentication_responses_server.DEFAULT_SERVER_PORT)
+        self.port = int(security_details.get('port', DEFAULT_SERVER_PORT))
         self.redirect_uri = 'http://localhost:{0}/{1}'.format(self.port, self.key)
-        self.full_url = OAuth2Auth.create_auth_url(authorization_url, self.redirect_uri)
-        self.token_name = OAuth2Auth.get_query_parameter(authorization_url, 'response_type') or \
-                          get_detail('response_type', security_details) or \
-                          oauth2_authentication_responses_server.DEFAULT_TOKEN_NAME
-        self.timeout = get_detail_int('timeout', security_details,
-                                      oauth2_authentication_responses_server.DEFAULT_AUTHENTICATION_TIMEOUT)
-        self.success_display_time = get_detail_int('success_display_time', security_details,
-                                                   oauth2_authentication_responses_server.DEFAULT_SUCCESS_DISPLAY_TIME)
-        self.failure_display_time = get_detail_int('failure_display_time', security_details,
-                                                   oauth2_authentication_responses_server.DEFAULT_FAILURE_DISPLAY_TIME)
+        self.full_url = add_parameters(security_definition['authorizationUrl'], self.get_oauth2_parameters())
+        self.token_name = get_query_parameter(self.full_url, 'response_type') or DEFAULT_TOKEN_NAME
+        self.timeout = int(security_details.get('timeout', DEFAULT_AUTHENTICATION_TIMEOUT))
+        self.success_display_time = int(security_details.get('success_display_time', DEFAULT_SUCCESS_DISPLAY_TIME))
+        self.failure_display_time = int(security_details.get('failure_display_time', DEFAULT_FAILURE_DISPLAY_TIME))
 
     def __call__(self, r):
         r.headers['Bearer'] = oauth2_authentication_responses_server.get_bearer(self)
         return r
 
-    @staticmethod
-    def get_query_parameter(url, param_name):
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
-        all_values = query_params.get(param_name)
-        return all_values[0] if all_values else None
+    def get_oauth2_parameters(self):
+        extra_parameters = {
+            'redirect_uri': self.redirect_uri,
 
-    @staticmethod
-    def create_auth_url(url, redirect_url):
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
+            # TODO Handle GET to be able to get rid of this HACK (not working with every OAUTH2 provider anyway)
+            # Force Form Post as get is only providing token in anchor and anchor is not provided to server
+            # (interpreted on client side only)
+            'response_mode': 'form_post'
+        }
+        # Return all parameters specified in configuration (prefixed with oauth2.)
+        extra_parameters.update({
+            security_detail_key[7:]: self.security_details[security_detail_key]
+            for security_detail_key in self.security_details.keys() if security_detail_key.startswith('oauth2.')
+        })
 
-        query_params['redirect_uri'] = [redirect_url]
-        # Force Form Post as get is only providing token in anchor and anchor is not provided to server
-        # (interpreted on client side only)
-        query_params['response_mode'] = ['form_post']
-        new_query_string = urlencode(query_params, doseq=True)
-
-        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
+        return extra_parameters
 
     def __str__(self):
-        return "authentication.OAuth2Auth('{0}', {1}, '{2}')".format(self.service_name,
-                                                                     self.security_definition,
-                                                                     self.security_details)
+        return "authentication.OAuth2Auth('{0}', {1}, {2})".format(self.service_name,
+                                                                   self.security_definition,
+                                                                   self.security_details)
 
 
 class ApiKeyAuth(requests.auth.AuthBase):
@@ -100,7 +103,7 @@ class ApiKeyAuth(requests.auth.AuthBase):
         self.security_details = security_details
         self.field_name = security_definition['name']
         self.value_in = security_definition['in']
-        self.api_key = get_detail('api_key', security_details)
+        self.api_key = security_details.get('api_key')
 
     def __call__(self, r):
         if not self.api_key:
@@ -109,43 +112,33 @@ class ApiKeyAuth(requests.auth.AuthBase):
             if self.value_in == 'header':
                 r.headers[self.field_name] = self.api_key
             elif self.value_in == 'query':
-                r.url = ApiKeyAuth.add_query_parameter(r.url, self.field_name, self.api_key)
+                r.url = add_parameters(r.url, {self.field_name: self.api_key})
             else:
                 logging.warning('api_key "{0}" destination is not supported.'.format(self.value_in))
         return r
 
-    @staticmethod
-    def add_query_parameter(url, parameter_name, parameter_value):
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
-
-        query_params[parameter_name] = [parameter_value]
-        new_query_string = urlencode(query_params, doseq=True)
-
-        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
-
     def __str__(self):
-        return "authentication.ApiKeyAuth({0},'{1}')".format(self.security_definition, self.security_details)
+        return "authentication.ApiKeyAuth({0}, {1})".format(self.security_definition, self.security_details)
 
 
 class BasicAuth(requests.auth.HTTPBasicAuth):
     """Describes a basic security definition."""
     def __init__(self, security_details):
         self.security_details = security_details
-        username = get_detail('username', security_details)
-        password = get_detail('password', security_details)
+        username = security_details.get('username')
+        password = security_details.get('password')
         requests.auth.HTTPBasicAuth.__init__(self, username, password)
 
     def __str__(self):
-        return "authentication.BasicAuth('{0}')".format(self.security_details)
+        return "authentication.BasicAuth({0})".format(self.security_details)
 
 
 class NTLMAuth:
     """Describes a NTLM authentication."""
     def __init__(self, security_details):
         self.security_details = security_details
-        username = get_detail('username', security_details)
-        password = get_detail('password', security_details)
+        username = security_details.get('username')
+        password = security_details.get('password')
         if not username and not password:
             try:
                 import requests_negotiate_sspi
@@ -168,7 +161,7 @@ class NTLMAuth:
         return r
 
     def __str__(self):
-        return "authentication.NTLMAuth('{0}')".format(self.security_details)
+        return "authentication.NTLMAuth({0})".format(self.security_details)
 
 
 class MultipleAuth(requests.auth.AuthBase):
@@ -186,7 +179,7 @@ class MultipleAuth(requests.auth.AuthBase):
 
 
 def add_service_custom_authentication(service_name, security_details):
-    auth = get_detail('auth', security_details)
+    auth = security_details.get('auth')
     if 'ntlm' == auth:
         custom_authentications[service_name] = NTLMAuth(security_details)
         return auth

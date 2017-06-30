@@ -1,6 +1,21 @@
 # PyxelRest Changelog #
 
-## 0.62 (next) ##
+## 0.63 (next) ##
+
+## 0.62 (2017-06-27) ##
+
+### Release notes ###
+
+- security_details OAuth2 response_type key is now oauth2.response_type
+- rely_on_definitions property should now be set using the newly introduced advanced_configuration property.
+
+### Enhancements ###
+
+- It is now possible to override and specify new parameters for OAuth2 authentication URL by using "oauth2." prefix in security_details key name.
+- Security details values can be loaded from environment variables.
+- UDFs can now be synchronous, meaning you will need to specify the result array within Microsoft Excel before the call. Refer to documentation for more details.
+- It is now possible to request more methods than the usual get, post, put or delete.
+- Microsoft Excel Auto-Load add-in now also allows to select patch, options and head HTTP methods.
 
 ## 0.61 (2017-06-22) ##
 
