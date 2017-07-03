@@ -31,20 +31,17 @@ def load_logging_configuration():
             with open(logging_configuration_file_path, 'r') as config_file:
                  log_config_dict = yaml.load(config_file)
                  logging.config.dictConfig(log_config_dict)
+                 logging.info('Loading PyxelRest version {}'.format(_version.__version__))
+                 logging.info('Using Python lib at {}'.format(sysconfig.get_python_lib()))
         else:
-            default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest.log')
-            logging.basicConfig(format='%(asctime)s - %(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s',
-                                handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
-                                level=logging.INFO)
+            set_file_logger('pyxelrest')
             logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
                 logging_configuration_file_path))
-        logging.info('Loading PyxelRest version {}'.format(_version.__version__))
-        logging.info('Using Python lib at {}'.format(sysconfig.get_python_lib()))
 
 
-def set_pid_file_logger(level=logging.INFO):
+def set_file_logger(filename, level=logging.INFO):
     if len(logging.root.handlers) == 0:
-        default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest-' + str(os.getpid())                                        + '.log')
+        default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', filename + '.log')
         logging.basicConfig(
             format='%(asctime)s - %(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s',
             handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],

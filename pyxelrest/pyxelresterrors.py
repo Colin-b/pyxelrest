@@ -1,3 +1,14 @@
+import threading
+import traceback
+import sys
+
+import logging
+import pywintypes
+import win32api
+from distutils import sysconfig
+
+from winerror import RPC_E_SERVERCALL_RETRYLATER
+
 class InvalidSwaggerDefinition(Exception):
     """ Invalid Swagger Definition. """
     def __init__(self, message, *args, **kwargs):  # real signature unknown
@@ -75,3 +86,45 @@ class TokenExpiryNotProvided(Exception):
     """ Token expiry was not provided. """
     def __init__(self, token_body, *args, **kwargs):
         Exception.__init__(self, 'Expiry (exp) is not provided in {0}.'.format(token_body))
+
+
+def extract_error(e, debug=True):
+    """
+    Convert an error to a msg
+    :param e: exception thrown
+    :param debug: to include debug info
+    :return: msg along with debug info
+    """
+    if isinstance(e, pywintypes.com_error):
+        code = e.excepinfo[5]
+        msg = win32api.FormatMessage(code).strip()
+    else:
+        msg = str(e)
+        code = 0
+    if debug:
+        libpath = sysconfig.get_python_lib().replace('\\\\', '\\').lower()
+        ex_type, ex, tb = sys.exc_info()
+        st = traceback.extract_tb(tb)
+        p = len(st) - 1
+        # take the first non lib code
+        while p >= 0 and st[p].filename.lower().startswith(libpath):
+            p -= 1
+        if p > -1:
+            return '{0} in function {1.name}() file {1.filename}:{1.lineno} with "{1.line}"'.format(msg, st[p]), code
+    return msg, code
+
+
+def retry_com_exception(delay=1):
+    def decorator(f):
+        def wrapper(*args, **kwargs):
+            try:
+                f(*args, **kwargs)
+            except Exception as e:
+                if hasattr(e, 'hresult') and e.hresult == RPC_E_SERVERCALL_RETRYLATER:
+                    logging.warning('Retrying execution of function {}'.format(f.__name__))
+                    t = threading.Timer(delay, function=wrapper, args=args, kwargs=kwargs)
+                    t.start()
+                else:
+                    raise e
+        return wrapper
+    return decorator

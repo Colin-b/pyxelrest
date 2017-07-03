@@ -37,6 +37,15 @@ def no_cache():
     global_caching = None
 
 
+def clear_cache():
+    """
+    Clear the cache if initialized
+    """
+    global global_caching
+    if global_caching is not None:
+        global_caching.clear()
+
+
 def caching(f):
     """
     Decorator for caching results
