@@ -292,7 +292,7 @@ class SwaggerMethod:
 
     def return_a_list(self):
         return ('application/json' in self.swagger_method['produces']) or \
-               ('application/msqpack' in self.swagger_method['produces'])
+               ('application/msgpackpandas' in self.swagger_method['produces'])
 
     def requires_authentication(self):
         return self.security() or self.service.auth
@@ -321,7 +321,7 @@ class SwaggerMethod:
                     self.swagger_method['consumes']
                 ))
 
-        if 'application/msgpackpandas' in self.swagger_method['produces'] and support_pandas:
+        if 'application/msgpackpandas' in self.swagger_method['produces'] and support_pandas():
             header['Accept'] = 'application/msgpackpandas'
         elif 'application/json' in self.swagger_method['produces']:
             header['Accept'] = 'application/json'

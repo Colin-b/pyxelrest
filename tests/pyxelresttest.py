@@ -6,6 +6,14 @@ import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
 
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
+
+
 class PyxelRestTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -28,7 +36,9 @@ class PyxelRestTest(unittest.TestCase):
             header_parameter_test_service,
             form_parameter_test_service,
             array_parameter_test_service,
-            static_file_call_test_service
+            static_file_call_test_service,
+            http_methods_test_service,
+            content_type_test_service
         )
         serviceshandler.start_services(
             (usual_parameters_test_service, 8943),
@@ -39,7 +49,9 @@ class PyxelRestTest(unittest.TestCase):
             (header_parameter_test_service, 8951),
             (form_parameter_test_service, 8952),
             (array_parameter_test_service, 8953),
-            (static_file_call_test_service, 8954)
+            (static_file_call_test_service, 8954),
+            (http_methods_test_service, 8955),
+            (content_type_test_service, 8956)
         )
 
     def test_string_array_parameter(self):
@@ -270,6 +282,20 @@ class PyxelRestTest(unittest.TestCase):
             # HEAD is already handled by Flask
             '',
             pyxelrestgenerator.http_methods_test_head_test_all_http_methods()
+        )
+
+    def test_msgpackpandas_content_type(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'application/msgpackpandas' if support_pandas() else '*/*',
+            pyxelrestgenerator.content_type_test_get_test_msgpackpandas()
+        )
+
+    def test_json_content_type(self):
+        import pyxelrestgenerator
+        self.assertEqual(
+            'application/json',
+            pyxelrestgenerator.content_type_test_get_test_json()
         )
 
 if __name__ == '__main__':
