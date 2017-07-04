@@ -7,6 +7,7 @@ import pywintypes
 import win32api
 from distutils import sysconfig
 
+from pyxelrest import pyxelresterrors, alert
 from winerror import RPC_E_SERVERCALL_RETRYLATER
 
 class InvalidSwaggerDefinition(Exception):
@@ -115,14 +116,32 @@ def extract_error(e, debug=True):
 
 
 def retry_com_exception(delay=1):
+    """
+    Decorator to retry when there is a com exception RPC_E_SERVERCALL_RETRYLATER
+    Function cannot have a return result
+    :param delay: delay in second
+    """
     def decorator(f):
+        import pythoncom
+
         def wrapper(*args, **kwargs):
+            def retry_wrapper(*args, **kwargs):
+                try:
+                    pythoncom.CoInitialize()
+                    wrapper(*args, **kwargs)
+                except Exception as e:
+                    msg, code = pyxelresterrors.extract_error(e)
+                    logging.exception(msg)
+                    alert.message_box("Python Error", msg)
+                finally:
+                    pythoncom.CoUninitialize()
+
             try:
                 f(*args, **kwargs)
             except Exception as e:
                 if hasattr(e, 'hresult') and e.hresult == RPC_E_SERVERCALL_RETRYLATER:
                     logging.warning('Retrying execution of function {}'.format(f.__name__))
-                    t = threading.Timer(delay, function=wrapper, args=args, kwargs=kwargs)
+                    t = threading.Timer(delay, function=retry_wrapper, args=args, kwargs=kwargs)
                     t.start()
                 else:
                     raise e
