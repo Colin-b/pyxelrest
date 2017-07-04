@@ -371,14 +371,14 @@ def {{ swagger_method.udf_name }}(
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
+        logging.exception("Connection error occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", swagger_method) }}
     except Exception as error:
         # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
-            logging.exception("Error occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text,response.request.url))
+            logging.exception("Error occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
         else:
-            logging.exception("Error occurred while calling [function={{ swagger_method.udf_name }}].")
+            logging.exception("Error occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type('describe_error(response, error)', swagger_method) }}
     finally:
         # Check "is not None" because response.ok is overrided according to HTTP status code.
