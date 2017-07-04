@@ -2,6 +2,10 @@
 
 ## 0.63 (next) ##
 
+### Bug fixes ###
+
+- application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
+
 ## 0.62 (2017-06-27) ##
 
 ### Release notes ###
