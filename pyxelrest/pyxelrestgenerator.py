@@ -7,10 +7,16 @@ import jinja2
 import logging.config
 import logging.handlers
 import datetime
-from pyxelrest import GENERATE_UDF_ON_IMPORT
-from pyxelrest import custom_logging
 from importlib import import_module
 from builtins import open
+from pyxelrest import (
+    vba,
+    authentication,
+    swagger,
+    _version,
+    GENERATE_UDF_ON_IMPORT,
+    custom_logging
+)
 
 if sys.version_info.major > 2:
     # Python 3
@@ -18,11 +24,6 @@ if sys.version_info.major > 2:
 else:
     # Python 2
     from imp import reload
-
-from pyxelrest import vba
-from pyxelrest import authentication
-from pyxelrest import swagger
-from pyxelrest import _version
 
 
 def user_defined_functions(loaded_services):
@@ -79,7 +80,6 @@ def reset_authentication():
     authentication.security_definitions = {}
     authentication.custom_authentications = {}
 
-# TODO perform a proper import once package branch is done.
 if GENERATE_UDF_ON_IMPORT:
     custom_logging.load_logging_configuration()
     reset_authentication()
