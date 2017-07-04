@@ -5,9 +5,10 @@ import sys
 import logging
 import pywintypes
 import win32api
+import pythoncom
 from distutils import sysconfig
 
-from pyxelrest import pyxelresterrors, alert
+from pyxelrest import alert
 from winerror import RPC_E_SERVERCALL_RETRYLATER
 
 class InvalidSwaggerDefinition(Exception):
@@ -122,15 +123,13 @@ def retry_com_exception(delay=1):
     :param delay: delay in second
     """
     def decorator(f):
-        import pythoncom
-
         def wrapper(*args, **kwargs):
             def retry_wrapper(*args, **kwargs):
                 try:
                     pythoncom.CoInitialize()
                     wrapper(*args, **kwargs)
-                except Exception as e:
-                    msg, code = pyxelresterrors.extract_error(e)
+                except Exception as e2:
+                    msg, code = extract_error(e2)
                     logging.exception(msg)
                     alert.message_box("Python Error", msg)
                 finally:
