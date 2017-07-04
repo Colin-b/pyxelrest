@@ -31,8 +31,8 @@ def load_logging_configuration():
             with open(logging_configuration_file_path, 'r') as config_file:
                  log_config_dict = yaml.load(config_file)
                  logging.config.dictConfig(log_config_dict)
-                 logging.info('Loading PyxelRest version {}'.format(_version.__version__))
-                 logging.info('Using Python lib at {}'.format(sysconfig.get_python_lib()))
+                 logging.info('Loading PyxelRest: {} Python: {} Lib: {}'.format(_version.__version__, sys.version,
+                                                                                sysconfig.get_python_lib()))
         else:
             set_file_logger('pyxelrest')
             logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
@@ -46,8 +46,7 @@ def set_file_logger(filename, level=logging.INFO):
             format='%(asctime)s - %(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s',
             handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
             level=level)
-        logging.info('Loading PyxelRest version {}'.format(_version.__version__))
-        logging.info('Using Python lib at {}'.format(sysconfig.get_python_lib()))
+        logging.info('Loading PyxelRest: {} Python: {} Lib: {}'.format(_version.__version__, sys.version, sysconfig.get_python_lib()))
 
 
 def set_syslog_logger(host, port, level):
@@ -66,7 +65,6 @@ class StreamToLogger(object):
     def __init__(self, logger, log_level=logging.INFO):
         self.logger = logger
         self.log_level = log_level
-        self.linebuf = ''
 
     def write(self, buf):
         for line in buf.rstrip().splitlines():

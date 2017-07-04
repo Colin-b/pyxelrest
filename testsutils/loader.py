@@ -11,7 +11,7 @@ import testsutils.confighandler as confighandler
 def load(new_configuration_file_name, remove_logging_config=False):
     confighandler.set_new_configuration(new_configuration_file_name, remove_logging_config)
     try:
-        reload(import_module('pyxelrestgenerator'))
+        reload(import_module('pyxelrest.pyxelrestgenerator'))
     except:
         confighandler.set_initial_configuration()
         raise

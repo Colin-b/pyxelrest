@@ -72,7 +72,7 @@ def reload_user_defined_functions():
     TODO This is temporary until xlwings force a python reload instead
     :return: None
     """
-    reload(import_module('user_defined_functions'))
+    reload(import_module('pyxelrest.user_defined_functions'))
 
 
 def reset_authentication():
