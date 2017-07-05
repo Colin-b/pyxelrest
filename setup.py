@@ -12,17 +12,14 @@ scripts_dir = os.path.join(modules_dir, '..', '..', 'Scripts')
 
 class install_pyxelrest_data(install_data):
     def run(self):
-        try:
-            install_data.run(self)
-            from pyxelrest_post_install import PostInstall
-            post_install = PostInstall(os.path.join(data_dir, 'pyxelrest_addin'),
-                                       os.path.join(data_dir, 'pyxelrest_vb_addin'),
-                                       installation_files_folder=this_dir,
-                                       modules_folder=modules_dir,
-                                       scripts_folder=scripts_dir)
-            post_install.perform_post_installation_tasks()
-        except:
-            pass
+        install_data.run(self)
+        from pyxelrest_post_install import PostInstall
+        post_install = PostInstall(os.path.join(data_dir, 'pyxelrest_addin'),
+                                   os.path.join(data_dir, 'pyxelrest_vb_addin'),
+                                   installation_files_folder=this_dir,
+                                   modules_folder=modules_dir,
+                                   scripts_folder=scripts_dir)
+        post_install.perform_post_installation_tasks()
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
@@ -124,7 +121,7 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
           # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
-          'comtypes==1.1.3',
+          'comtypes==1.1.3-2',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.4.2',
           # Used to parse logging configuration file

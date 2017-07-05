@@ -356,7 +356,7 @@ class Definition:
             field = self.fields[field_name]
             merger.merge(field_name if not field.array_field else None, field.convert(field_name, field_value))
 
-        undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields]
+        undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields and field_name[:6].lower() != 'x-pxl-']
         if undefined_fields:
             raise Exception('The following fields are not part of the definition: {0}'.format(undefined_fields))
 

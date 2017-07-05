@@ -110,7 +110,7 @@ class PythonServer:
             alert.message_box("Python Error", msg)
             raise COMException(desc=msg, hresult=code)
 
-    def _thread_call2(self, call_name, func, *args):
+    def _thread_call_within_thread(self, call_name, func, *args):
         try:
             pythoncom.CoInitialize()
             self.results[call_name] = func(*args)
@@ -124,7 +124,7 @@ class PythonServer:
         finally:
             pythoncom.CoUninitialize()
 
-    def _process_call2(self, queue, sources, module_name, func_name, *args):
+    def _process_call_within_process(self, queue, sources, module_name, func_name, *args):
         sys.path.extend(sources)
         pythoncom.CoInitialize()
         custom_logging.set_file_logger('com_server-' + str(os.getpid()), self.filelog_level)
@@ -168,7 +168,7 @@ class PythonServer:
                 __import__(module_name)
             m = sys.modules[module_name]
             f = getattr(m, func_name)
-            p = threading.Thread(target=self._thread_call2, args=(call_name, f, *args))
+            p = threading.Thread(target=self._thread_call_within_thread, args=(call_name, f, *args))
             self.threads[call_name] = p
             p.start()
             return True
@@ -198,7 +198,7 @@ class PythonServer:
             # check that the function exists
             f = getattr(m, func_name)
             q = multiprocessing.Queue()
-            p = multiprocessing.Process(target=self._process_call2, args=(q, self.sources, module_name, func_name, *args))
+            p = multiprocessing.Process(target=self._process_call_within_process, args=(q, self.sources, module_name, func_name, *args))
             self.results[call_name] = q
             self.threads[call_name] = p
             p.start()

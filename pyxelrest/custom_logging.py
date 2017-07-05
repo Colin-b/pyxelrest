@@ -1,14 +1,15 @@
 import os
 import sys
+import platform
 import logging.config
 import logging.handlers
 
 from pyxelrest import _version
+from pyxelrest import alert
 from distutils import sysconfig
 
 
 def my_excepthook(excType, excValue, traceback, logger=logging):
-    from pyxelrest import alert
     logger.error("Logging an uncaught exception",
                  exc_info=(excType, excValue, traceback))
     alert.message_box("Python Error", str(excValue))
@@ -31,8 +32,8 @@ def load_logging_configuration():
             with open(logging_configuration_file_path, 'r') as config_file:
                  log_config_dict = yaml.load(config_file)
                  logging.config.dictConfig(log_config_dict)
-                 logging.info('Loading PyxelRest: {} Python: {} Lib: {}'.format(_version.__version__, sys.version,
-                                                                                sysconfig.get_python_lib()))
+                 logging.info('Loading PyxelRest: {} Python: {} OS: {} Lib: {}'.format(
+                     _version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))
         else:
             set_file_logger('pyxelrest')
             logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
@@ -46,7 +47,8 @@ def set_file_logger(filename, level=logging.INFO):
             format='%(asctime)s - %(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s',
             handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
             level=level)
-        logging.info('Loading PyxelRest: {} Python: {} Lib: {}'.format(_version.__version__, sys.version, sysconfig.get_python_lib()))
+        logging.info('Loading PyxelRest: {} Python: {} OS: {} Lib: {}'.format(
+            _version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))
 
 
 def set_syslog_logger(host, port, level):

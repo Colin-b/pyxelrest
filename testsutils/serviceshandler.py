@@ -6,7 +6,7 @@ service_processes = []
 
 
 def start_services(*services):
-    service_processes.clear()
+    del service_processes[:]
     for service in services:
         p = multiprocessing.Process(target=service[0].start_server, args=(service[1],))
         service_processes.append(p)
@@ -18,4 +18,4 @@ def stop_services():
     for service_process in service_processes:
         service_process.terminate()
         service_process.join(timeout=0.5)
-    service_processes.clear()
+    del service_processes[:]

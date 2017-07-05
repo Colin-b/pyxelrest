@@ -21,7 +21,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         serviceshandler.stop_services()
 
     def setUp(self):
-        oauth2_authentication_responses_server.auth_tokens.clear()
+        del oauth2_authentication_responses_server.auth_tokens[:]
 
     @classmethod
     def start_services(cls):
