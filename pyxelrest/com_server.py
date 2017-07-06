@@ -9,6 +9,7 @@ import xlwings
 from win32com.server.exception import COMException
 
 from pyxelrest import custom_logging, alert, pyxelresterrors
+from pyxelrest import _version
 
 
 class PythonServer:
@@ -17,7 +18,7 @@ class PythonServer:
     starting the python command line. Keeping data between two calls.
     """
 
-    _reg_clsid_ = '{AC87AC53-2291-4155-8505-37FE4BFEBDC3}'
+    _reg_clsid_ = _version.python_server_reg_clsid
     _reg_progid_ = 'pyxelrest.PythonServer'
     _public_methods_ = ['add_path', 'import_module', 'generate_udf', 'direct_call', 'thread_call', 'process_call',
                         'running', 'result', 'set_syslog', 'set_level', 'init_disk_cache', 'init_memory_cache',
@@ -33,7 +34,7 @@ class PythonServer:
     disk_cache = None
 
     def __init__(self):
-        custom_logging.set_file_logger('comserver-' + str(os.getpid()), self.filelog_level)
+        custom_logging.set_file_logger('pythonserver-' + str(os.getpid()), self.filelog_level)
         sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
         sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
         pass
@@ -127,7 +128,7 @@ class PythonServer:
     def _process_call_within_process(self, queue, sources, module_name, func_name, *args):
         sys.path.extend(sources)
         pythoncom.CoInitialize()
-        custom_logging.set_file_logger('com_server-' + str(os.getpid()), self.filelog_level)
+        custom_logging.set_file_logger('pythonserver-' + str(os.getpid()), self.filelog_level)
         if self.syslog_host is not None:
             custom_logging.set_syslog_logger(self.syslog_host, self.syslog_port, self.syslog_level)
         if self.disk_cache is not None:

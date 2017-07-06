@@ -2,6 +2,10 @@
 
 ## 0.63 (next) ##
 
+- PyxelRest is now properly set as a python package and can be used outside excel
+- A new COM component pyxelrest. PythonServer is registered to control and interact with a python process 
+- The PythonServer can launch, in the foreground or in the background, python functions on any folders.
+
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side

@@ -43,7 +43,7 @@ def clear_cache():
     """
     global global_caching
     if global_caching is not None:
-        del global_caching[:]
+        global_caching.clear()
 
 
 def caching(f):

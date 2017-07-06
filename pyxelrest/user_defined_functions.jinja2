@@ -334,7 +334,7 @@ def {{ swagger_method.udf_name }}(
 {% if swagger_method.summary() %}
     """{{ swagger_method.summary() }}"""
 {% endif %}
-    logging.info("Calling [function={{ swagger_method.udf_name }}]...")
+    logging.info("[status=Calling] [function={{ swagger_method.udf_name }}]...")
     request_header = {{ swagger_method.initial_header() }}
 {% if swagger_method.contains_body_parameters %}
     request_payload = {}
@@ -362,7 +362,7 @@ def {{ swagger_method.udf_name }}(
             {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}{% endfor -%}
         ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
         response.raise_for_status()
-        logging.info("Valid response received for [function=swagger_method.udf_name] [url={0}].".format(response.request.url))
+        logging.info("[status=Valid] response received for [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ swagger_method.responses }}
             return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.name }}'), {{ swagger_method.service.rely_on_definitions }})
@@ -371,14 +371,14 @@ def {{ swagger_method.udf_name }}(
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection error occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
+        logging.exception("Connection [status=error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", swagger_method) }}
     except Exception as error:
         # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
-            logging.exception("Error occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+            logging.exception("[status=Error] occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
         else:
-            logging.exception("Error occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
+            logging.exception("[status=Error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type('describe_error(response, error)', swagger_method) }}
     finally:
         # Check "is not None" because response.ok is overrided according to HTTP status code.
