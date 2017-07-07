@@ -2,6 +2,10 @@
 
 ## 0.63 (next) ##
 
+### Release notes ###
+
+- Rely on the official xlwings version now that it is possible to restart Python. XLWings configuration is now stored in a flat file.
+
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
