@@ -112,7 +112,8 @@ namespace AutoLoadPyxelRestAddIn
                     return false;
                 if (!TryToLoadXlWingsModule())
                     return false;
-                Application.Run("pyxelrest.xlam!ImportPythonUDFs");
+                new XlWings().ImportPythonUDFs(Application.ActiveWorkbook);
+//                Application.Run("pyxelrest.xlam!ImportPythonUDFs");
                 Log.Debug("User Defined Functions imported.");
                 return true;
             }

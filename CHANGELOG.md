@@ -56,6 +56,10 @@ List all changes in various categories:
 - Updater now display the new version of PyxelRest and is faster to detect update.
 - PathToPIP add-in property is not used anymore.
 
+### Release notes ###
+
+- Rely on the official xlwings version now that it is possible to restart Python. XLWings configuration is now stored in a flat file.
+
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side

@@ -117,7 +117,7 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.10.4.2',
+          'xlwings==0.11.2',
           # Used to parse logging configuration file
           'pyaml==17.12.1',
           # Used to manage authentication
