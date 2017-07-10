@@ -358,7 +358,7 @@ def {{ swagger_method.udf_name }}(
 
     response = None
     try:
-        response = session.get().request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
+        response = session.get({{ swagger_method.service.max_retries }}).request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
             {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}{% endfor -%}
         ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
         response.raise_for_status()

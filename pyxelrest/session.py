@@ -7,19 +7,17 @@ from pyxelrest import _version
 
 session = None
 nb = 1
-max_retries = 5
 hostname = platform.node()
 login = os.getlogin()
 
 
 def setup(cfg):
-    global max_retries, hostname, login
-    max_retries = cfg.get('max_retries', max_retries)
+    global hostname, login
     hostname = cfg.get('hostname', hostname)
     login = cfg.get('login', login)
 
 
-def get():
+def get(max_retries):
     """
     Get the global session object
     :return: the session object

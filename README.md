@@ -287,6 +287,11 @@ Values cannot contains "," character.
         <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
         <td>True or False</td>
     </tr>
+    <tr>
+        <td><strong>max_retries</strong></td>
+        <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
+        <td>Any positive integer value</td>
+    </tr>
 </table>
 
 ### Logging Configuration ###

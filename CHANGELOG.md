@@ -8,6 +8,10 @@
 - A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
 - The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
 
+### Enhancements ###
+
+- Introduce new max_retries key for advanced_configuration property. Refer to documentation for more details. Previous behavior was "never retry", it will now retry 5 times by default.
+
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side

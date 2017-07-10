@@ -57,6 +57,7 @@ class SwaggerService:
         # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
         self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
         self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
+        self.max_retries = advanced_configuration.get('max_retries', 5)
 
     def should_return_asynchronously(self):
         return self.udf_return_type == 'asynchronous'
