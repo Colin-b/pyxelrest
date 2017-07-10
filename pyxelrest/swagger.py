@@ -58,6 +58,8 @@ class SwaggerService:
         self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
         self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
         self.max_retries = advanced_configuration.get('max_retries', 5)
+        self.custom_headers = {key[7:]: value for key, value in advanced_configuration.items()
+                               if key.startswith('header.')}
 
     def should_return_asynchronously(self):
         return self.udf_return_type == 'asynchronous'
@@ -69,7 +71,16 @@ class SwaggerService:
             for detail_entry in advanced_configuration_str.split(','):
                 detail_entry = detail_entry.split('=')
                 if len(detail_entry) == 2:
-                    details[detail_entry[0]] = detail_entry[1]
+                    value = detail_entry[1]
+                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
+                    environment_variables_match = re.match('^%(.*)%$', value)
+                    if environment_variables_match:
+                        environment_variable = environment_variables_match.group(1)
+                        value = os.environ[environment_variable]
+                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
+                            detail_entry[0], value, environment_variable
+                        ))
+                    details[detail_entry[0]] = value
                 else:
                     logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
         return details
@@ -328,6 +339,8 @@ class SwaggerMethod:
             header['Accept'] = 'application/msgpackpandas'
         elif 'application/json' in self.swagger_method['produces']:
             header['Accept'] = 'application/json'
+
+        header.update(self.service.custom_headers)
 
         return header
 

@@ -11,6 +11,7 @@
 ### Enhancements ###
 
 - Introduce new max_retries key for advanced_configuration property. Refer to documentation for more details. Previous behavior was "never retry", it will now retry 5 times by default.
+- It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
 
 ### Bug fixes ###
 

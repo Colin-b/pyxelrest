@@ -271,6 +271,7 @@ Additional configuration details can be provided thanks to `advanced_configurati
 This property is supposed to contains key=value information. Separator is ',' (comma).
 
 Values cannot contains "," character.
+Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
 
 <table>
     <th>
@@ -291,6 +292,11 @@ Values cannot contains "," character.
         <td><strong>max_retries</strong></td>
         <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
         <td>Any positive integer value</td>
+    </tr>
+    <tr>
+        <td><strong>header.XXXX</strong></td>
+        <td>Where XXXX is the name of the header that should be sent with every request sent to this service.</td>
+        <td></td>
     </tr>
 </table>
 
