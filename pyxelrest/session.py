@@ -5,7 +5,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from pyxelrest import _version
 
-session = None
+sessions = {}
 nb_requests_sent = 0
 hostname = platform.node()
 login = os.getlogin()
@@ -22,7 +22,8 @@ def get(max_retries):
     Get the global session object
     :return: the session object
     """
-    global session, nb_requests_sent
+    global nb_requests_sent
+    session = sessions.get(max_retries)
     if session is None:
         session = requests.Session()
         session.mount('http://', HTTPAdapter(max_retries=max_retries))
@@ -31,6 +32,7 @@ def get(max_retries):
         session.headers['X-PXL-HOSTNAME'] = hostname
         session.headers['X-PXL-LOGIN'] = login
         session.headers['X-PXL-SESSION'] = datetime.datetime.today().isoformat()
+        sessions[max_retries] = session
     nb_requests_sent += 1
     session.headers['X-PXL-REQUEST'] = str(nb_requests_sent)
     return session
