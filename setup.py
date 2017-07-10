@@ -24,9 +24,10 @@ class install_pyxelrest_data(install_data):
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
 
+from pyxelrest import _version
 # More information on properties: https://packaging.python.org/distributing
 setup(name='pyxelrest',
-      version=open("pyxelrest/_version.py").readlines()[-1].split()[-1].strip("\"'"),
+      version=_version.__version__,
       author='Engie',
       # TODO Provide a support mailbox for our products
       author_email='colin.bounouar@external.engie.com',
