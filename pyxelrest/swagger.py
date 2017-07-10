@@ -18,7 +18,6 @@ from pyxelrest import vba
 from pyxelrest.pyxelresterrors import *
 from pyxelrest import authentication
 from pyxelrest import fileadapter
-from pyxelrest import session
 
 
 def to_valid_python_vba(str_value):
@@ -380,8 +379,6 @@ def load_services():
     file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
     if not config_parser.read(file_path):
         raise ConfigurationFileNotFound(file_path)
-
-    session.setup(config_parser['DEFAULT'])
 
     logging.debug('Loading services from "{0}"...'.format(file_path))
     loaded_services = []
