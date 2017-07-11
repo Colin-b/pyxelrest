@@ -21,6 +21,7 @@ namespace AutoLoadPyxelRestAddIn
                 Uri urlCheck = new Uri(url);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
                 request.Timeout = 500;
+                // TODO Handle the fact that proxy might be a no_proxy or contains more than one proxy (select the right one in this case)
                 if (!string.IsNullOrEmpty(proxy))
                     request.Proxy = new WebProxy(proxy);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
