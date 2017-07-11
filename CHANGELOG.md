@@ -5,6 +5,7 @@
 ### Release notes ###
 
 - connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
+- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
 
 ### Enhancements ###
 

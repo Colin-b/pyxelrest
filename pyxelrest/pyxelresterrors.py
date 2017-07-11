@@ -11,6 +11,7 @@ from distutils import sysconfig
 from pyxelrest import alert
 from winerror import RPC_E_SERVERCALL_RETRYLATER
 
+
 class InvalidSwaggerDefinition(Exception):
     """ Invalid Swagger Definition. """
     def __init__(self, message, *args, **kwargs):  # real signature unknown
@@ -33,12 +34,6 @@ class MandatoryPropertyNotProvided(Exception):
     """ Mandatory property not provided. """
     def __init__(self, section, property_name, *args, **kwargs):
         Exception.__init__(self, '"{0}" configuration section must provide "{1}".'.format(section, property_name))
-
-
-class NoMethodsProvided(Exception):
-    """ No Methods provided. """
-    def __init__(self, *args, **kwargs):
-        Exception.__init__(self, 'At least one method must be provided amongst [get, post, put, delete].')
 
 
 class PortNotAvailable(Exception):

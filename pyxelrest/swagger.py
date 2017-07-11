@@ -34,14 +34,14 @@ class SwaggerService:
         """
         self.name = service_name
         self.udf_prefix = to_valid_python_vba(service_name)
-        self.requested_methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
+        self.requested_methods = [method.strip() for method in self.get_item_default(config, 'methods', '').split(',') if method.strip()]
         if not self.requested_methods:
-            raise NoMethodsProvided()
+            self.requested_methods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']
         self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
         swagger_url = self.get_item(config, 'swagger_url')
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
-        self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
+        self.proxies = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
         advanced_configuration = self._get_advanced_configuration(config)
         self.connect_timeout = float(advanced_configuration.get('connect_timeout', 1))
         self.read_timeout = advanced_configuration.get('read_timeout')

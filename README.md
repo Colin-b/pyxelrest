@@ -99,7 +99,7 @@ The following options are available for each section:
     </th>
     <tr>
         <td><strong>swagger_url</strong></td>
-        <td>Complete URL to the Swagger definition. It can also be a system file path if specified using file:// prefix.</td>
+        <td>URL to the Swagger definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
@@ -117,7 +117,7 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>methods</strong></td>
-        <td>List of services methods to be exposed as UDFs.</td>
+        <td>List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head).</td>
         <td>Optional</td>
         <td>get, post, put, delete, patch, options, head</td>
     </tr>
@@ -129,13 +129,13 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>security_details</strong></td>
-        <td>Extra security information not provided by swagger.</td>
+        <td>Extra security information not provided by swagger. Refer to Security Details section for more information.</td>
         <td>Optional</td>
         <td>port=XX,timeout=YY</td>
     </tr>
     <tr>
         <td><strong>advanced_configuration</strong></td>
-        <td>Additional configuration details.</td>
+        <td>Additional configuration details. Refer to Advanced Configuration section for more information.</td>
         <td>Optional</td>
         <td>udf_return_type=XX,rely_on_definitions=YY</td>
     </tr>
