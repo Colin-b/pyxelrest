@@ -128,18 +128,6 @@ The following options are available for each section:
         <td>any value separated by ','</td>
     </tr>
     <tr>
-        <td><strong>connect_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
-        <td><strong>read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
         <td><strong>security_details</strong></td>
         <td>Extra security information not provided by swagger.</td>
         <td>Optional</td>
@@ -297,6 +285,16 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><strong>header.XXXX</strong></td>
         <td>Where XXXX is the name of the header that should be sent with every request sent to this service.</td>
         <td></td>
+    </tr>
+    <tr>
+        <td><strong>connect_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
     </tr>
 </table>
 

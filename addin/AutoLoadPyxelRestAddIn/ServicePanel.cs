@@ -25,8 +25,6 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox head;
         private CheckBox checkbox;
         private TextBox tagsTextBox;
-        private TextBox connectTimeoutTextBox;
-        private TextBox readTimeoutTextBox;
         private TextBox securityDetailsTextBox;
         private TextBox advancedConfigurationTextBox;
 
@@ -157,22 +155,6 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(methodsPanel, 1, 6);
             #endregion
 
-            #region Timeouts
-            servicePanel.Controls.Add(new Label { Text = "Timeouts", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
-            TableLayoutPanel timeoutsPanel = new TableLayoutPanel();
-            timeoutsPanel.Dock = DockStyle.Fill;
-            timeoutsPanel.AutoSize = true;
-            timeoutsPanel.Controls.Add(new Label { Text = "Connection", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            connectTimeoutTextBox = new TextBox() { Text = service.ConnectTimeout.HasValue? service.ConnectTimeout.Value.ToString(CultureInfo.InvariantCulture) : string.Empty };
-            connectTimeoutTextBox.TextChanged += ConnectTimeoutTextBox_TextChanged;
-            timeoutsPanel.Controls.Add(connectTimeoutTextBox, 1, 0);
-            timeoutsPanel.Controls.Add(new Label { Text = "Read", TextAlign = ContentAlignment.BottomLeft }, 2, 0);
-            readTimeoutTextBox = new TextBox() { Text = service.ReadTimeout.HasValue ? service.ReadTimeout.Value.ToString(CultureInfo.InvariantCulture) : string.Empty };
-            readTimeoutTextBox.TextChanged += ReadTimeoutTextBox_TextChanged;
-            timeoutsPanel.Controls.Add(readTimeoutTextBox, 3, 0);
-            servicePanel.Controls.Add(timeoutsPanel, 1, 7);
-            #endregion
-
             #region Delete
             Button deleteButton = new Button() { Text = "Delete " + service.Name + " Configuration" };
             deleteButton.Dock = DockStyle.Fill;
@@ -214,24 +196,6 @@ namespace AutoLoadPyxelRestAddIn
                 advancedConfigurationTextBox.BackColor = string.IsNullOrEmpty(advancedConfigurationTextBox.Text) ? Color.Empty : Color.Red;
                 service.AdvancedConfiguration = string.Empty;
             }
-        }
-
-        private void ReadTimeoutTextBox_TextChanged(object sender, EventArgs e)
-        {
-            float parsed;
-            if (float.TryParse(readTimeoutTextBox.Text, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out parsed))
-                service.ReadTimeout = parsed;
-            else
-                service.ReadTimeout = null;
-        }
-
-        private void ConnectTimeoutTextBox_TextChanged(object sender, EventArgs e)
-        {
-            float parsed;
-            if (float.TryParse(connectTimeoutTextBox.Text, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out parsed))
-                service.ConnectTimeout = parsed;
-            else
-                service.ConnectTimeout = null;
         }
 
         private void TagsTextBox_TextChanged(object sender, EventArgs e)

@@ -42,8 +42,9 @@ class SwaggerService:
         swagger_url_parsed = urlsplit(swagger_url)
         proxy_url = self.get_item_default(config, 'proxy_url', None)
         self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
-        self.connect_timeout = float(self.get_item_default(config, 'connect_timeout', 1))
-        self.read_timeout = self.get_item_default(config, 'read_timeout', None)
+        advanced_configuration = self._get_advanced_configuration(config)
+        self.connect_timeout = float(advanced_configuration.get('connect_timeout', 1))
+        self.read_timeout = advanced_configuration.get('read_timeout')
         if self.read_timeout:
             self.read_timeout = float(self.read_timeout)
         self.swagger = self._retrieve_swagger(swagger_url)
@@ -52,7 +53,6 @@ class SwaggerService:
         security_details = self._get_security_details(config)
         authentication.add_service_security(self.name, self.swagger, security_details)
         self.auth = authentication.add_service_custom_authentication(self.name, security_details)
-        advanced_configuration = self._get_advanced_configuration(config)
         # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
         self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
         self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
