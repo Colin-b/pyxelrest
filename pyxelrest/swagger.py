@@ -40,8 +40,7 @@ class SwaggerService:
         self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
         swagger_url = self.get_item(config, 'swagger_url')
         swagger_url_parsed = urlsplit(swagger_url)
-        proxy_url = self.get_item_default(config, 'proxy_url', None)
-        self.proxies = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
+        self.proxies = self._get_proxies(config, swagger_url_parsed.scheme)
         advanced_configuration = self._get_advanced_configuration(config)
         self.connect_timeout = float(advanced_configuration.get('connect_timeout', 1))
         self.read_timeout = advanced_configuration.get('read_timeout')
@@ -63,47 +62,50 @@ class SwaggerService:
     def should_return_asynchronously(self):
         return self.udf_return_type == 'asynchronous'
 
+    def _get_proxies(self, config, default_scheme):
+        proxy_url_str = self.get_item_default(config, 'proxy_url', None)
+        if proxy_url_str and '=' not in proxy_url_str:
+            proxy_url_str = '{0}={1}'.format(default_scheme, proxy_url_str)
+        proxies = self._str_to_dict(proxy_url_str)
+        logging.debug("Proxies: {0}".format(proxies))
+        return proxies
+
     def _get_advanced_configuration(self, config):
         advanced_configuration_str = self.get_item_default(config, 'advanced_configuration', None)
-        details = {}
-        if advanced_configuration_str:
-            for detail_entry in advanced_configuration_str.split(','):
-                detail_entry = detail_entry.split('=')
-                if len(detail_entry) == 2:
-                    value = detail_entry[1]
-                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
-                    environment_variables_match = re.match('^%(.*)%$', value)
-                    if environment_variables_match:
-                        environment_variable = environment_variables_match.group(1)
-                        value = os.environ[environment_variable]
-                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
-                            detail_entry[0], value, environment_variable
-                        ))
-                    details[detail_entry[0]] = value
-                else:
-                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        details = self._str_to_dict(advanced_configuration_str)
+        for key, value in details.items():
+            details[key] = self._convert(value)
+        logging.debug("Advanced configuration: {0}".format(details))
         return details
 
     def _get_security_details(self, config):
         security_details_str = self.get_item_default(config, 'security_details', None)
-        details = {}
-        if security_details_str:
-            for detail_entry in security_details_str.split(','):
-                detail_entry = detail_entry.split('=')
-                if len(detail_entry) == 2:
-                    value = detail_entry[1]
-                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
-                    environment_variables_match = re.match('^%(.*)%$', value)
-                    if environment_variables_match:
-                        environment_variable = environment_variables_match.group(1)
-                        value = os.environ[environment_variable]
-                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
-                            detail_entry[0], value, environment_variable
-                        ))
-                    details[detail_entry[0]] = value
-                else:
-                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        details = self._str_to_dict(security_details_str)
+        for key, value in details.items():
+            details[key] = self._convert(value)
+        logging.debug("Security details: {0}".format(details))
         return details
+
+    def _convert(self, value):
+        """
+        Value can be an environment variable formatted as %MY_ENV_VARIABLE%
+        """
+        environment_variables_match = re.match('^%(.*)%$', value)
+        if environment_variables_match:
+            environment_variable = environment_variables_match.group(1)
+            return os.environ[environment_variable]
+        return value
+
+    def _str_to_dict(self, str_value):
+        items = {}
+        if str_value:
+            for item in str_value.split(','):
+                item_entry = item.split('=')
+                if len(item_entry) == 2:
+                    items[item_entry[0]] = item_entry[1]
+                else:
+                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(item_entry))
+        return items
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
@@ -174,7 +176,7 @@ class SwaggerService:
         """
         requests_session = requests.session()
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
-        response = requests_session.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
+        response = requests_session.get(swagger_url, proxies=self.proxies, verify=False, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)

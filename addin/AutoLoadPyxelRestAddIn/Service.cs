@@ -25,6 +25,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string PATCH = "patch";
         private static readonly string OPTIONS = "options";
         private static readonly string HEAD = "head";
+        private static readonly string[] ALL_METHODS = { GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD };
 
         internal readonly string Name;
         public string SwaggerUrl;
@@ -170,7 +171,7 @@ namespace AutoLoadPyxelRestAddIn
         private string[] DefaultMethods(KeyDataCollection defaultConfig)
         {
             if (defaultConfig == null || !defaultConfig.ContainsKey(METHODS_PROPERTY))
-                return new string[0];
+                return (string[]) ALL_METHODS.Clone();
             return defaultConfig[METHODS_PROPERTY].Split(',');
         }
 

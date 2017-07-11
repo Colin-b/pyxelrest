@@ -13,6 +13,7 @@
 - It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
 - A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
 - The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
+- It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
 
 ### Bug fixes ###
 

@@ -91,6 +91,9 @@ class AuthTokenMap:
             logging.exception('Cannot save tokens.')
 
     def load_tokens(self):
+        if not os.path.exists(self.tokens_path):
+            logging.debug('No token loaded. Token cache does not exists.')
+            return
         try:
             modif = os.path.getmtime(self.tokens_path)
             if modif > self.last_modif:
@@ -98,7 +101,7 @@ class AuthTokenMap:
                 with open(self.tokens_path, 'r') as f:
                     self.data = json.load(f)
         except Exception as e:
-            logging.debug('Cannot load tokens.')
+            logging.exception('Cannot load tokens.')
             pass
 
     @staticmethod

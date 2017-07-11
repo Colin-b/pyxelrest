@@ -105,7 +105,7 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>proxy_url</strong></td>
-        <td>Proxy that should be used to reach service. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
+        <td>Proxy that should be used to reach service. If this is an URL, then this proxy will be used for the swagger_url scheme only. If you want to specify a proxy for a different scheme, then this value should be scheme=proxy_url_for_this_scheme. You can specify multiple schemes by using comma as a separator. You can also use no_proxy as a scheme for a no_proxy url. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
         <td>Optional</td>
         <td></td>
     </tr>
