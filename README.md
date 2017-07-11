@@ -129,13 +129,13 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>connect_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default.</td>
+        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
         <td>any float value (decimal separator is .)</td>
     </tr>
     <tr>
         <td><strong>read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.</td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
         <td>any float value (decimal separator is .)</td>
     </tr>
