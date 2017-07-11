@@ -20,6 +20,7 @@
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
 - PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
+- file:// swagger URL are now properly analyzed by Microsoft Excel Add-In
 
 ## 0.62 (2017-06-27) ##
 

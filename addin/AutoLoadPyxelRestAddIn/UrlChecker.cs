@@ -10,6 +10,17 @@ namespace AutoLoadPyxelRestAddIn
 
         public static bool IsSwaggerReachable(string url, string proxy=null)
         {
+            if (url.StartsWith("file://"))
+            {
+                try
+                {
+                    return System.IO.File.Exists(url.Substring(7));
+                }
+                catch(Exception)
+                {
+                    return false;
+                }
+            }
             HttpWebResponse response = ConnectTo(url, proxy);
             return response != null && response.StatusCode == HttpStatusCode.OK;
         }
