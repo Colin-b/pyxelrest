@@ -105,7 +105,7 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>proxy_url</strong></td>
-        <td>Proxy that should be used to reach service.</td>
+        <td>Proxy that should be used to reach service. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
         <td>Optional</td>
         <td></td>
     </tr>
