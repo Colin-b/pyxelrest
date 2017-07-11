@@ -80,21 +80,26 @@ def reset_authentication():
     authentication.security_definitions = {}
     authentication.custom_authentications = {}
 
+if __name__ == '__main__':
+    logger = logging.getLogger("pyxelrest.pyxelrestgenerator")
+else:
+    logger = logging.getLogger(__name__)
+
 if GENERATE_UDF_ON_IMPORT:
     custom_logging.load_logging_configuration()
     reset_authentication()
     try:
         generate_user_defined_functions()
     except Exception as e:
-        logging.exception('Cannot generate user defined functions.')
+        logger.exception('Cannot generate user defined functions.')
         raise
 
     try:
-        logging.debug('Expose user defined functions through PyxelRest.')
+        logger.debug('Expose user defined functions through PyxelRest.')
         reload_user_defined_functions()
         from pyxelrest.user_defined_functions import *
     except:
-        logging.exception('Error while importing UDFs.')
+        logger.exception('Error while importing UDFs.')
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':

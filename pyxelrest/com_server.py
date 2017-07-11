@@ -11,6 +11,8 @@ from win32com.server.exception import COMException
 from pyxelrest import custom_logging, alert, pyxelresterrors
 from pyxelrest import _version
 
+logger = logging.getLogger(__name__)
+
 
 class PythonServer:
     """
@@ -85,7 +87,7 @@ class PythonServer:
                 __import__(module_name)
             except Exception as e:
                 msg = "Cannot import module {}".format(module_name)
-                logging.exception(msg)
+                logger.exception(msg)
                 alert.message_box("Python Error", msg)
                 raise COMException(msg)
 
@@ -107,7 +109,7 @@ class PythonServer:
             raise e
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
-            logging.exception(msg)
+            logger.exception(msg)
             alert.message_box("Python Error", msg)
             raise COMException(desc=msg, hresult=code)
 
@@ -119,7 +121,7 @@ class PythonServer:
             self.results[call_name] = e
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
-            logging.exception(msg)
+            logger.exception(msg)
             self.results[call_name] = e
             alert.message_box("Python Error", msg)
         finally:
@@ -146,7 +148,7 @@ class PythonServer:
             queue.put(e)
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
-            logging.exception(msg)
+            logger.exception(msg)
             alert.message_box("Python Error", msg)
             queue.put(e)
         finally:
@@ -176,7 +178,7 @@ class PythonServer:
         except COMException as e:
             raise e
         except Exception as e:
-            logging.exception("Bad call")
+            logger.exception("Bad call")
             alert.message_box("Python Error", str(e))
             raise COMException(str(e))
 
@@ -207,7 +209,7 @@ class PythonServer:
         except COMException as e:
             raise e
         except Exception as e:
-            logging.exception("Bad call")
+            logger.exception("Bad call")
             alert.message_box("Python Error", str(e))
             raise COMException(str(e))
 

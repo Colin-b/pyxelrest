@@ -20,6 +20,9 @@ from pyxelrest import authentication
 from pyxelrest import fileadapter
 
 
+logger = logging.getLogger(__name__)
+
+
 def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
@@ -67,7 +70,7 @@ class SwaggerService:
         if proxy_url_str and '=' not in proxy_url_str:
             proxy_url_str = '{0}={1}'.format(default_scheme, proxy_url_str)
         proxies = self._str_to_dict(proxy_url_str)
-        logging.debug("Proxies: {0}".format(proxies))
+        logger.debug("Proxies: {0}".format(proxies))
         return proxies
 
     def _get_advanced_configuration(self, config):
@@ -75,7 +78,7 @@ class SwaggerService:
         details = self._str_to_dict(advanced_configuration_str)
         for key, value in details.items():
             details[key] = self._convert(value)
-        logging.debug("Advanced configuration: {0}".format(details))
+        logger.debug("Advanced configuration: {0}".format(details))
         return details
 
     def _get_security_details(self, config):
@@ -83,7 +86,7 @@ class SwaggerService:
         details = self._str_to_dict(security_details_str)
         for key, value in details.items():
             details[key] = self._convert(value)
-        logging.debug("Security details: {0}".format(details))
+        logger.debug("Security details: {0}".format(details))
         return details
 
     def _convert(self, value):
@@ -104,7 +107,7 @@ class SwaggerService:
                 if len(item_entry) == 2:
                     items[item_entry[0]] = item_entry[1]
                 else:
-                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(item_entry))
+                    logger.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(item_entry))
         return items
 
     def _extract_uri(self, swagger_url_parsed, config):
@@ -242,10 +245,6 @@ class SwaggerService:
             methods_consumes = methods.pop('consumes', [])
 
             for mode, method in methods.items():
-                if mode not in ['get', 'post', 'put', 'delete']:
-                    logging.warning("'{0}' mode is not supported for now. Supported ones are "
-                                    "['get', 'post', 'put', 'delete']".format(mode))
-
                 _update_method_parameters()
                 _update_method_produces()
                 _update_method_security()
@@ -330,8 +329,8 @@ class SwaggerMethod:
             if not consumes or 'application/json' in consumes:
                 header['Content-Type'] = 'application/json'
             else:
-                logging.warning('{0} is expecting {0} encoded body. '
-                                'For now PyxelRest only send JSON body so request might fail.'.format(
+                logger.warning('{0} is expecting {0} encoded body. '
+                               'For now PyxelRest only send JSON body so request might fail.'.format(
                     self.uri,
                     self.swagger_method['consumes']
                 ))
@@ -394,14 +393,14 @@ def load_services():
 
 
 def load_service(service_name, config_parser):
-    logging.debug('Loading "{0}" service...'.format(service_name))
+    logger.debug('Loading "{0}" service...'.format(service_name))
     try:
         service = SwaggerService(service_name, config_parser)
-        logging.info('"{0}" service will be available.'.format(service_name))
-        logging.debug(str(service))
+        logger.info('"{0}" service will be available.'.format(service_name))
+        logger.debug(str(service))
         return service
     except Exception as e:
-        logging.error('"{0}" service will not be available: {1}'.format(service_name, e))
+        logger.error('"{0}" service will not be available: {1}'.format(service_name, e))
 
 
 def check_for_duplicates(loaded_services):
@@ -413,5 +412,5 @@ def check_for_duplicates(loaded_services):
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]
         if len(service_names) > 1:
-            logging.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
-                            'only the last declared one will be available.'.format(service_names, udf_prefix))
+            logger.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
+                           'only the last declared one will be available.'.format(service_names, udf_prefix))

@@ -11,6 +11,10 @@ import logging
 import logging.config
 import logging.handlers
 
+if __name__ == '__main__':
+    logger = logging.getLogger("pyxelrest.pyxelrest_auto_update")
+else:
+    logger = logging.getLogger(__name__)
 
 logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration',
                                                'auto_update_logging.ini')
@@ -23,7 +27,7 @@ else:
     logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                         handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
                         level=logging.DEBUG)
-    logging.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
+    logger.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
         logging_configuration_file_path))
 
 
@@ -34,21 +38,20 @@ class PyxelRestUpdater:
         self._pip_path = pip_path
 
     def check_update(self):
-        logging.debug('Checking if an update is available...')
+        logger.debug('Checking if an update is available...')
         if self._is_update_available():
-            logging.info('Update available.')
+            logger.info('Update available.')
             if self._want_update():
-                logging.debug('Update accepted. Waiting for Microsoft Excel to close...')
+                logger.debug('Update accepted. Waiting for Microsoft Excel to close...')
                 while self._is_excel_running():
                     # As closing Microsoft Excel is a manual user action, wait for 1 second between each check.
                     time.sleep(1)
-                logging.debug('Microsoft Excel is closed. Installing update.')
-                self._end_logging()
+                logger.debug('Microsoft Excel is closed. Installing update.')
                 self._update_pyxelrest()
             else:
-                logging.info('Update rejected.')
+                logger.info('Update rejected.')
         else:
-            logging.debug('No update available.')
+            logger.debug('No update available.')
 
     def _is_update_available(self):
         outdated_packages = subprocess.check_output([self._pip_path, 'list', '--outdated'])
@@ -68,20 +71,17 @@ class PyxelRestUpdater:
         return False
 
     def _update_pyxelrest(self):
-        subprocess.call([self._pip_path, 'install', 'pyxelrest', '--upgrade'])
-
-    def _end_logging(self):
-        for handler in logging.getLogger().handlers[:]:
-            handler.close()
+        update_result = subprocess.check_output([self._pip_path, 'install', 'pyxelrest', '--upgrade'])
+        logger.info(str(update_result))
 
 
 if __name__ == '__main__':
-    logging.debug('Starting auto update script...')
+    logger.debug('Starting auto update script...')
     parser = argparse.ArgumentParser()
     parser.add_argument('path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
     options = parser.parse_args(sys.argv[1:])
     try:
         PyxelRestUpdater(options.path_to_pip).check_update()
     except:
-        logging.exception('An error occurred while checking for update.')
+        logger.exception('An error occurred while checking for update.')
         raise

@@ -11,6 +11,8 @@ from distutils import sysconfig
 from pyxelrest import alert
 from winerror import RPC_E_SERVERCALL_RETRYLATER
 
+logger = logging.getLogger(__name__)
+
 
 class InvalidSwaggerDefinition(Exception):
     """ Invalid Swagger Definition. """
@@ -125,7 +127,7 @@ def retry_com_exception(delay=1):
                     wrapper(*args, **kwargs)
                 except Exception as e2:
                     msg, code = extract_error(e2)
-                    logging.exception(msg)
+                    logger.exception(msg)
                     alert.message_box("Python Error", msg)
                 finally:
                     pythoncom.CoUninitialize()
@@ -134,7 +136,7 @@ def retry_com_exception(delay=1):
                 f(*args, **kwargs)
             except Exception as e:
                 if hasattr(e, 'hresult') and e.hresult == RPC_E_SERVERCALL_RETRYLATER:
-                    logging.warning('Retrying execution of function {}'.format(f.__name__))
+                    logger.warning('Retrying execution of function {}'.format(f.__name__))
                     t = threading.Timer(delay, function=retry_wrapper, args=args, kwargs=kwargs)
                     t.start()
                 else:

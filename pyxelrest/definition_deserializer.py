@@ -4,6 +4,8 @@ import dateutil.tz
 import dateutil.parser
 from past.builtins import basestring
 
+logger = logging.getLogger(__name__)
+
 
 def append_prefix(prefix, values_list):
     """
@@ -370,9 +372,9 @@ class Response:
         self.field = Field(schema, json_definitions if json_definitions is not None else {}) if schema else DefaultField()
 
     def rows(self, data):
-        logging.debug('Converting response to list...')
+        logger.debug('Converting response to list...')
         rows = self.field.convert(None, data).header_and_rows()
-        logging.debug('Response converted to list.')
+        logger.debug('Response converted to list.')
         return rows
 
 

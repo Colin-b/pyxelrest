@@ -7,6 +7,7 @@ import threading
 import logging
 from pyxelrest.pyxelresterrors import TokenExpiryNotProvided, InvalidToken, AuthenticationFailed
 
+logger = logging.getLogger(__name__)
 
 class AuthTokenMap:
     """
@@ -35,10 +36,10 @@ class AuthTokenMap:
             if name in self.data:
                 bearer, expiry = self.data[name]
                 if datetime.datetime.utcfromtimestamp(expiry) < datetime.datetime.utcnow():
-                    logging.debug('Authentication token is expired.')
+                    logger.debug('Authentication token is expired.')
                     del self.data[name]
                 else:
-                    logging.debug('Using already received authentication, will expire on {0} (UTC).'.format(
+                    logger.debug('Using already received authentication, will expire on {0} (UTC).'.format(
                         datetime.datetime.utcfromtimestamp(expiry)))
                     return bearer
         if func is not None:
@@ -48,7 +49,7 @@ class AuthTokenMap:
                 if name in self.data:
                     bearer, expiry = self.data[name]
                     return bearer
-        logging.debug('User was not authenticated.')
+        logger.debug('User was not authenticated.')
         raise AuthenticationFailed()
 
     def set_token(self, name, token):
@@ -67,7 +68,7 @@ class AuthTokenMap:
             expiry = body['exp']
             self.data[name] = token, expiry
             self.save_tokens()
-            logging.debug("{0} authentication response received: '{1}'. Expiry is {2} (UTC).".format(
+            logger.debug("{0} authentication response received: '{1}'. Expiry is {2} (UTC).".format(
                 name, token, datetime.datetime.utcfromtimestamp(expiry)))
 
     def clear(self):
@@ -77,7 +78,7 @@ class AuthTokenMap:
             try:
                 os.remove(self.tokens_path)
             except:
-                logging.debug('Cannot remove tokens file.')
+                logger.debug('Cannot remove tokens file.')
                 pass
 
     # private methods
@@ -88,11 +89,11 @@ class AuthTokenMap:
                json.dump(self.data, f)
             self.last_modif = os.path.getmtime(self.tokens_path)
         except Exception as e:
-            logging.exception('Cannot save tokens.')
+            logger.exception('Cannot save tokens.')
 
     def load_tokens(self):
         if not os.path.exists(self.tokens_path):
-            logging.debug('No token loaded. Token cache does not exists.')
+            logger.debug('No token loaded. Token cache does not exists.')
             return
         try:
             modif = os.path.getmtime(self.tokens_path)
@@ -101,7 +102,7 @@ class AuthTokenMap:
                 with open(self.tokens_path, 'r') as f:
                     self.data = json.load(f)
         except Exception as e:
-            logging.exception('Cannot load tokens.')
+            logger.exception('Cannot load tokens.')
             pass
 
     @staticmethod
