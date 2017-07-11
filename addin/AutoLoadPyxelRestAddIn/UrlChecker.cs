@@ -21,7 +21,7 @@ namespace AutoLoadPyxelRestAddIn
                 Uri urlCheck = new Uri(url);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
                 request.Timeout = 500;
-                // TODO Handle the fact that proxy might be a no_proxy or contains more than one proxy (select the right one in this case)
+                proxy = GetProxyFor(url, proxy);
                 if (!string.IsNullOrEmpty(proxy))
                     request.Proxy = new WebProxy(proxy);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -39,6 +39,45 @@ namespace AutoLoadPyxelRestAddIn
             {
                 return null;
             }
+        }
+
+        private static string GetProxyFor(string url, string proxy)
+        {
+            if (string.IsNullOrEmpty(proxy))
+                return null;
+
+            string[] proxies = proxy.Split(',');
+            if (proxies.Length == 1)
+            {
+                string[] proxyAndScheme = proxies[0].Split('=');
+                if (proxyAndScheme.Length == 1)
+                    return proxies[0]; // Single proxy specified (applies to the Swagger URL)
+            }
+
+            foreach (string proxyItem in proxies)
+            {
+                string[] proxyAndScheme = proxyItem.Split('=');
+                if(proxyAndScheme.Length == 2)
+                {
+                    string urlProxy = GetProxyFor(url, proxyAndScheme);
+                    if (urlProxy == null)
+                        return null; // No Proxy for this URL
+                    if (urlProxy.Length > 0)
+                        return urlProxy; // Proxy for this URL
+                }
+            }
+            return null;
+        }
+
+        private static string GetProxyFor(string url, string[] proxyAndScheme)
+        {
+            string scheme = proxyAndScheme[0];
+            if ("no_proxy" == scheme)
+                if (url.StartsWith(proxyAndScheme[1]))
+                    return null;
+            else if (url.StartsWith(scheme + ':'))
+                return proxyAndScheme[1];
+            return string.Empty;
         }
     }
 }
