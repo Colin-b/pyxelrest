@@ -99,13 +99,13 @@ The following options are available for each section:
     </th>
     <tr>
         <td><strong>swagger_url</strong></td>
-        <td>Complete URL to the Swagger definition. It can also be a system file path if specified using file:// prefix.</td>
+        <td>URL to the Swagger definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
     <tr>
         <td><strong>proxy_url</strong></td>
-        <td>Proxy that should be used to reach service.</td>
+        <td>Proxy that should be used to reach service. If this is an URL, then this proxy will be used for the swagger_url scheme only. If you want to specify a proxy for a different scheme, then this value should be scheme=proxy_url_for_this_scheme. You can specify multiple schemes by using comma as a separator. You can also use no_proxy as a scheme for a no_proxy url. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -117,7 +117,7 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>methods</strong></td>
-        <td>List of services methods to be exposed as UDFs.</td>
+        <td>List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head).</td>
         <td>Optional</td>
         <td>get, post, put, delete, patch, options, head</td>
     </tr>
@@ -128,26 +128,14 @@ The following options are available for each section:
         <td>any value separated by ','</td>
     </tr>
     <tr>
-        <td><strong>connect_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default.</td>
-        <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
-        <td><strong>read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.</td>
-        <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
         <td><strong>security_details</strong></td>
-        <td>Extra security information not provided by swagger.</td>
+        <td>Extra security information not provided by swagger. Refer to Security Details section for more information.</td>
         <td>Optional</td>
         <td>port=XX,timeout=YY</td>
     </tr>
     <tr>
         <td><strong>advanced_configuration</strong></td>
-        <td>Additional configuration details.</td>
+        <td>Additional configuration details. Refer to Advanced Configuration section for more information.</td>
         <td>Optional</td>
         <td>udf_return_type=XX,rely_on_definitions=YY</td>
     </tr>
@@ -297,6 +285,16 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><strong>header.XXXX</strong></td>
         <td>Where XXXX is the name of the header that should be sent with every request sent to this service.</td>
         <td></td>
+    </tr>
+    <tr>
+        <td><strong>connect_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
     </tr>
 </table>
 

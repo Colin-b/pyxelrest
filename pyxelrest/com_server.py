@@ -11,6 +11,8 @@ from win32com.server.exception import COMException
 from pyxelrest import custom_logging, alert, pyxelresterrors
 from pyxelrest import _version
 
+logger = logging.getLogger(__name__)
+
 
 class PythonServer:
     """
@@ -112,7 +114,7 @@ class PythonServer:
                 __import__(module_name)
             except Exception as e:
                 msg = "Cannot import module {}".format(module_name)
-                logging.exception(msg)
+                logger.exception(msg)
                 raise COMException(msg)
 
     def direct_call(self, module_name, func_name, *args):
@@ -134,7 +136,7 @@ class PythonServer:
             raise e
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
-            logging.exception(msg)
+            logger.exception(msg)
             raise COMException(desc=msg, hresult=code)
 
     def _thread_call_within_thread(self, call_name, func, *args):
@@ -145,7 +147,7 @@ class PythonServer:
             self.results[call_name] = e
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
-            logging.exception(msg)
+            logger.exception(msg)
             self.results[call_name] = e
         finally:
             pythoncom.CoUninitialize()
@@ -177,7 +179,7 @@ class PythonServer:
             queue.put(e)
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
-            logging.exception(msg)
+            logger.exception(msg)
             queue.put(e)
         finally:
             pythoncom.CoUninitialize()
@@ -208,7 +210,7 @@ class PythonServer:
         except COMException as e:
             raise e
         except Exception as e:
-            logging.exception("Bad call: {}.{}{}".format(module_name, func_name, args))
+            logger.exception("Bad call: {}.{}{}".format(module_name, func_name, args))
             raise COMException(str(e))
 
     def process_call(self, call_name, module_name, func_name, *args):
@@ -239,7 +241,7 @@ class PythonServer:
         except COMException as e:
             raise e
         except Exception as e:
-            logging.exception("Bad call: {}.{}{}".format(module_name, func_name, args))
+            logger.exception("Bad call: {}.{}{}".format(module_name, func_name, args))
             raise COMException(str(e))
 
     def running(self, call_name):

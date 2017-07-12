@@ -20,6 +20,9 @@ from pyxelrest import authentication
 from pyxelrest import fileadapter
 
 
+logger = logging.getLogger(__name__)
+
+
 def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
@@ -34,16 +37,16 @@ class SwaggerService:
         """
         self.name = service_name
         self.udf_prefix = to_valid_python_vba(service_name)
-        self.requested_methods = [method.strip() for method in self.get_item(config, 'methods').split(',') if method.strip()]
+        self.requested_methods = [method.strip() for method in self.get_item_default(config, 'methods', '').split(',') if method.strip()]
         if not self.requested_methods:
-            raise NoMethodsProvided()
+            self.requested_methods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']
         self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
         swagger_url = self.get_item(config, 'swagger_url')
         swagger_url_parsed = urlsplit(swagger_url)
-        proxy_url = self.get_item_default(config, 'proxy_url', None)
-        self.proxy = {swagger_url_parsed.scheme: proxy_url} if proxy_url else {}
-        self.connect_timeout = float(self.get_item_default(config, 'connect_timeout', 1))
-        self.read_timeout = self.get_item_default(config, 'read_timeout', None)
+        self.proxies = self._get_proxies(config, swagger_url_parsed.scheme)
+        advanced_configuration = self._get_advanced_configuration(config)
+        self.connect_timeout = float(advanced_configuration.get('connect_timeout', 1))
+        self.read_timeout = advanced_configuration.get('read_timeout')
         if self.read_timeout:
             self.read_timeout = float(self.read_timeout)
         self.swagger = self._retrieve_swagger(swagger_url)
@@ -52,7 +55,6 @@ class SwaggerService:
         security_details = self._get_security_details(config)
         authentication.add_service_security(self.name, self.swagger, security_details)
         self.auth = authentication.add_service_custom_authentication(self.name, security_details)
-        advanced_configuration = self._get_advanced_configuration(config)
         # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
         self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
         self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
@@ -63,47 +65,50 @@ class SwaggerService:
     def should_return_asynchronously(self):
         return self.udf_return_type == 'asynchronous'
 
+    def _get_proxies(self, config, default_scheme):
+        proxy_url_str = self.get_item_default(config, 'proxy_url', None)
+        if proxy_url_str and '=' not in proxy_url_str:
+            proxy_url_str = '{0}={1}'.format(default_scheme, proxy_url_str)
+        proxies = self._str_to_dict(proxy_url_str)
+        logger.debug("Proxies: {0}".format(proxies))
+        return proxies
+
     def _get_advanced_configuration(self, config):
         advanced_configuration_str = self.get_item_default(config, 'advanced_configuration', None)
-        details = {}
-        if advanced_configuration_str:
-            for detail_entry in advanced_configuration_str.split(','):
-                detail_entry = detail_entry.split('=')
-                if len(detail_entry) == 2:
-                    value = detail_entry[1]
-                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
-                    environment_variables_match = re.match('^%(.*)%$', value)
-                    if environment_variables_match:
-                        environment_variable = environment_variables_match.group(1)
-                        value = os.environ[environment_variable]
-                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
-                            detail_entry[0], value, environment_variable
-                        ))
-                    details[detail_entry[0]] = value
-                else:
-                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        details = self._str_to_dict(advanced_configuration_str)
+        for key, value in details.items():
+            details[key] = self._convert(value)
+        logger.debug("Advanced configuration: {0}".format(details))
         return details
 
     def _get_security_details(self, config):
         security_details_str = self.get_item_default(config, 'security_details', None)
-        details = {}
-        if security_details_str:
-            for detail_entry in security_details_str.split(','):
-                detail_entry = detail_entry.split('=')
-                if len(detail_entry) == 2:
-                    value = detail_entry[1]
-                    # Value can be an environment variable formatted as %MY_ENV_VARIABLE%
-                    environment_variables_match = re.match('^%(.*)%$', value)
-                    if environment_variables_match:
-                        environment_variable = environment_variables_match.group(1)
-                        value = os.environ[environment_variable]
-                        logging.debug("{0}={1} (loaded from '{2}' environment variable).".format(
-                            detail_entry[0], value, environment_variable
-                        ))
-                    details[detail_entry[0]] = value
-                else:
-                    logging.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(detail_entry))
+        details = self._str_to_dict(security_details_str)
+        for key, value in details.items():
+            details[key] = self._convert(value)
+        logger.debug("Security details: {0}".format(details))
         return details
+
+    def _convert(self, value):
+        """
+        Value can be an environment variable formatted as %MY_ENV_VARIABLE%
+        """
+        environment_variables_match = re.match('^%(.*)%$', value)
+        if environment_variables_match:
+            environment_variable = environment_variables_match.group(1)
+            return os.environ[environment_variable]
+        return value
+
+    def _str_to_dict(self, str_value):
+        items = {}
+        if str_value:
+            for item in str_value.split(','):
+                item_entry = item.split('=')
+                if len(item_entry) == 2:
+                    items[item_entry[0]] = item_entry[1]
+                else:
+                    logger.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(item_entry))
+        return items
 
     def _extract_uri(self, swagger_url_parsed, config):
         # The default scheme to be used is the one used to access the Swagger definition itself.
@@ -174,7 +179,7 @@ class SwaggerService:
         """
         requests_session = requests.session()
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
-        response = requests_session.get(swagger_url, proxies=self.proxy, verify=False, timeout=(self.connect_timeout, self.read_timeout))
+        response = requests_session.get(swagger_url, proxies=self.proxies, verify=False, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)
@@ -240,10 +245,6 @@ class SwaggerService:
             methods_consumes = methods.pop('consumes', [])
 
             for mode, method in methods.items():
-                if mode not in ['get', 'post', 'put', 'delete']:
-                    logging.warning("'{0}' mode is not supported for now. Supported ones are "
-                                    "['get', 'post', 'put', 'delete']".format(mode))
-
                 _update_method_parameters()
                 _update_method_produces()
                 _update_method_security()
@@ -328,8 +329,8 @@ class SwaggerMethod:
             if not consumes or 'application/json' in consumes:
                 header['Content-Type'] = 'application/json'
             else:
-                logging.warning('{0} is expecting {0} encoded body. '
-                                'For now PyxelRest only send JSON body so request might fail.'.format(
+                logger.warning('{0} is expecting {0} encoded body. '
+                               'For now PyxelRest only send JSON body so request might fail.'.format(
                     self.uri,
                     self.swagger_method['consumes']
                 ))
@@ -392,14 +393,14 @@ def load_services():
 
 
 def load_service(service_name, config_parser):
-    logging.debug('Loading "{0}" service...'.format(service_name))
+    logger.debug('Loading "{0}" service...'.format(service_name))
     try:
         service = SwaggerService(service_name, config_parser)
-        logging.info('"{0}" service will be available.'.format(service_name))
-        logging.debug(str(service))
+        logger.info('"{0}" service will be available.'.format(service_name))
+        logger.debug(str(service))
         return service
     except Exception as e:
-        logging.error('"{0}" service will not be available: {1}'.format(service_name, e))
+        logger.error('"{0}" service will not be available: {1}'.format(service_name, e))
 
 
 def check_for_duplicates(loaded_services):
@@ -411,5 +412,5 @@ def check_for_duplicates(loaded_services):
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]
         if len(service_names) > 1:
-            logging.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
-                            'only the last declared one will be available.'.format(service_names, udf_prefix))
+            logger.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
+                           'only the last declared one will be available.'.format(service_names, udf_prefix))

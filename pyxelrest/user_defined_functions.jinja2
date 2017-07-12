@@ -23,6 +23,8 @@ from pyxelrest.definition_deserializer import Response
 from pyxelrest import definition_deserializer
 from pyxelrest import authentication
 
+logger = logging.getLogger(__name__)
+
 {% macro convert_to_return_type(str_value, swagger_method) %}
 {% if swagger_method.return_a_list() -%}
 [{{ str_value }}]
@@ -37,7 +39,7 @@ from pyxelrest import authentication
 {# Integer Type check #}
 {% if param_type == 'integer' -%}
         if not isinstance({{param_name}}, int):
-            logging.error('{{ param_name }} must be an integer.')
+            logger.error('{{ param_name }} must be an integer.')
 {% if swagger_method.return_a_list() %}
             return ['{{ param_name }} must be an integer.']
 {% else %}
@@ -46,7 +48,7 @@ from pyxelrest import authentication
 {# Number Type check #}
 {% elif param_type == 'number' -%}
         if not isinstance({{param_name}}, float):
-            logging.error('{{ param_name }} must be a number.')
+            logger.error('{{ param_name }} must be a number.')
 {% if swagger_method.return_a_list() %}
             return ['{{ param_name }} must be a number.']
 {% else %}
@@ -58,7 +60,7 @@ from pyxelrest import authentication
 {# String (date) Type check #}
 {% if param_format == 'date' -%}
         if not isinstance({{param_name}}, datetime.date):
-            logging.error('{{ param_name }} must be a date.')
+            logger.error('{{ param_name }} must be a date.')
 {% if swagger_method.return_a_list() %}
             return ['{{ param_name }} must be a date.']
 {% else %}
@@ -67,7 +69,7 @@ from pyxelrest import authentication
 {# String (date-time) Type check #}
 {% elif param_format == 'date-time' -%}
         if not isinstance({{param_name}}, datetime.datetime):
-            logging.error('{{ param_name }} must be a date time.')
+            logger.error('{{ param_name }} must be a date time.')
 {% if swagger_method.return_a_list() %}
             return ['{{ param_name }} must be a date time.']
 {% else %}
@@ -79,7 +81,7 @@ from pyxelrest import authentication
 {# String (enum) Type check #}
 {% if param_enum|count > 0 -%}
         if {{param_name}} not in {{ param_enum }}:
-            logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }}))
+            logger.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }}))
 {% if swagger_method.return_a_list() %}
             return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
@@ -90,7 +92,7 @@ from pyxelrest import authentication
 {# Boolean Type check #}
 {% elif param_type == 'boolean' -%}
         if {{param_name}} not in ['true', 'false']:
-            logging.error('{{ param_name }} must be either "true" or "false".')
+            logger.error('{{ param_name }} must be either "true" or "false".')
 {% if swagger_method.return_a_list() %}
             return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -107,7 +109,7 @@ from pyxelrest import authentication
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, int):
-                    logging.error('{{ param_name }} must contain integers.')
+                    logger.error('{{ param_name }} must contain integers.')
 {% if swagger_method.return_a_list() %}
                     return ['{{ param_name }} must contain integers.']
 {% else %}
@@ -115,7 +117,7 @@ from pyxelrest import authentication
 {% endif %}
         else:
             if not isinstance({{param_name}}, int):
-                logging.error('{{ param_name }} must be an integer.')
+                logger.error('{{ param_name }} must be an integer.')
 {% if swagger_method.return_a_list() %}
                 return ['{{ param_name }} must be an integer.']
 {% else %}
@@ -127,7 +129,7 @@ from pyxelrest import authentication
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, float):
-                    logging.error('{{ param_name }} must contain numbers.')
+                    logger.error('{{ param_name }} must contain numbers.')
 {% if swagger_method.return_a_list() %}
                     return ['{{ param_name }} must contain numbers.']
 {% else %}
@@ -135,7 +137,7 @@ from pyxelrest import authentication
 {% endif %}
         else:
             if not isinstance({{param_name}}, float):
-                logging.error('{{ param_name }} must be a number.')
+                logger.error('{{ param_name }} must be a number.')
 {% if swagger_method.return_a_list() %}
                 return ['{{ param_name }} must be a number.']
 {% else %}
@@ -150,7 +152,7 @@ from pyxelrest import authentication
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.date):
-                    logging.error('{{ param_name }} must contain dates.')
+                    logger.error('{{ param_name }} must contain dates.')
 {% if swagger_method.return_a_list() %}
                     return ['{{ param_name }} must contain dates.']
 {% else %}
@@ -158,7 +160,7 @@ from pyxelrest import authentication
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.date):
-                logging.error('{{ param_name }} must be a date.')
+                logger.error('{{ param_name }} must be a date.')
 {% if swagger_method.return_a_list() %}
                 return ['{{ param_name }} must be a date.']
 {% else %}
@@ -170,7 +172,7 @@ from pyxelrest import authentication
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if not isinstance({{param_name}}_item, datetime.datetime):
-                    logging.error('{{ param_name }} must contain date times.')
+                    logger.error('{{ param_name }} must contain date times.')
 {% if swagger_method.return_a_list() %}
                     return ['{{ param_name }} must contain date times.']
 {% else %}
@@ -178,7 +180,7 @@ from pyxelrest import authentication
 {% endif %}
         else:
             if not isinstance({{param_name}}, datetime.datetime):
-                logging.error('{{ param_name }} must be a date time.')
+                logger.error('{{ param_name }} must be a date time.')
 {% if swagger_method.return_a_list() %}
                 return ['{{ param_name }} must be a date time.']
 {% else %}
@@ -193,7 +195,7 @@ from pyxelrest import authentication
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in {{ param_items_enum }}:
-                    logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item))
+                    logger.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item))
 {% if swagger_method.return_a_list() %}
                     return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)]
 {% else %}
@@ -201,7 +203,7 @@ from pyxelrest import authentication
 {% endif %}
         else:
             if {{param_name}} not in {{ param_items_enum }}:
-                logging.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}))
+                logger.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}))
 {% if swagger_method.return_a_list() %}
                 return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})]
 {% else %}
@@ -216,7 +218,7 @@ from pyxelrest import authentication
             {{param_name}} = [item for item in {{param_name}} if item is not None]
             for {{param_name}}_item in {{param_name}}:
                 if {{param_name}}_item not in ['true', 'false']:
-                    logging.error('{{ param_name }} must be either "true" or "false".')
+                    logger.error('{{ param_name }} must be either "true" or "false".')
 {% if swagger_method.return_a_list() %}
                     return ['{{ param_name }} must be either "true" or "false".']
 {% else %}
@@ -226,7 +228,7 @@ from pyxelrest import authentication
                     {{param_name}}_item = {{param_name}}_item == 'true'
         else:
             if {{param_name}} not in ['true', 'false']:
-                logging.error('{{ param_name }} must contain "true" or "false".')
+                logger.error('{{ param_name }} must contain "true" or "false".')
 {% if swagger_method.return_a_list() %}
                 return ['{{ param_name }} must contain "true" or "false".']
 {% else %}
@@ -244,7 +246,7 @@ from pyxelrest import authentication
 {% set param_type = parameter['type'] %}
 {% set server_param_name = parameter['server_param_name'] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
-        logging.error('{{ param_name }} is required.')
+        logger.error('{{ param_name }} is required.')
 {% if swagger_method.return_a_list() %}
         return ['{{ param_name }} is required.']
 {% else %}
@@ -270,7 +272,7 @@ from pyxelrest import authentication
 {% macro validate_path_parameter(parameter, swagger_method) %}
 {% set param_name = parameter['name'] %}
     if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
-        logging.error('{{ param_name }} is required.')
+        logger.error('{{ param_name }} is required.')
 {% if swagger_method.return_a_list() %}
         return ['{{ param_name }} is required.']
 {% else %}
@@ -334,7 +336,7 @@ def {{ swagger_method.udf_name }}(
 {% if swagger_method.summary() %}
     """{{ swagger_method.summary() }}"""
 {% endif %}
-    logging.info("[status=Calling] [function={{ swagger_method.udf_name }}]...")
+    logger.info("[status=Calling] [function={{ swagger_method.udf_name }}]...")
     request_header = {{ swagger_method.initial_header() }}
 {% if swagger_method.contains_body_parameters %}
     request_payload = {}
@@ -360,9 +362,9 @@ def {{ swagger_method.udf_name }}(
     try:
         response = session.get({{ swagger_method.service.max_retries }}).request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
             {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter['name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}{% endfor -%}
-        ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.proxy }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
+        ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.proxies }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
         response.raise_for_status()
-        logging.info("[status=Valid] response received for [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
+        logger.info("[status=Valid] response received for [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ swagger_method.responses }}
             return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.name }}'), {{ swagger_method.service.rely_on_definitions }})
@@ -371,14 +373,14 @@ def {{ swagger_method.udf_name }}(
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logging.exception("Connection [status=error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
+        logger.exception("Connection [status=error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", swagger_method) }}
     except Exception as error:
         # Check "is not None" because response.ok is overrided according to HTTP status code.
         if response is not None:
-            logging.exception("[status=Error] occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+            logger.exception("[status=Error] occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
         else:
-            logging.exception("[status=Error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
+            logger.exception("[status=Error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type('describe_error(response, error)', swagger_method) }}
     finally:
         # Check "is not None" because response.ok is overrided according to HTTP status code.
@@ -406,31 +408,31 @@ def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
         definition_deserializer.all_definitions = {}
 {% if support_ujson %}
         response_text = response.text
-        logging.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
+        logger.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
         json_data = ujson.loads(response_text) if response_text != '' else response_text
 {% else %}
-        logging.debug('Converting JSON string to corresponding python structure (relying on definitions)...')
+        logger.debug('Converting JSON string to corresponding python structure (relying on definitions)...')
         json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
 {% endif %}
         return Response(all_responses, response.status_code, all_definitions).rows(json_data)
 
-    logging.debug('Converting JSON string to corresponding python structure...')
+    logger.debug('Converting JSON string to corresponding python structure...')
     json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
     return Flattenizer(all_responses, response.status_code, all_definitions).to_list(json_data)
 
 
 def msgpackpandas_as_list(msgpack_pandas):
 {% if support_pandas %}
-    logging.debug('Converting message pack pandas to list...')
+    logger.debug('Converting message pack pandas to list...')
     data = pandas.read_msgpack(msgpack_pandas)
-    logging.debug('Converting dictionary to list...')
+    logger.debug('Converting dictionary to list...')
     header = [header_name.decode() for header_name in data.columns.values.tolist()]
     values = data.values.tolist()
     flatten_data = [header] + values if values else [header]
-    logging.debug('Data converted to list.')
+    logger.debug('Data converted to list.')
     return flatten_data
 {% else %}
-    logging.warning('Pandas module is required to decode response.')
+    logger.warning('Pandas module is required to decode response.')
     return ['Please install pandas module to be able to decode result.']
 {% endif %}
 

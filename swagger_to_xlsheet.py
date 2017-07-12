@@ -1,6 +1,5 @@
-from pyxelrest.pyxelrestgenerator import load_services
+from pyxelrest.swagger import load_services
 import xlsxwriter
-import string
 
 
 def colnum_string(n):

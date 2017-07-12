@@ -19,6 +19,8 @@ security_definitions = {}
 # Key is service name
 custom_authentications = {}
 
+logger = logging.getLogger(__name__)
+
 
 def add_parameters(initial_url, extra_parameters):
     """
@@ -107,14 +109,14 @@ class ApiKeyAuth(requests.auth.AuthBase):
 
     def __call__(self, r):
         if not self.api_key:
-            logging.error('api_key is not defined. Call might be rejected by server.')
+            logger.error('api_key is not defined. Call might be rejected by server.')
         else:
             if self.value_in == 'header':
                 r.headers[self.field_name] = self.api_key
             elif self.value_in == 'query':
                 r.url = add_parameters(r.url, {self.field_name: self.api_key})
             else:
-                logging.warning('api_key "{0}" destination is not supported.'.format(self.value_in))
+                logger.warning('api_key "{0}" destination is not supported.'.format(self.value_in))
         return r
 
     def __str__(self):
@@ -200,13 +202,13 @@ def create_authentication(security_definition, service_name, security_details):
         if security_definition.get('flow') == 'implicit':
             return OAuth2Auth(service_name, security_definition, security_details)
         # TODO Handle all OAuth2 flows
-        logging.warning('OAuth2 flow is not supported: {0}'.format(security_definition))
+        logger.warning('OAuth2 flow is not supported: {0}'.format(security_definition))
     elif 'apiKey' == security_definition.get('type'):
         return ApiKeyAuth(security_definition, security_details)
     elif 'basic' == security_definition.get('type'):
         return BasicAuth(security_details)
     else:
-        logging.error('Unexpected security definition type: {0}'.format(security_definition))
+        logger.error('Unexpected security definition type: {0}'.format(security_definition))
 
 
 def get_auth(service_name, securities):

@@ -4,18 +4,23 @@
 
 ### Release notes ###
 
-- PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
-- A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
-- The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
+- connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
+- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
+- Update script no longer removes logs folder on update, the whole update process can now be logged
 
 ### Enhancements ###
 
 - Introduce new max_retries key for advanced_configuration property. Refer to documentation for more details. Previous behavior was "never retry", it will now retry 5 times by default.
 - It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
+- A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
+- The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
+- It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
 
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
+- PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
+- file:// swagger URL are now properly analyzed by Microsoft Excel Add-In
 
 ## 0.62 (2017-06-27) ##
 

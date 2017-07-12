@@ -54,5 +54,14 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             [666666, 'JD', 'John', 'Doe', 'jdoe@petstore.com', 'azerty', '0123456789', 0]
         ])
 
+    def test_proxy(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertIsNotNone(pyxelrestgenerator.proxy_test_createUser)
+
+    def test_proxies(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertIsNotNone(pyxelrestgenerator.proxies_test_createUser)
+
+
 if __name__ == '__main__':
     unittest.main()

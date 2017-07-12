@@ -5,11 +5,13 @@ formatters:
 handlers:
   daily_rotating:
     class: logging.handlers.TimedRotatingFileHandler
-    level: INFO
     formatter: clean
     filename: {{ path_to_log_file }}
     when: 'D'
     backupCount: 10
+loggers:
+  pyxelrest:
+    level: DEBUG
 root:
   level: INFO
   handlers: [daily_rotating]

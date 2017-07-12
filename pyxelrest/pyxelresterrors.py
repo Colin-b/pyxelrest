@@ -8,8 +8,10 @@ import win32api
 import pythoncom
 from distutils import sysconfig
 
-from pyxelrest import alert
 from winerror import RPC_E_SERVERCALL_RETRYLATER
+
+logger = logging.getLogger(__name__)
+
 
 class InvalidSwaggerDefinition(Exception):
     """ Invalid Swagger Definition. """
@@ -33,12 +35,6 @@ class MandatoryPropertyNotProvided(Exception):
     """ Mandatory property not provided. """
     def __init__(self, section, property_name, *args, **kwargs):
         Exception.__init__(self, '"{0}" configuration section must provide "{1}".'.format(section, property_name))
-
-
-class NoMethodsProvided(Exception):
-    """ No Methods provided. """
-    def __init__(self, *args, **kwargs):
-        Exception.__init__(self, 'At least one method must be provided amongst [get, post, put, delete].')
 
 
 class PortNotAvailable(Exception):
@@ -130,7 +126,7 @@ def retry_com_exception(delay=1):
                     wrapper(*args, **kwargs)
                 except Exception as e2:
                     msg, code = extract_error(e2)
-                    logging.exception(msg)
+                    logger.exception(msg)
                 finally:
                     pythoncom.CoUninitialize()
 
@@ -138,7 +134,7 @@ def retry_com_exception(delay=1):
                 f(*args, **kwargs)
             except Exception as e:
                 if hasattr(e, 'hresult') and e.hresult == RPC_E_SERVERCALL_RETRYLATER:
-                    logging.warning('Retrying execution of function {}'.format(f.__name__))
+                    logger.warning('Retrying execution of function {}'.format(f.__name__))
                     t = threading.Timer(delay, function=retry_wrapper, args=args, kwargs=kwargs)
                     t.start()
                 else:

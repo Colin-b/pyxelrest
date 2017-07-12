@@ -1,5 +1,6 @@
 import os
 import unittest
+import win32com.server.exception
 from pyxelrest import (
     com_server,
     alert
@@ -25,35 +26,20 @@ class PyxelRestTestComServer(unittest.TestCase):
 
     def test_direct_module_not_existing(self):
         alert.HIDE_MESSAGE_BOX = True
-        try:
+        with self.assertRaises(win32com.server.exception.COMException):
             self.srv.direct_call('module_not_existing', 'my_function', 'arg', 0)
-            self.fail('An error should be raised in case module is not existing.')
-        except Exception as e:
-            self.assertEqual(str(e), "(0, 'No module named \\'module_not_existing\\' in function direct_call() file {0}:101 with \"__import__(module_name)\"', None, -1)".format(
-                com_server.__file__.replace('\\', '\\\\')
-            ))
 
     def test_direct_function_not_existing(self):
         alert.HIDE_MESSAGE_BOX = True
         self.srv.add_path(os.path.dirname(__file__))
-        try:
+        with self.assertRaises(win32com.server.exception.COMException):
             self.srv.direct_call('pyxelresttest_com_server', 'function_not_existing', 'arg', 0)
-            self.fail('An error should be raised in case function is not existing.')
-        except Exception as e:
-            self.assertEqual(str(e), "(0, 'module \\'pyxelresttest_com_server\\' has no attribute \\'function_not_existing\\' in function direct_call() file {0}:103 with \"f = getattr(m, func_name)\"', None, -1)".format(
-                com_server.__file__.replace('\\', '\\\\')
-            ))
 
     def test_direct_parameter_not_existing(self):
         alert.HIDE_MESSAGE_BOX = True
         self.srv.add_path(os.path.dirname(__file__))
-        try:
+        with self.assertRaises(win32com.server.exception.COMException):
             self.srv.direct_call('pyxelresttest_com_server', 'my_function', 'arg', 0, 'parameter_not_existing')
-            self.fail('An error should be raised in case parameter is not existing.')
-        except Exception as e:
-            self.assertEqual(str(e), "(0, 'my_function() takes 2 positional arguments but 3 were given in function direct_call() file {0}:104 with \"return f(*args)\"', None, -1)".format(
-                com_server.__file__.replace('\\', '\\\\')
-            ))
 
     def test_thread(self):
         self.srv.add_path(os.path.dirname(__file__))

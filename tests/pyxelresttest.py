@@ -97,6 +97,25 @@ class PyxelRestTest(unittest.TestCase):
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
+    def test_get_test_header_advanced_configuration(self):
+        from pyxelrest import pyxelrestgenerator
+        headers = pyxelrestgenerator.header_advanced_configuration_test_get_test_header_parameter('sent header')
+
+        custom_header_index = headers[0].index('X-Pxl-Custom')
+        self.assertEqual(headers[1][custom_header_index], 'MyCustomValue')
+
+        other_header_index = headers[0].index('X-Pxl-Other')
+        self.assertEqual(headers[1][other_header_index], 'MyOtherValue')
+
+        request_header_index = headers[0].index('X-Pxl-Request')
+        self.assertIsNotNone(request_header_index)
+
+        session_header_index = headers[0].index('X-Pxl-Session')
+        self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
+
+        user_agent_index = headers[0].index('User-Agent')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.63')
+
     def test_post_test_form_parameter(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(

@@ -15,8 +15,6 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
         private static readonly string TAGS_PROPERTY = "tags";
-        private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
-        private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
         private static readonly string SECURITY_DETAILS_PROPERTY = "security_details";
         private static readonly string ADVANCED_CONFIGURATION_PROPERTY = "advanced_configuration";
 
@@ -27,6 +25,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string PATCH = "patch";
         private static readonly string OPTIONS = "options";
         private static readonly string HEAD = "head";
+        private static readonly string[] ALL_METHODS = { GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD };
 
         internal readonly string Name;
         public string SwaggerUrl;
@@ -40,8 +39,6 @@ namespace AutoLoadPyxelRestAddIn
         public bool Options;
         public bool Head;
         public string Tags;
-        public float? ConnectTimeout;
-        public float? ReadTimeout;
         public string SecurityDetails;
         public string AdvancedConfiguration;
 
@@ -73,21 +70,8 @@ namespace AutoLoadPyxelRestAddIn
             Options = Array.Exists(methods, s => OPTIONS.Equals(s));
             Head = Array.Exists(methods, s => HEAD.Equals(s));
             Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
-            ConnectTimeout = GetFloatProperty(serviceConfig, CONNECT_TIMEOUT_PROPERTY, 1);
-            ReadTimeout = GetFloatProperty(serviceConfig, READ_TIMEOUT_PROPERTY, null);
             SecurityDetails = serviceConfig.ContainsKey(SECURITY_DETAILS_PROPERTY) ? serviceConfig[SECURITY_DETAILS_PROPERTY] : string.Empty;
             AdvancedConfiguration = serviceConfig.ContainsKey(ADVANCED_CONFIGURATION_PROPERTY) ? serviceConfig[ADVANCED_CONFIGURATION_PROPERTY] : string.Empty;
-        }
-
-        private float? GetFloatProperty(KeyDataCollection serviceConfig, string property, float? defaultValue)
-        {
-            if (serviceConfig.ContainsKey(property))
-            {
-                float parsed;
-                if (float.TryParse(serviceConfig[property], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out parsed))
-                    return parsed;
-            }
-            return defaultValue;
         }
 
         internal SectionData ToConfig()
@@ -123,20 +107,6 @@ namespace AutoLoadPyxelRestAddIn
                 section.Keys.SetKeyData(tags);
             }
 
-            if (ConnectTimeout.HasValue)
-            {
-                KeyData connectTimeout = new KeyData(CONNECT_TIMEOUT_PROPERTY);
-                connectTimeout.Value = ConnectTimeout.Value.ToString(CultureInfo.InvariantCulture);
-                section.Keys.SetKeyData(connectTimeout);
-            }
-
-            if (ReadTimeout.HasValue)
-            {
-                KeyData readTimeout = new KeyData(READ_TIMEOUT_PROPERTY);
-                readTimeout.Value = ReadTimeout.Value.ToString(CultureInfo.InvariantCulture);
-                section.Keys.SetKeyData(readTimeout);
-            }
-
             if (!string.IsNullOrEmpty(SecurityDetails))
             {
                 KeyData securityDetails = new KeyData(SECURITY_DETAILS_PROPERTY);
@@ -167,8 +137,6 @@ namespace AutoLoadPyxelRestAddIn
             Options = true;
             Head = true;
             Tags = "";
-            ConnectTimeout = 1;
-            ReadTimeout = null;
             SecurityDetails = "";
             AdvancedConfiguration = "";
         }
@@ -203,7 +171,7 @@ namespace AutoLoadPyxelRestAddIn
         private string[] DefaultMethods(KeyDataCollection defaultConfig)
         {
             if (defaultConfig == null || !defaultConfig.ContainsKey(METHODS_PROPERTY))
-                return new string[0];
+                return (string[]) ALL_METHODS.Clone();
             return defaultConfig[METHODS_PROPERTY].Split(',');
         }
 

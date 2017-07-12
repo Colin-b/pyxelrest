@@ -7,8 +7,14 @@ import distutils.dir_util as dir_util
 
 from pyxelrest import com_server
 
+
 def to_absolute_path(file_path):
     return file_path if os.path.isabs(file_path) else os.path.abspath(file_path)
+
+
+def create_folder(folder_path):
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
 
 class VSTOManager:
@@ -116,9 +122,9 @@ class PostInstall:
         self.vsto_version = vsto_version
 
     def perform_post_installation_tasks(self):
-        self._create_pyxelrest_appdata_folder()
-        self._clear_logs()
-        self._create_pyxelrest_configuration_folder()
+        create_folder(self.pyxelrest_appdata_folder)
+        create_folder(self.pyxelrest_appdata_logs_folder)
+        create_folder(self.pyxelrest_appdata_config_folder)
         self._create_services_configuration()
         self._create_pyxelrest_logging_configuration()
         self._create_auto_update_logging_configuration()
@@ -143,14 +149,6 @@ class PostInstall:
             if process.Properties_('Name').Value == 'EXCEL.EXE':
                 return True
         return False
-
-    def _create_pyxelrest_appdata_folder(self):
-        if not os.path.exists(self.pyxelrest_appdata_folder):
-            os.makedirs(self.pyxelrest_appdata_folder)
-
-    def _create_pyxelrest_configuration_folder(self):
-        if not os.path.exists(self.pyxelrest_appdata_config_folder):
-            os.makedirs(self.pyxelrest_appdata_config_folder)
 
     def _create_services_configuration(self):
         default_config_file = os.path.join(self.installation_files_folder,
@@ -259,11 +257,6 @@ class PostInstall:
                 with open(default_config_file_path) as default_file:
                     for line in default_file:
                         write_addin_configuration_line(line, new_file)
-
-    def _clear_logs(self):
-        if os.path.exists(self.pyxelrest_appdata_logs_folder):
-            dir_util.remove_tree(self.pyxelrest_appdata_logs_folder)
-        os.makedirs(self.pyxelrest_appdata_logs_folder)
 
 
 if __name__ == '__main__':

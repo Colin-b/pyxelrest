@@ -22,6 +22,8 @@ DEFAULT_SUCCESS_DISPLAY_TIME = 1  # Time is expressed in milliseconds
 DEFAULT_FAILURE_DISPLAY_TIME = 5000  # Time is expressed in milliseconds
 DEFAULT_TOKEN_NAME = 'token'  # As described in https://tools.ietf.org/html/rfc6749#section-4.2.1
 
+logger = logging.getLogger(__name__)
+
 
 class DefaultSecurityDefinition:
     failure_display_time = DEFAULT_FAILURE_DISPLAY_TIME
@@ -34,7 +36,7 @@ current_security_definition = DefaultSecurityDefinition
 @app.route("/<service_name>/<security_definition_key>", methods=['GET'])
 def auth_get(service_name, security_definition_key):
     key = service_name + '/' + security_definition_key
-    logging.exception("Unable to properly perform authentication on {0}. GET is not supported for now.".format(key))
+    logger.exception("Unable to properly perform authentication on {0}. GET is not supported for now.".format(key))
     return error_page("Unable to properly perform authentication on {0}. GET is not supported for now.".format(key),
                       current_security_definition.failure_display_time)
 
@@ -50,7 +52,7 @@ def auth_post(service_name, security_definition_key):
         return success_page("You are now authenticated on {0}. You may close this tab.".format(key),
                             current_security_definition.success_display_time)
     except Exception as e:
-        logging.exception("Unable to properly perform authentication on {0}.".format(key))
+        logger.exception("Unable to properly perform authentication on {0}.".format(key))
         return error_page("Unable to properly perform authentication on {0}: {1}".format(key, e),
                           current_security_definition.failure_display_time)
     finally:
@@ -68,7 +70,7 @@ def shutdown():
     if flask_server_shutdown is None:
         raise RuntimeError('Not running with the Werkzeug Server')
     flask_server_shutdown()
-    logging.info('Stopping OAuth2 authentication responses server')
+    logger.info('Stopping OAuth2 authentication responses server')
     return success_page("OAuth 2 authentication response server is now closed.",
                         current_security_definition.success_display_time)
 
@@ -97,7 +99,7 @@ def get_bearer(security_definition):
 
 
 def request_new_token(security_definition):
-    logging.debug('Requesting user authentication...')
+    logger.debug('Requesting user authentication...')
     start_server(security_definition.port)
     global current_security_definition
     current_security_definition = security_definition
@@ -109,10 +111,10 @@ def request_new_token(security_definition):
     if not ie.open(security_definition.full_url, 1):
         response = requests.get(security_definition.full_url)
 
-    logging.debug('Waiting for user authentication...')
+    logger.debug('Waiting for user authentication...')
     res = acquire_with_timeout(authentication_response, security_definition.timeout)
     if not res:
-        logging.debug('No response received within {0} seconds. Aborting...'.format(security_definition.timeout))
+        logger.debug('No response received within {0} seconds. Aborting...'.format(security_definition.timeout))
         try:
             requests.post('http://localhost:{0}/shutdown'.format(security_definition.port), json='', timeout=1)
         except:
@@ -150,7 +152,7 @@ def start_server(port):
 
 
 def start_server_sync(port):
-    logging.debug('Starting OAuth2 authentication responses server...')
+    logger.debug('Starting OAuth2 authentication responses server...')
     wait_for_port('127.0.0.1', port)
     authentication_server.release()
     app.run(port=port)
