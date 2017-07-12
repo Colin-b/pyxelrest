@@ -42,7 +42,6 @@ class PythonServer:
     def __init__(self):
         sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
         sys.stderr = custom_logging.StreamToLogger(logging, logging.WARNING)
-        pass
 
     def generate_udf(self):
         from pyxelrest import pyxelrestgenerator

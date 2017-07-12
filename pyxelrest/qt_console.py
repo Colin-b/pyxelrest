@@ -7,14 +7,14 @@ import logging
 import threading
 import datetime
 
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 """
 Log Handler that pops up a QT table with filter:
     h = QtHandler()
     h.start()
     logging.getLogger().addHandler(h)
+PyQt5 is not a mandatory package for pyxelrest
 """
 
 
@@ -64,7 +64,7 @@ class MyWindow(QtWidgets.QMainWindow):
 
 
 class MyTableModel(QtCore.QAbstractTableModel):
-    def __init__(self, parent, header, *args):
+    def __init__(self, parent, header, max_nb=1000, *args):
         QtCore.QAbstractTableModel.__init__(self, parent, *args)
         self.olist = []
         self.dlist = []
@@ -72,7 +72,11 @@ class MyTableModel(QtCore.QAbstractTableModel):
         self.reverseOrder = None
         self.expr = None
         self.header = header
-        self.max = 1000
+        self.max = max_nb
+        self.color_red = QtCore.QVariant(QtGui.QBrush(QtGui.QColor(QtCore.Qt.red)))
+        self.color_yellow = QtCore.QVariant(QtGui.QBrush(QtGui.QColor(QtCore.Qt.yellow)))
+        self.align_center = QtCore.QVariant(QtCore.Qt.AlignCenter)
+        self.align_left = QtCore.QVariant(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
 
     def rowCount(self, parent):
         return len(self.dlist)
@@ -83,9 +87,21 @@ class MyTableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if not index.isValid():
             return None
-        elif role != QtCore.Qt.DisplayRole:
+        elif role == QtCore.Qt.DisplayRole:
+            return self.dlist[index.row()][index.column()]
+        elif role == QtCore.Qt.BackgroundRole:
+            level = self.dlist[index.row()][1]
+            if level == 'ERROR':
+                return self.color_red
+            elif level == 'WARNING':
+                return self.color_yellow
             return None
-        return self.dlist[index.row()][index.column()]
+        elif role == QtCore.Qt.TextAlignmentRole:
+            if index.column() < len(self.header) - 1:
+                return self.align_center
+            else:
+                return self.align_left
+        return None
 
     def headerData(self, col, orientation, role):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
@@ -155,7 +171,9 @@ class QtHandler(logging.Handler):
             app = QtWidgets.QApplication(sys.argv)
             self.win = MyWindow("Log Viewer", ['Date', 'Level', 'Thread', 'Location', 'Message'])
             app.exec_()
-        threading.Thread(target=ui).start()
+            self.win = None
+        if self.win is not None:
+            threading.Thread(target=ui).start()
 
     def show(self):
         if self.win is not None:
