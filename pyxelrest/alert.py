@@ -26,6 +26,12 @@ def message_box(title, message):
 
 
 class AlertHandler(logging.Handler):
+    """
+    AlertHandler is a logging handler to show a message box when an error is logged (if the log level is error)
+        h = AlertHandler()
+        h.setLevel(logging.ERROR)
+        logging.getLogger().addHandler(h)
+    """
     tags = re.compile(r'\[\w*=([^]]*)\]')
 
     def emit(self, record):

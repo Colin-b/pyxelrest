@@ -129,7 +129,7 @@ class PythonServer:
                 __import__(module_name)
             m = sys.modules[module_name]
             f = getattr(m, func_name)
-            args = tuple(from_variant(arg) for arg in args)
+            args = tuple(_from_variant(arg) for arg in args)
             return f(*args)
         except COMException as e:
             raise e
@@ -201,7 +201,7 @@ class PythonServer:
                 __import__(module_name)
             m = sys.modules[module_name]
             f = getattr(m, func_name)
-            args = tuple(from_variant(arg) for arg in args)
+            args = tuple(_from_variant(arg) for arg in args)
             p = threading.Thread(target=self._thread_call_within_thread, args=(call_name, f, *args))
             self.threads[call_name] = p
             p.start()
@@ -230,7 +230,7 @@ class PythonServer:
             m = sys.modules[module_name]
             # check that the function exists
             f = getattr(m, func_name)
-            args = tuple(from_variant(arg) for arg in args)
+            args = tuple(_from_variant(arg) for arg in args)
             q = multiprocessing.Queue()
             p = multiprocessing.Process(target=self._process_call_within_process, args=(q, self.sources, module_name, func_name, *args))
             self.results[call_name] = q
@@ -285,12 +285,12 @@ class PythonServer:
         return [k for k, v in self.threads.items() if not v.is_alive()]
 
 
-def from_variant(var):
+def _from_variant(var):
     try:
         if isinstance(var, tuple):
-            return tuple(from_variant(x) for x in var)
+            return tuple(_from_variant(x) for x in var)
         if isinstance(var, list):
-            return list(from_variant(x) for x in var)
+            return list(_from_variant(x) for x in var)
         return win32com.server.util.unwrap(var).obj
     except:
         return var
