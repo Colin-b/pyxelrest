@@ -131,7 +131,6 @@ def retry_com_exception(delay=1):
                 except Exception as e2:
                     msg, code = extract_error(e2)
                     logging.exception(msg)
-                    alert.message_box("Python Error", msg)
                 finally:
                     pythoncom.CoUninitialize()
 

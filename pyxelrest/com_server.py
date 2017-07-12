@@ -5,7 +5,7 @@ import threading
 import logging
 
 import pythoncom
-import xlwings
+import win32com
 from win32com.server.exception import COMException
 
 from pyxelrest import custom_logging, alert, pyxelresterrors
@@ -21,27 +21,35 @@ class PythonServer:
     _reg_clsid_ = _version.python_server_reg_clsid
     _reg_progid_ = 'pyxelrest.PythonServer'
     _public_methods_ = ['add_path', 'import_module', 'generate_udf', 'direct_call', 'thread_call', 'process_call',
-                        'running', 'result', 'set_syslog', 'set_level', 'init_disk_cache', 'init_memory_cache',
+                        'running', 'result', 'set_syslog', 'set_loglevel', 'set_filelog', 'set_alertlog', 'set_consolelog', 'init_disk_cache', 'init_memory_cache',
                         'clear_cache', 'install_module', 'get_running_calls', 'get_finished_calls']
 
     threads = {}
     results = {}
     sources = []
+    log_level = logging.DEBUG
     syslog_host = None
     syslog_port = None
     syslog_level = None
-    filelog_level = logging.DEBUG
+    filelog_filename = None
+    filelog_level = None
+    console = None
     disk_cache = None
+    alert_level = None
 
     def __init__(self):
-        custom_logging.set_file_logger('pythonserver-' + str(os.getpid()), self.filelog_level)
         sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
-        sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
+        sys.stderr = custom_logging.StreamToLogger(logging, logging.WARNING)
         pass
 
     def generate_udf(self):
         from pyxelrest import pyxelrestgenerator
         pyxelrestgenerator.generate_user_defined_functions()
+
+    def set_filelog(self, filename, level="DEBUG"):
+        self.filelog_filename = filename
+        self.filelog_level = level
+        custom_logging.set_file_logger(filename, logging.getLevelName(level))
 
     def set_syslog(self, host, port, level="INFO"):
         self.syslog_host = host
@@ -49,8 +57,27 @@ class PythonServer:
         self.syslog_level = level
         custom_logging.set_syslog_logger(host, port, logging.getLevelName(level))
 
-    def set_level(self, level):
-        logging.getLogger().setLevel(logging.getLevelName(level))
+    def set_alertlog(self, level="ERROR"):
+        self.alert_level = level
+        h = alert.AlertHandler()
+        h.setLevel(logging.getLevelName(level))
+        logging.getLogger().addHandler(h)
+
+    def set_consolelog(self, level="INFO"):
+        try:
+            if self.console is None:
+                from pyxelrest import qt_console
+                self.console = qt_console.QtHandler()
+                self.console.start()
+                logging.getLogger().addHandler(self.console)
+            self.console.setLevel(logging.getLevelName(level))
+            self.console.show()
+        except ImportError:
+            logging.error('Cannot setup console')
+
+    def set_loglevel(self, level, logger=None):
+        self.log_level = level
+        logging.getLogger(logger).setLevel(logging.getLevelName(level))
 
     def init_disk_cache(self, filename):
         import pyxelrest.caching
@@ -86,7 +113,6 @@ class PythonServer:
             except Exception as e:
                 msg = "Cannot import module {}".format(module_name)
                 logging.exception(msg)
-                alert.message_box("Python Error", msg)
                 raise COMException(msg)
 
     def direct_call(self, module_name, func_name, *args):
@@ -102,13 +128,13 @@ class PythonServer:
                 __import__(module_name)
             m = sys.modules[module_name]
             f = getattr(m, func_name)
+            args = tuple(from_variant(arg) for arg in args)
             return f(*args)
         except COMException as e:
             raise e
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
             logging.exception(msg)
-            alert.message_box("Python Error", msg)
             raise COMException(desc=msg, hresult=code)
 
     def _thread_call_within_thread(self, call_name, func, *args):
@@ -121,21 +147,26 @@ class PythonServer:
             msg, code = pyxelresterrors.extract_error(e)
             logging.exception(msg)
             self.results[call_name] = e
-            alert.message_box("Python Error", msg)
         finally:
             pythoncom.CoUninitialize()
 
     def _process_call_within_process(self, queue, sources, module_name, func_name, *args):
         sys.path.extend(sources)
         pythoncom.CoInitialize()
-        custom_logging.set_file_logger('pythonserver-' + str(os.getpid()), self.filelog_level)
+
+        if self.filelog_filename is not None:
+            custom_logging.set_file_logger(self.filelog_filename + '-' + str(os.getpid()), self.filelog_level)
         if self.syslog_host is not None:
             custom_logging.set_syslog_logger(self.syslog_host, self.syslog_port, self.syslog_level)
         if self.disk_cache is not None:
             from pyxelrest import caching
             caching.init_disk_cache(self.disk_cache + '-' + os.getpid())
+        if self.alert_level is not None:
+            self.set_alertlog(self.alert_level)
+        logging.getLogger().setLevel(logging.getLevelName(self.log_level))
         sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
         sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
+
         try:
             if module_name not in sys.modules:
                 __import__(module_name)
@@ -147,7 +178,6 @@ class PythonServer:
         except Exception as e:
             msg, code = pyxelresterrors.extract_error(e)
             logging.exception(msg)
-            alert.message_box("Python Error", msg)
             queue.put(e)
         finally:
             pythoncom.CoUninitialize()
@@ -165,10 +195,12 @@ class PythonServer:
             if p.is_alive():
                 return False
         try:
+            logging.info("{}: {}.{}{}".format(call_name, module_name, func_name, args))
             if module_name not in sys.modules:
                 __import__(module_name)
             m = sys.modules[module_name]
             f = getattr(m, func_name)
+            args = tuple(from_variant(arg) for arg in args)
             p = threading.Thread(target=self._thread_call_within_thread, args=(call_name, f, *args))
             self.threads[call_name] = p
             p.start()
@@ -176,8 +208,7 @@ class PythonServer:
         except COMException as e:
             raise e
         except Exception as e:
-            logging.exception("Bad call")
-            alert.message_box("Python Error", str(e))
+            logging.exception("Bad call: {}.{}{}".format(module_name, func_name, args))
             raise COMException(str(e))
 
     def process_call(self, call_name, module_name, func_name, *args):
@@ -198,6 +229,7 @@ class PythonServer:
             m = sys.modules[module_name]
             # check that the function exists
             f = getattr(m, func_name)
+            args = tuple(from_variant(arg) for arg in args)
             q = multiprocessing.Queue()
             p = multiprocessing.Process(target=self._process_call_within_process, args=(q, self.sources, module_name, func_name, *args))
             self.results[call_name] = q
@@ -207,8 +239,7 @@ class PythonServer:
         except COMException as e:
             raise e
         except Exception as e:
-            logging.exception("Bad call")
-            alert.message_box("Python Error", str(e))
+            logging.exception("Bad call: {}.{}{}".format(module_name, func_name, args))
             raise COMException(str(e))
 
     def running(self, call_name):
@@ -250,7 +281,18 @@ class PythonServer:
         return [k for k, v in self.threads.items() if v.is_alive()]
 
     def get_finished_calls(self):
-        return xlwings.server.ToVariant([k for k, v in self.threads.items() if not v.is_alive()])
+        return [k for k, v in self.threads.items() if not v.is_alive()]
+
+
+def from_variant(var):
+    try:
+        if isinstance(var, tuple):
+            return tuple(from_variant(x) for x in var)
+        if isinstance(var, list):
+            return list(from_variant(x) for x in var)
+        return win32com.server.util.unwrap(var).obj
+    except:
+        return var
 
 
 def register_com():

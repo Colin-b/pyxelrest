@@ -1,8 +1,7 @@
 import ctypes
 import sys
-
-# If set to True, calling message_box will have no effect. Can be useful for an application running on non-graphical env
-HIDE_MESSAGE_BOX = False
+import logging
+import re
 
 BUTTON_OK = 0x0
 BUTTON_OK_CANCEL = 0x01
@@ -20,11 +19,24 @@ POSITION_TOP_MOST = 0x40000
 
 
 def message_box(title, message):
-    if HIDE_MESSAGE_BOX:
-        return
     if sys.version_info.major > 2:
         ctypes.windll.user32.MessageBoxW(0, message, title, BUTTON_OK | ICON_EXCLAIM | BEHAVIOR_SYSTEM_MODAL)
     else:
         ctypes.windll.user32.MessageBoxA(0, message, title, BUTTON_OK | ICON_EXCLAIM | BEHAVIOR_SYSTEM_MODAL)
 
 
+class AlertHandler(logging.Handler):
+    tags = re.compile(r'\[\w*=([^]]*)\]')
+
+    def emit(self, record):
+        msg = self.tags.sub(r'\1', record.msg)
+        message_box('Python ' + record.levelname.capitalize(), msg)
+
+if __name__ == '__main__':
+    l = logging.getLogger()
+    h = AlertHandler()
+    l.addHandler(h)
+    try:
+        raise Exception('msg')
+    except:
+        l.exception('toto [a=2]')

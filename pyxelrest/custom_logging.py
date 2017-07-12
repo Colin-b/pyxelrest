@@ -5,14 +5,12 @@ import logging.config
 import logging.handlers
 
 from pyxelrest import _version
-from pyxelrest import alert
 from distutils import sysconfig
 
 
 def my_excepthook(excType, excValue, traceback, logger=logging):
     logger.error("Logging an uncaught exception",
                  exc_info=(excType, excValue, traceback))
-    alert.message_box("Python Error", str(excValue))
 
 sys.excepthook = my_excepthook
 
