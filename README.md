@@ -397,3 +397,7 @@ The cachetools module is required for this feature to be available.
 In case your UDF has a lot of parameters, then Microsoft Excel is unable to display them all in the function wizard.
 
 Try reducing the number of parameters in your service.
+
+### No command specified in the configuration, cannot autostart server ###
+
+This error will happen in case you manually specified in your xlwings.bas file to use debug server but did not uncomment the main function starting the server on pyxelrest module side.
