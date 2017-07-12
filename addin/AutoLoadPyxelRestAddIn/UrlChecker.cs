@@ -33,7 +33,9 @@ namespace AutoLoadPyxelRestAddIn
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
                 request.Timeout = 500;
                 proxy = GetProxyFor(url, proxy);
-                if (!string.IsNullOrEmpty(proxy))
+                if (proxy == null)
+                    request.Proxy = new WebProxy();
+                else if (proxy.Length > 0)
                     request.Proxy = new WebProxy(proxy);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 response.Close();
@@ -52,10 +54,15 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        /**
+         * Return null if no proxy should be used.
+         * Return string.empty if default proxy should be used.
+         * Return the proxy to be used otherwise.
+         */
         private static string GetProxyFor(string url, string proxy)
         {
             if (string.IsNullOrEmpty(proxy))
-                return null;
+                return string.Empty;
 
             string[] proxies = proxy.Split(',');
             if (proxies.Length == 1)
@@ -77,9 +84,14 @@ namespace AutoLoadPyxelRestAddIn
                         return urlProxy; // Proxy for this URL
                 }
             }
-            return null;
+            return string.Empty;
         }
 
+        /**
+         * Return null if no proxy should be used.
+         * Return string.empty if default proxy should be used.
+         * Return the proxy to be used otherwise.
+         */
         private static string GetProxyFor(string url, string[] proxyAndScheme)
         {
             string scheme = proxyAndScheme[0];
