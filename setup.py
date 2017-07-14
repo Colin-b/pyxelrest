@@ -128,9 +128,8 @@ setup(name='pyxelrest',
           # Used to parse logging configuration file
           # TODO It should be an optional dependency
           'pyaml==16.12.2',
-          # Used to run authentication services (also used in test cases)
-          # TODO It should be an optional dependency + try to move to Werkzeug?
-          'flask==0.12.2',
+          # Used to manage authentication
+          'requests_auth==0.1',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X

@@ -2,7 +2,7 @@ import unittest
 
 import time
 
-from pyxelrest import oauth2_authentication_responses_server
+from requests_auth import oauth2_authentication_responses_server
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 import sys

@@ -37,12 +37,6 @@ class MandatoryPropertyNotProvided(Exception):
         Exception.__init__(self, '"{0}" configuration section must provide "{1}".'.format(section, property_name))
 
 
-class PortNotAvailable(Exception):
-    """ Port is already taken. """
-    def __init__(self, port, *args, **kwargs):
-        Exception.__init__(self, 'The port {0} is not available.'.format(port))
-
-
 class ConfigurationFileNotFound(Exception):
     """ Configuration file not found. """
     def __init__(self, file_path, *args, **kwargs):
@@ -60,30 +54,6 @@ class EmptyResponses(InvalidSwaggerDefinition):
     """ Responses are not set in Swagger. """
     def __init__(self, method_name, *args, **kwargs):
         Exception.__init__(self, 'At least one response must be specified for "{0}".'.format(method_name))
-
-
-class AuthenticationFailed(Exception):
-    """ User was not authenticated. """
-    def __init__(self, *args, **kwargs):
-        Exception.__init__(self, 'User was not authenticated.')
-
-
-class InvalidToken(Exception):
-    """ Token is invalid. """
-    def __init__(self, token_name, *args, **kwargs):
-        Exception.__init__(self, '{0} is invalid.'.format(token_name))
-
-
-class TokenNotProvided(Exception):
-    """ Token was not provided. """
-    def __init__(self, token_name, dictionary_without_token, *args, **kwargs):
-        Exception.__init__(self, '{0} not provided within {1}.'.format(token_name, dictionary_without_token))
-
-
-class TokenExpiryNotProvided(Exception):
-    """ Token expiry was not provided. """
-    def __init__(self, token_body, *args, **kwargs):
-        Exception.__init__(self, 'Expiry (exp) is not provided in {0}.'.format(token_body))
 
 
 def extract_error(e, debug=True):
