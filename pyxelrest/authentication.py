@@ -30,8 +30,8 @@ def add_service_security(service_name, swagger, security_details):
             authentication = _create_authentication(security_definition, service_name, security_details)
             if authentication:
                 security_definitions[service_name, security_definition_key] = authentication
-        except Exception:
-            logging.exception('Authentication cannot be handled for {}'.format(security_definition))
+        except Exception as e:
+            logger.error('Authentication cannot be handled ({}) for {}'.format(e, security_definition))
 
 
 def _create_authentication(security_definition, service_name, security_details):

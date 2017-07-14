@@ -133,7 +133,7 @@ class Flattenizer:
             self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1, json_definition)
 
     def to_list(self, data):
-        logging.debug('Converting response to list...')
+        logger.debug('Converting response to list...')
         self._extract_values_and_level(data)
         # Extract Header and Rows
         for row in self.__values_per_level.values():
