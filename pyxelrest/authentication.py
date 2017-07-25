@@ -26,14 +26,14 @@ def add_service_security(service_name, swagger, security_details):
     for security_definition_key in json_security_definitions.keys():
         security_definition = json_security_definitions[security_definition_key]
         try:
-            authentication = _create_authentication(security_definition, service_name, security_details)
+            authentication = _create_authentication(security_definition, security_details)
             if authentication:
                 security_definitions[service_name, security_definition_key] = authentication
         except Exception as e:
             logger.error('Authentication cannot be handled ({}) for {}'.format(e, security_definition))
 
 
-def _create_authentication(security_definition, service_name, security_details):
+def _create_authentication(security_definition, security_details):
     if 'oauth2' == security_definition.get('type'):
         if security_definition.get('flow') == 'implicit':
             additional_authorization_parameters = {
