@@ -25,7 +25,6 @@ def add_service_security(service_name, swagger, security_details):
     json_security_definitions = swagger.get('securityDefinitions', {})
     for security_definition_key in json_security_definitions.keys():
         security_definition = json_security_definitions[security_definition_key]
-        security_definition['security_definition_key'] = security_definition_key
         try:
             authentication = _create_authentication(security_definition, service_name, security_details)
             if authentication:
