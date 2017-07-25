@@ -15,6 +15,7 @@
 - A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
 - The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
 - It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
+- Authentication is now mostly handled in a separate `requests_auth` module, this module was refactored to get rid of the `flask` dependency.
 
 ### Bug fixes ###
 

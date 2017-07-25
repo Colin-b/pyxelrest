@@ -112,7 +112,9 @@ setup(name='pyxelrest',
           # Used to generate a jwt token
           'pyjwt',
           # used for caching results
-          'cachetools'
+          'cachetools',
+          # Used to create test services
+          'flask',
       ],
       install_requires=[
           # Used to generate UDFs python file from a template
@@ -129,7 +131,7 @@ setup(name='pyxelrest',
           # TODO It should be an optional dependency
           'pyaml==16.12.2',
           # Used to manage authentication
-          'requests_auth==0.1',
+          'requests_auth==0.2',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X

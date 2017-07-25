@@ -41,14 +41,12 @@ def _create_authentication(security_definition, service_name, security_details):
                 security_detail_key[7:]: security_details[security_detail_key]
                 for security_detail_key in security_details.keys() if security_detail_key.startswith('oauth2.')
             }
-            return OAuth2(security_definition['authorizationUrl'],
-                          key='service_{0}__security_definition_key_{1}'.format(service_name,
-                                                                                security_definition['security_definition_key']),
-                          additional_authorization_parameters=additional_authorization_parameters,
-                          port=security_details.get('port'),
-                          timeout=security_details.get('timeout'),
-                          success_display_time=security_details.get('success_display_time'),
-                          failure_display_time=security_details.get('failure_display_time'))
+            return OAuth2(authorization_url=security_definition['authorizationUrl'],
+                          redirect_uri_port=security_details.get('port'),
+                          token_reception_timeout=security_details.get('timeout'),
+                          token_reception_success_display_time=security_details.get('success_display_time'),
+                          token_reception_failure_display_time=security_details.get('failure_display_time'),
+                          **additional_authorization_parameters)
         # TODO Handle all OAuth2 flows
         logger.warning('OAuth2 flow is not supported: {0}'.format(security_definition))
     elif 'apiKey' == security_definition.get('type'):
