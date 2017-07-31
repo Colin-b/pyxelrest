@@ -73,6 +73,22 @@ class PyxelRestUpdater:
     def _update_pyxelrest(self):
         update_result = subprocess.check_output([self._pip_path, 'install', 'pyxelrest', '--upgrade'])
         logger.info(str(update_result))
+        # TODO This step will be removed as well as the auto-update feature as soon as infra will provide an installer
+        self._update_addin()
+
+    def _update_addin(self):
+        try:
+            # This script is always in the same folder as the add-in update script
+            from pyxelrest_install_addin import Installer
+
+            scripts_dir = os.path.abspath(os.path.dirname(__file__))
+            data_dir = os.path.join(scripts_dir, '..')
+            addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
+                                        os.path.join(data_dir, 'pyxelrest_vb_addin'))
+            addin_installer.perform_post_installation_tasks()
+            logger.info('Microsoft Excel add-in successfully updated.')
+        except:
+            logger.exception('Unable to update add-in.')
 
 
 if __name__ == '__main__':

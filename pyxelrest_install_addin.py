@@ -44,8 +44,7 @@ class VSTOManager:
 
 
 class XlWingsConfig:
-    def __init__(self, pyxelrest_module_dir, xlwings_config_folder):
-        self.pyxelrest_module_dir = pyxelrest_module_dir
+    def __init__(self, xlwings_config_folder):
         self.xlwings_config_folder = xlwings_config_folder
 
     def create_pyxelrest_bas_file(self):
@@ -89,17 +88,13 @@ class XlWingsConfig:
             pyxelrest_settings.write('    PYTHON_WIN = "' + pythonw_path + '"\n')
         # Allow to call pyxelrest
         elif '    UDF_MODULES = ""\n' == xlwings_settings_line:
-            pyxelrest_python_path = os.path.join(self.pyxelrest_module_dir, 'pyxelrestgenerator.py')
-            if not os.path.isfile(pyxelrest_python_path):
-                raise Exception('PyxelRest module cannot be found in {0}'.format(pyxelrest_python_path))
             pyxelrest_settings.write('    UDF_MODULES = "pyxelrest.pyxelrestgenerator"\n')
         else:
             pyxelrest_settings.write(xlwings_settings_line)
 
 
 class Installer:
-    def __init__(self, add_in_folder, vba_add_in_folder, installation_files_folder=None, modules_folder=None,
-                 scripts_folder=None, vsto_version='10.0'):
+    def __init__(self, add_in_folder, vba_add_in_folder, scripts_folder=None, vsto_version='10.0'):
         if not sys.platform.startswith('win'):
             raise Exception('Auto Load add-in can only be installed on Microsoft Windows.')
         if not add_in_folder:
@@ -109,10 +104,7 @@ class Installer:
 
         self.add_in_folder = to_absolute_path(add_in_folder)
         self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
-        self.installation_files_folder = installation_files_folder or os.path.abspath(os.path.dirname(__file__))
-        modules_folder = modules_folder or os.path.abspath(os.path.dirname(__file__))
         self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
-        self.pyxelrest_module_dir = os.path.join(modules_folder, 'pyxelrest')
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
         self.pyxelrest_appdata_logs_folder = os.path.join(self.pyxelrest_appdata_folder, 'logs')
@@ -131,7 +123,7 @@ class Installer:
             raise Exception('Microsoft Excel must be closed for add-ins to be installed.')
         self._install_pyxelrest_vb_addin()
 
-        xlwings_config = XlWingsConfig(self.pyxelrest_module_dir, self.pyxelrest_appdata_config_folder)
+        xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)
         xlwings_config.create_pyxelrest_bas_file()
 
         self._install_auto_load_addin()
@@ -231,17 +223,11 @@ if __name__ == '__main__':
                         type=str)
     parser.add_argument('vb_add_in_directory', help='Directory containing PyxelRest Microsoft Visual Basic add-in.',
                         type=str)
-    parser.add_argument('--install_directory', help='Directory containing PyxelRest files for installation.',
-                        default=None, type=str)
-    parser.add_argument('--modules_directory', help='Directory containing installed Python modules.',
-                        default=None, type=str)
     parser.add_argument('--scripts_directory', help='Directory containing installed Python scripts.',
                         default=None, type=str)
     options = parser.parse_args(sys.argv[1:])
 
     installer = Installer(options.add_in_directory,
                           options.vb_add_in_directory,
-                          installation_files_folder=options.install_directory,
-                          modules_folder=options.modules_directory,
                           scripts_folder=options.scripts_directory)
     installer.perform_post_installation_tasks()

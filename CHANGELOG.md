@@ -8,6 +8,7 @@
 - methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
 - Update script no longer removes logs folder on update, the whole update process can now be logged.
 - Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
+- Microsoft Excel VBA and C# add-in are not auto-installed anymore on pyxelrest module installation. (add-in upgrade is still managed by auto-update feature though)
 
 ### Enhancements ###
 

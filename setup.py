@@ -1,13 +1,8 @@
 import os
 from setuptools import setup, find_packages
 from distutils.command.install_data import install_data
-import distutils.sysconfig
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-# Corresponds to Lib\site-packages folder
-modules_dir = distutils.sysconfig.get_python_lib()
-data_dir = os.path.join(modules_dir, '..', '..')
-scripts_dir = os.path.join(modules_dir, '..', '..', 'Scripts')
 
 
 class install_pyxelrest_data(install_data):
@@ -17,14 +12,6 @@ class install_pyxelrest_data(install_data):
         from pyxelrest_post_install import PostInstall
         post_install = PostInstall(installation_files_folder=this_dir)
         post_install.perform_post_installation_tasks()
-
-        from pyxelrest_install_addin import Installer
-        addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
-                                   os.path.join(data_dir, 'pyxelrest_vb_addin'),
-                                   installation_files_folder=this_dir,
-                                   modules_folder=modules_dir,
-                                   scripts_folder=scripts_dir)
-        addin_installer.perform_post_installation_tasks()
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
