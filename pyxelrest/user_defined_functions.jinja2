@@ -418,7 +418,11 @@ def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
 
     logger.debug('Converting JSON string to corresponding python structure...')
     json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
+{% if flattenize %}
     return Flattenizer(all_responses, response.status_code, all_definitions).to_list(json_data)
+{% else %}
+    return json_data
+{% endif %}
 
 
 def msgpackpandas_as_list(msgpack_pandas):
