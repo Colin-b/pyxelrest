@@ -180,7 +180,7 @@ If response_type is not provided in authorization_url, token is expected to be r
     </tr>
     <tr>
         <td><strong>timeout</strong></td>
-        <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.</td>
+        <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 1 minute.</td>
         <td>Optional</td>
     </tr>
     <tr>

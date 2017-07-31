@@ -6,7 +6,8 @@
 
 - connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
 - methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
-- Update script no longer removes logs folder on update, the whole update process can now be logged
+- Update script no longer removes logs folder on update, the whole update process can now be logged.
+- Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
 
 ### Enhancements ###
 

@@ -120,7 +120,7 @@ setup(name='pyxelrest',
           # Used to generate UDFs python file from a template
           'jinja2==2.9.6',
           # Used to communicate with services
-          'requests==2.18.1',
+          'requests==2.18.2',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
           # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
@@ -131,7 +131,7 @@ setup(name='pyxelrest',
           # TODO It should be an optional dependency
           'pyaml==16.12.2',
           # Used to manage authentication
-          'requests_auth==0.2',
+          'requests_auth==0.3.0',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X

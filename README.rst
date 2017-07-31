@@ -159,7 +159,7 @@ If response_type is not provided in authorization_url, token is expected to be r
 +======================+==================================================================================================================================================================+===========+
 | port                 | Port on which the authentication response is supposed to be received. Default value is 5000.                                                                     | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
-| timeout              | Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.                                                   | Optional  |
+| timeout              | Maximum number of seconds to wait for the authentication response to be received. Default value is 1 minute.                                                     | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 | oauth2.XXXX          | Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1                 | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
