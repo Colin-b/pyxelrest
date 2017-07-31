@@ -13,13 +13,18 @@ scripts_dir = os.path.join(modules_dir, '..', '..', 'Scripts')
 class install_pyxelrest_data(install_data):
     def run(self):
         install_data.run(self)
+
         from pyxelrest_post_install import PostInstall
-        post_install = PostInstall(os.path.join(data_dir, 'pyxelrest_addin'),
+        post_install = PostInstall(installation_files_folder=this_dir)
+        post_install.perform_post_installation_tasks()
+
+        from pyxelrest_install_addin import Installer
+        addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
                                    os.path.join(data_dir, 'pyxelrest_vb_addin'),
                                    installation_files_folder=this_dir,
                                    modules_folder=modules_dir,
                                    scripts_folder=scripts_dir)
-        post_install.perform_post_installation_tasks()
+        addin_installer.perform_post_installation_tasks()
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
@@ -41,14 +46,14 @@ setup(name='pyxelrest',
       download_url='http://www.engie.com',
       classifiers=[
           "Development Status :: 4 - Beta",
-          "Intended Audience :: Developers"
+          "Intended Audience :: Developers",
           "Programming Language :: Python",
           "Programming Language :: Python :: 2",
           "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3",
           "Programming Language :: Python :: 3.5",
           "Programming Language :: Python :: 3.6",
-          "Operating System :: Microsoft :: Windows :: Windows 7"
+          "Operating System :: Microsoft :: Windows :: Windows 7",
       ],
       keywords=[
           'excel',
@@ -56,14 +61,14 @@ setup(name='pyxelrest',
           'swagger',
           'rest',
           'udf',
-          'service'
+          'service',
       ],
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
              'default_logging_configuration.ini.jinja2',
              'default_services_configuration.ini',
-             'user_defined_functions.jinja2'
+             'user_defined_functions.jinja2',
          ]
       },
       data_files=[
@@ -104,7 +109,7 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-16.ico',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-128.png'
               ]
-          )
+          ),
       ],
       tests_require=[
           # Used to run tests
@@ -135,16 +140,17 @@ setup(name='pyxelrest',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
-          'future==0.16.0'
+          'future==0.16.0',
       ],
       scripts=[
           'pyxelrest_auto_update.py',
-          'pyxelrest_post_install.py'
+          'pyxelrest_post_install.py',
+          'pyxelrest_install_addin.py',
       ],
       platforms=[
-          'Windows'
+          'Windows',
       ],
       cmdclass={
-          'install_data': install_pyxelrest_data
+          'install_data': install_pyxelrest_data,
       }
       )
