@@ -5,15 +5,14 @@
 ### Release notes ###
 
 - connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
-- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
-- Update script no longer removes logs folder on update, the whole update process can now be logged.
-- Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
-- Microsoft Excel VBA and C# add-in are not auto-installed anymore on pyxelrest module installation. (add-in upgrade is still managed by auto-update feature though)
 
 ### Enhancements ###
 
 - Introduce new max_retries key for advanced_configuration property. Refer to documentation for more details. Previous behavior was "never retry", it will now retry 5 times by default.
+- Update script no longer removes logs folder on update, the whole update process can now be logged.
 - It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
+- Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
+- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
 - A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
 - The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
 - It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
