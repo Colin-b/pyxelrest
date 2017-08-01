@@ -14,10 +14,12 @@ class install_pyxelrest_data(install_data):
     def run(self):
         install_data.run(self)
 
+        self.announce('Performing post installation tasks...')
         from pyxelrest_post_install import PostInstall
         post_install = PostInstall(installation_files_folder=this_dir)
         post_install.perform_post_installation_tasks()
 
+        self.announce('Installing add-in...')
         # TODO This will be removed once clients will have v0.63 at least (update script installing add-in)
         from pyxelrest_install_addin import Installer
         addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
