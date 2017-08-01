@@ -47,6 +47,7 @@ class PyxelRestUpdater:
             logger.info('Update available.')
             if self._want_update():
                 logger.debug('Update accepted. Waiting for Microsoft Excel to close...')
+                # If Microsoft Excel is running, user might still use pyxelrest, do not update yet
                 while self._is_excel_running():
                     # As closing Microsoft Excel is a manual user action, wait for 1 second between each check.
                     time.sleep(1)
