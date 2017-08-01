@@ -36,6 +36,27 @@ def swagger_version_not_supported():
                    })
 
 
+@app.route('/operation_id_not_provided')
+def operation_id_not_provided():
+    return jsonify(swagger='2.0',
+                   paths={
+                       '/test/without/operationId': {
+                           'get': {
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation'
+                                   }
+                               }
+                           }
+                       }
+                   })
+
+
+@app.route('/test/without/operationId')
+def get_test_without_operation_id():
+    return 'OK'
+
+
 def start_server(port):
     app.run(port=port)
 

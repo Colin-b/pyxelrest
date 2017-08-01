@@ -25,6 +25,7 @@
 - PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
 - file:// swagger URL are now properly analyzed by Microsoft Excel Add-In
 - Only HTTP GET results can now be cached as it does not make sense for other HTTP methods.
+- operationId was considered as mandatory in swagger while it is not, leading to services without operationId not being able to be loaded.
 
 ## 0.62 (2017-06-27) ##
 

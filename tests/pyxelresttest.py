@@ -32,26 +32,28 @@ class PyxelRestTest(unittest.TestCase):
             filtered_tags_test_service,
             values_false_test_service,
             output_order_test_service,
+            swagger_parsing_test_service,
             without_parameter_test_service,
             header_parameter_test_service,
             form_parameter_test_service,
             array_parameter_test_service,
             static_file_call_test_service,
             http_methods_test_service,
-            content_type_test_service
+            content_type_test_service,
         )
         serviceshandler.start_services(
             (usual_parameters_test_service, 8943),
             (filtered_tags_test_service, 8944),
             (values_false_test_service, 8945),
             (output_order_test_service, 8946),
+            (swagger_parsing_test_service, 8948),
             (without_parameter_test_service, 8950),
             (header_parameter_test_service, 8951),
             (form_parameter_test_service, 8952),
             (array_parameter_test_service, 8953),
             (static_file_call_test_service, 8954),
             (http_methods_test_service, 8955),
-            (content_type_test_service, 8956)
+            (content_type_test_service, 8956),
         )
 
     def test_string_array_parameter(self):
@@ -315,6 +317,13 @@ class PyxelRestTest(unittest.TestCase):
         self.assertEqual(
             'application/json',
             pyxelrestgenerator.content_type_test_get_test_json()
+        )
+
+    def test_missing_operation_id(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'OK',
+            pyxelrestgenerator.swagger_parsing_test_get_test_without_operationId()
         )
 
 if __name__ == '__main__':
