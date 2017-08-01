@@ -35,7 +35,8 @@ class VSTOManager:
             raise Exception('Auto Load PyxelRest add-in cannot be found in {0}.'.format(vsto_file_path))
         failed_silent_install = subprocess.call([self.vsto_installer_path, '/Silent', '/Install', vsto_file_path])
         if failed_silent_install:
-            log.warn('Silent add-in installation failed. Try non-silent installation...')
+            log.warn('Silent add-in installation failed (returned {0}). Try non-silent installation...'.format(
+                failed_silent_install))
             subprocess.check_call([self.vsto_installer_path, '/Install', vsto_file_path])
         log.info('Add-in installation completed.')
 
@@ -44,11 +45,18 @@ class VSTOManager:
         if os.path.isfile(vsto_file_path):
             log.info('Try to uninstall Microsoft Excel add-in...')
             # Check result of uninstall as failed uninstall should never occurs
-            failed_silent_uninstall = subprocess.call([self.vsto_installer_path, '/Silent', '/Uninstall', vsto_file_path])
+            failed_silent_uninstall = subprocess.call([
+                self.vsto_installer_path, '/Silent', '/Uninstall', vsto_file_path
+            ])
             if failed_silent_uninstall:
-                log.warn('Silent add-in uninstallation failed. Try non-silent uninstallation...')
+                log.warn('Silent add-in uninstallation failed (returned {0}). Try non-silent uninstallation...'.format(
+                    failed_silent_uninstall))
                 subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
-            log.info('Add-in uninstallation completed.')
+            # Clear ClickOnce cache as it might be inconsistent if Microsoft Excel was running
+            log.info('Add-in uninstallation completed. Clearing ClickOnce application cache...')
+            # Do not check result of cache clearing as it might not be required.
+            failed_clickonce_cache_cleanup = subprocess.call(['rundll32', 'dfshim', 'CleanOnlineAppCache'])
+            log.info('ClickOnce application cache cleared (returned {0})'.format(failed_clickonce_cache_cleanup))
 
     @staticmethod
     def get_auto_load_vsto_file_path(add_in_folder):
@@ -134,7 +142,7 @@ class Installer:
         # otherwise ClickOnce cache will still contains the add-in application manifest
         # Resulting in failure when installing a new add-in version
         if self._is_excel_running():
-            raise Exception('Microsoft Excel must be closed for add-ins to be installed.')
+            log.warn('Microsoft Excel should be closed otherwise add-in update might fail.')
         self._install_pyxelrest_vb_addin()
 
         xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)
