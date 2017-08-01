@@ -33,6 +33,7 @@ class VSTOManager:
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
             raise Exception('Auto Load PyxelRest add-in cannot be found in {0}.'.format(vsto_file_path))
+        self._clear_click_once_cache()
         failed_silent_install = subprocess.call([self.vsto_installer_path, '/Silent', '/Install', vsto_file_path])
         if failed_silent_install:
             log.warn('Silent add-in installation failed (returned {0}). Try non-silent installation...'.format(
@@ -52,11 +53,16 @@ class VSTOManager:
                 log.warn('Silent add-in uninstallation failed (returned {0}). Try non-silent uninstallation...'.format(
                     failed_silent_uninstall))
                 subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
-            # Clear ClickOnce cache as it might be inconsistent if Microsoft Excel was running
-            log.info('Add-in uninstallation completed. Clearing ClickOnce application cache...')
-            # Do not check result of cache clearing as it might not be required.
-            failed_clickonce_cache_cleanup = subprocess.call(['rundll32', 'dfshim', 'CleanOnlineAppCache'])
-            log.info('ClickOnce application cache cleared (returned {0})'.format(failed_clickonce_cache_cleanup))
+            log.info('Add-in uninstallation completed.')
+
+    def _clear_click_once_cache(self):
+        """
+        Clear ClickOnce cache as it might be inconsistent if Microsoft Excel was running
+        """
+        log.info('Clearing ClickOnce application cache...')
+        # Do not check result of cache clearing as it might not be required.
+        failed_clickonce_cache_cleanup = subprocess.call(['rundll32', 'dfshim', 'CleanOnlineAppCache'])
+        log.info('ClickOnce application cache cleared (returned {0})'.format(failed_clickonce_cache_cleanup))
 
     @staticmethod
     def get_auto_load_vsto_file_path(add_in_folder):
