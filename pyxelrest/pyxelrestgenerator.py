@@ -58,6 +58,7 @@ def support_ujson():
 def generate_user_defined_functions(output='user_defined_functions.py', flattenize=True):
     """
     Load services and create user_defined_functions.py python file containing generated xlwings User Defined Functions.
+    :param flattenize: Set to False if you want the JSON dictionary as result of your UDF call.
     :return: None
     """
     services = swagger.load_services()
