@@ -31,8 +31,8 @@ Installation
 Pre requisites
 --------------
 
-- [Python](https://www.python.org/downloads/) must be installed.
-- [Microsoft Excel](https://products.office.com/en-us/excel) must be installed.
+- [Python >= 2.7](https://www.python.org/downloads/) must be installed.
+- [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed.
 - [Microsoft .NET Framework 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
 
 User Installation (using PIP)
@@ -159,7 +159,7 @@ If response_type is not provided in authorization_url, token is expected to be r
 +======================+==================================================================================================================================================================+===========+
 | port                 | Port on which the authentication response is supposed to be received. Default value is 5000.                                                                     | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
-| timeout              | Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.                                                   | Optional  |
+| timeout              | Maximum number of seconds to wait for the authentication response to be received. Default value is 1 minute.                                                     | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 | oauth2.XXXX          | Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1                 | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+

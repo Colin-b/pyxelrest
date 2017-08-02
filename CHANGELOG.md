@@ -5,23 +5,27 @@
 ### Release notes ###
 
 - connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
-- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
-- Update script no longer removes logs folder on update, the whole update process can now be logged
 
 ### Enhancements ###
 
 - Introduce new max_retries key for advanced_configuration property. Refer to documentation for more details. Previous behavior was "never retry", it will now retry 5 times by default.
+- Update script no longer removes logs folder on update, the whole update process can now be logged.
 - It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
+- Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
+- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
 - A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
 - The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
 - It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
 - Authentication is now mostly handled in a separate `requests_auth` module, this module was refactored to get rid of the `flask` dependency.
+- ClickOnce application cache will now be cleared after Microsoft Excel add-in uninstallation to ensure that next installation succeed. Installing add-in will now be possible even if Microsoft Excel is launched.
 
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
 - PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
 - file:// swagger URL are now properly analyzed by Microsoft Excel Add-In
+- Only HTTP GET results can now be cached as it does not make sense for other HTTP methods.
+- Do not prompt anymore for one update per closed Microsoft Excel instance. Only prompt the user once.
 
 ## 0.62 (2017-06-27) ##
 
