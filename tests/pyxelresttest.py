@@ -322,8 +322,19 @@ class PyxelRestTest(unittest.TestCase):
     def test_missing_operation_id(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'OK',
-            pyxelrestgenerator.swagger_parsing_test_get_test_without_operationId()
+            '/test/without/operationId called.',
+            pyxelrestgenerator.operation_id_not_provided_test_get_test_without_operationId()
+        )
+
+    def test_mixed_operation_id(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            '/test/with/operationId called.',
+            pyxelrestgenerator.operation_id_not_always_provided_test_get_test_without_operationId()
+        )
+        self.assertEqual(
+            '/test/without/operationId called.',
+            pyxelrestgenerator.operation_id_not_always_provided_test_duplicated_get_test_without_operationId()
         )
 
 if __name__ == '__main__':
