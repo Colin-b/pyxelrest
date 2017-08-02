@@ -32,7 +32,7 @@ Pre requisites
 --------------
 
 - [Python >= 2.7](https://www.python.org/downloads/) must be installed.
-- [Microsoft Excel >= 2013](https://products.office.com/en-us/excel) must be installed.
+- [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed.
 - [Microsoft .NET Framework 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
 
 User Installation (using PIP)
