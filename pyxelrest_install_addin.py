@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import sys
 import distutils.dir_util as dir_util
+from distutils import log
 
 
 def to_absolute_path(file_path):
@@ -12,6 +13,7 @@ def to_absolute_path(file_path):
 
 def create_folder(folder_path):
     if not os.path.exists(folder_path):
+        log.info('Creating {0} folder'.format(folder_path))
         os.makedirs(folder_path)
 
 
@@ -27,16 +29,40 @@ class VSTOManager:
                             .format(self.vsto_installer_path))
 
     def install_auto_load_addin(self, add_in_folder):
+        log.info('Try to install Microsoft Excel add-in...')
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
             raise Exception('Auto Load PyxelRest add-in cannot be found in {0}.'.format(vsto_file_path))
-        subprocess.check_call([self.vsto_installer_path, '/Install', vsto_file_path])
+        self._clear_click_once_cache()
+        failed_silent_install = subprocess.call([self.vsto_installer_path, '/Silent', '/Install', vsto_file_path])
+        if failed_silent_install:
+            log.warn('Silent add-in installation failed (returned {0}). Try non-silent installation...'.format(
+                failed_silent_install))
+            subprocess.check_call([self.vsto_installer_path, '/Install', vsto_file_path])
+        log.info('Add-in installation completed.')
 
     def uninstall_auto_load_addin(self, add_in_folder):
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if os.path.isfile(vsto_file_path):
+            log.info('Try to uninstall Microsoft Excel add-in...')
             # Check result of uninstall as failed uninstall should never occurs
-            subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
+            failed_silent_uninstall = subprocess.call([
+                self.vsto_installer_path, '/Silent', '/Uninstall', vsto_file_path
+            ])
+            if failed_silent_uninstall:
+                log.warn('Silent add-in uninstallation failed (returned {0}). Try non-silent uninstallation...'.format(
+                    failed_silent_uninstall))
+                subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
+            log.info('Add-in uninstallation completed.')
+
+    def _clear_click_once_cache(self):
+        """
+        Clear ClickOnce cache as it might be inconsistent if Microsoft Excel was running
+        """
+        log.info('Clearing ClickOnce application cache...')
+        # Do not check result of cache clearing as it might not be required.
+        failed_clickonce_cache_cleanup = subprocess.call(['rundll32', 'dfshim', 'CleanOnlineAppCache'])
+        log.info('ClickOnce application cache cleared (returned {0})'.format(failed_clickonce_cache_cleanup))
 
     @staticmethod
     def get_auto_load_vsto_file_path(add_in_folder):
@@ -52,6 +78,7 @@ class XlWingsConfig:
         Create XLWings specific configuration for PyxelRest.
         :return: None
         """
+        log.info('Creating XLWings specific configuration for PyxelRest...')
         pyxelrest_settings = os.path.join(self.xlwings_config_folder, 'xlwings.bas')
         with open(pyxelrest_settings, 'w') as new_settings:
             self._fill_pyxelrest_bas_file(new_settings)
@@ -70,6 +97,7 @@ class XlWingsConfig:
         with open(xlwings_bas_path) as previous_settings:
             for line in previous_settings:
                 self._write_pyxelrest_settings_line(line, pyxelrest_settings)
+        log.info('XLWings PyxelRest configuration created.')
 
     def _write_pyxelrest_settings_line(self, xlwings_settings_line, pyxelrest_settings):
         """
@@ -113,14 +141,14 @@ class Installer:
 
     def perform_post_installation_tasks(self):
         create_folder(self.pyxelrest_appdata_folder)
-        # Logs folder is required by default addin configuration
+        # Logs folder is required by default add-in configuration
         create_folder(self.pyxelrest_appdata_logs_folder)
         create_folder(self.pyxelrest_appdata_config_folder)
         # Assert that Microsoft Excel is closed
-        # otherwise ClickOnce cache of will still contains the add-in application manifest
+        # otherwise ClickOnce cache will still contains the add-in application manifest
         # Resulting in failure when installing a new add-in version
         if self._is_excel_running():
-            raise Exception('Microsoft Excel must be closed for add-ins to be installed.')
+            log.warn('Microsoft Excel should be closed otherwise add-in update might fail.')
         self._install_pyxelrest_vb_addin()
 
         xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)

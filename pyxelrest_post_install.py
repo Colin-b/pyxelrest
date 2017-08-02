@@ -2,12 +2,14 @@ import argparse
 import os
 import shutil
 import sys
+from distutils import log
 
 from pyxelrest import com_server
 
 
 def create_folder(folder_path):
     if not os.path.exists(folder_path):
+        log.info('Creating {0} folder'.format(folder_path))
         os.makedirs(folder_path)
 
 
@@ -28,7 +30,12 @@ class PostInstall:
         self._create_services_configuration()
         self._create_pyxelrest_logging_configuration()
         self._create_auto_update_logging_configuration()
+        self._register_com_server()
+
+    def _register_com_server(self):
+        log.info('Registering COM server...')
         com_server.register_com()
+        log.info('COM server registered.')
 
     def _create_services_configuration(self):
         default_config_file = os.path.join(self.installation_files_folder,
@@ -38,6 +45,7 @@ class PostInstall:
             user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.ini')
             if not os.path.isfile(user_config_file):
                 shutil.copyfile(default_config_file, user_config_file)
+                log.info('Services configuration file created.')
         else:
             raise Exception('Default services configuration file cannot be found in provided PyxelRest directory. {0}'
                             .format(default_config_file))
@@ -58,6 +66,7 @@ class PostInstall:
             with open(config_file_path, 'w') as generated_file:
                 generated_file.write(renderer.get_template('default_logging_configuration.ini.jinja2')
                                      .render(path_to_log_file=log_file_path))
+            log.info('{0} logging configuration file created.'.format(config_file_name))
 
 
 if __name__ == '__main__':

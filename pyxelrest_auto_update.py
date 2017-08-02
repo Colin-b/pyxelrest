@@ -38,11 +38,16 @@ class PyxelRestUpdater:
         self._pip_path = pip_path
 
     def check_update(self):
+        if self._is_already_updating():
+            logger.debug('Skip update check as another update is ongoing.')
+            return
+
         logger.debug('Checking if an update is available...')
         if self._is_update_available():
             logger.info('Update available.')
             if self._want_update():
                 logger.debug('Update accepted. Waiting for Microsoft Excel to close...')
+                # If Microsoft Excel is running, user might still use pyxelrest, do not update yet
                 while self._is_excel_running():
                     # As closing Microsoft Excel is a manual user action, wait for 1 second between each check.
                     time.sleep(1)
@@ -52,10 +57,23 @@ class PyxelRestUpdater:
                 logger.info('Update rejected.')
         else:
             logger.debug('No update available.')
+        self._update_is_finished()
 
     def _is_update_available(self):
         outdated_packages = subprocess.check_output([self._pip_path, 'list', '--outdated'])
         return 'pyxelrest' in str(outdated_packages)
+
+    def _update_is_finished(self):
+        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
+        os.remove(update_is_in_progress)
+
+    def _is_already_updating(self):
+        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
+        if os.path.isfile(update_is_in_progress):
+            return True
+        # Create file if this is the first update (most cases)
+        with open(update_is_in_progress, 'w'):
+            return False
 
     def _want_update(self):
         return win32ui.MessageBox("A PyxelRest update is available. Do you want to install it now?\n"
