@@ -251,6 +251,15 @@ class SwaggerService:
                 _update_method_security()
                 _update_method_consumes()
 
+    def get_unique_operation_id(self, potential_duplicated_operation_id):
+        unique_operation_id = potential_duplicated_operation_id  # At this time, this might not be unique
+        if potential_duplicated_operation_id in self.existing_operation_ids:
+            logger.warning('Duplicated operationId found: {0}.'.format(potential_duplicated_operation_id))
+            unique_operation_id = 'duplicated_{0}'.format(potential_duplicated_operation_id)
+
+        self.existing_operation_ids.append(unique_operation_id)
+        return unique_operation_id
+
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
             raise SwaggerVersionNotProvided()
@@ -303,13 +312,7 @@ class SwaggerMethod:
         """
         operation_id = self.swagger_method.get('operationId') or \
                        '{0}{1}'.format(self.requests_method, path.replace('/', '_'))
-
-        if operation_id in self.service.existing_operation_ids:
-            logger.warning('Duplicated operationId for {0}.'.format(operation_id))
-            operation_id = 'duplicated_{0}'.format(operation_id)
-
-        self.swagger_method['operationId'] = operation_id
-        self.service.existing_operation_ids.append(operation_id)
+        self.swagger_method['operationId'] = self.service.get_unique_operation_id(operation_id)
 
     def update_information_on_parameter_type(self, parameter):
         parameter_in = parameter['in']
