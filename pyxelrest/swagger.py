@@ -35,6 +35,7 @@ class SwaggerService:
         to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
+        self.existing_operation_ids = []
         self.name = service_name
         self.udf_prefix = to_valid_python_vba(service_name)
         self.requested_methods = [method.strip() for method in self.get_item_default(config, 'methods', '').split(',') if method.strip()]
@@ -250,6 +251,15 @@ class SwaggerService:
                 _update_method_security()
                 _update_method_consumes()
 
+    def get_unique_operation_id(self, potential_duplicated_operation_id):
+        unique_operation_id = potential_duplicated_operation_id  # At this time, this might not be unique
+        if potential_duplicated_operation_id in self.existing_operation_ids:
+            logger.warning('Duplicated operationId found: {0}.'.format(potential_duplicated_operation_id))
+            unique_operation_id = 'duplicated_{0}'.format(potential_duplicated_operation_id)
+
+        self.existing_operation_ids.append(unique_operation_id)
+        return unique_operation_id
+
     def validate_swagger_version(self):
         if 'swagger' not in self.swagger:
             raise SwaggerVersionNotProvided()
@@ -287,10 +297,22 @@ class SwaggerMethod:
                 self.optional_parameters.append(parameter)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
-        self.udf_name = '{0}_{1}'.format(service.udf_prefix, swagger_method['operationId'])
+        self._compute_operation_id(path)
+        self.udf_name = '{0}_{1}'.format(service.udf_prefix, self.swagger_method['operationId'])
         self.responses = swagger_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
+
+    def _compute_operation_id(self, path):
+        """
+        Compute the operationId swagger field (as it may not be provided).
+        Also ensure that there is no duplicate (in case a computed one matches a provided one)
+
+        :param path: path provided in swagger definition for this method
+        """
+        operation_id = self.swagger_method.get('operationId') or \
+                       '{0}{1}'.format(self.requests_method, path.replace('/', '_'))
+        self.swagger_method['operationId'] = self.service.get_unique_operation_id(operation_id)
 
     def update_information_on_parameter_type(self, parameter):
         parameter_in = parameter['in']
