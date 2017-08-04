@@ -32,10 +32,11 @@ else:
 
 
 class PyxelRestUpdater:
-    def __init__(self, pip_path):
+    def __init__(self, pip_path, path_to_up_to_date_configurations=None):
         if not os.path.isfile(pip_path):
             raise Exception('PIP executable cannot be found at {0}.'.format(pip_path))
         self._pip_path = pip_path
+        self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
 
     def check_update(self):
         if self._is_already_updating():
@@ -91,8 +92,9 @@ class PyxelRestUpdater:
     def _update_pyxelrest(self):
         update_result = subprocess.check_output([self._pip_path, 'install', 'pyxelrest', '--upgrade'])
         logger.info(str(update_result))
-        # TODO This step will be removed as well as the auto-update feature as soon as infra will provide an installer
         self._update_addin()
+        # Only perform configuration update when we are sure that latest version is installed
+        self._update_configuration()
 
     def _update_addin(self):
         try:
@@ -108,14 +110,34 @@ class PyxelRestUpdater:
         except:
             logger.exception('Unable to update add-in.')
 
+    def _update_configuration(self):
+        if not self.path_to_up_to_date_configurations:
+            logger.info('Services configuration will not be updated.')
+            return
+
+        try:
+            # This script is always in the same folder as the configuration update script
+            from pyxelrest_update_services_config import ServicesConfigUpdater, UPDATE_SECTIONS
+
+            updater = ServicesConfigUpdater(self.path_to_up_to_date_configurations, UPDATE_SECTIONS)
+            updater.update_configuration()
+            logger.info('Services configuration successfully updated.')
+        except:
+            logger.exception('Unable to update configuration.')
+
 
 if __name__ == '__main__':
     logger.debug('Starting auto update script...')
     parser = argparse.ArgumentParser()
     parser.add_argument('path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
+    parser.add_argument('--path_to_up_to_date_configurations',
+                        help='File or directory containing up to date services configuration.',
+                        default=None,
+                        type=str)
     options = parser.parse_args(sys.argv[1:])
     try:
-        PyxelRestUpdater(options.path_to_pip).check_update()
+        updater = PyxelRestUpdater(options.path_to_pip, options.path_to_up_to_date_configurations)
+        updater.check_update()
     except:
         logger.exception('An error occurred while checking for update.')
         raise

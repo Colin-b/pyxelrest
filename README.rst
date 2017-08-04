@@ -257,19 +257,21 @@ Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\confi
 
 The following application settings are available:
 
-+----------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-|                      | Description                                                                                    | Mandatory | Possible values                                             |
-+======================+================================================================================================+===========+=============================================================+
-| PathToPIP            | Path to the pip.exe (including) executable that should be used to update PyxelRest.            | Mandatory | Installation script is already setting this value properly. |
-+----------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-| PathToPython         | Path to the python.exe (including) executable that should be used to launch the update script. | Mandatory | Installation script is already setting this value properly. |
-+----------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-| PathToUpdateScript   | Path to the Python script used to update PyxelRest.                                            | Mandatory | Installation script is already setting this value properly. |
-+----------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-| AutoCheckForUpdates  | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.        | Optional  | True (default), False                                       |
-+----------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-| PathToXlWingsBasFile | Path to the Python script used to update PyxelRest.                                            | Mandatory | Default value is already set.                               |
-+----------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+|                              | Description                                                                                    | Mandatory | Possible values                                             |
++==============================+================================================================================================+===========+=============================================================+
+| PathToPIP                    | Path to the pip.exe (including) executable that should be used to update PyxelRest.            | Mandatory | Installation script is already setting this value properly. |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| PathToPython                 | Path to the python.exe (including) executable that should be used to launch the update script. | Mandatory | Installation script is already setting this value properly. |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| PathToUpdateScript           | Path to the Python script used to update PyxelRest.                                            | Mandatory | Installation script is already setting this value properly. |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| AutoCheckForUpdates          | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.        | Optional  | True (default), False                                       |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| PathToXlWingsBasFile         | Path to the Python script used to update PyxelRest.                                            | Mandatory | Default value is already set.                               |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration.                    | Optional  |                                                             |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 
 Using as a module
 -----------------

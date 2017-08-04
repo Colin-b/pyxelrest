@@ -18,6 +18,7 @@
 - It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
 - Authentication is now mostly handled in a separate `requests_auth` module, this module was refactored to get rid of the `flask` dependency.
 - ClickOnce application cache will now be cleared after Microsoft Excel add-in uninstallation to ensure that next installation succeed. Installing add-in will now be possible even if Microsoft Excel is launched.
+- Services configuration can now be auto-updated as part of the auto-update process.
 
 ### Bug fixes ###
 

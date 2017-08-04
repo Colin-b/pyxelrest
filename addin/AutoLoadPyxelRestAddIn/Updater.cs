@@ -12,6 +12,7 @@ namespace AutoLoadPyxelRestAddIn
         private readonly string pipPath;
         private readonly string pythonPath;
         private readonly string update_script;
+        private readonly string path_to_up_to_date_configurations;
 
         internal Updater()
         {
@@ -26,14 +27,20 @@ namespace AutoLoadPyxelRestAddIn
             update_script = ThisAddIn.GetSetting("PathToUpdateScript");
             if (!File.Exists(update_script))
                 throw new Exception(string.Format("PyxelRest auto update script '{0}' cannot be found.", update_script));
+
+            path_to_up_to_date_configurations = ThisAddIn.GetSetting("PathToUpToDateConfigurations");
         }
 
         internal void CheckUpdate()
         {
+            string commandLine = string.Format("{0} {1}", update_script, pipPath);
+            if (!string.IsNullOrEmpty(path_to_up_to_date_configurations))
+                commandLine += string.Format(" --path_to_up_to_date_configurations {0}", path_to_up_to_date_configurations);
+
             Log.Debug("Check for PyxelRest update.");
             Process updateScript = new Process();
             updateScript.StartInfo.FileName = pythonPath;
-            updateScript.StartInfo.Arguments = string.Format("{0} {1}", update_script, pipPath);
+            updateScript.StartInfo.Arguments = commandLine;
             updateScript.StartInfo.UseShellExecute = false;
             updateScript.StartInfo.CreateNoWindow = true;
             updateScript.Start();

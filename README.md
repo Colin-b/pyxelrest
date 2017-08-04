@@ -358,6 +358,12 @@ The following application settings are available:
         <td>Mandatory</td>
         <td>Default value is already set.</td>
     </tr>
+    <tr>
+        <td><strong>PathToUpToDateConfigurations</strong></td>
+        <td>Path to the file or directory containing up to date services configuration.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 ## Using as a module ##

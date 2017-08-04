@@ -82,10 +82,10 @@ class ServicesConfigUpdater:
             if REMOVE_SECTIONS == self._action:
                 self._remove_service(service_name)
 
-        self.save_configuration()
+        self._save_configuration()
         logger.info('Services configuration updated.')
 
-    def save_configuration(self):
+    def _save_configuration(self):
         with open(_USER_CONFIG_FILE_PATH, 'w') as file:
             self._user_config.write(file)
 
