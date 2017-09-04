@@ -151,22 +151,19 @@ class PythonServer:
         finally:
             pythoncom.CoUninitialize()
 
-    def _process_call_within_process(self, queue, sources, module_name, func_name, *args):
+    def _process_call_within_process(self, queue, queue_log, sources, module_name, func_name, *args):
         sys.path.extend(sources)
         pythoncom.CoInitialize()
 
-        if self.filelog_filename is not None:
-            custom_logging.set_file_logger(self.filelog_filename + '-' + str(os.getpid()), self.filelog_level)
-        if self.syslog_host is not None:
-            custom_logging.set_syslog_logger(self.syslog_host, self.syslog_port, self.syslog_level)
         if self.disk_cache is not None:
             from pyxelrest import caching
             caching.init_disk_cache(self.disk_cache + '-' + os.getpid())
-        if self.alert_level is not None:
-            self.set_alertlog(self.alert_level)
-        logging.getLogger().setLevel(logging.getLevelName(self.log_level))
-        sys.stdout = custom_logging.StreamToLogger(logging, logging.INFO)
-        sys.stderr = custom_logging.StreamToLogger(logging, logging.ERROR)
+
+        rt = logging.getLogger()
+        rt.setLevel(logging.getLevelName(self.log_level))
+        sys.stdout = custom_logging.StreamToLogger(rt, logging.INFO)
+        sys.stderr = custom_logging.StreamToLogger(rt, logging.ERROR)
+        rt.addHandler(custom_logging.ProcessHandler(queue_log))
 
         try:
             if module_name not in sys.modules:
@@ -181,6 +178,7 @@ class PythonServer:
             logger.exception(msg)
             queue.put(e)
         finally:
+            queue_log.put(None)
             pythoncom.CoUninitialize()
 
     def thread_call(self, call_name, module_name, func_name, *args):
@@ -232,7 +230,9 @@ class PythonServer:
             f = getattr(m, func_name)
             args = tuple(_from_variant(arg) for arg in args)
             q = multiprocessing.Queue()
-            p = multiprocessing.Process(target=self._process_call_within_process, args=(q, self.sources, module_name, func_name, *args))
+            q2 = multiprocessing.Queue()
+            p = multiprocessing.Process(target=self._process_call_within_process, args=(q, q2, self.sources, module_name, func_name, *args))
+            custom_logging.connect(q2, logger)
             self.results[call_name] = q
             self.threads[call_name] = p
             p.start()
