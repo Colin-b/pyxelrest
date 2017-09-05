@@ -2,6 +2,7 @@ import argparse
 import sys
 import os
 import logging
+import requests
 try:
     # Python 3
     from configparser import ConfigParser
@@ -22,12 +23,31 @@ UPDATE_SECTIONS = 'update'  # Provided configuration(s) will be updated (if sect
 REMOVE_SECTIONS = 'remove'  # Provided configuration(s) will be removed (only based on section name)
 
 
-def open_config(config_file_names):
+def open_config(file_or_directory):
+    if os.path.isfile(file_or_directory) or os.path.isdir(file_or_directory):
+        return open_file_config(file_or_directory)
+    return open_url_config(file_or_directory)
+
+
+def open_file_config(file_or_directory):
+    config_file_names = to_file_paths(file_or_directory)
     config_parser = ConfigParser(interpolation=None)
     if not config_parser.read(config_file_names):
         logger.warning('Configuration files "{0}" cannot be read.'.format(config_file_names))
         return None
     return config_parser
+
+
+def open_url_config(configuration_file_url):
+    try:
+        response = requests.get(configuration_file_url)
+        response.raise_for_status()
+        config_parser = ConfigParser(interpolation=None)
+        config_parser.read_string(response.text)
+        return config_parser
+    except:
+        logger.exception('Configuration file URL "{0}" cannot be reached.'.format(configuration_file_url))
+        return None
 
 
 def to_absolute_path(file_path):
@@ -53,23 +73,25 @@ def to_file_paths(file_or_directory):
 
 class ServicesConfigUpdater:
 
-    def __init__(self, file_or_directory, action):
+    def __init__(self, action):
         """
 
-        :param file_or_directory: Absolute or relative path to a configuration file
-        or a directory containing configuration file(s).
         :param action: Valid value amongst ADD_SECTIONS, UPDATE_SECTIONS or REMOVE_SECTIONS
         :raise Exception: In case services configuration file located into _USER_CONFIG_FILE_PATH cannot be opened.
         """
         self._user_config = open_config(_USER_CONFIG_FILE_PATH)
         if not self._user_config:
             raise Exception('Services configuration cannot be opened.')
-        self.files = to_file_paths(file_or_directory)
         self._action = action
 
-    def update_configuration(self):
+    def update_configuration(self, file_or_directory):
+        """
+
+        :param file_or_directory: Absolute or relative path to a configuration file
+        or a directory or an URL to a file containing configuration file(s).
+        """
         logger.info('Updating services configuration...')
-        updated_config = open_config(self.files)
+        updated_config = open_config(file_or_directory)
         if not updated_config:
             logger.error('Services configuration cannot be updated.')
             return
@@ -118,13 +140,13 @@ class ServicesConfigUpdater:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('file_or_directory', help='File or directory containing services configuration.', type=str)
+    parser.add_argument('file_or_directory', help='File (path or URL) or directory (path) containing services configuration.', type=str)
     parser.add_argument('action', help='Action to perform with provided file(s).', type=str, choices=[
         ADD_SECTIONS, UPDATE_SECTIONS, REMOVE_SECTIONS])
     options = parser.parse_args(sys.argv[1:])
 
     try:
-        installer = ServicesConfigUpdater(options.file_or_directory, options.action)
-        installer.update_configuration()
+        installer = ServicesConfigUpdater(options.action)
+        installer.update_configuration(options.file_or_directory)
     except:
         logger.exception('Unable to perform services configuration update.')

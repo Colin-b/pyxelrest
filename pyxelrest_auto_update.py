@@ -119,8 +119,8 @@ class PyxelRestUpdater:
             # This script is always in the same folder as the configuration update script
             from pyxelrest_update_services_config import ServicesConfigUpdater, UPDATE_SECTIONS
 
-            updater = ServicesConfigUpdater(self.path_to_up_to_date_configurations, UPDATE_SECTIONS)
-            updater.update_configuration()
+            updater = ServicesConfigUpdater(UPDATE_SECTIONS)
+            updater.update_configuration(self.path_to_up_to_date_configurations)
             logger.info('Services configuration successfully updated.')
         except:
             logger.exception('Unable to update configuration.')
@@ -131,7 +131,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
     parser.add_argument('--path_to_up_to_date_configurations',
-                        help='File or directory containing up to date services configuration.',
+                        help='File (path or URL) or directory (path) containing up to date services configuration.',
                         default=None,
                         type=str)
     options = parser.parse_args(sys.argv[1:])
