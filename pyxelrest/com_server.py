@@ -102,15 +102,15 @@ class PythonServer:
             sys.path.append(path)
             self.sources.append(path)
 
-    def install_module(self, module_name, module_ver=None):
+    def install_module(self, module_name, package_name=None, module_ver=None):
         try:
-            if module_name not in sys.modules:
-                __import__(module_name)
+            if package_name or module_name not in sys.modules:
+                __import__(package_name or module_name)
         except ImportError:
             try:
                 import pip
                 pip.main(['install', module_name if module_ver is None else module_name + '>=' + module_ver])
-                __import__(module_name)
+                __import__(package_name or module_name)
             except Exception as e:
                 msg = "Cannot import module {}".format(module_name)
                 logger.exception(msg)
