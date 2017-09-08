@@ -53,5 +53,6 @@ class PyxelRestCacheTest(unittest.TestCase):
         self.mod = 1
         self.assertEqual(toto3(2), 4)
 
+
 if __name__ == '__main__':
     unittest.main()

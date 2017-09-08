@@ -150,5 +150,6 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                              ['', 'my_provided_api_key']
                          ])
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -140,5 +140,6 @@ class PyxelRestNestedDataBasedOnDefinitionsTest(unittest.TestCase):
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list_of_different_size())
 
+
 if __name__ == '__main__':
     unittest.main()

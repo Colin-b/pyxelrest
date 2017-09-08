@@ -170,5 +170,6 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
         ],
             pyxelrestgenerator.usual_parameters_test_get_test_date_time())
 
+
 if __name__ == '__main__':
     unittest.main()

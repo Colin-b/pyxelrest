@@ -2951,5 +2951,6 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date_time=['str value']),
             ['query_array_date_time must contain date times.'])
 
+
 if __name__ == '__main__':
     unittest.main()

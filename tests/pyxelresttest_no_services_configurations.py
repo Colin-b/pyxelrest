@@ -15,5 +15,6 @@ class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
             self.assertEqual(str(e), '"{0}" configuration file cannot be read.'.format(
                 loader.confighandler.services_config_file_path))
 
+
 if __name__ == '__main__':
     unittest.main()
