@@ -1,6 +1,6 @@
 # PyxelRest Changelog #
 
-## 0.63 (next) ##
+## 0.63.0 (next) ##
 
 ### Release notes ###
 
