@@ -3,6 +3,7 @@ import sys
 import platform
 import logging.config
 import logging.handlers
+import threading
 
 from pyxelrest import _version
 from distutils import sysconfig
@@ -57,6 +58,18 @@ def set_syslog_logger(host, port, level):
     logging.getLogger().addHandler(handler)
 
 
+def connect(queue, logger):
+    def treatment():
+        while True:
+            data = queue.get(block=True)
+            if data is None:
+                break
+            logger.handle(logger.makeRecord(**data))
+    t = threading.Thread(target=treatment)
+    t.start()
+    return t
+
+
 class StreamToLogger(object):
     """
     Fake file-like stream object that redirects writes to a logger instance.
@@ -72,3 +85,14 @@ class StreamToLogger(object):
 
     def flush(self):
         pass
+
+
+class ProcessHandler(logging.Handler):
+    def __init__(self, queue):
+        super().__init__()
+        self.queue = queue
+
+    def emit(self, record):
+        data = dict(level=record.levelno, msg=record.msg, fn=record.pathname, lno=record.lineno, name=record.name,
+                    args=record.args, exc_info=None)
+        self.queue.put(data)

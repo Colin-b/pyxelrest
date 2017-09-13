@@ -2,7 +2,6 @@ import logging
 import os
 from requests_auth.authentication import NTLM, OAuth2, HeaderApiKey, QueryApiKey, Basic, Auths
 from requests_auth.oauth2_tokens import JsonTokenFileCache
-import requests_auth.oauth2_authentication_responses_server as oauth2_authentication_responses_server
 
 logger = logging.getLogger(__name__)
 # Key is a tuple 'service name, security key'
@@ -11,7 +10,7 @@ security_definitions = {}
 custom_authentications = {}
 
 oauth2_tokens_cache_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'tokens.json')
-oauth2_authentication_responses_server.oauth2_tokens = JsonTokenFileCache(oauth2_tokens_cache_path)
+OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
 
 
 def add_service_custom_authentication(service_name, security_details):

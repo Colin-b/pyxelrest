@@ -81,5 +81,6 @@ class PyxelRestUdfsTest(unittest.TestCase):
         # PyCharm may rstrip lines without asking...
         self.assertEqual([line.rstrip() for line in actual[4:]], [line.rstrip() for line in expected[4:]])
 
+
 if __name__ == '__main__':
     unittest.main()

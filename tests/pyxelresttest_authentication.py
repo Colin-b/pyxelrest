@@ -1,11 +1,8 @@
 import unittest
 
-import time
-
-from requests_auth import oauth2_authentication_responses_server
+from requests_auth import authentication
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
-import sys
 import time
 
 
@@ -21,7 +18,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         serviceshandler.stop_services()
 
     def setUp(self):
-        oauth2_authentication_responses_server.auth_tokens.clear()
+        authentication.OAuth2.token_cache.clear()
 
     @classmethod
     def start_services(cls):
@@ -80,7 +77,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     def test_oauth2_authentication_timeout(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual('An error occurred. Please check logs for full details: "User was not authenticated."',
+        self.assertEqual('An error occurred. Please check logs for full details: "User authentication was not received within 5 seconds."',
                          pyxelrestgenerator.authenticated_test_get_test_oauth2_authentication_timeout())
 
     def test_without_authentication(self):
@@ -149,6 +146,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
                              ['Authorization', 'X-API-HEADER-KEY'],
                              ['', 'my_provided_api_key']
                          ])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -337,5 +337,6 @@ class PyxelRestTest(unittest.TestCase):
             pyxelrestgenerator.operation_id_not_always_provided_test_duplicated_get_test_without_operationId()
         )
 
+
 if __name__ == '__main__':
     unittest.main()

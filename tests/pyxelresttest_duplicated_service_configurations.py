@@ -19,5 +19,6 @@ class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
             self.assertEqual(str(e), "While reading from '{0}' [line  5]: section 'usual_parameters_test' already exists".format(
                 loader.confighandler.services_config_file_path.replace('\\', '\\\\')))
 
+
 if __name__ == '__main__':
     unittest.main()
