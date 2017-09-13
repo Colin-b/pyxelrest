@@ -20,12 +20,14 @@ class install_pyxelrest_data(install_data):
         post_install.perform_post_installation_tasks()
 
         self.announce('Installing add-in...')
-        # TODO This will be removed once clients will have v0.63 at least (update script installing add-in)
+        # TODO This will be removed once clients will have v0.63.0 at least (update script installing add-in)
         from pyxelrest_install_addin import Installer
         addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
                                     os.path.join(data_dir, 'pyxelrest_vb_addin'),
-                                    scripts_folder=scripts_dir)
+                                    scripts_folder=scripts_dir,
+                                    path_to_up_to_date_configuration='http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest-configuration/raw/all_services.ini?at=refs/heads/master')
         addin_installer.perform_post_installation_tasks()
+
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
@@ -40,7 +42,7 @@ setup(name='pyxelrest',
       maintainer='Engie',
       # TODO Provide a support mailbox for our products
       maintainer_email='colin.bounouar@external.engie.com',
-      url="http://guru.trading.gdfsuez.net/bitbucket/projects/RMS/repos/pyxelrest",
+      url="http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest",
       description="Access REST APIs from Excel using User Defined Functions (UDF)",
       long_description=long_description,
       # TODO Package to artifactory and assert that bamboo will keep it up to date
@@ -147,6 +149,7 @@ setup(name='pyxelrest',
           'pyxelrest_auto_update.py',
           'pyxelrest_post_install.py',
           'pyxelrest_install_addin.py',
+          'pyxelrest_update_services_config.py',
       ],
       platforms=[
           'Windows',

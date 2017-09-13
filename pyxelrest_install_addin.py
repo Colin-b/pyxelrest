@@ -122,7 +122,7 @@ class XlWingsConfig:
 
 
 class Installer:
-    def __init__(self, add_in_folder, vba_add_in_folder, scripts_folder=None, vsto_version='10.0'):
+    def __init__(self, add_in_folder, vba_add_in_folder, scripts_folder=None, vsto_version='10.0', path_to_up_to_date_configuration=None):
         if not sys.platform.startswith('win'):
             raise Exception('Auto Load add-in can only be installed on Microsoft Windows.')
         if not add_in_folder:
@@ -137,6 +137,7 @@ class Installer:
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
         self.pyxelrest_appdata_logs_folder = os.path.join(self.pyxelrest_appdata_folder, 'logs')
         self.pyxelrest_appdata_config_folder = os.path.join(self.pyxelrest_appdata_folder, 'configuration')
+        self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.vsto_version = vsto_version
 
     def perform_post_installation_tasks(self):
@@ -232,6 +233,10 @@ class Installer:
                 new_line = addin_settings_line.replace('XLWINGS_BAS_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
                                                        xlwings_bas_path)
                 addin_settings_file.write(new_line)
+            elif '</appSettings>' in addin_settings_line:
+                if self.path_to_up_to_date_configuration:
+                    addin_settings_file.write('    <add key="PathToUpToDateConfigurations" value="{0}" />\n'.format(self.path_to_up_to_date_configuration))
+                addin_settings_file.write(addin_settings_line)
             else:
                 addin_settings_file.write(addin_settings_line)
 
@@ -253,9 +258,12 @@ if __name__ == '__main__':
                         type=str)
     parser.add_argument('--scripts_directory', help='Directory containing installed Python scripts.',
                         default=None, type=str)
+    parser.add_argument('--path_to_up_to_date_configuration', help='Path to up to date configuration file(s).',
+                        default=None, type=str)
     options = parser.parse_args(sys.argv[1:])
 
     installer = Installer(options.add_in_directory,
                           options.vb_add_in_directory,
-                          scripts_folder=options.scripts_directory)
+                          scripts_folder=options.scripts_directory,
+                          path_to_up_to_date_configuration=options.path_to_up_to_date_configuration)
     installer.perform_post_installation_tasks()
