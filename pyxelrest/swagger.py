@@ -398,7 +398,7 @@ def load_services():
     :return: List of SwaggerService objects, size is the same one as the number of sections within configuration file
     (DEFAULT excluded).
     """
-    config_parser = ConfigParser()
+    config_parser = ConfigParser(interpolation=None)
     file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
     if not config_parser.read(file_path):
         raise ConfigurationFileNotFound(file_path)
