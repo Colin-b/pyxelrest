@@ -2,7 +2,6 @@ import argparse
 import win32con
 import win32ui
 import win32com.client
-import subprocess
 import os
 import time
 import sys
@@ -10,6 +9,9 @@ import yaml
 import logging
 import logging.config
 import logging.handlers
+from pip.commands.list import ListCommand
+from pip.commands.install import InstallCommand
+from pip.utils import get_installed_distributions
 
 if __name__ == '__main__':
     logger = logging.getLogger("pyxelrest.pyxelrest_auto_update")
@@ -31,11 +33,23 @@ else:
         logging_configuration_file_path))
 
 
+def _outdated_package():
+    """Faster outdated check when running it for a single package."""
+    list_command = ListCommand()
+    command_options, _ = list_command.parse_args(None)
+    packages = list_command.get_outdated([_pyxelrest_package()], command_options)
+    return packages[0] if packages else None
+
+
+def _pyxelrest_package():
+    # Break from the loop in order to retrieve it faster in huge environments
+    for package in get_installed_distributions():
+        if package.project_name == 'pyxelrest':
+            return package
+
+
 class PyxelRestUpdater:
-    def __init__(self, pip_path, path_to_up_to_date_configurations=None):
-        if not os.path.isfile(pip_path):
-            raise Exception('PIP executable cannot be found at {0}.'.format(pip_path))
-        self._pip_path = pip_path
+    def __init__(self, path_to_up_to_date_configurations=None):
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
 
     def check_update(self):
@@ -45,7 +59,7 @@ class PyxelRestUpdater:
 
         logger.debug('Checking if an update is available...')
         if self._is_update_available():
-            logger.info('Update available.')
+            logger.info('Update {0} available (from {1}).'.format(self.pyxelrest_package.latest_version, self.pyxelrest_package.version))
             if self._want_update():
                 logger.debug('Update accepted. Waiting for Microsoft Excel to close...')
                 # If Microsoft Excel is running, user might still use pyxelrest, do not update yet
@@ -61,8 +75,8 @@ class PyxelRestUpdater:
         self._update_is_finished()
 
     def _is_update_available(self):
-        outdated_packages = subprocess.check_output([self._pip_path, 'list', '--outdated'])
-        return 'pyxelrest' in str(outdated_packages)
+        self.pyxelrest_package = _outdated_package()
+        return self.pyxelrest_package
 
     def _update_is_finished(self):
         update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
@@ -77,9 +91,9 @@ class PyxelRestUpdater:
             return False
 
     def _want_update(self):
-        return win32ui.MessageBox("A PyxelRest update is available. Do you want to install it now?\n"
+        return win32ui.MessageBox("PyxelRest {0} is available. Do you want to install it now?\n"
                                   "Update will be installed when Microsoft Excel will be closed.",
-                                  "PyxelRest update available",
+                                  "PyxelRest update available".format(self.pyxelrest_package.latest_version),
                                   win32con.MB_YESNO) == win32con.IDYES
 
     def _is_excel_running(self):
@@ -90,11 +104,14 @@ class PyxelRestUpdater:
         return False
 
     def _update_pyxelrest(self):
-        update_result = subprocess.check_output([self._pip_path, 'install', 'pyxelrest', '--upgrade'])
-        logger.info(str(update_result))
-        self._update_addin()
-        # Only perform configuration update when we are sure that latest version is installed
-        self._update_configuration()
+        result = InstallCommand().main(['pyxelrest', '--upgrade'])
+        if result == 0:
+            logger.info('PyxelRest package updated.')
+            self._update_addin()
+            # Only perform configuration update when we are sure that latest version is installed
+            self._update_configuration()
+        else:
+            logger.warning('PyxelRest package update failed.')
 
     def _update_addin(self):
         try:
@@ -130,14 +147,13 @@ class PyxelRestUpdater:
 if __name__ == '__main__':
     logger.debug('Starting auto update script...')
     parser = argparse.ArgumentParser()
-    parser.add_argument('path_to_pip', help='Path to PIP where PyxelRest is already installed.', type=str)
     parser.add_argument('--path_to_up_to_date_configurations',
                         help='File (path or URL) or directory (path) containing up to date services configuration.',
                         default=None,
                         type=str)
     options = parser.parse_args(sys.argv[1:])
     try:
-        updater = PyxelRestUpdater(options.path_to_pip, options.path_to_up_to_date_configurations)
+        updater = PyxelRestUpdater(options.path_to_up_to_date_configurations)
         updater.check_update()
     except:
         logger.exception('An error occurred while checking for update.')

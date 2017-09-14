@@ -201,19 +201,7 @@ class Installer:
     def _update_auto_load_addin_config(self):
         # TODO Use regular expressions to update settings
         def write_addin_configuration_line(addin_settings_line, addin_settings_file):
-            if 'PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
-                python_executable_folder_path = os.path.dirname(sys.executable)
-                # PIP is in the same folder as python executable in a virtual environment
-                pip_path = os.path.join(python_executable_folder_path, 'pip.exe')
-                if not os.path.isfile(pip_path):
-                    # PIP is in the Scripts folder in a non virtual environment
-                    pip_path = os.path.join(python_executable_folder_path, 'Scripts', 'pip.exe')
-                # Do not set pip path to a value that we know wrong, this case should not happen but you never know
-                # Do not raise an exception here as the auto update feature is optional
-                if os.path.isfile(pip_path):
-                    new_line = addin_settings_line.replace('PIP_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION', pip_path)
-                    addin_settings_file.write(new_line)
-            elif 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
+            if 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
                 python_path = os.path.join(python_executable_folder_path, 'python.exe')
                 # Do not set python path to a value that we know wrong, this case should not happen but you never know

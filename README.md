@@ -329,12 +329,6 @@ The following application settings are available:
         <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td><strong>PathToPIP</strong></td>
-        <td>Path to the pip.exe (including) executable that should be used to update PyxelRest.</td>
-        <td>Mandatory</td>
-        <td>Installation script is already setting this value properly.</td>
-    </tr>
-    <tr>
         <td><strong>PathToPython</strong></td>
         <td>Path to the python.exe (including) executable that should be used to launch the update script.</td>
         <td>Mandatory</td>

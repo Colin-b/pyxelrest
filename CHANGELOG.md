@@ -1,8 +1,6 @@
 # PyxelRest Changelog #
 
-## 0.63.1 (next) ##
-
-## 0.63.0 (2017-09-14) ##
+## 0.63.0 (next) ##
 
 ### Release notes ###
 
@@ -21,6 +19,8 @@
 - Authentication is now mostly handled in a separate `requests_auth` module, this module was refactored to get rid of the `flask` dependency.
 - ClickOnce application cache will now be cleared after Microsoft Excel add-in uninstallation to ensure that next installation succeed. Installing add-in will now be possible even if Microsoft Excel is launched.
 - Services configuration can now be auto-updated as part of the auto-update process.
+- Updater now display the new version of PyxelRest and is faster to detect update.
+- PathToPIP add-in property is not used anymore.
 
 ### Bug fixes ###
 

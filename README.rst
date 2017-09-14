@@ -260,8 +260,6 @@ The following application settings are available:
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 |                              | Description                                                                                    | Mandatory | Possible values                                             |
 +==============================+================================================================================================+===========+=============================================================+
-| PathToPIP                    | Path to the pip.exe (including) executable that should be used to update PyxelRest.            | Mandatory | Installation script is already setting this value properly. |
-+------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | PathToPython                 | Path to the python.exe (including) executable that should be used to launch the update script. | Mandatory | Installation script is already setting this value properly. |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | PathToUpdateScript           | Path to the Python script used to update PyxelRest.                                            | Mandatory | Installation script is already setting this value properly. |

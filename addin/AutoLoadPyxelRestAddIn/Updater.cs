@@ -16,10 +16,6 @@ namespace AutoLoadPyxelRestAddIn
 
         internal Updater()
         {
-            pipPath = ThisAddIn.GetSetting("PathToPIP");
-            if (!File.Exists(pipPath))
-                throw new Exception(string.Format("Path to PIP '{0}' cannot be found.", pipPath));
-
             pythonPath = ThisAddIn.GetSetting("PathToPython");
             if (!File.Exists(pythonPath))
                 throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
@@ -33,7 +29,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void CheckUpdate()
         {
-            string commandLine = string.Format("{0} {1}", update_script, pipPath);
+            string commandLine = update_script;
             if (!string.IsNullOrEmpty(path_to_up_to_date_configurations))
                 commandLine += string.Format(" --path_to_up_to_date_configurations {0}", path_to_up_to_date_configurations);
 
