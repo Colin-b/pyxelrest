@@ -58,15 +58,15 @@ class PostInstall:
 
     def _create_logging_configuration(self, log_file_name, config_file_name):
         config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
-        if not os.path.isfile(config_file_path):
-            import jinja2
-            template_folder = os.path.join(self.installation_files_folder, 'pyxelrest')
-            renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(template_folder), trim_blocks=True)
-            log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', log_file_name)
-            with open(config_file_path, 'w') as generated_file:
-                generated_file.write(renderer.get_template('default_logging_configuration.ini.jinja2')
-                                     .render(path_to_log_file=log_file_path))
-            log.info('{0} logging configuration file created.'.format(config_file_name))
+        # Always keep default logging configuration up to date as logger name / parsing logic might change
+        import jinja2
+        template_folder = os.path.join(self.installation_files_folder, 'pyxelrest')
+        renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(template_folder), trim_blocks=True)
+        log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', log_file_name)
+        with open(config_file_path, 'w') as generated_file:
+            generated_file.write(renderer.get_template('default_logging_configuration.ini.jinja2')
+                                 .render(path_to_log_file=log_file_path))
+        log.info('{0} logging configuration file created.'.format(config_file_name))
 
 
 if __name__ == '__main__':
