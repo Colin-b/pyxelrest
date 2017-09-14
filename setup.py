@@ -28,6 +28,12 @@ class install_pyxelrest_data(install_data):
                                     path_to_up_to_date_configuration='http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest-configuration/raw/all_services.ini?at=refs/heads/master')
         addin_installer.perform_post_installation_tasks()
 
+        # TODO This will be removed once clients will have v0.63.0 at least (update script updating configuration)
+        self.announce('Updating configuration...')
+        from pyxelrest_update_services_config import ServicesConfigUpdater, UPDATE_SECTIONS
+        config_updater = ServicesConfigUpdater(UPDATE_SECTIONS)
+        config_updater.update_configuration('http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest-configuration/raw/all_services.ini?at=refs/heads/master')
+
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()
