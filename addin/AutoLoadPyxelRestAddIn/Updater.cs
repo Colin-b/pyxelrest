@@ -8,8 +8,7 @@ namespace AutoLoadPyxelRestAddIn
     class Updater
     {
         private static readonly ILog Log = LogManager.GetLogger("Updater");
-
-        private readonly string pipPath;
+        
         private readonly string pythonPath;
         private readonly string update_script;
         private readonly string path_to_up_to_date_configurations;
