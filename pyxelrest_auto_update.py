@@ -91,10 +91,9 @@ class PyxelRestUpdater:
             return False
 
     def _want_update(self):
-        return win32ui.MessageBox("PyxelRest {0} is available. Do you want to install it now?\n"
-                                  "Update will be installed when Microsoft Excel will be closed.",
-                                  "PyxelRest update available".format(self.pyxelrest_package.latest_version),
-                                  win32con.MB_YESNO) == win32con.IDYES
+        msg = "PyxelRest {0} is available. Do you want to install it now?\n" \
+              "Update will be installed when Microsoft Excel will be closed.".format(self.pyxelrest_package.latest_version)
+        return win32ui.MessageBox(msg, "PyxelRest update available", win32con.MB_YESNO) == win32con.IDYES
 
     def _is_excel_running(self):
         processes = win32com.client.GetObject('winmgmts:').InstancesOf('Win32_Process')
