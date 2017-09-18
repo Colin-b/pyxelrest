@@ -5,7 +5,6 @@
 ### Release notes ###
 
 - connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
-- com_server and related logging utilities were extracted into additional packages.
 
 ### Enhancements ###
 
@@ -14,8 +13,6 @@
 - It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
 - Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
 - methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
-- A new COM component pyxelrest.PythonServer is registered to control and interact with a python process.
-- The PythonServer can launch, in the foreground or in the background, Python functions on any folders.
 - It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
 - Authentication is now mostly handled in a separate `requests_auth` module, this module was refactored to get rid of the `flask` dependency.
 - ClickOnce application cache will now be cleared after Microsoft Excel add-in uninstallation to ensure that next installation succeed. Installing add-in will now be possible even if Microsoft Excel is launched.
