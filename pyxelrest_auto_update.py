@@ -36,7 +36,7 @@ else:
 def _outdated_package():
     """Faster outdated check when running it for a single package."""
     list_command = ListCommand()
-    command_options, _ = list_command.parse_args(None)
+    command_options, _ = list_command.parse_args([])
     packages = list_command.get_outdated([_pyxelrest_package()], command_options)
     return packages[0] if packages else None
 
