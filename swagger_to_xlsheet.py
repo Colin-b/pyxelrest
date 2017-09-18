@@ -11,7 +11,6 @@ def colnum_string(n):
         string = chr(65+module) + string
         div = int((div-module)/26)
     return string
-print(colnum_string(2))
 
 
 pattern = "ordos_local_test_explain"
@@ -53,12 +52,5 @@ for service in load_services():
             formula = "={prefix}_{function}({parameters})".format(prefix=service.udf_prefix,
                                                                   function=spec['operationId'],
                                                                   parameters=','.join(parameters_ranges))
-            print(formula)
-
             s.write_formula("A%d"%(r+13), formula)
 workbook.close()
-
-
-
-
-

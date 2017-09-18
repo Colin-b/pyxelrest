@@ -4,8 +4,6 @@ import shutil
 import sys
 from distutils import log
 
-from pyxelrest import com_server
-
 
 def create_folder(folder_path):
     if not os.path.exists(folder_path):
@@ -30,12 +28,6 @@ class PostInstall:
         self._create_services_configuration()
         self._create_pyxelrest_logging_configuration()
         self._create_auto_update_logging_configuration()
-        self._register_com_server()
-
-    def _register_com_server(self):
-        log.info('Registering COM server...')
-        com_server.register_com()
-        log.info('COM server registered.')
 
     def _create_services_configuration(self):
         default_config_file = os.path.join(self.installation_files_folder,

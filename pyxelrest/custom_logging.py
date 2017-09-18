@@ -3,7 +3,6 @@ import sys
 import platform
 import logging.config
 import logging.handlers
-import threading
 
 from pyxelrest import _version
 from distutils import sysconfig
@@ -11,11 +10,11 @@ from distutils import sysconfig
 logger = logging.getLogger(__name__)
 
 
-def my_excepthook(excType, excValue, traceback, logger=logging):
-    logger.error("Logging an uncaught exception",
-                 exc_info=(excType, excValue, traceback))
+def log_uncaught_exception(excType, excValue, traceback, logger=logging):
+    logger.error("Logging an uncaught exception", exc_info=(excType, excValue, traceback))
 
-sys.excepthook = my_excepthook
+
+sys.excepthook = log_uncaught_exception
 
 
 def load_logging_configuration():
@@ -48,51 +47,3 @@ def set_file_logger(filename, level=logging.INFO):
         level=level)
     logger.info('Loading PyxelRest: {} Python: {} OS: {} Lib: {}'.format(
         _version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))
-
-
-def set_syslog_logger(host, port, level):
-    handler = logging.handlers.SysLogHandler(address=(host, port))
-    formatter = logging.Formatter('%(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s')
-    handler.setFormatter(formatter)
-    handler.setLevel(level)
-    logging.getLogger().addHandler(handler)
-
-
-def connect(queue, logger):
-    def treatment():
-        while True:
-            data = queue.get(block=True)
-            if data is None:
-                break
-            logger.handle(logger.makeRecord(**data))
-    t = threading.Thread(target=treatment)
-    t.start()
-    return t
-
-
-class StreamToLogger(object):
-    """
-    Fake file-like stream object that redirects writes to a logger instance.
-    """
-
-    def __init__(self, logger, log_level=logging.INFO):
-        self.logger = logger
-        self.log_level = log_level
-
-    def write(self, buf):
-        for line in buf.rstrip().splitlines():
-            self.logger.log(self.log_level, line.rstrip())
-
-    def flush(self):
-        pass
-
-
-class ProcessHandler(logging.Handler):
-    def __init__(self, queue):
-        super().__init__()
-        self.queue = queue
-
-    def emit(self, record):
-        data = dict(level=record.levelno, msg=record.msg, fn=record.pathname, lno=record.lineno, name=record.name,
-                    args=record.args, exc_info=None)
-        self.queue.put(data)

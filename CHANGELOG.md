@@ -5,6 +5,7 @@
 ### Release notes ###
 
 - connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
+- com_server and related logging utilities were extracted into additional packages.
 
 ### Enhancements ###
 

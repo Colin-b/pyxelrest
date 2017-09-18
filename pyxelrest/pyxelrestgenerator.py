@@ -82,6 +82,7 @@ def reset_authentication():
     authentication.security_definitions = {}
     authentication.custom_authentications = {}
 
+
 if __name__ == '__main__':
     logger = logging.getLogger("pyxelrest.pyxelrestgenerator")
 else:
