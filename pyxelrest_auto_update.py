@@ -48,6 +48,11 @@ def _pyxelrest_package():
             return package
 
 
+def _update_is_finished():
+    update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
+    os.remove(update_is_in_progress)
+
+
 class PyxelRestUpdater:
     def __init__(self, path_to_up_to_date_configurations=None):
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
@@ -72,15 +77,10 @@ class PyxelRestUpdater:
                 logger.info('Update rejected.')
         else:
             logger.debug('No update available.')
-        self._update_is_finished()
 
     def _is_update_available(self):
         self.pyxelrest_package = _outdated_package()
         return self.pyxelrest_package
-
-    def _update_is_finished(self):
-        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
-        os.remove(update_is_in_progress)
 
     def _is_already_updating(self):
         update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
@@ -158,3 +158,5 @@ if __name__ == '__main__':
     except:
         logger.exception('An error occurred while checking for update.')
         raise
+    finally:
+        _update_is_finished()
