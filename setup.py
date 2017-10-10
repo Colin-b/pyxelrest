@@ -145,7 +145,7 @@ setup(name='pyxelrest',
           # TODO It should be an optional dependency
           'pyaml==16.12.2',
           # Used to manage authentication
-          'requests_auth==0.3.2',
+          'requests_auth==1.0.0',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.6.0',
           # Used to maintain compatibility with Python 2.7 and Python 3.X

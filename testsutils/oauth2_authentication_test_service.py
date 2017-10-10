@@ -1,8 +1,10 @@
 import flask
 import jwt
 import datetime
+import logging
 
 
+logger = logging.getLogger(__name__)
 app = flask.Flask(__name__)
 
 already_asked_for_quick_expiry = [False]
@@ -96,7 +98,9 @@ def close_page():
 
 
 def start_server(port):
+    logger.info('Starting server on localhost:{0}'.format(port))
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8947)
