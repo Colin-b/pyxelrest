@@ -1,6 +1,12 @@
 # PyxelRest Changelog #
 
-## 0.63.0 (next) ##
+List all changes in various categories:
+* Release notes: Contains all worth noting changes (breaking changes mainly)
+* Enhancements
+* Bug fixes
+* Known issues
+
+## 0.63.0 (2017-10-10) ##
 
 ### Release notes ###
 
