@@ -53,6 +53,9 @@ class SwaggerService:
         self.swagger = self._retrieve_swagger(swagger_url)
         self.validate_swagger_version()
         self.uri = self._extract_uri(swagger_url_parsed, config)
+        # Remove trailing slashes (as paths must starts with a slash)
+        while self.uri.endswith('/'):
+            self.uri = self.uri[:-1]
         security_details = self._get_security_details(config)
         authentication.add_service_security(self.name, self.swagger, security_details)
         self.auth = authentication.add_service_custom_authentication(self.name, security_details)
