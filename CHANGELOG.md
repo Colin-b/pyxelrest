@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.63.1 (2017-11-14) ##
+
+### Bug fixes ###
+
+- Handle basePath ending with slash.
+
 ## 0.63.0 (2017-10-10) ##
 
 ### Release notes ###

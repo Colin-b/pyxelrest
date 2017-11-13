@@ -40,6 +40,7 @@ class PyxelRestTest(unittest.TestCase):
             static_file_call_test_service,
             http_methods_test_service,
             content_type_test_service,
+            base_path_ending_with_slash_test_service,
         )
         serviceshandler.start_services(
             (usual_parameters_test_service, 8943),
@@ -54,6 +55,7 @@ class PyxelRestTest(unittest.TestCase):
             (static_file_call_test_service, 8954),
             (http_methods_test_service, 8955),
             (content_type_test_service, 8956),
+            (base_path_ending_with_slash_test_service, 8957),
         )
 
     def test_string_array_parameter(self):
@@ -116,7 +118,7 @@ class PyxelRestTest(unittest.TestCase):
         self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
 
         user_agent_index = headers[0].index('User-Agent')
-        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.63.0')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.63.1')
 
     def test_post_test_form_parameter(self):
         from pyxelrest import pyxelrestgenerator
@@ -335,6 +337,13 @@ class PyxelRestTest(unittest.TestCase):
         self.assertEqual(
             '/test/without/operationId called.',
             pyxelrestgenerator.operation_id_not_always_provided_test_duplicated_get_test_without_operationId()
+        )
+
+    def test_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_get_test_method()
         )
 
 
