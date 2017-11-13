@@ -339,11 +339,32 @@ class PyxelRestTest(unittest.TestCase):
             pyxelrestgenerator.operation_id_not_always_provided_test_duplicated_get_test_without_operationId()
         )
 
-    def test_base_path_ending_with_slash(self):
+    def test_get_base_path_ending_with_slash(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'http://localhost:8957/test/method',
             pyxelrestgenerator.base_path_ending_with_slash_test_get_test_method()
+        )
+
+    def test_post_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_post_test_method()
+        )
+
+    def test_put_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_put_test_method()
+        )
+
+    def test_delete_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_delete_test_method()
         )
 
 
