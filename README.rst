@@ -33,7 +33,7 @@ Pre requisites
 
 - [Python >= 2.7](https://www.python.org/downloads/) must be installed.
 - [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed.
-- [Microsoft .NET Framework 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+- [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
 
 User Installation (using PIP)
 -----------------------------
@@ -320,3 +320,12 @@ No command specified in the configuration, cannot autostart server
 ------------------------------------------------------------------
 
 This error will happen in case you manually specified in your xlwings.bas file to use debug server but did not uncomment the main function starting the server on pyxelrest module side.
+
+Microsoft Excel Add-In cannot be installed
+------------------------------------------
+
+Check that all requirements are met:
+- [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+- [Microsoft Visual Studio 2010 Tools for Office Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=48217) must be installed.
+
+In case you encounter an issue like `Could not load file or assembly 'Microsoft.Office.BusinessApplications.Fba...` anyway, you then need to remove `C:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\VSTOInstaller.exe.config` file.
