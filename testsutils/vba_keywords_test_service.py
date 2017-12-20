@@ -21,6 +21,8 @@ def swagger():
                                 },
                                 'as': {
                                 },
+                                'attribute': {
+                                },
                                 'boolean': {
                                 },
                                 'byref': {
@@ -361,6 +363,13 @@ def swagger():
                                    'description': '',
                                    'in': 'query',
                                    'name': 'as',
+                                   'required': True,
+                                   'type': 'string'
+                               },
+                               {
+                                   'description': '',
+                                   'in': 'query',
+                                   'name': 'attribute',
                                    'required': True,
                                    'type': 'string'
                                },
