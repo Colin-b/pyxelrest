@@ -276,7 +276,21 @@ The following application settings are available:
 Using as a module
 -----------------
 
-You can use pyxelrest as a python module as well.
+You can use pyxelrest as a python module as well::
+
+   import pyxelrest
+
+   # Avoid the following import statement to generate UDFs
+   pyxelrest.GENERATE_UDF_ON_IMPORT = False
+
+   from pyxelrest import pyxelrestgenerator
+
+   # Generate UDFs for the following import
+   pyxelrestgenerator.generate_user_defined_functions()
+
+   from pyxelrest import user_defined_functions
+
+   # UDFs are available as python functions within user_defined_functions and can be used as such
 
 Generating user defined functions
 ---------------------------------
