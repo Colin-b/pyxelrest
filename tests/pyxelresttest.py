@@ -249,6 +249,21 @@ class PyxelRestTest(unittest.TestCase):
             pyxelrestgenerator.usual_parameters_test_get_test_date_time()
         )
 
+    def test_get_test_datetime_encoding(self):
+        from pyxelrest import pyxelrestgenerator
+        date_time = datetime.datetime.strptime('2017-09-13T15:20:35', '%Y-%m-%dT%H:%M:%S')
+        self.assertEqual('2017-09-13T15:20:35',
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+        )
+        date_time = datetime.datetime.strptime('2017-09-13T15:20', '%Y-%m-%dT%H:%M')
+        self.assertEqual('2017-09-13T15:20:00',
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+        )
+        date_time = datetime.datetime.strptime('2017-09-13 15', '%Y-%m-%d %H')
+        self.assertEqual('2017-09-13T15:00:00',
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+        )
+
     def test_get_static_swagger_file(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(

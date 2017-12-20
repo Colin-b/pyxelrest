@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -3031,6 +3031,26 @@ def swagger():
                                    }
                                }
                            }
+                       },
+                       '/test/datetime/encoding': {
+                           'get': {
+                               'operationId': 'get_test_date_time_encoding',
+                               'parameters': [
+                                   {
+                                       'description': 'string parameter',
+                                       'in': 'query',
+                                       'name': 'encoded_date_time',
+                                       'required': True,
+                                       'type': 'string',
+                                       'format': 'date-time'
+                                   },
+                               ],
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                   }
+                               }
+                           }
                        }
     })
 
@@ -3052,8 +3072,14 @@ def get_test_date_time():
     ])
 
 
+@app.route('/test/datetime/encoding', methods=['GET'])
+def get_test_date_time_encoding():
+    return request.args.get('encoded_date_time')
+
+
 def start_server(port):
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8943)
