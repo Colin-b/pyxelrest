@@ -6,11 +6,16 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.64.0 (2017-12-08) ##
+## 0.64.0 (2017-12-20) ##
 
 ### Enhancements ###
 
 - Introduce a new advanced configuration property: swagger_read_timeout. Allows to provide a read timeout for swagger retrieval (to avoid being stuck when service is not available behind an available reverse proxy).
+
+### Bug fixes ###
+
+- Date Time are now sent following ISO format.
+- Handle "attribute" VBA keyword.
 
 ## 0.63.1 (2017-11-14) ##
 
