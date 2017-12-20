@@ -19,21 +19,6 @@ class install_pyxelrest_data(install_data):
         post_install = PostInstall(installation_files_folder=this_dir)
         post_install.perform_post_installation_tasks()
 
-        self.announce('Installing add-in...')
-        # TODO This will be removed once clients will have v0.63.0 at least (update script installing add-in)
-        from pyxelrest_install_addin import Installer
-        addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
-                                    os.path.join(data_dir, 'pyxelrest_vb_addin'),
-                                    scripts_folder=scripts_dir,
-                                    path_to_up_to_date_configuration='http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest-configuration/raw/all_services.ini?at=refs/heads/master')
-        addin_installer.perform_post_installation_tasks()
-
-        # TODO This will be removed once clients will have v0.63.0 at least (update script updating configuration)
-        self.announce('Updating configuration...')
-        from pyxelrest_update_services_config import ServicesConfigUpdater, UPDATE_SECTIONS
-        config_updater = ServicesConfigUpdater(UPDATE_SECTIONS)
-        config_updater.update_configuration('http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest-configuration/raw/all_services.ini?at=refs/heads/master')
-
 
 with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
     long_description = f.read()

@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Enhancements ###
 
 - Introduce a new advanced configuration property: swagger_read_timeout. Allows to provide a read timeout for swagger retrieval (to avoid being stuck when service is not available behind an available reverse proxy).
+- PyxelRest is now installed without the Microsoft Excel Add-In (to be used as an external module)
 
 ### Bug fixes ###
 
