@@ -50,7 +50,8 @@ class SwaggerService:
         self.read_timeout = advanced_configuration.get('read_timeout')
         if self.read_timeout:
             self.read_timeout = float(self.read_timeout)
-        self.swagger = self._retrieve_swagger(swagger_url)
+        swagger_read_timeout = float(advanced_configuration.get('swagger_read_timeout', 5))
+        self.swagger = self._retrieve_swagger(swagger_url, swagger_read_timeout)
         self.validate_swagger_version()
         # Remove trailing slashes (as paths must starts with a slash)
         self.uri = self._extract_uri(swagger_url_parsed, config).rstrip('/')
@@ -173,7 +174,7 @@ class SwaggerService:
             # Python 2
             return config.get(self.name, key) if config.has_option(self.name, key) else default_value
 
-    def _retrieve_swagger(self, swagger_url):
+    def _retrieve_swagger(self, swagger_url, read_timeout):
         """
         Retrieve swagger JSON from service.
         :param swagger_url: URI of the service swagger JSON.
@@ -181,7 +182,7 @@ class SwaggerService:
         """
         requests_session = requests.session()
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
-        response = requests_session.get(swagger_url, proxies=self.proxies, verify=False, timeout=(self.connect_timeout, self.read_timeout))
+        response = requests_session.get(swagger_url, proxies=self.proxies, verify=False, timeout=(self.connect_timeout, read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)

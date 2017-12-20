@@ -296,6 +296,11 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>any float value (decimal separator is .)</td>
     </tr>
+    <tr>
+        <td><strong>swagger_read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
 </table>
 
 ### Logging Configuration ###
