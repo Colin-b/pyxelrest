@@ -8,6 +8,7 @@ import requests
 import requests.exceptions
 import datetime
 import logging
+import sys
 from pyxelrest import custom_logging
 from pyxelrest.caching import caching
 from pyxelrest import session
@@ -435,7 +436,10 @@ def msgpackpandas_as_list(msgpack_pandas):
     logger.debug('Converting message pack pandas to list...')
     data = pandas.read_msgpack(msgpack_pandas)
     logger.debug('Converting dictionary to list...')
-    header = [header_name.decode() for header_name in data.columns.values.tolist()]
+    if sys.version_info[0] < 3:
+        header = [header_name.decode() for header_name in data.columns.values.tolist()]
+    else:
+        header = data.columns.tolist()
     values = data.values.tolist()
     flatten_data = [header] + values if values else [header]
     logger.debug('Data converted to list.')

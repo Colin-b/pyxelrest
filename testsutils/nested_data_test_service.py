@@ -1,4 +1,6 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
+import pandas as pd
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -243,6 +245,16 @@ def swagger():
                        '/test/dict/with/various/columns': {
                            'get': {
                                'operationId': 'get_test_dict_with_various_columns',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation'
+                                   }
+                               }
+                           }
+                       },
+                       '/test/pandas/msgpack/default/encoding': {
+                           'get': {
+                               'operationId': 'get_test_pandas_msgpack_default_encoding',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -559,6 +571,24 @@ def get_test_dict_with_various_columns():
         ]
     }
     return jsonify(dict_with_list)
+
+
+def _get_dataframe():
+    df = pd.DataFrame(
+        [
+            ['data11', 'data12_é&ç', u'data13_é&ç', datetime(2017, 12, 26, 1, 2, 3), 1.1],
+            ['data21', 'data22_é&ç', u'data23_é&ç', datetime(2017, 12, 27, 1, 2, 3), 2.2]
+        ],
+        columns=['col1', 'col2_é&ç', u'col3_é&ç', 'col4', 'col5']
+    )
+    return df
+
+
+@app.route('/test/pandas/msgpack/default/encoding', methods=['GET'])
+def get_test_pandas_msgpack_default_encoding():
+    df = _get_dataframe()
+    output = df.to_msgpack(compress='zlib')
+    return Response(output, mimetype='application/msgpackpandas')
 
 
 def start_server(port):
