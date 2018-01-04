@@ -6,6 +6,14 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.64.1 (2018-01-04) ##
+
+### Bug fixes ###
+
+- Avoid uninstalling Microsoft Excel Add-in in case it cannot be installed back.
+- Make sure Microsoft Excel Add-in can be installed in case 32 bits VSTO installer is the only one available.
+- Use latest log4net version.
+
 ## 0.64.0 (2017-12-20) ##
 
 ### Enhancements ###

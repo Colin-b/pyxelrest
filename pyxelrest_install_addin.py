@@ -19,14 +19,22 @@ def create_folder(folder_path):
 
 class VSTOManager:
     def __init__(self, version):
+        # Try 64 bits version first
         self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'),
                                                 'microsoft shared',
                                                 'VSTO',
                                                 version,
                                                 'VSTOInstaller.exe')
         if not os.path.isfile(self.vsto_installer_path):
-            raise Exception('Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {0}.'
-                            .format(self.vsto_installer_path))
+            # Try 32 bits version as backup
+            self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles(x86)'),
+                                                    'microsoft shared',
+                                                    'VSTO',
+                                                    version,
+                                                    'VSTOInstaller.exe')
+            if not os.path.isfile(self.vsto_installer_path):
+                raise Exception('Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {0}.'
+                                .format(self.vsto_installer_path))
 
     def install_auto_load_addin(self, add_in_folder):
         log.info('Try to install Microsoft Excel add-in...')
