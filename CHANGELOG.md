@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.64.1 (2018-01-216) ##
+
+### Bug fixes ###
+
+- fix bug when a vba-reserved keyword is used as an uri parameter (ex: /resource/{name}/child/{attribute})
+
 ## 0.64.0 (2017-12-20) ##
 
 ### Enhancements ###

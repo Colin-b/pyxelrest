@@ -672,5 +672,17 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
             )
         )
 
+    def test_this_attribute_vba_restricted_keyword_in_uri_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        expected = [
+                ['attribute'],
+                ['my_attribute_value']
+            ]
+        actual = pyxelrestgenerator.vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter(
+                attribute_visual_basic='my_attribute_value')
+
+        self.assertEqual(expected, actual)
+
+
 if __name__ == '__main__':
     unittest.main()

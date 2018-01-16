@@ -1443,6 +1443,28 @@ def swagger():
                                    "application/json"
                                ]
                            }
+                       },
+                       '/test/this/{attribute}/vba/restricted/keyword/in/uri/parameter': {
+                           'parameters': [
+                               {
+                                   'type': 'string',
+                                   'in': 'path',
+                                   'name': 'attribute',
+                                   'description': 'attribute uri param',
+                                   'required': True
+                               }
+                           ],
+                           'get': {
+                               'operationId': 'get_test_this_attribute_vba_restricted_keyword_in_uri_parameter',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           '$ref': '#/definitions/VBAKeywords'
+                                       }
+                                   }
+                               }
+                           }
                        }
                    })
 
@@ -1465,6 +1487,11 @@ def put_test_vba_restricted_keywords():
 @app.route('/test/vba/restricted/keywords', methods=['DELETE'])
 def delete_test_vba_restricted_keywords():
     return jsonify(request.args)
+
+
+@app.route('/test/this/<string:attribute>/vba/restricted/keyword/in/uri/parameter', methods=['GET'])
+def get_test_this_attribute_vba_restricted_keyword_in_uri_parameter(attribute):
+    return jsonify({'attribute': attribute})
 
 
 def start_server(port):
