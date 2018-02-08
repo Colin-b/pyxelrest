@@ -2879,6 +2879,38 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         tomorrow_datetime = datetime.datetime.combine(tomorrow_date, datetime.datetime.min.time())
         tomorrow_datetime_local = tomorrow_datetime
         from collections import OrderedDict
+        import sys
+        if sys.version_info[0] == 2:
+            today_date_str = unicode(today_date_str)
+            today_datetime_str = unicode(today_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+            today_datetime_str_T = unicode(today_datetime.strftime('%Y-%m-%dT%H:%M:%S'))
+        self.maxDiff = None
+        expected = \
+            OrderedDict([(u'query_array_boolean', u'true'), (u'query_array_date', today_date_str),
+                     (u'query_array_date_time', today_datetime_str), (u'query_array_double', u'1.1'),
+                     (u'query_array_float', u'1.01'), (u'query_array_integer', u'1'), (u'query_array_integer32', u'10'),
+                     (u'query_array_integer64', u'100'), (u'query_array_number', u'0.1'),
+                     (u'query_array_password', u'password 1'), (u'query_array_string', u'string 1'),
+                     (u'query_array_string_binary', u'string binary 1'),
+                     (u'query_array_string_byte', u'string bytes 1'), (u'query_boolean', u'True'),
+                     (u'query_date', today_date_str), (u'query_date_time', today_datetime_str_T),
+                     (u'query_double', u'1.1'), (u'query_float', u'1.01'), (u'query_integer', u'1'),
+                     (u'query_integer32', u'10'), (u'query_integer64', u'100'), (u'query_number', u'0.1'),
+                     (u'query_password', u'password'), (u'query_string', u'string'),
+                     (u'query_string_binary', u'string binary'), (u'query_string_byte', u'string bytes')]) \
+            if sys.version_info[0] == 2 else \
+            OrderedDict([('query_array_boolean', 'true'), ('query_array_date', today_date_str),
+                     ('query_array_date_time', today_datetime_str), ('query_array_double', '1.1'),
+                     ('query_array_float', '1.01'), ('query_array_integer', '1'), ('query_array_integer32', '10'),
+                     ('query_array_integer64', '100'), ('query_array_number', '0.1'),
+                     ('query_array_password', 'password 1'), ('query_array_string', 'string 1'),
+                     ('query_array_string_binary', 'string binary 1'),
+                     ('query_array_string_byte', 'string bytes 1'), ('query_boolean', 'True'),
+                     ('query_date', today_date_str), ('query_date_time', today_datetime_str),
+                     ('query_double', '1.1'), ('query_float', '1.01'), ('query_integer', '1'),
+                     ('query_integer32', '10'), ('query_integer64', '100'), ('query_number', '0.1'),
+                     ('query_password', 'password'), ('query_string', 'string'),
+                     ('query_string_binary', 'string binary'), ('query_string_byte', 'string bytes')])
         self.assertDictEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
             query_integer=1,
             query_integer32=10,
@@ -2926,18 +2958,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
                 'password 1',
                 'password 2'
             ]),
-            OrderedDict([('query_array_boolean', 'true'), ('query_array_date', today_date_str),
-                         ('query_array_date_time', today_datetime_str), ('query_array_double', '1.1'),
-                         ('query_array_float', '1.01'), ('query_array_integer', '1'), ('query_array_integer32', '10'),
-                         ('query_array_integer64', '100'), ('query_array_number', '0.1'),
-                         ('query_array_password', 'password 1'), ('query_array_string', 'string 1'),
-                         ('query_array_string_binary', 'string binary 1'),
-                         ('query_array_string_byte', 'string bytes 1'), ('query_boolean', 'True'),
-                         ('query_date', today_date_str), ('query_date_time', today_datetime_str),
-                         ('query_double', '1.1'), ('query_float', '1.01'), ('query_integer', '1'),
-                         ('query_integer32', '10'), ('query_integer64', '100'), ('query_number', '0.1'),
-                         ('query_password', 'password'), ('query_string', 'string'),
-                         ('query_string_binary', 'string binary'), ('query_string_byte', 'string bytes')]))
+            expected)
 
     def test_optional_array_date_time_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions

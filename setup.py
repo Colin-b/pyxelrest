@@ -28,15 +28,12 @@ from pyxelrest import _version
 setup(name='pyxelrest',
       version=_version.__version__,
       author='Engie',
-      # TODO Provide a support mailbox for our products
-      author_email='colin.bounouar@external.engie.com',
+      author_email='colin.bounouar@engie.com',
       maintainer='Engie',
-      # TODO Provide a support mailbox for our products
-      maintainer_email='colin.bounouar@external.engie.com',
+      maintainer_email='colin.bounouar@engie.com',
       url="http://guru.trading.gdfsuez.net/bitbucket/projects/GEMS/repos/pyxelrest",
       description="Access REST APIs from Excel using User Defined Functions (UDF)",
       long_description=long_description,
-      # TODO Package to artifactory and assert that bamboo will keep it up to date
       download_url='http://www.engie.com',
       classifiers=[
           "Development Status :: 4 - Beta",
@@ -77,11 +74,8 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/INIFileParser.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.xml',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.xml',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.xml',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.dll',
@@ -117,22 +111,19 @@ setup(name='pyxelrest',
       ],
       install_requires=[
           # Used to generate UDFs python file from a template
-          'jinja2==2.9.6',
+          'jinja2==2.10',
           # Used to communicate with services
-          'requests==2.18.2',
+          'requests==2.18.4',
           # Used to check that Excel is not running and required by xlwings (220 is only provided for Python 3.6)
           'pypiwin32>=219',
-          # Used to send responses to Microsoft Excel by xlwings - Force dependency order as not managed properly by PIP
-          'comtypes==1.1.3-2',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.4.2',
           # Used to parse logging configuration file
-          # TODO It should be an optional dependency
-          'pyaml==16.12.2',
+          'pyaml==17.12.1',
           # Used to manage authentication
-          'requests_auth==1.0.1',
+          'requests_auth==1.0.2',
           # Used to parse all date-time formats in a easy way
-          'python-dateutil==2.6.0',
+          'python-dateutil==2.6.1',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
           'future==0.16.0',
       ],

@@ -11,7 +11,7 @@ try:
     from urllib.parse import urlsplit
 except ImportError:
     # Python 2
-    from ConfigParser import ConfigParser
+    from ConfigParser import RawConfigParser
     from urlparse import urlsplit
 
 from pyxelrest import vba
@@ -400,7 +400,12 @@ def load_services():
     :return: List of SwaggerService objects, size is the same one as the number of sections within configuration file
     (DEFAULT excluded).
     """
-    config_parser = ConfigParser(interpolation=None)
+    try:
+        # Python 3
+        config_parser = ConfigParser(interpolation=None)
+    except:
+        # Python 2
+        config_parser = RawConfigParser()
     file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
     if not config_parser.read(file_path):
         raise ConfigurationFileNotFound(file_path)

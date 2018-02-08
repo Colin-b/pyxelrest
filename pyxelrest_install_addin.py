@@ -19,14 +19,22 @@ def create_folder(folder_path):
 
 class VSTOManager:
     def __init__(self, version):
+        # Try 64 bits version first
         self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles'),
                                                 'microsoft shared',
                                                 'VSTO',
                                                 version,
                                                 'VSTOInstaller.exe')
         if not os.path.isfile(self.vsto_installer_path):
-            raise Exception('Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {0}.'
-                            .format(self.vsto_installer_path))
+            # Try 32 bits version as backup
+            self.vsto_installer_path = os.path.join(os.getenv('commonprogramfiles(x86)'),
+                                                    'microsoft shared',
+                                                    'VSTO',
+                                                    version,
+                                                    'VSTOInstaller.exe')
+            if not os.path.isfile(self.vsto_installer_path):
+                raise Exception('Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {0}.'
+                                .format(self.vsto_installer_path))
 
     def install_auto_load_addin(self, add_in_folder):
         log.info('Try to install Microsoft Excel add-in...')
@@ -126,11 +134,14 @@ class Installer:
         if not sys.platform.startswith('win'):
             raise Exception('Auto Load add-in can only be installed on Microsoft Windows.')
         if not add_in_folder:
-            raise Exception('Path to Auto Load add-in folder must be provided.')
+            raise Exception('Path to Microsoft Excel Auto Load add-in folder must be provided.')
         if not vba_add_in_folder:
             raise Exception('Path to Visual Basic add-in folder must be provided.')
 
         self.add_in_folder = to_absolute_path(add_in_folder)
+        if not os.path.isdir(self.add_in_folder):
+            raise Exception('PyxelRest Microsoft Excel Auto-Load Add-In cannot be found in {0}.'
+                            .format(self.add_in_folder))
         self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
         self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
@@ -169,7 +180,7 @@ class Installer:
     def _install_pyxelrest_vb_addin(self):
         pyxelrest_vb_file_path = os.path.join(self.vba_add_in_folder, 'pyxelrest.xlam')
         if not os.path.isfile(pyxelrest_vb_file_path):
-            raise Exception('Visual Basic PixelRest Excel Add-In cannot be found in {0}.'
+            raise Exception('Visual Basic PyxelRest Excel Add-In cannot be found in {0}.'
                             .format(pyxelrest_vb_file_path))
         xlstart_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART')
         if not os.path.exists(xlstart_folder):

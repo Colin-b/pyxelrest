@@ -109,7 +109,7 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Advanced Configuration
-            servicePanel.Controls.Add(new Label { Text = "Advanced Config", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+            servicePanel.Controls.Add(new Label { Text = "Advanced", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
             advancedConfigurationTextBox = new TextBox() { Text = service.AdvancedConfiguration };
             advancedConfigurationTextBox.Dock = DockStyle.Fill;
             advancedConfigurationTextBox.AutoSize = true;
@@ -134,22 +134,22 @@ namespace AutoLoadPyxelRestAddIn
             get = new CheckBox() { Text = "get", Checked = service.Get, Width = 50 };
             get.CheckedChanged += Get_CheckedChanged;
             methodsPanel.Controls.Add(get, 0, 0);
-            post = new CheckBox() { Text = "post", Checked = service.Post, Width = 50 };
+            post = new CheckBox() { Text = "post", Checked = service.Post, Width = 55 };
             post.CheckedChanged += Post_CheckedChanged;
             methodsPanel.Controls.Add(post, 1, 0);
             put = new CheckBox() { Text = "put", Checked = service.Put, Width = 50 };
             put.CheckedChanged += Put_CheckedChanged;
             methodsPanel.Controls.Add(put, 2, 0);
-            delete = new CheckBox() { Text = "delete", Checked = service.Delete, Width = 60 };
+            delete = new CheckBox() { Text = "delete", Checked = service.Delete, Width = 65 };
             delete.CheckedChanged += Delete_CheckedChanged;
             methodsPanel.Controls.Add(delete, 3, 0);
             patch = new CheckBox() { Text = "patch", Checked = service.Patch, Width = 60 };
             patch.CheckedChanged += Patch_CheckedChanged;
             methodsPanel.Controls.Add(patch, 4, 0);
-            options = new CheckBox() { Text = "options", Checked = service.Options, Width = 60 };
+            options = new CheckBox() { Text = "options", Checked = service.Options, Width = 70 };
             options.CheckedChanged += Options_CheckedChanged;
             methodsPanel.Controls.Add(options, 5, 0);
-            head = new CheckBox() { Text = "head", Checked = service.Head, Width = 50 };
+            head = new CheckBox() { Text = "head", Checked = service.Head, Width = 60};
             head.CheckedChanged += Head_CheckedChanged;
             methodsPanel.Controls.Add(head, 6, 0);
             servicePanel.Controls.Add(methodsPanel, 1, 6);

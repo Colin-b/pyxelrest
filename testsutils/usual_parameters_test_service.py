@@ -3008,8 +3008,11 @@ def swagger():
                                    '200': {
                                        'description': 'return value',
                                        'schema': {
-                                           'type': 'string',
-                                           'format': 'date'
+                                           'type': 'array',
+                                           'items': {
+                                               'type': 'string',
+                                               'format': 'date'
+                                           }
                                        }
                                    }
                                }
@@ -3057,7 +3060,11 @@ def swagger():
 
 @app.route('/test/date', methods=['GET'])
 def get_test_date():
-    return jsonify('2014-03-05')
+    return jsonify([
+        '2014-03-05',
+        '9999-01-01',
+        '3001-01-01',
+    ])
 
 
 @app.route('/test/datetime', methods=['GET'])
@@ -3068,7 +3075,8 @@ def get_test_date_time():
         '2014-03-05 15:59:58.20198Z',
         '2014-03-05t15:59:58.20198Z',
         '2014-03-05t15:59:58.20198z',
-        # TODO Add other date-time specific cases
+        '9999-01-01T00:00:00+00:00',
+        '3001-01-01T08:00:00+00:00',
     ])
 
 

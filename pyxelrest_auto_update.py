@@ -106,9 +106,9 @@ class PyxelRestUpdater:
         result = InstallCommand().main(['pyxelrest', '--upgrade'])
         if result == 0:
             logger.info('PyxelRest package updated.')
-            self._update_addin()
-            # Only perform configuration update when we are sure that latest version is installed
-            self._update_configuration()
+            if self._update_addin():
+                # Only perform configuration update when we are sure that latest version is installed
+                self._update_configuration()
         else:
             logger.warning('PyxelRest package update failed.')
 
@@ -124,6 +124,7 @@ class PyxelRestUpdater:
                                         path_to_up_to_date_configuration=self.path_to_up_to_date_configurations)
             addin_installer.perform_post_installation_tasks()
             logger.info('Microsoft Excel add-in successfully updated.')
+            return True
         except:
             logger.exception('Unable to update add-in.')
 
