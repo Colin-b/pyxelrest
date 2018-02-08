@@ -7,9 +7,16 @@ import jinja2
 import logging.config
 import logging.handlers
 import datetime
-import custom_logging
 from importlib import import_module
 from builtins import open
+from pyxelrest import (
+    vba,
+    authentication,
+    swagger,
+    _version,
+    GENERATE_UDF_ON_IMPORT,
+    custom_logging
+)
 
 if sys.version_info.major > 2:
     # Python 3
@@ -18,13 +25,8 @@ else:
     # Python 2
     from imp import reload
 
-import vba
-import authentication
-import swagger
-import _version
 
-
-def user_defined_functions(loaded_services):
+def user_defined_functions(loaded_services, flattenize=True):
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
     :return: A string containing python code with all xlwings UDFs.
@@ -40,7 +42,8 @@ def user_defined_functions(loaded_services):
         modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
         support_pandas=swagger.support_pandas(),
         support_ujson=support_ujson(),
-        authentication=authentication
+        authentication=authentication,
+        flattenize=flattenize
     )
 
 
@@ -52,16 +55,17 @@ def support_ujson():
         return False
 
 
-def generate_user_defined_functions():
+def generate_user_defined_functions(output='user_defined_functions.py', flattenize=True):
     """
     Load services and create user_defined_functions.py python file containing generated xlwings User Defined Functions.
+    :param flattenize: Set to False if you want the JSON dictionary as result of your UDF call.
     :return: None
     """
     services = swagger.load_services()
     logging.debug('Generating user defined functions.')
-    with open(os.path.join(os.path.dirname(__file__), 'user_defined_functions.py'), 'w', encoding='utf-8') \
+    with open(os.path.join(os.path.dirname(__file__), output), 'w', encoding='utf-8') \
             as generated_file:
-        generated_file.write(user_defined_functions(services))
+        generated_file.write(user_defined_functions(services, flattenize))
 
 
 def reload_user_defined_functions():
@@ -71,32 +75,34 @@ def reload_user_defined_functions():
     TODO This is temporary until xlwings force a python reload instead
     :return: None
     """
-    reload(import_module('user_defined_functions'))
+    reload(import_module('pyxelrest.user_defined_functions'))
 
 
 def reset_authentication():
     authentication.security_definitions = {}
     authentication.custom_authentications = {}
 
-custom_logging.load_logging_configuration()
-logging.info('Loading PyxelRest version {}'.format(_version.__version__))
 
-# TODO perform a proper import once package branch is done.
-import __init__
-if __init__.GENERATE_UDF_ON_IMPORT:
+if __name__ == '__main__':
+    logger = logging.getLogger("pyxelrest.pyxelrestgenerator")
+else:
+    logger = logging.getLogger(__name__)
+
+if GENERATE_UDF_ON_IMPORT:
+    custom_logging.load_logging_configuration()
     reset_authentication()
     try:
         generate_user_defined_functions()
     except Exception as e:
-        logging.exception('Cannot generate user defined functions.')
+        logger.exception('Cannot generate user defined functions.')
         raise
 
     try:
-        logging.debug('Expose user defined functions through PyxelRest.')
+        logger.debug('Expose user defined functions through PyxelRest.')
         reload_user_defined_functions()
-        from user_defined_functions import *
+        from pyxelrest.user_defined_functions import *
     except:
-        logging.exception('Error while importing UDFs.')
+        logger.exception('Error while importing UDFs.')
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':

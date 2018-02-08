@@ -4,6 +4,8 @@ import dateutil.tz
 import dateutil.parser
 from past.builtins import basestring
 
+logger = logging.getLogger(__name__)
+
 
 def append_prefix(prefix, values_list):
     """
@@ -31,6 +33,9 @@ def to_date_time(value):
         # Changed in python 3.6: The astimezone() method can now be called on naive instances
         # that are presumed to represent system local time.
         if not datetime_with_service_timezone.tzinfo:
+            return datetime_with_service_timezone
+        # Conversion cannot be performed for dates after year 3000, best effort and return in provided timezone
+        if datetime_with_service_timezone.year > 3000:
             return datetime_with_service_timezone
         return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
     return value
@@ -356,7 +361,7 @@ class Definition:
             field = self.fields[field_name]
             merger.merge(field_name if not field.array_field else None, field.convert(field_name, field_value))
 
-        undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields]
+        undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields and field_name[:6].lower() != 'x-pxl-']
         if undefined_fields:
             raise Exception('The following fields are not part of the definition: {0}'.format(undefined_fields))
 
@@ -370,9 +375,9 @@ class Response:
         self.field = Field(schema, json_definitions if json_definitions is not None else {}) if schema else DefaultField()
 
     def rows(self, data):
-        logging.debug('Converting response to list...')
+        logger.debug('Converting response to list...')
         rows = self.field.convert(None, data).header_and_rows()
-        logging.debug('Response converted to list.')
+        logger.debug('Response converted to list.')
         return rows
 
 

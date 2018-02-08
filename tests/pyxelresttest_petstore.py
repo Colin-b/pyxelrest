@@ -14,7 +14,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         loader.unload()
 
     def test_get_order_by_id(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         new_order_response = pyxelrestgenerator.petstore_test_placeOrder({
             'id': 444444,
             'petId': 222222,
@@ -35,7 +35,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         ])
 
     def test_get_user_by_name(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         new_user_response = pyxelrestgenerator.petstore_test_createUser({
             'id': 666666,
             'username': 'JD',
@@ -53,6 +53,15 @@ class PyxelRestPetstoreTest(unittest.TestCase):
             ['id', 'username', 'firstName', 'lastName', 'email', 'password', 'phone', 'userStatus'],
             [666666, 'JD', 'John', 'Doe', 'jdoe@petstore.com', 'azerty', '0123456789', 0]
         ])
+
+    def test_proxy(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertIsNotNone(pyxelrestgenerator.proxy_test_createUser)
+
+    def test_proxies(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertIsNotNone(pyxelrestgenerator.proxies_test_createUser)
+
 
 if __name__ == '__main__':
     unittest.main()

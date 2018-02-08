@@ -1,6 +1,60 @@
 # PyxelRest Changelog #
 
-## 0.63 (next) ##
+List all changes in various categories:
+* Release notes: Contains all worth noting changes (breaking changes mainly)
+* Enhancements
+* Bug fixes
+* Known issues
+
+## 0.64.1 (2018-02-08) ##
+
+### Bug fixes ###
+
+- Avoid uninstalling Microsoft Excel Add-in in case it cannot be installed back.
+- Make sure Microsoft Excel Add-in can be installed in case 32 bits VSTO installer is the only one available.
+- Use latest log4net version and latest version of python dependencies.
+- Handle VBA reserved keywords within uri (eg. /resource/{name}/child/{attribute}).
+- Add compatibility with Python 2.7 back.
+- Handle date and date time after year 3000.
+- Handle application/msgpackpandas with Python 3.
+
+## 0.64.0 (2017-12-20) ##
+
+### Enhancements ###
+
+- Introduce a new advanced configuration property: swagger_read_timeout. Allows to provide a read timeout for swagger retrieval (to avoid being stuck when service is not available behind an available reverse proxy).
+- PyxelRest is now installed without the Microsoft Excel Add-In (to be used as an external module).
+
+### Bug fixes ###
+
+- Date Time are now sent following ISO format.
+- Handle "attribute" VBA keyword.
+
+## 0.63.1 (2017-11-14) ##
+
+### Bug fixes ###
+
+- Handle basePath ending with slash.
+
+## 0.63.0 (2017-10-10) ##
+
+### Release notes ###
+
+- connect_timeout and read_timeout properties do not exists anymore. Instead they are now available as keys within advanced_configuration property.
+
+### Enhancements ###
+
+- Introduce new max_retries key for advanced_configuration property. Refer to documentation for more details. Previous behavior was "never retry", it will now retry 5 times by default.
+- Update script no longer removes logs folder on update, the whole update process can now be logged.
+- It is now possible to specify custom headers in advanced_configuration property. Refer to documentation for more details.
+- Default OAuth2 authentication timeout was increased from 20 seconds to 1 minute.
+- methods property now have a default value, meaning that by default all standards HTTP methods will be retrieved.
+- It is now possible to specify more than one proxy per service (in case both http and https schemes are required). It is also possible to specify a no_proxy url as well.
+- Authentication is now mostly handled in a separate `requests_auth` module, this module was refactored to get rid of the `flask` dependency.
+- ClickOnce application cache will now be cleared after Microsoft Excel add-in uninstallation to ensure that next installation succeed. Installing add-in will now be possible even if Microsoft Excel is launched.
+- Services configuration can now be auto-updated as part of the auto-update process.
+- Updater now display the new version of PyxelRest and is faster to detect update.
+- PathToPIP add-in property is not used anymore.
 
 ### Release notes ###
 
@@ -9,6 +63,12 @@
 ### Bug fixes ###
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
+- PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
+- file:// swagger URL are now properly analyzed by Microsoft Excel Add-In
+- Only HTTP GET results can now be cached as it does not make sense for other HTTP methods.
+- Do not prompt anymore for one update per closed Microsoft Excel instance. Only prompt the user once.
+- operationId was considered as mandatory in swagger while it is not, leading to services without operationId not being able to be loaded.
+- operationId was considered as unique within a swagger file, leading to missing UDFs if it was not the case.
 
 ## 0.62 (2017-06-27) ##
 

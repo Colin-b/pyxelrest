@@ -14,17 +14,23 @@ IF ERRORLEVEL 1 GOTO Install
 
 :ForceUpdate
 pip install -e . --upgrade --force-reinstall
-python pyxelrest_post_install.py addin/AutoLoadPyxelRestAddIn/bin/Release addin
+python pyxelrest_post_install.py
+SET /P "path_to_conf=Please provide path to the up to date configuration:"
+python pyxelrest_install_addin.py addin/AutoLoadPyxelRestAddIn/bin/Release addin --path_to_up_to_date_configuration "%path_to_conf%"
 GOTO End
 
 :Update
 pip install -e . --upgrade
-python pyxelrest_post_install.py addin/AutoLoadPyxelRestAddIn/bin/Release addin
+python pyxelrest_post_install.py
+SET /P "path_to_conf=Please provide path to the up to date configuration:"
+python pyxelrest_install_addin.py addin/AutoLoadPyxelRestAddIn/bin/Release addin --path_to_up_to_date_configuration "%path_to_conf%"
 GOTO End
 
 :Install
 pip install -e .
-python pyxelrest_post_install.py addin/AutoLoadPyxelRestAddIn/bin/Release addin
+python pyxelrest_post_install.py
+SET /P "path_to_conf=Please provide path to the up to date configuration:"
+python pyxelrest_install_addin.py addin/AutoLoadPyxelRestAddIn/bin/Release addin --path_to_up_to_date_configuration "%path_to_conf%"
 GOTO End
 
 :End

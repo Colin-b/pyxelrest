@@ -3,6 +3,8 @@ import dateutil.parser
 import dateutil.tz
 from past.builtins import basestring
 
+logger = logging.getLogger(__name__)
+
 
 def to_date_time(value):
     """
@@ -20,6 +22,9 @@ def to_date_time(value):
         # Changed in python 3.6: The astimezone() method can now be called on naive instances
         # that are presumed to represent system local time.
         if not datetime_with_service_timezone.tzinfo:
+            return datetime_with_service_timezone
+        # Conversion cannot be performed for dates after year 3000, best effort and return in provided timezone
+        if datetime_with_service_timezone.year > 3000:
             return datetime_with_service_timezone
         return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
     return value
@@ -131,7 +136,7 @@ class Flattenizer:
             self._set_values_per_level(new_row, level + 1, header, list_value, column_index + 1, json_definition)
 
     def to_list(self, data):
-        logging.debug('Converting response to list...')
+        logger.debug('Converting response to list...')
         self._extract_values_and_level(data)
         # Extract Header and Rows
         for row in self.__values_per_level.values():
@@ -169,11 +174,11 @@ class Flattenizer:
             self.__flatten_header = self.__flatten_header[1:]
             self.__all_flatten_rows = [flatten_row[1:] for flatten_row in self.__all_flatten_rows]
         if not self.__flatten_header or self.__flatten_header == ['']:
-            logging.debug('Response converted to list.')
+            logger.debug('Response converted to list.')
             return self.__all_flatten_rows if self.__all_flatten_rows and self.__all_flatten_rows != [[]] else ['']
         flatten_data = [self.__flatten_header]
         flatten_data.extend(self.__all_flatten_rows)
-        logging.debug('Response converted to list.')
+        logger.debug('Response converted to list.')
         return flatten_data
 
 

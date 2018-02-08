@@ -4,8 +4,10 @@ Global caching decorator
 - init_memory_cache(size,ttl) => stores up to <size> results for <ttl> seconds
 - nothing or no_cache() => no decoration and no caching
 """
+import logging
 
 global_caching = None
+logger = logging.getLogger(__name__)
 
 
 def init_disk_cache(filename):
@@ -37,6 +39,15 @@ def no_cache():
     global_caching = None
 
 
+def clear_cache():
+    """
+    Clear the cache if initialized
+    """
+    global global_caching
+    if global_caching is not None:
+        global_caching.clear()
+
+
 def caching(f):
     """
     Decorator for caching results
@@ -49,6 +60,7 @@ def caching(f):
             # key must be hashable
             key = f.__name__ + '(' + str(args) + ',' + str(kwargs) + ')'
             if key in global_caching:
+                logger.debug('Using cache for [function={}]'.format(f.__name__))
                 return global_caching[key]
             res = f(*args, **kwargs)
             global_caching[key] = res

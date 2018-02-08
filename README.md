@@ -24,9 +24,9 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 
 ### Pre requisites ###
 
-* [Python](https://www.python.org/downloads/) must be installed.
-* [Microsoft Excel](https://products.office.com/en-us/excel) must be installed.
-* [Microsoft .NET Framework 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+* [Python >= 2.7](https://www.python.org/downloads/) must be installed.
+* [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed.
+* [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
 
 ### User installation (using PIP) ###
 
@@ -99,13 +99,13 @@ The following options are available for each section:
     </th>
     <tr>
         <td><strong>swagger_url</strong></td>
-        <td>Complete URL to the Swagger definition. It can also be a system file path if specified using file:// prefix.</td>
+        <td>URL to the Swagger definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
     <tr>
         <td><strong>proxy_url</strong></td>
-        <td>Proxy that should be used to reach service.</td>
+        <td>Proxy that should be used to reach service. If this is an URL, then this proxy will be used for the swagger_url scheme only. If you want to specify a proxy for a different scheme, then this value should be scheme=proxy_url_for_this_scheme. You can specify multiple schemes by using comma as a separator. You can also use no_proxy as a scheme for a no_proxy url. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -117,7 +117,7 @@ The following options are available for each section:
     </tr>
     <tr>
         <td><strong>methods</strong></td>
-        <td>List of services methods to be exposed as UDFs.</td>
+        <td>List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head).</td>
         <td>Optional</td>
         <td>get, post, put, delete, patch, options, head</td>
     </tr>
@@ -128,26 +128,14 @@ The following options are available for each section:
         <td>any value separated by ','</td>
     </tr>
     <tr>
-        <td><strong>connect_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default.</td>
-        <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
-        <td><strong>read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.</td>
-        <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
         <td><strong>security_details</strong></td>
-        <td>Extra security information not provided by swagger.</td>
+        <td>Extra security information not provided by swagger. Refer to Security Details section for more information.</td>
         <td>Optional</td>
         <td>port=XX,timeout=YY</td>
     </tr>
     <tr>
         <td><strong>advanced_configuration</strong></td>
-        <td>Additional configuration details.</td>
+        <td>Additional configuration details. Refer to Advanced Configuration section for more information.</td>
         <td>Optional</td>
         <td>udf_return_type=XX,rely_on_definitions=YY</td>
     </tr>
@@ -192,7 +180,7 @@ If response_type is not provided in authorization_url, token is expected to be r
     </tr>
     <tr>
         <td><strong>timeout</strong></td>
-        <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 20 seconds.</td>
+        <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 1 minute.</td>
         <td>Optional</td>
     </tr>
     <tr>
@@ -271,6 +259,7 @@ Additional configuration details can be provided thanks to `advanced_configurati
 This property is supposed to contains key=value information. Separator is ',' (comma).
 
 Values cannot contains "," character.
+Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
 
 <table>
     <th>
@@ -286,6 +275,31 @@ Values cannot contains "," character.
         <td><strong>rely_on_definitions</strong></td>
         <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
         <td>True or False</td>
+    </tr>
+    <tr>
+        <td><strong>max_retries</strong></td>
+        <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
+        <td>Any positive integer value</td>
+    </tr>
+    <tr>
+        <td><strong>header.XXXX</strong></td>
+        <td>Where XXXX is the name of the header that should be sent with every request sent to this service.</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>connect_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>swagger_read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>any float value (decimal separator is .)</td>
     </tr>
 </table>
 
@@ -320,12 +334,6 @@ The following application settings are available:
         <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td><strong>PathToPIP</strong></td>
-        <td>Path to the pip.exe (including) executable that should be used to update PyxelRest.</td>
-        <td>Mandatory</td>
-        <td>Installation script is already setting this value properly.</td>
-    </tr>
-    <tr>
         <td><strong>PathToPython</strong></td>
         <td>Path to the python.exe (including) executable that should be used to launch the update script.</td>
         <td>Mandatory</td>
@@ -349,23 +357,45 @@ The following application settings are available:
         <td>Mandatory</td>
         <td>Default value is already set.</td>
     </tr>
+    <tr>
+        <td><strong>PathToUpToDateConfigurations</strong></td>
+        <td>Path to the file or directory containing up to date services configuration.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 ## Using as a module ##
 
 You can use pyxelrest as a python module as well.
 
+```python
+import pyxelrest
+
+# Avoid the following import statement to generate UDFs
+pyxelrest.GENERATE_UDF_ON_IMPORT = False
+
+from pyxelrest import pyxelrestgenerator
+
+# Generate UDFs for the following import
+pyxelrestgenerator.generate_user_defined_functions()
+
+from pyxelrest import user_defined_functions
+
+# UDFs are available as python functions within user_defined_functions and can be used as such
+```
+
 ### Generating user defined functions ###
 
-When `GENERATE_UDF_ON_IMPORT` is set to `True` (default behavior), UDFs are generated by loading (e.g. on first import) pyxelrestgenerator.py.
+When `pyxelrest.GENERATE_UDF_ON_IMPORT` is set to `True` (default behavior), UDFs are generated by loading (e.g. on first import) pyxelrest.pyxelrestgenerator.py.
 
-You can manually regenerate UDFs by calling p`yxelrestgenerator.generate_user_defined_functions()`
+You can manually regenerate UDFs by calling `pyxelrest.pyxelrestgenerator.generate_user_defined_functions()`
 
-All UDFs can be found within user_defined_functions.py.
+All UDFs can be found within pyxelrest.user_defined_functions.py.
 
 ### Caching results ###
 
-For testing purposes mainly, you can cache UDFs calls by using caching.py.
+For testing purposes mainly, you can cache UDFs calls by using pyxelrest.caching.py.
 This serves as an automatic mocking feature.
 
 The call to caching init method must be done prior to generating UDFs.
@@ -385,6 +415,22 @@ The cachetools module is required for this feature to be available.
 
 ### Microsoft Excel Wizard does not show any parameter ###
 
-In case your UDF has a lot of parameters, then Microsoft Excel is unable to display them all in the function wizard.
+In case your UDF has a lot of parameters (or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
 
-Try reducing the number of parameters in your service.
+Try reducing the number of parameters in your service (or the length of your parameter names).
+
+### No command specified in the configuration, cannot autostart server ###
+
+This error will happen in case you manually specified in your xlwings.bas file to use debug server but did not uncomment the main function starting the server on pyxelrest module side.
+
+### Microsoft Excel Add-In cannot be installed ###
+
+Check that all requirements are met:
+ * [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+ * [Microsoft Visual Studio 2010 Tools for Office Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=48217) must be installed.
+
+In case you encounter an issue like `Could not load file or assembly 'Microsoft.Office.BusinessApplications.Fba...` anyway, you then need to remove `C:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\VSTOInstaller.exe.config` file.
+
+### Dates with a year higher than 3000 are not converted to local timezone ###
+
+Due to timestamp limitation, dates after 3000-12-31 and date time after 3001-01-01T07:59:59+00:00 cannot be converted to local timezone.

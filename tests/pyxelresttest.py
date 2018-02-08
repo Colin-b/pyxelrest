@@ -32,30 +32,34 @@ class PyxelRestTest(unittest.TestCase):
             filtered_tags_test_service,
             values_false_test_service,
             output_order_test_service,
+            swagger_parsing_test_service,
             without_parameter_test_service,
             header_parameter_test_service,
             form_parameter_test_service,
             array_parameter_test_service,
             static_file_call_test_service,
             http_methods_test_service,
-            content_type_test_service
+            content_type_test_service,
+            base_path_ending_with_slash_test_service,
         )
         serviceshandler.start_services(
             (usual_parameters_test_service, 8943),
             (filtered_tags_test_service, 8944),
             (values_false_test_service, 8945),
             (output_order_test_service, 8946),
+            (swagger_parsing_test_service, 8948),
             (without_parameter_test_service, 8950),
             (header_parameter_test_service, 8951),
             (form_parameter_test_service, 8952),
             (array_parameter_test_service, 8953),
             (static_file_call_test_service, 8954),
             (http_methods_test_service, 8955),
-            (content_type_test_service, 8956)
+            (content_type_test_service, 8956),
+            (base_path_ending_with_slash_test_service, 8957),
         )
 
     def test_string_array_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         if platform.python_version()[0] == '3':
             result = 'query_array_string="[\'str1\', \'str2\']"'
         else:
@@ -64,7 +68,7 @@ class PyxelRestTest(unittest.TestCase):
                          result)
 
     def test_plain_text_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
             'string value returned should be truncated so that the following information cannot be seen by'
@@ -73,32 +77,51 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_post_test_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             pyxelrestgenerator.without_parameter_test_post_test_without_parameter(),
             'POST performed properly'
         )
 
     def test_put_test_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             pyxelrestgenerator.without_parameter_test_put_test_without_parameter(),
             'PUT performed properly'
         )
 
     def test_delete_test_without_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.without_parameter_test_delete_test_without_parameter(),
                          'DELETE performed properly')
 
     def test_get_test_header_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         headers = pyxelrestgenerator.header_parameter_test_get_test_header_parameter('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
+    def test_get_test_header_advanced_configuration(self):
+        from pyxelrest import pyxelrestgenerator
+        headers = pyxelrestgenerator.header_advanced_configuration_test_get_test_header_parameter('sent header')
+
+        custom_header_index = headers[0].index('X-Pxl-Custom')
+        self.assertEqual(headers[1][custom_header_index], 'MyCustomValue')
+
+        other_header_index = headers[0].index('X-Pxl-Other')
+        self.assertEqual(headers[1][other_header_index], 'MyOtherValue')
+
+        request_header_index = headers[0].index('X-Pxl-Request')
+        self.assertIsNotNone(request_header_index)
+
+        session_header_index = headers[0].index('X-Pxl-Session')
+        self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
+
+        user_agent_index = headers[0].index('User-Agent')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.64.1')
+
     def test_post_test_form_parameter(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             pyxelrestgenerator.form_parameter_test_post_test_form_parameter('sent string form data'),
             [
@@ -108,32 +131,32 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'Second tag is one of the accepted tags',
             pyxelrestgenerator.filtered_tags_test_get_test_with_tags()
         )
 
     def test_post_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'All tags are accepted',
             pyxelrestgenerator.filtered_tags_test_post_test_with_tags()
         )
 
     def test_put_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'First tag is one of the accepted tags',
             pyxelrestgenerator.filtered_tags_test_put_test_with_tags()
         )
 
     def test_delete_test_with_tags(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_test_delete_test_with_tags'))
 
     def test_get_test_with_zero_integer(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['zero_integer'],
@@ -143,7 +166,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_with_zero_float(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['zero_float'],
@@ -153,7 +176,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_with_false_boolean(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['false_boolean'],
@@ -163,7 +186,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_with_empty_string(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['empty_string'],
@@ -173,7 +196,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_with_empty_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['empty_list'],
@@ -183,7 +206,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_with_empty_dictionary(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['empty_dictionary'],
@@ -193,7 +216,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_compare_output_order(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 [u'curve', u'date', u'mat', u'ts'],
@@ -205,71 +228,90 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_get_test_date(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
-                [datetime.datetime(2014, 3, 5, 0, 0)]
+                [datetime.datetime(2014, 3, 5, 0, 0)],
+                [datetime.datetime(9999, 1, 1, 0, 0)],
+                [datetime.datetime(3001, 1, 1, 0, 0)],
             ],
             pyxelrestgenerator.usual_parameters_test_get_test_date()
         )
 
     def test_get_test_datetime(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
                 [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
                 [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
                 [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
-                [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())]
+                [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
+                [datetime.datetime(9999, 1, 1, 0, 0, 0, 0, tzinfo=tzutc())],
+                [datetime.datetime(3001, 1, 1, 8, 0, 0, 0, tzinfo=tzutc())],
             ],
             pyxelrestgenerator.usual_parameters_test_get_test_date_time()
         )
 
+    def test_get_test_datetime_encoding(self):
+        from pyxelrest import pyxelrestgenerator
+        date_time = datetime.datetime.strptime('2017-09-13T15:20:35', '%Y-%m-%dT%H:%M:%S')
+        self.assertEqual('2017-09-13T15:20:35',
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+        )
+        date_time = datetime.datetime.strptime('2017-09-13T15:20', '%Y-%m-%dT%H:%M')
+        self.assertEqual('2017-09-13T15:20:00',
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+        )
+        date_time = datetime.datetime.strptime('2017-09-13 15', '%Y-%m-%d %H')
+        self.assertEqual('2017-09-13T15:00:00',
+            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+        )
+
     def test_get_static_swagger_file(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'success',
             pyxelrestgenerator.swagger_loaded_from_file_test_get_test_static_file_call()
         )
 
     def test_get_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'GET',
             pyxelrestgenerator.http_methods_test_get_test_all_http_methods()
         )
 
     def test_post_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'POST',
             pyxelrestgenerator.http_methods_test_post_test_all_http_methods()
         )
 
     def test_put_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'PUT',
             pyxelrestgenerator.http_methods_test_put_test_all_http_methods()
         )
 
     def test_delete_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'DELETE',
             pyxelrestgenerator.http_methods_test_delete_test_all_http_methods()
         )
 
     def test_patch_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'PATCH',
             pyxelrestgenerator.http_methods_test_patch_test_all_http_methods()
         )
 
     def test_options_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             # OPTIONS is already handled by Flask
             '',
@@ -277,7 +319,7 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_head_http_method(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             # HEAD is already handled by Flask
             '',
@@ -285,18 +327,65 @@ class PyxelRestTest(unittest.TestCase):
         )
 
     def test_msgpackpandas_content_type(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'application/msgpackpandas' if support_pandas() else '*/*',
             pyxelrestgenerator.content_type_test_get_test_msgpackpandas()
         )
 
     def test_json_content_type(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'application/json',
             pyxelrestgenerator.content_type_test_get_test_json()
         )
+
+    def test_missing_operation_id(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            '/test/without/operationId called.',
+            pyxelrestgenerator.operation_id_not_provided_test_get_test_without_operationId()
+        )
+
+    def test_mixed_operation_id(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            '/test/with/operationId called.',
+            pyxelrestgenerator.operation_id_not_always_provided_test_get_test_without_operationId()
+        )
+        self.assertEqual(
+            '/test/without/operationId called.',
+            pyxelrestgenerator.operation_id_not_always_provided_test_duplicated_get_test_without_operationId()
+        )
+
+    def test_get_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_get_test_method()
+        )
+
+    def test_post_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_post_test_method()
+        )
+
+    def test_put_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_put_test_method()
+        )
+
+    def test_delete_base_path_ending_with_slash(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'http://localhost:8957/test/method',
+            pyxelrestgenerator.base_path_ending_with_slash_test_delete_test_method()
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

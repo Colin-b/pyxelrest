@@ -1,8 +1,10 @@
 import flask
 import jwt
 import datetime
+import logging
 
 
+logger = logging.getLogger(__name__)
 app = flask.Flask(__name__)
 
 already_asked_for_quick_expiry = [False]
@@ -50,12 +52,14 @@ def close_page_so_that_client_timeout_waiting_for_token():
 
 def submit_a_form_with_a_token(token_expiry, response_type):
     redirect_uri = flask.request.args.get('redirect_uri')
+    state = flask.request.args.get('state')
     token = jwt.encode({'exp': token_expiry}, 'secret').decode('unicode_escape')
     return """
 <html>
     <body>
         <form method="POST" name="hiddenform" action="{0}">
             <input type="hidden" name="{1}" value="{2}" />
+            <input type="hidden" name="state" value="{3}" />
             <noscript>
                 <p>Script is disabled. Click Submit to continue.</p>
                 <input type="submit" value="Submit" />
@@ -64,7 +68,7 @@ def submit_a_form_with_a_token(token_expiry, response_type):
         <script language="javascript">document.forms[0].submit();</script>
     </body>
 </html>
-        """.format(redirect_uri, response_type, token)
+        """.format(redirect_uri, response_type, token, state)
 
 
 def submit_an_empty_form():
@@ -94,7 +98,9 @@ def close_page():
 
 
 def start_server(port):
+    logger.info('Starting server on localhost:{0}'.format(port))
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8947)

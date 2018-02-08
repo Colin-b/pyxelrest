@@ -3,6 +3,14 @@ import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
 
 
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
+
+
 class PyxelRestNestedDataTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -16,7 +24,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
         serviceshandler.stop_services()
 
     def test_get_test_dict_with_empty_nested_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3'],
@@ -27,7 +35,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_dict_with_empty_nested_list())
 
     def test_get_test_dict_with_three_imbricated_levels(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3'],
@@ -39,7 +47,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_dict_with_three_imbricated_levels())
 
     def test_get_test_dict_with_four_imbricated_levels(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3', 'Column 3'],
@@ -52,7 +60,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_dict_with_four_imbricated_levels())
 
     def test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3', 'Column 3', 'Column 3'],
@@ -65,17 +73,17 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys())
 
     def test_get_test_empty_dict(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([['']],
                          pyxelrestgenerator.nested_data_test_get_test_empty_dict())
 
     def test_get_test_empty_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([['']],
                          pyxelrestgenerator.nested_data_test_get_test_empty_list())
 
     def test_get_test_one_level_dict(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['Column 2', 'Column 3'],
             ['value 1', 'value 2']
@@ -83,7 +91,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_one_level_dict())
 
     def test_get_test_one_level_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['value 1'],
             ['value 2']
@@ -91,7 +99,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_one_level_list())
 
     def test_get_test_one_dict_entry_with_a_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['Column 1', 'Column 1'],
             ['', 'value 1'],
@@ -100,7 +108,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list())
 
     def test_get_test_one_dict_entry_with_a_list_of_dict(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 3'],
             ['', 'value 12', 'value 13'],
@@ -109,7 +117,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_one_dict_entry_with_a_list_of_dict())
 
     def test_get_test_list_of_dict(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.assertEqual([
             ['Column 2', 'Column 3'],
             ['value 11', 'value 12'],
@@ -118,7 +126,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_list_of_dict())
 
     def test_get_test_dict_with_list(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 3', 'Column 3'],
@@ -130,7 +138,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list())
 
     def test_get_test_dict_with_list_of_different_size(self):
-        import pyxelrestgenerator
+        from pyxelrest import pyxelrestgenerator
         self.maxDiff = None
         self.assertEqual([
             ['Column 1', 'Column 2', 'Column 1', 'Column 2', 'Column 3', 'Column 3'],
@@ -139,6 +147,21 @@ class PyxelRestNestedDataTest(unittest.TestCase):
             ['', '', 'value 3', '']
         ],
             pyxelrestgenerator.nested_data_test_get_test_dict_with_list_of_different_size())
+
+    def test_pandas_msgpack_default_encoding(self):
+        from pyxelrest import pyxelrestgenerator
+        actual = pyxelrestgenerator.nested_data_test_get_test_pandas_msgpack_default_encoding()
+        if support_pandas():
+            from pandas import Timestamp
+            expected = [
+                ['col1', 'col2_é&ç', u'col3_é&ç', 'col4', 'col5'],
+                ['data11', 'data12_é&ç', u'data13_é&ç', Timestamp('2017-12-26 01:02:03'), 1.1],
+                ['data21', 'data22_é&ç', u'data23_é&ç', Timestamp('2017-12-27 01:02:03'), 2.2],
+            ]
+        else:
+            expected = 'Pandas not installed'
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

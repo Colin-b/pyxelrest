@@ -8,6 +8,7 @@ keywords = [
     'and',
     'andalso',
     'as',
+    'attribute',
     'boolean',
     'byref',
     'byte',
