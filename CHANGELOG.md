@@ -16,6 +16,7 @@ List all changes in various categories:
 - Handle VBA reserved keywords within uri (eg. /resource/{name}/child/{attribute}).
 - Add compatibility with Python 2.7 back.
 - Handle date and date time after year 3000.
+- Handle application/msgpackpandas with Python 3.
 
 ## 0.64.0 (2017-12-20) ##
 
