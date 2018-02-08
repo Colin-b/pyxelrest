@@ -14,7 +14,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         pyxelrest.GENERATE_UDF_ON_IMPORT = False
         from pyxelrest import pyxelrestgenerator
         pyxelrestgenerator.generate_user_defined_functions(flattenize=False)
-        pyxelrestgenerator.reload_user_defined_functions()
+        pyxelrestgenerator.load_user_defined_functions()
 
     @classmethod
     def tearDownClass(cls):
