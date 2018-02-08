@@ -12,8 +12,9 @@ List all changes in various categories:
 
 - Avoid uninstalling Microsoft Excel Add-in in case it cannot be installed back.
 - Make sure Microsoft Excel Add-in can be installed in case 32 bits VSTO installer is the only one available.
-- Use latest log4net version.
+- Use latest log4net version and latest version of python dependencies.
 - Handle VBA reserved keywords within uri (eg. /resource/{name}/child/{attribute})
+- Add compatibility with Python 2.7 back
 
 ## 0.64.0 (2017-12-20) ##
 

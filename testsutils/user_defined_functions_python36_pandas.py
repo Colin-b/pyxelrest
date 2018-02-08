@@ -104,6 +104,56 @@ def empty_methods_test_get_test_date_time():
         if response is not None:
             response.close()
 
+@caching
+@xw.func(category='empty_methods_test', call_in_wizard=False)
+@xw.arg('encoded_date_time', dates=datetime.datetime, doc='string parameter')
+def empty_methods_test_get_test_date_time_encoding(encoded_date_time):
+    logger.info("[status=Calling] [function=empty_methods_test_get_test_date_time_encoding]...")
+    request_header = {}
+    request_parameters = {}
+
+    if encoded_date_time is None or isinstance(encoded_date_time, list) and all(x is None for x in encoded_date_time):
+        logger.error('encoded_date_time is required.')
+        return 'encoded_date_time is required.'
+    if encoded_date_time is not None:
+        if not isinstance(encoded_date_time, datetime.datetime):
+            logger.error('encoded_date_time must be a date time.')
+            return 'encoded_date_time must be a date time.'
+        else:
+            encoded_date_time = encoded_date_time.isoformat()
+
+        request_parameters['encoded_date_time'] = encoded_date_time
+
+
+    response = None
+    try:
+        response = session.get(5).request('get', 'http://localhost:8943/test/datetime/encoding'.format(), params=request_parameters, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
+        response.raise_for_status()
+        logger.info("[status=Valid] response received for [function=empty_methods_test_get_test_date_time_encoding] [url={0}].".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            return json_as_list(response, all_responses, all_definitions.get('empty_methods_test'), False)
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logger.exception("Connection [status=error] occurred while calling [function=empty_methods_test_get_test_date_time_encoding] [url=http://localhost:8943/test/datetime/encoding].")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            logger.exception("[status=Error] occurred while handling [function=empty_methods_test_get_test_date_time_encoding] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+        else:
+            logger.exception("[status=Error] occurred while calling [function=empty_methods_test_get_test_date_time_encoding] [url=http://localhost:8943/test/datetime/encoding].")
+        return describe_error(response, error)
+
+    finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            response.close()
+
 @xw.func(category='empty_methods_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -209,6 +259,8 @@ def empty_methods_test_delete_test_with_all_optional_parameters_types(query_inte
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -354,6 +406,8 @@ def empty_methods_test_delete_test_with_all_optional_parameters_types(query_inte
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -497,6 +551,8 @@ def empty_methods_test_get_test_with_all_optional_parameters_types(query_integer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -642,6 +698,8 @@ def empty_methods_test_get_test_with_all_optional_parameters_types(query_integer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -784,6 +842,8 @@ def empty_methods_test_post_test_with_all_optional_parameters_types(query_intege
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -929,6 +989,8 @@ def empty_methods_test_post_test_with_all_optional_parameters_types(query_intege
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -1071,6 +1133,8 @@ def empty_methods_test_put_test_with_all_optional_parameters_types(query_integer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -1216,6 +1280,8 @@ def empty_methods_test_put_test_with_all_optional_parameters_types(query_integer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -1394,6 +1460,8 @@ def empty_methods_test_delete_test_with_all_parameters_types(query_integer, quer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -1578,6 +1646,8 @@ def empty_methods_test_delete_test_with_all_parameters_types(query_integer, quer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -1760,6 +1830,8 @@ def empty_methods_test_get_test_with_all_parameters_types(query_integer, query_i
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -1944,6 +2016,8 @@ def empty_methods_test_get_test_with_all_parameters_types(query_integer, query_i
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -2125,6 +2199,8 @@ def empty_methods_test_post_test_with_all_parameters_types(query_integer, query_
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -2309,6 +2385,8 @@ def empty_methods_test_post_test_with_all_parameters_types(query_integer, query_
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -2490,6 +2568,8 @@ def empty_methods_test_put_test_with_all_parameters_types(query_integer, query_i
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -2674,6 +2754,8 @@ def empty_methods_test_put_test_with_all_parameters_types(query_integer, query_i
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -3450,6 +3532,56 @@ def usual_parameters_test_get_test_date_time():
         if response is not None:
             response.close()
 
+@caching
+@xw.func(category='usual_parameters_test', call_in_wizard=False)
+@xw.arg('encoded_date_time', dates=datetime.datetime, doc='string parameter')
+def usual_parameters_test_get_test_date_time_encoding(encoded_date_time):
+    logger.info("[status=Calling] [function=usual_parameters_test_get_test_date_time_encoding]...")
+    request_header = {}
+    request_parameters = {}
+
+    if encoded_date_time is None or isinstance(encoded_date_time, list) and all(x is None for x in encoded_date_time):
+        logger.error('encoded_date_time is required.')
+        return 'encoded_date_time is required.'
+    if encoded_date_time is not None:
+        if not isinstance(encoded_date_time, datetime.datetime):
+            logger.error('encoded_date_time must be a date time.')
+            return 'encoded_date_time must be a date time.'
+        else:
+            encoded_date_time = encoded_date_time.isoformat()
+
+        request_parameters['encoded_date_time'] = encoded_date_time
+
+
+    response = None
+    try:
+        response = session.get(5).request('get', 'http://localhost:8943/test/datetime/encoding'.format(), params=request_parameters, verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
+        response.raise_for_status()
+        logger.info("[status=Valid] response received for [function=usual_parameters_test_get_test_date_time_encoding] [url={0}].".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value')]))])
+            return json_as_list(response, all_responses, all_definitions.get('usual_parameters_test'), False)
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logger.exception("Connection [status=error] occurred while calling [function=usual_parameters_test_get_test_date_time_encoding] [url=http://localhost:8943/test/datetime/encoding].")
+        return 'Cannot connect to service. Please retry once connection is re-established.'
+
+    except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            logger.exception("[status=Error] occurred while handling [function=usual_parameters_test_get_test_date_time_encoding] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+        else:
+            logger.exception("[status=Error] occurred while calling [function=usual_parameters_test_get_test_date_time_encoding] [url=http://localhost:8943/test/datetime/encoding].")
+        return describe_error(response, error)
+
+    finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            response.close()
+
 @xw.func(category='usual_parameters_test', call_in_wizard=False)
 @xw.arg('query_integer', numbers=int, doc='integer parameter')
 @xw.arg('query_integer32', numbers=int, doc='integer 32 parameter')
@@ -3555,6 +3687,8 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -3700,6 +3834,8 @@ def usual_parameters_test_delete_test_with_all_optional_parameters_types(query_i
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -3843,6 +3979,8 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -3988,6 +4126,8 @@ def usual_parameters_test_get_test_with_all_optional_parameters_types(query_inte
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -4130,6 +4270,8 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -4275,6 +4417,8 @@ def usual_parameters_test_post_test_with_all_optional_parameters_types(query_int
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -4417,6 +4561,8 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -4562,6 +4708,8 @@ def usual_parameters_test_put_test_with_all_optional_parameters_types(query_inte
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -4740,6 +4888,8 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -4924,6 +5074,8 @@ def usual_parameters_test_delete_test_with_all_parameters_types(query_integer, q
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -5106,6 +5258,8 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -5290,6 +5444,8 @@ def usual_parameters_test_get_test_with_all_parameters_types(query_integer, quer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -5471,6 +5627,8 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -5655,6 +5813,8 @@ def usual_parameters_test_post_test_with_all_parameters_types(query_integer, que
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -5836,6 +5996,8 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -6020,6 +6182,8 @@ def usual_parameters_test_put_test_with_all_parameters_types(query_integer, quer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -7619,8 +7783,50 @@ def nested_data_test_get_test_one_level_list():
         if response is not None:
             response.close()
 
-all_definitions['vba_keywords_test'] = OrderedDict([(u'VBAKeywords', OrderedDict([(u'properties', OrderedDict([(u'addhandler', OrderedDict()), (u'addressof', OrderedDict()), (u'alias', OrderedDict()), (u'and', OrderedDict()), (u'andalso', OrderedDict()), (u'as', OrderedDict()), (u'attribute', OrderedDict()), (u'boolean', OrderedDict()), (u'byref', OrderedDict()), (u'byte', OrderedDict()), (u'byval', OrderedDict()), (u'call', OrderedDict()), (u'case', OrderedDict()), (u'catch', OrderedDict()), (u'cbool', OrderedDict()), (u'cbyte', OrderedDict()), (u'cchar', OrderedDict()), (u'cdate', OrderedDict()), (u'cdbl', OrderedDict()), (u'cdec', OrderedDict()), (u'char', OrderedDict()), (u'cint', OrderedDict()), (u'class', OrderedDict()), (u'clng', OrderedDict()), (u'cobj', OrderedDict()), (u'const', OrderedDict()), (u'continue', OrderedDict()), (u'csbyte', OrderedDict()), (u'cshort', OrderedDict()), (u'csng', OrderedDict()), (u'cstr', OrderedDict()), (u'ctype', OrderedDict()), (u'cuint', OrderedDict()), (u'culng', OrderedDict()), (u'currency', OrderedDict()), (u'cushort', OrderedDict()), (u'date', OrderedDict()), (u'decimal', OrderedDict()), (u'declare', OrderedDict()), (u'default', OrderedDict()), (u'delegate', OrderedDict()), (u'dim', OrderedDict()), (u'directcast', OrderedDict()), (u'do', OrderedDict()), (u'double', OrderedDict()), (u'each', OrderedDict()), (u'else', OrderedDict()), (u'elseif', OrderedDict()), (u'end', OrderedDict()), (u'endif', OrderedDict()), (u'enum', OrderedDict()), (u'erase', OrderedDict()), (u'error', OrderedDict()), (u'event', OrderedDict()), (u'exit', OrderedDict()), (u'finally', OrderedDict()), (u'for', OrderedDict()), (u'friend', OrderedDict()), (u'function', OrderedDict()), (u'get', OrderedDict()), (u'gettype', OrderedDict()), (u'getxmlnamespace', OrderedDict()), (u'global', OrderedDict()), (u'gosub', OrderedDict()), (u'goto', OrderedDict()), (u'handles', OrderedDict()), (u'if', OrderedDict()), (u'implements', OrderedDict()), (u'imports', OrderedDict()), (u'in', OrderedDict()), (u'inherits', OrderedDict()), (u'integer', OrderedDict()), (u'interface', OrderedDict()), (u'is', OrderedDict()), (u'isnot', OrderedDict()), (u'let', OrderedDict()), (u'lib', OrderedDict()), (u'like', OrderedDict()), (u'long', OrderedDict()), (u'loop', OrderedDict()), (u'me', OrderedDict()), (u'mod', OrderedDict()), (u'module', OrderedDict()), (u'mustinherit', OrderedDict()), (u'mustoverride', OrderedDict()), (u'mybase', OrderedDict()), (u'myclass', OrderedDict()), (u'namespace', OrderedDict()), (u'narrowing', OrderedDict()), (u'new', OrderedDict()), (u'next', OrderedDict()), (u'not', OrderedDict()), (u'nothing', OrderedDict()), (u'notinheritable', OrderedDict()), (u'notoverridable', OrderedDict()), (u'object', OrderedDict()), (u'of', OrderedDict()), (u'on', OrderedDict()), (u'operator', OrderedDict()), (u'option', OrderedDict()), (u'optional', OrderedDict()), (u'or', OrderedDict()), (u'orelse', OrderedDict()), (u'overloads', OrderedDict()), (u'overridable', OrderedDict()), (u'overrides', OrderedDict()), (u'paramarray', OrderedDict()), (u'partial', OrderedDict()), (u'private', OrderedDict()), (u'property', OrderedDict()), (u'protected', OrderedDict()), (u'public', OrderedDict()), (u'raiseevent', OrderedDict()), (u'readonly', OrderedDict()), (u'redim', OrderedDict()), (u'rem', OrderedDict()), (u'removehandler', OrderedDict()), (u'resume', OrderedDict()), (u'return', OrderedDict()), (u'sbyte', OrderedDict()), (u'select', OrderedDict()), (u'set', OrderedDict()), (u'shadows', OrderedDict()), (u'shared', OrderedDict()), (u'short', OrderedDict()), (u'single', OrderedDict()), (u'static', OrderedDict()), (u'step', OrderedDict()), (u'stop', OrderedDict()), (u'string', OrderedDict()), (u'structure', OrderedDict()), (u'sub', OrderedDict()), (u'synclock', OrderedDict()), (u'then', OrderedDict()), (u'throw', OrderedDict()), (u'to', OrderedDict()), (u'try', OrderedDict()), (u'trycast', OrderedDict()), (u'type', OrderedDict()), (u'typeof', OrderedDict()), (u'uinteger', OrderedDict()), (u'ulong', OrderedDict()), (u'ushort', OrderedDict()), (u'using', OrderedDict()), (u'variant', OrderedDict()), (u'wend', OrderedDict()), (u'when', OrderedDict()), (u'while', OrderedDict()), (u'widening', OrderedDict()), (u'with', OrderedDict()), (u'withevents', OrderedDict()), (u'writeonly', OrderedDict()), (u'xor', OrderedDict())]))]))])
+all_definitions['vba_keywords_test'] = OrderedDict([('VBAKeywords', OrderedDict([('properties', OrderedDict([('addhandler', OrderedDict()), ('addressof', OrderedDict()), ('alias', OrderedDict()), ('and', OrderedDict()), ('andalso', OrderedDict()), ('as', OrderedDict()), ('attribute', OrderedDict()), ('boolean', OrderedDict()), ('byref', OrderedDict()), ('byte', OrderedDict()), ('byval', OrderedDict()), ('call', OrderedDict()), ('case', OrderedDict()), ('catch', OrderedDict()), ('cbool', OrderedDict()), ('cbyte', OrderedDict()), ('cchar', OrderedDict()), ('cdate', OrderedDict()), ('cdbl', OrderedDict()), ('cdec', OrderedDict()), ('char', OrderedDict()), ('cint', OrderedDict()), ('class', OrderedDict()), ('clng', OrderedDict()), ('cobj', OrderedDict()), ('const', OrderedDict()), ('continue', OrderedDict()), ('csbyte', OrderedDict()), ('cshort', OrderedDict()), ('csng', OrderedDict()), ('cstr', OrderedDict()), ('ctype', OrderedDict()), ('cuint', OrderedDict()), ('culng', OrderedDict()), ('currency', OrderedDict()), ('cushort', OrderedDict()), ('date', OrderedDict()), ('decimal', OrderedDict()), ('declare', OrderedDict()), ('default', OrderedDict()), ('delegate', OrderedDict()), ('dim', OrderedDict()), ('directcast', OrderedDict()), ('do', OrderedDict()), ('double', OrderedDict()), ('each', OrderedDict()), ('else', OrderedDict()), ('elseif', OrderedDict()), ('end', OrderedDict()), ('endif', OrderedDict()), ('enum', OrderedDict()), ('erase', OrderedDict()), ('error', OrderedDict()), ('event', OrderedDict()), ('exit', OrderedDict()), ('finally', OrderedDict()), ('for', OrderedDict()), ('friend', OrderedDict()), ('function', OrderedDict()), ('get', OrderedDict()), ('gettype', OrderedDict()), ('getxmlnamespace', OrderedDict()), ('global', OrderedDict()), ('gosub', OrderedDict()), ('goto', OrderedDict()), ('handles', OrderedDict()), ('if', OrderedDict()), ('implements', OrderedDict()), ('imports', OrderedDict()), ('in', OrderedDict()), ('inherits', OrderedDict()), ('integer', OrderedDict()), ('interface', OrderedDict()), ('is', OrderedDict()), ('isnot', OrderedDict()), ('let', OrderedDict()), ('lib', OrderedDict()), ('like', OrderedDict()), ('long', OrderedDict()), ('loop', OrderedDict()), ('me', OrderedDict()), ('mod', OrderedDict()), ('module', OrderedDict()), ('mustinherit', OrderedDict()), ('mustoverride', OrderedDict()), ('mybase', OrderedDict()), ('myclass', OrderedDict()), ('namespace', OrderedDict()), ('narrowing', OrderedDict()), ('new', OrderedDict()), ('next', OrderedDict()), ('not', OrderedDict()), ('nothing', OrderedDict()), ('notinheritable', OrderedDict()), ('notoverridable', OrderedDict()), ('object', OrderedDict()), ('of', OrderedDict()), ('on', OrderedDict()), ('operator', OrderedDict()), ('option', OrderedDict()), ('optional', OrderedDict()), ('or', OrderedDict()), ('orelse', OrderedDict()), ('overloads', OrderedDict()), ('overridable', OrderedDict()), ('overrides', OrderedDict()), ('paramarray', OrderedDict()), ('partial', OrderedDict()), ('private', OrderedDict()), ('property', OrderedDict()), ('protected', OrderedDict()), ('public', OrderedDict()), ('raiseevent', OrderedDict()), ('readonly', OrderedDict()), ('redim', OrderedDict()), ('rem', OrderedDict()), ('removehandler', OrderedDict()), ('resume', OrderedDict()), ('return', OrderedDict()), ('sbyte', OrderedDict()), ('select', OrderedDict()), ('set', OrderedDict()), ('shadows', OrderedDict()), ('shared', OrderedDict()), ('short', OrderedDict()), ('single', OrderedDict()), ('static', OrderedDict()), ('step', OrderedDict()), ('stop', OrderedDict()), ('string', OrderedDict()), ('structure', OrderedDict()), ('sub', OrderedDict()), ('synclock', OrderedDict()), ('then', OrderedDict()), ('throw', OrderedDict()), ('to', OrderedDict()), ('try', OrderedDict()), ('trycast', OrderedDict()), ('type', OrderedDict()), ('typeof', OrderedDict()), ('uinteger', OrderedDict()), ('ulong', OrderedDict()), ('ushort', OrderedDict()), ('using', OrderedDict()), ('variant', OrderedDict()), ('wend', OrderedDict()), ('when', OrderedDict()), ('while', OrderedDict()), ('widening', OrderedDict()), ('with', OrderedDict()), ('withevents', OrderedDict()), ('writeonly', OrderedDict()), ('xor', OrderedDict())]))]))])
 
+
+@caching
+@xw.func(category='vba_keywords_test', call_in_wizard=False)
+@xw.arg('attribute_visual_basic', doc='attribute uri param')
+@xw.ret(expand='table')
+def vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter(attribute_visual_basic):
+    logger.info("[status=Calling] [function=vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter]...")
+    request_header = {'Accept': 'application/json'}
+
+    if attribute_visual_basic is None or isinstance(attribute_visual_basic, list) and all(x is None for x in attribute_visual_basic):
+        logger.error('attribute_visual_basic is required.')
+        return ['attribute_visual_basic is required.']
+
+
+    response = None
+    try:
+        response = session.get(5).request('get', 'http://localhost:8949/test/this/{attribute}/vba/restricted/keyword/in/uri/parameter'.format(attribute=attribute_visual_basic), verify=False, headers=request_header, proxies={}, timeout=(1.0, None))
+        response.raise_for_status()
+        logger.info("[status=Valid] response received for [function=vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter] [url={0}].".format(response.request.url))
+        if response.headers['content-type'] == 'application/json':
+            all_responses = OrderedDict([('200', OrderedDict([('description', 'return value'), ('schema', OrderedDict([('$ref', '#/definitions/VBAKeywords')]))]))])
+            return json_as_list(response, all_responses, all_definitions.get('vba_keywords_test'), False)
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logger.exception("Connection [status=error] occurred while calling [function=vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter] [url=http://localhost:8949/test/this/{attribute}/vba/restricted/keyword/in/uri/parameter].")
+        return ['Cannot connect to service. Please retry once connection is re-established.']
+
+    except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            logger.exception("[status=Error] occurred while handling [function=vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+        else:
+            logger.exception("[status=Error] occurred while calling [function=vba_keywords_test_get_test_this_attribute_vba_restricted_keyword_in_uri_parameter] [url=http://localhost:8949/test/this/{attribute}/vba/restricted/keyword/in/uri/parameter].")
+        return [describe_error(response, error)]
+
+    finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            response.close()
 
 @xw.func(category='vba_keywords_test', call_in_wizard=False)
 @xw.arg('addhandler_visual_basic', doc='')
@@ -10152,6 +10358,7 @@ def vba_keywords_test_get_test_vba_restricted_keywords(addhandler_visual_basic, 
 @xw.arg('and_visual_basic', doc='')
 @xw.arg('andalso_visual_basic', doc='')
 @xw.arg('as_visual_basic', doc='')
+@xw.arg('attribute_visual_basic', doc='')
 @xw.arg('boolean_visual_basic', doc='')
 @xw.arg('byref_visual_basic', doc='')
 @xw.arg('byte_visual_basic', doc='')
@@ -11412,6 +11619,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
 @xw.arg('and_visual_basic', doc='')
 @xw.arg('andalso_visual_basic', doc='')
 @xw.arg('as_visual_basic', doc='')
+@xw.arg('attribute_visual_basic', doc='')
 @xw.arg('boolean_visual_basic', doc='')
 @xw.arg('byref_visual_basic', doc='')
 @xw.arg('byte_visual_basic', doc='')
@@ -11559,7 +11767,7 @@ def vba_keywords_test_post_test_vba_restricted_keywords(addhandler_visual_basic,
 @xw.arg('writeonly_visual_basic', doc='')
 @xw.arg('xor_visual_basic', doc='')
 @xw.ret(expand='table')
-def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, addressof_visual_basic, alias_visual_basic, and_visual_basic, andalso_visual_basic, attribute_visual_basic, as_visual_basic, boolean_visual_basic, byref_visual_basic, byte_visual_basic, byval_visual_basic, call_visual_basic, case_visual_basic, catch_visual_basic, cbool_visual_basic, cbyte_visual_basic, cchar_visual_basic, cdate_visual_basic, cdbl_visual_basic, cdec_visual_basic, char_visual_basic, cint_visual_basic, class_visual_basic, clng_visual_basic, cobj_visual_basic, const_visual_basic, continue_visual_basic, csbyte_visual_basic, cshort_visual_basic, csng_visual_basic, cstr_visual_basic, ctype_visual_basic, cuint_visual_basic, culng_visual_basic, currency_visual_basic, cushort_visual_basic, date_visual_basic, decimal_visual_basic, declare_visual_basic, default_visual_basic, delegate_visual_basic, dim_visual_basic, directcast_visual_basic, do_visual_basic, double_visual_basic, each_visual_basic, else_visual_basic, elseif_visual_basic, end_visual_basic, endif_visual_basic, enum_visual_basic, erase_visual_basic, error_visual_basic, event_visual_basic, exit_visual_basic, finally_visual_basic, for_visual_basic, friend_visual_basic, function_visual_basic, get_visual_basic, gettype_visual_basic, getxmlnamespace_visual_basic, global_visual_basic, gosub_visual_basic, goto_visual_basic, handles_visual_basic, if_visual_basic, implements_visual_basic, imports_visual_basic, in_visual_basic, inherits_visual_basic, integer_visual_basic, interface_visual_basic, is_visual_basic, isnot_visual_basic, let_visual_basic, lib_visual_basic, like_visual_basic, long_visual_basic, loop_visual_basic, me_visual_basic, mod_visual_basic, module_visual_basic, mustinherit_visual_basic, mustoverride_visual_basic, mybase_visual_basic, myclass_visual_basic, namespace_visual_basic, narrowing_visual_basic, new_visual_basic, next_visual_basic, not_visual_basic, nothing_visual_basic, notinheritable_visual_basic, notoverridable_visual_basic, object_visual_basic, of_visual_basic, on_visual_basic, operator_visual_basic, option_visual_basic, optional_visual_basic, or_visual_basic, orelse_visual_basic, overloads_visual_basic, overridable_visual_basic, overrides_visual_basic, paramarray_visual_basic, partial_visual_basic, private_visual_basic, property_visual_basic, protected_visual_basic, public_visual_basic, raiseevent_visual_basic, readonly_visual_basic, redim_visual_basic, rem_visual_basic, removehandler_visual_basic, resume_visual_basic, return_visual_basic, sbyte_visual_basic, select_visual_basic, set_visual_basic, shadows_visual_basic, shared_visual_basic, short_visual_basic, single_visual_basic, static_visual_basic, step_visual_basic, stop_visual_basic, string_visual_basic, structure_visual_basic, sub_visual_basic, synclock_visual_basic, then_visual_basic, throw_visual_basic, to_visual_basic, try_visual_basic, trycast_visual_basic, type_visual_basic, typeof_visual_basic, uinteger_visual_basic, ulong_visual_basic, ushort_visual_basic, using_visual_basic, variant_visual_basic, wend_visual_basic, when_visual_basic, while_visual_basic, widening_visual_basic, with_visual_basic, withevents_visual_basic, writeonly_visual_basic, xor_visual_basic):
+def vba_keywords_test_put_test_vba_restricted_keywords(addhandler_visual_basic, addressof_visual_basic, alias_visual_basic, and_visual_basic, andalso_visual_basic, as_visual_basic, attribute_visual_basic, boolean_visual_basic, byref_visual_basic, byte_visual_basic, byval_visual_basic, call_visual_basic, case_visual_basic, catch_visual_basic, cbool_visual_basic, cbyte_visual_basic, cchar_visual_basic, cdate_visual_basic, cdbl_visual_basic, cdec_visual_basic, char_visual_basic, cint_visual_basic, class_visual_basic, clng_visual_basic, cobj_visual_basic, const_visual_basic, continue_visual_basic, csbyte_visual_basic, cshort_visual_basic, csng_visual_basic, cstr_visual_basic, ctype_visual_basic, cuint_visual_basic, culng_visual_basic, currency_visual_basic, cushort_visual_basic, date_visual_basic, decimal_visual_basic, declare_visual_basic, default_visual_basic, delegate_visual_basic, dim_visual_basic, directcast_visual_basic, do_visual_basic, double_visual_basic, each_visual_basic, else_visual_basic, elseif_visual_basic, end_visual_basic, endif_visual_basic, enum_visual_basic, erase_visual_basic, error_visual_basic, event_visual_basic, exit_visual_basic, finally_visual_basic, for_visual_basic, friend_visual_basic, function_visual_basic, get_visual_basic, gettype_visual_basic, getxmlnamespace_visual_basic, global_visual_basic, gosub_visual_basic, goto_visual_basic, handles_visual_basic, if_visual_basic, implements_visual_basic, imports_visual_basic, in_visual_basic, inherits_visual_basic, integer_visual_basic, interface_visual_basic, is_visual_basic, isnot_visual_basic, let_visual_basic, lib_visual_basic, like_visual_basic, long_visual_basic, loop_visual_basic, me_visual_basic, mod_visual_basic, module_visual_basic, mustinherit_visual_basic, mustoverride_visual_basic, mybase_visual_basic, myclass_visual_basic, namespace_visual_basic, narrowing_visual_basic, new_visual_basic, next_visual_basic, not_visual_basic, nothing_visual_basic, notinheritable_visual_basic, notoverridable_visual_basic, object_visual_basic, of_visual_basic, on_visual_basic, operator_visual_basic, option_visual_basic, optional_visual_basic, or_visual_basic, orelse_visual_basic, overloads_visual_basic, overridable_visual_basic, overrides_visual_basic, paramarray_visual_basic, partial_visual_basic, private_visual_basic, property_visual_basic, protected_visual_basic, public_visual_basic, raiseevent_visual_basic, readonly_visual_basic, redim_visual_basic, rem_visual_basic, removehandler_visual_basic, resume_visual_basic, return_visual_basic, sbyte_visual_basic, select_visual_basic, set_visual_basic, shadows_visual_basic, shared_visual_basic, short_visual_basic, single_visual_basic, static_visual_basic, step_visual_basic, stop_visual_basic, string_visual_basic, structure_visual_basic, sub_visual_basic, synclock_visual_basic, then_visual_basic, throw_visual_basic, to_visual_basic, try_visual_basic, trycast_visual_basic, type_visual_basic, typeof_visual_basic, uinteger_visual_basic, ulong_visual_basic, ushort_visual_basic, using_visual_basic, variant_visual_basic, wend_visual_basic, when_visual_basic, while_visual_basic, widening_visual_basic, with_visual_basic, withevents_visual_basic, writeonly_visual_basic, xor_visual_basic):
     logger.info("[status=Calling] [function=vba_keywords_test_put_test_vba_restricted_keywords]...")
     request_header = {'Accept': 'application/json'}
     request_parameters = {}
@@ -13346,6 +13554,8 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -13491,6 +13701,8 @@ def json_test_delete_test_json_with_all_optional_parameters_types(query_integer=
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -13635,6 +13847,8 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -13780,6 +13994,8 @@ def json_test_get_test_json_with_all_optional_parameters_types(query_integer=Non
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -13923,6 +14139,8 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -14068,6 +14286,8 @@ def json_test_post_test_json_with_all_optional_parameters_types(query_integer=No
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -14211,6 +14431,8 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -14356,6 +14578,8 @@ def json_test_put_test_json_with_all_optional_parameters_types(query_integer=Non
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -14535,6 +14759,8 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -14719,6 +14945,8 @@ def json_test_delete_test_json_with_all_parameters_types(query_integer, query_in
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -14902,6 +15130,8 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -15086,6 +15316,8 @@ def json_test_get_test_json_with_all_parameters_types(query_integer, query_integ
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -15268,6 +15500,8 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -15452,6 +15686,8 @@ def json_test_post_test_json_with_all_parameters_types(query_integer, query_inte
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -15634,6 +15870,8 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -15818,6 +16056,8 @@ def json_test_put_test_json_with_all_parameters_types(query_integer, query_integ
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -16631,6 +16871,8 @@ def json_synchronous_test_delete_test_json_with_all_optional_parameters_types(qu
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -16776,6 +17018,8 @@ def json_synchronous_test_delete_test_json_with_all_optional_parameters_types(qu
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -16919,6 +17163,8 @@ def json_synchronous_test_get_test_json_with_all_optional_parameters_types(query
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -17064,6 +17310,8 @@ def json_synchronous_test_get_test_json_with_all_optional_parameters_types(query
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -17206,6 +17454,8 @@ def json_synchronous_test_post_test_json_with_all_optional_parameters_types(quer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -17351,6 +17601,8 @@ def json_synchronous_test_post_test_json_with_all_optional_parameters_types(quer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -17493,6 +17745,8 @@ def json_synchronous_test_put_test_json_with_all_optional_parameters_types(query
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -17638,6 +17892,8 @@ def json_synchronous_test_put_test_json_with_all_optional_parameters_types(query
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -17816,6 +18072,8 @@ def json_synchronous_test_delete_test_json_with_all_parameters_types(query_integ
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -18000,6 +18258,8 @@ def json_synchronous_test_delete_test_json_with_all_parameters_types(query_integ
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -18182,6 +18442,8 @@ def json_synchronous_test_get_test_json_with_all_parameters_types(query_integer,
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -18366,6 +18628,8 @@ def json_synchronous_test_get_test_json_with_all_parameters_types(query_integer,
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -18547,6 +18811,8 @@ def json_synchronous_test_post_test_json_with_all_parameters_types(query_integer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -18731,6 +18997,8 @@ def json_synchronous_test_post_test_json_with_all_parameters_types(query_integer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -18912,6 +19180,8 @@ def json_synchronous_test_put_test_json_with_all_parameters_types(query_integer,
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return ['query_date_time must be a date time.']
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -19096,6 +19366,8 @@ def json_synchronous_test_put_test_json_with_all_parameters_types(query_integer,
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return ['query_array_date_time must be a date time.']
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -19905,6 +20177,8 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -20050,6 +20324,8 @@ def plain_text_test_delete_test_plain_text_with_all_optional_parameters_types(qu
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -20193,6 +20469,8 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -20338,6 +20616,8 @@ def plain_text_test_get_test_plain_text_with_all_optional_parameters_types(query
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -20480,6 +20760,8 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -20625,6 +20907,8 @@ def plain_text_test_post_test_plain_text_with_all_optional_parameters_types(quer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -20767,6 +21051,8 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -20912,6 +21198,8 @@ def plain_text_test_put_test_plain_text_with_all_optional_parameters_types(query
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -21090,6 +21378,8 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -21274,6 +21564,8 @@ def plain_text_test_delete_test_plain_text_with_all_parameters_types(query_integ
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -21456,6 +21748,8 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -21640,6 +21934,8 @@ def plain_text_test_get_test_plain_text_with_all_parameters_types(query_integer,
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -21821,6 +22117,8 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -22005,6 +22303,8 @@ def plain_text_test_post_test_plain_text_with_all_parameters_types(query_integer
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
@@ -22186,6 +22486,8 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
         if not isinstance(query_date_time, datetime.datetime):
             logger.error('query_date_time must be a date time.')
             return 'query_date_time must be a date time.'
+        else:
+            query_date_time = query_date_time.isoformat()
 
         request_parameters['query_date_time'] = query_date_time
 
@@ -22370,6 +22672,8 @@ def plain_text_test_put_test_plain_text_with_all_parameters_types(query_integer,
             if not isinstance(query_array_date_time, datetime.datetime):
                 logger.error('query_array_date_time must be a date time.')
                 return 'query_array_date_time must be a date time.'
+            else:
+                query_array_date_time = query_array_date_time.isoformat()
 
         request_parameters['query_array_date_time'] = query_array_date_time
 
