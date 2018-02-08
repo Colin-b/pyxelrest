@@ -2,7 +2,6 @@
 Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will generate xlwings User Defined Functions.
 """
 import os
-import sys
 import jinja2
 import logging.config
 import logging.handlers
@@ -17,13 +16,6 @@ from pyxelrest import (
     GENERATE_UDF_ON_IMPORT,
     custom_logging
 )
-
-if sys.version_info.major > 2:
-    # Python 3
-    from importlib import reload
-else:
-    # Python 2
-    from imp import reload
 
 
 def user_defined_functions(loaded_services, flattenize=True):
@@ -68,14 +60,8 @@ def generate_user_defined_functions(output='user_defined_functions.py', flatteni
         generated_file.write(user_defined_functions(services, flattenize))
 
 
-def reload_user_defined_functions():
-    """
-    Force reload of module (even if this is first time, it should not take long)
-    as reloading pyxelrest does not reload UDFs otherwise
-    TODO This is temporary until xlwings force a python reload instead
-    :return: None
-    """
-    reload(import_module('pyxelrest.user_defined_functions'))
+def load_user_defined_functions():
+    import_module('pyxelrest.user_defined_functions')
 
 
 def reset_authentication():
@@ -99,7 +85,7 @@ if GENERATE_UDF_ON_IMPORT:
 
     try:
         logger.debug('Expose user defined functions through PyxelRest.')
-        reload_user_defined_functions()
+        load_user_defined_functions()
         from pyxelrest.user_defined_functions import *
     except:
         logger.exception('Error while importing UDFs.')
