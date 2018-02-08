@@ -23,6 +23,9 @@ def to_date_time(value):
         # that are presumed to represent system local time.
         if not datetime_with_service_timezone.tzinfo:
             return datetime_with_service_timezone
+        # Conversion cannot be performed for dates after year 3000, best effort and return in provided timezone
+        if datetime_with_service_timezone.year > 3000:
+            return datetime_with_service_timezone
         return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
     return value
 
