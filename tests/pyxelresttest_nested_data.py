@@ -1,7 +1,14 @@
 import unittest
 import testsutils.serviceshandler as serviceshandler
 import testsutils.loader as loader
-from pandas import Timestamp
+
+
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
 
 
 class PyxelRestNestedDataTest(unittest.TestCase):
@@ -143,13 +150,18 @@ class PyxelRestNestedDataTest(unittest.TestCase):
 
     def test_pandas_msgpack_default_encoding(self):
         from pyxelrest import pyxelrestgenerator
-        expected = [
-            ['col1', 'col2_é&ç', u'col3_é&ç', 'col4', 'col5'],
-            ['data11', 'data12_é&ç', u'data13_é&ç', Timestamp('2017-12-26 01:02:03'), 1.1],
-            ['data21', 'data22_é&ç', u'data23_é&ç', Timestamp('2017-12-27 01:02:03'), 2.2]
-        ]
         actual = pyxelrestgenerator.nested_data_test_get_test_pandas_msgpack_default_encoding()
+        if support_pandas():
+            from pandas import Timestamp
+            expected = [
+                ['col1', 'col2_é&ç', u'col3_é&ç', 'col4', 'col5'],
+                ['data11', 'data12_é&ç', u'data13_é&ç', Timestamp('2017-12-26 01:02:03'), 1.1],
+                ['data21', 'data22_é&ç', u'data23_é&ç', Timestamp('2017-12-27 01:02:03'), 2.2],
+            ]
+        else:
+            expected = 'Pandas not installed'
         self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

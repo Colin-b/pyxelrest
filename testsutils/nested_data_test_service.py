@@ -1,6 +1,14 @@
 from flask import Flask, jsonify, Response
-import pandas as pd
 from datetime import datetime
+
+
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
+
 
 app = Flask(__name__)
 
@@ -574,7 +582,7 @@ def get_test_dict_with_various_columns():
 
 
 def _get_dataframe():
-    df = pd.DataFrame(
+    df = pandas.DataFrame(
         [
             ['data11', 'data12_é&ç', u'data13_é&ç', datetime(2017, 12, 26, 1, 2, 3), 1.1],
             ['data21', 'data22_é&ç', u'data23_é&ç', datetime(2017, 12, 27, 1, 2, 3), 2.2]
@@ -586,9 +594,11 @@ def _get_dataframe():
 
 @app.route('/test/pandas/msgpack/default/encoding', methods=['GET'])
 def get_test_pandas_msgpack_default_encoding():
-    df = _get_dataframe()
-    output = df.to_msgpack(compress='zlib')
-    return Response(output, mimetype='application/msgpackpandas')
+    if support_pandas():
+        df = _get_dataframe()
+        output = df.to_msgpack(compress='zlib')
+        return Response(output, mimetype='application/msgpackpandas')
+    return 'Pandas not installed'
 
 
 def start_server(port):
