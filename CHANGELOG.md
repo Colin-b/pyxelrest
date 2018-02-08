@@ -6,6 +6,13 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+
+## 1.0.0 (2018-02-09) ##
+
+### Release notes ###
+
+- Rely on the official xlwings version now that it is possible to restart Python. XLWings configuration is now stored in a flat file.
+
 ## 0.64.1 (2018-02-08) ##
 
 ### Bug fixes ###
@@ -55,10 +62,6 @@ List all changes in various categories:
 - Services configuration can now be auto-updated as part of the auto-update process.
 - Updater now display the new version of PyxelRest and is faster to detect update.
 - PathToPIP add-in property is not used anymore.
-
-### Release notes ###
-
-- Rely on the official xlwings version now that it is possible to restart Python. XLWings configuration is now stored in a flat file.
 
 ### Bug fixes ###
 
