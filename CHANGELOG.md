@@ -6,6 +6,13 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.65.0 (2018-02-20) ##
+
+### Enhancements ###
+
+- Handle asynchronous REST APIs (HTTP 202 status code response).
+- Provide ability to send a GET request to custom URLs thanks to definition of a pyxelrest service.
+
 ## 0.64.1 (2018-02-14) ##
 
 ### Bug fixes ###

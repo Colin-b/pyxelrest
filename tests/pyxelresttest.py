@@ -41,6 +41,7 @@ class PyxelRestTest(unittest.TestCase):
             http_methods_test_service,
             content_type_test_service,
             base_path_ending_with_slash_test_service,
+            async_test_service,
         )
         serviceshandler.start_services(
             (usual_parameters_test_service, 8943),
@@ -56,6 +57,7 @@ class PyxelRestTest(unittest.TestCase):
             (http_methods_test_service, 8955),
             (content_type_test_service, 8956),
             (base_path_ending_with_slash_test_service, 8957),
+            (async_test_service, 8958),
         )
 
     def test_string_array_parameter(self):
@@ -118,7 +120,7 @@ class PyxelRestTest(unittest.TestCase):
         self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
 
         user_agent_index = headers[0].index('User-Agent')
-        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.64.1')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.65.0')
 
     def test_post_test_form_parameter(self):
         from pyxelrest import pyxelrestgenerator
@@ -385,6 +387,22 @@ class PyxelRestTest(unittest.TestCase):
             'http://localhost:8957/test/method',
             pyxelrestgenerator.base_path_ending_with_slash_test_delete_test_method()
         )
+
+    def test_get_async_url(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            {'Status URL': 'http://localhost:8958/test/async/status'},
+            pyxelrestgenerator.async_test_get_test_async()
+        )
+
+    def test_get_custom_url(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [['key'], ['value']],
+            pyxelrestgenerator.pyxelrest_get_url('http://localhost:8958/test/async/status')
+        )
+
+    # TODO Test post put and delete
 
 
 if __name__ == '__main__':
