@@ -156,7 +156,11 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
 
     def test_get_test_date(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual([datetime.datetime(2014, 3, 5, 0, 0)],
+        self.assertEqual([
+            [datetime.datetime(2014, 3, 5, 0, 0)],
+            [datetime.datetime(9999, 1, 1, 0, 0)],
+            [datetime.datetime(3001, 1, 1, 0, 0)],
+        ],
             pyxelrestgenerator.usual_parameters_test_get_test_date())
 
     def test_get_test_datetime(self):
@@ -166,7 +170,9 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
             [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
             [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
             [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
-            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())]
+            [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
+            [datetime.datetime(9999, 1, 1, 0, 0, tzinfo=tzutc())],
+            [datetime.datetime(3001, 1, 1, 8, 0, tzinfo=tzutc())],
         ],
             pyxelrestgenerator.usual_parameters_test_get_test_date_time())
 

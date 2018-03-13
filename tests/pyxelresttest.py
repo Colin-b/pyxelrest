@@ -398,11 +398,118 @@ class PyxelRestTest(unittest.TestCase):
     def test_get_custom_url(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            [['key'], ['value']],
-            pyxelrestgenerator.pyxelrest_get_url('http://localhost:8958/test/async/status')
+            [
+                ['X-Custom-Header1', 'X-Custom-Header2'],
+                ['custom1', 'custom2']
+            ],
+            pyxelrestgenerator.pyxelrest_get_url(
+                'http://localhost:8958/test/async/status',
+                extra_headers=[
+                    ['X-Custom-Header1', 'custom1'],
+                    ['X-Custom-Header2', 'custom2'],
+                ],
+            )
         )
 
-    # TODO Test post put and delete
+    def test_delete_custom_url(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['X-Custom-Header1', 'X-Custom-Header2'],
+                ['custom1', 'custom2']
+            ],
+            pyxelrestgenerator.pyxelrest_delete_url(
+                'http://localhost:8958/test/unlisted',
+                extra_headers=[
+                    ['X-Custom-Header1', 'custom1'],
+                    ['X-Custom-Header2', 'custom2'],
+                ],
+            )
+        )
+
+    def test_post_custom_url_dict(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['key1', 'key2', 'key3'],
+                ['value1', 1, 'value3'],
+            ],
+            pyxelrestgenerator.pyxelrest_post_url(
+                'http://localhost:8958/test/dict',
+                [
+                    ['key1', 'key2', 'key3'],
+                    ['value1', 1, 'value3'],
+                ],
+                extra_headers=[
+                    ['Content-Type', 'application/json'],
+                ],
+                parse_body_as='dict',
+            )
+        )
+
+    def test_post_custom_url_dict_list(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['key1', 'key2', 'key3'],
+                ['value1', 1, 'value3'],
+                ['other1', 2, 'other3'],
+            ],
+            pyxelrestgenerator.pyxelrest_post_url(
+                'http://localhost:8958/test/dict',
+                [
+                    ['key1', 'key2', 'key3'],
+                    ['value1', 1, 'value3'],
+                    ['other1', 2, 'other3'],
+                ],
+                extra_headers=[
+                    ['Content-Type', 'application/json'],
+                ],
+                parse_body_as='dict_list',
+            )
+        )
+
+    def test_put_custom_url_dict_list(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['key1', 'key2', 'key3'],
+                ['value1', 1, 'value3'],
+                ['other1', 2, 'other3'],
+            ],
+            pyxelrestgenerator.pyxelrest_put_url(
+                'http://localhost:8958/test/dict',
+                [
+                    ['key1', 'key2', 'key3'],
+                    ['value1', 1, 'value3'],
+                    ['other1', 2, 'other3'],
+                ],
+                extra_headers=[
+                    ['Content-Type', 'application/json'],
+                ],
+                parse_body_as='dict_list',
+            )
+        )
+
+    def test_put_custom_url_dict(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['key1', 'key2', 'key3'],
+                ['value1', 1, 'value3'],
+            ],
+            pyxelrestgenerator.pyxelrest_put_url(
+                'http://localhost:8958/test/dict',
+                [
+                    ['key1', 'key2', 'key3'],
+                    ['value1', 1, 'value3'],
+                ],
+                extra_headers=[
+                    ['Content-Type', 'application/json'],
+                ],
+                parse_body_as='dict',
+            )
+        )
 
 
 if __name__ == '__main__':

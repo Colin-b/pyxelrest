@@ -31,9 +31,48 @@ def get_test_method():
     return response
 
 
+skipped_headers = [
+    'Accept',
+    'Accept-Encoding',
+    'Connection',
+    'Host',
+    'User-Agent',
+    'Content-Length',
+    'X-Pxl-Request',
+    'X-Pxl-Session',
+]
+
+
 @app.route('/test/async/status', methods=['GET'])
 def get_test_status():
-    return jsonify({'key': 'value'})
+    headers = dict(request.headers)
+    return jsonify({
+        header_name: header_value
+        for header_name, header_value in headers.items()
+        if header_name not in skipped_headers
+    })
+
+
+@app.route('/test/unlisted', methods=['DELETE'])
+def delete_test_unlisted():
+    headers = dict(request.headers)
+    return jsonify({
+        header_name: header_value
+        for header_name, header_value in headers.items()
+        if header_name not in skipped_headers
+    })
+
+
+@app.route('/test/dict', methods=['POST'])
+def post_test_dict():
+    headers = dict(request.headers)
+    return jsonify(request.json)
+
+
+@app.route('/test/dict', methods=['PUT'])
+def put_test_dict():
+    headers = dict(request.headers)
+    return jsonify(request.json)
 
 
 def start_server(port):
