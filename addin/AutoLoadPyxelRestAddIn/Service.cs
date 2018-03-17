@@ -56,7 +56,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             KeyDataCollection serviceConfig = config[Name];
             KeyDataCollection defaultConfig = config[Configuration.DEFAULT_SECTION];
-            SwaggerUrl = serviceConfig[SWAGGER_URL_PROPERTY];
+            SwaggerUrl = serviceConfig.ContainsKey(SWAGGER_URL_PROPERTY) ? serviceConfig[SWAGGER_URL_PROPERTY]: string.Empty;
             ProxyUrl = serviceConfig.ContainsKey(PROXY_URL_PROPERTY) ? serviceConfig[PROXY_URL_PROPERTY] : DefaultProxyUrl(defaultConfig);
             ServiceHost = serviceConfig.ContainsKey(SERVICE_HOST_PROPERTY) ? serviceConfig[SERVICE_HOST_PROPERTY] : string.Empty;
             string[] methods = serviceConfig.ContainsKey(METHODS_PROPERTY) ? serviceConfig[METHODS_PROPERTY].Split(',') : DefaultMethods(defaultConfig);
@@ -79,11 +79,13 @@ namespace AutoLoadPyxelRestAddIn
             SectionData section = new SectionData(Name);
             section.Keys = new KeyDataCollection();
 
-            KeyData swaggerUrl = new KeyData(SWAGGER_URL_PROPERTY);
-            swaggerUrl.Value = SwaggerUrl;
-            section.Keys.SetKeyData(swaggerUrl);
+            if (!string.IsNullOrEmpty(SwaggerUrl)) {
+                KeyData swaggerUrl = new KeyData(SWAGGER_URL_PROPERTY);
+                swaggerUrl.Value = SwaggerUrl;
+                section.Keys.SetKeyData(swaggerUrl);
+            }
 
-            if(!string.IsNullOrEmpty(ProxyUrl)) {
+            if (!string.IsNullOrEmpty(ProxyUrl)) {
                 KeyData proxyUrl = new KeyData(PROXY_URL_PROPERTY);
                 proxyUrl.Value = ProxyUrl;
                 section.Keys.SetKeyData(proxyUrl);

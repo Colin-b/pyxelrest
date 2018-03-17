@@ -328,11 +328,11 @@ logger = logging.getLogger(__name__)
 {% macro add_udf(swagger_method) %}
 {% if 'get' == swagger_method.requests_method %}@caching
 {% endif %}
-@xw.func(category='{{ swagger_method.service.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
+@xw.func(category='{{ swagger_method.service.config.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
 {% for parameter in swagger_method.parameters %}
 @xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
 {% endfor %}
-{% if swagger_method.return_a_list() and swagger_method.service.should_return_asynchronously() %}
+{% if swagger_method.return_a_list() and swagger_method.service.config.should_return_asynchronously() %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ swagger_method.udf_name }}(
@@ -366,14 +366,16 @@ def {{ swagger_method.udf_name }}(
 
     response = None
     try:
-        response = session.get({{ swagger_method.service.max_retries }}).request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
+        response = session.get({{ swagger_method.service.config.max_retries }}).request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
             {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter['server_param_name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}{% endfor -%}
-        ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.proxies }}, timeout=({{ swagger_method.service.connect_timeout }}, {{ swagger_method.service.read_timeout }}))
+        ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.config.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.config.proxies }}, timeout=({{ swagger_method.service.config.connect_timeout }}, {{ swagger_method.service.config.read_timeout }}))
         response.raise_for_status()
         logger.info("[status=Valid] response received for [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
+        if 202 == response.status_code:
+            return {'Status URL': response.headers['location']}
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ swagger_method.responses }}
-            return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.name }}'), {{ swagger_method.service.rely_on_definitions }})
+            return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.config.name }}'), {{ swagger_method.service.config.rely_on_definitions }})
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
@@ -397,17 +399,165 @@ def {{ swagger_method.udf_name }}(
 all_definitions = {}
 
 {% for service in services %}
-all_definitions['{{ service.name }}'] = {{ service.definitions() }}
+all_definitions['{{ service.config.name }}'] = {{ service.definitions() }}
 
 
     {% for method_path, methods in service.swagger['paths'].items() %}
         {% for http_method, swagger_method in methods.items() %}
-            {%- if service.should_provide_method(http_method, swagger_method) -%}
+            {%- if service.config.should_provide_method(http_method, swagger_method) -%}
                 {{- add_udf(service.method(http_method, swagger_method, method_path)) -}}
             {%- endif -%}
         {% endfor %}
     {%- endfor %}
 {% endfor %}
+
+{# Macro generating the UDF related to provided method #}
+{% macro handle_pyxelrest_response(method_name) %}
+        response.raise_for_status()
+        logger.info("[status=Valid] response received for [function={{ nethod_name }}] [url={0}].".format(response.request.url))
+        if 202 == response.status_code:
+            return {'Status URL': response.headers['location']}
+        if response.headers['content-type'] == 'application/json':
+            return json_as_list(response, {}, None, False)
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return response.text[:255]
+    except requests.exceptions.ConnectionError:
+        logger.exception("Connection [status=error] occurred while calling [function={{ nethod_name }}] [url={0}].".format(url))
+        return ["'Cannot connect to service. Please retry once connection is re-established.'"]
+    except Exception as error:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            logger.exception("[status=Error] occurred while handling [function={{ nethod_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+        else:
+            logger.exception("[status=Error] occurred while calling [function={{ nethod_name }}] [url={0}].".format(url))
+        return [describe_error(response, error)]
+    finally:
+        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        if response is not None:
+            response.close()
+
+{% endmacro %}
+
+{% if pyxelrest_config %}
+
+{% if pyxelrest_config.should_provide_method('get') %}
+@caching
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to query.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_get_url(url, extra_headers=None):
+    logger.info("[status=Calling] [function=pyxelrest_get_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
+
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('get', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_get_url') }}
+{% endif %}
+
+{% if pyxelrest_config.should_provide_method('post') %}
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to POST to.')
+@xw.arg('body', doc='Content of the body.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+@xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_post_url(url, body, extra_headers=None, parse_body_as=None):
+    logger.info("[status=Calling] [function=pyxelrest_post_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
+
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    if not body:
+        logger.error('body is required.')
+        return ['body is required.']
+
+    json_body = list_as_json(body, parse_body_as)
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('post', url, json=json_body{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_post_url') }}
+{% endif %}
+
+{% if pyxelrest_config.should_provide_method('put') %}
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to PUT to.')
+@xw.arg('body', doc='Content of the body.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+@xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_put_url(url, body, extra_headers=None, parse_body_as=None):
+    logger.info("[status=Calling] [function=pyxelrest_put_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
+
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    if not body:
+        logger.error('body is required.')
+        return ['body is required.']
+
+    json_body = list_as_json(body, parse_body_as)
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('put', url, json=json_body{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_put_url') }}
+{% endif %}
+
+{% if pyxelrest_config.should_provide_method('delete') %}
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to query.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_delete_url(url, extra_headers=None):
+    logger.info("[status=Calling] [function=pyxelrest_delete_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
+
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('delete', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_delete_url') }}
+{% endif %}
+
+{% endif %}
+
+def lists_to_dict(lists):
+    header = lists[0]
+    return [
+
+    ]
 
 def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
     if rely_on_definitions:
@@ -455,3 +605,28 @@ def describe_error(response, error):
     if response is not None:
         return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
     return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
+
+
+def list_as_json(lists, parse_as):
+    if 'dict' == parse_as:
+        if len(lists) != 2:
+            return ['There should be only two rows. Header and values.']
+        return list_to_dict(lists[0], lists[1])
+
+    if 'dict_list' == parse_as:
+        if len(lists) < 2:
+            return ['There should be at least two rows. Header and first dictionary values.']
+        header = lists[0]
+        return [
+            list_to_dict(header, values)
+            for values in lists[1:]
+        ]
+
+    return lists
+
+
+def list_to_dict(header, values):
+    return {
+        header[index]: value
+        for index, value in enumerate(values)
+    }

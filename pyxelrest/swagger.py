@@ -27,46 +27,57 @@ def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
 
-class SwaggerService:
+def return_type_can_be_handled(method_produces):
+    return 'application/octet-stream' not in method_produces
+
+
+class ConfigSection:
     def __init__(self, service_name, config):
         """
-        Load service information from configuration and swagger JSON.
+        Load service information from configuration.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
-        self.existing_operation_ids = []
         self.name = service_name
         self.udf_prefix = to_valid_python_vba(service_name)
         self.requested_methods = [method.strip() for method in self.get_item_default(config, 'methods', '').split(',') if method.strip()]
         if not self.requested_methods:
             self.requested_methods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']
-        self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
-        swagger_url = self.get_item(config, 'swagger_url')
-        swagger_url_parsed = urlsplit(swagger_url)
-        self.proxies = self._get_proxies(config, swagger_url_parsed.scheme)
-        advanced_configuration = self._get_advanced_configuration(config)
-        self.connect_timeout = float(advanced_configuration.get('connect_timeout', 1))
-        self.read_timeout = advanced_configuration.get('read_timeout')
+        self.advanced_configuration = self._get_advanced_configuration(config)
+        self.connect_timeout = float(self.advanced_configuration.get('connect_timeout', 1))
+        self.read_timeout = self.advanced_configuration.get('read_timeout')
         if self.read_timeout:
             self.read_timeout = float(self.read_timeout)
-        swagger_read_timeout = float(advanced_configuration.get('swagger_read_timeout', 5))
-        self.swagger = self._retrieve_swagger(swagger_url, swagger_read_timeout)
-        self.validate_swagger_version()
-        # Remove trailing slashes (as paths must starts with a slash)
-        self.uri = self._extract_uri(swagger_url_parsed, config).rstrip('/')
-        security_details = self._get_security_details(config)
-        authentication.add_service_security(self.name, self.swagger, security_details)
-        self.auth = authentication.add_service_custom_authentication(self.name, security_details)
+        self.security_details = self._get_security_details(config)
+        self.auth = authentication.add_service_custom_authentication(self.name, self.security_details)
         # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
-        self.udf_return_type = advanced_configuration.get('udf_return_type', 'asynchronous')
-        self.rely_on_definitions = advanced_configuration.get('rely_on_definitions') == 'True'
-        self.max_retries = advanced_configuration.get('max_retries', 5)
-        self.custom_headers = {key[7:]: value for key, value in advanced_configuration.items()
+        self.udf_return_type = self.advanced_configuration.get('udf_return_type', 'asynchronous')
+        self.max_retries = self.advanced_configuration.get('max_retries', 5)
+        self.custom_headers = {key[7:]: value for key, value in self.advanced_configuration.items()
                                if key.startswith('header.')}
 
-    def should_return_asynchronously(self):
-        return self.udf_return_type == 'asynchronous'
+    def get_item(self, config, key):
+        try:
+            # Python 3
+            section = config[self.name]
+            if key not in section:
+                raise MandatoryPropertyNotProvided(self.name, key)
+            return section[key]
+        except AttributeError:
+            # Python 2
+            if not config.has_option(self.name, key):
+                raise MandatoryPropertyNotProvided(self.name, key)
+            return config.get(self.name, key)
+
+    def get_item_default(self, config, key, default_value):
+        try:
+            # Python 3
+            section = config[self.name]
+            return section[key] if key in section else default_value
+        except AttributeError:
+            # Python 2
+            return config.get(self.name, key) if config.has_option(self.name, key) else default_value
 
     def _get_proxies(self, config, default_scheme):
         proxy_url_str = self.get_item_default(config, 'proxy_url', None)
@@ -113,13 +124,80 @@ class SwaggerService:
                     logger.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(item_entry))
         return items
 
-    def _extract_uri(self, swagger_url_parsed, config):
+    def should_return_asynchronously(self):
+        return self.udf_return_type == 'asynchronous'
+
+
+class ServiceConfigSection(ConfigSection):
+    def __init__(self, service_name, config):
+        """
+        Load service information from configuration.
+        :param service_name: Will be used as prefix to use in front of services UDFs
+        to avoid duplicate between services.
+        :param config: ConfigParser instance from where service details are retrieved.
+        """
+        ConfigSection.__init__(self, service_name, config)
+        self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
+        self.swagger_url = self.get_item(config, 'swagger_url')
+        self.swagger_url_parsed = urlsplit(self.swagger_url)
+        self.proxies = self._get_proxies(config, self.swagger_url_parsed.scheme)
+        self.swagger_read_timeout = float(self.advanced_configuration.get('swagger_read_timeout', 5))
+        self.service_host = self.get_item_default(config, 'service_host', self.swagger_url_parsed.netloc)
+        self.rely_on_definitions = self.advanced_configuration.get('rely_on_definitions') == 'True'
+
+    def _allow_tags(self, method_tags):
+        if not self.tags or not method_tags:
+            return True
+        for method_tag in method_tags:
+            if method_tag in self.tags:
+                return True
+        return False
+
+    def should_provide_method(self, http_verb, swagger_method):
+        if http_verb not in self.requested_methods:
+            return False
+        return self._allow_tags(swagger_method.get('tags')) and return_type_can_be_handled(
+            swagger_method.get('produces', []))
+
+
+class PyxelRestConfigSection(ConfigSection):
+    def __init__(self, service_name, config):
+        """
+        Load service information from configuration.
+        :param service_name: Will be used as prefix to use in front of services UDFs
+        to avoid duplicate between services.
+        :param config: ConfigParser instance from where service details are retrieved.
+        """
+        ConfigSection.__init__(self, service_name, config)
+        self.proxies = self._get_proxies(config, 'http')
+
+    def should_provide_method(self, http_verb):
+        return http_verb in self.requested_methods
+
+
+class SwaggerService:
+    def __init__(self, service_name, config):
+        """
+        Load service information from configuration and swagger JSON.
+        :param service_name: Will be used as prefix to use in front of services UDFs
+        to avoid duplicate between services.
+        :param config: ConfigParser instance from where service details are retrieved.
+        """
+        self.config = ServiceConfigSection(service_name, config)
+        self.existing_operation_ids = []
+        self.swagger = self._retrieve_swagger()
+        self.validate_swagger_version()
+        # Remove trailing slashes (as paths must starts with a slash)
+        self.uri = self._extract_uri().rstrip('/')
+        authentication.add_service_security(self.config.name, self.swagger, self.config.security_details)
+
+    def _extract_uri(self):
         # The default scheme to be used is the one used to access the Swagger definition itself.
-        scheme = self.swagger.get('schemes', [swagger_url_parsed.scheme])[0]
+        scheme = self.swagger.get('schemes', [self.config.swagger_url_parsed.scheme])[0]
         # If the host is not included, the host serving the documentation is to be used (including the port).
         # service_host property is here to handle services behind a reverse proxy
         # (otherwise host will be the reverse proxy one)
-        host = self.swagger.get('host', self.get_item_default(config, 'service_host', swagger_url_parsed.netloc))
+        host = self.swagger.get('host', self.config.service_host)
         # Allow user to provide service_host starting with scheme (removing it)
         host_parsed = urlsplit(host)
         if host_parsed.netloc:
@@ -135,46 +213,7 @@ class SwaggerService:
     def method(self, requests_method, swagger_method, method_path):
         return SwaggerMethod(self, requests_method, swagger_method, method_path)
 
-    def should_provide_method(self, http_verb, swagger_method):
-        if http_verb not in self.requested_methods:
-            return False
-        return self._allow_tags(swagger_method.get('tags')) and \
-               self.return_type_can_be_handled(swagger_method.get('produces', []))
-
-    def _allow_tags(self, method_tags):
-        if not self.tags or not method_tags:
-            return True
-        for method_tag in method_tags:
-            if method_tag in self.tags:
-                return True
-        return False
-
-    def return_type_can_be_handled(self, method_produces):
-        return 'application/octet-stream' not in method_produces
-
-    def get_item(self, config, key):
-        try:
-            # Python 3
-            section = config[self.name]
-            if key not in section:
-                raise MandatoryPropertyNotProvided(self.name, key)
-            return section[key]
-        except AttributeError:
-            # Python 2
-            if not config.has_option(self.name, key):
-                raise MandatoryPropertyNotProvided(self.name, key)
-            return config.get(self.name, key)
-
-    def get_item_default(self, config, key, default_value):
-        try:
-            # Python 3
-            section = config[self.name]
-            return section[key] if key in section else default_value
-        except AttributeError:
-            # Python 2
-            return config.get(self.name, key) if config.has_option(self.name, key) else default_value
-
-    def _retrieve_swagger(self, swagger_url, read_timeout):
+    def _retrieve_swagger(self):
         """
         Retrieve swagger JSON from service.
         :param swagger_url: URI of the service swagger JSON.
@@ -182,7 +221,8 @@ class SwaggerService:
         """
         requests_session = requests.session()
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
-        response = requests_session.get(swagger_url, proxies=self.proxies, verify=False, timeout=(self.connect_timeout, read_timeout))
+        response = requests_session.get(self.config.swagger_url, proxies=self.config.proxies, verify=False,
+                                        timeout=(self.config.connect_timeout, self.config.swagger_read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         swagger = response.json(object_pairs_hook=OrderedDict)
@@ -269,9 +309,9 @@ class SwaggerService:
             raise UnsupportedSwaggerVersion(self.swagger['swagger'])
 
     def __str__(self):
-        if self.auth:
-            return '[{0}] service. {1} (custom {2} authentication)'.format(self.name, self.uri, self.auth)
-        return '[{0}] service. {1}'.format(self.name, self.uri)
+        if self.config.auth:
+            return '[{0}] service. {1} (custom {2} authentication)'.format(self.config.name, self.uri, self.config.auth)
+        return '[{0}] service. {1}'.format(self.config.name, self.uri)
 
 
 class SwaggerMethod:
@@ -300,7 +340,7 @@ class SwaggerMethod:
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
         self._compute_operation_id(path)
-        self.udf_name = '{0}_{1}'.format(service.udf_prefix, self.swagger_method['operationId'])
+        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix, self.swagger_method['operationId'])
         self.responses = swagger_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
@@ -333,7 +373,7 @@ class SwaggerMethod:
                ('application/msgpackpandas' in self.swagger_method['produces'])
 
     def requires_authentication(self):
-        return self.security() or self.service.auth
+        return self.security() or self.service.config.auth
 
     def security(self):
         return self.swagger_method.get('security')
@@ -364,7 +404,7 @@ class SwaggerMethod:
         elif 'application/json' in self.swagger_method['produces']:
             header['Accept'] = 'application/json'
 
-        header.update(self.service.custom_headers)
+        header.update(self.service.config.custom_headers)
 
         return header
 
@@ -398,7 +438,7 @@ def load_services():
     """
     Retrieve swagger JSON for each service defined in configuration file.
     :return: List of SwaggerService objects, size is the same one as the number of sections within configuration file
-    (DEFAULT excluded).
+    (DEFAULT excluded) and the loaded pyxelrest configuration if provided
     """
     try:
         # Python 3
@@ -412,13 +452,17 @@ def load_services():
 
     logging.debug('Loading services from "{0}"...'.format(file_path))
     loaded_services = []
+    pyxelrest_config = None
     for service_name in config_parser.sections():
-        service = load_service(service_name, config_parser)
-        if service:
-            loaded_services.append(service)
+        if 'pyxelrest' == service_name:
+            pyxelrest_config = PyxelRestConfigSection(service_name, config_parser)
+        else:
+            service = load_service(service_name, config_parser)
+            if service:
+                loaded_services.append(service)
 
     check_for_duplicates(loaded_services)
-    return loaded_services
+    return loaded_services, pyxelrest_config
 
 
 def load_service(service_name, config_parser):
@@ -435,9 +479,9 @@ def load_service(service_name, config_parser):
 def check_for_duplicates(loaded_services):
     services_by_prefix = {}
     for service in loaded_services:
-        duplicates = services_by_prefix.get(service.udf_prefix, [])
-        duplicates.append(service.name)
-        services_by_prefix[service.udf_prefix] = duplicates
+        duplicates = services_by_prefix.get(service.config.udf_prefix, [])
+        duplicates.append(service.config.name)
+        services_by_prefix[service.config.udf_prefix] = duplicates
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]
         if len(service_names) > 1:

@@ -2874,6 +2874,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         tomorrow_date = today_date + datetime.timedelta(days=1)
         today_datetime = datetime.datetime.combine(today_date, datetime.datetime.min.time())
         today_date_str = today_datetime.strftime('%Y-%m-%d')
+        today_datetime_str_T = today_datetime.strftime('%Y-%m-%dT%H:%M:%S')
         today_datetime_str = today_datetime.strftime('%Y-%m-%d %H:%M:%S')
         today_datetime_local = today_datetime
         tomorrow_datetime = datetime.datetime.combine(tomorrow_date, datetime.datetime.min.time())
@@ -2906,7 +2907,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
                      ('query_array_password', 'password 1'), ('query_array_string', 'string 1'),
                      ('query_array_string_binary', 'string binary 1'),
                      ('query_array_string_byte', 'string bytes 1'), ('query_boolean', 'True'),
-                     ('query_date', today_date_str), ('query_date_time', today_datetime_str),
+                     ('query_date', today_date_str), ('query_date_time', today_datetime_str_T),
                      ('query_double', '1.1'), ('query_float', '1.01'), ('query_integer', '1'),
                      ('query_integer32', '10'), ('query_integer64', '100'), ('query_number', '0.1'),
                      ('query_password', 'password'), ('query_string', 'string'),

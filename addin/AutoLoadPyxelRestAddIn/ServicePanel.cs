@@ -35,7 +35,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             this.configurationForm = configurationForm;
             this.service = service;
-            servicePanel = DefaultPanel();
+            servicePanel = service.Name.Equals("pyxelrest") ? PyxelRestDefaultPanel() : DefaultPanel();
         }
 
         public override string ToString()
@@ -45,7 +45,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal bool IsValid()
         {
-            return swaggerUrlTextBox.TextLength > 0;
+            return service.Name.Equals("pyxelrest") || swaggerUrlTextBox.TextLength > 0;
         }
 
         internal void CheckHostReachability()
@@ -153,6 +153,81 @@ namespace AutoLoadPyxelRestAddIn
             head.CheckedChanged += Head_CheckedChanged;
             methodsPanel.Controls.Add(head, 6, 0);
             servicePanel.Controls.Add(methodsPanel, 1, 6);
+            #endregion
+
+            #region Delete
+            Button deleteButton = new Button() { Text = "Delete " + service.Name + " Configuration" };
+            deleteButton.Dock = DockStyle.Fill;
+            deleteButton.ForeColor = Color.White;
+            deleteButton.BackColor = Color.MediumOrchid;
+            deleteButton.AutoSize = true;
+            deleteButton.Click += DeleteButton_Click;
+            servicePanel.Controls.Add(deleteButton);
+            servicePanel.SetColumnSpan(deleteButton, 2);
+            #endregion
+
+            return servicePanel;
+        }
+
+        private TableLayoutPanel PyxelRestDefaultPanel()
+        {
+            TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
+            servicePanel.TabStop = true;
+
+            #region Proxy Url
+            servicePanel.Controls.Add(new Label { Text = "Proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
+            proxyUrlTextBox = new TextBox() { Text = service.ProxyUrl };
+            proxyUrlTextBox.Dock = DockStyle.Fill;
+            proxyUrlTextBox.AutoSize = true;
+            proxyUrlTextBox.TextChanged += ProxyUrlTextBox_TextChanged;
+            servicePanel.Controls.Add(proxyUrlTextBox, 1, 0);
+            #endregion
+
+            #region Security Details
+            servicePanel.Controls.Add(new Label { Text = "Security Details", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+            securityDetailsTextBox = new TextBox() { Text = service.SecurityDetails };
+            securityDetailsTextBox.Dock = DockStyle.Fill;
+            securityDetailsTextBox.AutoSize = true;
+            securityDetailsTextBox.TextChanged += SecurityDetailsTextBox_TextChanged;
+            servicePanel.Controls.Add(securityDetailsTextBox, 1, 1);
+            #endregion
+
+            #region Advanced Configuration
+            servicePanel.Controls.Add(new Label { Text = "Advanced", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+            advancedConfigurationTextBox = new TextBox() { Text = service.AdvancedConfiguration };
+            advancedConfigurationTextBox.Dock = DockStyle.Fill;
+            advancedConfigurationTextBox.AutoSize = true;
+            advancedConfigurationTextBox.TextChanged += AdvancedConfigurationTextBox_TextChanged;
+            servicePanel.Controls.Add(advancedConfigurationTextBox, 1, 2);
+            #endregion
+
+            #region Methods
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+            TableLayoutPanel methodsPanel = new TableLayoutPanel();
+            methodsPanel.Dock = DockStyle.Fill;
+            methodsPanel.AutoSize = true;
+            get = new CheckBox() { Text = "get", Checked = service.Get, Width = 50 };
+            get.CheckedChanged += Get_CheckedChanged;
+            methodsPanel.Controls.Add(get, 0, 0);
+            post = new CheckBox() { Text = "post", Checked = service.Post, Width = 55 };
+            post.CheckedChanged += Post_CheckedChanged;
+            methodsPanel.Controls.Add(post, 1, 0);
+            put = new CheckBox() { Text = "put", Checked = service.Put, Width = 50 };
+            put.CheckedChanged += Put_CheckedChanged;
+            methodsPanel.Controls.Add(put, 2, 0);
+            delete = new CheckBox() { Text = "delete", Checked = service.Delete, Width = 65 };
+            delete.CheckedChanged += Delete_CheckedChanged;
+            methodsPanel.Controls.Add(delete, 3, 0);
+            patch = new CheckBox() { Text = "patch", Checked = service.Patch, Width = 60 };
+            patch.CheckedChanged += Patch_CheckedChanged;
+            methodsPanel.Controls.Add(patch, 4, 0);
+            options = new CheckBox() { Text = "options", Checked = service.Options, Width = 70 };
+            options.CheckedChanged += Options_CheckedChanged;
+            methodsPanel.Controls.Add(options, 5, 0);
+            head = new CheckBox() { Text = "head", Checked = service.Head, Width = 60 };
+            head.CheckedChanged += Head_CheckedChanged;
+            methodsPanel.Controls.Add(head, 6, 0);
+            servicePanel.Controls.Add(methodsPanel, 1, 3);
             #endregion
 
             #region Delete
