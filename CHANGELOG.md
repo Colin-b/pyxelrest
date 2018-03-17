@@ -6,7 +6,7 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.65.0 (2018-03-13) ##
+## 0.65.0 (2018-03-19) ##
 
 ### Enhancements ###
 
