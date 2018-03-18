@@ -99,7 +99,7 @@ namespace AutoLoadPyxelRestAddIn
             return string.Format("{0}.{1}.{2}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart);
         }
 
-        internal bool ImportUserDefinedFunctions()
+        internal bool ImportUserDefinedFunctions(bool reload=false)
         {
             try
             {
@@ -112,8 +112,11 @@ namespace AutoLoadPyxelRestAddIn
                     return false;
                 if (!TryToLoadXlWingsModule())
                     return false;
-                new XlWings().ImportPythonUDFs(Application.ActiveWorkbook);
-//                Application.Run("pyxelrest.xlam!ImportPythonUDFs");
+                if (reload)
+                {
+                    KillPython();
+                }
+                Application.Run("pyxelrest.xlam!ImportPythonUDFs");
                 Log.Debug("User Defined Functions imported.");
                 return true;
             }
@@ -121,6 +124,21 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Error("Unable to import User Defined Functions.", ex);
                 return false;
+            }
+        }
+
+        private void KillPython()
+        {
+            Process[] pythonProcesses = Process.GetProcessesByName("pythonw");
+            Application.Run("pyxelrest.xlam!KillPy");
+            // As Python process is not killed instantly, ensure it is killed before trying to launch it again.
+            // Check 10 times at max every 10ms for one Python process to be killed
+            for (int check = 0; check < 10; check++)
+            {
+                foreach(Process pythonProcess in pythonProcesses)
+                    if (pythonProcess.HasExited)
+                        return;
+                System.Threading.Thread.Sleep(10);
             }
         }
 

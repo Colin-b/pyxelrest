@@ -52,7 +52,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             if (DialogResult.Yes == new ServiceConfigurationForm().ShowDialog())
             {
-                if (!Globals.ThisAddIn.ImportUserDefinedFunctions())
+                if (!Globals.ThisAddIn.ImportUserDefinedFunctions(reload:true))
                     MessageBox.Show(
                         UDF_IMPORT_FAILURE_MSG,
                         "Import failed",
@@ -63,7 +63,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ImportUserDefinedFunctions(object sender, RibbonControlEventArgs e)
         {
-            if(!Globals.ThisAddIn.ImportUserDefinedFunctions())
+            if(!Globals.ThisAddIn.ImportUserDefinedFunctions(reload:true))
                 MessageBox.Show(
                     UDF_IMPORT_FAILURE_MSG, 
                     "Import failed",

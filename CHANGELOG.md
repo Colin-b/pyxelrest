@@ -12,6 +12,7 @@ List all changes in various categories:
 
 - Handle asynchronous REST APIs (HTTP 202 status code response).
 - Provide ability to send custom GET/POST/PUT/DELETE requests thanks to definition of a pyxelrest service.
+- Rely on latest official XlWings package (0.11.7).
 
 ## 0.64.1 (2018-02-14) ##
 
