@@ -41,6 +41,19 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private void ActivateOrDeactivateUDFGeneration(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                ThisAddIn.SetSetting("GenerateUDFAtStartup", "" + generateUDFAtStartupButton.Checked);
+                Log.DebugFormat("User defined functions generation at startup set to {0}", generateUDFAtStartupButton.Checked);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                Log.Error("Unable to update configuration.", ex);
+            }
+        }
+
         private void OpenPyxelRestFolder(object sender, RibbonControlEventArgs e)
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

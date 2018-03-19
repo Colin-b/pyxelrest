@@ -36,11 +36,12 @@
         {
             this.pyxelrestTab = this.Factory.CreateRibbonTab();
             this.udfGroup = this.Factory.CreateRibbonGroup();
-            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.importButton = this.Factory.CreateRibbonButton();
             this.configureButton = this.Factory.CreateRibbonButton();
-            this.openFolderButton = this.Factory.CreateRibbonButton();
+            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.autoUpdateButton = this.Factory.CreateRibbonToggleButton();
+            this.generateUDFAtStartupButton = this.Factory.CreateRibbonToggleButton();
+            this.openFolderButton = this.Factory.CreateRibbonButton();
             this.pyxelrestTab.SuspendLayout();
             this.udfGroup.SuspendLayout();
             this.developerGroup.SuspendLayout();
@@ -59,13 +60,6 @@
             this.udfGroup.Items.Add(this.configureButton);
             this.udfGroup.Label = "User Defined Functions";
             this.udfGroup.Name = "udfGroup";
-            // 
-            // developerGroup
-            // 
-            this.developerGroup.Items.Add(this.autoUpdateButton);
-            this.developerGroup.Items.Add(this.openFolderButton);
-            this.developerGroup.Label = "Version X.Y";
-            this.developerGroup.Name = "developerGroup";
             // 
             // importButton
             // 
@@ -91,6 +85,14 @@
             this.configureButton.ShowImage = true;
             this.configureButton.SuperTip = "Open a window to configure available services.";
             // 
+            // developerGroup
+            // 
+            this.developerGroup.Items.Add(this.autoUpdateButton);
+            this.developerGroup.Items.Add(this.generateUDFAtStartupButton);
+            this.developerGroup.Items.Add(this.openFolderButton);
+            this.developerGroup.Label = "Version X.Y";
+            this.developerGroup.Name = "developerGroup";
+            // 
             // autoUpdateButton
             // 
             this.autoUpdateButton.Checked = true;
@@ -101,6 +103,19 @@
             this.autoUpdateButton.ScreenTip = "Check for update on close";
             this.autoUpdateButton.ShowImage = true;
             this.autoUpdateButton.SuperTip = "Check for update once Microsoft Excel is closed.";
+            this.autoUpdateButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivateAutoUpdate);
+            // 
+            // generateUDFAtStartupButton
+            // 
+            this.generateUDFAtStartupButton.Checked = true;
+            this.generateUDFAtStartupButton.Image = global::AutoLoadPyxelRestAddIn.Properties.Resources.refresh_128;
+            this.generateUDFAtStartupButton.ImageName = "Generate user defined functions at startup";
+            this.generateUDFAtStartupButton.Label = "Generate UDFs at startup";
+            this.generateUDFAtStartupButton.Name = "generateUDFAtStartupButton";
+            this.generateUDFAtStartupButton.ScreenTip = "Generate user defined functions at startup";
+            this.generateUDFAtStartupButton.ShowImage = true;
+            this.generateUDFAtStartupButton.SuperTip = "Generate user defined functions at Microsoft Excel startup";
+            this.generateUDFAtStartupButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivateUDFGeneration);
             // 
             // openFolderButton
             // 
@@ -139,6 +154,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup developerGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton autoUpdateButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton openFolderButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton generateUDFAtStartupButton;
     }
 
     partial class ThisRibbonCollection
