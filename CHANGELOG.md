@@ -6,7 +6,17 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.65.0 (2018-03-19) ##
+## 0.66.0 (next) ##
+
+### Enhancements ###
+
+- Rely on latest official XlWings package (0.11.7).
+
+### Bug fixes ###
+
+- Exceptions were not properly catched on workbook activation event.
+
+## 0.65.0 (2018-03-20) ##
 
 ### Release notes ###
 
@@ -17,12 +27,10 @@ List all changes in various categories:
 - Allow to prevent generation of user defined functions at Microsoft Excel startup (see README for more information).
 - Handle asynchronous REST APIs (HTTP 202 status code response).
 - Provide ability to send custom GET/POST/PUT/DELETE requests thanks to definition of a pyxelrest service.
-- Rely on latest official XlWings package (0.11.7).
 
 ### Bug fixes ###
 
 - Auto update settings were not saved.
-- Exceptions were not properly catched on workbook activation event.
 
 ## 0.64.1 (2018-02-14) ##
 
