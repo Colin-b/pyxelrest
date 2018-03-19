@@ -16,7 +16,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
-            developerGroup.Label = string.Format("Version {0}", Globals.ThisAddIn.GetVersion());
+            developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), Globals.ThisAddIn.GetPyxelRestVersion());
 
             string autoCheckForUpdates = ThisAddIn.GetSetting("AutoCheckForUpdates");
             autoUpdateButton.Enabled = !string.IsNullOrEmpty(autoCheckForUpdates);
