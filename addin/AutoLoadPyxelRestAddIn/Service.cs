@@ -14,7 +14,6 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string PROXY_URL_PROPERTY = "proxy_url";
         private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
-        private static readonly string TAGS_PROPERTY = "tags";
         private static readonly string SECURITY_DETAILS_PROPERTY = "security_details";
         private static readonly string ADVANCED_CONFIGURATION_PROPERTY = "advanced_configuration";
 
@@ -38,7 +37,6 @@ namespace AutoLoadPyxelRestAddIn
         public bool Patch;
         public bool Options;
         public bool Head;
-        public string Tags;
         public string SecurityDetails;
         public string AdvancedConfiguration;
 
@@ -69,7 +67,6 @@ namespace AutoLoadPyxelRestAddIn
             Patch = Array.Exists(methods, s => PATCH.Equals(s));
             Options = Array.Exists(methods, s => OPTIONS.Equals(s));
             Head = Array.Exists(methods, s => HEAD.Equals(s));
-            Tags = serviceConfig.ContainsKey(TAGS_PROPERTY) ? serviceConfig[TAGS_PROPERTY] : string.Empty;
             SecurityDetails = serviceConfig.ContainsKey(SECURITY_DETAILS_PROPERTY) ? serviceConfig[SECURITY_DETAILS_PROPERTY] : string.Empty;
             AdvancedConfiguration = serviceConfig.ContainsKey(ADVANCED_CONFIGURATION_PROPERTY) ? serviceConfig[ADVANCED_CONFIGURATION_PROPERTY] : string.Empty;
         }
@@ -102,13 +99,6 @@ namespace AutoLoadPyxelRestAddIn
             methods.Value = GetMethods();
             section.Keys.SetKeyData(methods);
 
-            if (!string.IsNullOrEmpty(Tags))
-            {
-                KeyData tags = new KeyData(TAGS_PROPERTY);
-                tags.Value = Tags;
-                section.Keys.SetKeyData(tags);
-            }
-
             if (!string.IsNullOrEmpty(SecurityDetails))
             {
                 KeyData securityDetails = new KeyData(SECURITY_DETAILS_PROPERTY);
@@ -138,7 +128,6 @@ namespace AutoLoadPyxelRestAddIn
             Patch = true;
             Options = true;
             Head = true;
-            Tags = "";
             SecurityDetails = "";
             AdvancedConfiguration = "";
         }
