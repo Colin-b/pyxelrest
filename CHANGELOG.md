@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Enhancements ###
 
 - Rely on latest official XlWings package (0.11.7).
+- Display Python module version in addition to the add-in version.
 
 ### Bug fixes ###
 
