@@ -175,7 +175,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
-                if (HasGeneratedUDFs())
+                if (!GenerateUDFAtStartup())
+                {
+                    Log.Debug("Do not generate user defined functions on workbook activation (as configured).");
+                }
+                else if (HasGeneratedUDFs())
                 {
                     Log.DebugFormat("Activating '{0}' workbook. User defined functions have already been generated. Do nothing.", Wb.Name);
                 }
@@ -195,7 +199,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
-                if(HasGeneratedUDFs())
+                if (!GenerateUDFAtStartup())
+                {
+                    Log.Debug("Do not generate user defined functions on workbook opening (as configured).");
+                }
+                else if(HasGeneratedUDFs())
                 {
                     Log.DebugFormat("Opening '{0}' workbook. User defined functions have already been generated. Do nothing.", Wb.Name);
                 }
@@ -217,7 +225,11 @@ namespace AutoLoadPyxelRestAddIn
 
         private void OnExcelStart()
         {
-            if (Application.ActiveWorkbook == null)
+            if (!GenerateUDFAtStartup())
+            {
+                Log.Debug("Do not generate user defined functions at Microsoft Excel start (as configured).");
+            }
+            else if (Application.ActiveWorkbook == null)
             {
                 Log.Debug("Microsoft Excel started with an already existing document. Wait for workbook opening event to generate user defined functions.");
             }
@@ -226,6 +238,12 @@ namespace AutoLoadPyxelRestAddIn
                 Log.Debug("Microsoft Excel started with a blank document. Generating user defined functions...");
                 ImportUserDefinedFunctions();
             }
+        }
+
+        private bool GenerateUDFAtStartup()
+        {
+            string generateUDFAtStartup = GetSetting("GenerateUDFAtStartup");
+            return string.IsNullOrEmpty(generateUDFAtStartup) || "True".Equals(generateUDFAtStartup);
         }
 
         private bool HasGeneratedUDFs()

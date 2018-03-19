@@ -351,6 +351,12 @@ The following application settings are available:
         <td>True (default), False</td>
     </tr>
     <tr>
+        <td><strong>GenerateUDFAtStartup</strong></td>
+        <td>Activate or Deactivate generation of user defined functions at Microsoft Excel startup.</td>
+        <td>Optional</td>
+        <td>True (default), False</td>
+    </tr>
+    <tr>
         <td><strong>PathToXlWingsBasFile</strong></td>
         <td>Path to the Python script used to update PyxelRest.</td>
         <td>Mandatory</td>
