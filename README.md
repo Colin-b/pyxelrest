@@ -357,10 +357,10 @@ The following application settings are available:
         <td>True (default), False</td>
     </tr>
     <tr>
-        <td><strong>PathToXlWingsBasFile</strong></td>
-        <td>Path to the Python script used to update PyxelRest.</td>
+        <td><strong>PathToXlWingsConfiguration</strong></td>
+        <td>Path to the XlWings configuration file used to configure XlWings for PyxelRest.</td>
         <td>Mandatory</td>
-        <td>Default value is already set.</td>
+        <td>Installation script is already setting this value properly.</td>
     </tr>
     <tr>
         <td><strong>PathToUpToDateConfigurations</strong></td>
