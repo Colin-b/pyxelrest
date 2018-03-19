@@ -268,6 +268,8 @@ The following application settings are available:
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | AutoCheckForUpdates          | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.        | Optional  | True (default), False                                       |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
+| GenerateUDFAtStartup         | Activate or Deactivate generation of user defined functions at Microsoft Excel startup.        | Optional  | True (default), False                                       |
++------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | PathToXlWingsBasFile         | Path to the Python script used to update PyxelRest.                                            | Mandatory | Default value is already set.                               |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration.                    | Optional  |                                                             |

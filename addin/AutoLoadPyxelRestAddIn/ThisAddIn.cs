@@ -160,7 +160,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
-                if(ContainsXlWingsModule())
+                if (ContainsXlWingsModule())
                 {
                     Log.DebugFormat("Opening '{0}' workbook. PyxelRest already activated. Do nothing.", Wb.Name);
                 }
@@ -193,6 +193,12 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private bool GenerateUDFAtStartup()
+        {
+            string generateUDFAtStartup = GetSetting("GenerateUDFAtStartup");
+            return string.IsNullOrEmpty(generateUDFAtStartup) || "True".Equals(generateUDFAtStartup);
+        }
+
         private bool ContainsXlWingsModule()
         {
             return GetXlWingsModule() != null;
@@ -207,8 +213,11 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ActivatePyxelRest()
         {
-            if(ImportXlWingsBasFile())
-                ImportUserDefinedFunctions();
+            if (ImportXlWingsBasFile())
+                if (GenerateUDFAtStartup())
+                    ImportUserDefinedFunctions();
+                else
+                    Log.Info("Do not generate user defined functions (as configured).");
         }
 
         private bool ImportXlWingsBasFile()

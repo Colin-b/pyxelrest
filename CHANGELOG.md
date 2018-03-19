@@ -14,6 +14,7 @@ List all changes in various categories:
 
 ### Enhancements ###
 
+- Allow to prevent generation of user defined functions at Microsoft Excel startup (see README for more information).
 - Handle asynchronous REST APIs (HTTP 202 status code response).
 - Provide ability to send custom GET/POST/PUT/DELETE requests thanks to definition of a pyxelrest service.
 
