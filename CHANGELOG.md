@@ -21,11 +21,8 @@ List all changes in various categories:
 
 ### Bug fixes ###
 
-- Exceptions were not properly catched on workbook activation event.
-
-### Bug fixes ###
-
 - Auto update settings were not saved.
+- Exceptions were not properly catched on workbook activation event.
 
 ## 0.64.1 (2018-02-14) ##
 
