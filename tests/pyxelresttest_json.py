@@ -2953,6 +2953,23 @@ class PyxelRestJsonTest(unittest.TestCase):
             query_array_date_time=['str value']),
             ['query_array_date_time must contain date times.'])
 
+    def test_list_of_list_form_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+            rules=[
+                ['1', 'EBE', 'SNCF', 'rule_1', 'output_1'],
+                ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2'],
+            ],
+            items=[
+                ['Deal Number', 'Underlying', 'Client'],
+                ['0001', 'EBE', 'SNCF'],
+                ['0002', 'EFR', 'ENGIE'],
+                ['0003', 'EDE', 'ENGIE'],
+            ],
+        ),
+            [['OK']]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

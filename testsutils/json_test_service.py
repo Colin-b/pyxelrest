@@ -89,6 +89,51 @@ def swagger():
                        }
                    },
                    paths={
+                       '/test/json/list_of_list/form': {
+                           'post': {
+                               'operationId': 'post_test_json_list_of_list_form',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "all_matching",
+                                       'in': "query",
+                                       'type': "boolean"
+                                   },
+                                   {
+                                       'name': "rules",
+                                       'in': "formData",
+                                       'collectionFormat': "multi",
+                                       'type': "array",
+                                       'items': {
+                                           'items': {
+                                               'type': "string"
+                                           },
+                                           'type': "array"
+                                       }
+                                   },
+                                   {
+                                       'name': "items",
+                                       'in': "formData",
+                                       'collectionFormat': "multi",
+                                       'type': "array",
+                                       'items': {
+                                           'items': {
+                                               'type': "string"
+                                           },
+                                           'type': "array"
+                                       }
+                                   }
+                               ],
+                               'consumes': [
+                                   "application/x-www-form-urlencoded",
+                                   "multipart/form-data"
+                               ],
+                           },
+                       },
                        '/test/json/with/all/parameters/types': {
                            'get': {
                                'operationId': 'get_test_json_with_all_parameters_types',
@@ -3189,6 +3234,13 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/test/json/list_of_list/form', methods=['POST'])
+def post_test_json_lists_of_list_form():
+    if request.json == {'rules': [['1', 'EBE', 'SNCF', 'rule_1', 'output_1'], ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2']], 'items': [['Deal Number', 'Underlying', 'Client'], ['0001', 'EBE', 'SNCF'], ['0002', 'EFR', 'ENGIE'], ['0003', 'EDE', 'ENGIE']]}:
+        return jsonify('OK')
+    return jsonify(request.json)
 
 
 @app.route('/test/json/with/all/parameters/types', methods=['GET'])
