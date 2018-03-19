@@ -137,7 +137,7 @@ class ServiceConfigSection(ConfigSection):
         :param config: ConfigParser instance from where service details are retrieved.
         """
         ConfigSection.__init__(self, service_name, config)
-        self.tags = [tag.strip() for tag in self.get_item_default(config, 'tags', '').split(',') if tag.strip()]
+        self.tags = [tag.strip() for tag in self.advanced_configuration.get('tags', '').split(';') if tag.strip()]
         self.swagger_url = self.get_item(config, 'swagger_url')
         self.swagger_url_parsed = urlsplit(self.swagger_url)
         self.proxies = self._get_proxies(config, self.swagger_url_parsed.scheme)

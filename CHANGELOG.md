@@ -8,6 +8,10 @@ List all changes in various categories:
 
 ## 0.65.0 (2018-03-19) ##
 
+### Release notes ###
+
+- tags property do not exists anymore. Instead it is now available as key within advanced_configuration property (value separator is now semicolon).
+
 ### Enhancements ###
 
 - Handle asynchronous REST APIs (HTTP 202 status code response).

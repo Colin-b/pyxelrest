@@ -122,12 +122,6 @@ The following options are available for each section:
         <td>get, post, put, delete, patch, options, head</td>
     </tr>
     <tr>
-        <td><strong>tags</strong></td>
-        <td>Swagger tags that should be retrieved. If not specified, no filtering is applied.</td>
-        <td>Optional</td>
-        <td>any value separated by ','</td>
-    </tr>
-    <tr>
         <td><strong>security_details</strong></td>
         <td>Extra security information not provided by swagger. Refer to Security Details section for more information.</td>
         <td>Optional</td>
@@ -300,6 +294,11 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><strong>swagger_read_timeout</strong></td>
         <td>Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>tags</strong></td>
+        <td>Swagger tags that should be retrieved. If not specified, no filtering is applied.</td>
+        <td>any value separated by ';' (semicolon)</td>
     </tr>
 </table>
 

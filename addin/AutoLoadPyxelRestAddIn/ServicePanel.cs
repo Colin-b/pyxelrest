@@ -24,7 +24,6 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox options;
         private CheckBox head;
         private CheckBox checkbox;
-        private TextBox tagsTextBox;
         private TextBox securityDetailsTextBox;
         private TextBox advancedConfigurationTextBox;
 
@@ -117,17 +116,8 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(advancedConfigurationTextBox, 1, 4);
             #endregion
 
-            #region Tags
-            servicePanel.Controls.Add(new Label { Text = "Tags", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
-            tagsTextBox = new TextBox() { Text = service.Tags };
-            tagsTextBox.Dock = DockStyle.Fill;
-            tagsTextBox.AutoSize = true;
-            tagsTextBox.TextChanged += TagsTextBox_TextChanged;
-            servicePanel.Controls.Add(tagsTextBox, 1, 5);
-            #endregion
-
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -152,7 +142,7 @@ namespace AutoLoadPyxelRestAddIn
             head = new CheckBox() { Text = "head", Checked = service.Head, Width = 60};
             head.CheckedChanged += Head_CheckedChanged;
             methodsPanel.Controls.Add(head, 6, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 6);
+            servicePanel.Controls.Add(methodsPanel, 1, 5);
             #endregion
 
             #region Delete
@@ -271,11 +261,6 @@ namespace AutoLoadPyxelRestAddIn
                 advancedConfigurationTextBox.BackColor = string.IsNullOrEmpty(advancedConfigurationTextBox.Text) ? Color.Empty : Color.Red;
                 service.AdvancedConfiguration = string.Empty;
             }
-        }
-
-        private void TagsTextBox_TextChanged(object sender, EventArgs e)
-        {
-            service.Tags = tagsTextBox.Text;
         }
 
         private void ServiceHostTextBox_TextChanged(object sender, EventArgs e)
