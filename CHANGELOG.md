@@ -14,6 +14,10 @@ List all changes in various categories:
 - Provide ability to send custom GET/POST/PUT/DELETE requests thanks to definition of a pyxelrest service.
 - Rely on latest official XlWings package (0.11.7).
 
+### Bug fixes ###
+
+- Exceptions were not properly catched on workbook activation event.
+
 ## 0.64.1 (2018-02-14) ##
 
 ### Bug fixes ###

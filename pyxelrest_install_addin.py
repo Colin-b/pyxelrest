@@ -79,70 +79,39 @@ class VSTOManager:
 
 class XlWingsConfig:
     def __init__(self, xlwings_config_folder):
-        self.xlwings_config_folder = xlwings_config_folder
+        self.xlwings_config_path = os.path.join(xlwings_config_folder, 'xlwings.conf')
 
-    def create_pyxelrest_bas_file(self):
+    def create_file(self):
         """
         Create XLWings specific configuration for PyxelRest.
-        :return: None
         """
         log.info('Creating XLWings specific configuration for PyxelRest...')
-        pyxelrest_settings = os.path.join(self.xlwings_config_folder, 'xlwings.bas')
-        with open(pyxelrest_settings, 'w') as new_settings:
-            self._fill_pyxelrest_bas_file(new_settings)
 
-    def _fill_pyxelrest_bas_file(self, pyxelrest_settings):
-        """
-        Fill XLWings specific configuration for PyxelRest.
-        :param pyxelrest_settings: PyxelRest XLWings specific settings file.
-        :return: None
-        """
-        import xlwings
-        xlwings_path = xlwings.__path__[0]
-        xlwings_bas_path = os.path.join(xlwings_path, 'xlwings.bas')
-        if not os.path.isfile(xlwings_bas_path):
-            raise Exception('XLWings BAS file cannot be found in {0}'.format(xlwings_bas_path))
-        with open(xlwings_bas_path) as previous_settings:
-            for line in previous_settings:
-                self._write_pyxelrest_settings_line(line, pyxelrest_settings)
+        python_path = os.path.dirname(sys.executable)
+        pythonw_path = os.path.join(python_path, 'pythonw.exe')
+        if not os.path.isfile(pythonw_path):
+            raise Exception('Python executable cannot be found in {0}'.format(pythonw_path))
+
+        with open(self.xlwings_config_path, 'w') as config_file:
+            config_file.writelines([
+                '"INTERPRETER", "{0}"'.format(pythonw_path),
+                '"UDF MODULES","pyxelrest.pyxelrestgenerator"',
+            ])
         log.info('XLWings PyxelRest configuration created.')
-
-    def _write_pyxelrest_settings_line(self, xlwings_settings_line, pyxelrest_settings):
-        """
-        Write a new line in PyxelRest XLWings settings file.
-        :param xlwings_settings_line: Line in default XLWings settings file.
-        :param pyxelrest_settings: PyxelRest XLWings specific settings file.
-        :return: None
-        """
-        # TODO Use regular expressions to update settings
-        # In case this installation is not performed using the default python executable in the system
-        if '    PYTHON_WIN = ""\n' == xlwings_settings_line:
-            python_path = os.path.dirname(sys.executable)
-            pythonw_path = os.path.join(python_path, 'pythonw.exe')
-            if not os.path.isfile(pythonw_path):
-                raise Exception('Python executable cannot be found in {0}'.format(pythonw_path))
-            pyxelrest_settings.write('    PYTHON_WIN = "' + pythonw_path + '"\n')
-        # Allow to call pyxelrest
-        elif '    UDF_MODULES = ""\n' == xlwings_settings_line:
-            pyxelrest_settings.write('    UDF_MODULES = "pyxelrest.pyxelrestgenerator"\n')
-        else:
-            pyxelrest_settings.write(xlwings_settings_line)
 
 
 class Installer:
-    def __init__(self, add_in_folder, vba_add_in_folder, scripts_folder=None, vsto_version='10.0', path_to_up_to_date_configuration=None):
+    # TODO Remove parameter once every client will have the proper updater version non relying on it
+    def __init__(self, add_in_folder, vba_add_in_folder=None, scripts_folder=None, vsto_version='10.0', path_to_up_to_date_configuration=None):
         if not sys.platform.startswith('win'):
             raise Exception('Auto Load add-in can only be installed on Microsoft Windows.')
         if not add_in_folder:
             raise Exception('Path to Microsoft Excel Auto Load add-in folder must be provided.')
-        if not vba_add_in_folder:
-            raise Exception('Path to Visual Basic add-in folder must be provided.')
 
         self.add_in_folder = to_absolute_path(add_in_folder)
         if not os.path.isdir(self.add_in_folder):
             raise Exception('PyxelRest Microsoft Excel Auto-Load Add-In cannot be found in {0}.'
                             .format(self.add_in_folder))
-        self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
         self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
@@ -164,9 +133,9 @@ class Installer:
         self._install_pyxelrest_vb_addin()
 
         xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)
-        xlwings_config.create_pyxelrest_bas_file()
+        xlwings_config.create_file()
 
-        self._install_auto_load_addin()
+        self._install_auto_load_addin(xlwings_config)
 
     @staticmethod
     def _is_excel_running():
@@ -178,18 +147,19 @@ class Installer:
         return False
 
     def _install_pyxelrest_vb_addin(self):
-        pyxelrest_vb_file_path = os.path.join(self.vba_add_in_folder, 'pyxelrest.xlam')
-        if not os.path.isfile(pyxelrest_vb_file_path):
-            raise Exception('Visual Basic PyxelRest Excel Add-In cannot be found in {0}.'
-                            .format(pyxelrest_vb_file_path))
+        import xlwings
+        xlwings_path = xlwings.__path__[0]
+        xlwings_vb_addin_path = os.path.join(xlwings_path, 'addin', 'xlwings.xlam')
+        if not os.path.isfile(xlwings_vb_addin_path):
+            raise Exception('XLWings Visual Basic add-in file cannot be found in {0}'.format(xlwings_vb_addin_path))
+
         xlstart_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART')
         if not os.path.exists(xlstart_folder):
             os.makedirs(xlstart_folder)
-        loaded_pyxelrest_vb_file = os.path.join(xlstart_folder, 'pyxelrest.xlam')
-        if not os.path.isfile(loaded_pyxelrest_vb_file):
-            shutil.copyfile(pyxelrest_vb_file_path, loaded_pyxelrest_vb_file)
+        pyxelrest_vb_addin_path = os.path.join(xlstart_folder, 'pyxelrest.xlam')
+        shutil.copyfile(xlwings_vb_addin_path, pyxelrest_vb_addin_path)
 
-    def _install_auto_load_addin(self):
+    def _install_auto_load_addin(self, xlwings_config):
         """
         Install Excel addin in a different folder than the python copied one as it must be uninstalled prior to
         installation and python copy is performed before running post installation script.
@@ -207,9 +177,9 @@ class Installer:
             # Avoid next install trying to uninstall an addin that was not properly installed
             dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
             raise
-        self._update_auto_load_addin_config()
+        self._update_auto_load_addin_config(xlwings_config)
 
-    def _update_auto_load_addin_config(self):
+    def _update_auto_load_addin_config(self, xlwings_config):
         # TODO Use regular expressions to update settings
         def write_addin_configuration_line(addin_settings_line, addin_settings_file):
             if 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
@@ -227,10 +197,9 @@ class Installer:
                 new_line = addin_settings_line.replace('AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
                                                        auto_update_script_path)
                 addin_settings_file.write(new_line)
-            elif 'XLWINGS_BAS_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
-                xlwings_bas_path = os.path.join(self.pyxelrest_appdata_config_folder, 'xlwings.bas')
-                new_line = addin_settings_line.replace('XLWINGS_BAS_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
-                                                       xlwings_bas_path)
+            elif 'XLWINGS_CONFIG_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
+                new_line = addin_settings_line.replace('XLWINGS_CONFIG_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
+                                                       xlwings_config.xlwings_config_path)
                 addin_settings_file.write(new_line)
             elif '</appSettings>' in addin_settings_line:
                 if self.path_to_up_to_date_configuration:
@@ -253,8 +222,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('add_in_directory', help='Directory containing PyxelRest Microsoft Excel auto load add-in.',
                         type=str)
-    parser.add_argument('vb_add_in_directory', help='Directory containing PyxelRest Microsoft Visual Basic add-in.',
-                        type=str)
     parser.add_argument('--scripts_directory', help='Directory containing installed Python scripts.',
                         default=None, type=str)
     parser.add_argument('--path_to_up_to_date_configuration', help='Path to up to date configuration file(s).',
@@ -262,7 +229,6 @@ if __name__ == '__main__':
     options = parser.parse_args(sys.argv[1:])
 
     installer = Installer(options.add_in_directory,
-                          options.vb_add_in_directory,
                           scripts_folder=options.scripts_directory,
                           path_to_up_to_date_configuration=options.path_to_up_to_date_configuration)
     installer.perform_post_installation_tasks()

@@ -120,7 +120,6 @@ class PyxelRestUpdater:
             scripts_dir = os.path.abspath(os.path.dirname(__file__))
             data_dir = os.path.join(scripts_dir, '..')
             addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
-                                        os.path.join(data_dir, 'pyxelrest_vb_addin'),
                                         path_to_up_to_date_configuration=self.path_to_up_to_date_configurations)
             addin_installer.perform_post_installation_tasks()
             logger.info('Microsoft Excel add-in successfully updated.')

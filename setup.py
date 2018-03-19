@@ -85,11 +85,6 @@ setup(name='pyxelrest',
               ]
           ),
           (
-              'pyxelrest_vb_addin', [
-                  'addin/pyxelrest.xlam'
-              ]
-          ),
-          (
               'pyxelrest_addin/resources', [
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/folder-3-128.png',
