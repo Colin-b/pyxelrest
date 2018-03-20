@@ -70,7 +70,7 @@ def generate_user_defined_functions(output='user_defined_functions.py', flatteni
     return services
 
 
-def reload_user_defined_functions():
+def reload_user_defined_functions(services):
     """
     Force reload of module (even if this is first time, it should not take long)
     as reloading pyxelrest does not reload UDFs otherwise
@@ -78,6 +78,12 @@ def reload_user_defined_functions():
     :return: None
     """
     reload(import_module('pyxelrest.user_defined_functions'))
+    from pyxelrest import user_defined_functions as udfs
+    udfs.swagger_methods = {
+        udf_name: method
+        for service in services
+        for udf_name, method in service.methods.items()
+    }
 
 
 def reset_authentication():
@@ -102,13 +108,7 @@ if GENERATE_UDF_ON_IMPORT:
 
     try:
         logger.debug('Expose user defined functions through PyxelRest.')
-        reload_user_defined_functions()
-        from pyxelrest import user_defined_functions as udfs
-        udfs.swagger_methods = {
-            udf_name: method
-            for service in services
-            for udf_name, method in service.methods.items()
-        }
+        reload_user_defined_functions(services)
         from pyxelrest.user_defined_functions import *
     except:
         logger.exception('Error while importing UDFs.')
