@@ -82,7 +82,7 @@ def {{ swagger_method.udf_name }}(
 
     try:
 {% for parameter in swagger_method.path_parameters %}
-        swagger_method.parameters['{{ parameter.name }}'].validate_path({{ parameter.name }}, request_content)
+        swagger_method.parameters['{{ parameter.name }}'].validate_path({{ parameter.name }})
 {% endfor %}
 {% for parameter in swagger_method.required_parameters %}
         swagger_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
