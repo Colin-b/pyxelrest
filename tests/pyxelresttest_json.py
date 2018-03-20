@@ -2976,12 +2976,15 @@ class PyxelRestJsonTest(unittest.TestCase):
         self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_dict(
             inner_dict=[
                 ['key1', 'key2', 'key3'],
-                ['value1', 'value2', 'value3'],
+                ['value10', 'value20', 'value30'],
             ],
             dict_field1='value1',
             dict_field2='value2',
         ),
-            [['OK']]
+            [
+                ['dict_field1', 'dict_field2', 'key1', 'key2', 'key3'],
+                ['value1', 'value2', 'value10', 'value20', 'value30']
+            ]
         )
 
 

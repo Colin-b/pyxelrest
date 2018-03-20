@@ -46,6 +46,17 @@ def return_type_can_be_handled(method_produces):
     return 'application/octet-stream' not in method_produces
 
 
+def list_to_dict(header, values):
+    if not isinstance(header, list):
+        header = [header]
+    if not isinstance(values, list):
+        values = [values]
+    return {
+        header[index]: value
+        for index, value in enumerate(values)
+    }
+
+
 class ConfigSection:
     def __init__(self, service_name, config):
         """
@@ -365,6 +376,7 @@ class SwaggerMethod:
         ref = swagger_parameter['schema']['$ref']
         ref = ref[len('#/definitions/'):]
         parameters = []
+        # TODO Prefix name properly to avoid conflicts
         for inner_parameter_name, inner_parameter in self.service.swagger_definitions[ref]['properties'].items():
             inner_parameter['server_param_name'] = inner_parameter_name
             inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
@@ -522,6 +534,13 @@ class SwaggerParameter:
             raise Exception('{0} value "{1}" must be either "true" or "false".'.format(self.name, value))
         return value == 'true'
 
+    def convert_to_dict(self, value):
+        if not isinstance(value, list):
+            raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
+        if len(value) != 2:
+            raise Exception('{0} value should contains only two rows. Header and values.'.format(self.name))
+        return list_to_dict(value[0], value[1])
+
     def _get_convert_array_method(self, array_parameter):
         return lambda value: [
             array_parameter._convert_to_type(item)
@@ -543,6 +562,8 @@ class SwaggerParameter:
             return self._convert_to_str
         elif self.type == 'boolean':
             return self._convert_to_bool
+        elif self.type == 'object':
+            return self.convert_to_dict
         return lambda value: value  # Unhandled type, best effort
 
 

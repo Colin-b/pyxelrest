@@ -23,7 +23,7 @@ from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.definition_deserializer import Response
 from pyxelrest import definition_deserializer
 from pyxelrest import authentication
-from pyxelrest.swagger import RequestContent
+from pyxelrest.swagger import RequestContent, list_to_dict
 
 logger = logging.getLogger(__name__)
 swagger_methods = None  # Will be set after load
@@ -354,10 +354,3 @@ def list_as_json(lists, parse_as):
         ]
 
     return lists
-
-
-def list_to_dict(header, values):
-    return {
-        header[index]: value
-        for index, value in enumerate(values)
-    }
