@@ -27,6 +27,21 @@ def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
 
+def to_vba_valid_name(swagger_name):
+    """
+    Return name as non VBA or python restricted keyword
+    """
+    # replace vba restricted keywords
+    if swagger_name.lower() in vba.vba_restricted_keywords:
+        swagger_name = vba.vba_restricted_keywords[swagger_name.lower()]
+    # replace '-'
+    if "-" in swagger_name:
+        swagger_name = swagger_name.replace("-", "_")
+    if swagger_name.startswith("_"):  # TODO Handle more than one
+        swagger_name = swagger_name[1:]
+    return swagger_name
+
+
 def return_type_can_be_handled(method_produces):
     return 'application/octet-stream' not in method_produces
 
@@ -188,6 +203,7 @@ class SwaggerService:
         self.existing_operation_ids = []
         self.swagger = self._retrieve_swagger()
         self.validate_swagger_version()
+        self.swagger_definitions = self.swagger.get('definitions')
         # Remove trailing slashes (as paths must starts with a slash)
         self.uri = self._extract_uri().rstrip('/')
         authentication.add_service_security(self.config.name, self.swagger, self.config.security_details)
@@ -207,9 +223,6 @@ class SwaggerService:
         base_path = self.swagger.get('basePath', None)
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
-
-    def definitions(self):
-        return self.swagger.get('definitions')
 
     def create_method(self, requests_method, swagger_method, method_path):
         udf = SwaggerMethod(self, requests_method, swagger_method, method_path)
@@ -250,16 +263,8 @@ class SwaggerService:
 
         def _normalise_names(parameters):
             for parameter in parameters:
-                parameter["server_param_name"] = parameter["name"]
-
-                # replace vba restricted keywords
-                if parameter['name'].lower() in vba.vba_restricted_keywords:
-                    parameter['name'] = vba.vba_restricted_keywords[parameter['name'].lower()]
-                # replace '-'
-                if "-" in parameter['name']:
-                    parameter['name'] = parameter['name'].replace("-", "_")
-                if parameter['name'].startswith("_"):
-                    parameter['name'] = parameter['name'][1:]
+                parameter['server_param_name'] = parameter['name']
+                parameter['name'] = to_vba_valid_name(parameter['name'])
             return parameters
 
         def _update_method_parameters():
@@ -330,18 +335,21 @@ class SwaggerMethod:
         self.contains_file_parameters = False
         self.contains_query_parameters = False
         self.parameters = {}
-        for parameter in swagger_method.get('parameters', []):
-            param = SwaggerParameter(parameter)
-            self.parameters[param.name] = param
-            if parameter['in'] == 'path':
-                self.path_parameters.append(param)
+        for swagger_parameter in swagger_method.get('parameters', []):
+            parameters = self._to_parameters(swagger_parameter)
+            self.parameters.update({
+                parameter.name: parameter
+                for parameter in parameters
+            })
+            if swagger_parameter['in'] == 'path':
+                self.path_parameters.extend(parameters)
             # Required but not in path
-            elif parameter.get('required'):
-                self.update_information_on_parameter_type(parameter)
-                self.required_parameters.append(param)
+            elif swagger_parameter.get('required'):
+                self.update_information_on_parameter_type(swagger_parameter)
+                self.required_parameters.extend(parameters)
             else:
-                self.update_information_on_parameter_type(parameter)
-                self.optional_parameters.append(param)
+                self.update_information_on_parameter_type(swagger_parameter)
+                self.optional_parameters.extend(parameters)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
         self._compute_operation_id(path)
@@ -349,6 +357,20 @@ class SwaggerMethod:
         self.responses = swagger_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
+
+    def _to_parameters(self, swagger_parameter):
+        if 'type' in swagger_parameter:  # Type usually means that this is not a complex type
+            return [SwaggerParameter(swagger_parameter)]
+
+        ref = swagger_parameter['schema']['$ref']
+        ref = ref[len('#/definitions/'):]
+        parameters = []
+        for inner_parameter_name, inner_parameter in self.service.swagger_definitions[ref]['properties'].items():
+            inner_parameter['server_param_name'] = inner_parameter_name
+            inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+            inner_parameter['in'] = swagger_parameter['in']
+            parameters.append(SwaggerParameter(inner_parameter))
+        return parameters
 
     def _compute_operation_id(self, path):
         """
@@ -465,17 +487,7 @@ class SwaggerParameter:
     def validate_optional(self, value, request_content):
         if value is not None:
             value = self._convert_to_type(value)
-            if self.location == 'query':
-                request_content.parameters[self.server_param_name] = value
-            elif self.location == 'body':
-                request_content.payload = value
-            elif self.location == 'formData':
-                if self.type == 'file':
-                    request_content.files[self.server_param_name] = value
-                else:
-                    request_content.payload[self.server_param_name] = value
-            elif self.location == 'header':
-                request_content.header[self.server_param_name] = value
+            request_content.add_value(self, value)
 
     def _not_provided(self):
         return Exception('{0} is required.'.format(self.name))
@@ -540,6 +552,19 @@ class RequestContent:
         self.payload = {}
         self.files = {}
         self.parameters = {}
+
+    def add_value(self, parameter, value):
+        if parameter.location == 'query':
+            self.parameters[parameter.server_param_name] = value
+        elif parameter.location == 'body':
+            self.payload[parameter.server_param_name] = value
+        elif parameter.location == 'formData':
+            if parameter.type == 'file':
+                self.files[parameter.server_param_name] = value
+            else:
+                self.payload[parameter.server_param_name] = value
+        elif parameter.location == 'header':
+            self.header[parameter.server_param_name] = value
 
 
 def support_pandas():

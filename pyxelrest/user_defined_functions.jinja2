@@ -130,7 +130,7 @@ def {{ swagger_method.udf_name }}(
 all_definitions = {}
 
 {% for service in services %}
-all_definitions['{{ service.config.name }}'] = {{ service.definitions() }}
+all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
 
 
     {% for method_path, methods in service.swagger['paths'].items() %}
