@@ -7,6 +7,21 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    definitions={
+                       'DictWithDict': {
+                           'type': 'object',
+                           'properties': {
+                               'inner_dict': {
+                                   'type': 'object',
+                               },
+                               'dict_field1': {
+                                   'type': 'string',
+                               },
+                               'dict_field2': {
+                                   'type': 'string',
+                               }
+                           },
+                           'title': 'Test'
+                       },
                        'TestObject': {
                            'type': 'object',
                            'properties': {
@@ -89,6 +104,30 @@ def swagger():
                        }
                    },
                    paths={
+                       '/test/json/dict_with_dict': {
+                           'post': {
+                               'operationId': 'post_test_json_dict_with_dict',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/DictWithDict",
+                                       },
+                                   },
+                               ],
+                               'consumes': [
+                                   "application/x-www-form-urlencoded",
+                                   "multipart/form-data"
+                               ],
+                           },
+                       },
                        '/test/json/list_of_list/form': {
                            'post': {
                                'operationId': 'post_test_json_list_of_list_form',
@@ -3234,6 +3273,11 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/test/json/dict_with_dict', methods=['POST'])
+def post_test_json_dict_with_dict():
+    return jsonify(request.json)
 
 
 @app.route('/test/json/list_of_list/form', methods=['POST'])

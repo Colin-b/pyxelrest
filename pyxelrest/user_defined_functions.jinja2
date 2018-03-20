@@ -23,8 +23,10 @@ from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.definition_deserializer import Response
 from pyxelrest import definition_deserializer
 from pyxelrest import authentication
+from pyxelrest.swagger import RequestContent
 
 logger = logging.getLogger(__name__)
+swagger_methods = None  # Will be set after load
 
 {% macro convert_to_return_type(str_value, swagger_method) %}
 {% if swagger_method.return_a_list() -%}
@@ -34,291 +36,16 @@ logger = logging.getLogger(__name__)
 {% endif %}
 {% endmacro %}
 
-{% macro validate_parameter_value(parameter, swagger_method) %}
-{% set param_name = parameter['name'] %}
-{% set param_type = parameter['type'] %}
-{# Integer Type check #}
-{% if param_type == 'integer' -%}
-        if not isinstance({{param_name}}, int):
-            logger.error('{{ param_name }} must be an integer.')
-{% if swagger_method.return_a_list() %}
-            return ['{{ param_name }} must be an integer.']
-{% else %}
-            return '{{ param_name }} must be an integer.'
-{% endif %}
-{# Number Type check #}
-{% elif param_type == 'number' -%}
-        if not isinstance({{param_name}}, float):
-            logger.error('{{ param_name }} must be a number.')
-{% if swagger_method.return_a_list() %}
-            return ['{{ param_name }} must be a number.']
-{% else %}
-            return '{{ param_name }} must be a number.'
-{% endif %}
-{# String Type check #}
-{% elif param_type == 'string' %}
-{% set param_format = parameter['format'] %}
-{# String (date) Type check #}
-{% if param_format == 'date' -%}
-        if not isinstance({{param_name}}, datetime.date):
-            logger.error('{{ param_name }} must be a date.')
-{% if swagger_method.return_a_list() %}
-            return ['{{ param_name }} must be a date.']
-{% else %}
-            return '{{ param_name }} must be a date.'
-{% endif %}
-{# String (date-time) Type check #}
-{% elif param_format == 'date-time' -%}
-        if not isinstance({{param_name}}, datetime.datetime):
-            logger.error('{{ param_name }} must be a date time.')
-{% if swagger_method.return_a_list() %}
-            return ['{{ param_name }} must be a date time.']
-{% else %}
-            return '{{ param_name }} must be a date time.'
-{% endif %}
-        else:
-            {{ param_name }} = {{ param_name }}.isoformat()
-{# String (non date or date-time) Type check #}
-{% else %}
-{% set param_enum = parameter['enum'] %}
-{# String (enum) Type check #}
-{% if param_enum|count > 0 -%}
-        if {{param_name}} not in {{ param_enum }}:
-            logger.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }}))
-{% if swagger_method.return_a_list() %}
-            return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})]
-{% else %}
-            return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_enum|join(" or ") }}.'.format({{ param_name }})
-{% endif %}
-{% endif %}
-{% endif %}
-{# Boolean Type check #}
-{% elif param_type == 'boolean' -%}
-        if {{param_name}} not in ['true', 'false']:
-            logger.error('{{ param_name }} must be either "true" or "false".')
-{% if swagger_method.return_a_list() %}
-            return ['{{ param_name }} must be either "true" or "false".']
-{% else %}
-            return '{{ param_name }} must be either "true" or "false".'
-{% endif %}
-        {{param_name}} = {{param_name}} == 'true'
-{# Array Type check #}
-{% elif param_type == 'array' -%}
-{% set param_items = parameter['items'] %}
-{% set param_items_type = param_items['type'] %}
-{# Array (integers) Type check #}
-{% if param_items_type == 'integer' -%}
-        if isinstance({{param_name}}, list):
-            {{param_name}} = [item for item in {{param_name}} if item is not None]
-            for {{param_name}}_item in {{param_name}}:
-                if not isinstance({{param_name}}_item, int):
-                    logger.error('{{ param_name }} must contain integers.')
-{% if swagger_method.return_a_list() %}
-                    return ['{{ param_name }} must contain integers.']
-{% else %}
-                    return '{{ param_name }} must contain integers.'
-{% endif %}
-        else:
-            if not isinstance({{param_name}}, int):
-                logger.error('{{ param_name }} must be an integer.')
-{% if swagger_method.return_a_list() %}
-                return ['{{ param_name }} must be an integer.']
-{% else %}
-                return '{{ param_name }} must be an integer.'
-{% endif %}
-{# Array (numbers) Type check #}
-{% elif param_items_type == 'number' -%}
-        if isinstance({{param_name}}, list):
-            {{param_name}} = [item for item in {{param_name}} if item is not None]
-            for {{param_name}}_item in {{param_name}}:
-                if not isinstance({{param_name}}_item, float):
-                    logger.error('{{ param_name }} must contain numbers.')
-{% if swagger_method.return_a_list() %}
-                    return ['{{ param_name }} must contain numbers.']
-{% else %}
-                    return '{{ param_name }} must contain numbers.'
-{% endif %}
-        else:
-            if not isinstance({{param_name}}, float):
-                logger.error('{{ param_name }} must be a number.')
-{% if swagger_method.return_a_list() %}
-                return ['{{ param_name }} must be a number.']
-{% else %}
-                return '{{ param_name }} must be a number.'
-{% endif %}
-{# Array (strings) Type check #}
-{% elif param_items_type == 'string' %}
-{% set param_items_format = param_items['format'] %}
-{# Array (string - date) Type check #}
-{% if param_items_format == 'date' -%}
-        if isinstance({{param_name}}, list):
-            {{param_name}} = [item for item in {{param_name}} if item is not None]
-            for {{param_name}}_item in {{param_name}}:
-                if not isinstance({{param_name}}_item, datetime.date):
-                    logger.error('{{ param_name }} must contain dates.')
-{% if swagger_method.return_a_list() %}
-                    return ['{{ param_name }} must contain dates.']
-{% else %}
-                    return '{{ param_name }} must contain dates.'
-{% endif %}
-        else:
-            if not isinstance({{param_name}}, datetime.date):
-                logger.error('{{ param_name }} must be a date.')
-{% if swagger_method.return_a_list() %}
-                return ['{{ param_name }} must be a date.']
-{% else %}
-                return '{{ param_name }} must be a date.'
-{% endif %}
-{# Array (string - date-time) Type check #}
-{% elif param_items_format == 'date-time' -%}
-        if isinstance({{param_name}}, list):
-            {{param_name}} = [item for item in {{param_name}} if item is not None]
-            for {{param_name}}_item in {{param_name}}:
-                if not isinstance({{param_name}}_item, datetime.datetime):
-                    logger.error('{{ param_name }} must contain date times.')
-{% if swagger_method.return_a_list() %}
-                    return ['{{ param_name }} must contain date times.']
-{% else %}
-                    return '{{ param_name }} must contain date times.'
-{% endif %}
-        else:
-            if not isinstance({{param_name}}, datetime.datetime):
-                logger.error('{{ param_name }} must be a date time.')
-{% if swagger_method.return_a_list() %}
-                return ['{{ param_name }} must be a date time.']
-{% else %}
-                return '{{ param_name }} must be a date time.'
-{% endif %}
-            else:
-                {{ param_name }} = {{ param_name }}.isoformat()
-{# Array (string - non date or date-time) Type check #}
-{% else %}
-{% set param_items_enum = param_items['enum'] %}
-{# Array (string - enum) Type check #}
-{% if param_items_enum|count > 0 -%}
-        if isinstance({{param_name}}, list):
-            {{param_name}} = [item for item in {{param_name}} if item is not None]
-            for {{param_name}}_item in {{param_name}}:
-                if {{param_name}}_item not in {{ param_items_enum }}:
-                    logger.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item))
-{% if swagger_method.return_a_list() %}
-                    return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)]
-{% else %}
-                    return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}_item)
-{% endif %}
-        else:
-            if {{param_name}} not in {{ param_items_enum }}:
-                logger.error('{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }}))
-{% if swagger_method.return_a_list() %}
-                return ['{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})]
-{% else %}
-                return '{{ param_name }} value "{% raw %}{{% endraw %}0{% raw %}}{% endraw %}" should be {{ param_items_enum|join(" or ") }}.'.format({{ param_name }})
-{% endif %}
-{# End of Array (string - enum) Type check #}
-{% endif %}
-{# End of Array (string) Type check #}
-{% endif %}
-{% elif param_items_type == 'boolean' -%}
-        if isinstance({{param_name}}, list):
-            {{param_name}} = [item for item in {{param_name}} if item is not None]
-            for {{param_name}}_item in {{param_name}}:
-                if {{param_name}}_item not in ['true', 'false']:
-                    logger.error('{{ param_name }} must be either "true" or "false".')
-{% if swagger_method.return_a_list() %}
-                    return ['{{ param_name }} must be either "true" or "false".']
-{% else %}
-                    return '{{ param_name }} must be either "true" or "false".'
-{% endif %}
-                else:
-                    {{param_name}}_item = {{param_name}}_item == 'true'
-        else:
-            if {{param_name}} not in ['true', 'false']:
-                logger.error('{{ param_name }} must contain "true" or "false".')
-{% if swagger_method.return_a_list() %}
-                return ['{{ param_name }} must contain "true" or "false".']
-{% else %}
-                return '{{ param_name }} must contain "true" or "false".'
-{% endif %}
-            {{param_name}} = {{param_name}} == 'true'
-{# End of Array Type check #}
-{% endif %}
-{% endif %}
-{% endmacro %}
-
-{% macro validate_required_parameter(parameter, swagger_method) %}
-{% set param_name = parameter['name'] %}
-{% set param_in = parameter['in'] %}
-{% set param_type = parameter['type'] %}
-{% set server_param_name = parameter['server_param_name'] %}
-    if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
-        logger.error('{{ param_name }} is required.')
-{% if swagger_method.return_a_list() %}
-        return ['{{ param_name }} is required.']
-{% else %}
-        return '{{ param_name }} is required.'
-{% endif %}
-    if {{ param_name }} is not None:
-        {{ validate_parameter_value(parameter, swagger_method) }}
-{% if param_in == 'query' %}
-        request_parameters['{{ server_param_name }}'] = {{ param_name }}
-{% elif param_in == 'body' %}
-        request_payload = {{ param_name }}
-{% elif param_in == 'formData' %}
-    {% if param_type == 'file' %}
-        request_files['{{ server_param_name }}'] = {{ param_name }}
-    {% else %}
-        request_payload['{{ server_param_name }}'] = {{ param_name }}
-    {% endif %}
-{% elif param_in == 'header' %}
-        request_header['{{ server_param_name }}'] = {{ param_name }}
-{% endif %}
-{% endmacro %}
-
-{% macro validate_path_parameter(parameter, swagger_method) %}
-{% set param_name = parameter['name'] %}
-    if {{ param_name }} is None or isinstance({{ param_name }}, list) and all(x is None for x in {{ param_name }}):
-        logger.error('{{ param_name }} is required.')
-{% if swagger_method.return_a_list() %}
-        return ['{{ param_name }} is required.']
-{% else %}
-        return '{{ param_name }} is required.'
-{% endif %}
-{% endmacro %}
-
-{% macro validate_optional_parameter(parameter, swagger_method) %}
-{% set param_name = parameter['name'] %}
-{% set param_in = parameter['in'] %}
-{% set param_type = parameter['type'] %}
-{% set server_param_name = parameter['server_param_name'] %}
-    if {{ param_name }} is not None:
-        {{ validate_parameter_value(parameter, swagger_method) }}
-{% if param_in == 'query' %}
-        request_parameters['{{ server_param_name }}'] = {{ param_name }}
-{% elif param_in == 'body' %}
-        request_payload = {{ param_name }}
-{% elif param_in == 'formData' %}
-    {% if param_type == 'file' %}
-        request_files['{{ server_param_name }}'] = {{ param_name }}
-    {% else %}
-        request_payload['{{ server_param_name }}'] = {{ param_name }}
-    {% endif %}
-{% elif param_in == 'header' %}
-        request_header['{{ server_param_name }}'] = {{ param_name }}
-{% endif %}
-{% endmacro %}
-
 {# Macro generating the converter for the parameter if needed #}
 {% macro param_converter(parameter) %}
-{% set param_type = parameter['type'] %}
-{%- if param_type == 'integer' %}
+{%- if parameter.type == 'integer' %}
  numbers=int,
-{%- elif param_type == 'number' %}
+{%- elif parameter.type == 'number' %}
  numbers=float,
-{%- elif param_type == 'string' %}
-    {%- set param_format = parameter['format'] %}
-    {%- if param_format == 'date' %}
+{%- elif parameter.type == 'string' %}
+    {%- if parameter.format == 'date' %}
  dates=datetime.date,
-    {%- elif param_format == 'date-time' %}
+    {%- elif parameter.format == 'date-time' %}
  dates=datetime.datetime,
     {%- endif %}
 {% endif %}
@@ -329,50 +56,53 @@ logger = logging.getLogger(__name__)
 {% if 'get' == swagger_method.requests_method %}@caching
 {% endif %}
 @xw.func(category='{{ swagger_method.service.config.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
-{% for parameter in swagger_method.parameters %}
-@xw.arg('{{ parameter['name'] }}',{{ param_converter(parameter) }} doc='{{ parameter['description']|replace('\'', '') }}')
+{% for parameter in swagger_method.path_parameters %}
+@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
+{% endfor %}
+{% for parameter in swagger_method.required_parameters %}
+@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
+{% endfor %}
+{% for parameter in swagger_method.optional_parameters %}
+@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
 {% endfor %}
 {% if swagger_method.return_a_list() and swagger_method.service.config.should_return_asynchronously() %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ swagger_method.udf_name }}(
-    {%- for parameter in swagger_method.path_parameters %}{{ parameter['name'] }}{% if not loop.last or swagger_method.has_required_parameters() or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in swagger_method.required_parameters %}{{ parameter['name'] }}{% if not loop.last or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in swagger_method.optional_parameters %}{{ parameter['name'] }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
+    {%- for parameter in swagger_method.path_parameters %}{{ parameter.name }}{% if not loop.last or swagger_method.has_required_parameters() or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in swagger_method.required_parameters %}{{ parameter.name }}{% if not loop.last or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in swagger_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
 {% if swagger_method.summary() %}
     """{{ swagger_method.summary() }}"""
 {% endif %}
     logger.info("[status=Calling] [function={{ swagger_method.udf_name }}]...")
-    request_header = {{ swagger_method.initial_header() }}
-{% if swagger_method.contains_body_parameters %}
-    request_payload = {}
-{% endif %}
-{% if swagger_method.contains_file_parameters %}
-    request_files = {}
-{% endif %}
-{% if swagger_method.contains_query_parameters %}
-    request_parameters = {}
-{% endif %}
+    swagger_method = swagger_methods['{{ swagger_method.udf_name }}']
+    request_content = RequestContent(swagger_method)
+{% if swagger_method.has_path_parameters() or swagger_method.has_required_parameters() or swagger_method.has_optional_parameters() %}
 
+    try:
 {% for parameter in swagger_method.path_parameters %}
-{{ validate_path_parameter(parameter, swagger_method) }}
+        swagger_method.parameters['{{ parameter.name }}'].validate_path({{ parameter.name }}, request_content)
 {% endfor %}
 {% for parameter in swagger_method.required_parameters %}
-{{ validate_required_parameter(parameter, swagger_method) }}
+        swagger_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
 {% endfor %}
 {% for parameter in swagger_method.optional_parameters %}
-{{ validate_optional_parameter(parameter, swagger_method) }}
+        swagger_method.parameters['{{ parameter.name }}'].validate_optional({{ parameter.name }}, request_content)
 {% endfor %}
-
+    except Exception as e:
+        logger.exception("Unable to validate parameters.")
+        return {{ convert_to_return_type('str(e)', swagger_method) }}
+{% endif %}
     response = None
     try:
         response = session.get({{ swagger_method.service.config.max_retries }}).request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
-            {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter['server_param_name'] }}={{ path_parameter['name'] }}{% if not loop.last %}, {% endif %}{% endfor -%}
-        ){% if swagger_method.contains_body_parameters %}, json=request_payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.config.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_header, proxies={{ swagger_method.service.config.proxies }}, timeout=({{ swagger_method.service.config.connect_timeout }}, {{ swagger_method.service.config.read_timeout }}))
+            {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter.server_param_name }}={{ path_parameter.name }}{% if not loop.last %}, {% endif %}{% endfor -%}
+        ){% if swagger_method.contains_body_parameters %}, json=request_content.payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_content.parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_content.files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.config.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_content.header, proxies={{ swagger_method.service.config.proxies }}, timeout=({{ swagger_method.service.config.connect_timeout }}, {{ swagger_method.service.config.read_timeout }}))
         response.raise_for_status()
         logger.info("[status=Valid] response received for [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
         if 202 == response.status_code:
-            return {'Status URL': response.headers['location']}
+            return [['Status URL'], [response.headers['location']]]
         if response.headers['content-type'] == 'application/json':
             all_responses = {{ swagger_method.responses }}
             return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.config.name }}'), {{ swagger_method.service.config.rely_on_definitions }})
@@ -384,16 +114,17 @@ def {{ swagger_method.udf_name }}(
         logger.exception("Connection [status=error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", swagger_method) }}
     except Exception as error:
-        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception("[status=Error] occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+            logger.exception("[status=Error] occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
         else:
             logger.exception("[status=Error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
         return {{ convert_to_return_type('describe_error(response, error)', swagger_method) }}
     finally:
-        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
             response.close()
+
 
 {% endmacro %}
 all_definitions = {}
@@ -405,7 +136,7 @@ all_definitions['{{ service.config.name }}'] = {{ service.definitions() }}
     {% for method_path, methods in service.swagger['paths'].items() %}
         {% for http_method, swagger_method in methods.items() %}
             {%- if service.config.should_provide_method(http_method, swagger_method) -%}
-                {{- add_udf(service.method(http_method, swagger_method, method_path)) -}}
+                {{- add_udf(service.create_method(http_method, swagger_method, method_path)) -}}
             {%- endif -%}
         {% endfor %}
     {%- endfor %}
@@ -416,7 +147,7 @@ all_definitions['{{ service.config.name }}'] = {{ service.definitions() }}
         response.raise_for_status()
         logger.info("[status=Valid] response received for [function={{ nethod_name }}] [url={0}].".format(response.request.url))
         if 202 == response.status_code:
-            return {'Status URL': response.headers['location']}
+            return [['Status URL'], [response.headers['location']]]
         if response.headers['content-type'] == 'application/json':
             return json_as_list(response, {}, None, False)
         elif response.headers['content-type'] == 'application/msgpackpandas':
@@ -427,14 +158,14 @@ all_definitions['{{ service.config.name }}'] = {{ service.definitions() }}
         logger.exception("Connection [status=error] occurred while calling [function={{ nethod_name }}] [url={0}].".format(url))
         return ["'Cannot connect to service. Please retry once connection is re-established.'"]
     except Exception as error:
-        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception("[status=Error] occurred while handling [function={{ nethod_name }}] [url={1}] response: [response={0}].".format(response.text[:64],response.request.url))
+            logger.exception("[status=Error] occurred while handling [function={{ nethod_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
         else:
             logger.exception("[status=Error] occurred while calling [function={{ nethod_name }}] [url={0}].".format(url))
         return [describe_error(response, error)]
     finally:
-        # Check "is not None" because response.ok is overrided according to HTTP status code.
+        # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
             response.close()
 
@@ -601,7 +332,7 @@ def msgpackpandas_as_list(msgpack_pandas):
 
 
 def describe_error(response, error):
-    # Check "is not None" because response.ok is overrided according to HTTP status code.
+    # Check "is not None" because response.ok is overridden according to HTTP status code.
     if response is not None:
         return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
     return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])

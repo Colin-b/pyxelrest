@@ -1,6 +1,6 @@
+import datetime
 import os
 import re
-
 import requests
 import logging
 from collections import OrderedDict
@@ -183,6 +183,7 @@ class SwaggerService:
         to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
+        self.methods = {}
         self.config = ServiceConfigSection(service_name, config)
         self.existing_operation_ids = []
         self.swagger = self._retrieve_swagger()
@@ -210,8 +211,10 @@ class SwaggerService:
     def definitions(self):
         return self.swagger.get('definitions')
 
-    def method(self, requests_method, swagger_method, method_path):
-        return SwaggerMethod(self, requests_method, swagger_method, method_path)
+    def create_method(self, requests_method, swagger_method, method_path):
+        udf = SwaggerMethod(self, requests_method, swagger_method, method_path)
+        self.methods[udf.udf_name] = udf
+        return udf
 
     def _retrieve_swagger(self):
         """
@@ -320,23 +323,25 @@ class SwaggerMethod:
         self.service = service
         self.requests_method = requests_method
         self.swagger_method = swagger_method
-        self.parameters = swagger_method.get('parameters', [])
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
         self.contains_body_parameters = False
         self.contains_file_parameters = False
         self.contains_query_parameters = False
-        for parameter in self.parameters:
+        self.parameters = {}
+        for parameter in swagger_method.get('parameters', []):
+            param = SwaggerParameter(parameter)
+            self.parameters[param.name] = param
             if parameter['in'] == 'path':
-                self.path_parameters.append(parameter)
+                self.path_parameters.append(param)
             # Required but not in path
             elif parameter.get('required'):
                 self.update_information_on_parameter_type(parameter)
-                self.required_parameters.append(parameter)
+                self.required_parameters.append(param)
             else:
                 self.update_information_on_parameter_type(parameter)
-                self.optional_parameters.append(parameter)
+                self.optional_parameters.append(param)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
         self._compute_operation_id(path)
@@ -408,6 +413,9 @@ class SwaggerMethod:
 
         return header
 
+    def has_path_parameters(self):
+        return len(self.path_parameters) > 0
+
     def has_required_parameters(self):
         return len(self.required_parameters) > 0
 
@@ -424,6 +432,114 @@ class SwaggerMethod:
         urls = re.findall('^.*\[.*\]\((.*)\).*$', text)
         if urls:
             return urls[0]
+
+
+class SwaggerParameter:
+    def __init__(self, swagger_parameter):
+        self.name = swagger_parameter['name']
+        self.server_param_name = swagger_parameter['server_param_name']
+        self.description = swagger_parameter.get('description', '')
+        if self.description:
+            self.description = self.description.replace('\'', '')
+        self.location = swagger_parameter['in']  # path, body, formData, query, header
+        self.required = swagger_parameter.get('required')
+        self.type = swagger_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
+        self.format = swagger_parameter.get('format')  # date (string type), date-time (string type)
+        self.choices = swagger_parameter.get('enum')  # string type
+        if self.type == 'array':
+            swagger_array_parameter = dict(swagger_parameter)
+            swagger_array_parameter.update(swagger_parameter['items'])
+            self._convert_to_type = self._get_convert_array_method(SwaggerParameter(swagger_array_parameter))
+        else:
+            self._convert_to_type = self._get_convert_method()
+
+    def validate_path(self, value):
+        if value is None or isinstance(value, list) and all(x is None for x in value):
+            raise self._not_provided()
+
+    def validate_required(self, value, request_content):
+        if value is None or isinstance(value, list) and all(x is None for x in value):
+            raise self._not_provided()
+        self.validate_optional(value, request_content)
+
+    def validate_optional(self, value, request_content):
+        if value is not None:
+            value = self._convert_to_type(value)
+            if self.location == 'query':
+                request_content.parameters[self.server_param_name] = value
+            elif self.location == 'body':
+                request_content.payload = value
+            elif self.location == 'formData':
+                if self.type == 'file':
+                    request_content.files[self.server_param_name] = value
+                else:
+                    request_content.payload[self.server_param_name] = value
+            elif self.location == 'header':
+                request_content.header[self.server_param_name] = value
+
+    def _not_provided(self):
+        return Exception('{0} is required.'.format(self.name))
+
+    def _convert_to_int(self, value):
+        if not isinstance(value, int):
+            raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+        return value
+
+    def _convert_to_float(self, value):
+        if not isinstance(value, float):
+            raise Exception('{0} value "{1}" must be a number.'.format(self.name, value))
+        return value
+
+    def _convert_to_date(self, value):
+        if not isinstance(value, datetime.date):
+            raise Exception('{0} value "{1}" must be a date.'.format(self.name, value))
+        return value
+
+    def _convert_to_date_time(self, value):
+        if not isinstance(value, datetime.datetime):
+            raise Exception('{0} value "{1}" must be a date time.'.format(self.name, value))
+        return value.isoformat()
+
+    def _convert_to_str(self, value):
+        if self.choices and value not in self.choices:
+            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, self.choices.join(' or ')))
+        return value
+
+    def _convert_to_bool(self, value):
+        if value not in ['true', 'false']:
+            raise Exception('{0} value "{1}" must be either "true" or "false".'.format(self.name, value))
+        return value == 'true'
+
+    def _get_convert_array_method(self, array_parameter):
+        return lambda value: [
+            array_parameter._convert_to_type(item)
+            for item in value if item is not None
+        ] if isinstance(value, list) else [
+            array_parameter._convert_to_type(value)
+        ]
+
+    def _get_convert_method(self):
+        if self.type == 'integer':
+            return self._convert_to_int
+        elif self.type == 'number':
+            return self._convert_to_float
+        elif self.type == 'string':
+            if self.format == 'date':
+                return self._convert_to_date
+            elif self.format == 'date-time':
+                return self._convert_to_date_time
+            return self._convert_to_str
+        elif self.type == 'boolean':
+            return self._convert_to_bool
+        return lambda value: value  # Unhandled type, best effort
+
+
+class RequestContent:
+    def __init__(self, swagger_method):
+        self.header = swagger_method.initial_header()
+        self.payload = {}
+        self.files = {}
+        self.parameters = {}
 
 
 def support_pandas():
