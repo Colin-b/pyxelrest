@@ -7,11 +7,41 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    definitions={
+                       'Dict': {
+                           'type': 'object',
+                           'properties': {
+                               'dict_field1': {
+                                   'type': 'string',
+                               },
+                               'dict_field2': {
+                                   'type': 'string',
+                               }
+                           },
+                           'title': 'Test'
+                       },
                        'DictWithDict': {
                            'type': 'object',
                            'properties': {
                                'inner_dict': {
                                    'type': 'object',
+                               },
+                               'dict_field1': {
+                                   'type': 'string',
+                               },
+                               'dict_field2': {
+                                   'type': 'string',
+                               }
+                           },
+                           'title': 'Test'
+                       },
+                       'DictWithDictList': {
+                           'type': 'object',
+                           'properties': {
+                               'inner_dict_list': {
+                                   'type': 'array',
+                                   'items': {
+                                       '$ref': '#/definitions/Dict',
+                                   },
                                },
                                'dict_field1': {
                                    'type': 'string',
@@ -104,6 +134,57 @@ def swagger():
                        }
                    },
                    paths={
+                       '/test/json/dict_with_dict_list': {
+                           'post': {
+                               'operationId': 'post_test_json_dict_with_dict_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/DictWithDictList",
+                                       },
+                                   },
+                               ],
+                               'consumes': [
+                                   "application/x-www-form-urlencoded",
+                                   "multipart/form-data"
+                               ],
+                           },
+                       },
+                       '/test/json/list_of_dict_with_dict': {
+                           'post': {
+                               'operationId': 'post_test_json_list_of_dict_with_dict',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': "#/definitions/DictWithDict",
+                                           },
+                                       },
+                                   },
+                               ],
+                               'consumes': [
+                                   "application/x-www-form-urlencoded",
+                                   "multipart/form-data"
+                               ],
+                           },
+                       },
                        '/test/json/dict_with_dict': {
                            'post': {
                                'operationId': 'post_test_json_dict_with_dict',
@@ -3273,6 +3354,16 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/test/json/dict_with_dict_list', methods=['POST'])
+def post_test_json_dict_with_dict_list():
+    return jsonify(request.json)
+
+
+@app.route('/test/json/list_of_dict_with_dict', methods=['POST'])
+def post_test_json_list_of_dict_with_dict():
+    return jsonify(request.json)
 
 
 @app.route('/test/json/dict_with_dict', methods=['POST'])

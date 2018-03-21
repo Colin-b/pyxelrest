@@ -23,7 +23,7 @@ from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.definition_deserializer import Response
 from pyxelrest import definition_deserializer
 from pyxelrest import authentication
-from pyxelrest.swagger import RequestContent, list_to_dict
+from pyxelrest.swagger import RequestContent, list_to_dict, list_to_dict_list
 
 logger = logging.getLogger(__name__)
 swagger_methods = None  # Will be set after load
@@ -347,10 +347,6 @@ def list_as_json(lists, parse_as):
     if 'dict_list' == parse_as:
         if len(lists) < 2:
             return ['There should be at least two rows. Header and first dictionary values.']
-        header = lists[0]
-        return [
-            list_to_dict(header, values)
-            for values in lists[1:]
-        ]
+        return list_to_dict_list(lists[0], lists[1:])
 
     return lists

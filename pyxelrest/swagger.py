@@ -57,6 +57,13 @@ def list_to_dict(header, values):
     }
 
 
+def list_to_dict_list(header, values_list):
+    return [
+        list_to_dict(header, values)
+        for values in values_list
+    ]
+
+
 class ConfigSection:
     def __init__(self, service_name, config):
         """
@@ -369,21 +376,6 @@ class SwaggerMethod:
         if not self.responses:
             raise EmptyResponses(self.udf_name)
 
-    def _to_parameters(self, swagger_parameter):
-        if 'type' in swagger_parameter:  # Type usually means that this is not a complex type
-            return [SwaggerParameter(swagger_parameter)]
-
-        ref = swagger_parameter['schema']['$ref']
-        ref = ref[len('#/definitions/'):]
-        parameters = []
-        # TODO Prefix name properly to avoid conflicts
-        for inner_parameter_name, inner_parameter in self.service.swagger_definitions[ref]['properties'].items():
-            inner_parameter['server_param_name'] = inner_parameter_name
-            inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
-            inner_parameter['in'] = swagger_parameter['in']
-            parameters.append(SwaggerParameter(inner_parameter))
-        return parameters
-
     def _compute_operation_id(self, path):
         """
         Compute the operationId swagger field (as it may not be provided).
@@ -467,23 +459,44 @@ class SwaggerMethod:
         if urls:
             return urls[0]
 
+    def _to_parameters(self, swagger_parameter):
+        if 'type' in swagger_parameter:  # Type usually means that this is not a complex type
+            return [SwaggerParameter(swagger_parameter, {})]
+
+        schema = swagger_parameter['schema']
+        ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
+        ref = ref[len('#/definitions/'):]
+        parameters = []
+        # TODO Prefix name properly to avoid conflicts
+        for inner_parameter_name, inner_parameter in self.service.swagger_definitions[ref]['properties'].items():
+            inner_parameter['server_param_name'] = inner_parameter_name
+            inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+            inner_parameter['in'] = swagger_parameter['in']
+            parameters.append(SwaggerParameter(inner_parameter, schema))
+        return parameters
+
 
 class SwaggerParameter:
-    def __init__(self, swagger_parameter):
+    def __init__(self, swagger_parameter, schema):
         self.name = swagger_parameter['name']
         self.server_param_name = swagger_parameter['server_param_name']
         self.description = swagger_parameter.get('description', '')
         if self.description:
             self.description = self.description.replace('\'', '')
+        self.schema = schema
         self.location = swagger_parameter['in']  # path, body, formData, query, header
         self.required = swagger_parameter.get('required')
         self.type = swagger_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
         self.format = swagger_parameter.get('format')  # date (string type), date-time (string type)
         self.choices = swagger_parameter.get('enum')  # string type
         if self.type == 'array':
-            swagger_array_parameter = dict(swagger_parameter)
-            swagger_array_parameter.update(swagger_parameter['items'])
-            self._convert_to_type = self._get_convert_array_method(SwaggerParameter(swagger_array_parameter))
+            items = swagger_parameter['items']
+            if '$ref' in items:
+                self._convert_to_type = self._convert_to_dict_list
+            else:
+                swagger_array_parameter = dict(swagger_parameter)
+                swagger_array_parameter.update(items)
+                self._convert_to_type = self._get_convert_array_method(SwaggerParameter(swagger_array_parameter, {}))
         else:
             self._convert_to_type = self._get_convert_method()
 
@@ -534,12 +547,19 @@ class SwaggerParameter:
             raise Exception('{0} value "{1}" must be either "true" or "false".'.format(self.name, value))
         return value == 'true'
 
-    def convert_to_dict(self, value):
+    def _convert_to_dict(self, value):
         if not isinstance(value, list):
             raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
         if len(value) != 2:
             raise Exception('{0} value should contains only two rows. Header and values.'.format(self.name))
         return list_to_dict(value[0], value[1])
+
+    def _convert_to_dict_list(self, value):
+        if not isinstance(value, list):
+            raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
+        if len(value) < 2:
+            raise Exception('{0} value should contains at least two rows. Header and values.'.format(self.name))
+        return list_to_dict_list(value[0], value[1:])
 
     def _get_convert_array_method(self, array_parameter):
         return lambda value: [
@@ -563,7 +583,9 @@ class SwaggerParameter:
         elif self.type == 'boolean':
             return self._convert_to_bool
         elif self.type == 'object':
-            return self.convert_to_dict
+            if self.schema.get('type') == 'array':
+                return self._convert_to_dict_list
+            return self._convert_to_dict
         return lambda value: value  # Unhandled type, best effort
 
 
@@ -578,7 +600,16 @@ class RequestContent:
         if parameter.location == 'query':
             self.parameters[parameter.server_param_name] = value
         elif parameter.location == 'body':
-            self.payload[parameter.server_param_name] = value
+            if parameter.schema.get('type') == 'array':
+                if self.payload == {}:  # Change the default payload to list
+                    self.payload = [
+                        {}
+                        for index in range(len(value))
+                    ]
+                for index, parameter_list_item in enumerate(value):
+                    self.payload[index][parameter.server_param_name] = parameter_list_item
+            else:
+                self.payload[parameter.server_param_name] = value
         elif parameter.location == 'formData':
             if parameter.type == 'file':
                 self.files[parameter.server_param_name] = value

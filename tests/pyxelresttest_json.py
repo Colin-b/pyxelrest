@@ -2983,7 +2983,47 @@ class PyxelRestJsonTest(unittest.TestCase):
         ),
             [
                 ['dict_field1', 'dict_field2', 'key1', 'key2', 'key3'],
-                ['value1', 'value2', 'value10', 'value20', 'value30']
+                ['value1', 'value2', 'value10', 'value20', 'value30'],
+            ]
+        )
+
+    def test_list_of_dict_with_dict_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(
+            inner_dict=[
+                ['key1', 'key2', 'key3'],
+                ['value10', 'value20', 'value30'],
+                ['value11', 'value21', 'value31'],
+                ['value12', 'value22', 'value32'],
+            ],
+            dict_field1=['value000', 'value001', 'value002'],
+            dict_field2=['value010', 'value011', 'value012'],
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'key1', 'key2', 'key3'],
+                ['value000', 'value010', 'value10', 'value20', 'value30'],
+                ['value001', 'value011', 'value11', 'value21', 'value31'],
+                ['value002', 'value012', 'value12', 'value22', 'value32'],
+            ]
+        )
+
+    def test_dict_with_dict_list_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_dict_list(
+            inner_dict_list=[
+                ['key1', 'key2', 'key3'],
+                ['value10', 'value20', 'value30'],
+                ['value11', 'value21', 'value31'],
+                ['value12', 'value22', 'value32'],
+            ],
+            dict_field1='value000',
+            dict_field2='value010',
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'key1', 'key2', 'key3', 'inner_dict_list'],
+                ['value000', 'value010', 'value10', 'value20', 'value30', ''],
+                ['value000', 'value010', 'value11', 'value21', 'value31', ''],
+                ['value000', 'value010', 'value12', 'value22', 'value32', ''],
             ]
         )
 
