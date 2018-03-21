@@ -31,6 +31,7 @@ List all changes in various categories:
 - Allow to post/put dictionaries and lists easily.
 - Allow to post/put files by specifying content or file path.
 - Display PyxelRest python module version in Microsoft Excel add-in.
+- Warn user in case update failed.
 
 ### Bug fixes ###
 
