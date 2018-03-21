@@ -99,6 +99,28 @@ namespace AutoLoadPyxelRestAddIn
             return string.Format("{0}.{1}.{2}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart);
         }
 
+        internal string GetPyxelRestVersion()
+        {
+            string pythonPath = ThisAddIn.GetSetting("PathToPython");
+            if (!File.Exists(pythonPath))
+                return string.Empty;
+
+            string pythonScriptPath = Path.GetTempFileName();
+            File.WriteAllLines(pythonScriptPath, new string[] {
+                "import pyxelrest._version",
+                "print(pyxelrest._version.__version__)"
+            });
+
+            Process pyxelrestVersion = new Process();
+            pyxelrestVersion.StartInfo.FileName = pythonPath;
+            pyxelrestVersion.StartInfo.Arguments = pythonScriptPath;
+            pyxelrestVersion.StartInfo.UseShellExecute = false;
+            pyxelrestVersion.StartInfo.RedirectStandardOutput = true;
+            pyxelrestVersion.StartInfo.CreateNoWindow = true;
+            pyxelrestVersion.Start();
+            return pyxelrestVersion.StandardOutput.ReadLine();
+        }
+
         internal bool ImportUserDefinedFunctions()
         {
             try

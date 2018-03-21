@@ -20,6 +20,7 @@ List all changes in various categories:
 - Reduce code duplication in generated user defined function python file. Should result in a faster loading.
 - Allow to post/put dictionaries and lists easily.
 - Allow to post/put files by specifying content or file path.
+- Display PyxelRest python module version in Microsoft Excel add-in.
 
 ### Bug fixes ###
 
