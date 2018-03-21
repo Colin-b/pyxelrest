@@ -15,6 +15,7 @@ from pip.utils import get_installed_distributions
 
 
 def create_logger():
+    global default_log_file_path
     global logger
     if __name__ == '__main__':
         logger = logging.getLogger("pyxelrest.pyxelrest_auto_update")
@@ -23,12 +24,12 @@ def create_logger():
 
     logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration',
                                                    'auto_update_logging.ini')
+    default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auto_update.log')
     if os.path.isfile(logging_configuration_file_path):
         with open(logging_configuration_file_path, 'r') as config_file:
             log_config_dict = yaml.load(config_file)
             logging.config.dictConfig(log_config_dict)
     else:
-        default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auto_update.log')
         logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                             handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
                             level=logging.DEBUG)
@@ -109,7 +110,7 @@ class PyxelRestUpdater:
         return False
 
     def _update_pyxelrest(self):
-        result = InstallCommand().main(['pyxelrest', '--upgrade'])
+        result = InstallCommand().main(['pyxelrest', '--upgrade', '--log', default_log_file_path])
         create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
             logger.info('PyxelRest package updated.')
