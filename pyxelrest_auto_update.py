@@ -119,6 +119,7 @@ class PyxelRestUpdater:
                 self._update_configuration()
         else:
             logger.warning('PyxelRest package update failed.')
+            win32ui.MessageBox("Update failed (python module). Please contact support.", "PyxelRest update failed", win32con.MB_ICONERROR)
 
     def _update_addin(self):
         try:
@@ -135,6 +136,7 @@ class PyxelRestUpdater:
             return True
         except:
             logger.exception('Unable to update add-in.')
+            win32ui.MessageBox("Update failed (Microsoft Excel add-in). Please contact support.", "PyxelRest update failed", win32con.MB_ICONERROR)
 
     def _update_configuration(self):
         if not self.path_to_up_to_date_configurations:
@@ -150,6 +152,7 @@ class PyxelRestUpdater:
             logger.info('Services configuration successfully updated.')
         except:
             logger.exception('Unable to update configuration.')
+            win32ui.MessageBox("Update failed (services configuration). Please contact support.", "PyxelRest update failed", win32con.MB_ICONWARNING)
 
 
 if __name__ == '__main__':
