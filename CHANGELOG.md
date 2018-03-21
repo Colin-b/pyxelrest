@@ -17,7 +17,7 @@ List all changes in various categories:
 
 - Exceptions were not properly catched on workbook activation event.
 
-## 0.65.0 (2018-03-20) ##
+## 0.65.0 (2018-03-21) ##
 
 ### Release notes ###
 
@@ -28,10 +28,15 @@ List all changes in various categories:
 - Allow to prevent generation of user defined functions at Microsoft Excel startup (see README for more information).
 - Handle asynchronous REST APIs (HTTP 202 status code response).
 - Provide ability to send custom GET/POST/PUT/DELETE requests thanks to definition of a pyxelrest service.
+- Reduce code duplication in generated user defined function python file. Should result in a faster loading.
+- Allow to post/put dictionaries and lists easily.
+- Allow to post/put files by specifying content or file path.
 
 ### Bug fixes ###
 
 - Auto update settings were not saved.
+- Array parameters are now always sent as array (was not the case for length 1 arrays).
+- boolean and date-time arrays of length > 1 were not sent properly (not as boolean and not as ISO8601 formatted date-time)
 
 ## 0.64.1 (2018-02-14) ##
 

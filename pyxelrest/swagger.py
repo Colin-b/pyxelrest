@@ -1,6 +1,6 @@
+import datetime
 import os
 import re
-
 import requests
 import logging
 from collections import OrderedDict
@@ -27,8 +27,41 @@ def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
 
+def to_vba_valid_name(swagger_name):
+    """
+    Return name as non VBA or python restricted keyword
+    """
+    # replace vba restricted keywords
+    if swagger_name.lower() in vba.vba_restricted_keywords:
+        swagger_name = vba.vba_restricted_keywords[swagger_name.lower()]
+    # replace '-'
+    if "-" in swagger_name:
+        swagger_name = swagger_name.replace("-", "_")
+    if swagger_name.startswith("_"):  # TODO Handle more than one
+        swagger_name = swagger_name[1:]
+    return swagger_name
+
+
 def return_type_can_be_handled(method_produces):
     return 'application/octet-stream' not in method_produces
+
+
+def list_to_dict(header, values):
+    if not isinstance(header, list):
+        header = [header]
+    if not isinstance(values, list):
+        values = [values]
+    return {
+        header[index]: value
+        for index, value in enumerate(values)
+    }
+
+
+def list_to_dict_list(header, values_list):
+    return [
+        list_to_dict(header, values)
+        for values in values_list
+    ]
 
 
 class ConfigSection:
@@ -183,10 +216,12 @@ class SwaggerService:
         to avoid duplicate between services.
         :param config: ConfigParser instance from where service details are retrieved.
         """
+        self.methods = {}
         self.config = ServiceConfigSection(service_name, config)
         self.existing_operation_ids = []
         self.swagger = self._retrieve_swagger()
         self.validate_swagger_version()
+        self.swagger_definitions = self.swagger.get('definitions')
         # Remove trailing slashes (as paths must starts with a slash)
         self.uri = self._extract_uri().rstrip('/')
         authentication.add_service_security(self.config.name, self.swagger, self.config.security_details)
@@ -207,11 +242,10 @@ class SwaggerService:
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
-    def definitions(self):
-        return self.swagger.get('definitions')
-
-    def method(self, requests_method, swagger_method, method_path):
-        return SwaggerMethod(self, requests_method, swagger_method, method_path)
+    def create_method(self, requests_method, swagger_method, method_path):
+        udf = SwaggerMethod(self, requests_method, swagger_method, method_path)
+        self.methods[udf.udf_name] = udf
+        return udf
 
     def _retrieve_swagger(self):
         """
@@ -247,16 +281,8 @@ class SwaggerService:
 
         def _normalise_names(parameters):
             for parameter in parameters:
-                parameter["server_param_name"] = parameter["name"]
-
-                # replace vba restricted keywords
-                if parameter['name'].lower() in vba.vba_restricted_keywords:
-                    parameter['name'] = vba.vba_restricted_keywords[parameter['name'].lower()]
-                # replace '-'
-                if "-" in parameter['name']:
-                    parameter['name'] = parameter['name'].replace("-", "_")
-                if parameter['name'].startswith("_"):
-                    parameter['name'] = parameter['name'][1:]
+                parameter['server_param_name'] = parameter['name']
+                parameter['name'] = to_vba_valid_name(parameter['name'])
             return parameters
 
         def _update_method_parameters():
@@ -320,23 +346,28 @@ class SwaggerMethod:
         self.service = service
         self.requests_method = requests_method
         self.swagger_method = swagger_method
-        self.parameters = swagger_method.get('parameters', [])
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
         self.contains_body_parameters = False
         self.contains_file_parameters = False
         self.contains_query_parameters = False
-        for parameter in self.parameters:
-            if parameter['in'] == 'path':
-                self.path_parameters.append(parameter)
+        self.parameters = {}
+        for swagger_parameter in swagger_method.get('parameters', []):
+            parameters = self._to_parameters(swagger_parameter)
+            self.parameters.update({
+                parameter.name: parameter
+                for parameter in parameters
+            })
+            if swagger_parameter['in'] == 'path':
+                self.path_parameters.extend(parameters)
             # Required but not in path
-            elif parameter.get('required'):
-                self.update_information_on_parameter_type(parameter)
-                self.required_parameters.append(parameter)
+            elif swagger_parameter.get('required'):
+                self.update_information_on_parameter_type(swagger_parameter)
+                self.required_parameters.extend(parameters)
             else:
-                self.update_information_on_parameter_type(parameter)
-                self.optional_parameters.append(parameter)
+                self.update_information_on_parameter_type(swagger_parameter)
+                self.optional_parameters.extend(parameters)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
         self._compute_operation_id(path)
@@ -408,6 +439,9 @@ class SwaggerMethod:
 
         return header
 
+    def has_path_parameters(self):
+        return len(self.path_parameters) > 0
+
     def has_required_parameters(self):
         return len(self.required_parameters) > 0
 
@@ -424,6 +458,172 @@ class SwaggerMethod:
         urls = re.findall('^.*\[.*\]\((.*)\).*$', text)
         if urls:
             return urls[0]
+
+    def _to_parameters(self, swagger_parameter):
+        if 'type' in swagger_parameter:  # Type usually means that this is not a complex type
+            return [SwaggerParameter(swagger_parameter, {})]
+
+        schema = swagger_parameter['schema']
+        ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
+        ref = ref[len('#/definitions/'):]
+        parameters = []
+        # TODO Prefix name properly to avoid conflicts
+        for inner_parameter_name, inner_parameter in self.service.swagger_definitions[ref]['properties'].items():
+            inner_parameter['server_param_name'] = inner_parameter_name
+            inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+            inner_parameter['in'] = swagger_parameter['in']
+            parameters.append(SwaggerParameter(inner_parameter, schema))
+        return parameters
+
+
+class SwaggerParameter:
+    def __init__(self, swagger_parameter, schema):
+        self.name = swagger_parameter['name']
+        self.server_param_name = swagger_parameter['server_param_name']
+        self.description = swagger_parameter.get('description', '')
+        if self.description:
+            self.description = self.description.replace('\'', '')
+        self.schema = schema
+        self.location = swagger_parameter['in']  # path, body, formData, query, header
+        self.required = swagger_parameter.get('required')
+        self.type = swagger_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
+        self.format = swagger_parameter.get('format')  # date (string type), date-time (string type)
+        self.choices = swagger_parameter.get('enum')  # string type
+        if self.type == 'array':
+            items = swagger_parameter['items']
+            if '$ref' in items:
+                self._convert_to_type = self._convert_to_dict_list
+            else:
+                swagger_array_parameter = dict(swagger_parameter)
+                swagger_array_parameter.update(items)
+                self._convert_to_type = self._get_convert_array_method(SwaggerParameter(swagger_array_parameter, {}))
+        else:
+            self._convert_to_type = self._get_convert_method()
+
+    def validate_path(self, value):
+        if value is None or isinstance(value, list) and all(x is None for x in value):
+            raise self._not_provided()
+
+    def validate_required(self, value, request_content):
+        if value is None or isinstance(value, list) and all(x is None for x in value):
+            raise self._not_provided()
+        self.validate_optional(value, request_content)
+
+    def validate_optional(self, value, request_content):
+        if value is not None:
+            value = self._convert_to_type(value)
+            request_content.add_value(self, value)
+
+    def _not_provided(self):
+        return Exception('{0} is required.'.format(self.name))
+
+    def _convert_to_int(self, value):
+        if not isinstance(value, int):
+            raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+        return value
+
+    def _convert_to_float(self, value):
+        if not isinstance(value, float):
+            raise Exception('{0} value "{1}" must be a number.'.format(self.name, value))
+        return value
+
+    def _convert_to_date(self, value):
+        if not isinstance(value, datetime.date):
+            raise Exception('{0} value "{1}" must be a date.'.format(self.name, value))
+        return value
+
+    def _convert_to_date_time(self, value):
+        if not isinstance(value, datetime.datetime):
+            raise Exception('{0} value "{1}" must be a date time.'.format(self.name, value))
+        return value.isoformat()
+
+    def _convert_to_str(self, value):
+        if self.choices and value not in self.choices:
+            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, self.choices.join(' or ')))
+        return value
+
+    def _convert_to_bool(self, value):
+        if value not in ['true', 'false']:
+            raise Exception('{0} value "{1}" must be either "true" or "false".'.format(self.name, value))
+        return value == 'true'
+
+    def _convert_to_dict(self, value):
+        if not isinstance(value, list):
+            raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
+        if len(value) != 2:
+            raise Exception('{0} value should contains only two rows. Header and values.'.format(self.name))
+        return list_to_dict(value[0], value[1])
+
+    def _convert_to_dict_list(self, value):
+        if not isinstance(value, list):
+            raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
+        if len(value) < 2:
+            raise Exception('{0} value should contains at least two rows. Header and values.'.format(self.name))
+        return list_to_dict_list(value[0], value[1:])
+
+    def _convert_to_file(self, value):
+        if os.path.isfile(value):  # Can be a path to a file
+            return open(value, 'rb')
+        return self.server_param_name, value  # Or the content of the file
+
+    def _get_convert_array_method(self, array_parameter):
+        return lambda value: [
+            array_parameter._convert_to_type(item)
+            for item in value if item is not None
+        ] if isinstance(value, list) else [
+            array_parameter._convert_to_type(value)
+        ]
+
+    def _get_convert_method(self):
+        if self.type == 'integer':
+            return self._convert_to_int
+        elif self.type == 'number':
+            return self._convert_to_float
+        elif self.type == 'string':
+            if self.format == 'date':
+                return self._convert_to_date
+            elif self.format == 'date-time':
+                return self._convert_to_date_time
+            return self._convert_to_str
+        elif self.type == 'boolean':
+            return self._convert_to_bool
+        elif self.type == 'object':
+            if self.schema.get('type') == 'array':
+                return self._convert_to_dict_list
+            return self._convert_to_dict
+        elif self.type == 'file':
+            return self._convert_to_file
+        return lambda value: value  # Unhandled type, best effort
+
+
+class RequestContent:
+    def __init__(self, swagger_method):
+        self.header = swagger_method.initial_header()
+        self.payload = {}
+        self.files = {}
+        self.parameters = {}
+
+    def add_value(self, parameter, value):
+        if parameter.location == 'query':
+            self.parameters[parameter.server_param_name] = value
+        elif parameter.location == 'body':
+            if parameter.schema.get('type') == 'array':
+                if self.payload == {}:  # Change the default payload to list
+                    self.payload = [
+                        {}
+                        for index in range(len(value))
+                    ]
+                for index, parameter_list_item in enumerate(value):
+                    self.payload[index][parameter.server_param_name] = parameter_list_item
+            else:
+                self.payload[parameter.server_param_name] = value
+        elif parameter.location == 'formData':
+            if parameter.type == 'file':
+                self.files[parameter.server_param_name] = value
+            else:
+                self.payload[parameter.server_param_name] = value
+        elif parameter.location == 'header':
+            self.header[parameter.server_param_name] = value
 
 
 def support_pandas():

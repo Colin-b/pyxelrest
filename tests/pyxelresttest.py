@@ -391,7 +391,7 @@ class PyxelRestTest(unittest.TestCase):
     def test_get_async_url(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            {'Status URL': 'http://localhost:8958/test/async/status'},
+            [['Status URL'], ['http://localhost:8958/test/async/status']],
             pyxelrestgenerator.async_test_get_test_async()
         )
 

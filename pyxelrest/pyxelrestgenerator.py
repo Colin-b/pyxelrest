@@ -59,10 +59,16 @@ def generate_user_defined_functions(output='user_defined_functions.py', flatteni
     with open(os.path.join(os.path.dirname(__file__), output), 'w', encoding='utf-8') \
             as generated_file:
         generated_file.write(user_defined_functions(services, pyxelrest_config, flattenize))
+    return services
 
 
-def load_user_defined_functions():
-    import_module('pyxelrest.user_defined_functions')
+def load_user_defined_functions(services):
+    from pyxelrest import user_defined_functions as udfs
+    udfs.swagger_methods = {
+        udf_name: method
+        for service in services
+        for udf_name, method in service.methods.items()
+    }
 
 
 def reset_authentication():
@@ -75,18 +81,19 @@ if __name__ == '__main__':
 else:
     logger = logging.getLogger(__name__)
 
+# TODO Generate one service per file instead of a full file
 if GENERATE_UDF_ON_IMPORT:
     custom_logging.load_logging_configuration()
     reset_authentication()
     try:
-        generate_user_defined_functions()
+        services = generate_user_defined_functions()
     except Exception as e:
         logger.exception('Cannot generate user defined functions.')
         raise
 
     try:
         logger.debug('Expose user defined functions through PyxelRest.')
-        load_user_defined_functions()
+        load_user_defined_functions(services)
         from pyxelrest.user_defined_functions import *
     except:
         logger.exception('Error while importing UDFs.')
