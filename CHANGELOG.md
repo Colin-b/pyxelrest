@@ -6,7 +6,7 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.65.0 (2018-03-19) ##
+## 0.65.0 (2018-03-21) ##
 
 ### Release notes ###
 
@@ -18,6 +18,8 @@ List all changes in various categories:
 - Handle asynchronous REST APIs (HTTP 202 status code response).
 - Provide ability to send custom GET/POST/PUT/DELETE requests thanks to definition of a pyxelrest service.
 - Reduce code duplication in generated user defined function python file. Should result in a faster loading.
+- Allow to post/put dictionaries and lists easily.
+- Allow to post/put files by specifying content or file path.
 
 ### Bug fixes ###
 

@@ -561,6 +561,11 @@ class SwaggerParameter:
             raise Exception('{0} value should contains at least two rows. Header and values.'.format(self.name))
         return list_to_dict_list(value[0], value[1:])
 
+    def _convert_to_file(self, value):
+        if os.path.isfile(value):  # Can be a path to a file
+            return open(value, 'rb')
+        return self.server_param_name, value  # Or the content of the file
+
     def _get_convert_array_method(self, array_parameter):
         return lambda value: [
             array_parameter._convert_to_type(item)
@@ -586,6 +591,8 @@ class SwaggerParameter:
             if self.schema.get('type') == 'array':
                 return self._convert_to_dict_list
             return self._convert_to_dict
+        elif self.type == 'file':
+            return self._convert_to_file
         return lambda value: value  # Unhandled type, best effort
 
 
