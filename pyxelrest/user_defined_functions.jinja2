@@ -182,6 +182,7 @@ all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
 @xw.ret(expand='table')
 {% endif %}
 def pyxelrest_get_url(url, extra_headers=None):
+    """Send a HTTP GET request to specified URL."""
     logger.info("[status=Calling] [function=pyxelrest_get_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
@@ -207,6 +208,7 @@ def pyxelrest_get_url(url, extra_headers=None):
 @xw.ret(expand='table')
 {% endif %}
 def pyxelrest_post_url(url, body, extra_headers=None, parse_body_as=None):
+    """Send a HTTP POST request to specified URL."""
     logger.info("[status=Calling] [function=pyxelrest_post_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
@@ -238,6 +240,7 @@ def pyxelrest_post_url(url, body, extra_headers=None, parse_body_as=None):
 @xw.ret(expand='table')
 {% endif %}
 def pyxelrest_put_url(url, body, extra_headers=None, parse_body_as=None):
+    """Send a HTTP PUT request to specified URL."""
     logger.info("[status=Calling] [function=pyxelrest_put_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
@@ -267,6 +270,7 @@ def pyxelrest_put_url(url, body, extra_headers=None, parse_body_as=None):
 @xw.ret(expand='table')
 {% endif %}
 def pyxelrest_delete_url(url, extra_headers=None):
+    """Send a HTTP DELETE request to specified URL."""
     logger.info("[status=Calling] [function=pyxelrest_delete_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
@@ -282,13 +286,79 @@ def pyxelrest_delete_url(url, extra_headers=None):
 {{ handle_pyxelrest_response('pyxelrest_delete_url') }}
 {% endif %}
 
+{% if pyxelrest_config.should_provide_method('patch') %}
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to query.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_patch_url(url, extra_headers=None):
+    """Send a HTTP PATCH request to specified URL."""
+    logger.info("[status=Calling] [function=pyxelrest_patch_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
+
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('patch', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_patch_url') }}
 {% endif %}
 
-def lists_to_dict(lists):
-    header = lists[0]
-    return [
+{% if pyxelrest_config.should_provide_method('options') %}
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to query.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_options_url(url, extra_headers=None):
+    """Send a HTTP OPTIONS request to specified URL."""
+    logger.info("[status=Calling] [function=pyxelrest_options_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
 
-    ]
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('options', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_options_url') }}
+{% endif %}
+
+{% if pyxelrest_config.should_provide_method('head') %}
+@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
+@xw.arg('url', doc='URL to query.')
+@xw.arg('extra_headers', doc='Extra headers to send in the query.')
+{% if pyxelrest_config.should_return_asynchronously() %}
+@xw.ret(expand='table')
+{% endif %}
+def pyxelrest_head_url(url, extra_headers=None):
+    """Send a HTTP HEAD request to specified URL."""
+    logger.info("[status=Calling] [function=pyxelrest_head_url]...")
+    request_header = {{ pyxelrest_config.custom_headers }}
+    if extra_headers:
+        request_header.update(extra_headers)
+
+    if not url:
+        logger.error('url is required.')
+        return ['url is required.']
+
+    response = None
+    try:
+        response = session.get({{ pyxelrest_config.max_retries }}).request('head', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
+{{ handle_pyxelrest_response('pyxelrest_head_url') }}
+{% endif %}
+
+{% endif %}
 
 def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
     if rely_on_definitions:
