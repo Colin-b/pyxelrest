@@ -37,6 +37,7 @@ List all changes in various categories:
 - Auto update settings were not saved.
 - Array parameters are now always sent as array (was not the case for length 1 arrays).
 - boolean and date-time arrays of length > 1 were not sent properly (not as boolean and not as ISO8601 formatted date-time)
+- Update logs will now contains information about the whole upgrade process.
 
 ## 0.64.1 (2018-02-14) ##
 

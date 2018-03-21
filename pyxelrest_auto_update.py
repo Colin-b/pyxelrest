@@ -13,24 +13,31 @@ from pip.commands.list import ListCommand
 from pip.commands.install import InstallCommand
 from pip.utils import get_installed_distributions
 
-if __name__ == '__main__':
-    logger = logging.getLogger("pyxelrest.pyxelrest_auto_update")
-else:
-    logger = logging.getLogger(__name__)
 
-logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration',
-                                               'auto_update_logging.ini')
-if os.path.isfile(logging_configuration_file_path):
-    with open(logging_configuration_file_path, 'r') as config_file:
-        log_config_dict = yaml.load(config_file)
-        logging.config.dictConfig(log_config_dict)
-else:
+def create_logger():
+    global default_log_file_path
+    global logger
+    if __name__ == '__main__':
+        logger = logging.getLogger("pyxelrest.pyxelrest_auto_update")
+    else:
+        logger = logging.getLogger(__name__)
+
+    logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration',
+                                                   'auto_update_logging.ini')
     default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auto_update.log')
-    logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
-                        handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
-                        level=logging.DEBUG)
-    logger.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
-        logging_configuration_file_path))
+    if os.path.isfile(logging_configuration_file_path):
+        with open(logging_configuration_file_path, 'r') as config_file:
+            log_config_dict = yaml.load(config_file)
+            logging.config.dictConfig(log_config_dict)
+    else:
+        logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
+                            handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
+                            level=logging.DEBUG)
+        logger.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
+            logging_configuration_file_path))
+
+
+create_logger()
 
 
 def _outdated_package():
@@ -103,7 +110,8 @@ class PyxelRestUpdater:
         return False
 
     def _update_pyxelrest(self):
-        result = InstallCommand().main(['pyxelrest', '--upgrade'])
+        result = InstallCommand().main(['pyxelrest', '--upgrade', '--log', default_log_file_path])
+        create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
             logger.info('PyxelRest package updated.')
             if self._update_addin():
