@@ -222,7 +222,7 @@ class PyxelRestUpdater:
 
 class UpdateGUI(tkinter.Frame):
 
-    def __init__(self, master, updating_thread, updating_queue, new_version):
+    def __init__(self, master, updating_process, updating_queue, new_version):
         tkinter.Frame.__init__(self, master)
         master.protocol("WM_DELETE_WINDOW", self.on_close)
         self.grid(row=0, column=0, rowspan=3, sticky='nsew')
@@ -268,7 +268,7 @@ class UpdateGUI(tkinter.Frame):
         self.rowconfigure(2, weight=1)
         self.columnconfigure(0, weight=1)
 
-        self.updating_thread = updating_thread
+        self.updating_process = updating_process
         self.updating_queue = updating_queue
         self.update_failed = False
 
@@ -276,9 +276,9 @@ class UpdateGUI(tkinter.Frame):
         return tkinter.PhotoImage(file=os.path.join(self.resources_path, IMAGE_NAMES[image_name]))
 
     def on_close(self):
-        if self.updating_thread.is_alive():
+        if self.updating_process.is_alive():
             return  # Avoid closing while update is already in progress
-        if not self.updating_thread.pid:  # In case user exit without starting the update
+        if not self.updating_process.pid:  # In case user exit without starting the update
             logger.info('Update rejected.')
         self.master.destroy()
 
@@ -286,12 +286,12 @@ class UpdateGUI(tkinter.Frame):
         self.update_button.config(state='disabled')
         self.update_button.configure(text='Update in progress')
         self.status.configure(text='Launching update')
-        self.updating_thread.start()
+        self.updating_process.start()
         self.update_installation_status()
 
     def update_installation_status(self):
         self.check_queue()
-        if self.updating_thread.is_alive() or not self.updating_queue.empty():
+        if self.updating_process.is_alive() or not self.updating_queue.empty():
             self.after(100, self.update_installation_status)
         elif self.update_failed:
             self.update_button.configure(text='Update failed. Contact support.')
@@ -317,7 +317,7 @@ class UpdateGUI(tkinter.Frame):
             step, status = self.updating_queue.get()
             if END_STEP == step:
                 self.updating_queue.task_done()
-                self.updating_thread.join()
+                self.updating_process.join()
                 return
 
             if CLOSING_EXCEL_STEP == step:
