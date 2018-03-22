@@ -2,12 +2,13 @@ import argparse
 import win32con
 import win32ui
 import win32com.client
-import threading
+import multiprocessing
 import os
 import os.path
 import time
 import sys
 import yaml
+import pywintypes
 import logging
 import logging.config
 import logging.handlers
@@ -18,11 +19,9 @@ from pip.utils import get_installed_distributions
 try:
     # Python 3
     import tkinter
-    import queue
 except ImportError:
     # Python 2
     import Tkinter as tkinter
-    import Queue as queue
 
 
 CLOSING_EXCEL_STEP = 'Closing Microsoft Excel'
@@ -95,23 +94,12 @@ def _update_is_finished():
     os.remove(update_is_in_progress)
 
 
-class PyxelRestUpdater:
-    def __init__(self, path_to_up_to_date_configurations=None):
+class UpdateProcess:
+    def __init__(self, path_to_up_to_date_configurations, updating_queue):
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
+        self.updating_queue = updating_queue
 
-    def check_update(self):
-        if self._is_already_updating():
-            logger.debug('Skip update check as another update is ongoing.')
-            return
-
-        logger.debug('Checking if an update is available...')
-        if self._is_update_available():
-            logger.info('Update {0} available (from {1}).'.format(self.pyxelrest_package.latest_version, self.pyxelrest_package.version))
-            self.start_update_gui()
-        else:
-            logger.debug('No update available.')
-
-    def _start_update(self):
+    def start_update(self):
         logger.debug('Update accepted. Waiting for Microsoft Excel to close...')
         self.updating_queue.put((CLOSING_EXCEL_STEP, IN_PROGRESS))
         # If Microsoft Excel is running, user might still use pyxelrest, do not update yet
@@ -122,36 +110,16 @@ class PyxelRestUpdater:
         self.updating_queue.put((CLOSING_EXCEL_STEP, DONE))
         self._update_pyxelrest()
 
-    def start_update_gui(self):
-        root = tkinter.Tk()
-        root.title = "PyxelRest update available"
-        root.wm_title = "PyxelRest update available"
-        root.rowconfigure(0, weight=1)
-        root.columnconfigure(0, weight=1)
-        root.resizable(width=False, height=False)
-        self.updating_queue = queue.Queue()
-        updating_thread = threading.Thread(target=self._start_update)
-        app = UpdateGUI(root, updating_thread, self.updating_queue, self.pyxelrest_package.latest_version)
-        root.mainloop()
-
-    def _is_update_available(self):
-        self.pyxelrest_package = _outdated_package()
-        return self.pyxelrest_package
-
-    def _is_already_updating(self):
-        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
-        if os.path.isfile(update_is_in_progress):
-            return True
-        # Create file if this is the first update (most cases)
-        with open(update_is_in_progress, 'w'):
-            return False
-
     def _is_excel_running(self):
-        processes = win32com.client.GetObject('winmgmts:').InstancesOf('Win32_Process')
-        for process in processes:
-            if process.Properties_('Name').Value == 'EXCEL.EXE':
-                return True
-        return False
+        try:
+            processes = win32com.client.GetObject('winmgmts:').InstancesOf('Win32_Process')
+            for process in processes:
+                if process.Properties_('Name').Value == 'EXCEL.EXE':
+                    return True
+            return False
+        except:
+            logger.exception('Unable to retrieve Microsoft Excel process list. Considering as closed.')
+            return False
 
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
@@ -203,6 +171,51 @@ class PyxelRestUpdater:
         except:
             logger.exception('Unable to update configuration.')
             self.updating_queue.put((SETTINGS_STEP, FAILURE))
+
+
+def _start_update_process(path_to_up_to_date_configurations, updating_queue):
+    UpdateProcess(path_to_up_to_date_configurations, updating_queue).start_update()
+
+
+class PyxelRestUpdater:
+    def __init__(self, path_to_up_to_date_configurations=None):
+        self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
+
+    def check_update(self):
+        if self._is_already_updating():
+            logger.debug('Skip update check as another update is ongoing.')
+            return
+
+        logger.debug('Checking if an update is available...')
+        if self._is_update_available():
+            logger.info('Update {0} available (from {1}).'.format(self.pyxelrest_package.latest_version, self.pyxelrest_package.version))
+            self.start_update_gui()
+        else:
+            logger.debug('No update available.')
+
+    def start_update_gui(self):
+        root = tkinter.Tk()
+        root.title = "PyxelRest update available"
+        root.wm_title = "PyxelRest update available"
+        root.rowconfigure(0, weight=1)
+        root.columnconfigure(0, weight=1)
+        root.resizable(width=False, height=False)
+        updating_queue = multiprocessing.JoinableQueue()
+        updating_process = multiprocessing.Process(target=_start_update_process, args=(self.path_to_up_to_date_configurations, updating_queue))
+        app = UpdateGUI(root, updating_process, updating_queue, self.pyxelrest_package.latest_version)
+        root.mainloop()
+
+    def _is_update_available(self):
+        self.pyxelrest_package = _outdated_package()
+        return self.pyxelrest_package
+
+    def _is_already_updating(self):
+        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
+        if os.path.isfile(update_is_in_progress):
+            return True
+        # Create file if this is the first update (most cases)
+        with open(update_is_in_progress, 'w'):
+            return False
 
 
 class UpdateGUI(tkinter.Frame):
@@ -263,7 +276,7 @@ class UpdateGUI(tkinter.Frame):
     def on_close(self):
         if self.updating_thread.is_alive():
             return  # Avoid closing while update is already in progress
-        if self.updating_thread.handled:  # In case user exit without starting the update
+        if not self.updating_thread.pid:  # In case user exit without starting the update
             logger.info('Update rejected.')
         self.master.destroy()
 
@@ -314,6 +327,7 @@ class UpdateGUI(tkinter.Frame):
 
             self.updating_queue.task_done()
         except:
+            logger.exception('Error while handling new status.')
             self.updating_queue.task_done()
 
 
