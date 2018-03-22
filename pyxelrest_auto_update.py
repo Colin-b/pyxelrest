@@ -28,6 +28,7 @@ CLOSING_EXCEL_STEP = 'Closing Microsoft Excel'
 PYTHON_STEP = 'PyxelRest package'
 EXCEL_STEP = 'Microsoft Excel add-in'
 SETTINGS_STEP = 'Services configuration'
+END_STEP = 'End of update'
 
 IN_PROGRESS = 'in progress'
 DONE = 'done'
@@ -109,6 +110,7 @@ class UpdateProcess:
         logger.debug('Microsoft Excel is closed. Installing update.')
         self.updating_queue.put((CLOSING_EXCEL_STEP, DONE))
         self._update_pyxelrest()
+        self.updating_queue.put((END_STEP, DONE))
 
     def _is_excel_running(self):
         try:
@@ -313,6 +315,10 @@ class UpdateGUI(tkinter.Frame):
     def check_queue(self):
         try:
             step, status = self.updating_queue.get()
+            if END_STEP == step:
+                self.updating_queue.task_done()
+                self.updating_thread.join()
+                return
 
             if CLOSING_EXCEL_STEP == step:
                 if DONE == status:
