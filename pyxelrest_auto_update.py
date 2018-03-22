@@ -132,8 +132,7 @@ class PyxelRestUpdater:
         self.updating_queue = queue.Queue()
         updating_thread = threading.Thread(target=self._start_update)
         app = UpdateGUI(root, updating_thread, self.updating_queue, self.pyxelrest_package.latest_version)
-        gui_thread = threading.Thread(target=root.mainloop)
-        gui_thread.start()
+        root.mainloop()
 
     def _is_update_available(self):
         self.pyxelrest_package = _outdated_package()
@@ -146,11 +145,6 @@ class PyxelRestUpdater:
         # Create file if this is the first update (most cases)
         with open(update_is_in_progress, 'w'):
             return False
-
-    def _want_update(self):
-        msg = "PyxelRest {0} is available. Do you want to install it now?\n" \
-              "Update will be installed when Microsoft Excel will be closed.".format(self.pyxelrest_package.latest_version)
-        return win32ui.MessageBox(msg, "PyxelRest update available", win32con.MB_YESNO) == win32con.IDYES
 
     def _is_excel_running(self):
         processes = win32com.client.GetObject('winmgmts:').InstancesOf('Win32_Process')
