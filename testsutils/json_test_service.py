@@ -52,6 +52,27 @@ def swagger():
                            },
                            'title': 'Test'
                        },
+                       'DictWithListOfList': {
+                           'type': 'object',
+                           'properties': {
+                               'inner_list_of_list': {
+                                   'type': 'array',
+                                   'items': {
+                                       'type': 'array',
+                                       'items': {
+                                           'type': 'string',
+                                       },
+                                   },
+                               },
+                               'dict_field1': {
+                                   'type': 'string',
+                               },
+                               'dict_field2': {
+                                   'type': 'string',
+                               }
+                           },
+                           'title': 'Test'
+                       },
                        'TestObject': {
                            'type': 'object',
                            'properties': {
@@ -134,6 +155,26 @@ def swagger():
                        }
                    },
                    paths={
+                       '/test/json/dict_with_list_of_list': {
+                           'post': {
+                               'operationId': 'post_test_json_dict_with_list_of_list',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/DictWithListOfList",
+                                       },
+                                   },
+                               ],
+                           },
+                       },
                        '/test/json/dict_with_dict_list': {
                            'post': {
                                'operationId': 'post_test_json_dict_with_dict_list',
@@ -151,10 +192,6 @@ def swagger():
                                            '$ref': "#/definitions/DictWithDictList",
                                        },
                                    },
-                               ],
-                               'consumes': [
-                                   "application/x-www-form-urlencoded",
-                                   "multipart/form-data"
                                ],
                            },
                        },
@@ -179,10 +216,6 @@ def swagger():
                                        },
                                    },
                                ],
-                               'consumes': [
-                                   "application/x-www-form-urlencoded",
-                                   "multipart/form-data"
-                               ],
                            },
                        },
                        '/test/json/dict_with_dict': {
@@ -202,10 +235,6 @@ def swagger():
                                            '$ref': "#/definitions/DictWithDict",
                                        },
                                    },
-                               ],
-                               'consumes': [
-                                   "application/x-www-form-urlencoded",
-                                   "multipart/form-data"
                                ],
                            },
                        },
@@ -3354,6 +3383,15 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/test/json/dict_with_list_of_list', methods=['POST'])
+def post_test_json_dict_with_list_of_list():
+    if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1', 'key2', 'key3'], ['value10', 'value20', 'value30'], ['value11', 'value21', 'value31'], ['value12', 'value22', 'value32']]}:
+        return jsonify('OK')
+    if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1'], ['key2'], ['key3']]}:
+        return jsonify('OK')
+    return jsonify(request.json)
 
 
 @app.route('/test/json/dict_with_dict_list', methods=['POST'])

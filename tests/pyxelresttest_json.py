@@ -3027,6 +3027,33 @@ class PyxelRestJsonTest(unittest.TestCase):
             ]
         )
 
+    def test_dict_with_list_of_list_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_list_of_list(
+            inner_list_of_list=[
+                ['key1', 'key2', 'key3'],
+                ['value10', 'value20', 'value30'],
+                ['value11', 'value21', 'value31'],
+                ['value12', 'value22', 'value32'],
+            ],
+            dict_field1='value000',
+            dict_field2='value010',
+        ),
+            [['OK']]
+        )
+
+    def test_dict_with_list_of_list_json_post_a_single_list(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_list_of_list(
+            inner_list_of_list=[
+                'key1', 'key2', 'key3',
+            ],
+            dict_field1='value000',
+            dict_field2='value010',
+        ),
+            [['OK']]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
