@@ -2971,6 +2971,19 @@ class PyxelRestJsonTest(unittest.TestCase):
             [['OK']]
         )
 
+    def test_list_of_list_form_post_with_single_list(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+            rules=[
+                'rule1', 'rule2', 'rule3',
+            ],
+            items=[
+                'item1', 'item2', 'item3',
+            ],
+        ),
+            [['OK']]
+        )
+
     def test_dict_with_dict_json_post(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_dict(

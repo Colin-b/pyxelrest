@@ -3413,6 +3413,8 @@ def post_test_json_dict_with_dict():
 def post_test_json_lists_of_list_form():
     if request.json == {'rules': [['1', 'EBE', 'SNCF', 'rule_1', 'output_1'], ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2']], 'items': [['Deal Number', 'Underlying', 'Client'], ['0001', 'EBE', 'SNCF'], ['0002', 'EFR', 'ENGIE'], ['0003', 'EDE', 'ENGIE']]}:
         return jsonify('OK')
+    if request.json == {'rules': [['rule1'], ['rule2'], ['rule3']], 'items': [['item1'], ['item2'], ['item3']]}:
+        return jsonify('OK')
     return jsonify(request.json)
 
 
