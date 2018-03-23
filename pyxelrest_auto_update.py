@@ -204,7 +204,7 @@ class PyxelRestUpdater:
         root.resizable(width=False, height=False)
         updating_queue = multiprocessing.JoinableQueue()
         updating_process = multiprocessing.Process(target=_start_update_process, args=(self.path_to_up_to_date_configurations, updating_queue))
-        app = UpdateGUI(root, updating_process, updating_queue, self.pyxelrest_package.latest_version)
+        app = UpdateGUI(root, updating_process, updating_queue, self.pyxelrest_package.version, self.pyxelrest_package.latest_version)
         root.mainloop()
 
     def _is_update_available(self):
@@ -222,7 +222,7 @@ class PyxelRestUpdater:
 
 class UpdateGUI(tkinter.Frame):
 
-    def __init__(self, master, updating_process, updating_queue, new_version):
+    def __init__(self, master, updating_process, updating_queue, current_version, new_version):
         tkinter.Frame.__init__(self, master)
         master.protocol("WM_DELETE_WINDOW", self.on_close)
         self.grid(row=0, column=0, rowspan=3, sticky='nsew')
