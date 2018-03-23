@@ -220,6 +220,35 @@ class PyxelRestUpdater:
             return False
 
 
+def _get_versions(current_version, new_version, group_number):
+    current_match = re.search('(\d+).(\d+).(\d+)', current_version)
+    new_match = re.search('(\d+).(\d+).(\d+)', new_version)
+    if current_match and new_match:
+        return int(current_match.group(group_number)), int(new_match.group(group_number))
+    return None, None
+
+
+def is_breaking_compatibility(current_version, new_version):
+    current_major, new_major = _get_versions(current_version, new_version, 1)
+    if current_major is not None and new_major is not None:
+        return new_major > current_major
+    return False
+
+
+def is_adding_features(current_version, new_version):
+    current_minor, new_minor = _get_versions(current_version, new_version, 2)
+    if current_minor is not None and new_minor is not None:
+        return new_minor > current_minor
+    return False
+
+
+def is_fixing_bugs(current_version, new_version):
+    current_patch, new_patch = _get_versions(current_version, new_version, 3)
+    if current_patch is not None and new_patch is not None:
+        return new_patch > current_patch
+    return False
+
+
 class UpdateGUI(tkinter.Frame):
 
     def __init__(self, master, updating_process, updating_queue, current_version, new_version):
@@ -255,7 +284,14 @@ class UpdateGUI(tkinter.Frame):
             SETTINGS_STEP: settings_image,
         }
 
-        install_message = "PyxelRest {0} is available".format(new_version)
+        if is_breaking_compatibility(current_version, new_version):
+            install_message = "Major PyxelRest release {0} is available. Read change log before updating.".format(new_version)
+        elif is_adding_features(current_version, new_version):
+            install_message = "PyxelRest bug fixes and enhancements are available (version {0})".format(new_version)
+        elif is_fixing_bugs(current_version, new_version):
+            install_message = "PyxelRest bug fixes are available (version {0})".format(new_version)
+        else: # This case should not happen but if the way versioning is done change it should be handled
+            install_message = "PyxelRest {0} is available".format(new_version)
         self.status = tkinter.Label(self, text=install_message)
         self.status.grid(in_=self, row=1, column=0)
 
