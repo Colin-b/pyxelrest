@@ -23,6 +23,7 @@ List all changes in various categories:
 - Display PyxelRest python module version in Microsoft Excel add-in.
 - Auto update is not semi silent anymore and is providing information on every updating step.
 - Less verbose error message in case a configuration file provided as a URL cannot be reached.
+- Ability to generate both synchronous and asynchronous user defined functions.
 
 ### Bug fixes ###
 
