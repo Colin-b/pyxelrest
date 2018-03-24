@@ -30,12 +30,16 @@ def open_config(file_or_directory):
 
 
 def open_file_config(file_or_directory):
-    config_file_names = to_file_paths(file_or_directory)
-    config_parser = ConfigParser(interpolation=None)
-    if not config_parser.read(config_file_names):
-        logger.warning('Configuration files "{0}" cannot be read.'.format(config_file_names))
+    try:
+        config_file_names = to_file_paths(file_or_directory)
+        config_parser = ConfigParser(interpolation=None)
+        if not config_parser.read(config_file_names):
+            logger.warning('Configuration files "{0}" cannot be read.'.format(config_file_names))
+            return None
+        return config_parser
+    except:
+        logger.exception('Configuration files "{0}" cannot be read.'.format(file_or_directory))
         return None
-    return config_parser
 
 
 def open_url_config(configuration_file_url):
@@ -45,6 +49,9 @@ def open_url_config(configuration_file_url):
         config_parser = ConfigParser(interpolation=None)
         config_parser.read_string(response.text)
         return config_parser
+    except requests.HTTPError as e:
+        logger.warning('Configuration file URL "{0}" cannot be reached: {1}.'.format(configuration_file_url, str(e)))
+        return None
     except:
         logger.exception('Configuration file URL "{0}" cannot be reached.'.format(configuration_file_url))
         return None
