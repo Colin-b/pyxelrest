@@ -1,6 +1,4 @@
 import argparse
-import win32con
-import win32ui
 import win32com.client
 import multiprocessing
 import os
@@ -8,7 +6,7 @@ import os.path
 import time
 import sys
 import yaml
-import pywintypes
+import re
 import logging
 import logging.config
 import logging.handlers
@@ -79,8 +77,10 @@ def _outdated_package():
     """Faster outdated check when running it for a single package."""
     list_command = ListCommand()
     command_options, _ = list_command.parse_args([])
-    packages = list_command.get_outdated([_pyxelrest_package()], command_options)
-    return packages[0] if packages else None
+    pyxelrest_package = _pyxelrest_package()
+    if pyxelrest_package:
+        packages = list_command.get_outdated([pyxelrest_package], command_options)
+        return packages[0] if packages else None
 
 
 def _pyxelrest_package():
@@ -220,8 +220,8 @@ class PyxelRestUpdater:
 
 
 def _get_versions(current_version, new_version, group_number):
-    current_match = re.search('(\d+).(\d+).(\d+)', current_version)
-    new_match = re.search('(\d+).(\d+).(\d+)', new_version)
+    current_match = re.search('(\d+).(\d+).(\d+)', str(current_version))
+    new_match = re.search('(\d+).(\d+).(\d+)', str(new_version))
     if current_match and new_match:
         return int(current_match.group(group_number)), int(new_match.group(group_number))
     return None, None
