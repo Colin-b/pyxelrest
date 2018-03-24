@@ -30,6 +30,7 @@ List all changes in various categories:
 - boolean and date-time arrays of length > 1 were not sent properly (not as boolean and not as ISO8601 formatted date-time)
 - Update logs will now contains information about the whole upgrade process.
 - Reject with a user friendly error message in case a date or date time is sent instead of a string.
+- Send number formatted values as string if required by the swagger definition.
 
 ## 0.64.1 (2018-02-14) ##
 

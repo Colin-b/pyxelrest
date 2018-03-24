@@ -542,6 +542,8 @@ class SwaggerParameter:
             raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, self.choices.join(' or ')))
         if isinstance(value, datetime.date):
             raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+        if isinstance(value, int) or isinstance(value, float):
+            value = str(value)
         return value
 
     def _convert_to_bool(self, value):

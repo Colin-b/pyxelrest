@@ -3084,6 +3084,18 @@ class PyxelRestJsonTest(unittest.TestCase):
             [['OK']]
         )
 
+    def test_dict_string_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_string(
+            dict_field1=34,  # Send as integer
+            dict_field2=890.32,
+        ),
+            [
+                ['dict_field1', 'dict_field2'],
+                ['34', '890.32'],
+            ]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

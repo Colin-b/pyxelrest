@@ -155,6 +155,26 @@ def swagger():
                        }
                    },
                    paths={
+                       '/test/json/dict_string': {
+                           'post': {
+                               'operationId': 'post_test_json_dict_string',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/Dict",
+                                       },
+                                   },
+                               ],
+                           },
+                       },
                        '/test/json/dict_with_list_of_list': {
                            'post': {
                                'operationId': 'post_test_json_dict_with_list_of_list',
@@ -3383,6 +3403,11 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/test/json/dict_string', methods=['POST'])
+def post_test_json_dict_string():
+    return jsonify(request.json)
 
 
 @app.route('/test/json/dict_with_list_of_list', methods=['POST'])
