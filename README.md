@@ -297,7 +297,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
     <tr>
         <td><strong>tags</strong></td>
-        <td>Swagger tags that should be retrieved. If not specified, no filtering is applied.</td>
+        <td>Swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
         <td>any value separated by ';' (semicolon)</td>
     </tr>
 </table>
