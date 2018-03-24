@@ -221,8 +221,8 @@ class PyxelRestUpdater:
 
 
 def _get_versions(current_version, new_version, group_number):
-    current_match = re.search('(\d+).(\d+).(\d+)', current_version)
-    new_match = re.search('(\d+).(\d+).(\d+)', new_version)
+    current_match = re.search('(\d+).(\d+).(\d+)', str(current_version))
+    new_match = re.search('(\d+).(\d+).(\d+)', str(new_version))
     if current_match and new_match:
         return int(current_match.group(group_number)), int(new_match.group(group_number))
     return None, None
