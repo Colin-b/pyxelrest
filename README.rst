@@ -224,7 +224,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 +----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------+
 | swagger_read_timeout | Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts | any float value (decimal separator is .) |
 +----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------+
-| tags                 | Swagger tags that should be retrieved. If not specified, no filtering is applied.                                                                                                                            | any value separated by ';' (semicolon)   |
+| tags                 | Swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                         | any value separated by ';' (semicolon)   |
 +----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------+
 
 Logging Configuration
