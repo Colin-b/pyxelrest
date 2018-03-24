@@ -97,11 +97,29 @@ class PyxelRestTest(unittest.TestCase):
         self.assertEqual(pyxelrestgenerator.without_parameter_test_delete_test_without_parameter(),
                          'DELETE performed properly')
 
+    def test_service_without_sync_does_not_have_sync(self):
+        from pyxelrest import pyxelrestgenerator
+        with self.assertRaises(AttributeError) as cm:
+            pyxelrestgenerator.sync_without_parameter_test_delete_test_without_parameter()
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_without_parameter_test_delete_test_without_parameter'")
+
     def test_get_test_header_parameter(self):
         from pyxelrest import pyxelrestgenerator
         headers = pyxelrestgenerator.header_parameter_test_get_test_header_parameter('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
+
+    def test_get_test_header_parameter_sync(self):
+        from pyxelrest import pyxelrestgenerator
+        headers = pyxelrestgenerator.sync_header_parameter_test_get_test_header_parameter('sent header')
+        header_param_index = headers[0].index('Header-String')
+        self.assertEqual(headers[1][header_param_index], 'sent header')
+
+    def test_service_only_sync_does_not_have_sync_prefix(self):
+        from pyxelrest import pyxelrestgenerator
+        with self.assertRaises(AttributeError) as cm:
+            pyxelrestgenerator.sync_header_advanced_configuration_test_get_test_header_parameter('sent header')
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_header_advanced_configuration_test_get_test_header_parameter'")
 
     def test_get_test_header_advanced_configuration(self):
         from pyxelrest import pyxelrestgenerator
@@ -395,6 +413,22 @@ class PyxelRestTest(unittest.TestCase):
             pyxelrestgenerator.async_test_get_test_async()
         )
 
+    def test_get_custom_url_sync(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['X-Custom-Header1', 'X-Custom-Header2'],
+                ['custom1', 'custom2']
+            ],
+            pyxelrestgenerator.sync_pyxelrest_get_url(
+                'http://localhost:8958/test/async/status',
+                extra_headers=[
+                    ['X-Custom-Header1', 'custom1'],
+                    ['X-Custom-Header2', 'custom2'],
+                ],
+            )
+        )
+
     def test_get_custom_url(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
@@ -404,6 +438,22 @@ class PyxelRestTest(unittest.TestCase):
             ],
             pyxelrestgenerator.pyxelrest_get_url(
                 'http://localhost:8958/test/async/status',
+                extra_headers=[
+                    ['X-Custom-Header1', 'custom1'],
+                    ['X-Custom-Header2', 'custom2'],
+                ],
+            )
+        )
+
+    def test_delete_custom_url_sync(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['X-Custom-Header1', 'X-Custom-Header2'],
+                ['custom1', 'custom2']
+            ],
+            pyxelrestgenerator.sync_pyxelrest_delete_url(
+                'http://localhost:8958/test/unlisted',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
                     ['X-Custom-Header2', 'custom2'],
@@ -444,6 +494,28 @@ class PyxelRestTest(unittest.TestCase):
                     ['Content-Type', 'application/json'],
                 ],
                 parse_body_as='dict',
+            )
+        )
+
+    def test_post_custom_url_dict_list_sync(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['key1', 'key2', 'key3'],
+                ['value1', 1, 'value3'],
+                ['other1', 2, 'other3'],
+            ],
+            pyxelrestgenerator.sync_pyxelrest_post_url(
+                'http://localhost:8958/test/dict',
+                [
+                    ['key1', 'key2', 'key3'],
+                    ['value1', 1, 'value3'],
+                    ['other1', 2, 'other3'],
+                ],
+                extra_headers=[
+                    ['Content-Type', 'application/json'],
+                ],
+                parse_body_as='dict_list',
             )
         )
 
@@ -499,6 +571,26 @@ class PyxelRestTest(unittest.TestCase):
                 ['value1', 1, 'value3'],
             ],
             pyxelrestgenerator.pyxelrest_put_url(
+                'http://localhost:8958/test/dict',
+                [
+                    ['key1', 'key2', 'key3'],
+                    ['value1', 1, 'value3'],
+                ],
+                extra_headers=[
+                    ['Content-Type', 'application/json'],
+                ],
+                parse_body_as='dict',
+            )
+        )
+
+    def test_put_custom_url_dict_sync(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['key1', 'key2', 'key3'],
+                ['value1', 1, 'value3'],
+            ],
+            pyxelrestgenerator.sync_pyxelrest_put_url(
                 'http://localhost:8958/test/dict',
                 [
                     ['key1', 'key2', 'key3'],

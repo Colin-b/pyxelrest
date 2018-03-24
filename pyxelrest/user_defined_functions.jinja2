@@ -65,7 +65,7 @@ swagger_methods = None  # Will be set after load
 {% for parameter in swagger_method.optional_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
 {% endfor %}
-{% if swagger_method.return_a_list() and swagger_method.service.config.should_return_asynchronously() %}
+{% if swagger_method.return_a_list() and swagger_method.is_asynchronous %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ swagger_method.udf_name }}(
@@ -136,7 +136,9 @@ all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
     {% for method_path, methods in service.swagger['paths'].items() %}
         {% for http_method, swagger_method in methods.items() %}
             {%- if service.config.should_provide_method(http_method, swagger_method) -%}
-                {{- add_udf(service.create_method(http_method, swagger_method, method_path)) -}}
+                {% for udf_return_type in service.config.udf_return_types %}
+                    {{- add_udf(service.create_method(http_method, swagger_method, method_path, udf_return_type)) -}}
+                {% endfor %}
             {%- endif -%}
         {% endfor %}
     {%- endfor %}
@@ -173,17 +175,18 @@ all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
 
 {% if pyxelrest_config %}
 
+{% for udf_return_type in pyxelrest_config.udf_return_types %}
 {% if pyxelrest_config.should_provide_method('get') %}
 @caching
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_get_url(url, extra_headers=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_get_url(url, extra_headers=None):
     """Send a HTTP GET request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_get_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_get_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -204,12 +207,12 @@ def pyxelrest_get_url(url, extra_headers=None):
 @xw.arg('body', doc='Content of the body.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
 @xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_post_url(url, body, extra_headers=None, parse_body_as=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_post_url(url, body, extra_headers=None, parse_body_as=None):
     """Send a HTTP POST request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_post_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_post_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -236,12 +239,12 @@ def pyxelrest_post_url(url, body, extra_headers=None, parse_body_as=None):
 @xw.arg('body', doc='Content of the body.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
 @xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_put_url(url, body, extra_headers=None, parse_body_as=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_put_url(url, body, extra_headers=None, parse_body_as=None):
     """Send a HTTP PUT request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_put_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_put_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -266,12 +269,12 @@ def pyxelrest_put_url(url, body, extra_headers=None, parse_body_as=None):
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_delete_url(url, extra_headers=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_delete_url(url, extra_headers=None):
     """Send a HTTP DELETE request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_delete_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_delete_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -290,12 +293,12 @@ def pyxelrest_delete_url(url, extra_headers=None):
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_patch_url(url, extra_headers=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_patch_url(url, extra_headers=None):
     """Send a HTTP PATCH request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_patch_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_patch_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -314,12 +317,12 @@ def pyxelrest_patch_url(url, extra_headers=None):
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_options_url(url, extra_headers=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_options_url(url, extra_headers=None):
     """Send a HTTP OPTIONS request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_options_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_options_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -338,12 +341,12 @@ def pyxelrest_options_url(url, extra_headers=None):
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.should_return_asynchronously() %}
+{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
-def pyxelrest_head_url(url, extra_headers=None):
+def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_head_url(url, extra_headers=None):
     """Send a HTTP HEAD request to specified URL."""
-    logger.info("[status=Calling] [function=pyxelrest_head_url]...")
+    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_head_url]...")
     request_header = {{ pyxelrest_config.custom_headers }}
     if extra_headers:
         request_header.update(extra_headers)
@@ -357,6 +360,7 @@ def pyxelrest_head_url(url, extra_headers=None):
         response = session.get({{ pyxelrest_config.max_retries }}).request('head', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
 {{ handle_pyxelrest_response('pyxelrest_head_url') }}
 {% endif %}
+{% endfor %}
 
 {% endif %}
 

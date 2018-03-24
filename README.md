@@ -263,7 +263,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     <tr>
         <td><strong>udf_return_type</strong></td>
         <td>synchronous if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. asynchronous by default.</td>
-        <td>asynchronous or synchronous</td>
+        <td>asynchronous or synchronous. Both values can be provided separated by ';' (semicolon)</td>
     </tr>
     <tr>
         <td><strong>rely_on_definitions</strong></td>

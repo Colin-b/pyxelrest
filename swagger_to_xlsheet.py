@@ -23,7 +23,7 @@ for service in load_services():
         service_methods = set(service.methods).intersection(services_infos)
         for method in service_methods:
             spec = services_infos[method]
-            name = service.config.udf_prefix+'_'+(method+'_' if len(service_methods)>1 else '')+path.lstrip('/')
+            name = service.config.udf_prefix('asynchronous')+'_'+(method+'_' if len(service_methods)>1 else '')+path.lstrip('/')
             if pattern not in name:
                 continue
             s = workbook.add_worksheet((name.replace('{', '_').replace('}', '_').replace('/', ''))[:31])
@@ -49,7 +49,7 @@ for service in load_services():
                 parameters_ranges.append(input_range)
                 c += 1
             # write formula
-            formula = "={prefix}_{function}({parameters})".format(prefix=service.config.udf_prefix,
+            formula = "={prefix}_{function}({parameters})".format(prefix=service.config.udf_prefix('asynchronous'),
                                                                   function=spec['operationId'],
                                                                   parameters=','.join(parameters_ranges))
             s.write_formula("A%d"%(r+13), formula)

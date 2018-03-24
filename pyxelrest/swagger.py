@@ -73,7 +73,6 @@ class ConfigSection:
         :param config: ConfigParser instance from where service details are retrieved.
         """
         self.name = service_name
-        self.udf_prefix = to_valid_python_vba(service_name)
         self.requested_methods = [method.strip() for method in self.get_item_default(config, 'methods', '').split(',') if method.strip()]
         if not self.requested_methods:
             self.requested_methods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']
@@ -85,7 +84,7 @@ class ConfigSection:
         self.security_details = self._get_security_details(config)
         self.auth = authentication.add_service_custom_authentication(self.name, self.security_details)
         # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
-        self.udf_return_type = self.advanced_configuration.get('udf_return_type', 'asynchronous')
+        self.udf_return_types = self.advanced_configuration.get('udf_return_type', 'asynchronous').split(';')
         self.max_retries = self.advanced_configuration.get('max_retries', 5)
         self.custom_headers = {key[7:]: value for key, value in self.advanced_configuration.items()
                                if key.startswith('header.')}
@@ -157,8 +156,14 @@ class ConfigSection:
                     logger.warning("'{0}' does not respect the key=value rule. Property will be skipped.".format(item_entry))
         return items
 
-    def should_return_asynchronously(self):
-        return self.udf_return_type == 'asynchronous'
+    def is_asynchronous(self, udf_return_type):
+        return udf_return_type == 'asynchronous'
+
+    def udf_prefix(self, udf_return_type):
+        service_name_prefix = to_valid_python_vba(self.name)
+        if (len(self.udf_return_types) == 1) or self.is_asynchronous(udf_return_type):
+            return service_name_prefix
+        return 'sync_{0}'.format(service_name_prefix)
 
 
 class ServiceConfigSection(ConfigSection):
@@ -218,7 +223,7 @@ class SwaggerService:
         """
         self.methods = {}
         self.config = ServiceConfigSection(service_name, config)
-        self.existing_operation_ids = []
+        self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
         self.swagger = self._retrieve_swagger()
         self.validate_swagger_version()
         self.swagger_definitions = self.swagger.get('definitions')
@@ -242,8 +247,8 @@ class SwaggerService:
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
-    def create_method(self, requests_method, swagger_method, method_path):
-        udf = SwaggerMethod(self, requests_method, swagger_method, method_path)
+    def create_method(self, requests_method, swagger_method, method_path, udf_return_type):
+        udf = SwaggerMethod(self, requests_method, swagger_method, method_path, udf_return_type)
         self.methods[udf.udf_name] = udf
         return udf
 
@@ -319,13 +324,13 @@ class SwaggerService:
                 _update_method_security()
                 _update_method_consumes()
 
-    def get_unique_operation_id(self, potential_duplicated_operation_id):
+    def get_unique_operation_id(self, udf_return_type, potential_duplicated_operation_id):
         unique_operation_id = potential_duplicated_operation_id  # At this time, this might not be unique
-        if potential_duplicated_operation_id in self.existing_operation_ids:
+        if potential_duplicated_operation_id in self.existing_operation_ids[udf_return_type]:
             logger.warning('Duplicated operationId found: {0}.'.format(potential_duplicated_operation_id))
             unique_operation_id = 'duplicated_{0}'.format(potential_duplicated_operation_id)
 
-        self.existing_operation_ids.append(unique_operation_id)
+        self.existing_operation_ids[udf_return_type].append(unique_operation_id)
         return unique_operation_id
 
     def validate_swagger_version(self):
@@ -341,11 +346,12 @@ class SwaggerService:
 
 
 class SwaggerMethod:
-    def __init__(self, service, requests_method, swagger_method, path):
+    def __init__(self, service, requests_method, swagger_method, path, udf_return_type):
         self.uri = '{0}{1}'.format(service.uri, path)
         self.service = service
         self.requests_method = requests_method
         self.swagger_method = swagger_method
+        self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
@@ -370,13 +376,13 @@ class SwaggerMethod:
                 self.optional_parameters.extend(parameters)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
-        self._compute_operation_id(path)
-        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix, self.swagger_method['operationId'])
+        self._compute_operation_id(udf_return_type, path)
+        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type), self.swagger_method['operationId'])
         self.responses = swagger_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
 
-    def _compute_operation_id(self, path):
+    def _compute_operation_id(self, udf_return_type, path):
         """
         Compute the operationId swagger field (as it may not be provided).
         Also ensure that there is no duplicate (in case a computed one matches a provided one)
@@ -385,7 +391,7 @@ class SwaggerMethod:
         """
         operation_id = self.swagger_method.get('operationId') or \
                        '{0}{1}'.format(self.requests_method, path.replace('/', '_'))
-        self.swagger_method['operationId'] = self.service.get_unique_operation_id(operation_id)
+        self.swagger_method['operationId'] = self.service.get_unique_operation_id(udf_return_type, operation_id)
 
     def update_information_on_parameter_type(self, parameter):
         parameter_in = parameter['in']
@@ -683,9 +689,8 @@ def load_service(service_name, config_parser):
 def check_for_duplicates(loaded_services):
     services_by_prefix = {}
     for service in loaded_services:
-        duplicates = services_by_prefix.get(service.config.udf_prefix, [])
-        duplicates.append(service.config.name)
-        services_by_prefix[service.config.udf_prefix] = duplicates
+        for udf_return_type in service.config.udf_return_types:
+            services_by_prefix.setdefault(service.config.udf_prefix(udf_return_type), []).append(service.config.name)
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]
         if len(service_names) > 1:
