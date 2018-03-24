@@ -1,1 +1,2 @@
 recursive-include addin/AutoLoadPyxelRestAddIn/bin/Release *.dll *.config *.manifest *.vsto *.xml *.png *.ico
+recursive-include pyxelrest_resources *.png

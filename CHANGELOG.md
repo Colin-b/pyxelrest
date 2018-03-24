@@ -31,7 +31,8 @@ List all changes in various categories:
 - Allow to post/put dictionaries and lists easily.
 - Allow to post/put files by specifying content or file path.
 - Display PyxelRest python module version in Microsoft Excel add-in.
-- Warn user in case update failed.
+- Auto update is not semi silent anymore and is providing information on every updating step.
+- Less verbose error message in case a configuration file provided as a URL cannot be reached.
 
 ### Bug fixes ###
 
@@ -39,6 +40,9 @@ List all changes in various categories:
 - Array parameters are now always sent as array (was not the case for length 1 arrays).
 - boolean and date-time arrays of length > 1 were not sent properly (not as boolean and not as ISO8601 formatted date-time)
 - Update logs will now contains information about the whole upgrade process.
+- Reject with a user friendly error message in case a date or date time is sent instead of a string.
+- Send number formatted values as string if required by the swagger definition.
+- Avoid a configuration update script failure in case file do not exists.
 
 ## 0.64.1 (2018-02-14) ##
 

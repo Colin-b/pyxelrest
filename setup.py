@@ -85,6 +85,19 @@ setup(name='pyxelrest',
               ]
           ),
           (
+              'pyxelrest_resources', [
+                  'pyxelrest_resources/excel_logo_100.png',
+                  'pyxelrest_resources/excel_logo_error_100.png',
+                  'pyxelrest_resources/excel_logo_greyscale_100.png',
+                  'pyxelrest_resources/python_logo_100.png',
+                  'pyxelrest_resources/python_logo_error_100.png',
+                  'pyxelrest_resources/python_logo_greyscale_100.png',
+                  'pyxelrest_resources/settings_logo_100.png',
+                  'pyxelrest_resources/settings_logo_error_100.png',
+                  'pyxelrest_resources/settings_logo_greyscale_100.png'
+              ]
+          ),
+          (
               'pyxelrest_addin/resources', [
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/folder-3-128.png',

@@ -2971,6 +2971,36 @@ class PyxelRestJsonTest(unittest.TestCase):
             [['OK']]
         )
 
+    def test_list_of_list_form_post_with_non_str(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+            rules=[
+                ['1', 'EBE', 'SNCF', 'rule_1', 'output_1'],
+                ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2'],
+            ],
+            items=[
+                ['Deal Number', 'Underlying', 'Client'],
+                [1, datetime.datetime.strptime('2017-03-04', '%Y-%m-%d'), 'SNCF'],
+                [2, datetime.datetime.strptime('2017-03-05', '%Y-%m-%d'), 'ENGIE'],
+                [3, datetime.datetime.strptime('2017-03-06', '%Y-%m-%d'), 'ENGIE'],
+            ],
+        ),
+            'items value "2017-03-04 00:00:00" must be formatted as text.'
+        )
+
+    def test_list_of_list_form_post_with_single_list(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+            rules=[
+                'rule1', 'rule2', 'rule3',
+            ],
+            items=[
+                'item1', 'item2', 'item3',
+            ],
+        ),
+            [['OK']]
+        )
+
     def test_dict_with_dict_json_post(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_dict(
@@ -3024,6 +3054,45 @@ class PyxelRestJsonTest(unittest.TestCase):
                 ['value000', 'value010', 'value10', 'value20', 'value30', ''],
                 ['value000', 'value010', 'value11', 'value21', 'value31', ''],
                 ['value000', 'value010', 'value12', 'value22', 'value32', ''],
+            ]
+        )
+
+    def test_dict_with_list_of_list_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_list_of_list(
+            inner_list_of_list=[
+                ['key1', 'key2', 'key3'],
+                ['value10', 'value20', 'value30'],
+                ['value11', 'value21', 'value31'],
+                ['value12', 'value22', 'value32'],
+            ],
+            dict_field1='value000',
+            dict_field2='value010',
+        ),
+            [['OK']]
+        )
+
+    def test_dict_with_list_of_list_json_post_a_single_list(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_list_of_list(
+            inner_list_of_list=[
+                'key1', 'key2', 'key3',
+            ],
+            dict_field1='value000',
+            dict_field2='value010',
+        ),
+            [['OK']]
+        )
+
+    def test_dict_string_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_string(
+            dict_field1=34,  # Send as integer
+            dict_field2=890.32,
+        ),
+            [
+                ['dict_field1', 'dict_field2'],
+                ['34', '890.32'],
             ]
         )
 
