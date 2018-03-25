@@ -125,7 +125,7 @@ class UpdateProcess:
 
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
-        result = InstallCommand().main(['pyxelrest', '--upgrade', '--log', default_log_file_path])
+        result = InstallCommand().main(['pyxelrest', '--upgrade', '--disable-pip-version-check', '--log', default_log_file_path])
         create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
             self.updating_queue.put((PYTHON_STEP, DONE))
