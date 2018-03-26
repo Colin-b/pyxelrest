@@ -247,8 +247,8 @@ class SwaggerService:
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
-    def create_method(self, requests_method, swagger_method, method_path, udf_return_type):
-        udf = UDFMethod(self, requests_method, swagger_method, method_path, udf_return_type)
+    def create_method(self, http_method, swagger_method, method_path, udf_return_type):
+        udf = UDFMethod(self, http_method, swagger_method, method_path, udf_return_type)
         self.methods[udf.udf_name] = udf
         return udf
 
@@ -346,10 +346,10 @@ class SwaggerService:
 
 
 class UDFMethod:
-    def __init__(self, service, requests_method, swagger_method, path, udf_return_type):
+    def __init__(self, service, http_method, swagger_method, path, udf_return_type):
         self.uri = '{0}{1}'.format(service.uri, path)
         self.service = service
-        self.requests_method = requests_method
+        self.requests_method = http_method
         self.swagger_method = swagger_method
         self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
         self.path_parameters = []
@@ -476,11 +476,12 @@ class UDFMethod:
         swagger_definition = self.service.swagger_definitions[ref]
         # TODO Prefix name properly to avoid conflicts
         for inner_parameter_name, inner_parameter in swagger_definition['properties'].items():
-            inner_parameter['server_param_name'] = inner_parameter_name
-            inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
-            inner_parameter['in'] = swagger_parameter['in']
-            inner_parameter['required'] = inner_parameter_name in swagger_definition.get('required', [])
-            parameters.append(UDFParameter(inner_parameter, schema))
+            if not inner_parameter.get('readOnly', False):
+                inner_parameter['server_param_name'] = inner_parameter_name
+                inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+                inner_parameter['in'] = swagger_parameter['in']
+                inner_parameter['required'] = inner_parameter_name in swagger_definition.get('required', [])
+                parameters.append(UDFParameter(inner_parameter, schema))
         return parameters
 
 

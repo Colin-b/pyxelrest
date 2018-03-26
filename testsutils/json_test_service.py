@@ -7,6 +7,25 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    definitions={
+                       'DictWithReadOnly': {
+                           'type': 'object',
+                           'required': [
+                               'dict_field1',
+                           ],
+                           'properties': {
+                               'dict_field1': {
+                                   'type': 'integer',
+                               },
+                               'read_only_field': {
+                                   'type': 'string',
+                                   'readOnly': True,
+                               },
+                               'dict_field3': {
+                                   'type': 'boolean',
+                               }
+                           },
+                           'title': 'Test'
+                       },
                        'Dict': {
                            'type': 'object',
                            'required': [
@@ -158,6 +177,29 @@ def swagger():
                        }
                    },
                    paths={
+                       '/test/json/dict_with_read_only': {
+                           'post': {
+                               'operationId': 'post_test_json_dict_with_read_only',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': "#/definitions/DictWithReadOnly",
+                                           },
+                                       },
+                                   },
+                               ],
+                           },
+                       },
                        '/test/json/dict_string': {
                            'post': {
                                'operationId': 'post_test_json_dict_string',
@@ -3406,6 +3448,11 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/test/json/dict_with_read_only', methods=['POST'])
+def post_test_json_dict_with_read_only():
+    return jsonify(request.json)
 
 
 @app.route('/test/json/dict_string', methods=['POST'])

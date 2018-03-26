@@ -3149,6 +3149,30 @@ class PyxelRestJsonTest(unittest.TestCase):
             ]
         )
 
+    def test_dict_with_read_only_json_post(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_read_only(
+            dict_field1=34,
+            dict_field3=[False, True, True],
+        ),
+            [
+                ['dict_field1', 'dict_field3'],
+                [34, False],
+                ['', True],
+                ['', True],
+            ]
+        )
+
+    def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        with self.assertRaises(Exception) as cm:
+            pyxelrestgenerator.json_test_post_test_json_dict_with_read_only(
+                dict_field1=34,
+                read_only_field='test',
+                dict_field3=[False, True, True],
+            )
+        self.assertEqual(cm.exception.args[0], "json_test_post_test_json_dict_with_read_only() got an unexpected keyword argument 'read_only_field'")
+
 
 if __name__ == '__main__':
     unittest.main()
