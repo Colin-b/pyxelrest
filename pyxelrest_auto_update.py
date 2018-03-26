@@ -197,8 +197,7 @@ class PyxelRestUpdater:
 
     def start_update_gui(self):
         root = tkinter.Tk()
-        root.title = "PyxelRest update available"
-        root.wm_title = "PyxelRest update available"
+        root.title("PyxelRest update available")
         root.rowconfigure(0, weight=1)
         root.columnconfigure(0, weight=1)
         root.resizable(width=False, height=False)
@@ -284,6 +283,7 @@ class UpdateGUI(tkinter.Frame):
             SETTINGS_STEP: settings_image,
         }
 
+        self.new_version = new_version
         if is_breaking_compatibility(current_version, new_version):
             install_message = "Major PyxelRest release {0} is available. Read change log before updating.".format(new_version)
         elif is_adding_features(current_version, new_version):
@@ -320,6 +320,7 @@ class UpdateGUI(tkinter.Frame):
 
     def install_update(self):
         self.update_button.config(state='disabled')
+        self.master.title('Updating PyxelRest...')
         self.update_button.configure(text='Update in progress')
         self.status.configure(text='Launching update')
         self.updating_process.start()
@@ -331,9 +332,12 @@ class UpdateGUI(tkinter.Frame):
             self.after(100, self.update_installation_status)
         elif self.update_failed:
             self.update_button.configure(text='Update failed. Contact support.')
-            pass  # Keep alive and let user close the window
-        else:  # Close window once update is complete
-            self.on_close()
+        else:  # Update complete
+            self.master.title('PyxelRest updated')
+            self.status.configure(text='PyxelRest is now up to date (version {0})'.format(self.new_version))
+            self.update_button.configure(command=self.on_close)
+            self.update_button.configure(text='OK')
+            self.update_button.config(state='normal')
 
     def update_status(self, step, status):
         if DONE == status:
