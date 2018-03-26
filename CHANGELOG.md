@@ -34,6 +34,7 @@ List all changes in various categories:
 - Reject with a user friendly error message in case a date or date time is sent instead of a string.
 - Send number formatted values as string if required by the swagger definition.
 - Avoid a configuration update script failure in case file do not exists.
+- Excel boolean values were not handled.
 
 ## 0.64.1 (2018-02-14) ##
 

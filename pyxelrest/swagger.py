@@ -553,9 +553,9 @@ class SwaggerParameter:
         return value
 
     def _convert_to_bool(self, value):
-        if value not in ['true', 'false']:
-            raise Exception('{0} value "{1}" must be either "true" or "false".'.format(self.name, value))
-        return value == 'true'
+        if not isinstance(value, bool):
+            raise Exception('{0} value "{1}" must be a boolean.'.format(self.name, value))
+        return value
 
     def _convert_to_dict(self, value):
         if not isinstance(value, list):
