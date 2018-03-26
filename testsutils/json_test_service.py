@@ -9,6 +9,9 @@ def swagger():
                    definitions={
                        'Dict': {
                            'type': 'object',
+                           'required': [
+                               'dict_field1',
+                           ],
                            'properties': {
                                'dict_field1': {
                                    'type': 'string',

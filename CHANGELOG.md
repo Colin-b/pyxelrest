@@ -35,6 +35,7 @@ List all changes in various categories:
 - Send number formatted values as string if required by the swagger definition.
 - Avoid a configuration update script failure in case file do not exists.
 - Excel boolean values were not handled.
+- None values are now allowed within body.
 
 ## 0.64.1 (2018-02-14) ##
 

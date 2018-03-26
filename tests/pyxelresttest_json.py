@@ -3095,6 +3095,60 @@ class PyxelRestJsonTest(unittest.TestCase):
             ]
         )
 
+    def test_dict_string_json_post_without_non_required(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_string(
+            dict_field1=34,
+        ),
+            [
+                ['dict_field1', 'dict_field2'],
+                ['34', ''],
+            ]
+        )
+
+    def test_dict_string_json_post_without_required(self):
+        from pyxelrest import pyxelrestgenerator
+        with self.assertRaises(Exception) as cm:
+            pyxelrestgenerator.json_test_post_test_json_dict_string(
+                dict_field2=34.5,
+            )
+        self.assertEqual(cm.exception.args[0], "json_test_post_test_json_dict_string() missing 1 required positional argument: 'dict_field1'")
+
+    def test_list_of_dict_with_dict_json_post_without_any_required(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(),
+            [
+                [''],
+            ]
+        )
+
+    def test_list_of_dict_with_dict_json_post_with_empty_lists(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(
+            dict_field2=['1', None, '4'],
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'inner_dict'],
+                ['', '1', ''],
+                ['', '', ''],
+                ['', '4', ''],
+            ]
+        )
+
+    def test_list_of_dict_with_dict_json_post_with_different_list_length(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(
+            dict_field1='000',
+            dict_field2=['1', None, '4'],
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'inner_dict'],
+                ['000', '1', ''],
+                ['', '', ''],
+                ['', '4', ''],
+            ]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
