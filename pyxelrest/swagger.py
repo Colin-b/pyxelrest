@@ -247,8 +247,8 @@ class SwaggerService:
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
-    def create_method(self, requests_method, swagger_method, method_path, udf_return_type):
-        udf = SwaggerMethod(self, requests_method, swagger_method, method_path, udf_return_type)
+    def create_method(self, http_method, swagger_method, method_path, udf_return_type):
+        udf = UDFMethod(self, http_method, swagger_method, method_path, udf_return_type)
         self.methods[udf.udf_name] = udf
         return udf
 
@@ -345,11 +345,11 @@ class SwaggerService:
         return '[{0}] service. {1}'.format(self.config.name, self.uri)
 
 
-class SwaggerMethod:
-    def __init__(self, service, requests_method, swagger_method, path, udf_return_type):
+class UDFMethod:
+    def __init__(self, service, http_method, swagger_method, path, udf_return_type):
         self.uri = '{0}{1}'.format(service.uri, path)
         self.service = service
-        self.requests_method = requests_method
+        self.requests_method = http_method
         self.swagger_method = swagger_method
         self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
         self.path_parameters = []
@@ -365,17 +365,18 @@ class SwaggerMethod:
                 parameter.name: parameter
                 for parameter in parameters
             })
-            if swagger_parameter['in'] == 'path':
-                self.path_parameters.extend(parameters)
-            # Required but not in path
-            elif swagger_parameter.get('required'):
-                self.update_information_on_parameter_type(swagger_parameter)
-                self.required_parameters.extend(parameters)
-            else:
-                self.update_information_on_parameter_type(swagger_parameter)
-                self.optional_parameters.extend(parameters)
+            for parameter in parameters:
+                if parameter.location == 'path':
+                    self.path_parameters.append(parameter)
+                # Required but not in path
+                elif parameter.required:
+                    self.update_information_on_parameter_type(parameter)
+                    self.required_parameters.append(parameter)
+                else:
+                    self.update_information_on_parameter_type(parameter)
+                    self.optional_parameters.append(parameter)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
-        self.help_url = SwaggerMethod.extract_url(swagger_method.get('description') or '')
+        self.help_url = UDFMethod.extract_url(swagger_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
         self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type), self.swagger_method['operationId'])
         self.responses = swagger_method.get('responses')
@@ -394,15 +395,14 @@ class SwaggerMethod:
         self.swagger_method['operationId'] = self.service.get_unique_operation_id(udf_return_type, operation_id)
 
     def update_information_on_parameter_type(self, parameter):
-        parameter_in = parameter['in']
-        if parameter_in == 'body':
+        if parameter.location == 'body':
             self.contains_body_parameters = True
-        elif parameter_in == 'formData':
-            if parameter['type'] == 'file':
+        elif parameter.location == 'formData':
+            if parameter.type == 'file':
                 self.contains_file_parameters = True
             else:
                 self.contains_body_parameters = True
-        elif parameter_in == 'query':
+        elif parameter.location == 'query':
             self.contains_query_parameters = True
 
     def return_a_list(self):
@@ -467,22 +467,25 @@ class SwaggerMethod:
 
     def _to_parameters(self, swagger_parameter):
         if 'type' in swagger_parameter:  # Type usually means that this is not a complex type
-            return [SwaggerParameter(swagger_parameter, {})]
+            return [UDFParameter(swagger_parameter, {})]
 
         schema = swagger_parameter['schema']
         ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
         ref = ref[len('#/definitions/'):]
         parameters = []
+        swagger_definition = self.service.swagger_definitions[ref]
         # TODO Prefix name properly to avoid conflicts
-        for inner_parameter_name, inner_parameter in self.service.swagger_definitions[ref]['properties'].items():
-            inner_parameter['server_param_name'] = inner_parameter_name
-            inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
-            inner_parameter['in'] = swagger_parameter['in']
-            parameters.append(SwaggerParameter(inner_parameter, schema))
+        for inner_parameter_name, inner_parameter in swagger_definition['properties'].items():
+            if not inner_parameter.get('readOnly', False):
+                inner_parameter['server_param_name'] = inner_parameter_name
+                inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+                inner_parameter['in'] = swagger_parameter['in']
+                inner_parameter['required'] = inner_parameter_name in swagger_definition.get('required', [])
+                parameters.append(UDFParameter(inner_parameter, schema))
         return parameters
 
 
-class SwaggerParameter:
+class UDFParameter:
     def __init__(self, swagger_parameter, schema):
         self.name = swagger_parameter['name']
         self.server_param_name = swagger_parameter['server_param_name']
@@ -502,9 +505,13 @@ class SwaggerParameter:
             else:
                 swagger_array_parameter = dict(swagger_parameter)
                 swagger_array_parameter.update(items)
-                self._convert_to_type = self._get_convert_array_method(SwaggerParameter(swagger_array_parameter, {}))
+                self._convert_to_type = self._get_convert_array_method(UDFParameter(swagger_array_parameter, {}))
         else:
-            self._convert_to_type = self._get_convert_method()
+            if self.schema.get('type') == 'array':  # Classic Model field in an array of model
+                swagger_array_parameter = dict(swagger_parameter)
+                self._convert_to_type = self._get_convert_array_method(UDFParameter(swagger_array_parameter, {}))
+            else:
+                self._convert_to_type = self._get_convert_method()
 
     def validate_path(self, value):
         if value is None or isinstance(value, list) and all(x is None for x in value):
@@ -518,7 +525,7 @@ class SwaggerParameter:
     def validate_optional(self, value, request_content):
         if value is not None:
             value = self._convert_to_type(value)
-            request_content.add_value(self, value)
+        request_content.add_value(self, value)
 
     def _not_provided(self):
         return Exception('{0} is required.'.format(self.name))
@@ -553,9 +560,9 @@ class SwaggerParameter:
         return value
 
     def _convert_to_bool(self, value):
-        if value not in ['true', 'false']:
-            raise Exception('{0} value "{1}" must be either "true" or "false".'.format(self.name, value))
-        return value == 'true'
+        if not isinstance(value, bool):
+            raise Exception('{0} value "{1}" must be a boolean.'.format(self.name, value))
+        return value
 
     def _convert_to_dict(self, value):
         if not isinstance(value, list):
@@ -577,9 +584,12 @@ class SwaggerParameter:
         return self.server_param_name, value  # Or the content of the file
 
     def _get_convert_array_method(self, array_parameter):
+        if array_parameter.type == 'object':
+            return self._convert_to_dict_list
+
         return lambda value: [
-            array_parameter._convert_to_type(item)
-            for item in value if item is not None
+            array_parameter._convert_to_type(item) if item is not None else None
+            for item in value
         ] if isinstance(value, list) else [
             array_parameter._convert_to_type(value)
         ]
@@ -598,8 +608,6 @@ class SwaggerParameter:
         elif self.type == 'boolean':
             return self._convert_to_bool
         elif self.type == 'object':
-            if self.schema.get('type') == 'array':
-                return self._convert_to_dict_list
             return self._convert_to_dict
         elif self.type == 'file':
             return self._convert_to_file
@@ -612,27 +620,83 @@ class RequestContent:
         self.payload = {}
         self.files = {}
         self.parameters = {}
+        # Contains parameters that were not provided but may still need to be sent with None value
+        self._none_parameters = []
 
     def add_value(self, parameter, value):
         if parameter.location == 'query':
-            self.parameters[parameter.server_param_name] = value
+            self._add_query_parameter(parameter, value)
         elif parameter.location == 'body':
-            if parameter.schema.get('type') == 'array':
-                if self.payload == {}:  # Change the default payload to list
-                    self.payload = [
-                        {}
-                        for index in range(len(value))
-                    ]
+            self._add_body_parameter(parameter, value)
+        elif parameter.location == 'formData':
+            self._add_form_parameter(parameter, value)
+        elif parameter.location == 'header':
+            self._add_header_parameter(parameter, value)
+
+    def _add_query_parameter(self, parameter, value):
+        if value is not None:
+            self.parameters[parameter.server_param_name] = value
+
+    def _add_body_parameter(self, parameter, value):
+        if parameter.schema.get('type') == 'array':
+            self._add_body_list_parameter(parameter, value)
+        else:
+            self.payload[parameter.server_param_name] = value
+
+    def _add_body_list_parameter(self, parameter, value):
+        # Change the default payload to list
+        if self.payload == {}:
+            self.payload = []
+
+        if value is None:
+            if len(self.payload) == 0:
+                self._none_parameters.append(parameter)
+
+            for list_item in self.payload:
+                list_item[parameter.server_param_name] = None
+        else:
+            nb_values = len(value)
+            nb_list_items = len(self.payload)
+
+            # All items will be updated with a new provided value
+            if nb_values == nb_list_items:
                 for index, parameter_list_item in enumerate(value):
                     self.payload[index][parameter.server_param_name] = parameter_list_item
+
+            # All items will be updated with a new provided value and new items will be added
+            elif nb_values > nb_list_items:
+                # Add empty items to current payload so that length fits the new one
+                empty_item = {
+                    field_name: None
+                    for field_name in self.payload[0]
+                } if nb_list_items > 0 else {
+                    none_parameter.server_param_name: None
+                    for none_parameter in self._none_parameters
+                }
+                self._none_parameters.clear()
+                for new_index in range(nb_list_items, nb_values):
+                    self.payload.append(dict(empty_item))
+
+                for index, parameter_list_item in enumerate(value):
+                    self.payload[index][parameter.server_param_name] = parameter_list_item
+
+            # Some items will be updated with a new provided value and remaining will contains None
             else:
-                self.payload[parameter.server_param_name] = value
-        elif parameter.location == 'formData':
-            if parameter.type == 'file':
+                for index, parameter_list_item in enumerate(value):
+                    self.payload[index][parameter.server_param_name] = parameter_list_item
+
+                for non_provided_index in range(nb_values, nb_list_items):
+                    self.payload[non_provided_index][parameter.server_param_name] = None
+
+    def _add_form_parameter(self, parameter, value):
+        if parameter.type == 'file':
+            if value is not None:
                 self.files[parameter.server_param_name] = value
-            else:
-                self.payload[parameter.server_param_name] = value
-        elif parameter.location == 'header':
+        else:
+            self.payload[parameter.server_param_name] = value
+
+    def _add_header_parameter(self, parameter, value):
+        if value is not None:
             self.header[parameter.server_param_name] = value
 
 
