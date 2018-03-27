@@ -43,6 +43,36 @@ User Installation (using PIP)
 #. Microsoft Excel must be closed while executing the following command:
         >>> pip install pyxelrest
 
+User add-in installation
+------------------------
+
+One python module is installed, a script is available to install the Microsoft Excel add-in.
+
+The add-in is not installed at the same time as the module because:
+    * It may prompt the user for installation.
+    * pyxelrest can be used as a python module without the need for the add-in.
+
+Considering %script_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
+
+Considering %data_dir% as the directory containing python data (root folder within your virtual environment).
+
+Install Microsoft Excel add-in by executing the following command:
+        >>> python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin %data_dir%\pyxelrest_vb_addin
+
+The following options are available when launching this script:
+
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+|                                    | Description                                                                                                                        | Mandatory | Possible values                                |
++====================================+====================================================================================================================================+===========+================================================+
+| add_in_directory                   | Directory containing PyxelRest Microsoft Excel auto load add-in.                                                                   | Mandatory | Must be the first positional argument.         |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+| vb_add_in_directory                | Directory containing PyxelRest Microsoft Visual Basic add-in.                                                                      | Mandatory | Must be the second positional argument.        |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+| --scripts_directory                | Directory containing installed Python scripts.                                                                                     | Optional  | Default to the folder containing this script.  |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+| --path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date. | Optional  | Can be file, folder paths or an URL to a file. |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+
 User Uninstall (using PIP)
 --------------------------
 
@@ -227,6 +257,39 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 | tags                 | Swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                         | any value separated by ';' (semicolon)                                                |
 +----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
+PyxelRest Service Configuration
+-------------------------------
+
+You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com )-like UDFs.
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_service.PNG
+   :align: center
+
+   Configuration screen
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG
+   :align: center
+
+   Selecting UDF
+
+It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
+
++--------------+
+| swagger_url  |
++--------------+
+| service_host |
++--------------+
+
+Also the following advanced configuration options will not be taken into account:
+
++----------------------+
+| rely_on_definitions  |
++----------------------+
+| swagger_read_timeout |
++----------------------+
+| tags                 |
++----------------------+
+
 Logging Configuration
 ---------------------
 
@@ -272,7 +335,7 @@ The following application settings are available:
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | PathToXlWingsConfiguration   | Path to the XlWings configuration file used to configure XlWings for PyxelRest.                | Mandatory | Installation script is already setting this value properly. |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-| PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration.                    | Optional  |                                                             |
+| PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration.                    | Optional  | Installation script is already setting this value properly. |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 
 Using as a module
@@ -288,7 +351,8 @@ You can use pyxelrest as a python module as well::
    from pyxelrest import pyxelrestgenerator
 
    # Generate UDFs for the following import
-   pyxelrestgenerator.generate_user_defined_functions()
+   services = pyxelrestgenerator.generate_user_defined_functions()
+   pyxelrestgenerator.reload_user_defined_functions(services)
 
    from pyxelrest import user_defined_functions
 

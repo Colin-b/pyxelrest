@@ -34,7 +34,61 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Microsoft Excel must be closed while executing the following command:
 
-        pip install pyxelrest
+```bash
+pip install pyxelrest
+```
+
+#### User add-in installation ####
+
+One python module is installed, a script is available to install the Microsoft Excel add-in.
+
+The add-in is not installed at the same time as the module because:
+    * It may prompt the user for installation.
+    * pyxelrest can be used as a python module without the need for the add-in.
+
+Considering %script_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
+
+Considering %data_dir% as the directory containing python data (root folder within your virtual environment).
+
+Install Microsoft Excel add-in by executing the following command:
+
+```bash
+python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin %data_dir%\pyxelrest_vb_addin
+```
+
+The following options are available when launching this script:
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
+    </th>
+    <tr>
+        <td><strong>add_in_directory</strong></td>
+        <td>Directory containing PyxelRest Microsoft Excel auto load add-in.</td>
+        <td>Mandatory</td>
+        <td>Must be the first positional argument.</td>
+    </tr>
+    <tr>
+        <td><strong>vb_add_in_directory</strong></td>
+        <td>Directory containing PyxelRest Microsoft Visual Basic add-in.</td>
+        <td>Mandatory</td>
+        <td>Must be the second positional argument.</td>
+    </tr>
+    <tr>
+        <td><strong>--scripts_directory</strong></td>
+        <td>Directory containing installed Python scripts.</td>
+        <td>Optional</td>
+        <td>Default to the folder containing this script.</td>
+    </tr>
+    <tr>
+        <td><strong>--path_to_up_to_date_configuration</strong></td>
+        <td>Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.</td>
+        <td>Optional</td>
+        <td>Can be file, folder paths or an URL to a file.</td>
+    </tr>
+</table>
 
 ### User uninstall (using PIP) ###
 
@@ -302,6 +356,39 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
 </table>
 
+#### PyxelRest Service Configuration ####
+
+You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
+
+![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_service.PNG)
+
+![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG)
+
+It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
+
+<table>
+    <tr>
+        <td><strong>swagger_url</strong></td>
+    </tr>
+    <tr>
+        <td><strong>service_host</strong></td>
+    </tr>
+</table>
+
+Also the following advanced configuration options will not be taken into account:
+
+<table>
+    <tr>
+        <td><strong>rely_on_definitions</strong></td>
+    </tr>
+    <tr>
+        <td><strong>swagger_read_timeout</strong></td>
+    </tr>
+    <tr>
+        <td><strong>tags</strong></td>
+    </tr>
+</table>
+
 ### Logging Configuration ###
 
 PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.ini` file.
@@ -366,7 +453,7 @@ The following application settings are available:
         <td><strong>PathToUpToDateConfigurations</strong></td>
         <td>Path to the file or directory containing up to date services configuration.</td>
         <td>Optional</td>
-        <td></td>
+        <td>Installation script is already setting this value properly.</td>
     </tr>
 </table>
 
@@ -383,7 +470,8 @@ pyxelrest.GENERATE_UDF_ON_IMPORT = False
 from pyxelrest import pyxelrestgenerator
 
 # Generate UDFs for the following import
-pyxelrestgenerator.generate_user_defined_functions()
+services = pyxelrestgenerator.generate_user_defined_functions()
+pyxelrestgenerator.reload_user_defined_functions(services)
 
 from pyxelrest import user_defined_functions
 
