@@ -351,7 +351,8 @@ You can use pyxelrest as a python module as well::
    from pyxelrest import pyxelrestgenerator
 
    # Generate UDFs for the following import
-   pyxelrestgenerator.generate_user_defined_functions()
+   services = pyxelrestgenerator.generate_user_defined_functions()
+   pyxelrestgenerator.reload_user_defined_functions(services)
 
    from pyxelrest import user_defined_functions
 

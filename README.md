@@ -470,7 +470,8 @@ pyxelrest.GENERATE_UDF_ON_IMPORT = False
 from pyxelrest import pyxelrestgenerator
 
 # Generate UDFs for the following import
-pyxelrestgenerator.generate_user_defined_functions()
+services = pyxelrestgenerator.generate_user_defined_functions()
+pyxelrestgenerator.reload_user_defined_functions(services)
 
 from pyxelrest import user_defined_functions
 
