@@ -34,7 +34,61 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Microsoft Excel must be closed while executing the following command:
 
-        pip install pyxelrest
+```bash
+pip install pyxelrest
+```
+
+#### User add-in installation ####
+
+One python module is installed, a script is available to install the Microsoft Excel add-in.
+
+The add-in is not installed at the same time as the module because:
+    * It may prompt the user for installation.
+    * pyxelrest can be used as a python module without the need for the add-in.
+
+Considering %script_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
+
+Considering %data_dir% as the directory containing python data (root folder within your virtual environment).
+
+Install Microsoft Excel add-in by executing the following command:
+
+```bash
+python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin %data_dir%\pyxelrest_vb_addin
+```
+
+The following options are available when launching this script:
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
+    </th>
+    <tr>
+        <td><strong>add_in_directory</strong></td>
+        <td>Directory containing PyxelRest Microsoft Excel auto load add-in.</td>
+        <td>Mandatory</td>
+        <td>Must be the first positional argument.</td>
+    </tr>
+    <tr>
+        <td><strong>vb_add_in_directory</strong></td>
+        <td>Directory containing PyxelRest Microsoft Visual Basic add-in.</td>
+        <td>Mandatory</td>
+        <td>Must be the second positional argument.</td>
+    </tr>
+    <tr>
+        <td><strong>--scripts_directory</strong></td>
+        <td>Directory containing installed Python scripts.</td>
+        <td>Optional</td>
+        <td>Default to the folder containing this script.</td>
+    </tr>
+    <tr>
+        <td><strong>--path_to_up_to_date_configuration</strong></td>
+        <td>Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.</td>
+        <td>Optional</td>
+        <td>Can be file, folder paths or an URL to a file.</td>
+    </tr>
+</table>
 
 ### User uninstall (using PIP) ###
 

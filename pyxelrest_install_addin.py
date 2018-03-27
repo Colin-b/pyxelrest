@@ -262,7 +262,7 @@ if __name__ == '__main__':
                         type=str)
     parser.add_argument('--scripts_directory', help='Directory containing installed Python scripts.',
                         default=None, type=str)
-    parser.add_argument('--path_to_up_to_date_configuration', help='Path to up to date configuration file(s).',
+    parser.add_argument('--path_to_up_to_date_configuration', help='Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.',
                         default=None, type=str)
     options = parser.parse_args(sys.argv[1:])
 

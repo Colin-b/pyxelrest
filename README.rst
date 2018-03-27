@@ -43,6 +43,36 @@ User Installation (using PIP)
 #. Microsoft Excel must be closed while executing the following command:
         >>> pip install pyxelrest
 
+User add-in installation
+------------------------
+
+One python module is installed, a script is available to install the Microsoft Excel add-in.
+
+The add-in is not installed at the same time as the module because:
+    * It may prompt the user for installation.
+    * pyxelrest can be used as a python module without the need for the add-in.
+
+Considering %script_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
+
+Considering %data_dir% as the directory containing python data (root folder within your virtual environment).
+
+Install Microsoft Excel add-in by executing the following command:
+        >>> python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin %data_dir%\pyxelrest_vb_addin
+
+The following options are available when launching this script:
+
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+|                                    | Description                                                                                                                        | Mandatory | Possible values                                |
++====================================+====================================================================================================================================+===========+================================================+
+| add_in_directory                   | Directory containing PyxelRest Microsoft Excel auto load add-in.                                                                   | Mandatory | Must be the first positional argument.         |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+| vb_add_in_directory                | Directory containing PyxelRest Microsoft Visual Basic add-in.                                                                      | Mandatory | Must be the second positional argument.        |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+| --scripts_directory                | Directory containing installed Python scripts.                                                                                     | Optional  | Default to the folder containing this script.  |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+| --path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date. | Optional  | Can be file, folder paths or an URL to a file. |
++------------------------------------+------------------------------------------------------------------------------------------------------------------------------------+-----------+------------------------------------------------+
+
 User Uninstall (using PIP)
 --------------------------
 
