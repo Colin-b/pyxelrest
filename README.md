@@ -53,7 +53,7 @@ Considering %data_dir% as the directory containing python data (root folder with
 Install Microsoft Excel add-in by executing the following command:
 
 ```bash
-python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin %data_dir%\pyxelrest_vb_addin
+python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin
 ```
 
 The following options are available when launching this script:
@@ -69,12 +69,6 @@ The following options are available when launching this script:
         <td>Directory containing PyxelRest Microsoft Excel auto load add-in.</td>
         <td>Mandatory</td>
         <td>Must be the first positional argument.</td>
-    </tr>
-    <tr>
-        <td><strong>vb_add_in_directory</strong></td>
-        <td>Directory containing PyxelRest Microsoft Visual Basic add-in.</td>
-        <td>Mandatory</td>
-        <td>Must be the second positional argument.</td>
     </tr>
     <tr>
         <td><strong>--scripts_directory</strong></td>
