@@ -257,6 +257,29 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 | tags                 | Swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                         | any value separated by ';' (semicolon)                                                |
 +----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
+PyxelRest Service Configuration
+-------------------------------
+
+You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com )-like UDFs.
+
+It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
+
++--------------+
+| swagger_url  |
++--------------+
+| service_host |
++--------------+
+
+Also the following advanced configuration options will not be taken into account:
+
++----------------------+
+| rely_on_definitions  |
++----------------------+
+| swagger_read_timeout |
++----------------------+
+| tags                 |
++----------------------+
+
 Logging Configuration
 ---------------------
 

@@ -356,6 +356,35 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
 </table>
 
+#### PyxelRest Service Configuration ####
+
+You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
+
+It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
+
+<table>
+    <tr>
+        <td><strong>swagger_url</strong></td>
+    </tr>
+    <tr>
+        <td><strong>service_host</strong></td>
+    </tr>
+</table>
+
+Also the following advanced configuration options will not be taken into account:
+
+<table>
+    <tr>
+        <td><strong>rely_on_definitions</strong></td>
+    </tr>
+    <tr>
+        <td><strong>swagger_read_timeout</strong></td>
+    </tr>
+    <tr>
+        <td><strong>tags</strong></td>
+    </tr>
+</table>
+
 ### Logging Configuration ###
 
 PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.ini` file.
