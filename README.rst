@@ -302,7 +302,7 @@ The following application settings are available:
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 | PathToXlWingsBasFile         | Path to the Python script used to update PyxelRest.                                            | Mandatory | Default value is already set.                               |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
-| PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration.                    | Optional  |                                                             |
+| PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration.                    | Optional  | Installation script is already setting this value properly. |
 +------------------------------+------------------------------------------------------------------------------------------------+-----------+-------------------------------------------------------------+
 
 Using as a module

@@ -420,7 +420,7 @@ The following application settings are available:
         <td><strong>PathToUpToDateConfigurations</strong></td>
         <td>Path to the file or directory containing up to date services configuration.</td>
         <td>Optional</td>
-        <td></td>
+        <td>Installation script is already setting this value properly.</td>
     </tr>
 </table>
 
