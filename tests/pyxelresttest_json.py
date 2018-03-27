@@ -3173,6 +3173,61 @@ class PyxelRestJsonTest(unittest.TestCase):
             )
         self.assertEqual(cm.exception.args[0], "json_test_post_test_json_dict_with_read_only() got an unexpected keyword argument 'read_only_field'")
 
+    def test_get_empty_list_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+            list_parameter=[]
+        ),
+            'list_parameter is required.'
+        )
+
+    def test_get_none_filled_list_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+            list_parameter=[None, None, None]
+        ),
+            'list_parameter is required.'
+        )
+
+    def test_get_none_as_first_list_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+            list_parameter=[None, 'valid']
+        ),
+            [
+                ['valid'],
+            ]
+        )
+
+    def test_get_none_as_last_list_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+            list_parameter=['valid', None]
+        ),
+            [
+                ['valid'],
+            ]
+        )
+
+    def test_get_none_in_list_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+            list_parameter=['valid1', None, 'valid2']
+        ),
+            [
+                ['valid1'],
+                ['valid2'],
+            ]
+        )
+
+    def test_get_none_as_list_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+            list_parameter=None
+        ),
+            'list_parameter is required.'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

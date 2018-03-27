@@ -177,6 +177,40 @@ def swagger():
                        }
                    },
                    paths={
+                       '/list_parameter': {
+                           'get': {
+                               'operationId': 'get_list_parameter',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "list_parameter",
+                                       'required': True,
+                                       'in': "query",
+                                       'type': 'string',
+                                   },
+                               ],
+                           },
+                           'delete': {
+                               'operationId': 'delete_list_parameter',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "list_parameter",
+                                       'required': True,
+                                       'in': "query",
+                                       'type': 'string',
+                                   },
+                               ],
+                           },
+                       },
                        '/test/json/dict_with_read_only': {
                            'post': {
                                'operationId': 'post_test_json_dict_with_read_only',
@@ -3448,6 +3482,11 @@ def swagger():
                            }
                        }
                    })
+
+
+@app.route('/list_parameter', methods=['GET', 'DELETE'])
+def list_parameter():
+    return jsonify(request.args.getlist('list_parameter'))
 
 
 @app.route('/test/json/dict_with_read_only', methods=['POST'])
