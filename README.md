@@ -360,6 +360,10 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 
 You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
+![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_service.PNG)
+
+![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG)
+
 It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
 
 <table>

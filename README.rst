@@ -262,6 +262,16 @@ PyxelRest Service Configuration
 
 You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com )-like UDFs.
 
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_service.PNG
+   :align: center
+
+   Configuration screen
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG
+   :align: center
+
+   Selecting UDF
+
 It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
 
 +--------------+
