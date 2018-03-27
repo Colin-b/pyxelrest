@@ -7,9 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/without/auth': {
+                       '/without_auth': {
                            'get': {
-                               'operationId': 'get_test_without_auth',
+                               'operationId': 'get_without_auth',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -20,8 +20,8 @@ def swagger():
                    })
 
 
-@app.route('/test/without/auth', methods=['GET'])
-def get_test_without_auth():
+@app.route('/without_auth', methods=['GET'])
+def get_without_auth():
     return jsonify([{'received token': request.headers.get('Bearer') is not None}])
 
 

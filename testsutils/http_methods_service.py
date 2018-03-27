@@ -7,9 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/all/http/methods': {
+                       '/http_methods': {
                            'get': {
-                               'operationId': 'get_test_all_http_methods',
+                               'operationId': 'get_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -17,7 +17,7 @@ def swagger():
                                }
                            },
                            'post': {
-                               'operationId': 'post_test_all_http_methods',
+                               'operationId': 'post_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -25,7 +25,7 @@ def swagger():
                                }
                            },
                            'put': {
-                               'operationId': 'put_test_all_http_methods',
+                               'operationId': 'put_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -33,7 +33,7 @@ def swagger():
                                }
                            },
                            'delete': {
-                               'operationId': 'delete_test_all_http_methods',
+                               'operationId': 'delete_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -41,7 +41,7 @@ def swagger():
                                }
                            },
                            'patch': {
-                               'operationId': 'patch_test_all_http_methods',
+                               'operationId': 'patch_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -49,7 +49,7 @@ def swagger():
                                }
                            },
                            'options': {
-                               'operationId': 'options_test_all_http_methods',
+                               'operationId': 'options_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -57,7 +57,7 @@ def swagger():
                                }
                            },
                            'head': {
-                               'operationId': 'head_test_all_http_methods',
+                               'operationId': 'head_http_methods',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -68,39 +68,9 @@ def swagger():
                    })
 
 
-@app.route('/test/all/http/methods', methods=['GET'])
-def get_test_all_http_methods():
-    return "GET"
-
-
-@app.route('/test/all/http/methods', methods=['POST'])
-def post_test_all_http_methods():
-    return "POST"
-
-
-@app.route('/test/all/http/methods', methods=['PUT'])
-def put_test_all_http_methods():
-    return "PUT"
-
-
-@app.route('/test/all/http/methods', methods=['DELETE'])
-def delete_test_all_http_methods():
-    return "DELETE"
-
-
-@app.route('/test/all/http/methods', methods=['PATCH'])
-def patch_test_all_http_methods():
-    return "PATCH"
-
-
-@app.route('/test/all/http/methods', methods=['OPTIONS'])
-def options_test_all_http_methods():
-    return "OPTIONS"
-
-
-@app.route('/test/all/http/methods', methods=['HEAD'])
-def head_test_all_http_methods():
-    return "HEAD"
+@app.route('/http_methods', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'])
+def http_methods():
+    return request.method
 
 
 def start_server(port):

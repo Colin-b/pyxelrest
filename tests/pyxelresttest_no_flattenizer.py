@@ -7,8 +7,8 @@ import testsutils.loader as loader
 class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        import testsutils.json_test_service as json_test_service
-        serviceshandler.start_services((json_test_service, 8954))
+        import testsutils.json_service as json_service
+        serviceshandler.start_services((json_service, 8954))
         loader.load('pyxelresttest_json_services_configuration.ini')
         import pyxelrest
         pyxelrest.GENERATE_UDF_ON_IMPORT = False
@@ -23,7 +23,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_integer_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=None,
             query_integer32=None,
             query_integer64=None,
@@ -54,7 +54,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_integer_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer='str value',
             query_integer32=None,
             query_integer64=None,
@@ -86,7 +86,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_integer_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_integer='str value'),
             ['query_integer value "str value" must be an integer.'])
 
@@ -94,7 +94,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -127,7 +127,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -160,7 +160,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -193,7 +193,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -226,7 +226,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -259,20 +259,20 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_integer_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer='str value'),
             ['query_array_integer value "str value" must be an integer.'])
 
     def test_optional_array_integer_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer=['str value']
         ),
             ['query_array_integer value "str value" must be an integer.'])
 
     def test_mandatory_integer32_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=None,
             query_integer64=None,
@@ -303,7 +303,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_integer32_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32='str value',
             query_integer64=None,
@@ -335,7 +335,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_integer32_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_integer32='str value'),
             ['query_integer32 value "str value" must be an integer.'])
 
@@ -343,7 +343,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -376,7 +376,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -409,7 +409,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -442,7 +442,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -475,7 +475,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -507,19 +507,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_integer32_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer32='str value'),
             ['query_array_integer32 value "str value" must be an integer.'])
 
     def test_optional_array_integer32_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer32=['str value']),
             ['query_array_integer32 value "str value" must be an integer.'])
 
     def test_mandatory_integer64_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=None,
@@ -550,7 +550,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_integer64_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64='str value',
@@ -582,7 +582,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_integer64_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_integer64='str value'),
             ['query_integer64 value "str value" must be an integer.'])
 
@@ -590,7 +590,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -623,7 +623,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -656,7 +656,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -689,7 +689,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -722,7 +722,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -754,19 +754,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_integer64_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer64='str value'),
             ['query_array_integer64 value "str value" must be an integer.'])
 
     def test_optional_array_integer64_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer64=['str value']),
             ['query_array_integer64 value "str value" must be an integer.'])
 
     def test_mandatory_number_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -797,7 +797,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_number_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -829,7 +829,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_number_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_number='str value'),
             ['query_number value "str value" must be a number.'])
 
@@ -837,7 +837,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -870,7 +870,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -903,7 +903,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -936,7 +936,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -969,7 +969,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1001,19 +1001,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_number_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_number='str value'),
             ['query_array_number value "str value" must be a number.'])
 
     def test_optional_array_number_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_number=['str value']),
             ['query_array_number value "str value" must be a number.'])
 
     def test_mandatory_float_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1044,7 +1044,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_float_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1076,7 +1076,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_float_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_float='str value'),
             ['query_float value "str value" must be a number.'])
 
@@ -1084,7 +1084,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1117,7 +1117,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1150,7 +1150,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1183,7 +1183,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1216,7 +1216,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1249,19 +1249,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_array_float_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_array_float='str value'),
             ['query_array_float value "str value" must be a number.'])
 
     def test_optional_array_float_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_float=['str value']),
             ['query_array_float value "str value" must be a number.'])
 
     def test_mandatory_double_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1292,7 +1292,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_double_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1324,7 +1324,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_double_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_double='str value'),
             ['query_double value "str value" must be a number.'])
 
@@ -1332,7 +1332,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1365,7 +1365,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1398,7 +1398,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1431,7 +1431,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1464,7 +1464,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1496,19 +1496,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_double_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_double='str value'),
             ['query_array_double value "str value" must be a number.'])
 
     def test_optional_array_double_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_double=['str value']),
             ['query_array_double value "str value" must be a number.'])
 
     def test_mandatory_string_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1539,7 +1539,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_parameter_provided_as_empty_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1570,7 +1570,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_parameter_provided_as_none_filled_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1603,7 +1603,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1636,7 +1636,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1669,7 +1669,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1700,7 +1700,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_byte_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1731,7 +1731,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_byte_parameter_provided_as_empty_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1762,7 +1762,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_byte_parameter_provided_as_none_filled_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1795,7 +1795,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1829,7 +1829,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1863,7 +1863,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1895,7 +1895,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_binary_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1926,7 +1926,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_binary_parameter_provided_as_empty_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1957,7 +1957,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_string_binary_parameter_provided_as_none_filled_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1990,7 +1990,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2025,7 +2025,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2060,7 +2060,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2094,7 +2094,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_boolean_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2125,7 +2125,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_boolean_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2157,7 +2157,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_boolean_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_boolean='non boolean'),
             ['query_boolean value "non boolean" must be a boolean.'])
 
@@ -2165,7 +2165,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2201,7 +2201,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2237,7 +2237,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2273,7 +2273,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2309,7 +2309,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2344,19 +2344,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_boolean_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_boolean='non boolean'),
             ['query_array_boolean value "non boolean" must be a boolean.'])
 
     def test_optional_array_boolean_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_boolean=['non boolean']),
             ['query_array_boolean value "non boolean" must be a boolean.'])
 
     def test_mandatory_date_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2387,7 +2387,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_mandatory_date_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2419,7 +2419,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_date_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_date='str value'),
             ['query_date value "str value" must be a date.'])
 
@@ -2427,7 +2427,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2463,7 +2463,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2499,7 +2499,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2535,7 +2535,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2571,7 +2571,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2606,20 +2606,20 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_array_date_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_array_date='str value'),
             ['query_array_date value "str value" must be a date.'])
 
     def test_optional_array_date_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_date=['str value']),
             ['query_array_date value "str value" must be a date.'])
 
     def test_mandatory_date_time_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2651,7 +2651,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_mandatory_date_time_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2683,7 +2683,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def test_optional_date_time_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
-            user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+            user_defined_functions.json_get_all_optional_parameters_types(
                 query_date_time='str value'),
             ['query_date_time value "str value" must be a date time.'])
 
@@ -2691,7 +2691,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2727,7 +2727,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2763,7 +2763,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2799,7 +2799,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2835,7 +2835,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2908,7 +2908,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
                      ('query_integer32', '10'), ('query_integer64', '100'), ('query_number', '0.1'),
                      ('query_password', 'password'), ('query_string', 'string'),
                      ('query_string_binary', 'string binary'), ('query_string_byte', 'string bytes')])
-        self.assertDictEqual(user_defined_functions.json_test_get_test_json_with_all_parameters_types(
+        self.assertDictEqual(user_defined_functions.json_get_all_parameters_types(
             query_integer=1,
             query_integer32=10,
             query_integer64=100,
@@ -2958,13 +2958,13 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     def test_optional_array_date_time_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_date_time='str value'),
             ['query_array_date_time value "str value" must be a date time.'])
 
     def test_optional_array_date_time_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
-        self.assertEqual(user_defined_functions.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_date_time=['str value']),
             ['query_array_date_time value "str value" must be a date time.'])
 

@@ -5,8 +5,8 @@ import testsutils.loader as loader
 
 class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
     def setUp(self):
-        from testsutils import usual_parameters_test_service
-        serviceshandler.start_services((usual_parameters_test_service, 8943))
+        from testsutils import usual_parameters_service
+        serviceshandler.start_services((usual_parameters_service, 8943))
 
     def tearDown(self):
         loader.unload()
@@ -16,7 +16,7 @@ class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
         try:
             loader.load('pyxelresttest_duplicated_service_configuration.ini')
         except Exception as e:
-            self.assertEqual(str(e), "While reading from '{0}' [line  5]: section 'usual_parameters_test' already exists".format(
+            self.assertEqual(str(e), "While reading from '{0}' [line  5]: section 'usual_parameters' already exists".format(
                 loader.confighandler.services_config_file_path.replace('\\', '\\\\')))
 
 

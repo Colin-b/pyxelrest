@@ -6,8 +6,8 @@ import timeit
 
 class PyxelRestSwaggerNotAvailableTest(unittest.TestCase):
     def setUp(self):
-        from testsutils import swagger_not_responding_test_service
-        serviceshandler.start_services((swagger_not_responding_test_service, 8950))
+        from testsutils import swagger_not_responding_service
+        serviceshandler.start_services((swagger_not_responding_service, 8950))
         loader.load('pyxelresttest_swagger_not_available_configuration.ini')
 
     def tearDown(self):

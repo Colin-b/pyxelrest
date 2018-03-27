@@ -28,102 +28,102 @@ class PyxelRestTest(unittest.TestCase):
     @classmethod
     def start_services(cls):
         from testsutils import (
-            usual_parameters_test_service,
-            filtered_tags_test_service,
-            values_false_test_service,
-            output_order_test_service,
-            swagger_parsing_test_service,
-            without_parameter_test_service,
-            header_parameter_test_service,
-            form_parameter_test_service,
-            array_parameter_test_service,
-            static_file_call_test_service,
-            http_methods_test_service,
-            content_type_test_service,
-            base_path_ending_with_slash_test_service,
-            async_test_service,
+            usual_parameters_service,
+            filtered_tags_service,
+            values_false_service,
+            output_order_service,
+            swagger_parsing_service,
+            without_parameter_service,
+            header_parameter_service,
+            form_parameter_service,
+            array_parameter_service,
+            static_file_call_service,
+            http_methods_service,
+            content_type_service,
+            base_path_ending_with_slash_service,
+            async_service,
         )
         serviceshandler.start_services(
-            (usual_parameters_test_service, 8943),
-            (filtered_tags_test_service, 8944),
-            (values_false_test_service, 8945),
-            (output_order_test_service, 8946),
-            (swagger_parsing_test_service, 8948),
-            (without_parameter_test_service, 8950),
-            (header_parameter_test_service, 8951),
-            (form_parameter_test_service, 8952),
-            (array_parameter_test_service, 8953),
-            (static_file_call_test_service, 8954),
-            (http_methods_test_service, 8955),
-            (content_type_test_service, 8956),
-            (base_path_ending_with_slash_test_service, 8957),
-            (async_test_service, 8958),
+            (usual_parameters_service, 8943),
+            (filtered_tags_service, 8944),
+            (values_false_service, 8945),
+            (output_order_service, 8946),
+            (swagger_parsing_service, 8948),
+            (without_parameter_service, 8950),
+            (header_parameter_service, 8951),
+            (form_parameter_service, 8952),
+            (array_parameter_service, 8953),
+            (static_file_call_service, 8954),
+            (http_methods_service, 8955),
+            (content_type_service, 8956),
+            (base_path_ending_with_slash_service, 8957),
+            (async_service, 8958),
         )
 
     def test_string_array_parameter(self):
         from pyxelrest import pyxelrestgenerator
         if platform.python_version()[0] == '3':
-            result = 'query_array_string="[\'str1\', \'str2\']"'
+            result = 'string_array="[\'str1\', \'str2\']"'
         else:
-            result = u'query_array_string="[u\'str1\', u\'str2\']"'
-        self.assertEqual(pyxelrestgenerator.array_parameter_test_get_test_string_array_parameter(['str1', 'str2']),
+            result = u'string_array="[u\'str1\', u\'str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_array_parameter(['str1', 'str2']),
                          result)
 
-    def test_plain_text_without_parameter(self):
+    def test_plain_without_parameter(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.without_parameter_test_get_test_plain_text_without_parameter(),
+            pyxelrestgenerator.without_parameter_get_plain_text_without_parameter(),
             'string value returned should be truncated so that the following information cannot be seen by'
             ' user, because of the fact that Excel does not allow more than 255 characters in a cell. '
             'Only the 255 characters will be returned by the user defined functions:  '
         )
 
-    def test_post_test_without_parameter(self):
+    def test_post_without_parameter(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.without_parameter_test_post_test_without_parameter(),
+            pyxelrestgenerator.without_parameter_post_without_parameter(),
             'POST performed properly'
         )
 
-    def test_put_test_without_parameter(self):
+    def test_put_without_parameter(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.without_parameter_test_put_test_without_parameter(),
+            pyxelrestgenerator.without_parameter_put_without_parameter(),
             'PUT performed properly'
         )
 
-    def test_delete_test_without_parameter(self):
+    def test_delete_without_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.without_parameter_test_delete_test_without_parameter(),
+        self.assertEqual(pyxelrestgenerator.without_parameter_delete_without_parameter(),
                          'DELETE performed properly')
 
     def test_service_without_sync_does_not_have_sync(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(AttributeError) as cm:
-            pyxelrestgenerator.sync_without_parameter_test_delete_test_without_parameter()
-        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_without_parameter_test_delete_test_without_parameter'")
+            pyxelrestgenerator.sync_without_parameter_delete_without_parameter()
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_without_parameter_delete_without_parameter'")
 
-    def test_get_test_header_parameter(self):
+    def test_get_header_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        headers = pyxelrestgenerator.header_parameter_test_get_test_header_parameter('sent header')
+        headers = pyxelrestgenerator.header_parameter_get_header('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
-    def test_get_test_header_parameter_sync(self):
+    def test_get_header_parameter_sync(self):
         from pyxelrest import pyxelrestgenerator
-        headers = pyxelrestgenerator.sync_header_parameter_test_get_test_header_parameter('sent header')
+        headers = pyxelrestgenerator.sync_header_parameter_get_header('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
     def test_service_only_sync_does_not_have_sync_prefix(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(AttributeError) as cm:
-            pyxelrestgenerator.sync_header_advanced_configuration_test_get_test_header_parameter('sent header')
-        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_header_advanced_configuration_test_get_test_header_parameter'")
+            pyxelrestgenerator.sync_header_advanced_configuration_get_header('sent header')
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_header_advanced_configuration_get_header'")
 
-    def test_get_test_header_advanced_configuration(self):
+    def test_get_header_advanced_configuration(self):
         from pyxelrest import pyxelrestgenerator
-        headers = pyxelrestgenerator.header_advanced_configuration_test_get_test_header_parameter('sent header')
+        headers = pyxelrestgenerator.header_advanced_configuration_get_header('sent header')
 
         custom_header_index = headers[0].index('X-Pxl-Custom')
         self.assertEqual(headers[1][custom_header_index], 'MyCustomValue')
@@ -140,102 +140,102 @@ class PyxelRestTest(unittest.TestCase):
         user_agent_index = headers[0].index('User-Agent')
         self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.65.0')
 
-    def test_post_test_form_parameter(self):
+    def test_post_form_parameter(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.form_parameter_test_post_test_form_parameter('sent string form data'),
+            pyxelrestgenerator.form_parameter_post_form('sent string form data'),
             [
                 ['form_string'],
                 ['sent string form data']
             ]
         )
 
-    def test_get_test_with_tags(self):
+    def test_get_with_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'Second tag is one of the accepted tags',
-            pyxelrestgenerator.filtered_tags_test_get_test_with_tags()
+            pyxelrestgenerator.filtered_tags_get_tags()
         )
 
-    def test_post_test_with_tags(self):
+    def test_post_with_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'All tags are accepted',
-            pyxelrestgenerator.filtered_tags_test_post_test_with_tags()
+            pyxelrestgenerator.filtered_tags_post_tags()
         )
 
-    def test_put_test_with_tags(self):
+    def test_put_with_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'First tag is one of the accepted tags',
-            pyxelrestgenerator.filtered_tags_test_put_test_with_tags()
+            pyxelrestgenerator.filtered_tags_put_tags()
         )
 
-    def test_delete_test_with_tags(self):
+    def test_delete_with_tags(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_test_delete_test_with_tags'))
+        self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_delete_with_tags'))
 
-    def test_get_test_with_zero_integer(self):
+    def test_get_with_zero_integer(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['zero_integer'],
                 [0]
             ],
-            pyxelrestgenerator.values_false_test_get_test_with_zero_integer()
+            pyxelrestgenerator.values_false_get_with_zero_integer()
         )
 
-    def test_get_test_with_zero_float(self):
+    def test_get_with_zero_float(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['zero_float'],
                 [0.0]
             ],
-            pyxelrestgenerator.values_false_test_get_test_with_zero_float()
+            pyxelrestgenerator.values_false_get_with_zero_float()
         )
 
-    def test_get_test_with_false_boolean(self):
+    def test_get_with_false_boolean(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['false_boolean'],
                 [False]
             ],
-            pyxelrestgenerator.values_false_test_get_test_with_false_boolean()
+            pyxelrestgenerator.values_false_get_with_false_boolean()
         )
 
-    def test_get_test_with_empty_string(self):
+    def test_get_with_empty_string(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['empty_string'],
                 ['']
             ],
-            pyxelrestgenerator.values_false_test_get_test_with_empty_string()
+            pyxelrestgenerator.values_false_get_with_empty_string()
         )
 
-    def test_get_test_with_empty_list(self):
+    def test_get_with_empty_list(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['empty_list'],
                 ['']
             ],
-            pyxelrestgenerator.values_false_test_get_test_with_empty_list()
+            pyxelrestgenerator.values_false_get_with_empty_list()
         )
 
-    def test_get_test_with_empty_dictionary(self):
+    def test_get_with_empty_dictionary(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
                 ['empty_dictionary'],
                 ['']
             ],
-            pyxelrestgenerator.values_false_test_get_test_with_empty_dictionary()
+            pyxelrestgenerator.values_false_get_with_empty_dictionary()
         )
 
-    def test_get_test_compare_output_order(self):
+    def test_get_compare_output_order(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
@@ -244,10 +244,10 @@ class PyxelRestTest(unittest.TestCase):
                 [u'PW_FR', datetime.datetime(2017, 4, 5, 0, 0), u'H02', u'2017-04-05 12:03:15'],
                 [u'PW_FR', datetime.datetime(2017, 4, 5, 0, 0), u'H03', u'']
             ],
-            pyxelrestgenerator.output_order_test_get_test_price_unordered()
+            pyxelrestgenerator.output_order_get_price_unordered()
         )
 
-    def test_get_test_date(self):
+    def test_get_date(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
@@ -255,10 +255,10 @@ class PyxelRestTest(unittest.TestCase):
                 [datetime.datetime(9999, 1, 1, 0, 0)],
                 [datetime.datetime(3001, 1, 1, 0, 0)],
             ],
-            pyxelrestgenerator.usual_parameters_test_get_test_date()
+            pyxelrestgenerator.usual_parameters_get_date()
         )
 
-    def test_get_test_datetime(self):
+    def test_get_datetime(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             [
@@ -270,72 +270,71 @@ class PyxelRestTest(unittest.TestCase):
                 [datetime.datetime(9999, 1, 1, 0, 0, 0, 0, tzinfo=tzutc())],
                 [datetime.datetime(3001, 1, 1, 8, 0, 0, 0, tzinfo=tzutc())],
             ],
-            pyxelrestgenerator.usual_parameters_test_get_test_date_time()
+            pyxelrestgenerator.usual_parameters_get_date_time()
         )
 
-    def test_get_test_datetime_encoding(self):
+    def test_get_datetime_encoding(self):
         from pyxelrest import pyxelrestgenerator
         date_time = datetime.datetime.strptime('2017-09-13T15:20:35', '%Y-%m-%dT%H:%M:%S')
         self.assertEqual('2017-09-13T15:20:35',
-            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+            pyxelrestgenerator.usual_parameters_get_date_time_encoding(encoded_date_time=date_time)
         )
         date_time = datetime.datetime.strptime('2017-09-13T15:20', '%Y-%m-%dT%H:%M')
         self.assertEqual('2017-09-13T15:20:00',
-            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+            pyxelrestgenerator.usual_parameters_get_date_time_encoding(encoded_date_time=date_time)
         )
         date_time = datetime.datetime.strptime('2017-09-13 15', '%Y-%m-%d %H')
         self.assertEqual('2017-09-13T15:00:00',
-            pyxelrestgenerator.usual_parameters_test_get_test_date_time_encoding(encoded_date_time=date_time)
+            pyxelrestgenerator.usual_parameters_get_date_time_encoding(encoded_date_time=date_time)
         )
 
     def test_get_static_swagger_file(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'success',
-            pyxelrestgenerator.swagger_loaded_from_file_test_get_test_static_file_call()
+            pyxelrestgenerator.swagger_loaded_from_file_get_static_file_call()
         )
 
     def test_get_http_method(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'GET',
-            pyxelrestgenerator.http_methods_test_get_test_all_http_methods()
+            pyxelrestgenerator.http_methods_get_http_methods()
         )
 
     def test_post_http_method(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'POST',
-            pyxelrestgenerator.http_methods_test_post_test_all_http_methods()
+            pyxelrestgenerator.http_methods_post_http_methods()
         )
 
     def test_put_http_method(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'PUT',
-            pyxelrestgenerator.http_methods_test_put_test_all_http_methods()
+            pyxelrestgenerator.http_methods_put_http_methods()
         )
 
     def test_delete_http_method(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'DELETE',
-            pyxelrestgenerator.http_methods_test_delete_test_all_http_methods()
+            pyxelrestgenerator.http_methods_delete_http_methods()
         )
 
     def test_patch_http_method(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'PATCH',
-            pyxelrestgenerator.http_methods_test_patch_test_all_http_methods()
+            pyxelrestgenerator.http_methods_patch_http_methods()
         )
 
     def test_options_http_method(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            # OPTIONS is already handled by Flask
-            '',
-            pyxelrestgenerator.http_methods_test_options_test_all_http_methods()
+            'OPTIONS',
+            pyxelrestgenerator.http_methods_options_http_methods()
         )
 
     def test_head_http_method(self):
@@ -343,74 +342,74 @@ class PyxelRestTest(unittest.TestCase):
         self.assertEqual(
             # HEAD is already handled by Flask
             '',
-            pyxelrestgenerator.http_methods_test_head_test_all_http_methods()
+            pyxelrestgenerator.http_methods_head_http_methods()
         )
 
     def test_msgpackpandas_content_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'application/msgpackpandas' if support_pandas() else '*/*',
-            pyxelrestgenerator.content_type_test_get_test_msgpackpandas()
+            pyxelrestgenerator.content_type_get_msgpackpandas()
         )
 
     def test_json_content_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'application/json',
-            pyxelrestgenerator.content_type_test_get_test_json()
+            pyxelrestgenerator.content_type_get_json()
         )
 
     def test_missing_operation_id(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            '/test/without/operationId called.',
-            pyxelrestgenerator.operation_id_not_provided_test_get_test_without_operationId()
+            '/without_operationId called.',
+            pyxelrestgenerator.operation_id_not_provided_get_without_operationId()
         )
 
     def test_mixed_operation_id(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            '/test/with/operationId called.',
-            pyxelrestgenerator.operation_id_not_always_provided_test_get_test_without_operationId()
+            '/with_operationId called.',
+            pyxelrestgenerator.operation_id_not_always_provided_get_without_operationId()
         )
         self.assertEqual(
-            '/test/without/operationId called.',
-            pyxelrestgenerator.operation_id_not_always_provided_test_duplicated_get_test_without_operationId()
+            '/without_operationId called.',
+            pyxelrestgenerator.operation_id_not_always_provided_duplicated_get_without_operationId()
         )
 
     def test_get_base_path_ending_with_slash(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'http://localhost:8957/test/method',
-            pyxelrestgenerator.base_path_ending_with_slash_test_get_test_method()
+            'http://localhost:8957/method',
+            pyxelrestgenerator.base_path_ending_with_slash_get_method()
         )
 
     def test_post_base_path_ending_with_slash(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'http://localhost:8957/test/method',
-            pyxelrestgenerator.base_path_ending_with_slash_test_post_test_method()
+            'http://localhost:8957/method',
+            pyxelrestgenerator.base_path_ending_with_slash_post_method()
         )
 
     def test_put_base_path_ending_with_slash(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'http://localhost:8957/test/method',
-            pyxelrestgenerator.base_path_ending_with_slash_test_put_test_method()
+            'http://localhost:8957/method',
+            pyxelrestgenerator.base_path_ending_with_slash_put_method()
         )
 
     def test_delete_base_path_ending_with_slash(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'http://localhost:8957/test/method',
-            pyxelrestgenerator.base_path_ending_with_slash_test_delete_test_method()
+            'http://localhost:8957/method',
+            pyxelrestgenerator.base_path_ending_with_slash_delete_method()
         )
 
     def test_get_async_url(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            [['Status URL'], ['http://localhost:8958/test/async/status']],
-            pyxelrestgenerator.async_test_get_test_async()
+            [['Status URL'], ['http://localhost:8958/async/status']],
+            pyxelrestgenerator.async_get_async()
         )
 
     def test_get_custom_url_sync(self):
@@ -421,7 +420,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['custom1', 'custom2']
             ],
             pyxelrestgenerator.sync_pyxelrest_get_url(
-                'http://localhost:8958/test/async/status',
+                'http://localhost:8958/async/status',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
                     ['X-Custom-Header2', 'custom2'],
@@ -437,7 +436,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['custom1', 'custom2']
             ],
             pyxelrestgenerator.pyxelrest_get_url(
-                'http://localhost:8958/test/async/status',
+                'http://localhost:8958/async/status',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
                     ['X-Custom-Header2', 'custom2'],
@@ -453,7 +452,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['custom1', 'custom2']
             ],
             pyxelrestgenerator.sync_pyxelrest_delete_url(
-                'http://localhost:8958/test/unlisted',
+                'http://localhost:8958/unlisted',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
                     ['X-Custom-Header2', 'custom2'],
@@ -469,7 +468,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['custom1', 'custom2']
             ],
             pyxelrestgenerator.pyxelrest_delete_url(
-                'http://localhost:8958/test/unlisted',
+                'http://localhost:8958/unlisted',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
                     ['X-Custom-Header2', 'custom2'],
@@ -485,7 +484,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['value1', 1, 'value3'],
             ],
             pyxelrestgenerator.pyxelrest_post_url(
-                'http://localhost:8958/test/dict',
+                'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
                     ['value1', 1, 'value3'],
@@ -506,7 +505,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['other1', 2, 'other3'],
             ],
             pyxelrestgenerator.sync_pyxelrest_post_url(
-                'http://localhost:8958/test/dict',
+                'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
                     ['value1', 1, 'value3'],
@@ -528,7 +527,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['other1', 2, 'other3'],
             ],
             pyxelrestgenerator.pyxelrest_post_url(
-                'http://localhost:8958/test/dict',
+                'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
                     ['value1', 1, 'value3'],
@@ -550,7 +549,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['other1', 2, 'other3'],
             ],
             pyxelrestgenerator.pyxelrest_put_url(
-                'http://localhost:8958/test/dict',
+                'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
                     ['value1', 1, 'value3'],
@@ -571,7 +570,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['value1', 1, 'value3'],
             ],
             pyxelrestgenerator.pyxelrest_put_url(
-                'http://localhost:8958/test/dict',
+                'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
                     ['value1', 1, 'value3'],
@@ -591,7 +590,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['value1', 1, 'value3'],
             ],
             pyxelrestgenerator.sync_pyxelrest_put_url(
-                'http://localhost:8958/test/dict',
+                'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
                     ['value1', 1, 'value3'],

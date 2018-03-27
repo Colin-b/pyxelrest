@@ -8,9 +8,9 @@ def swagger():
     return jsonify(swagger='2.0',
                    basePath='//',
                    paths={
-                       '/test/method': {
+                       '/method': {
                            'get': {
-                               'operationId': 'get_test_method',
+                               'operationId': 'get_method',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -21,7 +21,7 @@ def swagger():
                                }
                            },
                            'post': {
-                                'operationId': 'post_test_method',
+                                'operationId': 'post_method',
                                 'responses': {
                                    '200': {
                                        'description': 'POST performed properly'
@@ -29,7 +29,7 @@ def swagger():
                                 }
                            },
                            'put': {
-                                'operationId': 'put_test_method',
+                                'operationId': 'put_method',
                                 'responses': {
                                    '200': {
                                        'description': 'PUT performed properly'
@@ -37,7 +37,7 @@ def swagger():
                                 }
                            },
                            'delete': {
-                                'operationId': 'delete_test_method',
+                                'operationId': 'delete_method',
                                 'responses': {
                                    '200': {
                                        'description': 'DELETE performed properly'
@@ -48,23 +48,8 @@ def swagger():
                    })
 
 
-@app.route('/test/method', methods=['GET'])
-def get_test_method():
-    return request.url
-
-
-@app.route('/test/method', methods=['POST'])
-def post_test_method():
-    return request.url
-
-
-@app.route('/test/method', methods=['PUT'])
-def put_test_method():
-    return request.url
-
-
-@app.route('/test/method', methods=['DELETE'])
-def delete_test_method():
+@app.route('/method', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def method_single_slash():
     return request.url
 
 

@@ -7,8 +7,8 @@ import testsutils.loader as loader
 class PyxelRestJsonTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        import testsutils.json_test_service as json_test_service
-        serviceshandler.start_services((json_test_service, 8954))
+        import testsutils.json_service as json_service
+        serviceshandler.start_services((json_service, 8954))
         loader.load('pyxelresttest_json_services_configuration.ini')
 
     @classmethod
@@ -18,7 +18,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_integer_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=None,
             query_integer32=None,
             query_integer64=None,
@@ -49,7 +49,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_integer_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer='str value',
             query_integer32=None,
             query_integer64=None,
@@ -81,7 +81,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_integer_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_integer='str value'),
             ['query_integer value "str value" must be an integer.'])
 
@@ -89,7 +89,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -122,7 +122,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -155,7 +155,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -188,7 +188,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -221,7 +221,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -254,20 +254,20 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_integer_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_integer='str value'),
             ['query_array_integer value "str value" must be an integer.'])
 
     def test_optional_array_integer_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_integer=['str value']
         ),
             ['query_array_integer value "str value" must be an integer.'])
 
     def test_mandatory_integer32_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=None,
             query_integer64=None,
@@ -298,7 +298,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_integer32_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32='str value',
             query_integer64=None,
@@ -330,7 +330,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_integer32_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_integer32='str value'),
             ['query_integer32 value "str value" must be an integer.'])
 
@@ -338,7 +338,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -371,7 +371,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -404,7 +404,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -437,7 +437,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -470,7 +470,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -502,19 +502,19 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_integer32_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_integer32='str value'),
             ['query_array_integer32 value "str value" must be an integer.'])
 
     def test_optional_array_integer32_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_integer32=['str value']),
             ['query_array_integer32 value "str value" must be an integer.'])
 
     def test_mandatory_integer64_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=None,
@@ -545,7 +545,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_integer64_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64='str value',
@@ -577,7 +577,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_integer64_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_integer64='str value'),
             ['query_integer64 value "str value" must be an integer.'])
 
@@ -585,7 +585,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -618,7 +618,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -651,7 +651,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -684,7 +684,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -717,7 +717,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -749,19 +749,19 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_integer64_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_integer64='str value'),
             ['query_array_integer64 value "str value" must be an integer.'])
 
     def test_optional_array_integer64_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_integer64=['str value']),
             ['query_array_integer64 value "str value" must be an integer.'])
 
     def test_mandatory_number_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -792,7 +792,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_number_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -824,7 +824,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_number_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_number='str value'),
             ['query_number value "str value" must be a number.'])
 
@@ -832,7 +832,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -865,7 +865,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -898,7 +898,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -931,7 +931,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -964,7 +964,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -996,19 +996,19 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_number_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_number='str value'),
             ['query_array_number value "str value" must be a number.'])
 
     def test_optional_array_number_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_number=['str value']),
             ['query_array_number value "str value" must be a number.'])
 
     def test_mandatory_float_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1039,7 +1039,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_float_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1071,7 +1071,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_float_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_float='str value'),
             ['query_float value "str value" must be a number.'])
 
@@ -1079,7 +1079,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1112,7 +1112,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1145,7 +1145,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1178,7 +1178,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1211,7 +1211,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1244,19 +1244,19 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_array_float_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_array_float='str value'),
             ['query_array_float value "str value" must be a number.'])
 
     def test_optional_array_float_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_float=['str value']),
             ['query_array_float value "str value" must be a number.'])
 
     def test_mandatory_double_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1287,7 +1287,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_double_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1319,7 +1319,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_double_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_double='str value'),
             ['query_double value "str value" must be a number.'])
 
@@ -1327,7 +1327,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1360,7 +1360,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1393,7 +1393,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1426,7 +1426,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1459,7 +1459,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1491,19 +1491,19 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_double_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_double='str value'),
             ['query_array_double value "str value" must be a number.'])
 
     def test_optional_array_double_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_double=['str value']),
             ['query_array_double value "str value" must be a number.'])
 
     def test_mandatory_string_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1534,7 +1534,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_parameter_provided_as_empty_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1565,7 +1565,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_parameter_provided_as_none_filled_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1598,7 +1598,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1631,7 +1631,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1664,7 +1664,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1695,7 +1695,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_byte_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1726,7 +1726,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_byte_parameter_provided_as_empty_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1757,7 +1757,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_byte_parameter_provided_as_none_filled_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1790,7 +1790,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1824,7 +1824,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1858,7 +1858,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1890,7 +1890,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_binary_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1921,7 +1921,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_binary_parameter_provided_as_empty_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1952,7 +1952,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_string_binary_parameter_provided_as_none_filled_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -1985,7 +1985,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2020,7 +2020,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2055,7 +2055,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2089,7 +2089,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_boolean_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2120,7 +2120,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_boolean_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2152,7 +2152,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_boolean_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_boolean='non boolean'),
             ['query_boolean value "non boolean" must be a boolean.'])
 
@@ -2160,7 +2160,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2196,7 +2196,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2232,7 +2232,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2268,7 +2268,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2304,7 +2304,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2339,19 +2339,19 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_boolean_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_boolean='non boolean'),
             ['query_array_boolean value "non boolean" must be a boolean.'])
 
     def test_optional_array_boolean_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_boolean=['non boolean']),
             ['query_array_boolean value "non boolean" must be a boolean.'])
 
     def test_mandatory_date_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2382,7 +2382,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_mandatory_date_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2414,7 +2414,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_date_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_date='str value'),
             ['query_date value "str value" must be a date.'])
 
@@ -2422,7 +2422,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2458,7 +2458,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2494,7 +2494,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2530,7 +2530,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2566,7 +2566,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2601,20 +2601,20 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_array_date_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_array_date='str value'),
             ['query_array_date value "str value" must be a date.'])
 
     def test_optional_array_date_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_date=['str value']),
             ['query_array_date value "str value" must be a date.'])
 
     def test_mandatory_date_time_parameter_not_provided(self):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2646,7 +2646,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_mandatory_date_time_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2678,7 +2678,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_optional_date_time_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+            pyxelrestgenerator.json_get_all_optional_parameters_types(
                 query_date_time='str value'),
             ['query_date_time value "str value" must be a date time.'])
 
@@ -2686,7 +2686,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2722,7 +2722,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2758,7 +2758,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2794,7 +2794,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2830,7 +2830,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         today_date = datetime.date.today()
         today_datetime = datetime.datetime.today()
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=0,
             query_integer32=0,
             query_integer64=0,
@@ -2872,7 +2872,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         tomorrow_datetime = datetime.datetime.combine(tomorrow_date, datetime.datetime.min.time())
         tomorrow_datetime_local = tomorrow_datetime
         self.maxDiff = None
-        self.assertListEqual(pyxelrestgenerator.json_test_get_test_json_with_all_parameters_types(
+        self.assertListEqual(pyxelrestgenerator.json_get_all_parameters_types(
             query_integer=1,
             query_integer32=10,
             query_integer64=100,
@@ -2943,19 +2943,19 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_optional_array_date_time_parameter_with_wrong_type(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_date_time='str value'),
             ['query_array_date_time value "str value" must be a date time.'])
 
     def test_optional_array_date_time_parameter_with_wrong_type_in_array(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_test_json_with_all_optional_parameters_types(
+        self.assertEqual(pyxelrestgenerator.json_get_all_optional_parameters_types(
             query_array_date_time=['str value']),
             ['query_array_date_time value "str value" must be a date time.'])
 
     def test_list_of_list_form_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
             rules=[
                 ['1', 'EBE', 'SNCF', 'rule_1', 'output_1'],
                 ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2'],
@@ -2972,7 +2972,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_list_of_list_form_post_with_non_str(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
             rules=[
                 ['1', 'EBE', 'SNCF', 'rule_1', 'output_1'],
                 ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2'],
@@ -2989,7 +2989,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_list_of_list_form_post_with_single_list(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_list_form(
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
             rules=[
                 'rule1', 'rule2', 'rule3',
             ],
@@ -3002,7 +3002,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_with_dict_json_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_dict(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_with_dict(
             inner_dict=[
                 ['key1', 'key2', 'key3'],
                 ['value10', 'value20', 'value30'],
@@ -3018,7 +3018,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_list_of_dict_with_dict_json_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict(
             inner_dict=[
                 ['key1', 'key2', 'key3'],
                 ['value10', 'value20', 'value30'],
@@ -3038,7 +3038,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_with_dict_list_json_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_dict_list(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_with_dict_list(
             inner_dict_list=[
                 ['key1', 'key2', 'key3'],
                 ['value10', 'value20', 'value30'],
@@ -3058,7 +3058,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_with_list_of_list_json_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_list_of_list(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_with_list_of_list(
             inner_list_of_list=[
                 ['key1', 'key2', 'key3'],
                 ['value10', 'value20', 'value30'],
@@ -3073,7 +3073,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_with_list_of_list_json_post_a_single_list(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_list_of_list(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_with_list_of_list(
             inner_list_of_list=[
                 'key1', 'key2', 'key3',
             ],
@@ -3085,7 +3085,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_string_json_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_string(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_string(
             dict_field1=34,  # Send as integer
             dict_field2=890.32,
         ),
@@ -3097,7 +3097,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_string_json_post_without_non_required(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_string(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_string(
             dict_field1=34,
         ),
             [
@@ -3109,14 +3109,14 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_dict_string_json_post_without_required(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(Exception) as cm:
-            pyxelrestgenerator.json_test_post_test_json_dict_string(
+            pyxelrestgenerator.json_post_dict_string(
                 dict_field2=34.5,
             )
-        self.assertEqual(cm.exception.args[0], "json_test_post_test_json_dict_string() missing 1 required positional argument: 'dict_field1'")
+        self.assertEqual(cm.exception.args[0], "json_post_dict_string() missing 1 required positional argument: 'dict_field1'")
 
     def test_list_of_dict_with_dict_json_post_without_any_required(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(),
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict(),
             [
                 [''],
             ]
@@ -3124,7 +3124,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_list_of_dict_with_dict_json_post_with_empty_lists(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict(
             dict_field2=['1', None, '4'],
         ),
             [
@@ -3137,7 +3137,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_list_of_dict_with_dict_json_post_with_different_list_length(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_list_of_dict_with_dict(
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict(
             dict_field1='000',
             dict_field2=['1', None, '4'],
         ),
@@ -3151,7 +3151,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_dict_with_read_only_json_post(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_post_test_json_dict_with_read_only(
+        self.assertEqual(pyxelrestgenerator.json_post_dict_with_read_only(
             dict_field1=34,
             dict_field3=[False, True, True],
         ),
@@ -3166,16 +3166,16 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(Exception) as cm:
-            pyxelrestgenerator.json_test_post_test_json_dict_with_read_only(
+            pyxelrestgenerator.json_post_dict_with_read_only(
                 dict_field1=34,
                 read_only_field='test',
                 dict_field3=[False, True, True],
             )
-        self.assertEqual(cm.exception.args[0], "json_test_post_test_json_dict_with_read_only() got an unexpected keyword argument 'read_only_field'")
+        self.assertEqual(cm.exception.args[0], "json_post_dict_with_read_only() got an unexpected keyword argument 'read_only_field'")
 
     def test_get_empty_list_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+        self.assertEqual(pyxelrestgenerator.json_get_list_parameter(
             list_parameter=[]
         ),
             'list_parameter is required.'
@@ -3183,7 +3183,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_get_none_filled_list_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+        self.assertEqual(pyxelrestgenerator.json_get_list_parameter(
             list_parameter=[None, None, None]
         ),
             'list_parameter is required.'
@@ -3191,7 +3191,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_get_none_as_first_list_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+        self.assertEqual(pyxelrestgenerator.json_get_list_parameter(
             list_parameter=[None, 'valid']
         ),
             [
@@ -3201,7 +3201,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_get_none_as_last_list_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+        self.assertEqual(pyxelrestgenerator.json_get_list_parameter(
             list_parameter=['valid', None]
         ),
             [
@@ -3211,7 +3211,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_get_none_in_list_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+        self.assertEqual(pyxelrestgenerator.json_get_list_parameter(
             list_parameter=['valid1', None, 'valid2']
         ),
             [
@@ -3222,7 +3222,7 @@ class PyxelRestJsonTest(unittest.TestCase):
 
     def test_get_none_as_list_parameter(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertEqual(pyxelrestgenerator.json_test_get_list_parameter(
+        self.assertEqual(pyxelrestgenerator.json_get_list_parameter(
             list_parameter=None
         ),
             'list_parameter is required.'
