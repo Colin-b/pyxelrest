@@ -26,6 +26,14 @@ Updating UDFs without restarting Microsoft Excel or updating configuration can b
 
    Microsoft Excel add-in
 
+PyxelRest itself can automatically stay up to date.
+The updater make sure that the python module, the Microsoft Excel add-in and the services configuration stays up to date.
+
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/update_gui.gif
+   :align: center
+
+   Update steps
+
 Installation
 ------------
 Pre requisites
