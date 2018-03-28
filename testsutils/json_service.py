@@ -177,6 +177,44 @@ def swagger():
                        }
                    },
                    paths={
+                       '/different_location_same_name/{dict_field1}': {
+                           'post': {
+                               'operationId': 'post_different_location_same_name',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/Dict",
+                                       },
+                                   },
+                                   {
+                                       'name': "dict_field1",
+                                       'required': True,
+                                       'in': "header",
+                                       'type': 'string',
+                                   },
+                                   {
+                                       'name': "dict_field1",
+                                       'required': True,
+                                       'in': "query",
+                                       'type': 'string',
+                                   },
+                                   {
+                                       'name': "dict_field1",
+                                       'required': True,
+                                       'in': "path",
+                                       'type': 'string',
+                                   },
+                               ],
+                           },
+                       },
                        '/list_parameter': {
                            'get': {
                                'operationId': 'get_list_parameter',
@@ -3492,6 +3530,15 @@ def list_parameter():
 @app.route('/dict_with_read_only', methods=['POST'])
 def post_dict_with_read_only():
     return jsonify(request.json)
+
+
+@app.route('/different_location_same_name/<string:dict_field1>', methods=['POST'])
+def post_different_location_same_name(dict_field1):
+    all_sent = request.json
+    all_sent['header_dict_field1'] = request.headers.get('dict_field1')
+    all_sent['query_dict_field1'] = request.args.get('dict_field1')
+    all_sent['path_dict_field1'] = dict_field1
+    return jsonify(all_sent)
 
 
 @app.route('/dict_string', methods=['POST'])

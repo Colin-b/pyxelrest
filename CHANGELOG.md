@@ -24,6 +24,7 @@ List all changes in various categories:
 - Auto update is not semi silent anymore and is providing information on every updating step.
 - Less verbose error message in case a configuration file provided as a URL cannot be reached.
 - Ability to generate both synchronous and asynchronous user defined functions.
+- Allow same parameter name within different location.
 
 ### Bug fixes ###
 

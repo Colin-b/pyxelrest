@@ -3228,6 +3228,21 @@ class PyxelRestJsonTest(unittest.TestCase):
             'list_parameter is required.'
         )
 
+    def test_different_location_same_name(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_different_location_same_name(
+            dict_field1=34,
+            dict_field2='test',
+            header_dict_field1='header value',
+            query_dict_field1='query value',
+            path_dict_field1='path value',
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'header_dict_field1', 'path_dict_field1', 'query_dict_field1'],
+                ['34', 'test', 'header value', 'path value', 'query value'],
+            ]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
