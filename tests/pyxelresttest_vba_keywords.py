@@ -10,10 +10,8 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
         serviceshandler.start_services((vba_keywords_service, 8949))
         loader.load('pyxelresttest_vba_keywords_services_configuration.ini')
 
-
     @classmethod
     def tearDownClass(cls):
-        loader.unload()
         serviceshandler.stop_services()
 
     def test_get_vba_restricted_keywords(self):

@@ -14,7 +14,6 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        loader.unload()
         serviceshandler.stop_services()
 
     def setUp(self):

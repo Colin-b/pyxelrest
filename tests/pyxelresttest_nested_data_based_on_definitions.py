@@ -12,7 +12,6 @@ class PyxelRestNestedDataBasedOnDefinitionsTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        loader.unload()
         serviceshandler.stop_services()
 
     def test_get_dict_with_empty_nested_list(self):

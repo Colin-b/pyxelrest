@@ -13,7 +13,6 @@ class PyxelRestTestFiles(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        loader.unload()
         serviceshandler.stop_services()
 
     @classmethod

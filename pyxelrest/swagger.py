@@ -14,7 +14,7 @@ except ImportError:
     from ConfigParser import RawConfigParser
     from urlparse import urlsplit
 
-from pyxelrest import vba
+from pyxelrest import vba, SERVICES_CONFIGURATION_FILE_PATH
 from pyxelrest.pyxelresterrors import *
 from pyxelrest import authentication
 from pyxelrest import fileadapter
@@ -736,11 +736,10 @@ def load_services():
     except:
         # Python 2
         config_parser = RawConfigParser()
-    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
-    if not config_parser.read(file_path):
-        raise ConfigurationFileNotFound(file_path)
+    if not config_parser.read(SERVICES_CONFIGURATION_FILE_PATH):
+        raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
 
-    logging.debug('Loading services from "{0}"...'.format(file_path))
+    logging.debug('Loading services from "{0}"...'.format(SERVICES_CONFIGURATION_FILE_PATH))
     loaded_services = []
     pyxelrest_config = None
     for service_name in config_parser.sections():

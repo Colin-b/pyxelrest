@@ -6,7 +6,7 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.65.0 (2018-03-21) ##
+## 0.65.0 (2018-03-28) ##
 
 ### Release notes ###
 
@@ -25,6 +25,7 @@ List all changes in various categories:
 - Less verbose error message in case a configuration file provided as a URL cannot be reached.
 - Ability to generate both synchronous and asynchronous user defined functions.
 - Allow same parameter name within different location.
+- Python module users can now use a different logging and/or services configuration file path.
 
 ### Bug fixes ###
 

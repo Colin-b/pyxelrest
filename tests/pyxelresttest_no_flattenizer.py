@@ -18,7 +18,6 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        loader.unload()
         serviceshandler.stop_services()
 
     def test_mandatory_integer_parameter_not_provided(self):

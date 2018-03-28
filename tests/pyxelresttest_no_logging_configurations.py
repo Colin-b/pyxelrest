@@ -10,7 +10,6 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         loader.load('pyxelresttest_no_logging_services_configuration.ini', remove_logging_config=True)
 
     def tearDown(self):
-        loader.unload()
         serviceshandler.stop_services()
 
     def test_without_logging_configuration_file(self):
@@ -18,6 +17,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         This test case assert that pyxelrest can be loaded without logging configuration
         """
         self.assertTrue(True)
+
 
 if __name__ == '__main__':
     unittest.main()

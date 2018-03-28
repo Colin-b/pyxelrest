@@ -11,7 +11,6 @@ class PyxelRestSwaggerNotAvailableTest(unittest.TestCase):
         loader.load('pyxelresttest_swagger_not_available_configuration.ini')
 
     def tearDown(self):
-        loader.unload()
         serviceshandler.stop_services()
 
     def test_service_can_be_loaded_without_hitting_timeout(self):

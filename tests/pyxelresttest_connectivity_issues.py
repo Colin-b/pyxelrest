@@ -9,9 +9,6 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
         serviceshandler.start_services((without_parameter_service, 8950))
         loader.load('pyxelresttest_connectivity_issues_services_configuration.ini')
 
-    def tearDown(self):
-        loader.unload()
-
     def test_get_plain_text_with_service_down(self):
         from pyxelrest import pyxelrestgenerator
         serviceshandler.stop_services()
