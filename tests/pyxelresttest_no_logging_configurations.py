@@ -7,7 +7,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
     def setUp(self):
         from testsutils import usual_parameters_service
         serviceshandler.start_services((usual_parameters_service, 8943))
-        loader.load('pyxelresttest_no_logging_services_configuration.ini', remove_logging_config=True)
+        loader.load('pyxelresttest_no_logging_services_configuration.ini', 'non_existing_configuration.ini')
 
     def tearDown(self):
         serviceshandler.stop_services()
