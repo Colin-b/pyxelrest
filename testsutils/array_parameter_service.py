@@ -19,14 +19,14 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/string/array/parameter': {
+                       '/string_array_parameter': {
                            'get': {
-                               'operationId': 'get_test_string_array_parameter',
+                               'operationId': 'get_string_array_parameter',
                                'parameters': [
                                    {
                                        'description': 'string array parameter',
                                        'in': 'query',
-                                       'name': 'query_array_string',
+                                       'name': 'string_array',
                                        'required': True,
                                        'items': {
                                            'type': 'string'
@@ -50,8 +50,8 @@ def swagger():
                    })
 
 
-@app.route('/test/string/array/parameter', methods=['GET'])
-def get_test_string_array_parameter():
+@app.route('/string_array_parameter', methods=['GET'])
+def string_array_parameter():
     return ', '.join(_request_args(request.args))
 
 

@@ -46,7 +46,7 @@ def swagger():
     "paths": {
         "/price/unordered": {
             "get": {
-                "operationId": "get_test_price_unordered",
+                "operationId": "get_price_unordered",
                 "description": "Price",
                 "parameters": [
                     {
@@ -98,7 +98,7 @@ def swagger():
 
 
 @app.route('/price/unordered', methods=['GET'])
-def get_test_price_unordered():
+def get_price_unordered():
     return jsonify([
         {
             'ts': None,

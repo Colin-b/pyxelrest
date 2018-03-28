@@ -78,9 +78,9 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/dict/with/empty/nested/list': {
+                       '/dict_with_empty_nested_list': {
                            'get': {
-                               'operationId': 'get_test_dict_with_empty_nested_list',
+                               'operationId': 'get_dict_with_empty_nested_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -91,9 +91,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/dict/with/three/imbricated/levels': {
+                       '/dict_with_three_imbricated_levels': {
                            'get': {
-                               'operationId': 'get_test_dict_with_three_imbricated_levels',
+                               'operationId': 'get_dict_with_three_imbricated_levels',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -104,9 +104,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/dict/with/four/imbricated/levels': {
+                       '/dict_with_four_imbricated_levels': {
                            'get': {
-                               'operationId': 'get_test_dict_with_four_imbricated_levels',
+                               'operationId': 'get_dict_with_four_imbricated_levels',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -117,9 +117,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/dict/with/multiple/imbricated/levels/and/duplicate/keys': {
+                       '/dict_with_multiple_imbricated_levels_and_duplicate_keys': {
                            'get': {
-                               'operationId': 'get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys',
+                               'operationId': 'get_dict_with_multiple_imbricated_levels_and_duplicate_keys',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -130,9 +130,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/empty/dict': {
+                       '/empty_dict': {
                            'get': {
-                               'operationId': 'get_test_empty_dict',
+                               'operationId': 'get_empty_dict',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -143,9 +143,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/empty/list': {
+                       '/empty_list': {
                            'get': {
-                               'operationId': 'get_test_empty_list',
+                               'operationId': 'get_empty_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -159,9 +159,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/one/level/dict': {
+                       '/one_level_dict': {
                            'get': {
-                               'operationId': 'get_test_one_level_dict',
+                               'operationId': 'get_one_level_dict',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -172,9 +172,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/one/level/list': {
+                       '/one_level_list': {
                            'get': {
-                               'operationId': 'get_test_one_level_list',
+                               'operationId': 'get_one_level_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -188,9 +188,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/one/dict/entry/with/a/list': {
+                       '/one_dict_entry_with_a_list': {
                            'get': {
-                               'operationId': 'get_test_one_dict_entry_with_a_list',
+                               'operationId': 'get_one_dict_entry_with_a_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -201,9 +201,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/one/dict/entry/with/a/list/of/dict': {
+                       '/one_dict_entry_with_a_list_of_dict': {
                            'get': {
-                               'operationId': 'get_test_one_dict_entry_with_a_list_of_dict',
+                               'operationId': 'get_one_dict_entry_with_a_list_of_dict',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -214,9 +214,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/list/of/dict': {
+                       '/list_of_dict': {
                            'get': {
-                               'operationId': 'get_test_list_of_dict',
+                               'operationId': 'get_list_of_dict',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -230,9 +230,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/dict/with/list': {
+                       '/dict_with_list': {
                            'get': {
-                               'operationId': 'get_test_dict_with_list',
+                               'operationId': 'get_dict_with_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -240,9 +240,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/dict/with/list/of/different/size': {
+                       '/dict_with_list_of_different_size': {
                            'get': {
-                               'operationId': 'get_test_dict_with_list_of_different_size',
+                               'operationId': 'get_dict_with_list_of_different_size',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -250,9 +250,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/dict/with/various/columns': {
+                       '/dict_with_various_columns': {
                            'get': {
-                               'operationId': 'get_test_dict_with_various_columns',
+                               'operationId': 'get_dict_with_various_columns',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -260,9 +260,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/pandas/msgpack/default/encoding': {
+                       '/pandas_msgpack_default_encoding': {
                            'get': {
-                               'operationId': 'get_test_pandas_msgpack_default_encoding',
+                               'operationId': 'get_pandas_msgpack_default_encoding',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -273,8 +273,8 @@ def swagger():
                    })
 
 
-@app.route('/test/dict/with/empty/nested/list', methods=['GET'])
-def get_test_dict_with_empty_nested_list():
+@app.route('/dict_with_empty_nested_list', methods=['GET'])
+def get_dict_with_empty_nested_list():
     dict_with_nested_list = {
         "Column 1": "0-0-1",
         "Column 2": [
@@ -305,8 +305,8 @@ def get_test_dict_with_empty_nested_list():
     return jsonify(dict_with_nested_list)
 
 
-@app.route('/test/dict/with/three/imbricated/levels', methods=['GET'])
-def get_test_dict_with_three_imbricated_levels():
+@app.route('/dict_with_three_imbricated_levels', methods=['GET'])
+def get_dict_with_three_imbricated_levels():
     dict_with_imbricated_levels = {
         "Column 1": "0-0-1",
         "Column 2": [
@@ -348,62 +348,8 @@ def get_test_dict_with_three_imbricated_levels():
     return jsonify(dict_with_imbricated_levels)
 
 
-@app.route('/test/dict/with/four/imbricated/levels', methods=['GET'])
-def get_test_dict_with_four_imbricated_levels():
-    dict_with_imbricated_levels = {
-        "Column 1": "0-0-1",
-        "Column 2": [
-            {
-                "Column 1": "0-0-2 / 1-0-1",
-                "Column 2": [
-                    {
-                        "Column 1": "0-0-2 / 1-0-2 / 2-0-1",
-                        "Column 2": [
-                            {
-                                "Column 1": "0-0-2 / 1-0-2 / 2-0-2 / 3-0-1",
-                                "Column 2": [],
-                                "Column 3": "0-0-2 / 1-0-2 / 2-0-2 / 3-0-3"
-                            },
-                            {
-                                "Column 1": "0-0-2 / 1-0-2 / 2-0-2 / 3-1-1",
-                                "Column 2": [],
-                                "Column 3": "0-0-2 / 1-0-2 / 2-0-2 / 3-1-3"
-                            }
-                        ],
-                        "Column 3": "0-0-2 / 1-0-2 / 2-0-3"
-                    },
-                    {
-                        "Column 1": "0-0-2 / 1-0-2 / 2-1-1",
-                        "Column 2": [],
-                        "Column 3": "0-0-2 / 1-0-2 / 2-1-3"
-                    }
-                ],
-                "Column 3": "0-0-2 / 1-0-3"
-            },
-            {
-                "Column 1": "0-0-2 / 1-1-1",
-                "Column 2": [
-                    {
-                        "Column 1": "0-0-2 / 1-1-2 / 2-0-1",
-                        "Column 2": [],
-                        "Column 3": "0-0-2 / 1-1-2 / 2-0-3"
-                    },
-                    {
-                        "Column 1": "0-0-2 / 1-1-2 / 2-1-1",
-                        "Column 2": [],
-                        "Column 3": "0-0-2 / 1-1-2 / 2-1-3"
-                    }
-                ],
-                "Column 3": "0-0-2 / 1-1-3"
-            }
-        ],
-        "Column 3": "0-0-3"
-    }
-    return jsonify(dict_with_imbricated_levels)
-
-
-@app.route('/test/dict/with/multiple/imbricated/levels/and/duplicate/keys', methods=['GET'])
-def get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys():
+@app.route('/dict_with_four_imbricated_levels', methods=['GET'])
+def get_dict_with_four_imbricated_levels():
     dict_with_imbricated_levels = {
         "Column 1": "0-0-1",
         "Column 2": [
@@ -456,34 +402,88 @@ def get_test_dict_with_multiple_imbricated_levels_and_duplicate_keys():
     return jsonify(dict_with_imbricated_levels)
 
 
-@app.route('/test/empty/dict', methods=['GET'])
-def get_test_empty_dict():
+@app.route('/dict_with_multiple_imbricated_levels_and_duplicate_keys', methods=['GET'])
+def get_dict_with_multiple_imbricated_levels_and_duplicate_keys():
+    dict_with_imbricated_levels = {
+        "Column 1": "0-0-1",
+        "Column 2": [
+            {
+                "Column 1": "0-0-2 / 1-0-1",
+                "Column 2": [
+                    {
+                        "Column 1": "0-0-2 / 1-0-2 / 2-0-1",
+                        "Column 2": [
+                            {
+                                "Column 1": "0-0-2 / 1-0-2 / 2-0-2 / 3-0-1",
+                                "Column 2": [],
+                                "Column 3": "0-0-2 / 1-0-2 / 2-0-2 / 3-0-3"
+                            },
+                            {
+                                "Column 1": "0-0-2 / 1-0-2 / 2-0-2 / 3-1-1",
+                                "Column 2": [],
+                                "Column 3": "0-0-2 / 1-0-2 / 2-0-2 / 3-1-3"
+                            }
+                        ],
+                        "Column 3": "0-0-2 / 1-0-2 / 2-0-3"
+                    },
+                    {
+                        "Column 1": "0-0-2 / 1-0-2 / 2-1-1",
+                        "Column 2": [],
+                        "Column 3": "0-0-2 / 1-0-2 / 2-1-3"
+                    }
+                ],
+                "Column 3": "0-0-2 / 1-0-3"
+            },
+            {
+                "Column 1": "0-0-2 / 1-1-1",
+                "Column 2": [
+                    {
+                        "Column 1": "0-0-2 / 1-1-2 / 2-0-1",
+                        "Column 2": [],
+                        "Column 3": "0-0-2 / 1-1-2 / 2-0-3"
+                    },
+                    {
+                        "Column 1": "0-0-2 / 1-1-2 / 2-1-1",
+                        "Column 2": [],
+                        "Column 3": "0-0-2 / 1-1-2 / 2-1-3"
+                    }
+                ],
+                "Column 3": "0-0-2 / 1-1-3"
+            }
+        ],
+        "Column 3": "0-0-3"
+    }
+    return jsonify(dict_with_imbricated_levels)
+
+
+@app.route('/empty_dict', methods=['GET'])
+def get_empty_dict():
     return jsonify({})
 
 
-@app.route('/test/empty/list', methods=['GET'])
-def get_test_empty_list():
+@app.route('/empty_list', methods=['GET'])
+def get_empty_list():
     return jsonify([])
 
 
-@app.route('/test/one/level/dict', methods=['GET'])
-def get_test_one_level_dict():
+@app.route('/one_level_dict', methods=['GET'])
+def get_one_level_dict():
     return jsonify({
         "Column 2": "value 1",
         "Column 3": "value 2"
     })
 
 
-@app.route('/test/one/level/list', methods=['GET'])
-def get_test_one_level_list():
+@app.route('/one_level_list', methods=['GET'])
+def get_one_level_list():
     return jsonify([
         "value 1",
         "value 2"
     ])
 
 
-@app.route('/test/one/dict/entry/with/a/list', methods=['GET'])
-def get_test_one_dict_entry_with_a_list():
+@app.route('/one_dict_entry_with_a_list', methods=['GET'])
+def get_one_dict_entry_with_a_list():
     return jsonify({
         'Column 1': [
             "value 1",
@@ -491,8 +491,8 @@ def get_test_one_dict_entry_with_a_list():
         ]})
 
 
-@app.route('/test/one/dict/entry/with/a/list/of/dict', methods=['GET'])
-def get_test_one_dict_entry_with_a_list_of_dict():
+@app.route('/one_dict_entry_with_a_list_of_dict', methods=['GET'])
+def get_one_dict_entry_with_a_list_of_dict():
     return jsonify({
         'Column 1': [
             {
@@ -507,8 +507,8 @@ def get_test_one_dict_entry_with_a_list_of_dict():
     })
 
 
-@app.route('/test/list/of/dict', methods=['GET'])
-def get_test_list_of_dict():
+@app.route('/list_of_dict', methods=['GET'])
+def get_list_of_dict():
     return jsonify([
         {
             'Column 2': "value 11",
@@ -521,8 +521,8 @@ def get_test_list_of_dict():
     ])
 
 
-@app.route('/test/dict/with/list', methods=['GET'])
-def get_test_dict_with_list():
+@app.route('/dict_with_list', methods=['GET'])
+def get_dict_with_list():
     dict_with_list = {
         "Column 1": 23,
         "Column 2": True,
@@ -536,8 +536,8 @@ def get_test_dict_with_list():
     return jsonify(dict_with_list)
 
 
-@app.route('/test/dict/with/list/of/different/size', methods=['GET'])
-def get_test_dict_with_list_of_different_size():
+@app.route('/dict_with_list_of_different_size', methods=['GET'])
+def get_dict_with_list_of_different_size():
     dict_with_list = {
         "Column 1": [23],
         "Column 2": [24],
@@ -550,8 +550,8 @@ def get_test_dict_with_list_of_different_size():
     return jsonify(dict_with_list)
 
 
-@app.route('/test/dict/with/various/columns', methods=['GET'])
-def get_test_dict_with_various_columns():
+@app.route('/dict_with_various_columns', methods=['GET'])
+def get_dict_with_various_columns():
     dict_with_list = {
         "Column 1": [
             [
@@ -592,8 +592,8 @@ def _get_dataframe():
     return df
 
 
-@app.route('/test/pandas/msgpack/default/encoding', methods=['GET'])
-def get_test_pandas_msgpack_default_encoding():
+@app.route('/pandas_msgpack_default_encoding', methods=['GET'])
+def get_pandas_msgpack_default_encoding():
     if support_pandas():
         df = _get_dataframe()
         output = df.to_msgpack(compress='zlib')

@@ -7,9 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/oauth2/authentication/success': {
+                       '/oauth2/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_oauth2_authentication_success',
+                               'operationId': 'get_oauth2_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -24,9 +24,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/oauth2/authentication/success/with/custom/response/type': {
+                       '/oauth2/authentication/success/with/custom/response/type': {
                            'get': {
-                               'operationId': 'get_test_oauth2_authentication_success_with_custom_response_type',
+                               'operationId': 'get_oauth2_authentication_success_with_custom_response_type',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -41,9 +41,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/oauth2/authentication/success/without/response/type': {
+                       '/oauth2/authentication/success/without/response/type': {
                            'get': {
-                               'operationId': 'get_test_oauth2_authentication_success_without_response_type',
+                               'operationId': 'get_oauth2_authentication_success_without_response_type',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -58,9 +58,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/oauth2/authentication/failure': {
+                       '/oauth2/authentication/failure': {
                            'get': {
-                               'operationId': 'get_test_oauth2_authentication_failure',
+                               'operationId': 'get_oauth2_authentication_failure',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -75,9 +75,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/oauth2/authentication/timeout': {
+                       '/oauth2/authentication/timeout': {
                            'get': {
-                               'operationId': 'get_test_oauth2_authentication_timeout',
+                               'operationId': 'get_oauth2_authentication_timeout',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -92,9 +92,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/oauth2/authentication/success/quick/expiry': {
+                       '/oauth2/authentication/success/quick/expiry': {
                            'get': {
-                               'operationId': 'get_test_oauth2_authentication_success_quick_expiry',
+                               'operationId': 'get_oauth2_authentication_success_quick_expiry',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -109,9 +109,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/api/key/header/authentication/success': {
+                       '/api/key/header/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_api_key_header_authentication_success',
+                               'operationId': 'get_api_key_header_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -125,9 +125,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/api/key/query/authentication/success': {
+                       '/api/key/query/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_api_key_query_authentication_success',
+                               'operationId': 'get_api_key_query_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -141,9 +141,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/basic/authentication/success': {
+                       '/basic/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_basic_authentication_success',
+                               'operationId': 'get_basic_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -157,9 +157,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/basic/and/api/key/authentication/success': {
+                       '/basic/and/api/key/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_basic_and_api_key_authentication_success',
+                               'operationId': 'get_basic_and_api_key_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -175,9 +175,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/basic/or/api/key/authentication/success': {
+                       '/basic/or/api/key/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_basic_or_api_key_authentication_success',
+                               'operationId': 'get_basic_or_api_key_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -195,9 +195,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/api/key/or/basic/authentication/success': {
+                       '/api/key/or/basic/authentication/success': {
                            'get': {
-                               'operationId': 'get_test_api_key_or_basic_authentication_success',
+                               'operationId': 'get_api_key_or_basic_authentication_success',
                                'responses': {
                                    '200': {
                                        'description': 'return value'
@@ -281,53 +281,53 @@ def swagger():
                    })
 
 
-@app.route('/test/oauth2/authentication/success', methods=['GET'])
-def get_test_oauth2_authentication_success():
+@app.route('/oauth2/authentication/success', methods=['GET'])
+def get_oauth2_authentication_success():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 
-@app.route('/test/oauth2/authentication/success/with/custom/response/type', methods=['GET'])
-def get_test_oauth2_authentication_success_with_custom_response_type():
+@app.route('/oauth2/authentication/success/with/custom/response/type', methods=['GET'])
+def get_oauth2_authentication_success_with_custom_response_type():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 
-@app.route('/test/oauth2/authentication/success/without/response/type', methods=['GET'])
-def get_test_oauth2_authentication_success_without_response_type():
+@app.route('/oauth2/authentication/success/without/response/type', methods=['GET'])
+def get_oauth2_authentication_success_without_response_type():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 
-@app.route('/test/oauth2/authentication/failure', methods=['GET'])
-def get_test_oauth2_authentication_failure():
+@app.route('/oauth2/authentication/failure', methods=['GET'])
+def get_oauth2_authentication_failure():
     return 'You should never receive this message as authentication should fail.'
 
 
-@app.route('/test/oauth2/authentication/timeout', methods=['GET'])
-def get_test_oauth2_authentication_timeout():
+@app.route('/oauth2/authentication/timeout', methods=['GET'])
+def get_oauth2_authentication_timeout():
     return 'You should never receive this message as authentication should timeout.'
 
 
-@app.route('/test/oauth2/authentication/success/quick/expiry', methods=['GET'])
-def get_test_oauth2_authentication_success_quick_expiry():
+@app.route('/oauth2/authentication/success/quick/expiry', methods=['GET'])
+def get_oauth2_authentication_success_quick_expiry():
     return jsonify([{'Bearer': request.headers.get('Bearer')}])
 
 
-@app.route('/test/api/key/header/authentication/success', methods=['GET'])
-def get_test_api_key_header_authentication_success():
+@app.route('/api/key/header/authentication/success', methods=['GET'])
+def get_api_key_header_authentication_success():
     return jsonify([{'X-API-HEADER-KEY': request.headers.get('X-API-HEADER-KEY')}])
 
 
-@app.route('/test/api/key/query/authentication/success', methods=['GET'])
-def get_test_api_key_query_authentication_success():
+@app.route('/api/key/query/authentication/success', methods=['GET'])
+def get_api_key_query_authentication_success():
     return jsonify([{'X-API-QUERY-KEY': request.args.get('X-API-QUERY-KEY')}])
 
 
-@app.route('/test/basic/authentication/success', methods=['GET'])
-def get_test_basic_authentication_success():
+@app.route('/basic/authentication/success', methods=['GET'])
+def get_basic_authentication_success():
     return jsonify([{'Authorization': request.headers.get('Authorization')}])
 
 
-@app.route('/test/basic/and/api/key/authentication/success', methods=['GET'])
-def get_test_basic_and_api_key_authentication_success():
+@app.route('/basic/and/api/key/authentication/success', methods=['GET'])
+def get_basic_and_api_key_authentication_success():
     return jsonify([
         {
             'Authorization': request.headers.get('Authorization'),
@@ -336,8 +336,8 @@ def get_test_basic_and_api_key_authentication_success():
     ])
 
 
-@app.route('/test/basic/or/api/key/authentication/success', methods=['GET'])
-def get_test_basic_or_api_key_authentication_success():
+@app.route('/basic/or/api/key/authentication/success', methods=['GET'])
+def get_basic_or_api_key_authentication_success():
     return jsonify([
         {
             'Authorization': request.headers.get('Authorization'),
@@ -346,8 +346,8 @@ def get_test_basic_or_api_key_authentication_success():
     ])
 
 
-@app.route('/test/api/key/or/basic/authentication/success', methods=['GET'])
-def get_test_api_key_or_basic_authentication_success():
+@app.route('/api/key/or/basic/authentication/success', methods=['GET'])
+def get_api_key_or_basic_authentication_success():
     return jsonify([
         {
             'Authorization': request.headers.get('Authorization'),

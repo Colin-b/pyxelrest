@@ -7,9 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/async': {
+                       '/async': {
                            'get': {
-                               'operationId': 'get_test_async',
+                               'operationId': 'get_async',
                                'responses': {
                                    '202': {
                                        'description': 'return value',
@@ -23,8 +23,8 @@ def swagger():
                    })
 
 
-@app.route('/test/async', methods=['GET'])
-def get_test_method():
+@app.route('/async', methods=['GET'])
+def get_async():
     response = Response()
     response.status_code = 202
     response.headers['location'] = request.base_url + '/status'
@@ -43,8 +43,8 @@ skipped_headers = [
 ]
 
 
-@app.route('/test/async/status', methods=['GET'])
-def get_test_status():
+@app.route('/async/status', methods=['GET'])
+def get_async_status():
     headers = dict(request.headers)
     return jsonify({
         header_name: header_value
@@ -53,8 +53,8 @@ def get_test_status():
     })
 
 
-@app.route('/test/unlisted', methods=['DELETE'])
-def delete_test_unlisted():
+@app.route('/unlisted', methods=['DELETE'])
+def delete_unlisted():
     headers = dict(request.headers)
     return jsonify({
         header_name: header_value
@@ -63,14 +63,8 @@ def delete_test_unlisted():
     })
 
 
-@app.route('/test/dict', methods=['POST'])
-def post_test_dict():
-    headers = dict(request.headers)
-    return jsonify(request.json)
-
-
-@app.route('/test/dict', methods=['PUT'])
-def put_test_dict():
+@app.route('/dict', methods=['POST', 'PUT'])
+def dict_body():
     headers = dict(request.headers)
     return jsonify(request.json)
 

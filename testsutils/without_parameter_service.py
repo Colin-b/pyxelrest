@@ -13,9 +13,9 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/without/parameter': {
+                       '/without_parameter': {
                            'get': {
-                               'operationId': 'get_test_without_parameter',
+                               'operationId': 'get_without_parameter',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -26,7 +26,7 @@ def swagger():
                                }
                            },
                            'post': {
-                                'operationId': 'post_test_without_parameter',
+                                'operationId': 'post_without_parameter',
                                 'responses': {
                                    '200': {
                                        'description': 'POST performed properly'
@@ -34,7 +34,7 @@ def swagger():
                                 }
                            },
                            'put': {
-                                'operationId': 'put_test_without_parameter',
+                                'operationId': 'put_without_parameter',
                                 'responses': {
                                    '200': {
                                        'description': 'PUT performed properly'
@@ -42,7 +42,7 @@ def swagger():
                                 }
                            },
                            'delete': {
-                                'operationId': 'delete_test_without_parameter',
+                                'operationId': 'delete_without_parameter',
                                 'responses': {
                                    '200': {
                                        'description': 'DELETE performed properly'
@@ -50,9 +50,9 @@ def swagger():
                                 }
                            }
                        },
-                       '/test/plain/text/without/parameter': {
+                       '/plain_text_without_parameter': {
                             'get': {
-                                'operationId': 'get_test_plain_text_without_parameter',
+                                'operationId': 'get_plain_text_without_parameter',
                                 'produces': [
                                     'text/plain'
                                 ],
@@ -66,7 +66,7 @@ def swagger():
                                 }
                             },
                             'post': {
-                                'operationId': 'post_test_plain_text_without_parameter',
+                                'operationId': 'post_plain_text_without_parameter',
                                 'produces': [
                                     'text/plain'
                                 ],
@@ -77,7 +77,7 @@ def swagger():
                                 }
                             },
                             'put': {
-                                'operationId': 'put_test_plain_text_without_parameter',
+                                'operationId': 'put_plain_text_without_parameter',
                                 'produces': [
                                     'text/plain'
                                 ],
@@ -88,7 +88,7 @@ def swagger():
                                 }
                             },
                             'delete': {
-                                'operationId': 'delete_test_plain_text_without_parameter',
+                                'operationId': 'delete_plain_text_without_parameter',
                                 'produces': [
                                     'text/plain'
                                 ],
@@ -99,9 +99,9 @@ def swagger():
                                 }
                             }
                        },
-                       '/test/json/without/parameter': {
+                       '/json_without_parameter': {
                             'get': {
-                                'operationId': 'get_test_json_without_parameter',
+                                'operationId': 'get_json_without_parameter',
                                 'produces': [
                                     'application/json'
                                 ],
@@ -113,7 +113,7 @@ def swagger():
                                 }
                             },
                             'post': {
-                                'operationId': 'post_test_json_without_parameter',
+                                'operationId': 'post_json_without_parameter',
                                 'produces': [
                                     'application/json'
                                 ],
@@ -125,7 +125,7 @@ def swagger():
                                 }
                             },
                             'put': {
-                                'operationId': 'put_test_json_without_parameter',
+                                'operationId': 'put_json_without_parameter',
                                 'produces': [
                                     'application/json'
                                 ],
@@ -137,7 +137,7 @@ def swagger():
                                 }
                             },
                             'delete': {
-                                'operationId': 'delete_test_json_without_parameter',
+                                'operationId': 'delete_json_without_parameter',
                                 'produces': [
                                     'application/json'
                                 ],
@@ -149,9 +149,9 @@ def swagger():
                                 }
                             }
                        },
-                       '/test/octet/without/parameter': {
+                       '/octet_without_parameter': {
                             'get': {
-                                'operationId': 'get_test_octet_without_parameter',
+                                'operationId': 'get_octet_without_parameter',
                                 'produces': [
                                     'application/octet-stream'
                                 ],
@@ -162,7 +162,7 @@ def swagger():
                                 }
                             },
                             'post': {
-                                'operationId': 'post_test_octet_without_parameter',
+                                'operationId': 'post_octet_without_parameter',
                                 'produces': [
                                     'application/octet-stream'
                                 ],
@@ -173,7 +173,7 @@ def swagger():
                                 }
                             },
                             'put': {
-                                'operationId': 'put_test_octet_without_parameter',
+                                'operationId': 'put_octet_without_parameter',
                                 'produces': [
                                     'application/octet-stream'
                                 ],
@@ -184,7 +184,7 @@ def swagger():
                                 }
                             },
                             'delete': {
-                                'operationId': 'delete_test_octet_without_parameter',
+                                'operationId': 'delete_octet_without_parameter',
                                 'produces': [
                                     'application/octet-stream'
                                 ],
@@ -198,25 +198,25 @@ def swagger():
                    })
 
 
-@app.route('/test/plain/text/without/parameter', methods=['GET'])
-def get_test_plain_text_without_parameter():
+@app.route('/plain_text_without_parameter', methods=['GET'])
+def get_plain_text_without_parameter():
     return 'string value returned should be truncated so that the following information cannot be seen by user, ' \
            'because of the fact that Excel does not allow more than 255 characters in a cell. ' \
            'Only the 255 characters will be returned by the user defined functions:  YOU CANNOT RECEIVE THIS!!!!!!'
 
 
-@app.route('/test/without/parameter', methods=['POST'])
-def post_test_without_parameter():
+@app.route('/without_parameter', methods=['POST'])
+def post_without_parameter():
     return 'POST performed properly'
 
 
-@app.route('/test/without/parameter', methods=['PUT'])
-def put_test_without_parameter():
+@app.route('/without_parameter', methods=['PUT'])
+def put_without_parameter():
     return 'PUT performed properly'
 
 
-@app.route('/test/without/parameter', methods=['DELETE'])
-def delete_test_without_parameter():
+@app.route('/without_parameter', methods=['DELETE'])
+def delete_without_parameter():
     return 'DELETE performed properly'
 
 

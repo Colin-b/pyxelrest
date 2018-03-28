@@ -3,8 +3,8 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/sub/test/static/file/call', methods=['GET'])
-def get_test_static_file_call():
+@app.route('/sub/static/file/call', methods=['GET'])
+def get_static_file_call():
     return 'success'
 
 

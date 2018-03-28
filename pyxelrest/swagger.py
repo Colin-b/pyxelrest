@@ -14,7 +14,7 @@ except ImportError:
     from ConfigParser import RawConfigParser
     from urlparse import urlsplit
 
-from pyxelrest import vba
+from pyxelrest import vba, SERVICES_CONFIGURATION_FILE_PATH
 from pyxelrest.pyxelresterrors import *
 from pyxelrest import authentication
 from pyxelrest import fileadapter
@@ -293,9 +293,13 @@ class SwaggerService:
         def _update_method_parameters():
             method['parameters'] = root_parameters + methods_parameters + _normalise_names(method.get('parameters', []))
 
-            method_parameters_names = [parameter['name'] for parameter in method['parameters']]
-            if len(set(method_parameters_names)) != len(method_parameters_names):
-                raise DuplicatedParameters(method)
+            method_parameters_names_per_location = {}
+            for parameter in method['parameters']:
+                method_parameters_names_per_location.setdefault(parameter['in'], []).append(parameter['name'])
+
+            for location, parameters_names in method_parameters_names_per_location.items():
+                if len(set(parameters_names)) != len(parameters_names):
+                    raise DuplicatedParameters(method)
 
         def _update_method_produces():
             method['produces'] = root_produces + methods_produces + method.get('produces', [])
@@ -358,23 +362,22 @@ class UDFMethod:
         self.contains_body_parameters = False
         self.contains_file_parameters = False
         self.contains_query_parameters = False
-        self.parameters = {}
+        udf_parameters = []
         for swagger_parameter in swagger_method.get('parameters', []):
-            parameters = self._to_parameters(swagger_parameter)
-            self.parameters.update({
-                parameter.name: parameter
-                for parameter in parameters
-            })
-            for parameter in parameters:
-                if parameter.location == 'path':
-                    self.path_parameters.append(parameter)
-                # Required but not in path
-                elif parameter.required:
-                    self.update_information_on_parameter_type(parameter)
-                    self.required_parameters.append(parameter)
-                else:
-                    self.update_information_on_parameter_type(parameter)
-                    self.optional_parameters.append(parameter)
+            udf_parameters.extend(self._to_parameters(swagger_parameter))
+        self._avoid_duplicated_names(udf_parameters)
+        self.parameters = {}
+        for udf_parameter in udf_parameters:
+            self.parameters[udf_parameter.name] = udf_parameter
+            if udf_parameter.location == 'path':
+                self.path_parameters.append(udf_parameter)
+            # Required but not in path
+            elif udf_parameter.required:
+                self.update_information_on_parameter_type(udf_parameter)
+                self.required_parameters.append(udf_parameter)
+            else:
+                self.update_information_on_parameter_type(udf_parameter)
+                self.optional_parameters.append(udf_parameter)
         # Uses "or" in case swagger contains None in description (explicitly set by service)
         self.help_url = UDFMethod.extract_url(swagger_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
@@ -474,7 +477,6 @@ class UDFMethod:
         ref = ref[len('#/definitions/'):]
         parameters = []
         swagger_definition = self.service.swagger_definitions[ref]
-        # TODO Prefix name properly to avoid conflicts
         for inner_parameter_name, inner_parameter in swagger_definition['properties'].items():
             if not inner_parameter.get('readOnly', False):
                 inner_parameter['server_param_name'] = inner_parameter_name
@@ -483,6 +485,20 @@ class UDFMethod:
                 inner_parameter['required'] = inner_parameter_name in swagger_definition.get('required', [])
                 parameters.append(UDFParameter(inner_parameter, schema))
         return parameters
+
+    def _avoid_duplicated_names(self, udf_parameters):
+        parameters_by_name = {}
+        for udf_parameter in udf_parameters:
+            parameters_by_name.setdefault(udf_parameter.name, []).append(udf_parameter)
+        for parameters in parameters_by_name.values():
+            if len(parameters) > 1:
+                for parameter in parameters:
+                    # Keep original name for body and form as they make the more sense for those location
+                    if parameter.location != 'body' and parameter.location != 'formData':
+                        parameter.name = '{0}_{1}'.format(parameter.location, parameter.name)
+        # Ensure that names are not duplicated anymore
+        if len(parameters_by_name) != len(udf_parameters):
+            self._avoid_duplicated_names(udf_parameters)
 
 
 class UDFParameter:
@@ -720,11 +736,10 @@ def load_services():
     except:
         # Python 2
         config_parser = RawConfigParser()
-    file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
-    if not config_parser.read(file_path):
-        raise ConfigurationFileNotFound(file_path)
+    if not config_parser.read(SERVICES_CONFIGURATION_FILE_PATH):
+        raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
 
-    logging.debug('Loading services from "{0}"...'.format(file_path))
+    logging.debug('Loading services from "{0}"...'.format(SERVICES_CONFIGURATION_FILE_PATH))
     loaded_services = []
     pyxelrest_config = None
     for service_name in config_parser.sections():

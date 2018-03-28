@@ -322,7 +322,7 @@ def swagger():
                        "application/json"
                    ],
                    paths={
-                       '/test/vba/restricted/keywords': {
+                       '/vba_restricted_keywords': {
                            'parameters': [
                                {
                                    'description': '',
@@ -1397,7 +1397,7 @@ def swagger():
                                }
                            ],
                            'get': {
-                               'operationId': 'get_test_vba_restricted_keywords',
+                               'operationId': 'get_vba_restricted_keywords',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -1408,7 +1408,7 @@ def swagger():
                                }
                            },
                            'post': {
-                               'operationId': 'post_test_vba_restricted_keywords',
+                               'operationId': 'post_vba_restricted_keywords',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -1420,7 +1420,7 @@ def swagger():
                                ]
                            },
                            'put': {
-                               'operationId': 'put_test_vba_restricted_keywords',
+                               'operationId': 'put_vba_restricted_keywords',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -1432,7 +1432,7 @@ def swagger():
                                ]
                            },
                            'delete': {
-                               'operationId': 'delete_test_vba_restricted_keywords',
+                               'operationId': 'delete_vba_restricted_keywords',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -1444,7 +1444,7 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/this/{attribute}/vba/restricted/keyword/in/uri/parameter': {
+                       '/{attribute}/vba/restricted/keyword/in/uri/parameter': {
                            'parameters': [
                                {
                                    'type': 'string',
@@ -1455,7 +1455,7 @@ def swagger():
                                }
                            ],
                            'get': {
-                               'operationId': 'get_test_this_attribute_vba_restricted_keyword_in_uri_parameter',
+                               'operationId': 'get_attribute_vba_restricted_keyword_in_uri_parameter',
                                'responses': {
                                    '200': {
                                        'description': 'return value',
@@ -1469,33 +1469,19 @@ def swagger():
                    })
 
 
-@app.route('/test/vba/restricted/keywords', methods=['GET'])
-def get_test_vba_restricted_keywords():
+@app.route('/vba_restricted_keywords', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def get_vba_restricted_keywords():
     return jsonify(request.args)
 
 
-@app.route('/test/vba/restricted/keywords', methods=['POST'])
-def post_test_vba_restricted_keywords():
-    return jsonify(request.args)
-
-
-@app.route('/test/vba/restricted/keywords', methods=['PUT'])
-def put_test_vba_restricted_keywords():
-    return jsonify(request.args)
-
-
-@app.route('/test/vba/restricted/keywords', methods=['DELETE'])
-def delete_test_vba_restricted_keywords():
-    return jsonify(request.args)
-
-
-@app.route('/test/this/<string:attribute>/vba/restricted/keyword/in/uri/parameter', methods=['GET'])
-def get_test_this_attribute_vba_restricted_keyword_in_uri_parameter(attribute):
+@app.route('/<string:attribute>/vba/restricted/keyword/in/uri/parameter', methods=['GET'])
+def get_attribute_vba_restricted_keyword_in_uri_parameter(attribute):
     return jsonify({'attribute': attribute})
 
 
 def start_server(port):
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8949)

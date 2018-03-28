@@ -177,9 +177,81 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/json/dict_with_read_only': {
+                       '/different_location_same_name/{dict_field1}': {
                            'post': {
-                               'operationId': 'post_test_json_dict_with_read_only',
+                               'operationId': 'post_different_location_same_name',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/Dict",
+                                       },
+                                   },
+                                   {
+                                       'name': "dict_field1",
+                                       'required': True,
+                                       'in': "header",
+                                       'type': 'string',
+                                   },
+                                   {
+                                       'name': "dict_field1",
+                                       'required': True,
+                                       'in': "query",
+                                       'type': 'string',
+                                   },
+                                   {
+                                       'name': "dict_field1",
+                                       'required': True,
+                                       'in': "path",
+                                       'type': 'string',
+                                   },
+                               ],
+                           },
+                       },
+                       '/list_parameter': {
+                           'get': {
+                               'operationId': 'get_list_parameter',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "list_parameter",
+                                       'required': True,
+                                       'in': "query",
+                                       'type': 'string',
+                                   },
+                               ],
+                           },
+                           'delete': {
+                               'operationId': 'delete_list_parameter',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "list_parameter",
+                                       'required': True,
+                                       'in': "query",
+                                       'type': 'string',
+                                   },
+                               ],
+                           },
+                       },
+                       '/dict_with_read_only': {
+                           'post': {
+                               'operationId': 'post_dict_with_read_only',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -200,9 +272,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/dict_string': {
+                       '/dict_string': {
                            'post': {
-                               'operationId': 'post_test_json_dict_string',
+                               'operationId': 'post_dict_string',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -220,9 +292,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/dict_with_list_of_list': {
+                       '/dict_with_list_of_list': {
                            'post': {
-                               'operationId': 'post_test_json_dict_with_list_of_list',
+                               'operationId': 'post_dict_with_list_of_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -240,9 +312,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/dict_with_dict_list': {
+                       '/dict_with_dict_list': {
                            'post': {
-                               'operationId': 'post_test_json_dict_with_dict_list',
+                               'operationId': 'post_dict_with_dict_list',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -260,9 +332,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/list_of_dict_with_dict': {
+                       '/list_of_dict_with_dict': {
                            'post': {
-                               'operationId': 'post_test_json_list_of_dict_with_dict',
+                               'operationId': 'post_list_of_dict_with_dict',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -283,9 +355,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/dict_with_dict': {
+                       '/dict_with_dict': {
                            'post': {
-                               'operationId': 'post_test_json_dict_with_dict',
+                               'operationId': 'post_dict_with_dict',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -303,9 +375,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/list_of_list/form': {
+                       '/list_of_list_form': {
                            'post': {
-                               'operationId': 'post_test_json_list_of_list_form',
+                               'operationId': 'post_list_of_list_form',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -348,9 +420,9 @@ def swagger():
                                ],
                            },
                        },
-                       '/test/json/with/all/parameters/types': {
+                       '/all_parameters_types': {
                            'get': {
-                               'operationId': 'get_test_json_with_all_parameters_types',
+                               'operationId': 'get_all_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -605,7 +677,7 @@ def swagger():
                                }
                            },
                            'post': {
-                               'operationId': 'post_test_json_with_all_parameters_types',
+                               'operationId': 'post_all_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -863,7 +935,7 @@ def swagger():
                                }
                            },
                            'put': {
-                               'operationId': 'put_test_json_with_all_parameters_types',
+                               'operationId': 'put_all_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -1121,7 +1193,7 @@ def swagger():
                                }
                            },
                            'delete': {
-                               'operationId': 'delete_test_json_with_all_parameters_types',
+                               'operationId': 'delete_all_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -1379,9 +1451,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/json/with/all/optional/parameters/types': {
+                       '/all_optional_parameters_types': {
                            'get': {
-                               'operationId': 'get_test_json_with_all_optional_parameters_types',
+                               'operationId': 'get_all_optional_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -1639,7 +1711,7 @@ def swagger():
                                }
                            },
                            'post': {
-                               'operationId': 'post_test_json_with_all_optional_parameters_types',
+                               'operationId': 'post_all_optional_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -1897,7 +1969,7 @@ def swagger():
                                }
                            },
                            'put': {
-                               'operationId': 'put_test_json_with_all_optional_parameters_types',
+                               'operationId': 'put_all_optional_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -2155,7 +2227,7 @@ def swagger():
                                }
                            },
                            'delete': {
-                               'operationId': 'delete_test_json_with_all_optional_parameters_types',
+                               'operationId': 'delete_all_optional_parameters_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -2413,9 +2485,9 @@ def swagger():
                                }
                            }
                        },
-                       '/test/json/with/all/paths/types': {
+                       '/all_paths_types': {
                            'get': {
-                               'operationId': 'get_test_json_with_all_paths_types',
+                               'operationId': 'get_all_paths_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -2673,7 +2745,7 @@ def swagger():
                                }
                            },
                            'post': {
-                               'operationId': 'post_test_json_with_all_paths_types',
+                               'operationId': 'post_all_paths_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -2931,7 +3003,7 @@ def swagger():
                                }
                            },
                            'put': {
-                               'operationId': 'put_test_json_with_all_paths_types',
+                               'operationId': 'put_all_paths_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -3189,7 +3261,7 @@ def swagger():
                                }
                            },
                            'delete': {
-                               'operationId': 'delete_test_json_with_all_paths_types',
+                               'operationId': 'delete_all_paths_types',
                                'produces': [
                                    'application/json'
                                ],
@@ -3450,18 +3522,32 @@ def swagger():
                    })
 
 
-@app.route('/test/json/dict_with_read_only', methods=['POST'])
-def post_test_json_dict_with_read_only():
+@app.route('/list_parameter', methods=['GET', 'DELETE'])
+def list_parameter():
+    return jsonify(request.args.getlist('list_parameter'))
+
+
+@app.route('/dict_with_read_only', methods=['POST'])
+def post_dict_with_read_only():
     return jsonify(request.json)
 
 
-@app.route('/test/json/dict_string', methods=['POST'])
-def post_test_json_dict_string():
+@app.route('/different_location_same_name/<string:dict_field1>', methods=['POST'])
+def post_different_location_same_name(dict_field1):
+    all_sent = request.json
+    all_sent['header_dict_field1'] = request.headers.get('dict_field1')
+    all_sent['query_dict_field1'] = request.args.get('dict_field1')
+    all_sent['path_dict_field1'] = dict_field1
+    return jsonify(all_sent)
+
+
+@app.route('/dict_string', methods=['POST'])
+def post_dict_string():
     return jsonify(request.json)
 
 
-@app.route('/test/json/dict_with_list_of_list', methods=['POST'])
-def post_test_json_dict_with_list_of_list():
+@app.route('/dict_with_list_of_list', methods=['POST'])
+def post_dict_with_list_of_list():
     if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1', 'key2', 'key3'], ['value10', 'value20', 'value30'], ['value11', 'value21', 'value31'], ['value12', 'value22', 'value32']]}:
         return jsonify('OK')
     if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1'], ['key2'], ['key3']]}:
@@ -3469,23 +3555,23 @@ def post_test_json_dict_with_list_of_list():
     return jsonify(request.json)
 
 
-@app.route('/test/json/dict_with_dict_list', methods=['POST'])
-def post_test_json_dict_with_dict_list():
+@app.route('/dict_with_dict_list', methods=['POST'])
+def post_dict_with_dict_list():
     return jsonify(request.json)
 
 
-@app.route('/test/json/list_of_dict_with_dict', methods=['POST'])
-def post_test_json_list_of_dict_with_dict():
+@app.route('/list_of_dict_with_dict', methods=['POST'])
+def post_list_of_dict_with_dict():
     return jsonify(request.json)
 
 
-@app.route('/test/json/dict_with_dict', methods=['POST'])
-def post_test_json_dict_with_dict():
+@app.route('/dict_with_dict', methods=['POST'])
+def post_dict_with_dict():
     return jsonify(request.json)
 
 
-@app.route('/test/json/list_of_list/form', methods=['POST'])
-def post_test_json_lists_of_list_form():
+@app.route('/list_of_list_form', methods=['POST'])
+def post_lists_of_list_form():
     if request.json == {'rules': [['1', 'EBE', 'SNCF', 'rule_1', 'output_1'], ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2']], 'items': [['Deal Number', 'Underlying', 'Client'], ['0001', 'EBE', 'SNCF'], ['0002', 'EFR', 'ENGIE'], ['0003', 'EDE', 'ENGIE']]}:
         return jsonify('OK')
     if request.json == {'rules': [['rule1'], ['rule2'], ['rule3']], 'items': [['item1'], ['item2'], ['item3']]}:
@@ -3493,13 +3579,13 @@ def post_test_json_lists_of_list_form():
     return jsonify(request.json)
 
 
-@app.route('/test/json/with/all/parameters/types', methods=['GET'])
-def get_test_json_with_all_parameters_types():
+@app.route('/all_parameters_types', methods=['GET'])
+def get_all_parameters_types():
     return jsonify(request.args)
 
 
-@app.route('/test/json/with/all/optional/parameters/types', methods=['GET'])
-def get_test_json_with_all_optional_parameters_types():
+@app.route('/all_optional_parameters_types', methods=['GET'])
+def get_all_optional_parameters_types():
     return jsonify(request.args)
 
 

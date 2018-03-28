@@ -19,9 +19,9 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/with/tags': {
+                       '/tags': {
                            'get': {
-                               'operationId': 'get_test_with_tags',
+                               'operationId': 'get_tags',
                                'tags': ['tag 0', 'tag 1'],
                                'responses': {
                                    200: {
@@ -36,7 +36,7 @@ def swagger():
                                }
                            },
                            'post': {
-                               'operationId': 'post_test_with_tags',
+                               'operationId': 'post_tags',
                                'tags': ['tag 1', 'tag 2'],
                                'responses': {
                                    200: {
@@ -51,7 +51,7 @@ def swagger():
                                }
                            },
                            'put': {
-                               'operationId': 'put_test_with_tags',
+                               'operationId': 'put_tags',
                                'tags': ['tag 2', 'tag 3'],
                                'responses': {
                                    200: {
@@ -66,7 +66,7 @@ def swagger():
                                }
                            },
                            'delete': {
-                               'operationId': 'delete_test_with_tags',
+                               'operationId': 'delete_tags',
                                'tags': ['tag 3', 'tag 4'],
                                'responses': {
                                    200: {
@@ -84,23 +84,23 @@ def swagger():
                    })
 
 
-@app.route('/test/with/tags', methods=['GET'])
-def get_test_with_tags():
+@app.route('/tags', methods=['GET'])
+def get_tags():
     return 'Second tag is one of the accepted tags'
 
 
-@app.route('/test/with/tags', methods=['POST'])
-def post_test_with_tags():
+@app.route('/tags', methods=['POST'])
+def post_tags():
     return 'All tags are accepted'
 
 
-@app.route('/test/with/tags', methods=['PUT'])
-def put_test_with_tags():
+@app.route('/tags', methods=['PUT'])
+def put_tags():
     return 'First tag is one of the accepted tags'
 
 
-@app.route('/test/with/tags', methods=['DELETE'])
-def delete_test_with_tags():
+@app.route('/tags', methods=['DELETE'])
+def delete_tags():
     return 'This method should not be available'
 
 

@@ -7,9 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/files': {
+                       '/files': {
                            'post': {
-                               'operationId': 'post_test_files',
+                               'operationId': 'post_files',
                                'responses': {
                                    200: {
                                        'description': 'successful operation',
@@ -38,8 +38,8 @@ def swagger():
                    ])
 
 
-@app.route('/test/files', methods=['POST'])
-def post_test_files():
+@app.route('/files', methods=['POST'])
+def post_files():
     return jsonify({
         file_name: file.read().decode('utf8')
         for file_name, file in request.files.items()

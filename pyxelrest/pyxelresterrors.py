@@ -31,8 +31,8 @@ class ConfigurationFileNotFound(Exception):
 class DuplicatedParameters(Exception):
     """ Method contains duplicated parameters. """
     def __init__(self, method, *args, **kwargs):
-        Exception.__init__(self, '"{0}" parameters are not unique: {1}.'.format(method['operationId'],
-                                                                                method['parameters']))
+        Exception.__init__(self, '"{0}" parameters are not unique per location: {1}.'.format(method['operationId'],
+                                                                                             method['parameters']))
 
 
 class EmptyResponses(InvalidSwaggerDefinition):

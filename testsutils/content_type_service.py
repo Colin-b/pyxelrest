@@ -7,9 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/msgpackpandas': {
+                       '/msgpackpandas': {
                            'get': {
-                               'operationId': 'get_test_msgpackpandas',
+                               'operationId': 'get_msgpackpandas',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -20,9 +20,9 @@ def swagger():
                                ]
                            }
                        },
-                       '/test/json': {
+                       '/json': {
                            'get': {
-                               'operationId': 'get_test_json',
+                               'operationId': 'get_json',
                                'responses': {
                                    200: {
                                        'description': 'successful operation'
@@ -36,13 +36,13 @@ def swagger():
                    })
 
 
-@app.route('/test/msgpackpandas', methods=['GET'])
-def get_test_msgpackpandas():
+@app.route('/msgpackpandas', methods=['GET'])
+def get_msgpackpandas():
     return request.headers.get('Accept')
 
 
-@app.route('/test/json', methods=['GET'])
-def get_test_json():
+@app.route('/json', methods=['GET'])
+def get_json():
     return request.headers.get('Accept')
 
 

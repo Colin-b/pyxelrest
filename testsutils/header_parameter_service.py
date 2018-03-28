@@ -39,9 +39,9 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/header/parameter': {
+                       '/header': {
                            'get': {
-                               'operationId': 'get_test_header_parameter',
+                               'operationId': 'get_header',
                                'parameters': [
                                    {
                                        'description': 'header parameter',
@@ -64,8 +64,8 @@ def swagger():
                    })
 
 
-@app.route('/test/header/parameter', methods=['GET'])
-def get_test_header_parameter():
+@app.route('/header', methods=['GET'])
+def get_header():
     return jsonify(dict(request.headers))
 
 

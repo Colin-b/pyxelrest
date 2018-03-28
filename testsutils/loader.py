@@ -5,17 +5,15 @@ try:
 except ImportError:
     # Python 2
     from imp import reload
-import testsutils.confighandler as confighandler
+import os
+import pyxelrest
 
 
-def load(new_configuration_file_name, remove_logging_config=False):
-    confighandler.set_new_configuration(new_configuration_file_name, remove_logging_config)
-    try:
-        reload(import_module('pyxelrest.pyxelrestgenerator'))
-    except:
-        confighandler.set_initial_configuration()
-        raise
+def load(new_configuration_file_name, logging_configuration_file_name=None):
+    this_dir = os.path.abspath(os.path.dirname(__file__))
+    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = os.path.join(this_dir, new_configuration_file_name)
 
+    if logging_configuration_file_name:
+        pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(this_dir, logging_configuration_file_name)
 
-def unload():
-    confighandler.set_initial_configuration()
+    reload(import_module('pyxelrest.pyxelrestgenerator'))

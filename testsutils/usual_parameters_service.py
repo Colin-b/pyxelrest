@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -7,12 +7,9 @@ app = Flask(__name__)
 def swagger():
     return jsonify(swagger='2.0',
                    paths={
-                       '/test/octet/with/all/parameters/types': {
+                       '/with/all/parameters/types': {
                             'get': {
-                                'operationId': 'get_test_octet_with_all_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'get_with_all_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -256,15 +253,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'post': {
-                                'operationId': 'post_test_octet_with_all_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'post_with_all_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -508,15 +502,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'put': {
-                                'operationId': 'put_test_octet_with_all_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'put_with_all_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -760,15 +751,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'delete': {
-                                'operationId': 'delete_test_octet_with_all_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'delete_with_all_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1012,17 +1000,14 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             }
                         },
-                       '/test/octet/with/all/optional/parameters/types': {
+                       '/with/all/optional/parameters/types': {
                             'get': {
-                                'operationId': 'get_test_octet_with_all_optional_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'get_with_all_optional_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1266,15 +1251,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'post': {
-                                'operationId': 'post_test_octet_with_all_optional_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'post_with_all_optional_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1518,15 +1500,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'put': {
-                                'operationId': 'put_test_octet_with_all_optional_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'put_with_all_optional_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -1770,15 +1749,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'delete': {
-                                'operationId': 'delete_test_octet_with_all_optional_parameters_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'delete_with_all_optional_parameters_types',
                                 'parameters': [
                                     {
                                         'description': 'integer parameter',
@@ -2022,17 +1998,14 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             }
                         },
-                       '/test/octet/with/all/paths/types': {
+                       '/with/all/paths/types': {
                             'get': {
-                                'operationId': 'get_test_octet_with_all_paths_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'get_with_all_paths_types',
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2276,15 +2249,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'post': {
-                                'operationId': 'post_test_octet_with_all_paths_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'post_with_all_paths_types',
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2528,15 +2498,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'put': {
-                                'operationId': 'put_test_octet_with_all_paths_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'put_with_all_paths_types',
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -2780,15 +2747,12 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             },
                             'delete': {
-                                'operationId': 'delete_test_octet_with_all_paths_types',
-                                'produces': [
-                                    'application/octet-stream'
-                                ],
+                                'operationId': 'delete_with_all_paths_types',
                                 'parameters': [
                                     {
                                         'description': 'integer path',
@@ -3032,16 +2996,98 @@ def swagger():
                                 ],
                                 'responses': {
                                    '200': {
-                                       'description': 'return value',
+                                       'description': 'return value'
                                    }
                                 }
                             }
-                        }
+                        },
+                       '/date': {
+                           'get': {
+                               'operationId': 'get_date',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               'type': 'string',
+                                               'format': 'date'
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/datetime': {
+                           'get': {
+                               'operationId': 'get_date_time',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               'type': 'string',
+                                               'format': 'date-time'
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/datetime/encoding': {
+                           'get': {
+                               'operationId': 'get_date_time_encoding',
+                               'parameters': [
+                                   {
+                                       'description': 'string parameter',
+                                       'in': 'query',
+                                       'name': 'encoded_date_time',
+                                       'required': True,
+                                       'type': 'string',
+                                       'format': 'date-time'
+                                   },
+                               ],
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                   }
+                               }
+                           }
+                       }
     })
+
+
+@app.route('/date', methods=['GET'])
+def get_date():
+    return jsonify([
+        '2014-03-05',
+        '9999-01-01',
+        '3001-01-01',
+    ])
+
+
+@app.route('/datetime', methods=['GET'])
+def get_date_time():
+    return jsonify([
+        '2014-03-05T15:59:58.20198Z',
+        '2014-03-05T15:59:58.20198z',
+        '2014-03-05 15:59:58.20198Z',
+        '2014-03-05t15:59:58.20198Z',
+        '2014-03-05t15:59:58.20198z',
+        '9999-01-01T00:00:00+00:00',
+        '3001-01-01T08:00:00+00:00',
+    ])
+
+
+@app.route('/datetime/encoding', methods=['GET'])
+def get_date_time_encoding():
+    return request.args.get('encoded_date_time')
 
 
 def start_server(port):
     app.run(port=port)
 
+
 if __name__ == '__main__':
-    start_server(8956)
+    start_server(8943)

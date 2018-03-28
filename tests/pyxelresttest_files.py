@@ -13,16 +13,15 @@ class PyxelRestTestFiles(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        loader.unload()
         serviceshandler.stop_services()
 
     @classmethod
     def start_services(cls):
         from testsutils import (
-            files_test_service,
+            files_service,
         )
         serviceshandler.start_services(
-            (files_test_service, 8959),
+            (files_service, 8959),
         )
 
     def test_files_parameter(self):
@@ -31,7 +30,7 @@ class PyxelRestTestFiles(unittest.TestCase):
             with open(os.path.join(temp_dir, 'temp_file'), 'wb') as temp_file:
                 temp_file.write(b'This is the content of the temporary file.')
 
-            self.assertEqual(pyxelrestgenerator.files_test_post_test_files(
+            self.assertEqual(pyxelrestgenerator.files_post_files(
                 mandatory_file='This is the content of the mandatory file.',
                 optional_file=temp_file.name
             ),

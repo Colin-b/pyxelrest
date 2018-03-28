@@ -18,9 +18,9 @@ def swagger():
                        }
                    },
                    paths={
-                       '/test/form/parameter': {
+                       '/form': {
                            'post': {
-                               'operationId': 'post_test_form_parameter',
+                               'operationId': 'post_form',
                                'parameters': [
                                    {
                                        'description': 'form parameter',
@@ -43,8 +43,8 @@ def swagger():
                    })
 
 
-@app.route('/test/form/parameter', methods=['POST'])
-def post_test_form_parameter():
+@app.route('/form', methods=['POST'])
+def post_form():
     return Response(request.data, mimetype='application/json')
 
 
