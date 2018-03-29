@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.66.0 (next) ##
+
+### Enhancements ###
+
+- Add field type and restricted values to UDF parameter documentation.
+
 ## 0.65.0 (2018-03-28) ##
 
 ### Release notes ###
