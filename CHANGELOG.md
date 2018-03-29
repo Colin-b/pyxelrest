@@ -12,6 +12,7 @@ List all changes in various categories:
 
 - Add field type and restricted values to UDF parameter documentation.
 - Depends on the brand new official pywin32 package.
+- add-in installation script no longer have mandatory parameters.
 
 ### Bug fixes ###
 

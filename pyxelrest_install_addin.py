@@ -135,20 +135,25 @@ class XlWingsConfig:
 
 
 class Installer:
-    def __init__(self, add_in_folder, vba_add_in_folder, scripts_folder=None, vsto_version='10.0', path_to_up_to_date_configuration=None):
+    def __init__(self, add_in_folder=None, vba_add_in_folder=None, scripts_folder=None, vsto_version='10.0', path_to_up_to_date_configuration=None):
         if not sys.platform.startswith('win'):
             raise Exception('Auto Load add-in can only be installed on Microsoft Windows.')
+
+        self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
+
         if not add_in_folder:
-            raise Exception('Path to Microsoft Excel Auto Load add-in folder must be provided.')
+            data_dir = os.path.join(self.scripts_folder, '..')
+            add_in_folder = os.path.join(data_dir, 'pyxelrest_addin')
+
         if not vba_add_in_folder:
-            raise Exception('Path to Visual Basic add-in folder must be provided.')
+            data_dir = os.path.join(self.scripts_folder, '..')
+            vba_add_in_folder = os.path.join(data_dir, 'pyxelrest_vb_addin')
 
         self.add_in_folder = to_absolute_path(add_in_folder)
         if not os.path.isdir(self.add_in_folder):
             raise Exception('PyxelRest Microsoft Excel Auto-Load Add-In cannot be found in {0}.'
                             .format(self.add_in_folder))
         self.vba_add_in_folder = to_absolute_path(vba_add_in_folder)
-        self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
         self.pyxelrest_appdata_logs_folder = os.path.join(self.pyxelrest_appdata_folder, 'logs')
@@ -256,18 +261,18 @@ class Installer:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('add_in_directory', help='Directory containing PyxelRest Microsoft Excel auto load add-in.',
-                        type=str)
-    parser.add_argument('vb_add_in_directory', help='Directory containing PyxelRest Microsoft Visual Basic add-in.',
-                        type=str)
+    parser.add_argument('--add_in_directory', help='Directory containing PyxelRest Microsoft Excel auto load add-in.',
+                        default=None, type=str)
+    parser.add_argument('--vb_add_in_directory', help='Directory containing PyxelRest Microsoft Visual Basic add-in.',
+                        default=None, type=str)
     parser.add_argument('--scripts_directory', help='Directory containing installed Python scripts.',
                         default=None, type=str)
     parser.add_argument('--path_to_up_to_date_configuration', help='Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.',
                         default=None, type=str)
     options = parser.parse_args(sys.argv[1:])
 
-    installer = Installer(options.add_in_directory,
-                          options.vb_add_in_directory,
+    installer = Installer(add_in_folder=options.add_in_directory,
+                          vba_add_in_folder=options.vb_add_in_directory,
                           scripts_folder=options.scripts_directory,
                           path_to_up_to_date_configuration=options.path_to_up_to_date_configuration)
     installer.perform_post_installation_tasks()
