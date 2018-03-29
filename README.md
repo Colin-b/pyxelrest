@@ -529,6 +529,8 @@ Check that all requirements are met:
 
 In case you encounter an issue like `Could not load file or assembly 'Microsoft.Office.BusinessApplications.Fba...` anyway, you then need to remove `C:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\VSTOInstaller.exe.config` file.
 
+In case you encounter an issue like `...An application with the same identity is already installed...`, you then need to manually remove all folders within `%USERPROFILE%\AppData\Local\Apps\2.0` and restart your computer.
+
 ### Dates with a year higher than 3000 are not converted to local timezone ###
 
 Due to timestamp limitation, dates after 3000-12-31 and date time after 3001-01-01T07:59:59+00:00 cannot be converted to local timezone.
