@@ -128,6 +128,8 @@ class UpdateProcess:
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
         # Sometimes pywin32 uninstallation might be considered as failed due to a locked file. Trying to uninstall first and discard result
         UninstallCommand().main(['pywin32', '--yes', '--disable-pip-version-check', '--log', default_log_file_path])
+        UninstallCommand().main(['pypiwin32', '--yes', '--disable-pip-version-check', '--log', default_log_file_path])
+
         result = InstallCommand().main(['pyxelrest', '--upgrade', '--disable-pip-version-check', '--log', default_log_file_path])
         create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
