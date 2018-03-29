@@ -1,6 +1,5 @@
 from collections import OrderedDict
 import datetime
-import enum
 import logging
 import os
 import re
