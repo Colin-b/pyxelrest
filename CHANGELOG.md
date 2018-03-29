@@ -11,6 +11,11 @@ List all changes in various categories:
 ### Enhancements ###
 
 - Add field type and restricted values to UDF parameter documentation.
+- Depends on the brand new official pywin32 package.
+
+### Bug fixes ###
+
+- Always uninstall pywin32 before upgrading to ensure there will be no locked file.
 
 ## 0.65.0 (2018-03-28) ##
 

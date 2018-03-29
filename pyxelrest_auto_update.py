@@ -12,6 +12,7 @@ import logging.config
 import logging.handlers
 from pip.commands.list import ListCommand
 from pip.commands.install import InstallCommand
+from pip.commands.uninstall import UninstallCommand
 from pip.utils import get_installed_distributions
 
 try:
@@ -125,6 +126,8 @@ class UpdateProcess:
 
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
+        # Sometimes pywin32 uninstallation might be considered as failed due to a locked file. Trying to uninstall first and discard result
+        UninstallCommand().main(['pywin32', '--yes', '--disable-pip-version-check', '--log', default_log_file_path])
         result = InstallCommand().main(['pyxelrest', '--upgrade', '--disable-pip-version-check', '--log', default_log_file_path])
         create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
