@@ -12,6 +12,7 @@ import logging.config
 import logging.handlers
 from pip.commands.list import ListCommand
 from pip.commands.install import InstallCommand
+from pip.commands.uninstall import UninstallCommand
 from pip.utils import get_installed_distributions
 
 try:
@@ -125,6 +126,10 @@ class UpdateProcess:
 
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
+        # Sometimes pywin32 uninstallation might be considered as failed due to a locked file. Trying to uninstall first and discard result
+        UninstallCommand().main(['pywin32', '--yes', '--disable-pip-version-check', '--log', default_log_file_path])
+        UninstallCommand().main(['pypiwin32', '--yes', '--disable-pip-version-check', '--log', default_log_file_path])
+
         result = InstallCommand().main(['pyxelrest', '--upgrade', '--disable-pip-version-check', '--log', default_log_file_path])
         create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
@@ -143,10 +148,7 @@ class UpdateProcess:
             # This script is always in the same folder as the add-in update script
             from pyxelrest_install_addin import Installer
 
-            scripts_dir = os.path.abspath(os.path.dirname(__file__))
-            data_dir = os.path.join(scripts_dir, '..')
-            addin_installer = Installer(os.path.join(data_dir, 'pyxelrest_addin'),
-                                        path_to_up_to_date_configuration=self.path_to_up_to_date_configurations)
+            addin_installer = Installer(path_to_up_to_date_configuration=self.path_to_up_to_date_configurations)
             addin_installer.perform_post_installation_tasks()
             logger.info('Microsoft Excel add-in successfully updated.')
             self.updating_queue.put((EXCEL_STEP, DONE))

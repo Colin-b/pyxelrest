@@ -51,14 +51,12 @@ The add-in is not installed at the same time as the module because:
     * It may prompt the user for installation.
     * pyxelrest can be used as a python module without the need for the add-in.
 
-Considering %script_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
-
-Considering %data_dir% as the directory containing python data (root folder within your virtual environment).
+Considering %scripts_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
 
 Install Microsoft Excel add-in by executing the following command:
 
 ```bash
-python %script_dir%\pyxelrest_install_addin.py %data_dir%\pyxelrest_addin
+python %scripts_dir%\pyxelrest_install_addin.py
 ```
 
 The following options are available when launching this script:
@@ -66,25 +64,21 @@ The following options are available when launching this script:
 <table>
     <th>
         <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
         <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td><strong>add_in_directory</strong></td>
+        <td><strong>--add_in_directory</strong></td>
         <td>Directory containing PyxelRest Microsoft Excel auto load add-in.</td>
-        <td>Mandatory</td>
-        <td>Must be the first positional argument.</td>
+        <td>Default to ..\pyxelrest_addin relatively to the scripts directory.</td>
     </tr>
     <tr>
         <td><strong>--scripts_directory</strong></td>
         <td>Directory containing installed Python scripts.</td>
-        <td>Optional</td>
         <td>Default to the folder containing this script.</td>
     </tr>
     <tr>
         <td><strong>--path_to_up_to_date_configuration</strong></td>
         <td>Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.</td>
-        <td>Optional</td>
         <td>Can be file, folder paths or an URL to a file.</td>
     </tr>
 </table>
@@ -522,6 +516,8 @@ Check that all requirements are met:
  * [Microsoft Visual Studio 2010 Tools for Office Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=48217) must be installed.
 
 In case you encounter an issue like `Could not load file or assembly 'Microsoft.Office.BusinessApplications.Fba...` anyway, you then need to remove `C:\Program Files\Common Files\Microsoft Shared\VSTO\10.0\VSTOInstaller.exe.config` file.
+
+In case you encounter an issue like `...An application with the same identity is already installed...`, you then need to manually remove all folders within `%USERPROFILE%\AppData\Local\Apps\2.0` and restart your computer.
 
 ### Dates with a year higher than 3000 are not converted to local timezone ###
 

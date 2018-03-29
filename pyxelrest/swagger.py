@@ -1,9 +1,9 @@
+from collections import OrderedDict
 import datetime
+import logging
 import os
 import re
 import requests
-import logging
-from collections import OrderedDict
 
 try:
     # Python 3
@@ -505,29 +505,33 @@ class UDFParameter:
     def __init__(self, swagger_parameter, schema):
         self.name = swagger_parameter['name']
         self.server_param_name = swagger_parameter['server_param_name']
-        self.description = swagger_parameter.get('description', '')
-        if self.description:
-            self.description = self.description.replace('\'', '')
         self.schema = schema
         self.location = swagger_parameter['in']  # path, body, formData, query, header
         self.required = swagger_parameter.get('required')
         self.type = swagger_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
         self.format = swagger_parameter.get('format')  # date (string type), date-time (string type)
         self.choices = swagger_parameter.get('enum')  # string type
-        if self.type == 'array':
-            items = swagger_parameter['items']
-            if '$ref' in items:
+
+        swagger_array_parameter = self._get_swagger_array_parameter(swagger_parameter)
+        if swagger_array_parameter:
+            if swagger_array_parameter.get('type') == 'object' or ('$ref' in swagger_array_parameter):
                 self._convert_to_type = self._convert_to_dict_list
+                self.description = self._get_dict_list_documentation(swagger_parameter)
             else:
-                swagger_array_parameter = dict(swagger_parameter)
-                swagger_array_parameter.update(items)
-                self._convert_to_type = self._get_convert_array_method(UDFParameter(swagger_array_parameter, {}))
+                inner_parameter = UDFParameter(swagger_array_parameter, {})
+                self._convert_to_type = self._get_convert_array_method(inner_parameter)
+                self.description = self._get_list_documentation(swagger_parameter, inner_parameter)
         else:
-            if self.schema.get('type') == 'array':  # Classic Model field in an array of model
-                swagger_array_parameter = dict(swagger_parameter)
-                self._convert_to_type = self._get_convert_array_method(UDFParameter(swagger_array_parameter, {}))
-            else:
-                self._convert_to_type = self._get_convert_method()
+            self._convert_to_type = self._get_convert_method()
+            self.description = self._get_documentation(swagger_parameter)
+
+    def _get_swagger_array_parameter(self, swagger_parameter):
+        if self.type == 'array':
+            swagger_array_parameter = dict(swagger_parameter)
+            swagger_array_parameter.update(swagger_parameter['items'])
+            return swagger_array_parameter
+        elif self.schema.get('type') == 'array':
+            return dict(swagger_parameter)
 
     def validate_path(self, value):
         if value is None or isinstance(value, list) and all(x is None for x in value):
@@ -600,9 +604,6 @@ class UDFParameter:
         return self.server_param_name, value  # Or the content of the file
 
     def _get_convert_array_method(self, array_parameter):
-        if array_parameter.type == 'object':
-            return self._convert_to_dict_list
-
         return lambda value: [
             array_parameter._convert_to_type(item) if item is not None else None
             for item in value
@@ -628,6 +629,61 @@ class UDFParameter:
         elif self.type == 'file':
             return self._convert_to_file
         return lambda value: value  # Unhandled type, best effort
+
+    def _common_documentation(self, swagger_parameter):
+        description = swagger_parameter.get('description', '') or ''
+        if self.choices:
+            description += '\nValid values are:\n{0}'.format('\n\t- '.join(self.choices))
+        return description
+
+    def _get_documentation(self, swagger_parameter):
+        description = self._common_documentation(swagger_parameter)
+        if self.type == 'integer':
+            description += '\nValue must be an integer.'
+        elif self.type == 'number':
+            description += '\nValue must be a number.'
+        elif self.type == 'string':
+            if self.format == 'date':
+                description += '\nValue must be formatted as date.'
+            elif self.format == 'date-time':
+                description += '\nValue must be formatted as date-time.'
+            else:
+                description += '\nValue must be formatted as text.'
+        elif self.type == 'boolean':
+            description += '\nValue must be formatted as boolean.'
+        elif self.type == 'object':
+            description += '\nValue must be an array of two rows.' \
+                           '\n\tFirst row contains field names' \
+                           '\n\tSecond row contains values'
+        elif self.type == 'file':
+            description += '\nValue must be the content of the file or the file path.'
+        return description.replace('\'', '')
+
+    def _get_dict_list_documentation(self, swagger_parameter):
+        description = self._common_documentation(swagger_parameter)
+        description += '\nValue must be an array of at least two rows.' \
+                       '\n\tFirst row contains field names' \
+                       '\n\tOther rows contains values'
+        return description.replace('\'', '')
+
+    def _get_list_documentation(self, swagger_parameter, inner_parameter):
+        description = self._common_documentation(swagger_parameter)
+        if inner_parameter.type == 'integer':
+            description += '\nValue must be an array of integers.'
+        elif inner_parameter.type == 'number':
+            description += '\nValue must be an array of numbers.'
+        elif inner_parameter.type == 'string':
+            if inner_parameter.format == 'date':
+                description += '\nValue must be an array of date formatted cells.'
+            elif inner_parameter.format == 'date-time':
+                description += '\nValue must be an array of date-time formatted cells.'
+            else:
+                description += '\nValue must be an array of text formatted cells.'
+        elif inner_parameter.type == 'boolean':
+            description += '\nValue must be an array of boolean formatted cells.'
+        elif inner_parameter.type == 'file':
+            description += '\nValue must be an array of cells with files content or files paths.'
+        return description.replace('\'', '')
 
 
 class RequestContent:

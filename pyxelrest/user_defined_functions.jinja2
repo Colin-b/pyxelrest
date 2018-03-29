@@ -57,13 +57,13 @@ swagger_methods = None  # Will be set after load
 {% endif %}
 @xw.func(category='{{ swagger_method.service.config.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
 {% for parameter in swagger_method.path_parameters %}
-@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
+@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
 {% for parameter in swagger_method.required_parameters %}
-@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
+@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
 {% for parameter in swagger_method.optional_parameters %}
-@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc='{{ parameter.description }}')
+@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
 {% if swagger_method.return_a_list() and swagger_method.is_asynchronous %}
 @xw.ret(expand='table')
