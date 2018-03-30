@@ -16,17 +16,13 @@ List all changes in various categories:
 
 - Exceptions were not properly handled on workbook activation event.
 
-## 0.66.0 (next) ##
+## 0.66.0 (2018-03-30) ##
 
 ### Enhancements ###
 
 - Add field type and restricted values to UDF parameter documentation.
-- Depends on the brand new official pywin32 package.
+- Depends on the brand new official pywin32 package (pipywin32 is now only a proxy to pywin32).
 - add-in installation script no longer have mandatory parameters.
-
-### Bug fixes ###
-
-- Always uninstall pywin32 before upgrading to ensure there will be no locked file.
 
 ## 0.65.0 (2018-03-28) ##
 
