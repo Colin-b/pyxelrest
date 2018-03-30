@@ -61,6 +61,11 @@ namespace AutoLoadPyxelRestAddIn
             return service.Name.Equals(serviceName);
         }
 
+        internal void UpdateFrom(Service updated)
+        {
+            service.UpdateFrom(updated);
+        }
+
         internal void Display(bool expanded)
         {
             checkbox = configurationForm.accordion.Add(servicePanel, service.Name, open: expanded);

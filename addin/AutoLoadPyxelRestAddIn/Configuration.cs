@@ -3,6 +3,7 @@ using IniParser.Model;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -14,17 +15,59 @@ namespace AutoLoadPyxelRestAddIn
 
         private readonly List<Service> services = new List<Service>();
 
-        public List<Service> Load()
+        private readonly string configurationFilePath;
+        private readonly IniData iniConfiguration;
+
+        public Configuration()
+        {
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            configurationFilePath = (appDataFolder != null) ? System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini") : null;
+        }
+
+        public Configuration(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+                configurationFilePath = null;
+            else
+            {
+                try
+                {
+                    FileAttributes attributes = File.GetAttributes(filePath);
+                    if (attributes.HasFlag(FileAttributes.Directory)) // Directory
+                    {
+                        // TODO 
+                    }
+                    else // File
+                    {
+                        var parser = new FileIniDataParser();
+                        iniConfiguration = parser.ReadFile(filePath);
+                    }
+                }
+                catch (Exception) // URL
+                {
+                    var parser = new FileIniDataParser();
+                    StreamReader reader = UrlChecker.Get(filePath);
+                    iniConfiguration = reader == null ? null : parser.ReadData(reader);
+                }
+            }
+        }
+
+        private IniData LoadFile(string filePath)
         {
             var parser = new FileIniDataParser();
-            string configurationFilePath = GetConfigurationFilePath();
-            if (configurationFilePath == null)
+            return parser.ReadFile(filePath);
+        }
+
+        public List<Service> Load()
+        {
+            services.Clear();
+            if (configurationFilePath == null && iniConfiguration == null)
             {
                 Log.Error("Configuration cannot be loaded as configuration file path cannot be found.");
                 return services;
             }
 
-            IniData config = parser.ReadFile(configurationFilePath);
+            IniData config = configurationFilePath == null ? iniConfiguration : LoadFile(configurationFilePath);
 
             foreach (var section in config.Sections)
             {
@@ -45,13 +88,13 @@ namespace AutoLoadPyxelRestAddIn
 
         public void Save()
         {
-            var parser = new FileIniDataParser();
-            string configurationFilePath = GetConfigurationFilePath();
             if (configurationFilePath == null)
             {
                 Log.Error("Configuration cannot be saved as configuration file path cannot be found.");
                 return;
             }
+
+            var parser = new FileIniDataParser();
             IniData config = parser.ReadFile(configurationFilePath);
 
             config.Sections.Clear();
@@ -76,12 +119,9 @@ namespace AutoLoadPyxelRestAddIn
             return service;
         }
 
-        private string GetConfigurationFilePath()
+        internal void AddService(Service service)
         {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini");
-            return null;
+            services.Add(service);
         }
 
         internal void Remove(Service service)

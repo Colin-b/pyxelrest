@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.IO;
 using System.Net;
 
 namespace AutoLoadPyxelRestAddIn
@@ -25,7 +26,17 @@ namespace AutoLoadPyxelRestAddIn
             return response != null && response.StatusCode == HttpStatusCode.OK;
         }
 
-        private static HttpWebResponse ConnectTo(string url, string proxy)
+        public static StreamReader Get(string url)
+        {
+            HttpWebResponse response = ConnectTo(url, null, close:false);
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
+                return null;
+
+            return new StreamReader(response.GetResponseStream());
+
+        }
+
+        private static HttpWebResponse ConnectTo(string url, string proxy, bool close=true)
         {
             try
             {
@@ -38,7 +49,8 @@ namespace AutoLoadPyxelRestAddIn
                 else if (proxy.Length > 0)
                     request.Proxy = new WebProxy(proxy);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                response.Close();
+                if (close)
+                    response.Close();
                 return response;
             }
             catch (WebException e)

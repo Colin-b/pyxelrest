@@ -6,6 +6,13 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.67.0 (next) ##
+
+### Enhancements ###
+
+- Microsoft Excel add-in allows to select services from within a list as well as manually.
+- Services configuration are kept up to date with latest version when editing configurations (TODO Do it at startup as well).
+
 ## 0.66.0 (2018-03-30) ##
 
 ### Enhancements ###

@@ -45,6 +45,22 @@ namespace AutoLoadPyxelRestAddIn
             Name = name;
         }
 
+        internal void UpdateFrom(Service updated)
+        {
+            SwaggerUrl = updated.SwaggerUrl;
+            ProxyUrl = updated.ProxyUrl;
+            ServiceHost = updated.ServiceHost;
+            Get = updated.Get;
+            Post = updated.Post;
+            Put = updated.Put;
+            Delete = updated.Delete;
+            Patch = updated.Patch;
+            Options = updated.Options;
+            Head = updated.Head;
+            SecurityDetails = updated.SecurityDetails;
+            AdvancedConfiguration = updated.AdvancedConfiguration;
+        }
+
         public override string ToString()
         {
             return Name;

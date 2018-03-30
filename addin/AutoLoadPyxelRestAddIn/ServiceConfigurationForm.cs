@@ -25,11 +25,13 @@ namespace AutoLoadPyxelRestAddIn
 
         internal Accordion accordion;
         private TextBox newServiceName;
+        private ComboBox addServiceList;
         private Button addServiceButton;
         private List<ServicePanel> services = new List<ServicePanel>();
         private Button saveButton;
         private readonly Timer hostReachabilityTimer;
         internal readonly Configuration configuration;
+        internal readonly Configuration upToDateConfiguration;
 
         public ServiceConfigurationForm()
         {
@@ -44,6 +46,15 @@ namespace AutoLoadPyxelRestAddIn
             catch (Exception e)
             {
                 Log.Error("Unable to load services.", e);
+            }
+            try
+            {
+                upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
+                LoadUpToDateServices();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Unable to load existing services.", e);
             }
         }
 
@@ -96,12 +107,20 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel newServicePanel = new TableLayoutPanel();
             newServicePanel.AutoSize = true;
             newServicePanel.Dock = DockStyle.Fill;
+
             newServiceName = new TextBox();
             newServiceName.Dock = DockStyle.Fill;
             newServiceName.AutoSize = true;
             newServiceName.TextChanged += NewServiceName_TextChanged;
             newServiceName.KeyDown += NewServiceName_KeyDown;
             newServicePanel.Controls.Add(newServiceName, 0, 0);
+
+            addServiceList = new ComboBox();
+            addServiceList.Dock = DockStyle.Fill;
+            addServiceList.AutoSize = true;
+            addServiceList.SelectedIndexChanged += AddServiceList_SelectedIndexChanged;
+            newServicePanel.Controls.Add(addServiceList, 0, 1);
+
             addServiceButton = new Button();
             addServiceButton.Text = "Enter service name to create a new configuration";
             addServiceButton.ForeColor = Color.DarkBlue;
@@ -110,7 +129,8 @@ namespace AutoLoadPyxelRestAddIn
             addServiceButton.AutoSize = true;
             addServiceButton.Click += AddServiceSection;
             addServiceButton.Enabled = false;
-            newServicePanel.Controls.Add(addServiceButton, 0, 1);
+            newServicePanel.Controls.Add(addServiceButton, 0, 2);
+
             layout.Controls.Add(newServicePanel);
             #endregion
 
@@ -212,6 +232,27 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private void LoadUpToDateServices()
+        {
+            addServiceList.Items.Clear();
+            foreach (Service service in upToDateConfiguration.Load())
+            {
+                ServicePanel configurationService = services.Find(s => s.Exists(service.Name));
+                if (configurationService != null)
+                    configurationService.UpdateFrom(service);
+                else
+                    addServiceList.Items.Add(service);
+            }
+            try
+            {
+                configuration.Save();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to save updated services.", ex);
+            }
+        }
+
         private void displayService(ServicePanel service, bool expanded)
         {
             service.Display(expanded);
@@ -233,6 +274,15 @@ namespace AutoLoadPyxelRestAddIn
             ServicePanel panel = new ServicePanel(this, newService);
             displayService(panel, true);
             newServiceName.Text = "";
+        }
+
+        private void AddServiceList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Service selectedService = (Service)addServiceList.SelectedItem;
+            configuration.AddService(selectedService);
+            ServicePanel panel = new ServicePanel(this, selectedService);
+            displayService(panel, true);
+            addServiceList.Items.RemoveAt(addServiceList.SelectedIndex);
         }
 
         private void Save(object sender, EventArgs e)
