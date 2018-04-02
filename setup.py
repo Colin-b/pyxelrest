@@ -57,8 +57,8 @@ setup(name='pyxelrest',
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
-             'default_logging_configuration.ini.jinja2',
-             'default_services_configuration.ini',
+             'default_logging_configuration.yml.jinja2',
+             'default_services_configuration.yml',
              'user_defined_functions.jinja2',
          ]
       },
@@ -131,7 +131,7 @@ setup(name='pyxelrest',
           'pywin32==223',
           # Used to communicate with Microsoft Excel
           'xlwings==0.10.4.2',
-          # Used to parse logging configuration file
+          # Used to parse configuration files
           'pyaml==17.12.1',
           # Used to manage authentication
           'requests_auth==1.0.2',

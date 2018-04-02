@@ -8,7 +8,6 @@ import logging.config
 import logging.handlers
 import datetime
 from importlib import import_module
-from builtins import open
 from pyxelrest import (
     vba,
     authentication,
@@ -20,6 +19,7 @@ from pyxelrest import (
 
 if sys.version_info.major > 2:
     # Python 3
+    from builtins import open
     from importlib import reload
 else:
     # Python 2

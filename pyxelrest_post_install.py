@@ -32,9 +32,9 @@ class PostInstall:
     def _create_services_configuration(self):
         default_config_file = os.path.join(self.installation_files_folder,
                                            'pyxelrest',
-                                           'default_services_configuration.ini')
+                                           'default_services_configuration.yml')
         if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.ini')
+            user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.yml')
             if not os.path.isfile(user_config_file):
                 shutil.copyfile(default_config_file, user_config_file)
                 log.info('Services configuration file created.')
@@ -43,10 +43,10 @@ class PostInstall:
                             .format(default_config_file))
 
     def _create_pyxelrest_logging_configuration(self):
-        self._create_logging_configuration('pyxelrest.log', 'logging.ini')
+        self._create_logging_configuration('pyxelrest.log', 'logging.yml')
 
     def _create_auto_update_logging_configuration(self):
-        self._create_logging_configuration('pyxelrest_auto_update.log', 'auto_update_logging.ini')
+        self._create_logging_configuration('pyxelrest_auto_update.log', 'auto_update_logging.yml')
 
     def _create_logging_configuration(self, log_file_name, config_file_name):
         config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
@@ -56,7 +56,7 @@ class PostInstall:
         renderer = jinja2.Environment(loader=jinja2.FileSystemLoader(template_folder), trim_blocks=True)
         log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', log_file_name)
         with open(config_file_path, 'w') as generated_file:
-            generated_file.write(renderer.get_template('default_logging_configuration.ini.jinja2')
+            generated_file.write(renderer.get_template('default_logging_configuration.yml.jinja2')
                                  .render(path_to_log_file=log_file_path))
         log.info('{0} logging configuration file created.'.format(config_file_name))
 

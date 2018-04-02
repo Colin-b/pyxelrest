@@ -13,6 +13,7 @@ List all changes in various categories:
 - Microsoft Excel add-in allows to select services from within a list as well as manually.
 - Services configuration are kept up to date on Microsoft Excel start.
 - Services configuration are kept up to date with latest version when editing configurations.
+- Use YAML format for configuration (remove restriction on the content of values).
 
 ## 0.66.0 (2018-03-30) ##
 
