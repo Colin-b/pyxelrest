@@ -212,6 +212,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Debug("Microsoft Excel started with a blank document. Activating PyxelRest...");
                 ActivatePyxelRest();
+                ServiceConfigurationForm.UpdateServices();
             }
         }
 

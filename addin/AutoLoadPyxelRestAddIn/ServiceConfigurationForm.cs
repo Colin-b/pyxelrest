@@ -54,7 +54,35 @@ namespace AutoLoadPyxelRestAddIn
             }
             catch (Exception e)
             {
-                Log.Error("Unable to load existing services.", e);
+                Log.Error("Unable to load up to date services.", e);
+            }
+        }
+
+        public static void UpdateServices()
+        {
+            try
+            {
+                Configuration configuration = new Configuration();
+                List<Service> configuredServices = configuration.Load();
+
+                Configuration upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
+                List<Service> upToDateServices = upToDateConfiguration.Load();
+
+                if (upToDateServices.Count > 0)
+                {
+                    foreach (Service service in configuredServices)
+                    {
+                        Service upToDateService = upToDateServices.Find(s => s.Name.Equals(service.Name));
+                        if (upToDateService != null)
+                            service.UpdateFrom(upToDateService);
+                    }
+
+                    configuration.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to keep services configuration up to date.", ex);
             }
         }
 
@@ -250,6 +278,7 @@ namespace AutoLoadPyxelRestAddIn
             addServiceList.Items.Clear();
             upToDateServices.Clear();
             upToDateServices.AddRange(upToDateConfiguration.Load());
+
             foreach (Service service in upToDateServices)
             {
                 ServicePanel configurationService = services.Find(s => s.Exists(service.Name));
@@ -258,14 +287,9 @@ namespace AutoLoadPyxelRestAddIn
                 else
                     addServiceList.Items.Add(service);
             }
-            try
-            {
+
+            if (upToDateServices.Count > 0)
                 configuration.Save();
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Unable to save updated services.", ex);
-            }
         }
 
         private void displayService(ServicePanel service, bool expanded)

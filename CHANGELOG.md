@@ -11,7 +11,8 @@ List all changes in various categories:
 ### Enhancements ###
 
 - Microsoft Excel add-in allows to select services from within a list as well as manually.
-- Services configuration are kept up to date with latest version when editing configurations (TODO Do it at startup as well).
+- Services configuration are kept up to date on Microsoft Excel start.
+- Services configuration are kept up to date with latest version when editing configurations.
 
 ## 0.66.0 (2018-03-30) ##
 
