@@ -15,52 +15,55 @@ namespace AutoLoadPyxelRestAddIn
         internal static readonly string DEFAULT_SECTION = "DEFAULT";
 
         private readonly List<Service> services = new List<Service>();
-
-        private readonly string configurationFilePath;
-        private readonly IniData iniConfiguration;
-
-        public Configuration()
-        {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            configurationFilePath = (appDataFolder != null) ? System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini") : null;
-        }
+        private readonly IniData config;
 
         public Configuration(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
-                configurationFilePath = null;
+            {
+                Log.Warn("Configuration cannot be loaded as configuration file path was not provided.");
+                config = null;
+            }
             else
             {
                 try
                 {
                     FileAttributes attributes = File.GetAttributes(filePath);
-                    if (attributes.HasFlag(FileAttributes.Directory)) // Directory
+                    if (attributes.HasFlag(FileAttributes.Directory))
                     {
-                        // TODO 
-                    }
-                    else // File
-                    {
-                        var parser = new FileIniDataParser();
-                        iniConfiguration = parser.ReadFile(filePath);
-                    }
-                }
-                catch (ArgumentException) // URL
-                {
-                    HttpWebResponse response = UrlChecker.ConnectTo(filePath, null, close: false);
-                    if (response == null || response.StatusCode != HttpStatusCode.OK)
-                    {
-                        string details = response == null ? "" : response.StatusDescription;
-                        Log.ErrorFormat("Configuration cannot be loaded from {0}: {1}.", filePath, details);
-                        iniConfiguration = null;
+                        config = LoadFolder(filePath);
                     }
                     else
                     {
-                        Log.InfoFormat("Configuration loaded from {0}: {1}.", filePath, response.StatusDescription);
-                        var parser = new FileIniDataParser();
-                        iniConfiguration = parser.ReadData(new StreamReader(response.GetResponseStream()));
+                        config = LoadFile(filePath);
                     }
                 }
+                catch (ArgumentException)
+                {
+                    config = LoadUrl(filePath);
+                }
             }
+        }
+
+        public static string GetDefaultConfigFilePath()
+        {
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            return appDataFolder == null ? null : Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini");
+        }
+
+        private IniData LoadUrl(string fileUrl)
+        {
+            HttpWebResponse response = UrlChecker.ConnectTo(fileUrl, null, close: false);
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
+            {
+                string details = response == null ? "" : response.StatusDescription;
+                Log.ErrorFormat("Configuration cannot be loaded from {0}: {1}.", fileUrl, details);
+                return null;
+            }
+
+            Log.InfoFormat("Configuration loaded from {0}: {1}.", fileUrl, response.StatusDescription);
+            var parser = new FileIniDataParser();
+            return parser.ReadData(new StreamReader(response.GetResponseStream()));
         }
 
         private IniData LoadFile(string filePath)
@@ -69,16 +72,17 @@ namespace AutoLoadPyxelRestAddIn
             return parser.ReadFile(filePath);
         }
 
+        private IniData LoadFolder(string filePath)
+        {
+            Log.Warn("Configuration cannot be loaded as configuration folder path loading is not yet implemented.");
+            return null;  // TODO Add ability to load a folder content into a single ini data
+        }
+
         public List<Service> Load()
         {
             services.Clear();
-            if (configurationFilePath == null && iniConfiguration == null)
-            {
-                Log.Error("Configuration cannot be loaded as configuration file path cannot be found.");
+            if (config == null)
                 return services;
-            }
-
-            IniData config = configurationFilePath == null ? iniConfiguration : LoadFile(configurationFilePath);
 
             foreach (var section in config.Sections)
             {
@@ -97,11 +101,11 @@ namespace AutoLoadPyxelRestAddIn
             return services;
         }
 
-        public void Save()
+        public void Save(string configurationFilePath)
         {
             if (configurationFilePath == null)
             {
-                Log.Error("Configuration cannot be saved as configuration file path cannot be found.");
+                Log.Error("Configuration cannot be saved as configuration file path was not provided.");
                 return;
             }
 

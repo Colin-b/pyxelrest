@@ -3,6 +3,7 @@ using Opulos.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -24,12 +25,13 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly Regex SERVICE_NAME_UNALLOWED_CHARACTERS = new Regex("[^a-zA-Z_]+[^a-zA-Z_0-9]*");
 
         internal Accordion accordion;
-        private ComboBox addServiceList;
+        private ComboBox serviceNameField;
         private Button addServiceButton;
         private List<ServicePanel> services = new List<ServicePanel>();
         private List<Service> upToDateServices = new List<Service>();
         private Button saveButton;
         private readonly Timer hostReachabilityTimer;
+        private readonly string configurationFilePath;
         internal readonly Configuration configuration;
         internal readonly Configuration upToDateConfiguration;
 
@@ -38,9 +40,10 @@ namespace AutoLoadPyxelRestAddIn
             hostReachabilityTimer = StartHostReachabilityTimer();
             InitializeComponent();
             FormClosed += ServiceConfigurationForm_FormClosed;
-            configuration = new Configuration();
             try
             {
+                configurationFilePath = Configuration.GetDefaultConfigFilePath();
+                configuration = new Configuration(configurationFilePath);
                 LoadServices();
             }
             catch (Exception e)
@@ -58,11 +61,12 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        public static void UpdateServices()
+        internal static void UpdateServices()
         {
             try
             {
-                Configuration configuration = new Configuration();
+                string configurationFilePath = Configuration.GetDefaultConfigFilePath();
+                Configuration configuration = new Configuration(configurationFilePath);
                 List<Service> configuredServices = configuration.Load();
 
                 Configuration upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
@@ -77,7 +81,7 @@ namespace AutoLoadPyxelRestAddIn
                             service.UpdateFrom(upToDateService);
                     }
 
-                    configuration.Save();
+                    configuration.Save(configurationFilePath);
                 }
             }
             catch (Exception ex)
@@ -136,12 +140,12 @@ namespace AutoLoadPyxelRestAddIn
             newServicePanel.AutoSize = true;
             newServicePanel.Dock = DockStyle.Fill;
 
-            addServiceList = new ComboBox();
-            addServiceList.Dock = DockStyle.Fill;
-            addServiceList.AutoSize = true;
-            addServiceList.TextChanged += AddServiceList_TextChanged;
-            addServiceList.KeyDown += AddServiceList_KeyDown;
-            newServicePanel.Controls.Add(addServiceList, 0, 0);
+            serviceNameField = new ComboBox();
+            serviceNameField.Dock = DockStyle.Fill;
+            serviceNameField.AutoSize = true;
+            serviceNameField.TextChanged += ServiceNameField_TextChanged;
+            serviceNameField.KeyDown += ServiceNameField_KeyDown;
+            newServicePanel.Controls.Add(serviceNameField, 0, 0);
 
             addServiceButton = new Button();
             addServiceButton.Text = "Enter service name to create a new configuration";
@@ -171,7 +175,7 @@ namespace AutoLoadPyxelRestAddIn
             Controls.Add(layout);
         }
 
-        private void AddServiceList_KeyDown(object sender, KeyEventArgs e)
+        private void ServiceNameField_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -186,9 +190,9 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        private void AddServiceList_TextChanged(object sender, EventArgs e)
+        private void ServiceNameField_TextChanged(object sender, EventArgs e)
         {
-            if (addServiceList.Text.Length > 0)
+            if (serviceNameField.Text.Length > 0)
                 CheckNonEmptyServiceName();
             else
                 InvalidateEmptyServiceName();
@@ -196,7 +200,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddServiceSection(object sender, EventArgs e)
         {
-            string serviceName = addServiceList.Text;
+            string serviceName = serviceNameField.Text;
             Service service = upToDateServices.Find(s => s.Name.Equals(serviceName));
             if (service == null)  // Service is unknown, new one
             {
@@ -204,13 +208,13 @@ namespace AutoLoadPyxelRestAddIn
             }
             else  // Service corresponds to an up to date service 
             {
-                addServiceList.Items.Remove(service);
+                serviceNameField.Items.Remove(service);
                 configuration.AddService(service);
             }
-            addServiceList.Text = "";
+            serviceNameField.Text = "";
             InvalidateEmptyServiceName();
             ServicePanel panel = new ServicePanel(this, service);
-            displayService(panel, true);
+            DisplayService(panel, true);
         }
 
         private void CheckNonEmptyServiceName()
@@ -223,13 +227,13 @@ namespace AutoLoadPyxelRestAddIn
 
         private bool IsServiceNameValid()
         {
-            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(addServiceList.Text, "");
-            return addServiceList.Text.Equals(validatedServiceName);
+            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(serviceNameField.Text, "");
+            return serviceNameField.Text.Equals(validatedServiceName);
         }
 
         private void CheckValidatedServiceName()
         {
-            if (services.Exists(s => s.Exists(addServiceList.Text)))
+            if (services.Exists(s => s.Exists(serviceNameField.Text)))
                 InvalidateDuplicatedServiceName();
             else
                 ValidateServiceName();
@@ -252,14 +256,14 @@ namespace AutoLoadPyxelRestAddIn
         private void InvalidateDuplicatedServiceName()
         {
             addServiceButton.Enabled = false;
-            addServiceButton.Text = addServiceList.Text + " configuration already exists";
+            addServiceButton.Text = serviceNameField.Text + " configuration already exists";
             addServiceButton.BackColor = Color.OrangeRed;
         }
 
         private void ValidateServiceName()
         {
             addServiceButton.Enabled = true;
-            addServiceButton.Text = "Add " + addServiceList.Text + " configuration";
+            addServiceButton.Text = "Add " + serviceNameField.Text + " configuration";
             addServiceButton.BackColor = Color.LightBlue;
         }
 
@@ -269,13 +273,13 @@ namespace AutoLoadPyxelRestAddIn
             foreach (Service service in configuration.Load())
             {
                 ServicePanel panel = new ServicePanel(this, service);
-                displayService(panel, false);
+                DisplayService(panel, false);
             }
         }
 
         private void LoadUpToDateServices()
         {
-            addServiceList.Items.Clear();
+            serviceNameField.Items.Clear();
             upToDateServices.Clear();
             upToDateServices.AddRange(upToDateConfiguration.Load());
 
@@ -285,14 +289,14 @@ namespace AutoLoadPyxelRestAddIn
                 if (configurationService != null)
                     configurationService.UpdateFrom(service);
                 else
-                    addServiceList.Items.Add(service);
+                    serviceNameField.Items.Add(service);
             }
 
             if (upToDateServices.Count > 0)
-                configuration.Save();
+                configuration.Save(configurationFilePath);
         }
 
-        private void displayService(ServicePanel service, bool expanded)
+        private void DisplayService(ServicePanel service, bool expanded)
         {
             service.Display(expanded);
             services.Add(service);
@@ -311,7 +315,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
-                configuration.Save();
+                configuration.Save(configurationFilePath);
             }
             catch (Exception ex)
             {
@@ -324,7 +328,7 @@ namespace AutoLoadPyxelRestAddIn
             services.Remove(service);
             Service removedService = upToDateServices.Find(s => service.Exists(s.Name));
             if (removedService != null)
-                addServiceList.Items.Add(removedService);
+                serviceNameField.Items.Add(removedService);
             saveButton.Enabled = IsValid();
         }
 
