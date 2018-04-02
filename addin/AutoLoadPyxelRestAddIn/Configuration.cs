@@ -17,31 +17,16 @@ namespace AutoLoadPyxelRestAddIn
         private readonly List<Service> services = new List<Service>();
         private readonly IniData config;
 
-        public Configuration(string filePath)
+        public Configuration(string path)
         {
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrEmpty(path))
             {
-                Log.Warn("Configuration cannot be loaded as configuration file path was not provided.");
+                Log.Warn("Configuration cannot be loaded as configuration path was not provided.");
                 config = null;
             }
             else
             {
-                try
-                {
-                    FileAttributes attributes = File.GetAttributes(filePath);
-                    if (attributes.HasFlag(FileAttributes.Directory))
-                    {
-                        config = LoadFolder(filePath);
-                    }
-                    else
-                    {
-                        config = LoadFile(filePath);
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    config = LoadUrl(filePath);
-                }
+                config = LoadPath(path);
             }
         }
 
@@ -49,6 +34,18 @@ namespace AutoLoadPyxelRestAddIn
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             return appDataFolder == null ? null : Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini");
+        }
+
+        private IniData LoadPath(string path)
+        {
+            try
+            {
+                return File.GetAttributes(path).HasFlag(FileAttributes.Directory) ? LoadFolder(path) : LoadFile(path);
+            }
+            catch (ArgumentException)
+            {
+                return LoadUrl(path);
+            }
         }
 
         private IniData LoadUrl(string fileUrl)
@@ -72,7 +69,7 @@ namespace AutoLoadPyxelRestAddIn
             return parser.ReadFile(filePath);
         }
 
-        private IniData LoadFolder(string filePath)
+        private IniData LoadFolder(string folderPath)
         {
             Log.Warn("Configuration cannot be loaded as configuration folder path loading is not yet implemented.");
             return null;  // TODO Add ability to load a folder content into a single ini data
