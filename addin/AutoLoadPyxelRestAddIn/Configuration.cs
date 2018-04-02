@@ -4,6 +4,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -43,11 +44,21 @@ namespace AutoLoadPyxelRestAddIn
                         iniConfiguration = parser.ReadFile(filePath);
                     }
                 }
-                catch (Exception) // URL
+                catch (ArgumentException) // URL
                 {
-                    var parser = new FileIniDataParser();
-                    StreamReader reader = UrlChecker.Get(filePath);
-                    iniConfiguration = reader == null ? null : parser.ReadData(reader);
+                    HttpWebResponse response = UrlChecker.ConnectTo(filePath, null, close: false);
+                    if (response == null || response.StatusCode != HttpStatusCode.OK)
+                    {
+                        string details = response == null ? "" : response.StatusDescription;
+                        Log.ErrorFormat("Configuration cannot be loaded from {0}: {1}.", filePath, details);
+                        iniConfiguration = null;
+                    }
+                    else
+                    {
+                        Log.InfoFormat("Configuration loaded from {0}: {1}.", filePath, response.StatusDescription);
+                        var parser = new FileIniDataParser();
+                        iniConfiguration = parser.ReadData(new StreamReader(response.GetResponseStream()));
+                    }
                 }
             }
         }

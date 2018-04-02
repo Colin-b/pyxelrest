@@ -24,10 +24,10 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly Regex SERVICE_NAME_UNALLOWED_CHARACTERS = new Regex("[^a-zA-Z_]+[^a-zA-Z_0-9]*");
 
         internal Accordion accordion;
-        private TextBox newServiceName;
         private ComboBox addServiceList;
         private Button addServiceButton;
         private List<ServicePanel> services = new List<ServicePanel>();
+        private List<Service> upToDateServices = new List<Service>();
         private Button saveButton;
         private readonly Timer hostReachabilityTimer;
         internal readonly Configuration configuration;
@@ -108,18 +108,12 @@ namespace AutoLoadPyxelRestAddIn
             newServicePanel.AutoSize = true;
             newServicePanel.Dock = DockStyle.Fill;
 
-            newServiceName = new TextBox();
-            newServiceName.Dock = DockStyle.Fill;
-            newServiceName.AutoSize = true;
-            newServiceName.TextChanged += NewServiceName_TextChanged;
-            newServiceName.KeyDown += NewServiceName_KeyDown;
-            newServicePanel.Controls.Add(newServiceName, 0, 0);
-
             addServiceList = new ComboBox();
             addServiceList.Dock = DockStyle.Fill;
             addServiceList.AutoSize = true;
-            addServiceList.SelectedIndexChanged += AddServiceList_SelectedIndexChanged;
-            newServicePanel.Controls.Add(addServiceList, 0, 1);
+            addServiceList.TextChanged += AddServiceList_TextChanged;
+            addServiceList.KeyDown += AddServiceList_KeyDown;
+            newServicePanel.Controls.Add(addServiceList, 0, 0);
 
             addServiceButton = new Button();
             addServiceButton.Text = "Enter service name to create a new configuration";
@@ -129,7 +123,7 @@ namespace AutoLoadPyxelRestAddIn
             addServiceButton.AutoSize = true;
             addServiceButton.Click += AddServiceSection;
             addServiceButton.Enabled = false;
-            newServicePanel.Controls.Add(addServiceButton, 0, 2);
+            newServicePanel.Controls.Add(addServiceButton, 0, 1);
 
             layout.Controls.Add(newServicePanel);
             #endregion
@@ -149,7 +143,7 @@ namespace AutoLoadPyxelRestAddIn
             Controls.Add(layout);
         }
 
-        private void NewServiceName_KeyDown(object sender, KeyEventArgs e)
+        private void AddServiceList_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -164,12 +158,31 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        private void NewServiceName_TextChanged(object sender, EventArgs e)
+        private void AddServiceList_TextChanged(object sender, EventArgs e)
         {
-            if (newServiceName.TextLength > 0)
+            if (addServiceList.Text.Length > 0)
                 CheckNonEmptyServiceName();
             else
                 InvalidateEmptyServiceName();
+        }
+
+        private void AddServiceSection(object sender, EventArgs e)
+        {
+            string serviceName = addServiceList.Text;
+            Service service = upToDateServices.Find(s => s.Name.Equals(serviceName));
+            if (service == null)  // Service is unknown, new one
+            {
+                service = configuration.AddDefaultService(serviceName);
+            }
+            else  // Service corresponds to an up to date service 
+            {
+                addServiceList.Items.Remove(service);
+                configuration.AddService(service);
+            }
+            addServiceList.Text = "";
+            InvalidateEmptyServiceName();
+            ServicePanel panel = new ServicePanel(this, service);
+            displayService(panel, true);
         }
 
         private void CheckNonEmptyServiceName()
@@ -182,13 +195,13 @@ namespace AutoLoadPyxelRestAddIn
 
         private bool IsServiceNameValid()
         {
-            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(newServiceName.Text, "");
-            return newServiceName.Text.Equals(validatedServiceName);
+            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(addServiceList.Text, "");
+            return addServiceList.Text.Equals(validatedServiceName);
         }
 
         private void CheckValidatedServiceName()
         {
-            if (services.Exists(s => s.Exists(newServiceName.Text)))
+            if (services.Exists(s => s.Exists(addServiceList.Text)))
                 InvalidateDuplicatedServiceName();
             else
                 ValidateServiceName();
@@ -211,14 +224,14 @@ namespace AutoLoadPyxelRestAddIn
         private void InvalidateDuplicatedServiceName()
         {
             addServiceButton.Enabled = false;
-            addServiceButton.Text = newServiceName.Text + " configuration already exists";
+            addServiceButton.Text = addServiceList.Text + " configuration already exists";
             addServiceButton.BackColor = Color.OrangeRed;
         }
 
         private void ValidateServiceName()
         {
             addServiceButton.Enabled = true;
-            addServiceButton.Text = "Add " + newServiceName.Text + " configuration";
+            addServiceButton.Text = "Add " + addServiceList.Text + " configuration";
             addServiceButton.BackColor = Color.LightBlue;
         }
 
@@ -235,7 +248,9 @@ namespace AutoLoadPyxelRestAddIn
         private void LoadUpToDateServices()
         {
             addServiceList.Items.Clear();
-            foreach (Service service in upToDateConfiguration.Load())
+            upToDateServices.Clear();
+            upToDateServices.AddRange(upToDateConfiguration.Load());
+            foreach (Service service in upToDateServices)
             {
                 ServicePanel configurationService = services.Find(s => s.Exists(service.Name));
                 if (configurationService != null)
@@ -268,23 +283,6 @@ namespace AutoLoadPyxelRestAddIn
             return true;
         }
 
-        private void AddServiceSection(object sender, EventArgs e)
-        {
-            Service newService = configuration.AddDefaultService(newServiceName.Text);
-            ServicePanel panel = new ServicePanel(this, newService);
-            displayService(panel, true);
-            newServiceName.Text = "";
-        }
-
-        private void AddServiceList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Service selectedService = (Service)addServiceList.SelectedItem;
-            configuration.AddService(selectedService);
-            ServicePanel panel = new ServicePanel(this, selectedService);
-            displayService(panel, true);
-            addServiceList.Items.RemoveAt(addServiceList.SelectedIndex);
-        }
-
         private void Save(object sender, EventArgs e)
         {
             try
@@ -300,6 +298,9 @@ namespace AutoLoadPyxelRestAddIn
         internal void Removed(ServicePanel service)
         {
             services.Remove(service);
+            Service removedService = upToDateServices.Find(s => service.Exists(s.Name));
+            if (removedService != null)
+                addServiceList.Items.Add(removedService);
             saveButton.Enabled = IsValid();
         }
 

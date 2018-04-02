@@ -26,17 +26,7 @@ namespace AutoLoadPyxelRestAddIn
             return response != null && response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static StreamReader Get(string url)
-        {
-            HttpWebResponse response = ConnectTo(url, null, close:false);
-            if (response == null || response.StatusCode != HttpStatusCode.OK)
-                return null;
-
-            return new StreamReader(response.GetResponseStream());
-
-        }
-
-        private static HttpWebResponse ConnectTo(string url, string proxy, bool close=true)
+        internal static HttpWebResponse ConnectTo(string url, string proxy, bool close=true)
         {
             try
             {
