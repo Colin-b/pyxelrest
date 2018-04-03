@@ -1,6 +1,6 @@
 import unittest
-import testsutils.loader as loader
 
+from testsutils import loader
 import pyxelrest
 
 

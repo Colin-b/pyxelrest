@@ -1,8 +1,8 @@
-import unittest
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
-import tempfile
 import os.path
+import tempfile
+import unittest
+
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestTestFiles(unittest.TestCase):

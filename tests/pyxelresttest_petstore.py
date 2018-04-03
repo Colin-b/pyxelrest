@@ -1,7 +1,7 @@
 import unittest
 import datetime
-from dateutil.tz import tzutc, tzlocal
-import testsutils.loader as loader
+
+from testsutils import loader
 
 
 class PyxelRestPetstoreTest(unittest.TestCase):

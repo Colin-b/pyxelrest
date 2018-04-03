@@ -1,9 +1,8 @@
+from requests_auth import authentication
+import time
 import unittest
 
-from requests_auth import authentication
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
-import time
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestAuthenticationTest(unittest.TestCase):

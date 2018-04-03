@@ -1,6 +1,6 @@
 import unittest
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
+
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestNestedDataBasedOnDefinitionsTest(unittest.TestCase):

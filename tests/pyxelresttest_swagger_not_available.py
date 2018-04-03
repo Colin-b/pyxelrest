@@ -1,7 +1,7 @@
-import unittest
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
 import timeit
+import unittest
+
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestSwaggerNotAvailableTest(unittest.TestCase):

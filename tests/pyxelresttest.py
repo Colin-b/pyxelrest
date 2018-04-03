@@ -1,9 +1,9 @@
 import datetime
+from dateutil.tz import tzutc
 import unittest
 import platform
-from dateutil.tz import tzutc
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
+
+from testsutils import (serviceshandler, loader)
 
 
 def support_pandas():
