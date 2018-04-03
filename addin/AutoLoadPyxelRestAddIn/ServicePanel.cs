@@ -106,26 +106,17 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(swaggerUrlTextBox, 1, 0);
             #endregion
 
-            #region Proxy Url
-            servicePanel.Controls.Add(new Label { Text = "Proxies", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            proxiesTextBox = new TextBox() { Text = service.Proxies };
-            proxiesTextBox.Dock = DockStyle.Fill;
-            proxiesTextBox.AutoSize = true;
-            proxiesTextBox.TextChanged += ProxiesTextBox_TextChanged;
-            servicePanel.Controls.Add(proxiesTextBox, 1, 1);
-            #endregion
-
             #region Service Host
-            servicePanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+            servicePanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
             serviceHostTextBox = new TextBox() { Text = service.ServiceHost };
             serviceHostTextBox.Dock = DockStyle.Fill;
             serviceHostTextBox.AutoSize = true;
             serviceHostTextBox.TextChanged += ServiceHostTextBox_TextChanged;
-            servicePanel.Controls.Add(serviceHostTextBox, 1, 2);
+            servicePanel.Controls.Add(serviceHostTextBox, 1, 1);
             #endregion
 
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -150,7 +141,7 @@ namespace AutoLoadPyxelRestAddIn
             head = new CheckBox() { Text = "head", Checked = service.Head, Width = 60};
             head.CheckedChanged += Head_CheckedChanged;
             methodsPanel.Controls.Add(head, 6, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 5);
+            servicePanel.Controls.Add(methodsPanel, 1, 2);
             #endregion
 
             #region Delete
@@ -172,17 +163,8 @@ namespace AutoLoadPyxelRestAddIn
             TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
             servicePanel.TabStop = true;
 
-            #region Proxy Url
-            servicePanel.Controls.Add(new Label { Text = "Proxies", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            proxiesTextBox = new TextBox() { Text = service.Proxies };
-            proxiesTextBox.Dock = DockStyle.Fill;
-            proxiesTextBox.AutoSize = true;
-            proxiesTextBox.TextChanged += ProxiesTextBox_TextChanged;
-            servicePanel.Controls.Add(proxiesTextBox, 1, 0);
-            #endregion
-
             #region Methods
-            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+            servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
             methodsPanel.Dock = DockStyle.Fill;
             methodsPanel.AutoSize = true;
@@ -207,7 +189,7 @@ namespace AutoLoadPyxelRestAddIn
             head = new CheckBox() { Text = "head", Checked = service.Head, Width = 60 };
             head.CheckedChanged += Head_CheckedChanged;
             methodsPanel.Controls.Add(head, 6, 0);
-            servicePanel.Controls.Add(methodsPanel, 1, 3);
+            servicePanel.Controls.Add(methodsPanel, 1, 0);
             #endregion
 
             #region Delete
@@ -243,11 +225,11 @@ namespace AutoLoadPyxelRestAddIn
             service.ServiceHost = serviceHostTextBox.Text;
         }
 
-        private void ProxiesTextBox_TextChanged(object sender, EventArgs e)
-        {
-            service.Proxies = proxiesTextBox.Text;
-            swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
-        }
+        //        private void ProxiesTextBox_TextChanged(object sender, EventArgs e)
+        //        {
+        //service.Proxies = proxiesTextBox.Text;
+        //swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+        //}
 
         private void Head_CheckedChanged(object sender, EventArgs e)
         {

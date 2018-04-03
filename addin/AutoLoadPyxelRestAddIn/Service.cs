@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using YamlDotNet.RepresentationModel;
 
@@ -39,7 +40,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal readonly string Name;
         public string SwaggerUrl;
-        public string Proxies;
+        public IDictionary<string, string> Proxies;
         public string ServiceHost;
 
         public bool Get;
@@ -50,21 +51,21 @@ namespace AutoLoadPyxelRestAddIn
         public bool Options;
         public bool Head;
 
-        public string OAuth2;
+        public IDictionary<string, string> OAuth2;
         public string ApiKey;
-        public string Basic;
-        public string Ntlm;
+        public IDictionary<string, string> Basic;
+        public IDictionary<string, string> Ntlm;
 
         public bool Synchronous;
         public bool Asynchronous;
 
         public bool RelyOnDefinitions;
         public int MaxRetries;
-        public string Headers;
+        public IDictionary<string, string> Headers;
         public float ConnectTimeout;
         public float? ReadTimeout;
         public float SwaggerReadTimeout;
-        public string Tags;
+        public IList<string> Tags;
 
         public Service(string name)
         {
@@ -109,7 +110,52 @@ namespace AutoLoadPyxelRestAddIn
 
         private YamlNode GetProperty(YamlMappingNode parent, string name)
         {
-            return parent.Children[new YamlScalarNode(name)];
+            YamlNode value;
+            if (parent.Children.TryGetValue(new YamlScalarNode(name), out value))
+                return value;
+            return null;
+        }
+
+        private IDictionary<string, string> ToDict(YamlMappingNode node)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach(var item in node.Children)
+            {
+                string key = ((YamlScalarNode)item.Key).Value;
+                string value = ((YamlScalarNode)item.Value).Value;
+                dict.Add(key, value);
+            }
+            return dict;
+        }
+
+        private IEnumerable<KeyValuePair<YamlNode, YamlNode>> FromDict(IDictionary<string, string> items)
+        {
+            List<KeyValuePair<YamlNode, YamlNode>> nodes = new List<KeyValuePair<YamlNode, YamlNode>>();
+            foreach (var item in items)
+            {
+                nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode(item.Value)));
+            }
+            return nodes;
+        }
+
+        private IList<string> ToList(YamlSequenceNode node)
+        {
+            List<string> list = new List<string>();
+            foreach (var item in node.Children)
+            {
+                list.Add(((YamlScalarNode)item).Value);
+            }
+            return list;
+        }
+
+        private IEnumerable<YamlNode> FromList(IList<string> items)
+        {
+            List<YamlNode> nodes = new List<YamlNode>();
+            foreach (var item in items)
+            {
+                nodes.Add(new YamlScalarNode(item));
+            }
+            return nodes;
         }
 
         internal void FromConfig(YamlMappingNode section)
@@ -118,37 +164,37 @@ namespace AutoLoadPyxelRestAddIn
             SwaggerUrl = swaggerUrl == null ? string.Empty : swaggerUrl.Value;
 
             YamlMappingNode proxies = (YamlMappingNode)GetProperty(section, PROXIES_PROPERTY);
-            Proxies = proxies == null ? string.Empty : string.Empty;
+            Proxies = proxies == null ? new Dictionary<string, string>() : ToDict(proxies);
 
             YamlScalarNode serviceHost = (YamlScalarNode)GetProperty(section, SERVICE_HOST_PROPERTY);
             ServiceHost = serviceHost == null ? string.Empty : serviceHost.Value;
 
             YamlSequenceNode methodsNode = (YamlSequenceNode)GetProperty(section, METHODS_PROPERTY);
-            string[] methods = methodsNode == null ? DefaultMethods() : new string[0];
-            Get = Array.Exists(methods, s => GET.Equals(s));
-            Post = Array.Exists(methods, s => POST.Equals(s));
-            Put = Array.Exists(methods, s => PUT.Equals(s));
-            Delete = Array.Exists(methods, s => DELETE.Equals(s));
-            Patch = Array.Exists(methods, s => PATCH.Equals(s));
-            Options = Array.Exists(methods, s => OPTIONS.Equals(s));
-            Head = Array.Exists(methods, s => HEAD.Equals(s));
+            IList<string> methods = methodsNode == null ? DefaultMethods() : ToList(methodsNode);
+            Get = methods.Contains(GET);
+            Post = methods.Contains(POST);
+            Put = methods.Contains(PUT);
+            Delete = methods.Contains(DELETE);
+            Patch = methods.Contains(PATCH);
+            Options = methods.Contains(OPTIONS);
+            Head = methods.Contains(HEAD);
 
             YamlMappingNode oauth2 = (YamlMappingNode)GetProperty(section, OAUTH2_PROPERTY);
-            OAuth2 = oauth2 == null ? string.Empty : string.Empty;
+            OAuth2 = oauth2 == null ? new Dictionary<string, string>() : ToDict(oauth2);
 
             YamlScalarNode apiKey = (YamlScalarNode)GetProperty(section, API_KEY_PROPERTY);
-            ApiKey = apiKey == null ? string.Empty : swaggerUrl.Value;
+            ApiKey = apiKey == null ? string.Empty : apiKey.Value;
 
             YamlMappingNode basic = (YamlMappingNode)GetProperty(section, BASIC_PROPERTY);
-            Basic = basic == null ? string.Empty : string.Empty;
+            Basic = basic == null ? new Dictionary<string, string>() : ToDict(basic);
 
             YamlMappingNode ntlm = (YamlMappingNode)GetProperty(section, NTLM_PROPERTY);
-            Ntlm = ntlm == null ? string.Empty : string.Empty;
+            Ntlm = ntlm == null ? new Dictionary<string, string>() : ToDict(ntlm);
 
             YamlSequenceNode udfReturnTypesNode = (YamlSequenceNode)GetProperty(section, UDF_RETURN_TYPES_PROPERTY);
-            string[] udfReturnTypes = udfReturnTypesNode == null ? DefaultUdfReturnTypes() : new string[0];
-            Synchronous = Array.Exists(udfReturnTypes, s => SYNCHRONOUS.Equals(s));
-            Asynchronous = Array.Exists(udfReturnTypes, s => ASYNCHRONOUS.Equals(s));
+            IList<string> udfReturnTypes = udfReturnTypesNode == null ? DefaultUdfReturnTypes() : ToList(udfReturnTypesNode);
+            Synchronous = udfReturnTypes.Contains(SYNCHRONOUS);
+            Asynchronous = udfReturnTypes.Contains(ASYNCHRONOUS);
             
             YamlScalarNode relyOnDefinitions = (YamlScalarNode)GetProperty(section, RELY_ON_DEFINITIONS_PROPERTY);
             RelyOnDefinitions = relyOnDefinitions == null ? false : bool.Parse(relyOnDefinitions.Value);
@@ -157,7 +203,7 @@ namespace AutoLoadPyxelRestAddIn
             MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
 
             YamlMappingNode headers = (YamlMappingNode)GetProperty(section, HEADERS_PROPERTY);
-            Headers = headers == null ? string.Empty : string.Empty;
+            Headers = headers == null ? new Dictionary<string, string>() : ToDict(headers);
 
             YamlScalarNode connectTimeout = (YamlScalarNode)GetProperty(section, CONNECT_TIMEOUT_PROPERTY);
             ConnectTimeout = connectTimeout == null ? 1 : float.Parse(connectTimeout.Value);
@@ -169,7 +215,7 @@ namespace AutoLoadPyxelRestAddIn
             SwaggerReadTimeout = swaggerReadTimeout == null ? 5 : float.Parse(swaggerReadTimeout.Value);
 
             YamlSequenceNode tags = (YamlSequenceNode)GetProperty(section, TAGS_PROPERTY);
-            Tags = tags == null ? string.Empty : string.Empty;
+            Tags = tags == null ? new List<string>() : ToList(tags);
         }
 
         internal YamlMappingNode ToConfig()
@@ -179,34 +225,34 @@ namespace AutoLoadPyxelRestAddIn
             if (!string.IsNullOrEmpty(SwaggerUrl))
                 section.Add(new YamlScalarNode(SWAGGER_URL_PROPERTY), new YamlScalarNode(SwaggerUrl));
 
-            if (!string.IsNullOrEmpty(Proxies))
-                section.Add(new YamlScalarNode(PROXIES_PROPERTY), new YamlMappingNode(Proxies));
+            if (Proxies != null && Proxies.Count > 0)
+                section.Add(new YamlScalarNode(PROXIES_PROPERTY), new YamlMappingNode(FromDict(Proxies)));
 
             if (!string.IsNullOrEmpty(ServiceHost))
                 section.Add(new YamlScalarNode(SERVICE_HOST_PROPERTY), new YamlScalarNode(ServiceHost));
 
-            section.Add(new YamlScalarNode(METHODS_PROPERTY), new YamlSequenceNode(GetMethods()));
+            section.Add(new YamlScalarNode(METHODS_PROPERTY), new YamlSequenceNode(FromList(GetMethods())));
 
-            if (!string.IsNullOrEmpty(OAuth2))
-                section.Add(new YamlScalarNode(OAUTH2_PROPERTY), new YamlMappingNode(OAuth2));
+            if (OAuth2 != null && OAuth2.Count > 0)
+                section.Add(new YamlScalarNode(OAUTH2_PROPERTY), new YamlMappingNode(FromDict(OAuth2)));
 
             if (!string.IsNullOrEmpty(ApiKey))
                 section.Add(new YamlScalarNode(API_KEY_PROPERTY), new YamlScalarNode(ApiKey));
 
-            if (!string.IsNullOrEmpty(Basic))
-                section.Add(new YamlScalarNode(BASIC_PROPERTY), new YamlMappingNode(Basic));
+            if (Basic != null && Basic.Count > 0)
+                section.Add(new YamlScalarNode(BASIC_PROPERTY), new YamlMappingNode(FromDict(Basic)));
 
-            if (!string.IsNullOrEmpty(Ntlm))
-                section.Add(new YamlScalarNode(NTLM_PROPERTY), new YamlMappingNode(Ntlm));
+            if (Ntlm != null && Ntlm.Count > 0)
+                section.Add(new YamlScalarNode(NTLM_PROPERTY), new YamlMappingNode(FromDict(Ntlm)));
 
-            section.Add(new YamlScalarNode(UDF_RETURN_TYPES_PROPERTY), new YamlSequenceNode(GetUdfReturnTypes()));
+            section.Add(new YamlScalarNode(UDF_RETURN_TYPES_PROPERTY), new YamlSequenceNode(FromList(GetUdfReturnTypes())));
 
             section.Add(new YamlScalarNode(RELY_ON_DEFINITIONS_PROPERTY), new YamlScalarNode(RelyOnDefinitions.ToString()));
 
             section.Add(new YamlScalarNode(MAX_RETRIES_PROPERTY), new YamlScalarNode(MaxRetries.ToString()));
 
-            if (!string.IsNullOrEmpty(Headers))
-                section.Add(new YamlScalarNode(HEADERS_PROPERTY), new YamlMappingNode(Headers));
+            if (Headers != null && Headers.Count > 0)
+                section.Add(new YamlScalarNode(HEADERS_PROPERTY), new YamlMappingNode(FromDict(Headers)));
 
             section.Add(new YamlScalarNode(CONNECT_TIMEOUT_PROPERTY), new YamlScalarNode(ConnectTimeout.ToString()));
 
@@ -215,8 +261,8 @@ namespace AutoLoadPyxelRestAddIn
 
             section.Add(new YamlScalarNode(SWAGGER_READ_TIMEOUT_PROPERTY), new YamlScalarNode(SwaggerReadTimeout.ToString()));
 
-            if (!string.IsNullOrEmpty(Tags))
-                section.Add(new YamlScalarNode(TAGS_PROPERTY), new YamlSequenceNode(Tags));
+            if (Tags != null && Tags.Count > 0)
+                section.Add(new YamlScalarNode(TAGS_PROPERTY), new YamlSequenceNode(FromList(Tags)));
 
             return section;
         }
@@ -224,7 +270,7 @@ namespace AutoLoadPyxelRestAddIn
         internal void Default()
         {
             SwaggerUrl = "";
-            Proxies = "";
+            Proxies = new Dictionary<string, string>();
             ServiceHost = "";
 
             Get = true;
@@ -235,68 +281,61 @@ namespace AutoLoadPyxelRestAddIn
             Options = true;
             Head = true;
 
-            OAuth2 = "";
+            OAuth2 = new Dictionary<string, string>();
             ApiKey = "";
-            Basic = "";
-            Ntlm = "";
+            Basic = new Dictionary<string, string>();
+            Ntlm = new Dictionary<string, string>();
 
             Synchronous = false;
             Asynchronous = true;
 
             RelyOnDefinitions = false;
             MaxRetries = 5;
-            Headers = "";
+            Headers = new Dictionary<string, string>();
             ConnectTimeout = 1;
             ReadTimeout = null;
             SwaggerReadTimeout = 5;
-            Tags = "";
+            Tags = new List<string>();
         }
 
-        private string GetMethods()
+        private IList<string> GetMethods()
         {
-            StringBuilder sb = new StringBuilder();
+            IList<string> list = new List<string>();
             if (Get)
-                sb.Append(GET);
+                list.Add(GET);
             if (Post)
-                AppendMethod(sb, POST);
+                list.Add(POST);
             if (Put)
-                AppendMethod(sb, PUT);
+                list.Add(PUT);
             if (Delete)
-                AppendMethod(sb, DELETE);
+                list.Add(DELETE);
             if (Patch)
-                AppendMethod(sb, PATCH);
+                list.Add(PATCH);
             if (Options)
-                AppendMethod(sb, OPTIONS);
+                list.Add(OPTIONS);
             if (Head)
-                AppendMethod(sb, HEAD);
-            return sb.ToString();
+                list.Add(HEAD);
+            return list;
         }
 
-        private string GetUdfReturnTypes()
+        private IList<string> GetUdfReturnTypes()
         {
-            StringBuilder sb = new StringBuilder();
+            IList<string> list = new List<string>();
             if (Synchronous)
-                sb.Append(SYNCHRONOUS);
+                list.Add(SYNCHRONOUS);
             if (Asynchronous)
-                AppendMethod(sb, ASYNCHRONOUS);
-            return sb.ToString();
+                list.Add(ASYNCHRONOUS);
+            return list;
         }
 
-        private void AppendMethod(StringBuilder sb, string method)
+        private IList<string> DefaultMethods()
         {
-            if (sb.Length > 0)
-                sb.Append(", ");
-            sb.Append(method);
+            return new List<string> { GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD };
         }
 
-        private string[] DefaultMethods()
+        private IList<string> DefaultUdfReturnTypes()
         {
-            return new string[] { GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD };
-        }
-
-        private string[] DefaultUdfReturnTypes()
-        {
-            return new string[] { ASYNCHRONOUS };
+            return new List<string> { ASYNCHRONOUS };
         }
     }
 }
