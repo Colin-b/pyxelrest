@@ -1,10 +1,9 @@
-﻿using IniParser;
-using IniParser.Model;
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using YamlDotNet.RepresentationModel;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -15,7 +14,7 @@ namespace AutoLoadPyxelRestAddIn
         internal static readonly string DEFAULT_SECTION = "DEFAULT";
 
         private readonly List<Service> services = new List<Service>();
-        private readonly IniData config;
+        private readonly YamlStream config;
 
         public Configuration(string path)
         {
@@ -36,7 +35,7 @@ namespace AutoLoadPyxelRestAddIn
             return appDataFolder == null ? null : Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini");
         }
 
-        private IniData LoadPath(string path)
+        private YamlStream LoadPath(string path)
         {
             try
             {
@@ -48,7 +47,7 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        private IniData LoadUrl(string fileUrl)
+        private YamlStream LoadUrl(string fileUrl)
         {
             HttpWebResponse response = UrlChecker.ConnectTo(fileUrl, null, close: false);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
@@ -59,17 +58,19 @@ namespace AutoLoadPyxelRestAddIn
             }
 
             Log.InfoFormat("Configuration loaded from {0}: {1}.", fileUrl, response.StatusDescription);
-            var parser = new FileIniDataParser();
-            return parser.ReadData(new StreamReader(response.GetResponseStream()));
+            var parser = new YamlStream();
+            parser.Load(new StreamReader(response.GetResponseStream()));
+            return parser;
         }
 
-        private IniData LoadFile(string filePath)
+        private YamlStream LoadFile(string filePath)
         {
-            var parser = new FileIniDataParser();
-            return parser.ReadFile(filePath);
+            var parser = new YamlStream();
+            parser.Load(new StreamReader(filePath));
+            return parser;
         }
 
-        private IniData LoadFolder(string folderPath)
+        private YamlStream LoadFolder(string folderPath)
         {
             Log.Warn("Configuration cannot be loaded as configuration folder path loading is not yet implemented.");
             return null;  // TODO Add ability to load a folder content into a single ini data
@@ -81,18 +82,18 @@ namespace AutoLoadPyxelRestAddIn
             if (config == null)
                 return services;
 
-            foreach (var section in config.Sections)
+            var mapping = (YamlMappingNode)config.Documents[0].RootNode;
+            foreach (var section in mapping.Children)
             {
-                if (DEFAULT_SECTION.Equals(section.SectionName))
-                    continue;
+                string serviceName = ((YamlScalarNode)section.Key).Value;
                 try
                 {
-                    Service service = AddService(section.SectionName);
-                    service.FromConfig(config);
+                    Service service = AddService(serviceName);
+                    service.FromConfig((YamlMappingNode) section.Value);
                 }
                 catch (Exception e)
                 {
-                    Log.Error(string.Format("Unable to load '{0}' service configuration", section.SectionName), e);
+                    Log.Error(string.Format("Unable to load '{0}' service configuration", serviceName), e);
                 }
             }
             return services;
@@ -106,13 +107,16 @@ namespace AutoLoadPyxelRestAddIn
                 return;
             }
 
-            var parser = new FileIniDataParser();
-            IniData config = parser.ReadFile(configurationFilePath);
+            var parser = new YamlStream();
+            parser.Load(new StreamReader(configurationFilePath));
 
-            config.Sections.Clear();
+            // TODO Remove all nodes first
+
+            var mapping = (YamlMappingNode)parser.Documents[0].RootNode;
             foreach (Service service in services)
-                config.Sections.Add(service.ToConfig());
-            parser.WriteFile(configurationFilePath, config);
+                mapping.Add(new YamlScalarNode(service.Name), service.ToConfig());
+
+            parser.Save(new StreamWriter(configurationFilePath));
             Log.Info("Services configuration updated.");
         }
 

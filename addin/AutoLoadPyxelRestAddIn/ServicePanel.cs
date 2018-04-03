@@ -11,11 +11,16 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("Service");
 
-        private readonly Service service;
-        internal readonly TableLayoutPanel servicePanel;
+        private readonly ServiceConfigurationForm configurationForm;  // Parent panel
+        internal readonly TableLayoutPanel servicePanel;  // This panel
+        private CheckBox checkbox;  // The accordion linking this panel to the parent panel
+
+        #region Service fields
+
         private TextBox swaggerUrlTextBox;
-        private TextBox proxyUrlTextBox;
+        private TextBox proxiesTextBox;
         private TextBox serviceHostTextBox;
+
         private CheckBox get;
         private CheckBox post;
         private CheckBox put;
@@ -23,11 +28,27 @@ namespace AutoLoadPyxelRestAddIn
         private CheckBox patch;
         private CheckBox options;
         private CheckBox head;
-        private CheckBox checkbox;
-        private TextBox securityDetailsTextBox;
-        private TextBox advancedConfigurationTextBox;
 
-        private readonly ServiceConfigurationForm configurationForm;
+        public TextBox oauth2TextBox;
+        public TextBox apiKeyTextBox;
+        public TextBox basicTextBox;
+        public TextBox ntlmTextBox;
+
+        public CheckBox synchronous;
+        public CheckBox asynchronous;
+
+        public CheckBox relyOnDefinitions;
+        public TextBox MaxRetriesTextBox;
+        public TextBox HeadersTextBox;
+        public TextBox ConnectTimeoutTextBox;
+        public TextBox ReadTimeoutTextBox;
+        public TextBox SwaggerReadTimeoutTextBox;
+        public TextBox tagsTextBox;
+
+        #endregion
+
+        private readonly Service service;
+
         private long? swaggerUrlModificationTicks;
 
         public ServicePanel(ServiceConfigurationForm configurationForm, Service service)
@@ -51,7 +72,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             if (swaggerUrlModificationTicks != null && DateTime.UtcNow.Ticks >= swaggerUrlModificationTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
             {
-                swaggerUrlTextBox.BackColor = UrlChecker.IsSwaggerReachable(swaggerUrlTextBox.Text, proxyUrlTextBox.Text) ? Color.LightGreen : Color.Red;
+                swaggerUrlTextBox.BackColor = UrlChecker.IsSwaggerReachable(swaggerUrlTextBox.Text, proxiesTextBox.Text) ? Color.LightGreen : Color.Red;
                 swaggerUrlModificationTicks = null;
             }
         }
@@ -86,12 +107,12 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Proxy Url
-            servicePanel.Controls.Add(new Label { Text = "Proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            proxyUrlTextBox = new TextBox() { Text = service.ProxyUrl };
-            proxyUrlTextBox.Dock = DockStyle.Fill;
-            proxyUrlTextBox.AutoSize = true;
-            proxyUrlTextBox.TextChanged += ProxyUrlTextBox_TextChanged;
-            servicePanel.Controls.Add(proxyUrlTextBox, 1, 1);
+            servicePanel.Controls.Add(new Label { Text = "Proxies", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+            proxiesTextBox = new TextBox() { Text = service.Proxies };
+            proxiesTextBox.Dock = DockStyle.Fill;
+            proxiesTextBox.AutoSize = true;
+            proxiesTextBox.TextChanged += ProxiesTextBox_TextChanged;
+            servicePanel.Controls.Add(proxiesTextBox, 1, 1);
             #endregion
 
             #region Service Host
@@ -170,12 +191,12 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.TabStop = true;
 
             #region Proxy Url
-            servicePanel.Controls.Add(new Label { Text = "Proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            proxyUrlTextBox = new TextBox() { Text = service.ProxyUrl };
-            proxyUrlTextBox.Dock = DockStyle.Fill;
-            proxyUrlTextBox.AutoSize = true;
-            proxyUrlTextBox.TextChanged += ProxyUrlTextBox_TextChanged;
-            servicePanel.Controls.Add(proxyUrlTextBox, 1, 0);
+            servicePanel.Controls.Add(new Label { Text = "Proxies", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
+            proxiesTextBox = new TextBox() { Text = service.Proxies };
+            proxiesTextBox.Dock = DockStyle.Fill;
+            proxiesTextBox.AutoSize = true;
+            proxiesTextBox.TextChanged += ProxiesTextBox_TextChanged;
+            servicePanel.Controls.Add(proxiesTextBox, 1, 0);
             #endregion
 
             #region Security Details
@@ -273,9 +294,9 @@ namespace AutoLoadPyxelRestAddIn
             service.ServiceHost = serviceHostTextBox.Text;
         }
 
-        private void ProxyUrlTextBox_TextChanged(object sender, EventArgs e)
+        private void ProxiesTextBox_TextChanged(object sender, EventArgs e)
         {
-            service.ProxyUrl = proxyUrlTextBox.Text;
+            service.Proxies = proxiesTextBox.Text;
             swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
         }
 
