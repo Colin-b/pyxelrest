@@ -135,13 +135,17 @@ Services configuration can be done within Microsoft Excel thanks to the `Configu
 
 ![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG)
 
-Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\services.ini` file.
+Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\services.yml` file.
+
+File is following [YAML](http://yaml.org/start.html) formatting.
 
 Each section name will be used as the UDFs category.
 
 Each UDF will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
 
 The following options are available for each section:
+
+Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
 
 <table>
     <th>
@@ -156,8 +160,8 @@ The following options are available for each section:
         <td></td>
     </tr>
     <tr>
-        <td><strong>proxy_url</strong></td>
-        <td>Proxy that should be used to reach service. If this is an URL, then this proxy will be used for the swagger_url scheme only. If you want to specify a proxy for a different scheme, then this value should be scheme=proxy_url_for_this_scheme. You can specify multiple schemes by using comma as a separator. You can also use no_proxy as a scheme for a no_proxy url. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
+        <td><strong>proxies</strong></td>
+        <td>Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -174,43 +178,80 @@ The following options are available for each section:
         <td>get, post, put, delete, patch, options, head</td>
     </tr>
     <tr>
-        <td><strong>security_details</strong></td>
-        <td>Extra security information not provided by swagger. Refer to Security Details section for more information.</td>
+        <td><strong>oauth2</strong></td>
+        <td>Dictionary containing OAuth2 related settings. Refer to OAuth 2 section for more information.</td>
         <td>Optional</td>
-        <td>port=XX,timeout=YY</td>
+        <td></td>
     </tr>
     <tr>
-        <td><strong>advanced_configuration</strong></td>
-        <td>Additional configuration details. Refer to Advanced Configuration section for more information.</td>
+        <td><strong>api_key</strong></td>
+        <td>User API Key.</td>
         <td>Optional</td>
-        <td>udf_return_type=XX,rely_on_definitions=YY</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>basic</strong></td>
+        <td>Dictionary containing Basic authentication related settings. Refer to Basic section for more information.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>ntlm</strong></td>
+        <td>Dictionary containing NTLM related settings. Refer to NTLM section for more information.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>udf_return_types</strong></td>
+        <td>List of user defined function return types. synchronous if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. Only asynchronous by default.</td>
+        <td>Optional</td>
+        <td>asynchronous or synchronous.</td>
+    </tr>
+    <tr>
+        <td><strong>rely_on_definitions</strong></td>
+        <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
+        <td>Optional</td>
+        <td>true or false</td>
+    </tr>
+    <tr>
+        <td><strong>max_retries</strong></td>
+        <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
+        <td>Optional</td>
+        <td>Any positive integer value</td>
+    </tr>
+    <tr>
+        <td><strong>headers</strong></td>
+        <td>Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>connect_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>Optional</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>Optional</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>swagger_read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td>Optional</td>
+        <td>any float value (decimal separator is .)</td>
+    </tr>
+    <tr>
+        <td><strong>tags</strong></td>
+        <td>List of swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
     </tr>
 </table>
 
-#### Security Details ####
-
-Additional security details can be provided thanks to `security_details` property.
-
-This property is supposed to contains key=value information. Separator is ',' (comma).
-
-Values cannot contains "," character.
-Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
-
-Depending on the type of authentication, the following keys are available:
-
-##### Common #####
-
-<table>
-    <th>
-        <td><em>Description</em></td>
-    </th>
-    <tr>
-        <td><strong>auth</strong></td>
-        <td>Custom authentication mechanism. Valid value is ntlm (requiring requests_ntlm or requests_negotiate_sspi).</td>
-    </tr>
-</table>
-
-##### OAuth 2 #####
+#### OAuth 2 ####
 
 If response_type is not provided in authorization_url, token is expected to be received in "token" field.
 
@@ -230,11 +271,6 @@ If response_type is not provided in authorization_url, token is expected to be r
         <td>Optional</td>
     </tr>
     <tr>
-        <td><strong>oauth2.XXXX</strong></td>
-        <td>Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
         <td><strong>success_display_time</strong></td>
         <td>Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel. Default value is 1 millisecond.</td>
         <td>Optional</td>
@@ -244,23 +280,14 @@ If response_type is not provided in authorization_url, token is expected to be r
         <td>Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel. Default value is 5 seconds.</td>
         <td>Optional</td>
     </tr>
-</table>
-
-##### API Key #####
-
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-    </th>
     <tr>
-        <td><strong>api_key</strong></td>
-        <td>User API Key.</td>
-        <td>Mandatory</td>
+        <td><strong>XXXX</strong></td>
+        <td>Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1</td>
+        <td>Optional</td>
     </tr>
 </table>
 
-##### Basic #####
+#### Basic ####
 
 <table>
     <th>
@@ -279,7 +306,9 @@ If response_type is not provided in authorization_url, token is expected to be r
     </tr>
 </table>
 
-##### NTLM #####
+#### NTLM ####
+
+Requiring requests_ntlm or requests_negotiate_sspi python modules.
 
 <table>
     <th>
@@ -295,62 +324,6 @@ If response_type is not provided in authorization_url, token is expected to be r
         <td><strong>password</strong></td>
         <td>User password. Default value is the logged in user password.</td>
         <td>Optional</td>
-    </tr>
-</table>
-
-#### Advanced Configuration ####
-
-Additional configuration details can be provided thanks to `advanced_configuration` property.
-
-This property is supposed to contains key=value information. Separator is ',' (comma).
-
-Values cannot contains "," character.
-Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
-
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Possible values</em></td>
-    </th>
-    <tr>
-        <td><strong>udf_return_type</strong></td>
-        <td>synchronous if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. asynchronous by default.</td>
-        <td>asynchronous or synchronous. Both values can be provided separated by ';' (semicolon)</td>
-    </tr>
-    <tr>
-        <td><strong>rely_on_definitions</strong></td>
-        <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
-        <td>True or False</td>
-    </tr>
-    <tr>
-        <td><strong>max_retries</strong></td>
-        <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
-        <td>Any positive integer value</td>
-    </tr>
-    <tr>
-        <td><strong>header.XXXX</strong></td>
-        <td>Where XXXX is the name of the header that should be sent with every request sent to this service.</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>connect_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
-        <td><strong>read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
-        <td><strong>swagger_read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>any float value (decimal separator is .)</td>
-    </tr>
-    <tr>
-        <td><strong>tags</strong></td>
-        <td>Swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>any value separated by ';' (semicolon)</td>
     </tr>
 </table>
 
@@ -371,11 +344,6 @@ It can be configured the same way than a usual service, except you cannot provid
     <tr>
         <td><strong>service_host</strong></td>
     </tr>
-</table>
-
-Also the following advanced configuration options will not be taken into account:
-
-<table>
     <tr>
         <td><strong>rely_on_definitions</strong></td>
     </tr>

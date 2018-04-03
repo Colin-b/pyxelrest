@@ -14,6 +14,7 @@ List all changes in various categories:
 - Services configuration are kept up to date on Microsoft Excel start.
 - Services configuration are kept up to date with latest version when editing configurations.
 - Use YAML format for configuration (remove restriction on the content of values).
+- Services are now loaded even if a service name is duplicated.
 
 ## 0.66.0 (2018-03-30) ##
 
