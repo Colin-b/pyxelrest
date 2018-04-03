@@ -7,7 +7,7 @@ class PyxelRestConnectivityIssuesTest(unittest.TestCase):
     def setUp(self):
         from testsutils import without_parameter_service
         serviceshandler.start_services((without_parameter_service, 8950))
-        loader.load('pyxelresttest_connectivity_issues_services_configuration.ini')
+        loader.load('connectivity_issues_services.yml')
 
     def test_get_plain_text_with_service_down(self):
         from pyxelrest import pyxelrestgenerator

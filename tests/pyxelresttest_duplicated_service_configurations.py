@@ -1,7 +1,7 @@
+import datetime
 import unittest
 
 from testsutils import (serviceshandler, loader)
-import pyxelrest
 
 
 class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
@@ -13,10 +13,16 @@ class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
         serviceshandler.stop_services()
 
     def test_without_service_configuration_file(self):
-        with self.assertRaises(Exception) as cm:
-            loader.load('pyxelresttest_duplicated_service_configuration.ini')
-        self.assertEqual(cm.exception.args[0], "While reading from '{0}' [line  5]: section 'usual_parameters' already exists".format(
-            pyxelrest.SERVICES_CONFIGURATION_FILE_PATH.replace('\\', '\\\\')))
+        loader.load('duplicated_service.yml')
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                [datetime.datetime(2014, 3, 5, 0, 0)],
+                [datetime.datetime(9999, 1, 1, 0, 0)],
+                [datetime.datetime(3001, 1, 1, 0, 0)],
+            ],
+            pyxelrestgenerator.usual_parameters_get_date()
+        )
 
 
 if __name__ == '__main__':

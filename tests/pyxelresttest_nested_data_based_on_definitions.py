@@ -8,7 +8,7 @@ class PyxelRestNestedDataBasedOnDefinitionsTest(unittest.TestCase):
     def setUpClass(cls):
         import testsutils.nested_data_service as nested_data_service
         serviceshandler.start_services((nested_data_service, 8947))
-        loader.load('pyxelresttest_nested_data_based_on_definitions_services_configuration.ini')
+        loader.load('nested_data_based_on_definitions_services.yml')
 
     @classmethod
     def tearDownClass(cls):

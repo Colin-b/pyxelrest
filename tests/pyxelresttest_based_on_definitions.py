@@ -10,7 +10,7 @@ class PyxelRestBasedOnDefinitionsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_based_on_definitions_services_configuration.ini')
+        loader.load('based_on_definitions_services.yml')
 
     @classmethod
     def tearDownClass(cls):

@@ -18,7 +18,7 @@ class PyxelRestTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_services_configuration.ini')
+        loader.load('services.yml')
 
     @classmethod
     def tearDownClass(cls):

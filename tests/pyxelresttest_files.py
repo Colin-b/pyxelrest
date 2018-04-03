@@ -9,7 +9,7 @@ class PyxelRestTestFiles(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_files_services_configuration.ini')
+        loader.load('files_services.yml')
 
     @classmethod
     def tearDownClass(cls):

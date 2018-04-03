@@ -9,7 +9,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def setUpClass(cls):
         import testsutils.json_service as json_service
         serviceshandler.start_services((json_service, 8954))
-        loader.load('pyxelresttest_json_services_configuration.ini')
+        loader.load('json_services.yml')
 
     @classmethod
     def tearDownClass(cls):

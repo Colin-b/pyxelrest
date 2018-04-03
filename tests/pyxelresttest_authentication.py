@@ -9,7 +9,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_authentication_services_configuration.ini')
+        loader.load('authentication_services.yml')
 
     @classmethod
     def tearDownClass(cls):

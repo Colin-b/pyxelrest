@@ -8,7 +8,7 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
     def setUpClass(cls):
         from testsutils import vba_keywords_service
         serviceshandler.start_services((vba_keywords_service, 8949))
-        loader.load('pyxelresttest_vba_keywords_services_configuration.ini')
+        loader.load('vba_keywords_services.yml')
 
     @classmethod
     def tearDownClass(cls):

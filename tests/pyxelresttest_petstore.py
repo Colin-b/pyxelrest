@@ -7,7 +7,7 @@ from testsutils import loader
 class PyxelRestPetstoreTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        loader.load('pyxelresttest_petstore_services_configuration.ini')
+        loader.load('petstore_services.yml')
 
     def test_get_order_by_id(self):
         from pyxelrest import pyxelrestgenerator
