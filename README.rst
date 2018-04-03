@@ -251,7 +251,7 @@ You can also use the "pyxelrest" service name to activate [Postman](https://www.
 
    Selecting UDF
 
-It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
+It can be configured the same way than a usual service, except the following options are not used anymore:
 
 +----------------------+
 | swagger_url          |

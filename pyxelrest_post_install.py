@@ -1,14 +1,86 @@
 import argparse
+from distutils import log
 import os
 import shutil
 import sys
-from distutils import log
+import yaml
+try:
+    # Python 3
+    from configparser import ConfigParser
+except ImportError:
+    # Python 2
+    from ConfigParser import ConfigParser
 
 
 def create_folder(folder_path):
     if not os.path.exists(folder_path):
         log.info('Creating {0} folder'.format(folder_path))
         os.makedirs(folder_path)
+
+
+def convert_ini_to_yml(ini_file_path, yml_file_path):
+    try:
+        config_parser = ConfigParser(interpolation=None)
+        if config_parser.read(ini_file_path):
+            yaml_content = {
+                service_name: convert_ini_service_to_yml(config_parser, service_name)
+                for service_name in config_parser.sections()
+            }
+            with open(yml_file_path) as yml_file:
+                yaml.dump(yaml_content, yml_file)
+            os.remove(ini_file_path)
+    except:
+        log.warn('Unable to convert ini services configuration file to yml.')
+
+
+def convert_ini_service_to_yml(config_parser, service_name):
+    yml_content = {}
+    for key, value in config_parser.items(service_name):
+        if 'methods' == key:
+            yml_content[key] = [method.strip() for method in value.split(',')]
+        if 'security_details' == key:
+            convert_security_details_to_yml(yml_content, value)
+        if 'advanced_configuration' == key:
+            convert_advanced_configuration_to_yml(yml_content, value)
+        else:
+            yml_content[key] = value
+    return yml_content
+
+
+def convert_security_details_to_yml(yml_content, security_details):
+    yml_oauth2 = {}
+    for security_detail in security_details.split(','):
+        key, value = security_detail.split('=', maxsplit=1)
+        if key in ['port', 'success_display_time', 'failure_display_time']:
+            yml_oauth2[key] = int(value)
+        elif 'timeout' == key:
+            yml_oauth2[key] = float(value)
+        elif key.startswith('oauth2.'):
+            yml_oauth2[key[7:]] = value
+        else:
+            yml_oauth2[key] = value
+
+    yml_content['oauth2'] = yml_oauth2
+
+
+def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
+    for security_detail in advanced_configuration.split(','):
+        key, value = security_detail.split('=', maxsplit=1)
+        if key in ['connect_timeout', 'read_timeout', 'swagger_read_timeout']:
+            yml_content[key] = float(value)
+        elif 'max_retries' == key:
+            yml_content[key] = int(value)
+        elif key.startswith('header.'):
+            headers = yml_content.setdefault('headers', {})
+            headers[key[7:]] = value
+        elif 'tags' == key:
+            yml_content[key] = [tag.strip() for tag in value.split(';')]
+        elif 'udf_return_type' == key:
+            yml_content['udf_return_types'] = [return_type.strip() for return_type in value.split(';')]
+        elif 'rely_on_definitions' == key:
+            yml_content[key] = value == 'True'
+        else:
+            yml_content[key] = value
 
 
 class PostInstall:
@@ -34,7 +106,10 @@ class PostInstall:
                                            'pyxelrest',
                                            'default_services_configuration.yml')
         if os.path.isfile(default_config_file):
+            ini_user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.ini')
             user_config_file = os.path.join(self.pyxelrest_appdata_config_folder, 'services.yml')
+            if os.path.isfile(ini_user_config_file):
+                convert_ini_to_yml(ini_user_config_file, user_config_file)
             if not os.path.isfile(user_config_file):
                 shutil.copyfile(default_config_file, user_config_file)
                 log.info('Services configuration file created.')
