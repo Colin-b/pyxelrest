@@ -124,24 +124,6 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(serviceHostTextBox, 1, 2);
             #endregion
 
-            #region Security Details
-            servicePanel.Controls.Add(new Label { Text = "Security Details", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-            securityDetailsTextBox = new TextBox() { Text = service.SecurityDetails };
-            securityDetailsTextBox.Dock = DockStyle.Fill;
-            securityDetailsTextBox.AutoSize = true;
-            securityDetailsTextBox.TextChanged += SecurityDetailsTextBox_TextChanged;
-            servicePanel.Controls.Add(securityDetailsTextBox, 1, 3);
-            #endregion
-
-            #region Advanced Configuration
-            servicePanel.Controls.Add(new Label { Text = "Advanced", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-            advancedConfigurationTextBox = new TextBox() { Text = service.AdvancedConfiguration };
-            advancedConfigurationTextBox.Dock = DockStyle.Fill;
-            advancedConfigurationTextBox.AutoSize = true;
-            advancedConfigurationTextBox.TextChanged += AdvancedConfigurationTextBox_TextChanged;
-            servicePanel.Controls.Add(advancedConfigurationTextBox, 1, 4);
-            #endregion
-
             #region Methods
             servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
@@ -199,24 +181,6 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.Controls.Add(proxiesTextBox, 1, 0);
             #endregion
 
-            #region Security Details
-            servicePanel.Controls.Add(new Label { Text = "Security Details", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            securityDetailsTextBox = new TextBox() { Text = service.SecurityDetails };
-            securityDetailsTextBox.Dock = DockStyle.Fill;
-            securityDetailsTextBox.AutoSize = true;
-            securityDetailsTextBox.TextChanged += SecurityDetailsTextBox_TextChanged;
-            servicePanel.Controls.Add(securityDetailsTextBox, 1, 1);
-            #endregion
-
-            #region Advanced Configuration
-            servicePanel.Controls.Add(new Label { Text = "Advanced", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            advancedConfigurationTextBox = new TextBox() { Text = service.AdvancedConfiguration };
-            advancedConfigurationTextBox.Dock = DockStyle.Fill;
-            advancedConfigurationTextBox.AutoSize = true;
-            advancedConfigurationTextBox.TextChanged += AdvancedConfigurationTextBox_TextChanged;
-            servicePanel.Controls.Add(advancedConfigurationTextBox, 1, 2);
-            #endregion
-
             #region Methods
             servicePanel.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
             TableLayoutPanel methodsPanel = new TableLayoutPanel();
@@ -260,34 +224,19 @@ namespace AutoLoadPyxelRestAddIn
             return servicePanel;
         }
 
-        private void SecurityDetailsTextBox_TextChanged(object sender, EventArgs e)
-        {
-            var securityDetailsRegex = new Regex("^(([^\n,]+)=([^\n,]*))(,([^\n,]+)=([^\n,]*))*$");
-            if(securityDetailsRegex.IsMatch(securityDetailsTextBox.Text)) {
-                securityDetailsTextBox.BackColor = Color.LightGreen;
-                service.SecurityDetails = securityDetailsTextBox.Text;
-            }
-            else
-            {
-                securityDetailsTextBox.BackColor = string.IsNullOrEmpty(securityDetailsTextBox.Text) ? Color.Empty : Color.Red;
-                service.SecurityDetails = string.Empty;
-            }
-        }
-
-        private void AdvancedConfigurationTextBox_TextChanged(object sender, EventArgs e)
-        {
-            var advancedConfigurationRegex = new Regex("^(([^\n,]+)=([^\n,]*))(,([^\n,]+)=([^\n,]*))*$");
-            if (advancedConfigurationRegex.IsMatch(advancedConfigurationTextBox.Text))
-            {
-                advancedConfigurationTextBox.BackColor = Color.LightGreen;
-                service.AdvancedConfiguration = advancedConfigurationTextBox.Text;
-            }
-            else
-            {
-                advancedConfigurationTextBox.BackColor = string.IsNullOrEmpty(advancedConfigurationTextBox.Text) ? Color.Empty : Color.Red;
-                service.AdvancedConfiguration = string.Empty;
-            }
-        }
+//        private void SecurityDetailsTextBox_TextChanged(object sender, EventArgs e)
+//        {
+//            var securityDetailsRegex = new Regex("^(([^\n,]+)=([^\n,]*))(,([^\n,]+)=([^\n,]*))*$");
+//            if(securityDetailsRegex.IsMatch(securityDetailsTextBox.Text)) {
+//                securityDetailsTextBox.BackColor = Color.LightGreen;
+//                service.SecurityDetails = securityDetailsTextBox.Text;
+//            }
+//            else
+//            {
+//                securityDetailsTextBox.BackColor = string.IsNullOrEmpty(securityDetailsTextBox.Text) ? Color.Empty : Color.Red;
+ //               service.SecurityDetails = string.Empty;
+ //           }
+ //       }
 
         private void ServiceHostTextBox_TextChanged(object sender, EventArgs e)
         {
