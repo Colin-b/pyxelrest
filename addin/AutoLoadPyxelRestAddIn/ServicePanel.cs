@@ -22,7 +22,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal readonly Service service;
 
-        private long? swaggerUrlModificationTicks;
+        internal long? swaggerUrlModificationTicks;
 
         public ServicePanel(ServiceConfigurationForm configurationForm, Service service)
         {

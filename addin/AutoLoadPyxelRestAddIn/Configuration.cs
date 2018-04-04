@@ -49,7 +49,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private YamlStream LoadUrl(string fileUrl)
         {
-            HttpWebResponse response = UrlChecker.ConnectTo(fileUrl, null, close: false);
+            HttpWebResponse response = UrlChecker.ConnectTo(fileUrl, UrlChecker.GetProxyFor(fileUrl), close: false);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
                 string details = response == null ? "" : response.StatusDescription;

@@ -8,59 +8,32 @@ namespace AutoLoadPyxelRestAddIn
     {
         private readonly ServicePanel servicePanel;
 
-        #region Fields
-
-        #region Proxies tab fields
-        private TextBox httpProxyTextBox;
-        private TextBox httpsProxyTextBox;
-        private TextBox noProxyTextBox;
-        #endregion
-
-        private TextBox serviceHostTextBox;
-
-        private CheckBox get;
-        private CheckBox post;
-        private CheckBox put;
-        private CheckBox delete;
-        private CheckBox patch;
-        private CheckBox options;
-        private CheckBox head;
-
-        #region OAuth2 tab fields
-        private NumericUpDown oauth2PortTextBox;
-        private NumericUpDown oauth2TimeoutTextBox;
-        private NumericUpDown oauth2SuccessDisplayTimeTextBox;
-        private NumericUpDown oauth2FailureDisplayTimeTextBox;
-        #endregion
-
-        private TextBox apiKeyTextBox;
-
-        #region Basic tab fields
-        private TextBox basicUsernameTextBox;
-        private TextBox basicPasswordTextBox;
-        #endregion
-
-        #region NTLM tab fields
-        private TextBox ntlmUsernameTextBox;
-        private TextBox ntlmPasswordTextBox;
-        #endregion
-
-        private CheckBox synchronous;
-        private CheckBox asynchronous;
-
-        private CheckBox relyOnDefinitions;
-        private NumericUpDown MaxRetriesTextBox;
-        private NumericUpDown ConnectTimeoutTextBox;
-        private NumericUpDown ReadTimeoutTextBox;
-        private NumericUpDown SwaggerReadTimeoutTextBox;
-        private TextBox tagsTextBox;
-
-        #endregion
+        private TextBox httpProxy;
+        private TextBox httpsProxy;
+        private TextBox noProxy;
 
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
             this.servicePanel = servicePanel;
             InitializeComponent();
+        }
+
+        /**
+         * Return null if no proxy should be used.
+         * Return string.empty if default proxy should be used.
+         * Return the proxy to be used otherwise.
+         */
+        internal string GetProxyFor(string url)
+        {
+            if (noProxy.Text.Length > 0 && url.StartsWith(noProxy.Text))
+                return null;
+
+            if (url.StartsWith("https"))
+                return httpsProxy.Text;
+            if (url.StartsWith("http"))
+                return httpProxy.Text;
+
+            return string.Empty;
         }
 
         private void InitializeComponent()
@@ -73,505 +46,476 @@ namespace AutoLoadPyxelRestAddIn
             AutoScroll = true;
             StartPosition = FormStartPosition.CenterParent;
 
-            TabControl tabs = new TabControl();
-            tabs.Dock = DockStyle.Fill;
+            var tabs = new TabControl { Dock = DockStyle.Fill };
 
             #region Standard settings
-            TabPage standardTab = new TabPage("Standard");
-            TableLayoutPanel layout = new TableLayoutPanel();
-            layout.AutoSize = true;
+            {
+                var tab = new TabPage("Standard");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region Service Host
-            layout.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            serviceHostTextBox = new TextBox() { Text = servicePanel.service.ServiceHost };
-            serviceHostTextBox.Dock = DockStyle.Fill;
-            serviceHostTextBox.TextChanged += ServiceHostTextBox_TextChanged;
-            layout.Controls.Add(serviceHostTextBox, 1, 1);
-            #endregion
+                #region Service Host
+                layout.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-            #region Methods
-            layout.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            TableLayoutPanel methodsPanel = new TableLayoutPanel();
-            methodsPanel.Dock = DockStyle.Fill;
-            methodsPanel.AutoSize = true;
-            get = new CheckBox() { Text = "get", Checked = servicePanel.service.Get, Width = 50 };
-            get.CheckedChanged += Get_CheckedChanged;
-            methodsPanel.Controls.Add(get, 0, 0);
-            post = new CheckBox() { Text = "post", Checked = servicePanel.service.Post, Width = 55 };
-            post.CheckedChanged += Post_CheckedChanged;
-            methodsPanel.Controls.Add(post, 1, 0);
-            put = new CheckBox() { Text = "put", Checked = servicePanel.service.Put, Width = 50 };
-            put.CheckedChanged += Put_CheckedChanged;
-            methodsPanel.Controls.Add(put, 2, 0);
-            delete = new CheckBox() { Text = "delete", Checked = servicePanel.service.Delete, Width = 65 };
-            delete.CheckedChanged += Delete_CheckedChanged;
-            methodsPanel.Controls.Add(delete, 3, 0);
-            patch = new CheckBox() { Text = "patch", Checked = servicePanel.service.Patch, Width = 60 };
-            patch.CheckedChanged += Patch_CheckedChanged;
-            methodsPanel.Controls.Add(patch, 4, 0);
-            options = new CheckBox() { Text = "options", Checked = servicePanel.service.Options, Width = 70 };
-            options.CheckedChanged += Options_CheckedChanged;
-            methodsPanel.Controls.Add(options, 5, 0);
-            head = new CheckBox() { Text = "head", Checked = servicePanel.service.Head, Width = 60 };
-            head.CheckedChanged += Head_CheckedChanged;
-            methodsPanel.Controls.Add(head, 6, 0);
-            layout.Controls.Add(methodsPanel, 1, 2);
-            #endregion
+                var serviceHost = new TextBox() { Text = servicePanel.service.ServiceHost, Dock = DockStyle.Fill };
+                serviceHost.TextChanged += ServiceHost_TextChanged;
+                layout.Controls.Add(serviceHost, 1, 1);
+                #endregion
 
-            #region Max retries
-            layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-            MaxRetriesTextBox = new NumericUpDown() { Value = servicePanel.service.MaxRetries };
-            MaxRetriesTextBox.Dock = DockStyle.Fill;
-            MaxRetriesTextBox.ValueChanged += MaxRetriesTextBox_ValueChanged;
-            layout.Controls.Add(MaxRetriesTextBox, 1, 3);
-            #endregion
+                #region Methods
+                {
+                    layout.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-            #region Timeout
+                    var panel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
 
-            #region Connect timeout
-            layout.Controls.Add(new Label { Text = "Connect", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-            ConnectTimeoutTextBox = new NumericUpDown() { Value = servicePanel.service.ConnectTimeout };
-            ConnectTimeoutTextBox.Dock = DockStyle.Fill;
-            ConnectTimeoutTextBox.ValueChanged += ConnectTimeoutTextBox_ValueChanged;
-            layout.Controls.Add(ConnectTimeoutTextBox, 1, 4);
-            #endregion
+                    var get = new CheckBox() { Text = "get", Checked = servicePanel.service.Get, Width = 50 };
+                    get.CheckedChanged += Get_CheckedChanged;
+                    panel.Controls.Add(get, 0, 0);
+                    var post = new CheckBox() { Text = "post", Checked = servicePanel.service.Post, Width = 55 };
+                    post.CheckedChanged += Post_CheckedChanged;
+                    panel.Controls.Add(post, 1, 0);
+                    var put = new CheckBox() { Text = "put", Checked = servicePanel.service.Put, Width = 50 };
+                    put.CheckedChanged += Put_CheckedChanged;
+                    panel.Controls.Add(put, 2, 0);
+                    var delete = new CheckBox() { Text = "delete", Checked = servicePanel.service.Delete, Width = 65 };
+                    delete.CheckedChanged += Delete_CheckedChanged;
+                    panel.Controls.Add(delete, 3, 0);
+                    var patch = new CheckBox() { Text = "patch", Checked = servicePanel.service.Patch, Width = 60 };
+                    patch.CheckedChanged += Patch_CheckedChanged;
+                    panel.Controls.Add(patch, 4, 0);
+                    var options = new CheckBox() { Text = "options", Checked = servicePanel.service.Options, Width = 70 };
+                    options.CheckedChanged += Options_CheckedChanged;
+                    panel.Controls.Add(options, 5, 0);
+                    var head = new CheckBox() { Text = "head", Checked = servicePanel.service.Head, Width = 60 };
+                    head.CheckedChanged += Head_CheckedChanged;
+                    panel.Controls.Add(head, 6, 0);
 
-            #region Read timeout
-            layout.Controls.Add(new Label { Text = "Read", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
-            ReadTimeoutTextBox = new NumericUpDown() { Value = servicePanel.service.ReadTimeout };
-            ReadTimeoutTextBox.Dock = DockStyle.Fill;
-            ReadTimeoutTextBox.ValueChanged += ReadTimeoutTextBox_ValueChanged;
-            layout.Controls.Add(ReadTimeoutTextBox, 1, 5);
-            #endregion
+                    layout.Controls.Add(panel, 1, 2);
+                }
+                #endregion
 
-            #region Swagger read timeout
-            layout.Controls.Add(new Label { Text = "Swagger read", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
-            SwaggerReadTimeoutTextBox = new NumericUpDown() { Value = servicePanel.service.SwaggerReadTimeout };
-            SwaggerReadTimeoutTextBox.Dock = DockStyle.Fill;
-            SwaggerReadTimeoutTextBox.ValueChanged += SwaggerReadTimeoutTextBox_ValueChanged;
-            layout.Controls.Add(SwaggerReadTimeoutTextBox, 1, 6);
-            #endregion
+                #region Max retries
+                layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
-            #endregion
+                var maxRetries = new NumericUpDown() { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
+                maxRetries.ValueChanged += MaxRetries_ValueChanged;
+                layout.Controls.Add(maxRetries, 1, 3);
+                #endregion
 
-            #region API Key
-            layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
-            apiKeyTextBox = new TextBox() { Text = servicePanel.service.ApiKey };
-            apiKeyTextBox.Dock = DockStyle.Fill;
-            apiKeyTextBox.TextChanged += ApiKeyTextBox_TextChanged;
-            layout.Controls.Add(apiKeyTextBox, 1, 7);
-            #endregion
+                #region Timeout
 
-            #region Return behavior
+                #region Connect timeout
+                layout.Controls.Add(new Label { Text = "Connect", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
-            layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 8);
+                var connectTimeout = new NumericUpDown() { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
+                connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
+                layout.Controls.Add(connectTimeout, 1, 4);
+                #endregion
 
-            TableLayoutPanel returnBehaviorPanel = new TableLayoutPanel();
-            returnBehaviorPanel.Dock = DockStyle.Fill;
+                #region Read timeout
+                layout.Controls.Add(new Label { Text = "Read", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
-            #region UDF Return types
-            synchronous = new CheckBox() { Text = "synchronous", Checked = servicePanel.service.Synchronous };
-            synchronous.CheckedChanged += Synchronous_CheckedChanged;
-            returnBehaviorPanel.Controls.Add(synchronous, 0, 0);
-            asynchronous = new CheckBox() { Text = "asynchronous", Checked = servicePanel.service.Asynchronous };
-            asynchronous.CheckedChanged += Asynchronous_CheckedChanged;
-            returnBehaviorPanel.Controls.Add(asynchronous, 1, 0);
-            #endregion
+                var readTimeout = new NumericUpDown() { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
+                readTimeout.ValueChanged += ReadTimeout_ValueChanged;
+                layout.Controls.Add(readTimeout, 1, 5);
+                #endregion
 
-            #region Rely on definitions
-            relyOnDefinitions = new CheckBox() { Text = "rely on definitions", Checked = servicePanel.service.RelyOnDefinitions, Width=200 };
-            relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
-            returnBehaviorPanel.Controls.Add(relyOnDefinitions, 2, 0);
-            #endregion
+                #region Swagger read timeout
+                layout.Controls.Add(new Label { Text = "Swagger read", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
 
-            layout.Controls.Add(returnBehaviorPanel, 1, 8);
+                var swaggerReadTimeout = new NumericUpDown() { Value = servicePanel.service.SwaggerReadTimeout, Dock = DockStyle.Fill };
+                swaggerReadTimeout.ValueChanged += SwaggerReadTimeout_ValueChanged;
+                layout.Controls.Add(swaggerReadTimeout, 1, 6);
+                #endregion
 
-            #endregion
+                #endregion
 
-            standardTab.Controls.Add(layout);
+                #region API Key
+                layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
 
-            tabs.TabPages.Add(standardTab);
+                var apiKey = new TextBox() { Text = servicePanel.service.ApiKey, Dock = DockStyle.Fill };
+                apiKey.TextChanged += ApiKey_TextChanged;
+                layout.Controls.Add(apiKey, 1, 7);
+                #endregion
+
+                #region Return behavior
+                {
+                    layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 8);
+
+                    var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+
+                    #region UDF Return types
+                    var synchronous = new CheckBox() { Text = "synchronous", Checked = servicePanel.service.Synchronous };
+                    synchronous.CheckedChanged += Synchronous_CheckedChanged;
+                    panel.Controls.Add(synchronous, 0, 0);
+
+                    var asynchronous = new CheckBox() { Text = "asynchronous", Checked = servicePanel.service.Asynchronous };
+                    asynchronous.CheckedChanged += Asynchronous_CheckedChanged;
+                    panel.Controls.Add(asynchronous, 1, 0);
+                    #endregion
+
+                    #region Rely on definitions
+                    var relyOnDefinitions = new CheckBox() { Text = "rely on definitions", Checked = servicePanel.service.RelyOnDefinitions, Width = 200 };
+                    relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
+                    panel.Controls.Add(relyOnDefinitions, 2, 0);
+                    #endregion
+
+                    layout.Controls.Add(panel, 1, 8);
+                }
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             #region Proxies settings
-            TabPage proxiesTab = new TabPage("Proxies");
-            TableLayoutPanel proxiesLayout = new TableLayoutPanel();
-            proxiesLayout.AutoSize = true;
+            {
+                var tab = new TabPage("Proxies");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region HTTP proxy
-            proxiesLayout.Controls.Add(new Label { Text = "HTTP URL", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            httpProxyTextBox = new TextBox() { Width=450, Text = servicePanel.service.Proxies.ContainsKey("http") ? (string)servicePanel.service.Proxies["http"] : string.Empty };
-            httpProxyTextBox.Dock = DockStyle.Fill;
-            httpProxyTextBox.TextChanged += HttpProxyTextBox_TextChanged;
-            proxiesLayout.Controls.Add(httpProxyTextBox, 1, 1);
-            #endregion
+                #region HTTP proxy
+                layout.Controls.Add(new Label { Text = "HTTP URL", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-            #region HTTPS proxy
-            proxiesLayout.Controls.Add(new Label { Text = "HTTPS URL", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            httpsProxyTextBox = new TextBox() { Width = 450, Text = servicePanel.service.Proxies.ContainsKey("https") ? (string)servicePanel.service.Proxies["https"] : string.Empty };
-            httpsProxyTextBox.Dock = DockStyle.Fill;
-            httpsProxyTextBox.TextChanged += HttpsProxyTextBox_TextChanged;
-            proxiesLayout.Controls.Add(httpsProxyTextBox, 1, 2);
-            #endregion
+                httpProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Proxies.ContainsKey("http") ? (string)servicePanel.service.Proxies["http"] : string.Empty };
+                httpProxy.TextChanged += HttpProxy_TextChanged;
+                layout.Controls.Add(httpProxy, 1, 1);
+                #endregion
 
-            #region No proxy
-            proxiesLayout.Controls.Add(new Label { Text = "No proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-            noProxyTextBox = new TextBox() { Width = 450, Text = servicePanel.service.Proxies.ContainsKey("no_proxy") ? (string)servicePanel.service.Proxies["no_proxy"] : string.Empty };
-            noProxyTextBox.Dock = DockStyle.Fill;
-            noProxyTextBox.TextChanged += NoProxyTextBox_TextChanged;
-            proxiesLayout.Controls.Add(noProxyTextBox, 1, 3);
-            #endregion
+                #region HTTPS proxy
+                layout.Controls.Add(new Label { Text = "HTTPS URL", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-            proxiesTab.Controls.Add(proxiesLayout);
+                httpsProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Proxies.ContainsKey("https") ? (string)servicePanel.service.Proxies["https"] : string.Empty };
+                httpsProxy.TextChanged += HttpsProxy_TextChanged;
+                layout.Controls.Add(httpsProxy, 1, 2);
+                #endregion
 
-            tabs.TabPages.Add(proxiesTab);
+                #region No proxy
+                layout.Controls.Add(new Label { Text = "No proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+
+                noProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Proxies.ContainsKey("no_proxy") ? (string)servicePanel.service.Proxies["no_proxy"] : string.Empty };
+                noProxy.TextChanged += NoProxy_TextChanged;
+                layout.Controls.Add(noProxy, 1, 3);
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             #region Headers settings
-            TabPage headersTab = new TabPage("Headers");
-            TableLayoutPanel headersLayout = new TableLayoutPanel();
-            headersLayout.AutoSize = true;
+            {
+                var tab = new TabPage("Headers");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region Add items
+                #region Add items
 
-            TextBox newHeaderFieldNameTextBox = new TextBox() { Text = string.Empty };
-            newHeaderFieldNameTextBox.Dock = DockStyle.Fill;
-            headersLayout.Controls.Add(newHeaderFieldNameTextBox, 0, 1);
-            headersLayout.SetColumnSpan(newHeaderFieldNameTextBox, 2);
+                var headerName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(headerName, 0, 1);
+                layout.SetColumnSpan(headerName, 2);
 
-            Button addHeaderFieldButton = new Button() { Text = "Add field" };
-            addHeaderFieldButton.Dock = DockStyle.Fill;
-            addHeaderFieldButton.AutoSize = true;
-            headersLayout.Controls.Add(addHeaderFieldButton, 0, 2);
-            headersLayout.SetColumnSpan(addHeaderFieldButton, 2);
+                var addHeader = new Button { Text = "Add field", Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(addHeader, 0, 2);
+                layout.SetColumnSpan(addHeader, 2);
 
-            #endregion
+                #endregion
 
-            headersTab.Controls.Add(headersLayout);
-
-            tabs.TabPages.Add(headersTab);
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             #region Tags settings
-            TabPage tagsTab = new TabPage("Tags");
-            TableLayoutPanel tagsLayout = new TableLayoutPanel();
-            tagsLayout.AutoSize = true;
+            {
+                var tab = new TabPage("Tags");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region Add values
+                #region Add values
 
-            TextBox newTagValueTextBox = new TextBox() { Text = string.Empty };
-            newTagValueTextBox.Dock = DockStyle.Fill;
-            tagsLayout.Controls.Add(newTagValueTextBox, 0, 1);
-            tagsLayout.SetColumnSpan(newTagValueTextBox, 2);
+                var tag = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(tag, 0, 1);
+                layout.SetColumnSpan(tag, 2);
 
-            Button addTagButton = new Button() { Text = "Add tag" };
-            addTagButton.Dock = DockStyle.Fill;
-            addTagButton.AutoSize = true;
-            tagsLayout.Controls.Add(addTagButton, 0, 2);
-            tagsLayout.SetColumnSpan(addTagButton, 2);
+                var addTag = new Button { Text = "Add tag", Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(addTag, 0, 2);
+                layout.SetColumnSpan(addTag, 2);
 
-            #endregion
+                #endregion
 
-            tagsTab.Controls.Add(tagsLayout);
-
-            tabs.TabPages.Add(tagsTab);
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             #region OAuth2 settings
-            TabPage oauth2Tab = new TabPage("OAuth2");
-            TableLayoutPanel oauth2Layout = new TableLayoutPanel();
-            oauth2Layout.AutoSize = true;
+            {
+                var tab = new TabPage("OAuth2");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region Port
-            oauth2Layout.Controls.Add(new Label { Width=150, Text = "Port", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            oauth2PortTextBox = new NumericUpDown() { Width = 400, Maximum = 100000, Value = servicePanel.service.OAuth2.ContainsKey("port") ? (decimal)servicePanel.service.OAuth2["port"] : 5000 };
-            oauth2PortTextBox.Dock = DockStyle.Fill;
-            oauth2PortTextBox.TextChanged += Oauth2PortTextBox_TextChanged;
-            oauth2Layout.Controls.Add(oauth2PortTextBox, 1, 1);
-            #endregion
+                #region Port
+                layout.Controls.Add(new Label { Width = 150, Text = "Port", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-            #region Timeout
-            oauth2Layout.Controls.Add(new Label { Width = 150, Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            oauth2TimeoutTextBox = new NumericUpDown() { Maximum=1000, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60 };
-            oauth2TimeoutTextBox.Dock = DockStyle.Fill;
-            oauth2TimeoutTextBox.TextChanged += Oauth2TimeoutTextBox_TextChanged;
-            oauth2Layout.Controls.Add(oauth2TimeoutTextBox, 1, 2);
-            #endregion
+                var port = new NumericUpDown { Width = 400, Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("port") ? (decimal)servicePanel.service.OAuth2["port"] : 5000 };
+                port.TextChanged += Oauth2Port_TextChanged;
+                layout.Controls.Add(port, 1, 1);
+                #endregion
 
-            #region Success display time
-            oauth2Layout.Controls.Add(new Label { Width = 150, Text = "Success display time", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-            oauth2SuccessDisplayTimeTextBox = new NumericUpDown() { Maximum = 100000, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1 };
-            oauth2SuccessDisplayTimeTextBox.Dock = DockStyle.Fill;
-            oauth2SuccessDisplayTimeTextBox.TextChanged += Oauth2SuccessDisplayTimeTextBox_TextChanged;
-            oauth2Layout.Controls.Add(oauth2SuccessDisplayTimeTextBox, 1, 3);
-            #endregion
+                #region Timeout
+                layout.Controls.Add(new Label { Width = 150, Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-            #region Failure display time
-            oauth2Layout.Controls.Add(new Label { Width = 150, Text = "Failure display time", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-            oauth2FailureDisplayTimeTextBox = new NumericUpDown() { Maximum = 100000, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000 };
-            oauth2FailureDisplayTimeTextBox.Dock = DockStyle.Fill;
-            oauth2FailureDisplayTimeTextBox.TextChanged += Oauth2FailureDisplayTimeTextBox_TextChanged;
-            oauth2Layout.Controls.Add(oauth2FailureDisplayTimeTextBox, 1, 4);
-            #endregion
+                var timeout = new NumericUpDown { Maximum = 1000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60 };
+                timeout.TextChanged += Oauth2Timeout_TextChanged;
+                layout.Controls.Add(timeout, 1, 2);
+                #endregion
 
-            oauth2Tab.Controls.Add(oauth2Layout);
+                #region Success display time
+                layout.Controls.Add(new Label { Width = 150, Text = "Success display time", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
-            tabs.TabPages.Add(oauth2Tab);
+                var successDisplayTime = new NumericUpDown { Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1 };
+                successDisplayTime.TextChanged += Oauth2SuccessDisplayTime_TextChanged;
+                layout.Controls.Add(successDisplayTime, 1, 3);
+                #endregion
+
+                #region Failure display time
+                layout.Controls.Add(new Label { Width = 150, Text = "Failure display time", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+
+                var failureDisplayTime = new NumericUpDown { Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000 };
+                failureDisplayTime.TextChanged += Oauth2FailureDisplayTime_TextChanged;
+                layout.Controls.Add(failureDisplayTime, 1, 4);
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             #region Basic Authentication settings
-            TabPage basicTab = new TabPage("Basic");
-            TableLayoutPanel basicLayout = new TableLayoutPanel();
-            basicLayout.AutoSize = true;
+            {
+                var tab = new TabPage("Basic");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region Username
-            basicLayout.Controls.Add(new Label { Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            basicUsernameTextBox = new TextBox() { Width = 450, Text = servicePanel.service.Basic.ContainsKey("username") ? (string)servicePanel.service.Basic["username"] : string.Empty };
-            basicUsernameTextBox.Dock = DockStyle.Fill;
-            basicUsernameTextBox.TextChanged += BasicUsernameTextBox_TextChanged;
-            basicLayout.Controls.Add(basicUsernameTextBox, 1, 1);
-            #endregion
+                #region Username
+                layout.Controls.Add(new Label { Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-            #region Password
-            basicLayout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            basicPasswordTextBox = new TextBox() { Width = 450, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
-            basicPasswordTextBox.Dock = DockStyle.Fill;
-            basicPasswordTextBox.TextChanged += BasicPasswordTextBox_TextChanged;
-            basicLayout.Controls.Add(basicPasswordTextBox, 1, 2);
-            #endregion
+                var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("username") ? (string)servicePanel.service.Basic["username"] : string.Empty };
+                userName.TextChanged += BasicUsername_TextChanged;
+                layout.Controls.Add(userName, 1, 1);
+                #endregion
 
-            basicTab.Controls.Add(basicLayout);
+                #region Password
+                layout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-            tabs.TabPages.Add(basicTab);
+                var password = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
+                password.TextChanged += BasicPassword_TextChanged;
+                layout.Controls.Add(password, 1, 2);
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             #region NTLM Authentication settings
-            TabPage ntlmTab = new TabPage("NTLM");
-            TableLayoutPanel ntlmLayout = new TableLayoutPanel();
-            ntlmLayout.AutoSize = true;
+            {
+                var tab = new TabPage("NTLM");
+                var layout = new TableLayoutPanel { AutoSize = true };
 
-            #region Username
-            ntlmLayout.Controls.Add(new Label { Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-            ntlmUsernameTextBox = new TextBox() { Width = 450, Text = servicePanel.service.Basic.ContainsKey("username") ? (string)servicePanel.service.Basic["username"] : string.Empty };
-            ntlmUsernameTextBox.Dock = DockStyle.Fill;
-            ntlmUsernameTextBox.TextChanged += NtlmUsernameTextBox_TextChanged;
-            ntlmLayout.Controls.Add(ntlmUsernameTextBox, 1, 1);
-            #endregion
+                #region Username
+                layout.Controls.Add(new Label { Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-            #region Password
-            ntlmLayout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-            ntlmPasswordTextBox = new TextBox() { Width = 450, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
-            ntlmPasswordTextBox.Dock = DockStyle.Fill;
-            ntlmPasswordTextBox.TextChanged += NtlmPasswordTextBox_TextChanged;
-            ntlmLayout.Controls.Add(ntlmPasswordTextBox, 1, 2);
-            #endregion
+                var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("username") ? (string)servicePanel.service.Basic["username"] : string.Empty };
+                userName.TextChanged += NtlmUsername_TextChanged;
+                layout.Controls.Add(userName, 1, 1);
+                #endregion
 
-            ntlmTab.Controls.Add(ntlmLayout);
+                #region Password
+                layout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-            tabs.TabPages.Add(ntlmTab);
+                var password = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
+                password.TextChanged += NtlmPassword_TextChanged;
+                layout.Controls.Add(password, 1, 2);
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
             #endregion
 
             Controls.Add(tabs);
         }
 
-        private void NtlmPasswordTextBox_TextChanged(object sender, EventArgs e)
+        #region Events
+
+        private void NtlmPassword_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(ntlmPasswordTextBox.Text))
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Ntlm.Remove("password");
             else
-                servicePanel.service.Ntlm["password"] = ntlmPasswordTextBox.Text;
+                servicePanel.service.Ntlm["password"] = ((TextBox)sender).Text;
         }
 
-        private void NtlmUsernameTextBox_TextChanged(object sender, EventArgs e)
+        private void NtlmUsername_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(ntlmUsernameTextBox.Text))
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Ntlm.Remove("username");
             else
-                servicePanel.service.Ntlm["username"] = ntlmUsernameTextBox.Text;
+                servicePanel.service.Ntlm["username"] = ((TextBox)sender).Text;
         }
 
-        private void BasicPasswordTextBox_TextChanged(object sender, EventArgs e)
+        private void BasicPassword_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(basicPasswordTextBox.Text))
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Basic.Remove("password");
             else
-                servicePanel.service.Basic["password"] = basicPasswordTextBox.Text;
+                servicePanel.service.Basic["password"] = ((TextBox)sender).Text;
         }
 
-        private void BasicUsernameTextBox_TextChanged(object sender, EventArgs e)
+        private void BasicUsername_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(basicUsernameTextBox.Text))
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Basic.Remove("username");
             else
-                servicePanel.service.Basic["username"] = basicUsernameTextBox.Text;
+                servicePanel.service.Basic["username"] = ((TextBox)sender).Text;
         }
 
-        private void Oauth2FailureDisplayTimeTextBox_TextChanged(object sender, EventArgs e)
+        private void Oauth2FailureDisplayTime_TextChanged(object sender, EventArgs e)
         {
-            if (oauth2FailureDisplayTimeTextBox.Value == 0)
+            if (((NumericUpDown)sender).Value == 0)
                 servicePanel.service.OAuth2.Remove("failure_display_time");
             else
-                servicePanel.service.OAuth2["failure_display_time"] = oauth2FailureDisplayTimeTextBox.Value;
+                servicePanel.service.OAuth2["failure_display_time"] = ((NumericUpDown)sender).Value;
         }
 
-        private void Oauth2SuccessDisplayTimeTextBox_TextChanged(object sender, EventArgs e)
+        private void Oauth2SuccessDisplayTime_TextChanged(object sender, EventArgs e)
         {
-            if (oauth2SuccessDisplayTimeTextBox.Value == 0)
+            if (((NumericUpDown)sender).Value == 0)
                 servicePanel.service.OAuth2.Remove("success_display_time");
             else
-                servicePanel.service.OAuth2["success_display_time"] = oauth2SuccessDisplayTimeTextBox.Value;
+                servicePanel.service.OAuth2["success_display_time"] = ((NumericUpDown)sender).Value;
         }
 
-        private void Oauth2PortTextBox_TextChanged(object sender, EventArgs e)
+        private void Oauth2Port_TextChanged(object sender, EventArgs e)
         {
-            if (oauth2PortTextBox.Value == 0)
+            if (((NumericUpDown)sender).Value == 0)
                 servicePanel.service.OAuth2.Remove("port");
             else
-                servicePanel.service.OAuth2["port"] = oauth2PortTextBox.Value;
+                servicePanel.service.OAuth2["port"] = ((NumericUpDown)sender).Value;
         }
 
-        private void Oauth2TimeoutTextBox_TextChanged(object sender, EventArgs e)
+        private void Oauth2Timeout_TextChanged(object sender, EventArgs e)
         {
-            if (oauth2TimeoutTextBox.Value == 0)
+            if (((NumericUpDown)sender).Value == 0)
                 servicePanel.service.OAuth2.Remove("timeout");
             else
-                servicePanel.service.OAuth2["timeout"] = oauth2TimeoutTextBox.Value;
+                servicePanel.service.OAuth2["timeout"] = ((NumericUpDown)sender).Value;
         }
 
-        private void NoProxyTextBox_TextChanged(object sender, EventArgs e)
+        private void NoProxy_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(noProxyTextBox.Text))
+            servicePanel.swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("no_proxy");
             else
-                servicePanel.service.Proxies["no_proxy"] = noProxyTextBox.Text;
+                servicePanel.service.Proxies["no_proxy"] = ((TextBox)sender).Text;
         }
 
-        private void HttpsProxyTextBox_TextChanged(object sender, EventArgs e)
+        private void HttpsProxy_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(httpsProxyTextBox.Text))
+            servicePanel.swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("https");
             else
-                servicePanel.service.Proxies["https"] = httpsProxyTextBox.Text;
+                servicePanel.service.Proxies["https"] = ((TextBox)sender).Text;
         }
 
-        private void HttpProxyTextBox_TextChanged(object sender, EventArgs e)
+        private void HttpProxy_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(httpProxyTextBox.Text))
+            servicePanel.swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("http");
             else
-                servicePanel.service.Proxies["http"] = httpProxyTextBox.Text;
+                servicePanel.service.Proxies["http"] = ((TextBox)sender).Text;
         }
 
-        private void SwaggerReadTimeoutTextBox_ValueChanged(object sender, EventArgs e)
+        private void SwaggerReadTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.SwaggerReadTimeout = SwaggerReadTimeoutTextBox.Value;
+            servicePanel.service.SwaggerReadTimeout = ((NumericUpDown)sender).Value;
         }
 
-        private void ReadTimeoutTextBox_ValueChanged(object sender, EventArgs e)
+        private void ReadTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ReadTimeout = ReadTimeoutTextBox.Value;
+            servicePanel.service.ReadTimeout = ((NumericUpDown)sender).Value;
         }
 
-        private void ConnectTimeoutTextBox_ValueChanged(object sender, EventArgs e)
+        private void ConnectTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ConnectTimeout = ConnectTimeoutTextBox.Value;
+            servicePanel.service.ConnectTimeout = ((NumericUpDown)sender).Value;
         }
 
-        private void MaxRetriesTextBox_ValueChanged(object sender, EventArgs e)
+        private void MaxRetries_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.MaxRetries = (int)MaxRetriesTextBox.Value;
+            servicePanel.service.MaxRetries = (int)((NumericUpDown)sender).Value;
         }
 
         private void RelyOnDefinitions_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.RelyOnDefinitions = relyOnDefinitions.Checked;
+            servicePanel.service.RelyOnDefinitions = ((CheckBox)sender).Checked;
         }
 
-        internal string GetProxyFor(string url)
+        private void ServiceHost_TextChanged(object sender, EventArgs e)
         {
-            if (noProxyTextBox.Text.Length > 0 && url.StartsWith(noProxyTextBox.Text))
-                return null;
-
-            if (url.StartsWith("http:"))
-                return httpProxyTextBox.Text;
-            if (url.StartsWith("https:"))
-                return httpsProxyTextBox.Text;
-            return null;
-        }
-
-        private void ServiceHostTextBox_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.ServiceHost = serviceHostTextBox.Text;
+            servicePanel.service.ServiceHost = ((TextBox)sender).Text;
         }
 
         private void Head_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Head = head.Checked;
+            servicePanel.service.Head = ((CheckBox)sender).Checked;
         }
 
         private void Options_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Options = options.Checked;
+            servicePanel.service.Options = ((CheckBox)sender).Checked;
         }
 
         private void Patch_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Patch = patch.Checked;
+            servicePanel.service.Patch = ((CheckBox)sender).Checked;
         }
 
         private void Delete_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Delete = delete.Checked;
+            servicePanel.service.Delete = ((CheckBox)sender).Checked;
         }
 
         private void Put_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Put = put.Checked;
+            servicePanel.service.Put = ((CheckBox)sender).Checked;
         }
 
         private void Post_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Post = post.Checked;
+            servicePanel.service.Post = ((CheckBox)sender).Checked;
         }
 
         private void Get_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Get = get.Checked;
+            servicePanel.service.Get = ((CheckBox)sender).Checked;
         }
 
-        private void ApiKeyTextBox_TextChanged(object sender, EventArgs e)
+        private void ApiKey_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ApiKey = apiKeyTextBox.Text;
+            servicePanel.service.ApiKey = ((TextBox)sender).Text;
         }
 
         private void Asynchronous_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Asynchronous = asynchronous.Checked;
+            servicePanel.service.Asynchronous = ((CheckBox)sender).Checked;
         }
 
         private void Synchronous_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Synchronous = synchronous.Checked;
+            servicePanel.service.Synchronous = ((CheckBox)sender).Checked;
         }
 
-        //        private void SecurityDetailsTextBox_TextChanged(object sender, EventArgs e)
-        //        {
-        //            var securityDetailsRegex = new Regex("^(([^\n,]+)=([^\n,]*))(,([^\n,]+)=([^\n,]*))*$");
-        //            if(securityDetailsRegex.IsMatch(securityDetailsTextBox.Text)) {
-        //                securityDetailsTextBox.BackColor = Color.LightGreen;
-        //                service.SecurityDetails = securityDetailsTextBox.Text;
-        //            }
-        //            else
-        //            {
-        //                securityDetailsTextBox.BackColor = string.IsNullOrEmpty(securityDetailsTextBox.Text) ? Color.Empty : Color.Red;
-        //               service.SecurityDetails = string.Empty;
-        //           }
-        //       }
-
-        //        private void ProxiesTextBox_TextChanged(object sender, EventArgs e)
-        //        {
-        //service.Proxies = proxiesTextBox.Text;
-        //swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
-        //}
+        #endregion
     }
 }

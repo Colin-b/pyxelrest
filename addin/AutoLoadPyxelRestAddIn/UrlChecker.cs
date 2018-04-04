@@ -9,13 +9,13 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("UrlChecker");
 
-        public static bool IsSwaggerReachable(string url, string proxy=null)
+        public static bool IsSwaggerReachable(string url, string proxy)
         {
             if (url.StartsWith("file://"))
             {
                 try
                 {
-                    return System.IO.File.Exists(url.Substring(7));
+                    return File.Exists(url.Substring(7));
                 }
                 catch(Exception)
                 {
@@ -33,7 +33,6 @@ namespace AutoLoadPyxelRestAddIn
                 Uri urlCheck = new Uri(url);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
                 request.Timeout = 500;
-                proxy = GetProxyFor(url, proxy);
                 if (proxy == null)
                     request.Proxy = new WebProxy();
                 else if (proxy.Length > 0)
@@ -56,53 +55,18 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        /**
-         * Return null if no proxy should be used.
-         * Return string.empty if default proxy should be used.
-         * Return the proxy to be used otherwise.
-         */
-        private static string GetProxyFor(string url, string proxy)
+        internal static string GetProxyFor(string url)
         {
-            if (string.IsNullOrEmpty(proxy))
-                return string.Empty;
+            string no_proxy = Environment.GetEnvironmentVariable("NO_PROXY");
+            if (string.IsNullOrEmpty(no_proxy))
+                return string.Empty; // System proxy should be used
 
-            string[] proxies = proxy.Split(',');
-            if (proxies.Length == 1)
+            foreach(string no_proxy_url in no_proxy.Split(','))
             {
-                string[] proxyAndScheme = proxies[0].Split('=');
-                if (proxyAndScheme.Length == 1)
-                    return proxies[0]; // Single proxy specified (applies to the Swagger URL)
+                if (url.Contains(no_proxy))
+                    return null;  // No proxy should be used
             }
-
-            foreach (string proxyItem in proxies)
-            {
-                string[] proxyAndScheme = proxyItem.Split('=');
-                if(proxyAndScheme.Length == 2)
-                {
-                    string urlProxy = GetProxyFor(url, proxyAndScheme);
-                    if (urlProxy == null)
-                        return null; // No Proxy for this URL
-                    if (urlProxy.Length > 0)
-                        return urlProxy; // Proxy for this URL
-                }
-            }
-            return string.Empty;
-        }
-
-        /**
-         * Return null if no proxy should be used.
-         * Return string.empty if default proxy should be used.
-         * Return the proxy to be used otherwise.
-         */
-        private static string GetProxyFor(string url, string[] proxyAndScheme)
-        {
-            string scheme = proxyAndScheme[0];
-            if ("no_proxy" == scheme)
-                if (url.StartsWith(proxyAndScheme[1]))
-                    return null;
-            else if (url.StartsWith(scheme + ':'))
-                return proxyAndScheme[1];
-            return string.Empty;
+            return string.Empty;  // System proxy should be used
         }
     }
 }
