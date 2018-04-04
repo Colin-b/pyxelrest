@@ -231,10 +231,50 @@ namespace AutoLoadPyxelRestAddIn
             TabPage headersTab = new TabPage("Headers");
             TableLayoutPanel headersLayout = new TableLayoutPanel();
             headersLayout.AutoSize = true;
-            
+
+            #region Add items
+
+            TextBox newHeaderFieldNameTextBox = new TextBox() { Text = string.Empty };
+            newHeaderFieldNameTextBox.Dock = DockStyle.Fill;
+            headersLayout.Controls.Add(newHeaderFieldNameTextBox, 0, 1);
+            headersLayout.SetColumnSpan(newHeaderFieldNameTextBox, 2);
+
+            Button addHeaderFieldButton = new Button() { Text = "Add field" };
+            addHeaderFieldButton.Dock = DockStyle.Fill;
+            addHeaderFieldButton.AutoSize = true;
+            headersLayout.Controls.Add(addHeaderFieldButton, 0, 2);
+            headersLayout.SetColumnSpan(addHeaderFieldButton, 2);
+
+            #endregion
+
             headersTab.Controls.Add(headersLayout);
 
             tabs.TabPages.Add(headersTab);
+            #endregion
+
+            #region Tags settings
+            TabPage tagsTab = new TabPage("Tags");
+            TableLayoutPanel tagsLayout = new TableLayoutPanel();
+            tagsLayout.AutoSize = true;
+
+            #region Add values
+
+            TextBox newTagValueTextBox = new TextBox() { Text = string.Empty };
+            newTagValueTextBox.Dock = DockStyle.Fill;
+            tagsLayout.Controls.Add(newTagValueTextBox, 0, 1);
+            tagsLayout.SetColumnSpan(newTagValueTextBox, 2);
+
+            Button addTagButton = new Button() { Text = "Add tag" };
+            addTagButton.Dock = DockStyle.Fill;
+            addTagButton.AutoSize = true;
+            tagsLayout.Controls.Add(addTagButton, 0, 2);
+            tagsLayout.SetColumnSpan(addTagButton, 2);
+
+            #endregion
+
+            tagsTab.Controls.Add(tagsLayout);
+
+            tabs.TabPages.Add(tagsTab);
             #endregion
 
             #region OAuth2 settings
