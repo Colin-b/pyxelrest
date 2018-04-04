@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -27,6 +28,21 @@ namespace AutoLoadPyxelRestAddIn
         {
             this.servicePanel = servicePanel;
             InitializeComponent();
+
+            foreach (var header in servicePanel.service.Headers)
+            {
+                AddHeader(header.Key, header.Value.ToString());
+            }
+            foreach (var tag in servicePanel.service.Tags)
+            {
+                AddTag(tag);
+            }
+            var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
+            foreach (var oauth2Item in servicePanel.service.OAuth2)
+            {
+                if (!oauth2NonParam.Contains(oauth2Item.Key))
+                    AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
+            }
         }
 
         /**
@@ -568,9 +584,16 @@ namespace AutoLoadPyxelRestAddIn
         {
             servicePanel.service.Tags.Add(tagName.Text);
 
+            AddTag(tagName.Text);
+
+            tagName.Text = "";
+        }
+
+        private void AddTag(string value)
+        {
             var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
 
-            panel.Controls.Add(new Label { Name="tagLabel", Text = tagName.Text, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Dock = DockStyle.Fill }, 0, 1);
 
             var remove = new Button { Text = "Remove tag", Dock = DockStyle.Fill };
             remove.Click += RemoveTag_Click;
@@ -578,8 +601,6 @@ namespace AutoLoadPyxelRestAddIn
 
             tagsPanel.Controls.Add(panel);
             tagsPanel.SetColumnSpan(panel, 2);
-
-            tagName.Text = "";
         }
 
         private void RemoveTag_Click(object sender, EventArgs e)
@@ -596,11 +617,19 @@ namespace AutoLoadPyxelRestAddIn
         {
             servicePanel.service.Headers.Add(headerName.Text, headerValue.Text);
 
+            AddHeader(headerName.Text, headerValue.Text);
+
+            headerName.Text = "";
+            headerValue.Text = "";
+        }
+
+        private void AddHeader(string name, string value)
+        {
             var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
 
-            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = headerName.Text, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = name, Dock = DockStyle.Fill }, 0, 1);
 
-            panel.Controls.Add(new Label { Text = headerValue.Text, Dock = DockStyle.Fill }, 1, 1);
+            panel.Controls.Add(new Label { Text = value, Dock = DockStyle.Fill }, 1, 1);
 
             var remove = new Button { Text = "Remove header", Dock = DockStyle.Fill };
             remove.Click += RemoveHeader_Click;
@@ -608,9 +637,6 @@ namespace AutoLoadPyxelRestAddIn
 
             headersPanel.Controls.Add(panel);
             headersPanel.SetColumnSpan(panel, 2);
-
-            headerName.Text = "";
-            headerValue.Text = "";
         }
 
         private void RemoveHeader_Click(object sender, EventArgs e)
@@ -627,11 +653,19 @@ namespace AutoLoadPyxelRestAddIn
         {
             servicePanel.service.OAuth2.Add(oauth2ParamName.Text, oauth2ParamValue.Text);
 
+            AddOAuth2Param(oauth2ParamName.Text, oauth2ParamValue.Text);
+
+            oauth2ParamName.Text = "";
+            oauth2ParamValue.Text = "";
+        }
+
+        private void AddOAuth2Param(string name, string value)
+        {
             var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
 
-            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = oauth2ParamName.Text, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Dock = DockStyle.Fill }, 0, 1);
 
-            panel.Controls.Add(new Label { Text = oauth2ParamValue.Text, Dock = DockStyle.Fill }, 1, 1);
+            panel.Controls.Add(new Label { Text = value, Dock = DockStyle.Fill }, 1, 1);
 
             var remove = new Button { Text = "Remove parameter", Dock = DockStyle.Fill };
             remove.Click += RemoveOAuth2Param_Click;
@@ -639,9 +673,6 @@ namespace AutoLoadPyxelRestAddIn
 
             oauth2ParamsPanel.Controls.Add(panel);
             oauth2ParamsPanel.SetColumnSpan(panel, 2);
-
-            oauth2ParamName.Text = "";
-            oauth2ParamValue.Text = "";
         }
 
         private void RemoveOAuth2Param_Click(object sender, EventArgs e)
