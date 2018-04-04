@@ -206,12 +206,18 @@
     <Compile Include="Accordion.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="AdvancedConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Service.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="OpacityEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="AdvancedConfigurationForm.resx">
+      <DependentUpon>AdvancedConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

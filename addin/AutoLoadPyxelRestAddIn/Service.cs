@@ -40,7 +40,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal readonly string Name;
         public string SwaggerUrl;
-        public IDictionary<string, string> Proxies;
+        public IDictionary<string, object> Proxies;
         public string ServiceHost;
 
         public bool Get;
@@ -51,20 +51,20 @@ namespace AutoLoadPyxelRestAddIn
         public bool Options;
         public bool Head;
 
-        public IDictionary<string, string> OAuth2;
+        public IDictionary<string, object> OAuth2;
         public string ApiKey;
-        public IDictionary<string, string> Basic;
-        public IDictionary<string, string> Ntlm;
+        public IDictionary<string, object> Basic;
+        public IDictionary<string, object> Ntlm;
 
         public bool Synchronous;
         public bool Asynchronous;
 
         public bool RelyOnDefinitions;
         public int MaxRetries;
-        public IDictionary<string, string> Headers;
-        public float ConnectTimeout;
-        public float? ReadTimeout;
-        public float SwaggerReadTimeout;
+        public IDictionary<string, object> Headers;
+        public decimal ConnectTimeout;
+        public decimal ReadTimeout;
+        public decimal SwaggerReadTimeout;
         public IList<string> Tags;
 
         public Service(string name)
@@ -116,9 +116,9 @@ namespace AutoLoadPyxelRestAddIn
             return null;
         }
 
-        private IDictionary<string, string> ToDict(YamlMappingNode node)
+        private IDictionary<string, object> ToDict(YamlMappingNode node)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Dictionary<string, object> dict = new Dictionary<string, object>();
             foreach(var item in node.Children)
             {
                 string key = ((YamlScalarNode)item.Key).Value;
@@ -128,12 +128,12 @@ namespace AutoLoadPyxelRestAddIn
             return dict;
         }
 
-        private IEnumerable<KeyValuePair<YamlNode, YamlNode>> FromDict(IDictionary<string, string> items)
+        private IEnumerable<KeyValuePair<YamlNode, YamlNode>> FromDict(IDictionary<string, object> items)
         {
             List<KeyValuePair<YamlNode, YamlNode>> nodes = new List<KeyValuePair<YamlNode, YamlNode>>();
             foreach (var item in items)
             {
-                nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode(item.Value)));
+                nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode(item.Value.ToString())));
             }
             return nodes;
         }
@@ -164,7 +164,7 @@ namespace AutoLoadPyxelRestAddIn
             SwaggerUrl = swaggerUrl == null ? string.Empty : swaggerUrl.Value;
 
             YamlMappingNode proxies = (YamlMappingNode)GetProperty(section, PROXIES_PROPERTY);
-            Proxies = proxies == null ? new Dictionary<string, string>() : ToDict(proxies);
+            Proxies = proxies == null ? new Dictionary<string, object>() : ToDict(proxies);
 
             YamlScalarNode serviceHost = (YamlScalarNode)GetProperty(section, SERVICE_HOST_PROPERTY);
             ServiceHost = serviceHost == null ? string.Empty : serviceHost.Value;
@@ -180,16 +180,16 @@ namespace AutoLoadPyxelRestAddIn
             Head = methods.Contains(HEAD);
 
             YamlMappingNode oauth2 = (YamlMappingNode)GetProperty(section, OAUTH2_PROPERTY);
-            OAuth2 = oauth2 == null ? new Dictionary<string, string>() : ToDict(oauth2);
+            OAuth2 = oauth2 == null ? new Dictionary<string, object>() : ToDict(oauth2);
 
             YamlScalarNode apiKey = (YamlScalarNode)GetProperty(section, API_KEY_PROPERTY);
             ApiKey = apiKey == null ? string.Empty : apiKey.Value;
 
             YamlMappingNode basic = (YamlMappingNode)GetProperty(section, BASIC_PROPERTY);
-            Basic = basic == null ? new Dictionary<string, string>() : ToDict(basic);
+            Basic = basic == null ? new Dictionary<string, object>() : ToDict(basic);
 
             YamlMappingNode ntlm = (YamlMappingNode)GetProperty(section, NTLM_PROPERTY);
-            Ntlm = ntlm == null ? new Dictionary<string, string>() : ToDict(ntlm);
+            Ntlm = ntlm == null ? new Dictionary<string, object>() : ToDict(ntlm);
 
             YamlSequenceNode udfReturnTypesNode = (YamlSequenceNode)GetProperty(section, UDF_RETURN_TYPES_PROPERTY);
             IList<string> udfReturnTypes = udfReturnTypesNode == null ? DefaultUdfReturnTypes() : ToList(udfReturnTypesNode);
@@ -203,16 +203,16 @@ namespace AutoLoadPyxelRestAddIn
             MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
 
             YamlMappingNode headers = (YamlMappingNode)GetProperty(section, HEADERS_PROPERTY);
-            Headers = headers == null ? new Dictionary<string, string>() : ToDict(headers);
+            Headers = headers == null ? new Dictionary<string, object>() : ToDict(headers);
 
             YamlScalarNode connectTimeout = (YamlScalarNode)GetProperty(section, CONNECT_TIMEOUT_PROPERTY);
-            ConnectTimeout = connectTimeout == null ? 1 : float.Parse(connectTimeout.Value);
+            ConnectTimeout = connectTimeout == null ? 1 : decimal.Parse(connectTimeout.Value);
 
             YamlScalarNode readTimeout = (YamlScalarNode)GetProperty(section, READ_TIMEOUT_PROPERTY);
-            ReadTimeout = readTimeout == null ? (float?)null : float.Parse(readTimeout.Value);
+            ReadTimeout = readTimeout == null ? 0 : decimal.Parse(readTimeout.Value);
 
             YamlScalarNode swaggerReadTimeout = (YamlScalarNode)GetProperty(section, SWAGGER_READ_TIMEOUT_PROPERTY);
-            SwaggerReadTimeout = swaggerReadTimeout == null ? 5 : float.Parse(swaggerReadTimeout.Value);
+            SwaggerReadTimeout = swaggerReadTimeout == null ? 5 : decimal.Parse(swaggerReadTimeout.Value);
 
             YamlSequenceNode tags = (YamlSequenceNode)GetProperty(section, TAGS_PROPERTY);
             Tags = tags == null ? new List<string>() : ToList(tags);
@@ -256,8 +256,8 @@ namespace AutoLoadPyxelRestAddIn
 
             section.Add(new YamlScalarNode(CONNECT_TIMEOUT_PROPERTY), new YamlScalarNode(ConnectTimeout.ToString()));
 
-            if (ReadTimeout.HasValue)
-                section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.Value.ToString()));
+            if (ReadTimeout > 0)
+                section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.ToString()));
 
             section.Add(new YamlScalarNode(SWAGGER_READ_TIMEOUT_PROPERTY), new YamlScalarNode(SwaggerReadTimeout.ToString()));
 
@@ -270,7 +270,7 @@ namespace AutoLoadPyxelRestAddIn
         internal void Default()
         {
             SwaggerUrl = "";
-            Proxies = new Dictionary<string, string>();
+            Proxies = new Dictionary<string, object>();
             ServiceHost = "";
 
             Get = true;
@@ -281,19 +281,19 @@ namespace AutoLoadPyxelRestAddIn
             Options = true;
             Head = true;
 
-            OAuth2 = new Dictionary<string, string>();
+            OAuth2 = new Dictionary<string, object>();
             ApiKey = "";
-            Basic = new Dictionary<string, string>();
-            Ntlm = new Dictionary<string, string>();
+            Basic = new Dictionary<string, object>();
+            Ntlm = new Dictionary<string, object>();
 
             Synchronous = false;
             Asynchronous = true;
 
             RelyOnDefinitions = false;
             MaxRetries = 5;
-            Headers = new Dictionary<string, string>();
+            Headers = new Dictionary<string, object>();
             ConnectTimeout = 1;
-            ReadTimeout = null;
+            ReadTimeout = 0;
             SwaggerReadTimeout = 5;
             Tags = new List<string>();
         }
