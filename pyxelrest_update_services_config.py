@@ -90,6 +90,8 @@ class ServicesConfigUpdater:
         or a directory or an URL to a file containing configuration file(s).
         """
         logger.info('Updating services configuration...')
+        # TODO Remove once every client will have this version in conf
+        file_or_directory = file_or_directory.replace('all_services.ini', 'services.yml')
         updated_config = open_config(file_or_directory)
         if not updated_config:
             logger.error('Services configuration cannot be updated.')
