@@ -15,6 +15,14 @@ namespace AutoLoadPyxelRestAddIn
         private TableLayoutPanel tagsPanel;
         private TextBox tagName;
 
+        private TableLayoutPanel headersPanel;
+        private TextBox headerName;
+        private TextBox headerValue;
+
+        private TableLayoutPanel oauth2ParamsPanel;
+        private TextBox oauth2ParamName;
+        private TextBox oauth2ParamValue;
+
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
             this.servicePanel = servicePanel;
@@ -212,12 +220,25 @@ namespace AutoLoadPyxelRestAddIn
 
                 #region Add items
 
-                var headerName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
-                layout.Controls.Add(headerName, 0, 1);
-                layout.SetColumnSpan(headerName, 2);
+                var nameLabel = new Label { Text="Name", Dock = DockStyle.Fill, Width=200 };
+                layout.Controls.Add(nameLabel, 0, 1);
+
+                var valueLabel = new Label { Text = "Value", Dock = DockStyle.Fill, Width=350 };
+                layout.Controls.Add(valueLabel, 1, 1);
+
+                headersPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(headersPanel, 0, 2);
+                layout.SetColumnSpan(headersPanel, 2);
+
+                headerName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(headerName, 0, 3);
+
+                headerValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(headerValue, 1, 3);
 
                 var addHeader = new Button { Text = "Add field", Dock = DockStyle.Fill, AutoSize = true };
-                layout.Controls.Add(addHeader, 0, 2);
+                addHeader.Click += AddHeader_Click;
+                layout.Controls.Add(addHeader, 0, 4);
                 layout.SetColumnSpan(addHeader, 2);
 
                 #endregion
@@ -234,18 +255,18 @@ namespace AutoLoadPyxelRestAddIn
 
                 #region Add values
 
+                var tagsLabel = new Label { Dock = DockStyle.Fill, Width=550, Text="Tag values" };
+                layout.Controls.Add(tagsLabel, 0, 1);
+
                 tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
-                layout.Controls.Add(tagsPanel);
-                layout.SetColumnSpan(tagsPanel, 2);
+                layout.Controls.Add(tagsPanel, 0, 2);
 
                 tagName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
-                layout.Controls.Add(tagName);
-                layout.SetColumnSpan(tagName, 2);
+                layout.Controls.Add(tagName, 0, 3);
 
                 var addTag = new Button { Text = "Add tag", Dock = DockStyle.Fill, AutoSize = true };
                 addTag.Click += AddTag_Click;
-                layout.Controls.Add(addTag);
-                layout.SetColumnSpan(addTag, 2);
+                layout.Controls.Add(addTag, 0, 4);
 
                 #endregion
 
@@ -289,6 +310,25 @@ namespace AutoLoadPyxelRestAddIn
                 var failureDisplayTime = new NumericUpDown { Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000 };
                 failureDisplayTime.TextChanged += Oauth2FailureDisplayTime_TextChanged;
                 layout.Controls.Add(failureDisplayTime, 1, 4);
+                #endregion
+
+                #region Add items
+
+                oauth2ParamsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(oauth2ParamsPanel, 0, 5);
+                layout.SetColumnSpan(oauth2ParamsPanel, 2);
+
+                oauth2ParamName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(oauth2ParamName, 0, 6);
+
+                oauth2ParamValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(oauth2ParamValue, 1, 6);
+
+                var addParam = new Button { Text = "Add field", Dock = DockStyle.Fill, AutoSize = true };
+                addParam.Click += AddOAuth2Param_Click;
+                layout.Controls.Add(addParam, 0, 7);
+                layout.SetColumnSpan(addParam, 2);
+
                 #endregion
 
                 tab.Controls.Add(layout);
@@ -547,9 +587,71 @@ namespace AutoLoadPyxelRestAddIn
             var panel = ((Button)sender).Parent;
             Label tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
 
-            servicePanel.service.Tags.Add(tagLabel.Text);
+            servicePanel.service.Tags.Remove(tagLabel.Text);
 
             tagsPanel.Controls.Remove(panel);
+        }
+
+        private void AddHeader_Click(object sender, EventArgs e)
+        {
+            servicePanel.service.Headers.Add(headerName.Text, headerValue.Text);
+
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+
+            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = headerName.Text, Dock = DockStyle.Fill }, 0, 1);
+
+            panel.Controls.Add(new Label { Text = headerValue.Text, Dock = DockStyle.Fill }, 1, 1);
+
+            var remove = new Button { Text = "Remove header", Dock = DockStyle.Fill };
+            remove.Click += RemoveHeader_Click;
+            panel.Controls.Add(remove, 2, 1);
+
+            headersPanel.Controls.Add(panel);
+            headersPanel.SetColumnSpan(panel, 2);
+
+            headerName.Text = "";
+            headerValue.Text = "";
+        }
+
+        private void RemoveHeader_Click(object sender, EventArgs e)
+        {
+            var panel = ((Button)sender).Parent;
+            Label headerNameLabel = (Label)panel.Controls.Find("headerNameLabel", false)[0];
+
+            servicePanel.service.Headers.Remove(headerNameLabel.Text);
+
+            headersPanel.Controls.Remove(panel);
+        }
+
+        private void AddOAuth2Param_Click(object sender, EventArgs e)
+        {
+            servicePanel.service.OAuth2.Add(oauth2ParamName.Text, oauth2ParamValue.Text);
+
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+
+            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = oauth2ParamName.Text, Dock = DockStyle.Fill }, 0, 1);
+
+            panel.Controls.Add(new Label { Text = oauth2ParamValue.Text, Dock = DockStyle.Fill }, 1, 1);
+
+            var remove = new Button { Text = "Remove parameter", Dock = DockStyle.Fill };
+            remove.Click += RemoveOAuth2Param_Click;
+            panel.Controls.Add(remove, 2, 1);
+
+            oauth2ParamsPanel.Controls.Add(panel);
+            oauth2ParamsPanel.SetColumnSpan(panel, 2);
+
+            oauth2ParamName.Text = "";
+            oauth2ParamValue.Text = "";
+        }
+
+        private void RemoveOAuth2Param_Click(object sender, EventArgs e)
+        {
+            var panel = ((Button)sender).Parent;
+            Label oauth2ParamNameLabel = (Label)panel.Controls.Find("oauth2ParamNameLabel", false)[0];
+
+            servicePanel.service.OAuth2.Remove(oauth2ParamNameLabel.Text);
+
+            oauth2ParamsPanel.Controls.Remove(panel);
         }
 
         #endregion
