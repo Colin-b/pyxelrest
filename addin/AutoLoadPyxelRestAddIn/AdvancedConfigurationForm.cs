@@ -12,6 +12,9 @@ namespace AutoLoadPyxelRestAddIn
         private TextBox httpsProxy;
         private TextBox noProxy;
 
+        private TableLayoutPanel tagsPanel;
+        private TextBox tagName;
+
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
             this.servicePanel = servicePanel;
@@ -231,12 +234,17 @@ namespace AutoLoadPyxelRestAddIn
 
                 #region Add values
 
-                var tag = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
-                layout.Controls.Add(tag, 0, 1);
-                layout.SetColumnSpan(tag, 2);
+                tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(tagsPanel);
+                layout.SetColumnSpan(tagsPanel, 2);
+
+                tagName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                layout.Controls.Add(tagName);
+                layout.SetColumnSpan(tagName, 2);
 
                 var addTag = new Button { Text = "Add tag", Dock = DockStyle.Fill, AutoSize = true };
-                layout.Controls.Add(addTag, 0, 2);
+                addTag.Click += AddTag_Click;
+                layout.Controls.Add(addTag);
                 layout.SetColumnSpan(addTag, 2);
 
                 #endregion
@@ -514,6 +522,34 @@ namespace AutoLoadPyxelRestAddIn
         private void Synchronous_CheckedChanged(object sender, EventArgs e)
         {
             servicePanel.service.Synchronous = ((CheckBox)sender).Checked;
+        }
+
+        private void AddTag_Click(object sender, EventArgs e)
+        {
+            servicePanel.service.Tags.Add(tagName.Text);
+
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+
+            panel.Controls.Add(new Label { Name="tagLabel", Text = tagName.Text, Dock = DockStyle.Fill }, 0, 1);
+
+            var remove = new Button { Text = "Remove tag", Dock = DockStyle.Fill };
+            remove.Click += RemoveTag_Click;
+            panel.Controls.Add(remove, 1, 1);
+
+            tagsPanel.Controls.Add(panel);
+            tagsPanel.SetColumnSpan(panel, 2);
+
+            tagName.Text = "";
+        }
+
+        private void RemoveTag_Click(object sender, EventArgs e)
+        {
+            var panel = ((Button)sender).Parent;
+            Label tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
+
+            servicePanel.service.Tags.Add(tagLabel.Text);
+
+            tagsPanel.Controls.Remove(panel);
         }
 
         #endregion
