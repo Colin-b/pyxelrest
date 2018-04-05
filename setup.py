@@ -79,7 +79,7 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.dll',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml'
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.xml',
               ]
