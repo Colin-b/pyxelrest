@@ -15,20 +15,20 @@ namespace AutoLoadPyxelRestAddIn
 
         #region Service fields
 
-        private TextBox swaggerUrlTextBox;
+        private TextBox openAPISpecification;
         private AdvancedConfigurationForm advancedConfigurationForm;
 
         #endregion
 
         internal readonly Service service;
 
-        internal long? swaggerUrlModificationTicks;
+        internal long? openAPISpecificationTicks;
 
         public ServicePanel(ServiceConfigurationForm configurationForm, Service service)
         {
             this.configurationForm = configurationForm;
             this.service = service;
-            servicePanel = service.Name.Equals("pyxelrest") ? PyxelRestDefaultPanel() : DefaultPanel();
+            servicePanel = DefaultPanel();
         }
 
         public override string ToString()
@@ -38,15 +38,15 @@ namespace AutoLoadPyxelRestAddIn
 
         internal bool IsValid()
         {
-            return service.Name.Equals("pyxelrest") || swaggerUrlTextBox.TextLength > 0;
+            return service.Name.Equals("pyxelrest") || openAPISpecification.TextLength > 0;
         }
 
         internal void CheckHostReachability()
         {
-            if (swaggerUrlModificationTicks != null && DateTime.UtcNow.Ticks >= swaggerUrlModificationTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
+            if (openAPISpecificationTicks != null && DateTime.UtcNow.Ticks >= openAPISpecificationTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
             {
-                swaggerUrlTextBox.BackColor = UrlChecker.IsSwaggerReachable(swaggerUrlTextBox.Text, advancedConfigurationForm.GetProxyFor(swaggerUrlTextBox.Text)) ? Color.LightGreen : Color.Red;
-                swaggerUrlModificationTicks = null;
+                openAPISpecification.BackColor = UrlChecker.CanReachOpenAPISpecification(openAPISpecification.Text, advancedConfigurationForm.GetProxyFor(openAPISpecification.Text)) ? Color.LightGreen : Color.Red;
+                openAPISpecificationTicks = null;
             }
         }
 
@@ -67,61 +67,58 @@ namespace AutoLoadPyxelRestAddIn
 
         private TableLayoutPanel DefaultPanel()
         {
-            var servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5), TabStop = true };
+            var servicePanel = new TableLayoutPanel { TabStop = true };
 
-            #region Swagger Url
-            servicePanel.Controls.Add(new Label { Text = "Swagger URL", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
+            if (!"pyxelrest".Equals(service.Name))
+            {
+                #region OpenAPI Specification Url
+                servicePanel.Controls.Add(new Label { Text = "OpenAPI Specification", TextAlign = ContentAlignment.BottomLeft, Width=120 }, 0, 0);
 
-            swaggerUrlTextBox = new TextBox { Text = service.SwaggerUrl, Dock = DockStyle.Fill, Width=300 };
-            swaggerUrlTextBox.TextChanged += SwaggerUrlTextBox_TextChanged;
-            servicePanel.Controls.Add(swaggerUrlTextBox, 1, 0);
-            #endregion
+                openAPISpecification = new TextBox { Text = service.OpenAPISpecification, Dock = DockStyle.Fill, Width = 300 };
+                openAPISpecification.TextChanged += OpenAPISpecification_TextChanged;
+                servicePanel.Controls.Add(openAPISpecification, 1, 0);
+                #endregion
+            }
+
+            var buttons = new TableLayoutPanel { Width=450, Height=30 };
 
             #region Advanced Configuration
-            var advancedConfigButton = new Button { Text = "Configure", Dock = DockStyle.Fill };
+            var advancedConfigButton = new Button { Text = "Configure", Width = 410 };
             advancedConfigButton.Click += AdvancedConfigButton_Click;
-            servicePanel.Controls.Add(advancedConfigButton);
-            servicePanel.SetColumnSpan(advancedConfigButton, 2);
+            buttons.Controls.Add(advancedConfigButton, 0, 1);
 
             advancedConfigurationForm = new AdvancedConfigurationForm(this);
             #endregion
 
             #region Delete
-            var deleteButton = new Button { ForeColor = Color.White, BackColor = Color.MediumOrchid, Dock = DockStyle.Fill, Text = "Delete " + service.Name + " Configuration" };
+            var deleteButton = new PictureBox {Image = Properties.Resources.x_mark_3_16, Padding=new Padding(0, 4, 0, 0), Width=20 };
+            deleteButton.MouseEnter += DeleteButton_MouseEnter;
+            deleteButton.MouseLeave += DeleteButton_MouseLeave;
             deleteButton.Click += DeleteButton_Click;
-            servicePanel.Controls.Add(deleteButton);
-            servicePanel.SetColumnSpan(deleteButton, 2);
+            buttons.Controls.Add(deleteButton, 1, 1);
             #endregion
+
+            servicePanel.Controls.Add(buttons);
+            servicePanel.SetColumnSpan(buttons, 2);
 
             return servicePanel;
         }
 
-        private TableLayoutPanel PyxelRestDefaultPanel()
+        private void DeleteButton_MouseEnter(object sender, EventArgs e)
         {
-            var servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5), TabStop = true };
-
-            #region Advanced Configuration
-            var advancedConfigButton = new Button { Text = "Configure", Dock = DockStyle.Fill };
-            advancedConfigButton.Click += AdvancedConfigButton_Click;
-            servicePanel.Controls.Add(advancedConfigButton);
-
-            advancedConfigurationForm = new AdvancedConfigurationForm(this);
-            #endregion
-
-            #region Delete
-            var deleteButton = new Button { ForeColor = Color.White, BackColor = Color.MediumOrchid, Dock = DockStyle.Fill, Text = "Delete " + service.Name + " Configuration" };
-            deleteButton.Click += DeleteButton_Click;
-            servicePanel.Controls.Add(deleteButton);
-            #endregion
-
-            return servicePanel;
+            ((PictureBox)sender).Image = Properties.Resources.x_mark_4_16;
         }
 
-        private void SwaggerUrlTextBox_TextChanged(object sender, EventArgs e)
+        private void DeleteButton_MouseLeave(object sender, EventArgs e)
         {
-            service.SwaggerUrl = swaggerUrlTextBox.Text;
+            ((PictureBox)sender).Image = Properties.Resources.x_mark_3_16;
+        }
+
+        private void OpenAPISpecification_TextChanged(object sender, EventArgs e)
+        {
+            service.OpenAPISpecification = openAPISpecification.Text;
             configurationForm.ServiceUpdated();
-            swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            openAPISpecificationTicks = DateTime.UtcNow.Ticks;
         }
 
         private void AdvancedConfigButton_Click(object sender, EventArgs e)

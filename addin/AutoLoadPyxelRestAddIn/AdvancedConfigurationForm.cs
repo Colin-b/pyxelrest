@@ -136,7 +136,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Timeout
 
                 #region Connect timeout
-                layout.Controls.Add(new Label { Text = "Connect", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+                layout.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
                 var connectTimeout = new NumericUpDown { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
                 connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
@@ -144,19 +144,19 @@ namespace AutoLoadPyxelRestAddIn
                 #endregion
 
                 #region Read timeout
-                layout.Controls.Add(new Label { Text = "Read", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+                layout.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
                 var readTimeout = new NumericUpDown { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
                 readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                 layout.Controls.Add(readTimeout, 1, 5);
                 #endregion
 
-                #region Swagger read timeout
-                layout.Controls.Add(new Label { Text = "Swagger read", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
+                #region OpenAPI Specification read timeout
+                layout.Controls.Add(new Label { Text = "OpenAPI timeout", TextAlign = ContentAlignment.BottomLeft, Width=100 }, 0, 6);
 
-                var swaggerReadTimeout = new NumericUpDown { Value = servicePanel.service.SwaggerReadTimeout, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
-                swaggerReadTimeout.ValueChanged += SwaggerReadTimeout_ValueChanged;
-                layout.Controls.Add(swaggerReadTimeout, 1, 6);
+                var openAPISpecificationReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPISpecificationReadTimeout, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
+                openAPISpecificationReadTimeout.ValueChanged += OpenAPISpecificationReadTimeout_ValueChanged;
+                layout.Controls.Add(openAPISpecificationReadTimeout, 1, 6);
                 #endregion
 
                 #endregion
@@ -493,7 +493,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void NoProxy_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            servicePanel.openAPISpecificationTicks = DateTime.UtcNow.Ticks;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("no_proxy");
             else
@@ -502,7 +502,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void HttpsProxy_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            servicePanel.openAPISpecificationTicks = DateTime.UtcNow.Ticks;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("https");
             else
@@ -511,16 +511,16 @@ namespace AutoLoadPyxelRestAddIn
 
         private void HttpProxy_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.swaggerUrlModificationTicks = DateTime.UtcNow.Ticks;
+            servicePanel.openAPISpecificationTicks = DateTime.UtcNow.Ticks;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("http");
             else
                 servicePanel.service.Proxies["http"] = ((TextBox)sender).Text;
         }
 
-        private void SwaggerReadTimeout_ValueChanged(object sender, EventArgs e)
+        private void OpenAPISpecificationReadTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.SwaggerReadTimeout = ((NumericUpDown)sender).Value;
+            servicePanel.service.OpenAPISpecificationReadTimeout = ((NumericUpDown)sender).Value;
         }
 
         private void ReadTimeout_ValueChanged(object sender, EventArgs e)
