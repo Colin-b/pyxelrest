@@ -29,7 +29,8 @@ def open_file_config(file_or_directory):
         loaded_yaml = {}
         config_file_names = to_file_paths(file_or_directory)
         for config_file_name in config_file_names:
-            loaded_yaml.update(yaml.load(config_file_name))
+            with open(config_file_name, 'r') as config_file:
+                loaded_yaml.update(yaml.load(config_file))
         return loaded_yaml
     except:
         logger.exception('Configuration files "{0}" cannot be read.'.format(file_or_directory))
@@ -110,7 +111,7 @@ class ServicesConfigUpdater:
 
     def _save_configuration(self):
         with open(_USER_CONFIG_FILE_PATH, 'w') as file:
-            yaml.dump(self._user_config, file)
+            yaml.dump(self._user_config, file, default_flow_style=False)
 
     def _add_service(self, service_name, updated_config):
         self._user_config[service_name] = updated_config
