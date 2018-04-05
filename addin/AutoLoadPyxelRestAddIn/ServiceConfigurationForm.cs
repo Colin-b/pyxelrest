@@ -26,7 +26,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal Accordion accordion;
         private ComboBox serviceNameField;
-        private Button addServiceButton;
+        private PictureBox addServiceButton;
         private List<ServicePanel> services = new List<ServicePanel>();
         private List<Service> upToDateServices = new List<Service>();
         private Button saveButton;
@@ -128,16 +128,16 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region New Service
-            var newServicePanel = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
+            var newServicePanel = new TableLayoutPanel { Width=520, Height=30 };
 
-            serviceNameField = new ComboBox { Dock = DockStyle.Fill, Width=300 };
+            serviceNameField = new ComboBox { Width=480 };
             serviceNameField.TextChanged += ServiceNameField_TextChanged;
             serviceNameField.KeyDown += ServiceNameField_KeyDown;
             newServicePanel.Controls.Add(serviceNameField, 0, 0);
 
-            addServiceButton = new Button { BackColor = Color.LightGray, ForeColor = Color.DarkBlue, Enabled = false, Dock = DockStyle.Fill, Text = "Enter service name to create a new configuration" };
+            addServiceButton = new AddButton();
             addServiceButton.Click += AddServiceSection;
-            newServicePanel.Controls.Add(addServiceButton, 0, 1);
+            newServicePanel.Controls.Add(addServiceButton, 1, 0);
 
             layout.Controls.Add(newServicePanel);
             #endregion
@@ -157,7 +157,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 case Keys.Enter:
                     if (addServiceButton.Enabled)
-                        addServiceButton.PerformClick();
+                        AddServiceSection();
                     e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
                     break;
                 default:
@@ -168,13 +168,21 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ServiceNameField_TextChanged(object sender, EventArgs e)
         {
-            if (serviceNameField.Text.Length > 0)
-                CheckNonEmptyServiceName();
-            else
-                InvalidateEmptyServiceName();
+            addServiceButton.Enabled = IsServiceNameValid();
+        }
+
+        private bool IsServiceNameValid()
+        {
+            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(serviceNameField.Text, "");
+            return serviceNameField.Text.Length > 0 && serviceNameField.Text.Equals(validatedServiceName) && !services.Exists(s => s.Exists(serviceNameField.Text));
         }
 
         private void AddServiceSection(object sender, EventArgs e)
+        {
+            AddServiceSection();
+        }
+
+        private void AddServiceSection()
         {
             string serviceName = serviceNameField.Text;
             Service service = upToDateServices.Find(s => s.Name.Equals(serviceName));
@@ -188,59 +196,10 @@ namespace AutoLoadPyxelRestAddIn
                 configuration.AddService(service);
             }
             serviceNameField.Text = "";
-            InvalidateEmptyServiceName();
+            addServiceButton.Enabled = false;
             ServicePanel panel = new ServicePanel(this, service);
             DisplayService(panel, true);
-        }
 
-        private void CheckNonEmptyServiceName()
-        {
-            if (IsServiceNameValid())
-                CheckValidatedServiceName();
-            else
-                InvalidateServiceName();
-        }
-
-        private bool IsServiceNameValid()
-        {
-            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(serviceNameField.Text, "");
-            return serviceNameField.Text.Equals(validatedServiceName);
-        }
-
-        private void CheckValidatedServiceName()
-        {
-            if (services.Exists(s => s.Exists(serviceNameField.Text)))
-                InvalidateDuplicatedServiceName();
-            else
-                ValidateServiceName();
-        }
-
-        private void InvalidateEmptyServiceName()
-        {
-            addServiceButton.Enabled = false;
-            addServiceButton.Text = "Enter service name to create a new configuration";
-            addServiceButton.BackColor = Color.LightGray;
-        }
-
-        private void InvalidateServiceName()
-        {
-            addServiceButton.Enabled = false;
-            addServiceButton.Text = "Service name only allows alphanumeric characters";
-            addServiceButton.BackColor = Color.OrangeRed;
-        }
-
-        private void InvalidateDuplicatedServiceName()
-        {
-            addServiceButton.Enabled = false;
-            addServiceButton.Text = serviceNameField.Text + " configuration already exists";
-            addServiceButton.BackColor = Color.OrangeRed;
-        }
-
-        private void ValidateServiceName()
-        {
-            addServiceButton.Enabled = true;
-            addServiceButton.Text = "Add " + serviceNameField.Text + " configuration";
-            addServiceButton.BackColor = Color.LightBlue;
         }
 
         private void LoadServices()

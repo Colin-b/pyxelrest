@@ -106,9 +106,14 @@ setup(name='pyxelrest',
               'pyxelrest_addin/resources', [
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/folder-3-128.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-4-16.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-4-16_grey.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-5-16.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/refresh-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-16.ico',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-128.png'
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-128.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/x-mark-3-16.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/x-mark-4-16.png'
               ]
           ),
       ],

@@ -74,7 +74,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region OpenAPI Specification Url
                 servicePanel.Controls.Add(new Label { Text = "OpenAPI Specification", TextAlign = ContentAlignment.BottomLeft, Width=120 }, 0, 0);
 
-                openAPISpecification = new TextBox { Text = service.OpenAPISpecification, Dock = DockStyle.Fill, Width = 300 };
+                openAPISpecification = new TextBox { Text = service.OpenAPISpecification, Dock = DockStyle.Fill, Width = 290 };
                 openAPISpecification.TextChanged += OpenAPISpecification_TextChanged;
                 servicePanel.Controls.Add(openAPISpecification, 1, 0);
                 #endregion
@@ -91,9 +91,7 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Delete
-            var deleteButton = new PictureBox {Image = Properties.Resources.x_mark_3_16, Padding=new Padding(0, 4, 0, 0), Width=20 };
-            deleteButton.MouseEnter += DeleteButton_MouseEnter;
-            deleteButton.MouseLeave += DeleteButton_MouseLeave;
+            var deleteButton = new DeleteButton();
             deleteButton.Click += DeleteButton_Click;
             buttons.Controls.Add(deleteButton, 1, 1);
             #endregion
@@ -102,16 +100,6 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.SetColumnSpan(buttons, 2);
 
             return servicePanel;
-        }
-
-        private void DeleteButton_MouseEnter(object sender, EventArgs e)
-        {
-            ((PictureBox)sender).Image = Properties.Resources.x_mark_4_16;
-        }
-
-        private void DeleteButton_MouseLeave(object sender, EventArgs e)
-        {
-            ((PictureBox)sender).Image = Properties.Resources.x_mark_3_16;
         }
 
         private void OpenAPISpecification_TextChanged(object sender, EventArgs e)
