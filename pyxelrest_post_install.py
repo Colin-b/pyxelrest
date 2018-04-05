@@ -119,9 +119,19 @@ class PostInstall:
 
     def _create_pyxelrest_logging_configuration(self):
         self._create_logging_configuration('pyxelrest.log', 'logging.yml')
+        self._delete_deprecated_logging_configuration('logging.ini')
 
     def _create_auto_update_logging_configuration(self):
         self._create_logging_configuration('pyxelrest_auto_update.log', 'auto_update_logging.yml')
+        self._delete_deprecated_logging_configuration('auto_update_logging.ini')
+
+    def _delete_deprecated_logging_configuration(self, ini_config_file_name):
+        try:
+            init_config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, ini_config_file_name)
+            if os.path.isfile(init_config_file_path):
+                os.remove(init_config_file_path)
+        except:
+            log.warn('{0} logging configuration file cannot be removed.'.format(ini_config_file_name))
 
     def _create_logging_configuration(self, log_file_name, config_file_name):
         config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
