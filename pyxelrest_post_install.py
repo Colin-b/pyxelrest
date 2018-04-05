@@ -26,8 +26,8 @@ def convert_ini_to_yml(ini_file_path, yml_file_path):
                 service_name: convert_ini_service_to_yml(config_parser, service_name)
                 for service_name in config_parser.sections()
             }
-            with open(yml_file_path) as yml_file:
-                yaml.dump(yaml_content, yml_file)
+            with open(yml_file_path, 'w') as yml_file:
+                yaml.dump(yaml_content, yml_file, default_flow_style=False)
             os.remove(ini_file_path)
     except:
         log.warn('Unable to convert ini services configuration file to yml.')
@@ -38,9 +38,9 @@ def convert_ini_service_to_yml(config_parser, service_name):
     for key, value in config_parser.items(service_name):
         if 'methods' == key:
             yml_content[key] = [method.strip() for method in value.split(',')]
-        if 'security_details' == key:
+        elif 'security_details' == key:
             convert_security_details_to_yml(yml_content, value)
-        if 'advanced_configuration' == key:
+        elif 'advanced_configuration' == key:
             convert_advanced_configuration_to_yml(yml_content, value)
         else:
             yml_content[key] = value
