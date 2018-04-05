@@ -53,7 +53,7 @@ List all changes in various categories:
 - boolean and date-time arrays of length > 1 were not sent properly (not as boolean and not as ISO8601 formatted date-time)
 - Update logs will now contains information about the whole upgrade process.
 - Reject with a user friendly error message in case a date or date time is sent instead of a string.
-- Send number formatted values as string if required by the swagger definition.
+- Send number formatted values as string if required by the OpenAPI definition.
 - Avoid a configuration update script failure in case file do not exists.
 - Excel boolean values were not handled.
 - None values are now allowed within body.
@@ -112,11 +112,11 @@ List all changes in various categories:
 
 - application/msgpackpandas was always requested (if supported by server) even when pandas was not supported on client side
 - PyxelRest is now properly set as a python package and can be used outside Microsoft Excel.
-- file:// swagger URL are now properly analyzed by Microsoft Excel Add-In
+- file:// OpenAPI definition URL are now properly analyzed by Microsoft Excel Add-In
 - Only HTTP GET results can now be cached as it does not make sense for other HTTP methods.
 - Do not prompt anymore for one update per closed Microsoft Excel instance. Only prompt the user once.
-- operationId was considered as mandatory in swagger while it is not, leading to services without operationId not being able to be loaded.
-- operationId was considered as unique within a swagger file, leading to missing UDFs if it was not the case.
+- operationId was considered as mandatory in OpenAPI definition while it is not, leading to services without operationId not being able to be loaded.
+- operationId was considered as unique within an OpenAPI definition, leading to missing UDFs if it was not the case.
 
 ## 0.62 (2017-06-27) ##
 
@@ -153,7 +153,7 @@ List all changes in various categories:
 - Basic security definition support. You should specify your username and password thanks to username and password keywords in security_details property.
 - Slight performance improvement on UDFs loading.
 - If more than one supported authentication step is required, all steps are now performed.
-- Swagger URI can now contains a path to a swagger file on the file system using file:// prefix.
+- OpenAPI definition URI can now contains a path to an OpenAPI definition on the file system using file:// prefix.
 - Services requiring NTLM authentication are now accessible thanks to auth=ntlm within security_details property.
 - Dependencies are now up-to-date (jinja2, requests, xlwings and flask upgraded to latest version)
 - Oauth2 authentication response display time can be tweaked thanks to success_display_time and failure_display_time keys within security_details property.
@@ -161,7 +161,7 @@ List all changes in various categories:
 ### Bug fixes ###
 
 - content-type header was sent instead of accept.
-- content-type header is now set to the proper value according to Swagger "consumes" field.
+- content-type header is now set to the proper value according to OpenAPI "consumes" field.
 - produces, consumes, parameters and security are now handled even if defined at root or methods level.
 - Microsoft Internet Explorer should now be properly opened and closed to perform authentication.
 - rely_on_definitions property was not working on Python 2.7
@@ -180,19 +180,19 @@ List all changes in various categories:
 - Handle all restricted VBA Keywords described here: https://msdn.microsoft.com/en-us/library/ksh7h19t(v=vs.90).aspx?f=255&MSPPError=-2147217396
 - Handle "type" restricted VBA keyword.
 - All date times fields were still displayed as string in Microsoft Excel for Python 2.7 users.
-- Handle produces section defined at Swagger root level instead (or in addition) of operation level.
+- Handle produces section defined at OpenAPI definition root level instead (or in addition) of operation level.
 
 ## 0.58 (2017-05-11) ##
 
 ### Release notes ###
 
-- As Swagger responses sections is now read, content is validated. Meaning non compliant Swagger files (not providing any response) are now rejected.
+- As OpenAPI definition responses sections is now read, content is validated. Meaning non compliant OpenAPI files (not providing any response) are now rejected.
 
 ### Enhancements ###
 
 - OAuth 2 Security definition support.
 - It is possible to force the port and the timeout used by server to retrieve the OAuth 2 authentication token using security_details property.
-- JSON deserialization can now be performed using uJSON following swagger definitions field ordering. This can be activated thanks to rely_on_definitions property.
+- JSON deserialization can now be performed using uJSON following OpenAPI definitions field ordering. This can be activated thanks to rely_on_definitions property.
 
 ### Bug fixes ###
 

@@ -31,7 +31,7 @@ class PyxelRestTest(unittest.TestCase):
             filtered_tags_service,
             values_false_service,
             output_order_service,
-            swagger_parsing_service,
+            open_api_definition_parsing_service,
             without_parameter_service,
             header_parameter_service,
             form_parameter_service,
@@ -47,7 +47,7 @@ class PyxelRestTest(unittest.TestCase):
             (filtered_tags_service, 8944),
             (values_false_service, 8945),
             (output_order_service, 8946),
-            (swagger_parsing_service, 8948),
+            (open_api_definition_parsing_service, 8948),
             (without_parameter_service, 8950),
             (header_parameter_service, 8951),
             (form_parameter_service, 8952),
@@ -287,11 +287,11 @@ class PyxelRestTest(unittest.TestCase):
             pyxelrestgenerator.usual_parameters_get_date_time_encoding(encoded_date_time=date_time)
         )
 
-    def test_get_static_swagger_file(self):
+    def test_get_static_open_api_definition(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'success',
-            pyxelrestgenerator.swagger_loaded_from_file_get_static_file_call()
+            pyxelrestgenerator.open_api_definition_loaded_from_file_get_static_file_call()
         )
 
     def test_get_http_method(self):

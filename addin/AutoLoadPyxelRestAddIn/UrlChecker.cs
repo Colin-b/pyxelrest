@@ -9,7 +9,7 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("UrlChecker");
 
-        public static bool CanReachOpenAPISpecification(string url, string proxy)
+        public static bool CanReachOpenAPIDefinition(string url, string proxy)
         {
             if (url.StartsWith("file://"))
             {

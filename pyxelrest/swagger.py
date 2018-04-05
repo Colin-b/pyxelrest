@@ -26,19 +26,19 @@ def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
 
-def to_vba_valid_name(swagger_name):
+def to_vba_valid_name(open_api_name):
     """
     Return name as non VBA or python restricted keyword
     """
     # replace vba restricted keywords
-    if swagger_name.lower() in vba.vba_restricted_keywords:
-        swagger_name = vba.vba_restricted_keywords[swagger_name.lower()]
+    if open_api_name.lower() in vba.vba_restricted_keywords:
+        open_api_name = vba.vba_restricted_keywords[open_api_name.lower()]
     # replace '-'
-    if "-" in swagger_name:
-        swagger_name = swagger_name.replace("-", "_")
-    if swagger_name.startswith("_"):  # TODO Handle more than one
-        swagger_name = swagger_name[1:]
-    return swagger_name
+    if "-" in open_api_name:
+        open_api_name = open_api_name.replace("-", "_")
+    if open_api_name.startswith("_"):  # TODO Handle more than one
+        open_api_name = open_api_name[1:]
+    return open_api_name
 
 
 def return_type_can_be_handled(method_produces):
@@ -113,11 +113,11 @@ class ServiceConfigSection(ConfigSection):
         """
         ConfigSection.__init__(self, service_name, service_config)
         self.tags = service_config.get('tags', [])
-        self.swagger_url = service_config['swagger_url']
-        self.swagger_url_parsed = urlsplit(self.swagger_url)
+        self.open_api_definition = service_config['open_api_definition']
+        self.open_api_definition_url_parsed = urlsplit(self.open_api_definition)
         self.proxies = service_config.get('proxies', {})
-        self.swagger_read_timeout = service_config.get('swagger_read_timeout', 5)
-        self.service_host = service_config.get('service_host', self.swagger_url_parsed.netloc)
+        self.definition_read_timeout = service_config.get('definition_read_timeout', 5)
+        self.service_host = service_config.get('service_host', self.open_api_definition_url_parsed.netloc)
         self.rely_on_definitions = service_config.get('rely_on_definitions')
 
     def _allow_tags(self, method_tags):
@@ -128,11 +128,11 @@ class ServiceConfigSection(ConfigSection):
                 return True
         return False
 
-    def should_provide_method(self, http_verb, swagger_method):
+    def should_provide_method(self, http_verb, open_api_method):
         if http_verb not in self.requested_methods:
             return False
-        return self._allow_tags(swagger_method.get('tags')) and return_type_can_be_handled(
-            swagger_method.get('produces', []))
+        return self._allow_tags(open_api_method.get('tags')) and return_type_can_be_handled(
+            open_api_method.get('produces', []))
 
 
 class PyxelRestConfigSection(ConfigSection):
@@ -153,7 +153,7 @@ class PyxelRestConfigSection(ConfigSection):
 class SwaggerService:
     def __init__(self, service_name, service_config):
         """
-        Load service information from configuration and swagger JSON.
+        Load service information from configuration and OpenAPI definition.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param service_config: Dictionary containing service details.
@@ -161,63 +161,62 @@ class SwaggerService:
         self.methods = {}
         self.config = ServiceConfigSection(service_name, service_config)
         self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
-        self.swagger = self._retrieve_swagger()
-        self.validate_swagger_version()
-        self.swagger_definitions = self.swagger.get('definitions')
+        self.open_api_definition = self._retrieve_open_api_definition()
+        self.validate_open_api_version()
+        self.open_api_definitions = self.open_api_definition.get('definitions')
         # Remove trailing slashes (as paths must starts with a slash)
         self.uri = self._extract_uri().rstrip('/')
-        authentication.add_service_security(self.config.name, self.swagger, service_config)
+        authentication.add_service_security(self.config.name, self.open_api_definition, service_config)
 
     def _extract_uri(self):
-        # The default scheme to be used is the one used to access the Swagger definition itself.
-        scheme = self.swagger.get('schemes', [self.config.swagger_url_parsed.scheme])[0]
+        # The default scheme to be used is the one used to access the OpenAPI definition itself.
+        scheme = self.open_api_definition.get('schemes', [self.config.open_api_definition_url_parsed.scheme])[0]
         # If the host is not included, the host serving the documentation is to be used (including the port).
         # service_host property is here to handle services behind a reverse proxy
         # (otherwise host will be the reverse proxy one)
-        host = self.swagger.get('host', self.config.service_host)
+        host = self.open_api_definition.get('host', self.config.service_host)
         # Allow user to provide service_host starting with scheme (removing it)
         host_parsed = urlsplit(host)
         if host_parsed.netloc:
             host = host_parsed.netloc + host_parsed.path
         # If it is not included, the API is served directly under the host.
-        base_path = self.swagger.get('basePath', None)
+        base_path = self.open_api_definition.get('basePath', None)
 
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
-    def create_method(self, http_method, swagger_method, method_path, udf_return_type):
-        udf = UDFMethod(self, http_method, swagger_method, method_path, udf_return_type)
+    def create_method(self, http_method, open_api_method, method_path, udf_return_type):
+        udf = UDFMethod(self, http_method, open_api_method, method_path, udf_return_type)
         self.methods[udf.udf_name] = udf
         return udf
 
-    def _retrieve_swagger(self):
+    def _retrieve_open_api_definition(self):
         """
-        Retrieve swagger JSON from service.
-        :param swagger_url: URI of the service swagger JSON.
-        :return: Dictionary representation of the retrieved swagger JSON.
+        Retrieve OpenAPI JSON definition from service.
+        :return: Dictionary representation of the retrieved Open API JSON definition.
         """
         requests_session = requests.session()
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
-        response = requests_session.get(self.config.swagger_url, proxies=self.config.proxies, verify=False,
-                                        timeout=(self.config.connect_timeout, self.config.swagger_read_timeout))
+        response = requests_session.get(self.config.open_api_definition, proxies=self.config.proxies, verify=False,
+                                        timeout=(self.config.connect_timeout, self.config.definition_read_timeout))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
-        swagger = response.json(object_pairs_hook=OrderedDict)
-        self._normalize_methods(swagger)
-        return swagger
+        open_api_definition = response.json(object_pairs_hook=OrderedDict)
+        self._normalize_methods(open_api_definition)
+        return open_api_definition
 
-    # TODO Clean this method as it is too big and a smart refactoring of SwaggerService might be needed
+    # TODO Clean this method as it is too big and a smart refactoring might be needed
     @classmethod
-    def _normalize_methods(cls, swagger_json):
+    def _normalize_methods(cls, open_api_definition):
         """
-        Normalize method parameters from dict representing the swagger JSON to:
+        Normalize method parameters from dict representing the OpenAPI definition to:
         - rename parameters name that are VBA restricted keywords 
         - rename parameters name that uses '-' (to '_')
         - cascade parameters defined at path level to operation level
 
-        Normalize method produces from dict representing the swagger JSON to:
+        Normalize method produces from dict representing the OpenAPI definition to:
         - cascade produces defined at root level to operation level
 
-        :param swagger_json: Dictionary representing the swagger JSON.
+        :param open_api_definition: Dictionary representing the OpenAPI definition.
         :return: None
         """
 
@@ -247,12 +246,12 @@ class SwaggerService:
         def _update_method_consumes():
             method['consumes'] = root_consumes + methods_consumes + method.get('consumes', [])
 
-        root_parameters = _normalise_names(swagger_json.get('parameters', []))
-        root_produces = swagger_json.get('produces', [])
-        root_security = swagger_json.get('security', [])
-        root_consumes = swagger_json.get('consumes', [])
+        root_parameters = _normalise_names(open_api_definition.get('parameters', []))
+        root_produces = open_api_definition.get('produces', [])
+        root_security = open_api_definition.get('security', [])
+        root_consumes = open_api_definition.get('consumes', [])
 
-        for methods in swagger_json['paths'].values():
+        for methods in open_api_definition['paths'].values():
             # retrieve parameters listed at the path level
             methods_parameters = _normalise_names(methods.pop('parameters', []))
             methods_produces = methods.pop('produces', [])
@@ -274,11 +273,11 @@ class SwaggerService:
         self.existing_operation_ids[udf_return_type].append(unique_operation_id)
         return unique_operation_id
 
-    def validate_swagger_version(self):
-        if 'swagger' not in self.swagger:
-            raise SwaggerVersionNotProvided()
-        if self.swagger['swagger'] != '2.0':
-            raise UnsupportedSwaggerVersion(self.swagger['swagger'])
+    def validate_open_api_version(self):
+        if 'swagger' not in self.open_api_definition:
+            raise OpenAPIVersionNotProvided()
+        if self.open_api_definition['swagger'] != '2.0':
+            raise UnsupportedOpenAPIVersion(self.open_api_definition['swagger'])
 
     def __str__(self):
         if self.config.auth:
@@ -287,11 +286,11 @@ class SwaggerService:
 
 
 class UDFMethod:
-    def __init__(self, service, http_method, swagger_method, path, udf_return_type):
+    def __init__(self, service, http_method, open_api_method, path, udf_return_type):
         self.uri = '{0}{1}'.format(service.uri, path)
         self.service = service
         self.requests_method = http_method
-        self.swagger_method = swagger_method
+        self.open_api_method = open_api_method
         self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
         self.path_parameters = []
         self.required_parameters = []
@@ -300,8 +299,8 @@ class UDFMethod:
         self.contains_file_parameters = False
         self.contains_query_parameters = False
         udf_parameters = []
-        for swagger_parameter in swagger_method.get('parameters', []):
-            udf_parameters.extend(self._to_parameters(swagger_parameter))
+        for open_api_parameter in open_api_method.get('parameters', []):
+            udf_parameters.extend(self._to_parameters(open_api_parameter))
         self._avoid_duplicated_names(udf_parameters)
         self.parameters = {}
         for udf_parameter in udf_parameters:
@@ -315,24 +314,24 @@ class UDFMethod:
             else:
                 self.update_information_on_parameter_type(udf_parameter)
                 self.optional_parameters.append(udf_parameter)
-        # Uses "or" in case swagger contains None in description (explicitly set by service)
-        self.help_url = UDFMethod.extract_url(swagger_method.get('description') or '')
+        # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
+        self.help_url = UDFMethod.extract_url(open_api_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
-        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type), self.swagger_method['operationId'])
-        self.responses = swagger_method.get('responses')
+        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type), self.open_api_method['operationId'])
+        self.responses = open_api_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
 
     def _compute_operation_id(self, udf_return_type, path):
         """
-        Compute the operationId swagger field (as it may not be provided).
+        Compute the operationId OpenAPI field (as it may not be provided).
         Also ensure that there is no duplicate (in case a computed one matches a provided one)
 
-        :param path: path provided in swagger definition for this method
+        :param path: path provided in OpenAPI definition for this method
         """
-        operation_id = self.swagger_method.get('operationId') or \
+        operation_id = self.open_api_method.get('operationId') or \
                        '{0}{1}'.format(self.requests_method, path.replace('/', '_'))
-        self.swagger_method['operationId'] = self.service.get_unique_operation_id(udf_return_type, operation_id)
+        self.open_api_method['operationId'] = self.service.get_unique_operation_id(udf_return_type, operation_id)
 
     def update_information_on_parameter_type(self, parameter):
         if parameter.location == 'body':
@@ -346,17 +345,17 @@ class UDFMethod:
             self.contains_query_parameters = True
 
     def return_a_list(self):
-        return ('application/json' in self.swagger_method['produces']) or \
-               ('application/msgpackpandas' in self.swagger_method['produces'])
+        return ('application/json' in self.open_api_method['produces']) or \
+               ('application/msgpackpandas' in self.open_api_method['produces'])
 
     def requires_authentication(self):
         return self.security() or self.service.config.auth
 
     def security(self):
-        return self.swagger_method.get('security')
+        return self.open_api_method.get('security')
 
     def summary(self):
-        return self.swagger_method.get('summary')
+        return self.open_api_method.get('summary')
 
     def initial_header(self):
         """
@@ -366,19 +365,19 @@ class UDFMethod:
         header = {}
 
         if self.contains_body_parameters:
-            consumes = self.swagger_method.get('consumes')
+            consumes = self.open_api_method.get('consumes')
             if not consumes or 'application/json' in consumes:
                 header['Content-Type'] = 'application/json'
             else:
                 logger.warning('{0} is expecting {0} encoded body. '
                                'For now PyxelRest only send JSON body so request might fail.'.format(
                     self.uri,
-                    self.swagger_method['consumes']
+                    self.open_api_method['consumes']
                 ))
 
-        if 'application/msgpackpandas' in self.swagger_method['produces'] and support_pandas():
+        if 'application/msgpackpandas' in self.open_api_method['produces'] and support_pandas():
             header['Accept'] = 'application/msgpackpandas'
-        elif 'application/json' in self.swagger_method['produces']:
+        elif 'application/json' in self.open_api_method['produces']:
             header['Accept'] = 'application/json'
 
         header.update(self.service.config.custom_headers)
@@ -397,7 +396,7 @@ class UDFMethod:
     @staticmethod
     def extract_url(text):
         """
-        Swagger URLs are interpreted thanks to the following format:
+        OpenAPI URLs are interpreted thanks to the following format:
         [description of the url](url)
         :return: URL or None if no URL can be found.
         """
@@ -405,21 +404,21 @@ class UDFMethod:
         if urls:
             return urls[0]
 
-    def _to_parameters(self, swagger_parameter):
-        if 'type' in swagger_parameter:  # Type usually means that this is not a complex type
-            return [UDFParameter(swagger_parameter, {})]
+    def _to_parameters(self, open_api_parameter):
+        if 'type' in open_api_parameter:  # Type usually means that this is not a complex type
+            return [UDFParameter(open_api_parameter, {})]
 
-        schema = swagger_parameter['schema']
+        schema = open_api_parameter['schema']
         ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
         ref = ref[len('#/definitions/'):]
         parameters = []
-        swagger_definition = self.service.swagger_definitions[ref]
-        for inner_parameter_name, inner_parameter in swagger_definition['properties'].items():
+        open_api_definition = self.service.open_api_definitions[ref]
+        for inner_parameter_name, inner_parameter in open_api_definition['properties'].items():
             if not inner_parameter.get('readOnly', False):
                 inner_parameter['server_param_name'] = inner_parameter_name
                 inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
-                inner_parameter['in'] = swagger_parameter['in']
-                inner_parameter['required'] = inner_parameter_name in swagger_definition.get('required', [])
+                inner_parameter['in'] = open_api_parameter['in']
+                inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
                 parameters.append(UDFParameter(inner_parameter, schema))
         return parameters
 
@@ -439,36 +438,36 @@ class UDFMethod:
 
 
 class UDFParameter:
-    def __init__(self, swagger_parameter, schema):
-        self.name = swagger_parameter['name']
-        self.server_param_name = swagger_parameter['server_param_name']
+    def __init__(self, open_api_parameter, schema):
+        self.name = open_api_parameter['name']
+        self.server_param_name = open_api_parameter['server_param_name']
         self.schema = schema
-        self.location = swagger_parameter['in']  # path, body, formData, query, header
-        self.required = swagger_parameter.get('required')
-        self.type = swagger_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
-        self.format = swagger_parameter.get('format')  # date (string type), date-time (string type)
-        self.choices = swagger_parameter.get('enum')  # string type
+        self.location = open_api_parameter['in']  # path, body, formData, query, header
+        self.required = open_api_parameter.get('required')
+        self.type = open_api_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
+        self.format = open_api_parameter.get('format')  # date (string type), date-time (string type)
+        self.choices = open_api_parameter.get('enum')  # string type
 
-        swagger_array_parameter = self._get_swagger_array_parameter(swagger_parameter)
-        if swagger_array_parameter:
-            if swagger_array_parameter.get('type') == 'object' or ('$ref' in swagger_array_parameter):
+        open_api_array_parameter = self._get_open_api_array_parameter(open_api_parameter)
+        if open_api_array_parameter:
+            if open_api_array_parameter.get('type') == 'object' or ('$ref' in open_api_array_parameter):
                 self._convert_to_type = self._convert_to_dict_list
-                self.description = self._get_dict_list_documentation(swagger_parameter)
+                self.description = self._get_dict_list_documentation(open_api_parameter)
             else:
-                inner_parameter = UDFParameter(swagger_array_parameter, {})
+                inner_parameter = UDFParameter(open_api_array_parameter, {})
                 self._convert_to_type = self._get_convert_array_method(inner_parameter)
-                self.description = self._get_list_documentation(swagger_parameter, inner_parameter)
+                self.description = self._get_list_documentation(open_api_parameter, inner_parameter)
         else:
             self._convert_to_type = self._get_convert_method()
-            self.description = self._get_documentation(swagger_parameter)
+            self.description = self._get_documentation(open_api_parameter)
 
-    def _get_swagger_array_parameter(self, swagger_parameter):
+    def _get_open_api_array_parameter(self, open_api_parameter):
         if self.type == 'array':
-            swagger_array_parameter = dict(swagger_parameter)
-            swagger_array_parameter.update(swagger_parameter['items'])
-            return swagger_array_parameter
+            open_api_array_parameter = dict(open_api_parameter)
+            open_api_array_parameter.update(open_api_parameter['items'])
+            return open_api_array_parameter
         elif self.schema.get('type') == 'array':
-            return dict(swagger_parameter)
+            return dict(open_api_parameter)
 
     def validate_path(self, value):
         if value is None or isinstance(value, list) and all(x is None for x in value):
@@ -567,14 +566,14 @@ class UDFParameter:
             return self._convert_to_file
         return lambda value: value  # Unhandled type, best effort
 
-    def _common_documentation(self, swagger_parameter):
-        description = swagger_parameter.get('description', '') or ''
+    def _common_documentation(self, open_api_parameter):
+        description = open_api_parameter.get('description', '') or ''
         if self.choices:
             description += '\nValid values are:\n{0}'.format('\n\t- '.join(self.choices))
         return description
 
-    def _get_documentation(self, swagger_parameter):
-        description = self._common_documentation(swagger_parameter)
+    def _get_documentation(self, open_api_parameter):
+        description = self._common_documentation(open_api_parameter)
         if self.type == 'integer':
             description += '\nValue must be an integer.'
         elif self.type == 'number':
@@ -596,15 +595,15 @@ class UDFParameter:
             description += '\nValue must be the content of the file or the file path.'
         return description.replace('\'', '')
 
-    def _get_dict_list_documentation(self, swagger_parameter):
-        description = self._common_documentation(swagger_parameter)
+    def _get_dict_list_documentation(self, open_api_parameter):
+        description = self._common_documentation(open_api_parameter)
         description += '\nValue must be an array of at least two rows.' \
                        '\n\tFirst row contains field names' \
                        '\n\tOther rows contains values'
         return description.replace('\'', '')
 
-    def _get_list_documentation(self, swagger_parameter, inner_parameter):
-        description = self._common_documentation(swagger_parameter)
+    def _get_list_documentation(self, open_api_parameter, inner_parameter):
+        description = self._common_documentation(open_api_parameter)
         if inner_parameter.type == 'integer':
             description += '\nValue must be an array of integers.'
         elif inner_parameter.type == 'number':
@@ -624,8 +623,8 @@ class UDFParameter:
 
 
 class RequestContent:
-    def __init__(self, swagger_method):
-        self.header = swagger_method.initial_header()
+    def __init__(self, open_api_method):
+        self.header = open_api_method.initial_header()
         self.payload = {}
         self.files = {}
         self.parameters = {}
@@ -719,9 +718,9 @@ def support_pandas():
 
 def load_services():
     """
-    Retrieve swagger JSON for each service defined in configuration file.
+    Retrieve OpenAPI JSON definition for each service defined in configuration file.
     :return: List of SwaggerService objects, size is the same one as the number of sections within configuration file
-    (DEFAULT excluded) and the loaded pyxelrest configuration if provided
+    and the loaded pyxelrest configuration if provided
     """
     if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
         raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)

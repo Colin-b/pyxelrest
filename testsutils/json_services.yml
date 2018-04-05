@@ -1,5 +1,5 @@
 json:
-  swagger_url: "http://localhost:8954/"
+  open_api_definition: "http://localhost:8954/"
   methods:
     - "get"
     - "post"

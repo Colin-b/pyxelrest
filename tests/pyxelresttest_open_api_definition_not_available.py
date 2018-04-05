@@ -4,11 +4,11 @@ import unittest
 from testsutils import (serviceshandler, loader)
 
 
-class PyxelRestSwaggerNotAvailableTest(unittest.TestCase):
+class PyxelRestOpenAPIDefinitionNotAvailableTest(unittest.TestCase):
     def setUp(self):
-        from testsutils import swagger_not_responding_service
-        serviceshandler.start_services((swagger_not_responding_service, 8950))
-        loader.load('swagger_not_available.yml')
+        from testsutils import open_api_definition_not_responding_service
+        serviceshandler.start_services((open_api_definition_not_responding_service, 8950))
+        loader.load('open_api_definition_not_available.yml')
 
     def tearDown(self):
         serviceshandler.stop_services()

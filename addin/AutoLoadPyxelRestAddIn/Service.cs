@@ -10,7 +10,7 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("Service");
 
-        private static readonly string OPEN_API_SPECIFICATION_PROPERTY = "swagger_url";
+        private static readonly string OPEN_API_DEFINITION_PROPERTY = "open_api_definition";
         private static readonly string PROXIES_PROPERTY = "proxies";
         private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
@@ -24,7 +24,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string HEADERS_PROPERTY = "headers";
         private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
-        private static readonly string OPEN_API_READ_TIMEOUT_PROPERTY = "swagger_read_timeout";
+        private static readonly string OPEN_API_READ_TIMEOUT_PROPERTY = "definition_read_timeout";
         private static readonly string TAGS_PROPERTY = "tags";
 
         private static readonly string GET = "get";
@@ -39,7 +39,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string ASYNCHRONOUS = "asynchronous";
 
         internal readonly string Name;
-        public string OpenAPISpecification;
+        public string OpenAPIDefinition;
         public IDictionary<string, object> Proxies;
         public string ServiceHost;
 
@@ -64,7 +64,7 @@ namespace AutoLoadPyxelRestAddIn
         public IDictionary<string, object> Headers;
         public decimal ConnectTimeout;
         public decimal ReadTimeout;
-        public decimal OpenAPISpecificationReadTimeout;
+        public decimal OpenAPIDefinitionReadTimeout;
         public IList<string> Tags;
 
         public Service(string name)
@@ -74,7 +74,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void UpdateFrom(Service updated)
         {
-            OpenAPISpecification = updated.OpenAPISpecification;
+            OpenAPIDefinition = updated.OpenAPIDefinition;
             Proxies = updated.Proxies;
             ServiceHost = updated.ServiceHost;
 
@@ -99,7 +99,7 @@ namespace AutoLoadPyxelRestAddIn
             Headers = updated.Headers;
             ConnectTimeout = updated.ConnectTimeout;
             ReadTimeout = updated.ReadTimeout;
-            OpenAPISpecificationReadTimeout = updated.OpenAPISpecificationReadTimeout;
+            OpenAPIDefinitionReadTimeout = updated.OpenAPIDefinitionReadTimeout;
             Tags = updated.Tags;
         }
 
@@ -160,8 +160,8 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void FromConfig(YamlMappingNode section)
         {
-            YamlScalarNode openAPISpecification = (YamlScalarNode) GetProperty(section, OPEN_API_SPECIFICATION_PROPERTY);
-            OpenAPISpecification = openAPISpecification == null ? string.Empty : openAPISpecification.Value;
+            YamlScalarNode openAPIDefinition = (YamlScalarNode) GetProperty(section, OPEN_API_DEFINITION_PROPERTY);
+            OpenAPIDefinition = openAPIDefinition == null ? string.Empty : openAPIDefinition.Value;
 
             YamlMappingNode proxies = (YamlMappingNode)GetProperty(section, PROXIES_PROPERTY);
             Proxies = proxies == null ? new Dictionary<string, object>() : ToDict(proxies);
@@ -211,8 +211,8 @@ namespace AutoLoadPyxelRestAddIn
             YamlScalarNode readTimeout = (YamlScalarNode)GetProperty(section, READ_TIMEOUT_PROPERTY);
             ReadTimeout = readTimeout == null ? 0 : decimal.Parse(readTimeout.Value);
 
-            YamlScalarNode openAPISpecificationReadTimeout = (YamlScalarNode)GetProperty(section, OPEN_API_READ_TIMEOUT_PROPERTY);
-            OpenAPISpecificationReadTimeout = openAPISpecificationReadTimeout == null ? 5 : decimal.Parse(openAPISpecificationReadTimeout.Value);
+            YamlScalarNode openAPIDefinitionReadTimeout = (YamlScalarNode)GetProperty(section, OPEN_API_READ_TIMEOUT_PROPERTY);
+            OpenAPIDefinitionReadTimeout = openAPIDefinitionReadTimeout == null ? 5 : decimal.Parse(openAPIDefinitionReadTimeout.Value);
 
             YamlSequenceNode tags = (YamlSequenceNode)GetProperty(section, TAGS_PROPERTY);
             Tags = tags == null ? new List<string>() : ToList(tags);
@@ -222,8 +222,8 @@ namespace AutoLoadPyxelRestAddIn
         {
             YamlMappingNode section = new YamlMappingNode();
 
-            if (!string.IsNullOrEmpty(OpenAPISpecification))
-                section.Add(new YamlScalarNode(OPEN_API_SPECIFICATION_PROPERTY), new YamlScalarNode(OpenAPISpecification));
+            if (!string.IsNullOrEmpty(OpenAPIDefinition))
+                section.Add(new YamlScalarNode(OPEN_API_DEFINITION_PROPERTY), new YamlScalarNode(OpenAPIDefinition));
 
             if (Proxies != null && Proxies.Count > 0)
                 section.Add(new YamlScalarNode(PROXIES_PROPERTY), new YamlMappingNode(FromDict(Proxies)));
@@ -259,7 +259,7 @@ namespace AutoLoadPyxelRestAddIn
             if (ReadTimeout > 0)
                 section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.ToString()));
 
-            section.Add(new YamlScalarNode(OPEN_API_READ_TIMEOUT_PROPERTY), new YamlScalarNode(OpenAPISpecificationReadTimeout.ToString()));
+            section.Add(new YamlScalarNode(OPEN_API_READ_TIMEOUT_PROPERTY), new YamlScalarNode(OpenAPIDefinitionReadTimeout.ToString()));
 
             if (Tags != null && Tags.Count > 0)
                 section.Add(new YamlScalarNode(TAGS_PROPERTY), new YamlSequenceNode(FromList(Tags)));
@@ -269,7 +269,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void Default()
         {
-            OpenAPISpecification = "";
+            OpenAPIDefinition = "";
             Proxies = new Dictionary<string, object>();
             ServiceHost = "";
 
@@ -294,7 +294,7 @@ namespace AutoLoadPyxelRestAddIn
             Headers = new Dictionary<string, object>();
             ConnectTimeout = 1;
             ReadTimeout = 0;
-            OpenAPISpecificationReadTimeout = 5;
+            OpenAPIDefinitionReadTimeout = 5;
             Tags = new List<string>();
         }
 

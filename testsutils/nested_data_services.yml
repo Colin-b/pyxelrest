@@ -1,5 +1,5 @@
 nested_data:
-  swagger_url: "http://localhost:8947/"
+  open_api_definition: "http://localhost:8947/"
   methods:
     - "get"
     - "post"

@@ -151,12 +151,12 @@ namespace AutoLoadPyxelRestAddIn
                 layout.Controls.Add(readTimeout, 1, 5);
                 #endregion
 
-                #region OpenAPI Specification read timeout
+                #region OpenAPI Definition read timeout
                 layout.Controls.Add(new Label { Text = "OpenAPI timeout", TextAlign = ContentAlignment.BottomLeft, Width=100 }, 0, 6);
 
-                var openAPISpecificationReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPISpecificationReadTimeout, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
-                openAPISpecificationReadTimeout.ValueChanged += OpenAPISpecificationReadTimeout_ValueChanged;
-                layout.Controls.Add(openAPISpecificationReadTimeout, 1, 6);
+                var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPIDefinitionReadTimeout, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
+                openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
+                layout.Controls.Add(openAPIDefinitionReadTimeout, 1, 6);
                 #endregion
 
                 #endregion
@@ -497,7 +497,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void NoProxy_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.openAPISpecificationTicks = DateTime.UtcNow.Ticks;
+            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("no_proxy");
             else
@@ -506,7 +506,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void HttpsProxy_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.openAPISpecificationTicks = DateTime.UtcNow.Ticks;
+            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("https");
             else
@@ -515,16 +515,16 @@ namespace AutoLoadPyxelRestAddIn
 
         private void HttpProxy_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.openAPISpecificationTicks = DateTime.UtcNow.Ticks;
+            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
                 servicePanel.service.Proxies.Remove("http");
             else
                 servicePanel.service.Proxies["http"] = ((TextBox)sender).Text;
         }
 
-        private void OpenAPISpecificationReadTimeout_ValueChanged(object sender, EventArgs e)
+        private void OpenAPIDefinitionReadTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.OpenAPISpecificationReadTimeout = ((NumericUpDown)sender).Value;
+            servicePanel.service.OpenAPIDefinitionReadTimeout = ((NumericUpDown)sender).Value;
         }
 
         private void ReadTimeout_ValueChanged(object sender, EventArgs e)

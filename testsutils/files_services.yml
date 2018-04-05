@@ -1,5 +1,5 @@
 files:
-  swagger_url: "http://localhost:8959/"
+  open_api_definition: "http://localhost:8959/"
   methods:
     - "get"
     - "post"

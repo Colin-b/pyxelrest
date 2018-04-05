@@ -1,5 +1,5 @@
 petstore:
-  swagger_url: "http://petstore.swagger.io/v2/swagger.json"
+  open_api_definition: "http://petstore.swagger.io/v2/swagger.json"
   proxies:
     http: "http://10.22.218.80:8088"
     no_proxy: "http://google.be"

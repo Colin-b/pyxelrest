@@ -20,8 +20,8 @@ def add_service_custom_authentication(service_name, service_config):
         return 'ntlm'
 
 
-def add_service_security(service_name, swagger, service_config):
-    json_security_definitions = swagger.get('securityDefinitions', {})
+def add_service_security(service_name, open_api_definition, service_config):
+    json_security_definitions = open_api_definition.get('securityDefinitions', {})
     for security_definition_key in json_security_definitions.keys():
         security_definition = json_security_definitions[security_definition_key]
         try:

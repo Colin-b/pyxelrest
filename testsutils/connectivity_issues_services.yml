@@ -1,5 +1,5 @@
 without_parameter:
-  swagger_url: "http://localhost:8950/"
+  open_api_definition: "http://localhost:8950/"
   methods:
     - "get"
     - "post"

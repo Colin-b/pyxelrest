@@ -15,14 +15,14 @@ namespace AutoLoadPyxelRestAddIn
 
         #region Service fields
 
-        private TextBox openAPISpecification;
+        private TextBox openAPIDefinition;
         private AdvancedConfigurationForm advancedConfigurationForm;
 
         #endregion
 
         internal readonly Service service;
 
-        internal long? openAPISpecificationTicks;
+        internal long? openAPIDefinitionTicks;
 
         public ServicePanel(ServiceConfigurationForm configurationForm, Service service)
         {
@@ -38,15 +38,15 @@ namespace AutoLoadPyxelRestAddIn
 
         internal bool IsValid()
         {
-            return service.Name.Equals("pyxelrest") || openAPISpecification.TextLength > 0;
+            return service.Name.Equals("pyxelrest") || openAPIDefinition.TextLength > 0;
         }
 
         internal void CheckHostReachability()
         {
-            if (openAPISpecificationTicks != null && DateTime.UtcNow.Ticks >= openAPISpecificationTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
+            if (openAPIDefinitionTicks != null && DateTime.UtcNow.Ticks >= openAPIDefinitionTicks + ServiceConfigurationForm.CHECK_HOST_INTERVAL_TICKS)
             {
-                openAPISpecification.BackColor = UrlChecker.CanReachOpenAPISpecification(openAPISpecification.Text, advancedConfigurationForm.GetProxyFor(openAPISpecification.Text)) ? Color.LightGreen : Color.Red;
-                openAPISpecificationTicks = null;
+                openAPIDefinition.BackColor = UrlChecker.CanReachOpenAPIDefinition(openAPIDefinition.Text, advancedConfigurationForm.GetProxyFor(openAPIDefinition.Text)) ? Color.LightGreen : Color.Red;
+                openAPIDefinitionTicks = null;
             }
         }
 
@@ -71,12 +71,12 @@ namespace AutoLoadPyxelRestAddIn
 
             if (!"pyxelrest".Equals(service.Name))
             {
-                #region OpenAPI Specification Url
-                servicePanel.Controls.Add(new Label { Text = "OpenAPI Specification", TextAlign = ContentAlignment.BottomLeft, Width=120 }, 0, 0);
+                #region OpenAPI Definition
+                servicePanel.Controls.Add(new Label { Text = "OpenAPI Definition", TextAlign = ContentAlignment.BottomLeft, Width=120 }, 0, 0);
 
-                openAPISpecification = new TextBox { Text = service.OpenAPISpecification, Dock = DockStyle.Fill, Width = 290 };
-                openAPISpecification.TextChanged += OpenAPISpecification_TextChanged;
-                servicePanel.Controls.Add(openAPISpecification, 1, 0);
+                openAPIDefinition = new TextBox { Text = service.OpenAPIDefinition, Dock = DockStyle.Fill, Width = 290 };
+                openAPIDefinition.TextChanged += OpenAPIDefinition_TextChanged;
+                servicePanel.Controls.Add(openAPIDefinition, 1, 0);
                 #endregion
             }
 
@@ -102,11 +102,11 @@ namespace AutoLoadPyxelRestAddIn
             return servicePanel;
         }
 
-        private void OpenAPISpecification_TextChanged(object sender, EventArgs e)
+        private void OpenAPIDefinition_TextChanged(object sender, EventArgs e)
         {
-            service.OpenAPISpecification = openAPISpecification.Text;
+            service.OpenAPIDefinition = openAPIDefinition.Text;
             configurationForm.ServiceUpdated();
-            openAPISpecificationTicks = DateTime.UtcNow.Ticks;
+            openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
         }
 
         private void AdvancedConfigButton_Click(object sender, EventArgs e)

@@ -26,10 +26,10 @@ from pyxelrest import authentication
 from pyxelrest.swagger import RequestContent, list_to_dict, list_to_dict_list
 
 logger = logging.getLogger(__name__)
-swagger_methods = None  # Will be set after load
+open_api_methods = None  # Will be set after load
 
-{% macro convert_to_return_type(str_value, swagger_method) %}
-{% if swagger_method.return_a_list() -%}
+{% macro convert_to_return_type(str_value, open_api_method) %}
+{% if open_api_method.return_a_list() -%}
 [{{ str_value }}]
 {% else -%}
 {{ str_value }}
@@ -52,74 +52,74 @@ swagger_methods = None  # Will be set after load
 {% endmacro %}
 
 {# Macro generating the UDF related to provided method #}
-{% macro add_udf(swagger_method) %}
-{% if 'get' == swagger_method.requests_method %}@caching
+{% macro add_udf(open_api_method) %}
+{% if 'get' == open_api_method.requests_method %}@caching
 {% endif %}
-@xw.func(category='{{ swagger_method.service.config.name }}', call_in_wizard=False{% if swagger_method.help_url %}, help_file='{{ swagger_method.help_url }}'{% endif %})
-{% for parameter in swagger_method.path_parameters %}
+@xw.func(category='{{ open_api_method.service.config.name }}', call_in_wizard=False{% if open_api_method.help_url %}, help_file='{{ open_api_method.help_url }}'{% endif %})
+{% for parameter in open_api_method.path_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% for parameter in swagger_method.required_parameters %}
+{% for parameter in open_api_method.required_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% for parameter in swagger_method.optional_parameters %}
+{% for parameter in open_api_method.optional_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% if swagger_method.return_a_list() and swagger_method.is_asynchronous %}
+{% if open_api_method.return_a_list() and open_api_method.is_asynchronous %}
 @xw.ret(expand='table')
 {% endif %}
-def {{ swagger_method.udf_name }}(
-    {%- for parameter in swagger_method.path_parameters %}{{ parameter.name }}{% if not loop.last or swagger_method.has_required_parameters() or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in swagger_method.required_parameters %}{{ parameter.name }}{% if not loop.last or swagger_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in swagger_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
-{% if swagger_method.summary() %}
-    """{{ swagger_method.summary() }}"""
+def {{ open_api_method.udf_name }}(
+    {%- for parameter in open_api_method.path_parameters %}{{ parameter.name }}{% if not loop.last or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in open_api_method.required_parameters %}{{ parameter.name }}{% if not loop.last or open_api_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in open_api_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
+{% if open_api_method.summary() %}
+    """{{ open_api_method.summary() }}"""
 {% endif %}
-    logger.info("[status=Calling] [function={{ swagger_method.udf_name }}]...")
-    swagger_method = swagger_methods['{{ swagger_method.udf_name }}']
-    request_content = RequestContent(swagger_method)
-{% if swagger_method.has_path_parameters() or swagger_method.has_required_parameters() or swagger_method.has_optional_parameters() %}
+    logger.info("[status=Calling] [function={{ open_api_method.udf_name }}]...")
+    open_api_method = open_api_methods['{{ open_api_method.udf_name }}']
+    request_content = RequestContent(open_api_method)
+{% if open_api_method.has_path_parameters() or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}
 
     try:
-{% for parameter in swagger_method.path_parameters %}
-        swagger_method.parameters['{{ parameter.name }}'].validate_path({{ parameter.name }})
+{% for parameter in open_api_method.path_parameters %}
+        open_api_method.parameters['{{ parameter.name }}'].validate_path({{ parameter.name }})
 {% endfor %}
-{% for parameter in swagger_method.required_parameters %}
-        swagger_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
+{% for parameter in open_api_method.required_parameters %}
+        open_api_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
 {% endfor %}
-{% for parameter in swagger_method.optional_parameters %}
-        swagger_method.parameters['{{ parameter.name }}'].validate_optional({{ parameter.name }}, request_content)
+{% for parameter in open_api_method.optional_parameters %}
+        open_api_method.parameters['{{ parameter.name }}'].validate_optional({{ parameter.name }}, request_content)
 {% endfor %}
     except Exception as e:
         logger.exception("Unable to validate parameters.")
-        return {{ convert_to_return_type('str(e)', swagger_method) }}
+        return {{ convert_to_return_type('str(e)', open_api_method) }}
 {% endif %}
     response = None
     try:
-        response = session.get({{ swagger_method.service.config.max_retries }}).request('{{ swagger_method.requests_method }}', '{{ swagger_method.uri }}'.format(
-            {%- for path_parameter in swagger_method.path_parameters %}{{ path_parameter.server_param_name }}={{ path_parameter.name }}{% if not loop.last %}, {% endif %}{% endfor -%}
-        ){% if swagger_method.contains_body_parameters %}, json=request_content.payload{% endif %}{% if swagger_method.contains_query_parameters %}, params=request_content.parameters{% endif %}{% if swagger_method.contains_file_parameters %}, files=request_content.files{% endif %}{% if swagger_method.requires_authentication() %}, auth={{ authentication.get_auth(swagger_method.service.config.name, swagger_method.security()) }}{% endif %}, verify=False, headers=request_content.header, proxies={{ swagger_method.service.config.proxies }}, timeout=({{ swagger_method.service.config.connect_timeout }}, {{ swagger_method.service.config.read_timeout }}))
+        response = session.get({{ open_api_method.service.config.max_retries }}).request('{{ open_api_method.requests_method }}', '{{ open_api_method.uri }}'.format(
+            {%- for path_parameter in open_api_method.path_parameters %}{{ path_parameter.server_param_name }}={{ path_parameter.name }}{% if not loop.last %}, {% endif %}{% endfor -%}
+        ){% if open_api_method.contains_body_parameters %}, json=request_content.payload{% endif %}{% if open_api_method.contains_query_parameters %}, params=request_content.parameters{% endif %}{% if open_api_method.contains_file_parameters %}, files=request_content.files{% endif %}{% if open_api_method.requires_authentication() %}, auth={{ authentication.get_auth(open_api_method.service.config.name, open_api_method.security()) }}{% endif %}, verify=False, headers=request_content.header, proxies={{ open_api_method.service.config.proxies }}, timeout=({{ open_api_method.service.config.connect_timeout }}, {{ open_api_method.service.config.read_timeout }}))
         response.raise_for_status()
-        logger.info("[status=Valid] response received for [function={{ swagger_method.udf_name }}] [url={0}].".format(response.request.url))
+        logger.info("[status=Valid] response received for [function={{ open_api_method.udf_name }}] [url={0}].".format(response.request.url))
         if 202 == response.status_code:
             return [['Status URL'], [response.headers['location']]]
         if response.headers['content-type'] == 'application/json':
-            all_responses = {{ swagger_method.responses }}
-            return json_as_list(response, all_responses, all_definitions.get('{{ swagger_method.service.config.name }}'), {{ swagger_method.service.config.rely_on_definitions }})
+            all_responses = {{ open_api_method.responses }}
+            return json_as_list(response, all_responses, all_definitions.get('{{ open_api_method.service.config.name }}'), {{ open_api_method.service.config.rely_on_definitions }})
         elif response.headers['content-type'] == 'application/msgpackpandas':
             return msgpackpandas_as_list(response.content)
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logger.exception("Connection [status=error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
-        return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", swagger_method) }}
+        logger.exception("Connection [status=error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
+        return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", open_api_method) }}
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception("[status=Error] occurred while handling [function={{ swagger_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
+            logger.exception("[status=Error] occurred while handling [function={{ open_api_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
         else:
-            logger.exception("[status=Error] occurred while calling [function={{ swagger_method.udf_name }}] [url={{ swagger_method.uri }}].")
-        return {{ convert_to_return_type('describe_error(response, error)', swagger_method) }}
+            logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
+        return {{ convert_to_return_type('describe_error(response, error)', open_api_method) }}
     finally:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
@@ -130,14 +130,14 @@ def {{ swagger_method.udf_name }}(
 all_definitions = {}
 
 {% for service in services %}
-all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
+all_definitions['{{ service.config.name }}'] = {{ service.open_api_definitions }}
 
 
-    {% for method_path, methods in service.swagger['paths'].items() %}
-        {% for http_method, swagger_method in methods.items() %}
-            {%- if service.config.should_provide_method(http_method, swagger_method) -%}
+    {% for method_path, methods in service.open_api_definition['paths'].items() %}
+        {% for http_method, open_api_method in methods.items() %}
+            {%- if service.config.should_provide_method(http_method, open_api_method) -%}
                 {% for udf_return_type in service.config.udf_return_types %}
-                    {{- add_udf(service.create_method(http_method, swagger_method, method_path, udf_return_type)) -}}
+                    {{- add_udf(service.create_method(http_method, open_api_method, method_path, udf_return_type)) -}}
                 {% endfor %}
             {%- endif -%}
         {% endfor %}
@@ -147,7 +147,7 @@ all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
 {# Macro generating the UDF related to provided method #}
 {% macro handle_pyxelrest_response(method_name) %}
         response.raise_for_status()
-        logger.info("[status=Valid] response received for [function={{ nethod_name }}] [url={0}].".format(response.request.url))
+        logger.info("[status=Valid] response received for [function={{ method_name }}] [url={0}].".format(response.request.url))
         if 202 == response.status_code:
             return [['Status URL'], [response.headers['location']]]
         if response.headers['content-type'] == 'application/json':
@@ -157,14 +157,14 @@ all_definitions['{{ service.config.name }}'] = {{ service.swagger_definitions }}
         else:
             return response.text[:255]
     except requests.exceptions.ConnectionError:
-        logger.exception("Connection [status=error] occurred while calling [function={{ nethod_name }}] [url={0}].".format(url))
+        logger.exception("Connection [status=error] occurred while calling [function={{ method_name }}] [url={0}].".format(url))
         return ["'Cannot connect to service. Please retry once connection is re-established.'"]
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception("[status=Error] occurred while handling [function={{ nethod_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
+            logger.exception("[status=Error] occurred while handling [function={{ method_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
         else:
-            logger.exception("[status=Error] occurred while calling [function={{ nethod_name }}] [url={0}].".format(url))
+            logger.exception("[status=Error] occurred while calling [function={{ method_name }}] [url={0}].".format(url))
         return [describe_error(response, error)]
     finally:
         # Check "is not None" because response.ok is overridden according to HTTP status code.

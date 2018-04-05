@@ -1,9 +1,9 @@
 usual_parameters:
-  swagger_url: "http://localhost:8943/"
+  open_api_definition: "http://localhost:8943/"
   methods:
     - "get"
 
 usual_parameters:
-  swagger_url: "http://localhost:8943/"
+  open_api_definition: "http://localhost:8943/"
   methods:
     - "get"

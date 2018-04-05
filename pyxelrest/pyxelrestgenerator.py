@@ -79,7 +79,7 @@ def reload_user_defined_functions(services):
     """
     reload(import_module('pyxelrest.user_defined_functions'))
     from pyxelrest import user_defined_functions as udfs
-    udfs.swagger_methods = {
+    udfs.open_api_methods = {
         udf_name: method
         for service in services
         for udf_name, method in service.methods.items()

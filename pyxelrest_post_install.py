@@ -42,6 +42,8 @@ def convert_ini_service_to_yml(config_parser, service_name):
             convert_security_details_to_yml(yml_content, value)
         elif 'advanced_configuration' == key:
             convert_advanced_configuration_to_yml(yml_content, value)
+        elif 'swagger_url' == key:
+            yml_content['open_api_definition'] = value
         else:
             yml_content[key] = value
     return yml_content
@@ -66,8 +68,10 @@ def convert_security_details_to_yml(yml_content, security_details):
 def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
     for security_detail in advanced_configuration.split(','):
         key, value = security_detail.split('=', maxsplit=1)
-        if key in ['connect_timeout', 'read_timeout', 'swagger_read_timeout']:
+        if key in ['connect_timeout', 'read_timeout']:
             yml_content[key] = float(value)
+        elif 'swagger_read_timeout' == key:
+            yml_content['definition_read_timeout'] = float(value)
         elif 'max_retries' == key:
             yml_content[key] = int(value)
         elif key.startswith('header.'):

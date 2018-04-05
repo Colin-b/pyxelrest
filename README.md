@@ -154,8 +154,8 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td><strong>swagger_url</strong></td>
-        <td>URL to the Swagger definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
+        <td><strong>open_api_definition</strong></td>
+        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
@@ -209,7 +209,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
     <tr>
         <td><strong>rely_on_definitions</strong></td>
-        <td>Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.</td>
+        <td>Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.</td>
         <td>Optional</td>
         <td>true or false</td>
     </tr>
@@ -238,14 +238,14 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>any float value (decimal separator is .)</td>
     </tr>
     <tr>
-        <td><strong>swagger_read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
+        <td><strong>definition_read_timeout</strong></td>
+        <td>Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
         <td>any float value (decimal separator is .)</td>
     </tr>
     <tr>
         <td><strong>tags</strong></td>
-        <td>List of swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>List of tags within OpenAPI definition that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -339,7 +339,7 @@ It can be configured the same way than a usual service, except the following opt
 
 <table>
     <tr>
-        <td><strong>swagger_url</strong></td>
+        <td><strong>open_api_definition</strong></td>
     </tr>
     <tr>
         <td><strong>service_host</strong></td>
@@ -348,7 +348,7 @@ It can be configured the same way than a usual service, except the following opt
         <td><strong>rely_on_definitions</strong></td>
     </tr>
     <tr>
-        <td><strong>swagger_read_timeout</strong></td>
+        <td><strong>definition_read_timeout</strong></td>
     </tr>
     <tr>
         <td><strong>tags</strong></td>

@@ -1,2 +1,0 @@
-without_available_swagger:
-  swagger_url: "http://localhost:8950/swagger.json"
