@@ -15,14 +15,17 @@ namespace AutoLoadPyxelRestAddIn
 
         private TableLayoutPanel tagsPanel;
         private TextBox tagName;
+        private Button addTag;
 
         private TableLayoutPanel headersPanel;
         private TextBox headerName;
         private TextBox headerValue;
+        private Button addHeader;
 
         private TableLayoutPanel oauth2ParamsPanel;
         private TextBox oauth2ParamName;
         private TextBox oauth2ParamValue;
+        private Button addOAuth2Param;
 
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
@@ -73,6 +76,8 @@ namespace AutoLoadPyxelRestAddIn
             AutoScroll = true;
             StartPosition = FormStartPosition.CenterParent;
 
+            bool isPyxelRest = "pyxelrest".Equals(servicePanel.service.Name);
+
             var tabs = new TabControl { Dock = DockStyle.Fill };
 
             #region Standard settings
@@ -83,7 +88,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Service Host
                 layout.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-                var serviceHost = new TextBox() { Text = servicePanel.service.ServiceHost, Dock = DockStyle.Fill };
+                var serviceHost = new TextBox { Text = servicePanel.service.ServiceHost, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
                 serviceHost.TextChanged += ServiceHost_TextChanged;
                 layout.Controls.Add(serviceHost, 1, 1);
                 #endregion
@@ -94,25 +99,25 @@ namespace AutoLoadPyxelRestAddIn
 
                     var panel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
 
-                    var get = new CheckBox() { Text = "get", Checked = servicePanel.service.Get, Width = 50 };
+                    var get = new CheckBox { Text = "get", Checked = servicePanel.service.Get, Width = 50 };
                     get.CheckedChanged += Get_CheckedChanged;
                     panel.Controls.Add(get, 0, 0);
-                    var post = new CheckBox() { Text = "post", Checked = servicePanel.service.Post, Width = 55 };
+                    var post = new CheckBox { Text = "post", Checked = servicePanel.service.Post, Width = 55 };
                     post.CheckedChanged += Post_CheckedChanged;
                     panel.Controls.Add(post, 1, 0);
-                    var put = new CheckBox() { Text = "put", Checked = servicePanel.service.Put, Width = 50 };
+                    var put = new CheckBox { Text = "put", Checked = servicePanel.service.Put, Width = 50 };
                     put.CheckedChanged += Put_CheckedChanged;
                     panel.Controls.Add(put, 2, 0);
-                    var delete = new CheckBox() { Text = "delete", Checked = servicePanel.service.Delete, Width = 65 };
+                    var delete = new CheckBox { Text = "delete", Checked = servicePanel.service.Delete, Width = 65 };
                     delete.CheckedChanged += Delete_CheckedChanged;
                     panel.Controls.Add(delete, 3, 0);
-                    var patch = new CheckBox() { Text = "patch", Checked = servicePanel.service.Patch, Width = 60 };
+                    var patch = new CheckBox { Text = "patch", Checked = servicePanel.service.Patch, Width = 60 };
                     patch.CheckedChanged += Patch_CheckedChanged;
                     panel.Controls.Add(patch, 4, 0);
-                    var options = new CheckBox() { Text = "options", Checked = servicePanel.service.Options, Width = 70 };
+                    var options = new CheckBox { Text = "options", Checked = servicePanel.service.Options, Width = 70 };
                     options.CheckedChanged += Options_CheckedChanged;
                     panel.Controls.Add(options, 5, 0);
-                    var head = new CheckBox() { Text = "head", Checked = servicePanel.service.Head, Width = 60 };
+                    var head = new CheckBox { Text = "head", Checked = servicePanel.service.Head, Width = 60 };
                     head.CheckedChanged += Head_CheckedChanged;
                     panel.Controls.Add(head, 6, 0);
 
@@ -123,7 +128,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Max retries
                 layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
-                var maxRetries = new NumericUpDown() { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
+                var maxRetries = new NumericUpDown { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
                 maxRetries.ValueChanged += MaxRetries_ValueChanged;
                 layout.Controls.Add(maxRetries, 1, 3);
                 #endregion
@@ -133,7 +138,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Connect timeout
                 layout.Controls.Add(new Label { Text = "Connect", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
-                var connectTimeout = new NumericUpDown() { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
+                var connectTimeout = new NumericUpDown { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
                 connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
                 layout.Controls.Add(connectTimeout, 1, 4);
                 #endregion
@@ -141,7 +146,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Read timeout
                 layout.Controls.Add(new Label { Text = "Read", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
-                var readTimeout = new NumericUpDown() { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
+                var readTimeout = new NumericUpDown { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
                 readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                 layout.Controls.Add(readTimeout, 1, 5);
                 #endregion
@@ -149,7 +154,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Swagger read timeout
                 layout.Controls.Add(new Label { Text = "Swagger read", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
 
-                var swaggerReadTimeout = new NumericUpDown() { Value = servicePanel.service.SwaggerReadTimeout, Dock = DockStyle.Fill };
+                var swaggerReadTimeout = new NumericUpDown { Value = servicePanel.service.SwaggerReadTimeout, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
                 swaggerReadTimeout.ValueChanged += SwaggerReadTimeout_ValueChanged;
                 layout.Controls.Add(swaggerReadTimeout, 1, 6);
                 #endregion
@@ -159,7 +164,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region API Key
                 layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
 
-                var apiKey = new TextBox() { Text = servicePanel.service.ApiKey, Dock = DockStyle.Fill };
+                var apiKey = new TextBox { Text = servicePanel.service.ApiKey, Dock = DockStyle.Fill };
                 apiKey.TextChanged += ApiKey_TextChanged;
                 layout.Controls.Add(apiKey, 1, 7);
                 #endregion
@@ -171,17 +176,17 @@ namespace AutoLoadPyxelRestAddIn
                     var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
 
                     #region UDF Return types
-                    var synchronous = new CheckBox() { Text = "synchronous", Checked = servicePanel.service.Synchronous };
+                    var synchronous = new CheckBox { Text = "synchronous", Checked = servicePanel.service.Synchronous };
                     synchronous.CheckedChanged += Synchronous_CheckedChanged;
                     panel.Controls.Add(synchronous, 0, 0);
 
-                    var asynchronous = new CheckBox() { Text = "asynchronous", Checked = servicePanel.service.Asynchronous };
+                    var asynchronous = new CheckBox { Text = "asynchronous", Checked = servicePanel.service.Asynchronous };
                     asynchronous.CheckedChanged += Asynchronous_CheckedChanged;
                     panel.Controls.Add(asynchronous, 1, 0);
                     #endregion
 
                     #region Rely on definitions
-                    var relyOnDefinitions = new CheckBox() { Text = "rely on definitions", Checked = servicePanel.service.RelyOnDefinitions, Width = 200 };
+                    var relyOnDefinitions = new CheckBox { Text = "rely on definitions", Checked = servicePanel.service.RelyOnDefinitions, Width = 200, Enabled = !isPyxelRest };
                     relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
                     panel.Controls.Add(relyOnDefinitions, 2, 0);
                     #endregion
@@ -247,12 +252,16 @@ namespace AutoLoadPyxelRestAddIn
                 layout.SetColumnSpan(headersPanel, 2);
 
                 headerName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                headerName.TextChanged += HeaderName_TextChanged;
+                headerName.KeyDown += HeaderName_KeyDown;
                 layout.Controls.Add(headerName, 0, 3);
 
                 headerValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                headerValue.TextChanged += HeaderValue_TextChanged;
+                headerValue.KeyDown += HeaderValue_KeyDown;
                 layout.Controls.Add(headerValue, 1, 3);
 
-                var addHeader = new Button { Text = "Add field", Dock = DockStyle.Fill, AutoSize = true };
+                addHeader = new Button { Text = "Add header", Dock = DockStyle.Fill, Enabled = false };
                 addHeader.Click += AddHeader_Click;
                 layout.Controls.Add(addHeader, 0, 4);
                 layout.SetColumnSpan(addHeader, 2);
@@ -264,32 +273,37 @@ namespace AutoLoadPyxelRestAddIn
             }
             #endregion
 
-            #region Tags settings
+            if (!isPyxelRest)
             {
-                var tab = new TabPage("Tags");
-                var layout = new TableLayoutPanel { AutoSize = true };
+                #region Tags settings
+                {
+                    var tab = new TabPage("Tags");
+                    var layout = new TableLayoutPanel { AutoSize = true };
 
-                #region Add values
+                    #region Add values
 
-                var tagsLabel = new Label { Dock = DockStyle.Fill, Width=550, Text="Tag values" };
-                layout.Controls.Add(tagsLabel, 0, 1);
+                    var tagsLabel = new Label { Dock = DockStyle.Fill, Width = 550, Text = "Tag values" };
+                    layout.Controls.Add(tagsLabel, 0, 1);
 
-                tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
-                layout.Controls.Add(tagsPanel, 0, 2);
+                    tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                    layout.Controls.Add(tagsPanel, 0, 2);
 
-                tagName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
-                layout.Controls.Add(tagName, 0, 3);
+                    tagName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                    tagName.TextChanged += TagName_TextChanged;
+                    tagName.KeyDown += TagName_KeyDown;
+                    layout.Controls.Add(tagName, 0, 3);
 
-                var addTag = new Button { Text = "Add tag", Dock = DockStyle.Fill, AutoSize = true };
-                addTag.Click += AddTag_Click;
-                layout.Controls.Add(addTag, 0, 4);
+                    addTag = new Button { Text = "Add tag", Dock = DockStyle.Fill, Enabled = false };
+                    addTag.Click += AddTag_Click;
+                    layout.Controls.Add(addTag, 0, 4);
 
+                    #endregion
+
+                    tab.Controls.Add(layout);
+                    tabs.TabPages.Add(tab);
+                }
                 #endregion
-
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
             }
-            #endregion
 
             #region OAuth2 settings
             {
@@ -335,15 +349,19 @@ namespace AutoLoadPyxelRestAddIn
                 layout.SetColumnSpan(oauth2ParamsPanel, 2);
 
                 oauth2ParamName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
+                oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
                 layout.Controls.Add(oauth2ParamName, 0, 6);
 
                 oauth2ParamValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
+                oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
                 layout.Controls.Add(oauth2ParamValue, 1, 6);
 
-                var addParam = new Button { Text = "Add field", Dock = DockStyle.Fill, AutoSize = true };
-                addParam.Click += AddOAuth2Param_Click;
-                layout.Controls.Add(addParam, 0, 7);
-                layout.SetColumnSpan(addParam, 2);
+                addOAuth2Param = new Button { Text = "Add parameter", Dock = DockStyle.Fill, Enabled = false };
+                addOAuth2Param.Click += AddOAuth2Param_Click;
+                layout.Controls.Add(addOAuth2Param, 0, 7);
+                layout.SetColumnSpan(addOAuth2Param, 2);
 
                 #endregion
 
@@ -580,6 +598,26 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.Synchronous = ((CheckBox)sender).Checked;
         }
 
+        private void TagName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addTag.Enabled)
+                        addTag.PerformClick();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void TagName_TextChanged(object sender, EventArgs e)
+        {
+            addTag.Enabled = ((TextBox)sender).Text.Length > 0;
+        }
+
         private void AddTag_Click(object sender, EventArgs e)
         {
             servicePanel.service.Tags.Add(tagName.Text);
@@ -591,9 +629,9 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddTag(string value)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
 
-            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Width=400, Dock = DockStyle.Fill }, 0, 1);
 
             var remove = new Button { Text = "Remove tag", Dock = DockStyle.Fill };
             remove.Click += RemoveTag_Click;
@@ -613,6 +651,47 @@ namespace AutoLoadPyxelRestAddIn
             tagsPanel.Controls.Remove(panel);
         }
 
+
+        private void HeaderValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addHeader.Enabled)
+                        addHeader.PerformClick();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void HeaderValue_TextChanged(object sender, EventArgs e)
+        {
+            addHeader.Enabled = ((TextBox)sender).Text.Length > 0 && headerName.Text.Length > 0;
+        }
+
+        private void HeaderName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addHeader.Enabled)
+                        addHeader.PerformClick();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void HeaderName_TextChanged(object sender, EventArgs e)
+        {
+            addHeader.Enabled = ((TextBox)sender).Text.Length > 0 && headerValue.Text.Length > 0;
+        }
+
         private void AddHeader_Click(object sender, EventArgs e)
         {
             servicePanel.service.Headers.Add(headerName.Text, headerValue.Text);
@@ -625,11 +704,13 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddHeader(string name, string value)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
 
-            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = name, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = name, Width = 200, Dock = DockStyle.Fill }, 0, 1);
 
-            panel.Controls.Add(new Label { Text = value, Dock = DockStyle.Fill }, 1, 1);
+            var valueTextBox = new TextBox { Text = value, Width = 200, Dock = DockStyle.Fill };
+            valueTextBox.TextChanged += ExistingHeaderValue_TextChanged;
+            panel.Controls.Add(valueTextBox, 1, 1);
 
             var remove = new Button { Text = "Remove header", Dock = DockStyle.Fill };
             remove.Click += RemoveHeader_Click;
@@ -637,6 +718,14 @@ namespace AutoLoadPyxelRestAddIn
 
             headersPanel.Controls.Add(panel);
             headersPanel.SetColumnSpan(panel, 2);
+        }
+
+        private void ExistingHeaderValue_TextChanged(object sender, EventArgs e)
+        {
+            var valueTextBox = (TextBox)sender;
+            Label headerNameLabel = (Label)valueTextBox.Parent.Controls.Find("headerNameLabel", false)[0];
+
+            servicePanel.service.Headers[headerNameLabel.Text] = valueTextBox.Text;
         }
 
         private void RemoveHeader_Click(object sender, EventArgs e)
@@ -647,6 +736,46 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.Headers.Remove(headerNameLabel.Text);
 
             headersPanel.Controls.Remove(panel);
+        }
+
+        private void Oauth2ParamValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addOAuth2Param.Enabled)
+                        addOAuth2Param.PerformClick();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void Oauth2ParamValue_TextChanged(object sender, EventArgs e)
+        {
+            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamName.Text.Length > 0;
+        }
+
+        private void Oauth2ParamName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addOAuth2Param.Enabled)
+                        addOAuth2Param.PerformClick();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void Oauth2ParamName_TextChanged(object sender, EventArgs e)
+        {
+            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0;
         }
 
         private void AddOAuth2Param_Click(object sender, EventArgs e)
@@ -661,11 +790,13 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddOAuth2Param(string name, string value)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
 
-            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Width = 150, Dock = DockStyle.Fill }, 0, 1);
 
-            panel.Controls.Add(new Label { Text = value, Dock = DockStyle.Fill }, 1, 1);
+            var valueTextBox = new TextBox { Text = value, Width = 250, Dock = DockStyle.Fill };
+            valueTextBox.TextChanged += OAuth2ParamValue_TextChanged;
+            panel.Controls.Add(valueTextBox, 1, 1);
 
             var remove = new Button { Text = "Remove parameter", Dock = DockStyle.Fill };
             remove.Click += RemoveOAuth2Param_Click;
@@ -673,6 +804,14 @@ namespace AutoLoadPyxelRestAddIn
 
             oauth2ParamsPanel.Controls.Add(panel);
             oauth2ParamsPanel.SetColumnSpan(panel, 2);
+        }
+
+        private void OAuth2ParamValue_TextChanged(object sender, EventArgs e)
+        {
+            var valueTextBox = (TextBox)sender;
+            Label oauth2ParamNameLabel = (Label)valueTextBox.Parent.Controls.Find("oauth2ParamNameLabel", false)[0];
+
+            servicePanel.service.OAuth2[oauth2ParamNameLabel.Text] = valueTextBox.Text;
         }
 
         private void RemoveOAuth2Param_Click(object sender, EventArgs e)

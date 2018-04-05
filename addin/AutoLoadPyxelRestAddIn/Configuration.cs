@@ -54,19 +54,26 @@ namespace AutoLoadPyxelRestAddIn
             {
                 string details = response == null ? "" : response.StatusDescription;
                 Log.ErrorFormat("Configuration cannot be loaded from {0}: {1}.", fileUrl, details);
+                if (response != null)
+                    response.Close();
                 return null;
             }
 
             Log.InfoFormat("Configuration loaded from {0}: {1}.", fileUrl, response.StatusDescription);
             var parser = new YamlStream();
-            parser.Load(new StreamReader(response.GetResponseStream()));
+            var reader = new StreamReader(response.GetResponseStream());
+            parser.Load(reader);
+            reader.Close();
+            response.Close();
             return parser;
         }
 
         private YamlStream LoadFile(string filePath)
         {
             var parser = new YamlStream();
-            parser.Load(new StreamReader(filePath));
+            var reader = new StreamReader(filePath);
+            parser.Load(reader);
+            reader.Close();
             return parser;
         }
 
@@ -79,7 +86,7 @@ namespace AutoLoadPyxelRestAddIn
         public List<Service> Load()
         {
             services.Clear();
-            if (config == null)
+            if (config == null || config.Documents.Count == 0)
                 return services;
 
             var mapping = (YamlMappingNode)config.Documents[0].RootNode;
@@ -108,15 +115,15 @@ namespace AutoLoadPyxelRestAddIn
             }
 
             var parser = new YamlStream();
-            parser.Load(new StreamReader(configurationFilePath));
+            var mapping = new YamlMappingNode();
 
-            // TODO Remove all nodes first
-
-            var mapping = (YamlMappingNode)parser.Documents[0].RootNode;
             foreach (Service service in services)
                 mapping.Add(new YamlScalarNode(service.Name), service.ToConfig());
 
-            parser.Save(new StreamWriter(configurationFilePath));
+            parser.Add(new YamlDocument(mapping));
+            var writer = new StreamWriter(configurationFilePath);
+            parser.Save(writer);
+            writer.Close();
             Log.Info("Services configuration updated.");
         }
 

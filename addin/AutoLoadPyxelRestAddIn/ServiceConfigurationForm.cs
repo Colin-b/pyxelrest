@@ -120,54 +120,30 @@ namespace AutoLoadPyxelRestAddIn
             AutoScroll = true;
             StartPosition = FormStartPosition.CenterParent;
 
-            TableLayoutPanel layout = new TableLayoutPanel();
-            layout.AutoSize = true;
+            var layout = new TableLayoutPanel { AutoSize = true };
 
             #region Services
-            accordion = new Accordion();
-            accordion.CheckBoxMargin = new Padding(2);
-            accordion.ContentMargin = new Padding(15, 5, 15, 5);
-            accordion.ContentPadding = new Padding(1);
-            accordion.Insets = new Padding(5);
-            accordion.ControlBackColor = Color.Transparent;
-            accordion.ContentBackColor = Color.Transparent;
-            accordion.AutoSize = true;
+            accordion = new Accordion { CheckBoxMargin = new Padding(2), ContentMargin = new Padding(15, 5, 15, 5), ContentPadding = new Padding(1), Insets = new Padding(5), ControlBackColor = Color.Transparent, ContentBackColor = Color.Transparent, AutoSize = true };
             layout.Controls.Add(accordion);
             #endregion
 
             #region New Service
-            TableLayoutPanel newServicePanel = new TableLayoutPanel();
-            newServicePanel.AutoSize = true;
-            newServicePanel.Dock = DockStyle.Fill;
+            var newServicePanel = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
 
-            serviceNameField = new ComboBox();
-            serviceNameField.Dock = DockStyle.Fill;
-            serviceNameField.AutoSize = true;
+            serviceNameField = new ComboBox { Dock = DockStyle.Fill, Width=300 };
             serviceNameField.TextChanged += ServiceNameField_TextChanged;
             serviceNameField.KeyDown += ServiceNameField_KeyDown;
             newServicePanel.Controls.Add(serviceNameField, 0, 0);
 
-            addServiceButton = new Button();
-            addServiceButton.Text = "Enter service name to create a new configuration";
-            addServiceButton.ForeColor = Color.DarkBlue;
-            addServiceButton.BackColor = Color.LightGray;
-            addServiceButton.Dock = DockStyle.Fill;
-            addServiceButton.AutoSize = true;
+            addServiceButton = new Button { BackColor = Color.LightGray, ForeColor = Color.DarkBlue, Enabled = false, Dock = DockStyle.Fill, Text = "Enter service name to create a new configuration" };
             addServiceButton.Click += AddServiceSection;
-            addServiceButton.Enabled = false;
             newServicePanel.Controls.Add(addServiceButton, 0, 1);
 
             layout.Controls.Add(newServicePanel);
             #endregion
 
             #region Save
-            saveButton = new Button();
-            saveButton.Text = "Save Configuration";
-            saveButton.ForeColor = Color.DarkGreen;
-            saveButton.BackColor = Color.LightGreen;
-            saveButton.DialogResult = DialogResult.Yes;
-            saveButton.Dock = DockStyle.Fill;
-            saveButton.AutoSize = true;
+            saveButton = new Button { ForeColor = Color.DarkGreen, BackColor = Color.LightGreen, DialogResult = DialogResult.Yes, Dock = DockStyle.Fill, Text = "Save Configuration" };
             saveButton.Click += Save;
             layout.Controls.Add(saveButton);
             #endregion

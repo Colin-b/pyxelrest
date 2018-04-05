@@ -67,22 +67,18 @@ namespace AutoLoadPyxelRestAddIn
 
         private TableLayoutPanel DefaultPanel()
         {
-            TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
-            servicePanel.TabStop = true;
+            var servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5), TabStop = true };
 
             #region Swagger Url
             servicePanel.Controls.Add(new Label { Text = "Swagger URL", TextAlign = ContentAlignment.BottomLeft }, 0, 0);
-            swaggerUrlTextBox = new TextBox() { Text = service.SwaggerUrl };
-            swaggerUrlTextBox.Dock = DockStyle.Fill;
-            swaggerUrlTextBox.AutoSize = true;
+
+            swaggerUrlTextBox = new TextBox { Text = service.SwaggerUrl, Dock = DockStyle.Fill, Width=300 };
             swaggerUrlTextBox.TextChanged += SwaggerUrlTextBox_TextChanged;
             servicePanel.Controls.Add(swaggerUrlTextBox, 1, 0);
             #endregion
 
             #region Advanced Configuration
-            Button advancedConfigButton = new Button() { Text = "Configure" };
-            advancedConfigButton.Dock = DockStyle.Fill;
-            advancedConfigButton.AutoSize = true;
+            var advancedConfigButton = new Button { Text = "Configure", Dock = DockStyle.Fill };
             advancedConfigButton.Click += AdvancedConfigButton_Click;
             servicePanel.Controls.Add(advancedConfigButton);
             servicePanel.SetColumnSpan(advancedConfigButton, 2);
@@ -91,11 +87,7 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Delete
-            Button deleteButton = new Button() { Text = "Delete " + service.Name + " Configuration" };
-            deleteButton.Dock = DockStyle.Fill;
-            deleteButton.ForeColor = Color.White;
-            deleteButton.BackColor = Color.MediumOrchid;
-            deleteButton.AutoSize = true;
+            var deleteButton = new Button { ForeColor = Color.White, BackColor = Color.MediumOrchid, Dock = DockStyle.Fill, Text = "Delete " + service.Name + " Configuration" };
             deleteButton.Click += DeleteButton_Click;
             servicePanel.Controls.Add(deleteButton);
             servicePanel.SetColumnSpan(deleteButton, 2);
@@ -106,13 +98,10 @@ namespace AutoLoadPyxelRestAddIn
 
         private TableLayoutPanel PyxelRestDefaultPanel()
         {
-            TableLayoutPanel servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5) };
-            servicePanel.TabStop = true;
+            var servicePanel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(5), TabStop = true };
 
             #region Advanced Configuration
-            Button advancedConfigButton = new Button() { Text = "Configure" };
-            advancedConfigButton.Dock = DockStyle.Fill;
-            advancedConfigButton.AutoSize = true;
+            var advancedConfigButton = new Button { Text = "Configure", Dock = DockStyle.Fill };
             advancedConfigButton.Click += AdvancedConfigButton_Click;
             servicePanel.Controls.Add(advancedConfigButton);
 
@@ -120,11 +109,7 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Delete
-            Button deleteButton = new Button() { Text = "Delete " + service.Name + " Configuration" };
-            deleteButton.Dock = DockStyle.Fill;
-            deleteButton.ForeColor = Color.White;
-            deleteButton.BackColor = Color.MediumOrchid;
-            deleteButton.AutoSize = true;
+            var deleteButton = new Button { ForeColor = Color.White, BackColor = Color.MediumOrchid, Dock = DockStyle.Fill, Text = "Delete " + service.Name + " Configuration" };
             deleteButton.Click += DeleteButton_Click;
             servicePanel.Controls.Add(deleteButton);
             #endregion
