@@ -23,6 +23,8 @@ namespace AutoLoadPyxelRestAddIn
             autoUpdateButton.Checked = "True".Equals(autoCheckForUpdates);
             autoUpdateButton.Click += ActivateOrDeactivateAutoUpdate;
 
+            generateUDFAtStartupButton.Checked = ThisAddIn.GenerateUDFAtStartup();
+
             importButton.Click += ImportUserDefinedFunctions;
             configureButton.Click += ConfigureServices;
             openFolderButton.Click += OpenPyxelRestFolder;

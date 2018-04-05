@@ -15,6 +15,7 @@ List all changes in various categories:
 - Services configuration are kept up to date with latest version when editing configurations.
 - Use YAML format for configuration (remove restriction on the content of values).
 - Services are now loaded even if a service name is duplicated.
+- If UDFs are not generated at startup according to user configuration. checkbox is now reflecting it.
 
 ## 0.66.0 (2018-03-30) ##
 

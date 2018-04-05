@@ -216,7 +216,7 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        private bool GenerateUDFAtStartup()
+        internal static bool GenerateUDFAtStartup()
         {
             string generateUDFAtStartup = GetSetting("GenerateUDFAtStartup");
             return string.IsNullOrEmpty(generateUDFAtStartup) || "True".Equals(generateUDFAtStartup);
