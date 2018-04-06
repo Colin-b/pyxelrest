@@ -160,6 +160,12 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td></td>
     </tr>
     <tr>
+        <td><strong>description</strong></td>
+        <td>A small description of this service. To be displayed within Microsoft Excel add-in services configuration screen.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
         <td><strong>proxies</strong></td>
         <td>Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
         <td>Optional</td>
@@ -229,19 +235,19 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><strong>connect_timeout</strong></td>
         <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
+        <td>any float value</td>
     </tr>
     <tr>
         <td><strong>read_timeout</strong></td>
         <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
+        <td>any float value</td>
     </tr>
     <tr>
         <td><strong>definition_read_timeout</strong></td>
         <td>Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
-        <td>any float value (decimal separator is .)</td>
+        <td>any float value</td>
     </tr>
     <tr>
         <td><strong>tags</strong></td>
