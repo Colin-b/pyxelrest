@@ -447,6 +447,7 @@ class UDFParameter:
         self.type = open_api_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
         self.format = open_api_parameter.get('format')  # date (string type), date-time (string type)
         self.choices = open_api_parameter.get('enum')  # string type
+        self.default_value = open_api_parameter.get('default')
 
         open_api_array_parameter = self._get_open_api_array_parameter(open_api_parameter)
         if open_api_array_parameter:
@@ -569,7 +570,9 @@ class UDFParameter:
     def _common_documentation(self, open_api_parameter):
         description = open_api_parameter.get('description', '') or ''
         if self.choices:
-            description += '\nValid values are: {0}'.format(', '.join(self.choices))
+            description += ' Valid values are: {0}.'.format(', '.join(self.choices))
+        if self.default_value:
+            description += ' Default value is: {0}.'.format(self.default_value)
         return description
 
     def _get_documentation(self, open_api_parameter):
