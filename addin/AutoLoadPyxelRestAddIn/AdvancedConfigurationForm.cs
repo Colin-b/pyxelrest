@@ -276,12 +276,12 @@ namespace AutoLoadPyxelRestAddIn
             {
                 #region Tags settings
                 {
-                    var tab = new TabPage("Tags");
+                    var tab = new TabPage("Filters");
                     var layout = new TableLayoutPanel { AutoSize = true };
 
                     #region Add values
 
-                    var tagsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Tag values" };
+                    var tagsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "OpenAPI tags" };
                     layout.Controls.Add(tagsLabel, 0, 1);
 
                     tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };

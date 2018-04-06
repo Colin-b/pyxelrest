@@ -66,22 +66,28 @@ namespace AutoLoadPyxelRestAddIn
             try
             {
                 string configurationFilePath = Configuration.GetDefaultConfigFilePath();
-                Configuration configuration = new Configuration(configurationFilePath);
+                var configuration = new Configuration(configurationFilePath);
                 List<Service> configuredServices = configuration.Load();
 
-                Configuration upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
+                var upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
                 List<Service> upToDateServices = upToDateConfiguration.Load();
 
                 if (upToDateServices.Count > 0)
                 {
+                    bool updated = false;
+
                     foreach (Service service in configuredServices)
                     {
                         Service upToDateService = upToDateServices.Find(s => s.Name.Equals(service.Name));
                         if (upToDateService != null)
+                        {
                             service.UpdateFrom(upToDateService);
+                            updated = true;
+                        }
                     }
 
-                    configuration.Save(configurationFilePath);
+                    if (updated)
+                        configuration.Save(configurationFilePath);
                 }
             }
             catch (Exception ex)
@@ -92,11 +98,10 @@ namespace AutoLoadPyxelRestAddIn
 
         private Timer StartHostReachabilityTimer()
         {
-            Timer hostReachabilityTimer = new Timer();
-            hostReachabilityTimer.Tick += HostReachabilityTimer_Tick;
-            hostReachabilityTimer.Interval = CHECK_HOST_INTERVAL_MS;
-            hostReachabilityTimer.Start();
-            return hostReachabilityTimer;
+            var timer = new Timer { Interval = CHECK_HOST_INTERVAL_MS };
+            timer.Tick += HostReachabilityTimer_Tick;
+            timer.Start();
+            return timer;
         }
 
         private void ServiceConfigurationForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -218,16 +223,21 @@ namespace AutoLoadPyxelRestAddIn
             upToDateServices.Clear();
             upToDateServices.AddRange(upToDateConfiguration.Load());
 
+            bool updated = false;
+
             foreach (Service service in upToDateServices)
             {
                 ServicePanel configurationService = services.Find(s => s.Exists(service.Name));
                 if (configurationService != null)
+                {
                     configurationService.UpdateFrom(service);
+                    updated = true;
+                }
                 else
                     serviceNameField.Items.Add(service);
             }
 
-            if (upToDateServices.Count > 0)
+            if (updated)
                 configuration.Save(configurationFilePath);
         }
 

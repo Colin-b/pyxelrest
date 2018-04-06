@@ -62,7 +62,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void Display(bool expanded)
         {
-            checkbox = configurationForm.accordion.Add(servicePanel, service.Name, open: expanded);
+            checkbox = configurationForm.accordion.Add(servicePanel, service.Description(), open: expanded);
         }
 
         private TableLayoutPanel DefaultPanel()

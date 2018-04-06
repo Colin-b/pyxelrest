@@ -26,6 +26,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
         private static readonly string OPEN_API_READ_TIMEOUT_PROPERTY = "definition_read_timeout";
         private static readonly string TAGS_PROPERTY = "tags";
+        private static readonly string DESCRIPTION_PROPERTY = "description";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -39,6 +40,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string ASYNCHRONOUS = "asynchronous";
 
         internal readonly string Name;
+        private string description;
         public string OpenAPIDefinition;
         public IDictionary<string, object> Proxies;
         public string ServiceHost;
@@ -75,6 +77,7 @@ namespace AutoLoadPyxelRestAddIn
         internal void UpdateFrom(Service updated)
         {
             OpenAPIDefinition = updated.OpenAPIDefinition;
+            description = updated.description;
             Proxies = updated.Proxies;
             ServiceHost = updated.ServiceHost;
 
@@ -106,6 +109,13 @@ namespace AutoLoadPyxelRestAddIn
         public override string ToString()
         {
             return Name;
+        }
+
+        public string Description()
+        {
+            if (string.IsNullOrEmpty(description))
+                return Name;
+            return string.Format("{0} ({1})", description, Name);
         }
 
         private YamlNode GetProperty(YamlMappingNode parent, string name)
@@ -162,6 +172,9 @@ namespace AutoLoadPyxelRestAddIn
         {
             YamlScalarNode openAPIDefinition = (YamlScalarNode) GetProperty(section, OPEN_API_DEFINITION_PROPERTY);
             OpenAPIDefinition = openAPIDefinition == null ? string.Empty : openAPIDefinition.Value;
+
+            YamlScalarNode description = (YamlScalarNode)GetProperty(section, DESCRIPTION_PROPERTY);
+            this.description = description == null ? string.Empty : description.Value;
 
             YamlMappingNode proxies = (YamlMappingNode)GetProperty(section, PROXIES_PROPERTY);
             Proxies = proxies == null ? new Dictionary<string, object>() : ToDict(proxies);
@@ -225,6 +238,9 @@ namespace AutoLoadPyxelRestAddIn
             if (!string.IsNullOrEmpty(OpenAPIDefinition))
                 section.Add(new YamlScalarNode(OPEN_API_DEFINITION_PROPERTY), new YamlScalarNode(OpenAPIDefinition));
 
+            if (!string.IsNullOrEmpty(description))
+                section.Add(new YamlScalarNode(DESCRIPTION_PROPERTY), new YamlScalarNode(description));
+
             if (Proxies != null && Proxies.Count > 0)
                 section.Add(new YamlScalarNode(PROXIES_PROPERTY), new YamlMappingNode(FromDict(Proxies)));
 
@@ -270,6 +286,7 @@ namespace AutoLoadPyxelRestAddIn
         internal void Default()
         {
             OpenAPIDefinition = "";
+            description = "";
             Proxies = new Dictionary<string, object>();
             ServiceHost = "";
 

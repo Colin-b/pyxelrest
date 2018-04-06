@@ -45,7 +45,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             Config = LoadConfig();
             log4net.Config.XmlConfigurator.Configure(new FileInfo(Config.FilePath));
-            Log.DebugFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
+            Log.InfoFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
             Log.DebugFormat("Configuration loaded from {0}", Config.FilePath);
             Application.WorkbookOpen += OnOpenWorkBook;
             Application.WorkbookActivate += OnActivateWorkBook;
@@ -174,6 +174,7 @@ namespace AutoLoadPyxelRestAddIn
             else
             {
                 Log.DebugFormat("Activating '{0}' workbook. Activating PyxelRest...", Wb.Name);
+                ServiceConfigurationForm.UpdateServices();
                 ActivatePyxelRest();
             }
         }
@@ -193,6 +194,7 @@ namespace AutoLoadPyxelRestAddIn
                 else
                 {
                     Log.DebugFormat("Opening '{0}' workbook. Activating PyxelRest...", Wb.Name);
+                    ServiceConfigurationForm.UpdateServices();
                     ActivatePyxelRest();
                 }
             }
