@@ -150,7 +150,7 @@ class PyxelRestConfigSection(ConfigSection):
         return http_verb in self.requested_methods
 
 
-class SwaggerService:
+class OpenAPI:
     def __init__(self, service_name, service_config):
         """
         Load service information from configuration and OpenAPI definition.
@@ -569,7 +569,7 @@ class UDFParameter:
     def _common_documentation(self, open_api_parameter):
         description = open_api_parameter.get('description', '') or ''
         if self.choices:
-            description += '\nValid values are:\n{0}'.format('\n\t- '.join(self.choices))
+            description += '\nValid values are: {0}'.format(', '.join(self.choices))
         return description
 
     def _get_documentation(self, open_api_parameter):
@@ -588,18 +588,14 @@ class UDFParameter:
         elif self.type == 'boolean':
             description += '\nValue must be formatted as boolean.'
         elif self.type == 'object':
-            description += '\nValue must be an array of two rows.' \
-                           '\n\tFirst row contains field names' \
-                           '\n\tSecond row contains values'
+            description += '\nValue must be an array of two rows (field names, values).'
         elif self.type == 'file':
             description += '\nValue must be the content of the file or the file path.'
         return description.replace('\'', '')
 
     def _get_dict_list_documentation(self, open_api_parameter):
         description = self._common_documentation(open_api_parameter)
-        description += '\nValue must be an array of at least two rows.' \
-                       '\n\tFirst row contains field names' \
-                       '\n\tOther rows contains values'
+        description += '\nValue must be an array of at least two rows (field names, values).'
         return description.replace('\'', '')
 
     def _get_list_documentation(self, open_api_parameter, inner_parameter):
@@ -719,7 +715,7 @@ def support_pandas():
 def load_services():
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
-    :return: List of SwaggerService objects, size is the same one as the number of sections within configuration file
+    :return: List of OpenAPI instances, size is the same one as the number of sections within configuration file
     and the loaded pyxelrest configuration if provided
     """
     if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
@@ -748,7 +744,7 @@ def load_services():
 def load_service(service_name, service_config):
     logger.debug('Loading "{0}" service...'.format(service_name))
     try:
-        service = SwaggerService(service_name, service_config)
+        service = OpenAPI(service_name, service_config)
         logger.info('"{0}" service will be available.'.format(service_name))
         logger.debug(str(service))
         return service

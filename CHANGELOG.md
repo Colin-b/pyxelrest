@@ -15,7 +15,12 @@ List all changes in various categories:
 - Services configuration are kept up to date with latest version when editing configurations.
 - Use YAML format for configuration (remove restriction on the content of values).
 - Services are now loaded even if a service name is duplicated.
+
+### Bug fixes ###
+
 - If UDFs are not generated at startup according to user configuration. checkbox is now reflecting it.
+- Microsoft Excel only allows 3 lines of UDF parameter description. Avoid one line per restricted values.
+- UDF Parameter description now contains default value.
 
 ## 0.66.0 (2018-03-30) ##
 
