@@ -150,7 +150,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 |                         | Description                                                                                                                                                    | Mandatory | Possible values                              |
 +=========================+================================================================================================================================================================+===========+==============================================+
-| open_api_definition     | URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL | Mandatory |                                              |
+| open_api                | Dictionary describing the OpenAPI definition. Refer to OpenAPI section for more information.                                                                   | Mandatory |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | description             | A small description of this service. To be displayed within Microsoft Excel add-in services configuration screen.                                              | Optional  |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
@@ -176,8 +176,6 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 |                         | It means that you will have to specify all the cells that will contains the result.                                                                            |           |                                              |
 |                         | asynchronous by default.                                                                                                                                       |           |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| rely_on_definitions     | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.                                                              | Optional  | true or false                                |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | max_retries             | Maximum number of time a request should be retried before considered as failed. 5 by default.                                                                  | Optional  | Any positive integer value                   |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | headers                 | Dictionary containing headers where key is the name of the header that should be sent with every request sent to this service.                                 | Optional  |                                              |
@@ -188,11 +186,24 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 | read_timeout            | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.                                                               | Optional  | any float value                              |
 |                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+
+OpenAPI
+-------
+
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+|                         | Description                                                                                                                                                    | Mandatory | Possible values                              |
++=========================+================================================================================================================================================================+===========+==============================================+
+| definition              | URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL | Mandatory |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default.                                              | Optional  | any float value                              |
 |                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | tags                    | List of tags within OpenAPI definition that should be retrieved. If not specified, no filtering is applied.                                                    | Optional  |                                              |
 |                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| rely_on_definitions     | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.                                                              | Optional  | true or false                                |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| service_host            | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
 OAuth 2
@@ -253,19 +264,7 @@ You can also use the "pyxelrest" service name to activate [Postman](https://www.
 
    Selecting UDF
 
-It can be configured the same way than a usual service, except the following options are not used anymore:
-
-+-------------------------+
-| open_api_definition     |
-+-------------------------+
-| service_host            |
-+-------------------------+
-| rely_on_definitions     |
-+-------------------------+
-| definition_read_timeout |
-+-------------------------+
-| tags                    |
-+-------------------------+
+It can be configured the same way than a usual service, except that open_api section is not used anymore.
 
 Logging Configuration
 ---------------------

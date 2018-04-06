@@ -33,13 +33,12 @@ namespace AutoLoadPyxelRestAddIn
             InitializeComponent();
 
             foreach (var header in servicePanel.service.Headers)
-            {
                 AddHeader(header.Key, header.Value.ToString());
-            }
-            foreach (var tag in servicePanel.service.Tags)
-            {
-                AddTag(tag);
-            }
+
+            if (servicePanel.service.OpenAPI.ContainsKey("tags"))
+                foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["tags"])
+                    AddTag(tag);
+
             var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
             foreach (var oauth2Item in servicePanel.service.OAuth2)
             {
@@ -88,7 +87,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Service Host
                 layout.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-                var serviceHost = new TextBox { Text = servicePanel.service.ServiceHost, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
+                var serviceHost = new TextBox { Text = servicePanel.service.OpenAPI.ContainsKey("service_host") ? servicePanel.service.OpenAPI["service_host"].ToString() : string.Empty, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
                 serviceHost.TextChanged += ServiceHost_TextChanged;
                 layout.Controls.Add(serviceHost, 1, 1);
                 #endregion
@@ -154,7 +153,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region OpenAPI Definition read timeout
                 layout.Controls.Add(new Label { Text = "OpenAPI timeout", TextAlign = ContentAlignment.BottomLeft, Width=100 }, 0, 6);
 
-                var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPIDefinitionReadTimeout, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
+                var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
                 openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
                 layout.Controls.Add(openAPIDefinitionReadTimeout, 1, 6);
                 #endregion
@@ -186,7 +185,7 @@ namespace AutoLoadPyxelRestAddIn
                     #endregion
 
                     #region Rely on definitions
-                    var relyOnDefinitions = new CheckBox { Text = "rely on definitions", Checked = servicePanel.service.RelyOnDefinitions, Width = 200, Enabled = !isPyxelRest };
+                    var relyOnDefinitions = new CheckBox { Text = "rely on definitions", Checked = servicePanel.service.OpenAPI.ContainsKey("rely_on_definitions") ? bool.Parse(servicePanel.service.OpenAPI["rely_on_definitions"].ToString()) : false, Width = 200, Enabled = !isPyxelRest };
                     relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
                     panel.Controls.Add(relyOnDefinitions, 2, 0);
                     #endregion
@@ -524,7 +523,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void OpenAPIDefinitionReadTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.OpenAPIDefinitionReadTimeout = ((NumericUpDown)sender).Value;
+            servicePanel.service.OpenAPI["definition_read_timeout"] = ((NumericUpDown)sender).Value;
         }
 
         private void ReadTimeout_ValueChanged(object sender, EventArgs e)
@@ -544,12 +543,15 @@ namespace AutoLoadPyxelRestAddIn
 
         private void RelyOnDefinitions_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.RelyOnDefinitions = ((CheckBox)sender).Checked;
+            servicePanel.service.OpenAPI["rely_on_definitions"] = ((CheckBox)sender).Checked;
         }
 
         private void ServiceHost_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ServiceHost = ((TextBox)sender).Text;
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                servicePanel.service.OpenAPI.Remove("service_host");
+            else
+                servicePanel.service.OpenAPI["service_host"] = ((TextBox)sender).Text;
         }
 
         private void Head_CheckedChanged(object sender, EventArgs e)
@@ -629,7 +631,10 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddTag()
         {
-            servicePanel.service.Tags.Add(tagName.Text);
+            if (!servicePanel.service.OpenAPI.ContainsKey("tags"))
+                servicePanel.service.OpenAPI["tags"] = new List<string>();
+
+            ((IList<string>)servicePanel.service.OpenAPI["tags"]).Add(tagName.Text);
 
             AddTag(tagName.Text);
 
@@ -655,7 +660,10 @@ namespace AutoLoadPyxelRestAddIn
             var panel = ((DeleteButton)sender).Parent;
             Label tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
 
-            servicePanel.service.Tags.Remove(tagLabel.Text);
+            var tags = (IList<string>)servicePanel.service.OpenAPI["tags"];
+            tags.Remove(tagLabel.Text);
+            if (tags.Count == 0)
+                servicePanel.service.OpenAPI.Remove("tags");
 
             tagsPanel.Controls.Remove(panel);
         }

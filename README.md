@@ -154,8 +154,8 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td><strong>open_api_definition</strong></td>
-        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
+        <td><strong>open_api</strong></td>
+        <td>Dictionary describing the OpenAPI definition. Refer to OpenAPI section for more information.</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
@@ -168,12 +168,6 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     <tr>
         <td><strong>proxies</strong></td>
         <td>Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>service_host</strong></td>
-        <td>Service host in case your service is behind a reverse proxy.</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -214,12 +208,6 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>asynchronous or synchronous.</td>
     </tr>
     <tr>
-        <td><strong>rely_on_definitions</strong></td>
-        <td>Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.</td>
-        <td>Optional</td>
-        <td>true or false</td>
-    </tr>
-    <tr>
         <td><strong>max_retries</strong></td>
         <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
         <td>Optional</td>
@@ -243,6 +231,22 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Optional</td>
         <td>any float value</td>
     </tr>
+</table>
+
+#### OpenAPI ####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
+    </th>
+    <tr>
+        <td><strong>definition</strong></td>
+        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
+        <td>Mandatory</td>
+        <td></td>
+    </tr>
     <tr>
         <td><strong>definition_read_timeout</strong></td>
         <td>Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
@@ -252,6 +256,18 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     <tr>
         <td><strong>tags</strong></td>
         <td>List of tags within OpenAPI definition that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>rely_on_definitions</strong></td>
+        <td>Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.</td>
+        <td>Optional</td>
+        <td>true or false</td>
+    </tr>
+    <tr>
+        <td><strong>service_host</strong></td>
+        <td>Service host in case your service is behind a reverse proxy.</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -341,25 +357,7 @@ You can also use the "pyxelrest" service name to activate [Postman](https://www.
 
 ![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG)
 
-It can be configured the same way than a usual service, except the following options are not used anymore:
-
-<table>
-    <tr>
-        <td><strong>open_api_definition</strong></td>
-    </tr>
-    <tr>
-        <td><strong>service_host</strong></td>
-    </tr>
-    <tr>
-        <td><strong>rely_on_definitions</strong></td>
-    </tr>
-    <tr>
-        <td><strong>definition_read_timeout</strong></td>
-    </tr>
-    <tr>
-        <td><strong>tags</strong></td>
-    </tr>
-</table>
+It can be configured the same way than a usual service, except that open_api section is not used anymore.
 
 ### Logging Configuration ###
 

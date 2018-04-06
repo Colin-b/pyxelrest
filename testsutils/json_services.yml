@@ -1,5 +1,6 @@
 json:
-  open_api_definition: "http://localhost:8954/"
+  open_api:
+    definition: "http://localhost:8954/"
   methods:
     - "get"
     - "post"

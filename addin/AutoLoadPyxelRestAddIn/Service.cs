@@ -10,22 +10,18 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("Service");
 
-        private static readonly string OPEN_API_DEFINITION_PROPERTY = "open_api_definition";
+        private static readonly string OPEN_API_PROPERTY = "open_api";
         private static readonly string PROXIES_PROPERTY = "proxies";
-        private static readonly string SERVICE_HOST_PROPERTY = "service_host";
         private static readonly string METHODS_PROPERTY = "methods";
         private static readonly string OAUTH2_PROPERTY = "oauth2";
         private static readonly string API_KEY_PROPERTY = "api_key";
         private static readonly string BASIC_PROPERTY = "basic";
         private static readonly string NTLM_PROPERTY = "ntlm";
         private static readonly string UDF_RETURN_TYPES_PROPERTY = "udf_return_types";
-        private static readonly string RELY_ON_DEFINITIONS_PROPERTY = "rely_on_definitions";
         private static readonly string MAX_RETRIES_PROPERTY = "max_retries";
         private static readonly string HEADERS_PROPERTY = "headers";
         private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
-        private static readonly string OPEN_API_READ_TIMEOUT_PROPERTY = "definition_read_timeout";
-        private static readonly string TAGS_PROPERTY = "tags";
         private static readonly string DESCRIPTION_PROPERTY = "description";
 
         private static readonly string GET = "get";
@@ -41,9 +37,8 @@ namespace AutoLoadPyxelRestAddIn
 
         internal readonly string Name;
         private string description;
-        public string OpenAPIDefinition;
+        public IDictionary<string, object> OpenAPI;
         public IDictionary<string, object> Proxies;
-        public string ServiceHost;
 
         public bool Get;
         public bool Post;
@@ -61,13 +56,10 @@ namespace AutoLoadPyxelRestAddIn
         public bool Synchronous;
         public bool Asynchronous;
 
-        public bool RelyOnDefinitions;
         public int MaxRetries;
         public IDictionary<string, object> Headers;
         public decimal ConnectTimeout;
         public decimal ReadTimeout;
-        public decimal OpenAPIDefinitionReadTimeout;
-        public IList<string> Tags;
 
         public Service(string name)
         {
@@ -76,10 +68,9 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void UpdateFrom(Service updated)
         {
-            OpenAPIDefinition = updated.OpenAPIDefinition;
+            OpenAPI = updated.OpenAPI;
             description = updated.description;
             Proxies = updated.Proxies;
-            ServiceHost = updated.ServiceHost;
 
             Get = updated.Get;
             Post = updated.Post;
@@ -97,13 +88,10 @@ namespace AutoLoadPyxelRestAddIn
             Synchronous = updated.Synchronous;
             Asynchronous = updated.Asynchronous;
 
-            RelyOnDefinitions = updated.RelyOnDefinitions;
             MaxRetries = updated.MaxRetries;
             Headers = updated.Headers;
             ConnectTimeout = updated.ConnectTimeout;
             ReadTimeout = updated.ReadTimeout;
-            OpenAPIDefinitionReadTimeout = updated.OpenAPIDefinitionReadTimeout;
-            Tags = updated.Tags;
         }
 
         public override string ToString()
@@ -132,8 +120,10 @@ namespace AutoLoadPyxelRestAddIn
             foreach(var item in node.Children)
             {
                 string key = ((YamlScalarNode)item.Key).Value;
-                string value = ((YamlScalarNode)item.Value).Value;
-                dict.Add(key, value);
+                if (item.Value.NodeType == YamlNodeType.Sequence)
+                    dict.Add(key, ToList((YamlSequenceNode)item.Value));
+                else
+                    dict.Add(key, ((YamlScalarNode)item.Value).Value);
             }
             return dict;
         }
@@ -143,9 +133,24 @@ namespace AutoLoadPyxelRestAddIn
             List<KeyValuePair<YamlNode, YamlNode>> nodes = new List<KeyValuePair<YamlNode, YamlNode>>();
             foreach (var item in items)
             {
-                nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode(item.Value.ToString())));
+                if (IsGenericList(item.Value))
+                {
+                    var listValue = (IList<string>)item.Value;
+                    if (listValue.Count > 0)
+                        nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlSequenceNode(FromList(listValue))));
+                }
+                else
+                {
+                    nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode(item.Value.ToString())));
+                }
             }
             return nodes;
+        }
+
+        private static bool IsGenericList(object obj)
+        {
+            var objectType = obj.GetType();
+            return (objectType.IsGenericType && (objectType.GetGenericTypeDefinition() == typeof(List<>)));
         }
 
         private IList<string> ToList(YamlSequenceNode node)
@@ -170,17 +175,14 @@ namespace AutoLoadPyxelRestAddIn
 
         internal void FromConfig(YamlMappingNode section)
         {
-            YamlScalarNode openAPIDefinition = (YamlScalarNode) GetProperty(section, OPEN_API_DEFINITION_PROPERTY);
-            OpenAPIDefinition = openAPIDefinition == null ? string.Empty : openAPIDefinition.Value;
+            YamlMappingNode openAPI = (YamlMappingNode) GetProperty(section, OPEN_API_PROPERTY);
+            OpenAPI = openAPI == null ? new Dictionary<string, object>() : ToDict(openAPI);
 
             YamlScalarNode description = (YamlScalarNode)GetProperty(section, DESCRIPTION_PROPERTY);
             this.description = description == null ? string.Empty : description.Value;
 
             YamlMappingNode proxies = (YamlMappingNode)GetProperty(section, PROXIES_PROPERTY);
             Proxies = proxies == null ? new Dictionary<string, object>() : ToDict(proxies);
-
-            YamlScalarNode serviceHost = (YamlScalarNode)GetProperty(section, SERVICE_HOST_PROPERTY);
-            ServiceHost = serviceHost == null ? string.Empty : serviceHost.Value;
 
             YamlSequenceNode methodsNode = (YamlSequenceNode)GetProperty(section, METHODS_PROPERTY);
             IList<string> methods = methodsNode == null ? DefaultMethods() : ToList(methodsNode);
@@ -209,9 +211,6 @@ namespace AutoLoadPyxelRestAddIn
             Synchronous = udfReturnTypes.Contains(SYNCHRONOUS);
             Asynchronous = udfReturnTypes.Contains(ASYNCHRONOUS);
             
-            YamlScalarNode relyOnDefinitions = (YamlScalarNode)GetProperty(section, RELY_ON_DEFINITIONS_PROPERTY);
-            RelyOnDefinitions = relyOnDefinitions == null ? false : bool.Parse(relyOnDefinitions.Value);
-
             YamlScalarNode maxRetries = (YamlScalarNode)GetProperty(section, MAX_RETRIES_PROPERTY);
             MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
 
@@ -223,29 +222,20 @@ namespace AutoLoadPyxelRestAddIn
 
             YamlScalarNode readTimeout = (YamlScalarNode)GetProperty(section, READ_TIMEOUT_PROPERTY);
             ReadTimeout = readTimeout == null ? 0 : decimal.Parse(readTimeout.Value);
-
-            YamlScalarNode openAPIDefinitionReadTimeout = (YamlScalarNode)GetProperty(section, OPEN_API_READ_TIMEOUT_PROPERTY);
-            OpenAPIDefinitionReadTimeout = openAPIDefinitionReadTimeout == null ? 5 : decimal.Parse(openAPIDefinitionReadTimeout.Value);
-
-            YamlSequenceNode tags = (YamlSequenceNode)GetProperty(section, TAGS_PROPERTY);
-            Tags = tags == null ? new List<string>() : ToList(tags);
         }
 
         internal YamlMappingNode ToConfig()
         {
             YamlMappingNode section = new YamlMappingNode();
 
-            if (!string.IsNullOrEmpty(OpenAPIDefinition))
-                section.Add(new YamlScalarNode(OPEN_API_DEFINITION_PROPERTY), new YamlScalarNode(OpenAPIDefinition));
+            if (OpenAPI != null && OpenAPI.Count > 0)
+                section.Add(new YamlScalarNode(OPEN_API_PROPERTY), new YamlMappingNode(FromDict(OpenAPI)));
 
             if (!string.IsNullOrEmpty(description))
                 section.Add(new YamlScalarNode(DESCRIPTION_PROPERTY), new YamlScalarNode(description));
 
             if (Proxies != null && Proxies.Count > 0)
                 section.Add(new YamlScalarNode(PROXIES_PROPERTY), new YamlMappingNode(FromDict(Proxies)));
-
-            if (!string.IsNullOrEmpty(ServiceHost))
-                section.Add(new YamlScalarNode(SERVICE_HOST_PROPERTY), new YamlScalarNode(ServiceHost));
 
             section.Add(new YamlScalarNode(METHODS_PROPERTY), new YamlSequenceNode(FromList(GetMethods())));
 
@@ -263,8 +253,6 @@ namespace AutoLoadPyxelRestAddIn
 
             section.Add(new YamlScalarNode(UDF_RETURN_TYPES_PROPERTY), new YamlSequenceNode(FromList(GetUdfReturnTypes())));
 
-            section.Add(new YamlScalarNode(RELY_ON_DEFINITIONS_PROPERTY), new YamlScalarNode(RelyOnDefinitions.ToString()));
-
             section.Add(new YamlScalarNode(MAX_RETRIES_PROPERTY), new YamlScalarNode(MaxRetries.ToString()));
 
             if (Headers != null && Headers.Count > 0)
@@ -275,20 +263,14 @@ namespace AutoLoadPyxelRestAddIn
             if (ReadTimeout > 0)
                 section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.ToString()));
 
-            section.Add(new YamlScalarNode(OPEN_API_READ_TIMEOUT_PROPERTY), new YamlScalarNode(OpenAPIDefinitionReadTimeout.ToString()));
-
-            if (Tags != null && Tags.Count > 0)
-                section.Add(new YamlScalarNode(TAGS_PROPERTY), new YamlSequenceNode(FromList(Tags)));
-
             return section;
         }
 
         internal void Default()
         {
-            OpenAPIDefinition = "";
+            OpenAPI = new Dictionary<string, object>();
             description = "";
             Proxies = new Dictionary<string, object>();
-            ServiceHost = "";
 
             Get = true;
             Post = true;
@@ -306,13 +288,10 @@ namespace AutoLoadPyxelRestAddIn
             Synchronous = false;
             Asynchronous = true;
 
-            RelyOnDefinitions = false;
             MaxRetries = 5;
             Headers = new Dictionary<string, object>();
             ConnectTimeout = 1;
             ReadTimeout = 0;
-            OpenAPIDefinitionReadTimeout = 5;
-            Tags = new List<string>();
         }
 
         private IList<string> GetMethods()

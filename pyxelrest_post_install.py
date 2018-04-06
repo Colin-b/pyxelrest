@@ -43,7 +43,9 @@ def convert_ini_service_to_yml(config_parser, service_name):
         elif 'advanced_configuration' == key:
             convert_advanced_configuration_to_yml(yml_content, value)
         elif 'swagger_url' == key:
-            yml_content['open_api_definition'] = value
+            yml_content.setdefault('open_api', {})['definition'] = value
+        elif 'service_host' == key:
+            yml_content.setdefault('open_api', {})['service_host'] = value
         else:
             yml_content[key] = value
     return yml_content
@@ -51,6 +53,7 @@ def convert_ini_service_to_yml(config_parser, service_name):
 
 def convert_security_details_to_yml(yml_content, security_details):
     yml_oauth2 = {}
+    yml_basic = {}
     for security_detail in security_details.split(','):
         key, value = security_detail.split('=', maxsplit=1)
         if key in ['port', 'success_display_time', 'failure_display_time']:
@@ -59,10 +62,17 @@ def convert_security_details_to_yml(yml_content, security_details):
             yml_oauth2[key] = float(value)
         elif key.startswith('oauth2.'):
             yml_oauth2[key[7:]] = value
+        elif 'username' == key:
+            yml_basic['username'] = value
+        elif 'password' == key:
+            yml_basic['password'] = value
         else:
             yml_oauth2[key] = value
 
-    yml_content['oauth2'] = yml_oauth2
+    if yml_oauth2:
+        yml_content['oauth2'] = yml_oauth2
+    if yml_basic:
+        yml_content['basic'] = yml_basic
 
 
 def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
@@ -71,18 +81,18 @@ def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
         if key in ['connect_timeout', 'read_timeout']:
             yml_content[key] = float(value)
         elif 'swagger_read_timeout' == key:
-            yml_content['definition_read_timeout'] = float(value)
+            yml_content.setdefault('open_api', {})['definition_read_timeout'] = float(value)
         elif 'max_retries' == key:
             yml_content[key] = int(value)
         elif key.startswith('header.'):
             headers = yml_content.setdefault('headers', {})
             headers[key[7:]] = value
         elif 'tags' == key:
-            yml_content[key] = [tag.strip() for tag in value.split(';')]
+            yml_content.setdefault('open_api', {})['tags'] = [tag.strip() for tag in value.split(';')]
         elif 'udf_return_type' == key:
             yml_content['udf_return_types'] = [return_type.strip() for return_type in value.split(';')]
         elif 'rely_on_definitions' == key:
-            yml_content[key] = value == 'True'
+            yml_content.setdefault('open_api', {})['rely_on_definitions'] = value == 'True'
         else:
             yml_content[key] = value
 

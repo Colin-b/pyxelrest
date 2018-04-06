@@ -92,6 +92,7 @@ class ConfigSection:
         self.udf_return_types = service_config.get('udf_return_types', ['asynchronous'])
         self.max_retries = service_config.get('max_retries', 5)
         self.custom_headers = service_config.get('headers', {})
+        self.proxies = service_config.get('proxies', {})
 
     def is_asynchronous(self, udf_return_type):
         return udf_return_type == 'asynchronous'
@@ -112,13 +113,19 @@ class ServiceConfigSection(ConfigSection):
         :param service_config: Dictionary containing service details.
         """
         ConfigSection.__init__(self, service_name, service_config)
-        self.tags = service_config.get('tags', [])
-        self.open_api_definition = service_config['open_api_definition']
+        open_api = service_config.get('open_api', None)
+        if not open_api:
+            raise MandatoryPropertyNotProvided(service_name, 'open_api')
+
+        self.open_api_definition = open_api.get('definition', None)
+        if not self.open_api_definition:
+            raise MandatoryPropertyNotProvided(service_name, 'open_api/definition')
+
         self.open_api_definition_url_parsed = urlsplit(self.open_api_definition)
-        self.proxies = service_config.get('proxies', {})
-        self.definition_read_timeout = service_config.get('definition_read_timeout', 5)
-        self.service_host = service_config.get('service_host', self.open_api_definition_url_parsed.netloc)
-        self.rely_on_definitions = service_config.get('rely_on_definitions')
+        self.definition_read_timeout = open_api.get('definition_read_timeout', 5)
+        self.service_host = open_api.get('service_host', self.open_api_definition_url_parsed.netloc)
+        self.rely_on_definitions = open_api.get('rely_on_definitions')
+        self.tags = open_api.get('tags', [])
 
     def _allow_tags(self, method_tags):
         if not self.tags or not method_tags:
@@ -144,7 +151,6 @@ class PyxelRestConfigSection(ConfigSection):
         :param service_config: Dictionary containing service details.
         """
         ConfigSection.__init__(self, service_name, service_config)
-        self.proxies = service_config.get('proxies', {})
 
     def should_provide_method(self, http_verb):
         return http_verb in self.requested_methods

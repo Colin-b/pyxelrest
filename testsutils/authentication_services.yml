@@ -1,5 +1,6 @@
 authenticated:
-  open_api_definition: "http://localhost:8946/"
+  open_api:
+    definition: "http://localhost:8946/"
   api_key: "my_provided_api_key"
   basic:
     username: "test_user"
@@ -8,14 +9,17 @@ authenticated:
     timeout: 10
 
 oauth_custom_token_name:
-  open_api_definition: "http://localhost:8946/"
+  open_api:
+    definition: "http://localhost:8946/"
   oauth2:
     response_type: "my_custom_token"
 
 oauth_cutom_response_port:
-  open_api_definition: "http://localhost:8946/"
+  open_api:
+    definition: "http://localhost:8946/"
   oauth2:
     port: 5001
 
 non_authenticated:
-  open_api_definition: "http://localhost:8948/"
+  open_api:
+    definition: "http://localhost:8948/"

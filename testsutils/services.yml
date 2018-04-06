@@ -1,35 +1,44 @@
 usual_parameters:
-  open_api_definition: "http://localhost:8943/"
+  open_api:
+    definition: "http://localhost:8943/"
 
 filtered_tags:
-  open_api_definition: "http://localhost:8944/"
-  tags:
-    - "tag 1"
-    - "tag 2"
+  open_api:
+    definition: "http://localhost:8944/"
+    tags:
+      - "tag 1"
+      - "tag 2"
 
 values_false:
-  open_api_definition: "http://localhost:8945/"
+  open_api:
+    definition: "http://localhost:8945/"
 
 output_order:
-  open_api_definition: "http://localhost:8946/"
+  open_api:
+    definition: "http://localhost:8946/"
 
 operation_id_not_provided:
-  open_api_definition: "http://localhost:8948/operation_id_not_provided"
+  open_api:
+    definition: "http://localhost:8948/operation_id_not_provided"
 
 operation_id_not_always_provided:
-  open_api_definition: "http://localhost:8948/operation_id_not_always_provided"
+  open_api:
+    definition: "http://localhost:8948/operation_id_not_always_provided"
 
 without_parameter:
-  open_api_definition: "http://localhost:8950/"
+  open_api:
+    definition: "http://localhost:8950/"
 
 header_parameter:
-  open_api_definition: "http://localhost:8951/"
+  open_api:
+    definition: "http://localhost:8951/"
   udf_return_types:
     - "synchronous"
     - "asynchronous"
 
 header_advanced_configuration:
-  open_api_definition: "http://localhost:8951/"
+  open_api:
+    definition: "http://localhost:8951/"
   udf_return_types:
     - synchronous
   headers:
@@ -37,16 +46,20 @@ header_advanced_configuration:
     X-PXL-OTHER: "MyOtherValue"
 
 form_parameter:
-  open_api_definition: "http://localhost:8952/"
+  open_api:
+    definition: "http://localhost:8952/"
 
 open_api_definition_loaded_from_file:
-  open_api_definition: "file://../testsutils/static_open_api_definition.json"
+  open_api:
+    definition: "file://../testsutils/static_open_api_definition.json"
 
 array_parameter:
-  open_api_definition: "http://localhost:8953/"
+  open_api:
+    definition: "http://localhost:8953/"
 
 http_methods:
-  open_api_definition: "http://localhost:8955/"
+  open_api:
+    definition: "http://localhost:8955/"
   methods:
     - "get"
     - "post"
@@ -57,13 +70,16 @@ http_methods:
     - "head"
 
 content_type:
-  open_api_definition: "http://localhost:8956/"
+  open_api:
+    definition: "http://localhost:8956/"
 
 base_path_ending_with_slash:
-  open_api_definition: "http://localhost:8957/"
+  open_api:
+    definition: "http://localhost:8957/"
 
 async:
-  open_api_definition: "http://localhost:8958/"
+  open_api:
+    definition: "http://localhost:8958/"
 
 pyxelrest:
   udf_return_types:
