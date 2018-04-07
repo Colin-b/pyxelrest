@@ -84,11 +84,12 @@ class ServicesConfigUpdater:
             raise Exception('Services configuration cannot be opened.')
         self._action = action
 
-    def update_configuration(self, file_or_directory):
+    def update_configuration(self, file_or_directory, services=None):
         """
 
         :param file_or_directory: Absolute or relative path to a configuration file
         or a directory or an URL to a file containing configuration file(s).
+        :param services: List of service names to be affected.
         """
         logger.info('Updating services configuration...')
         # TODO Remove once every client will have this version in conf
@@ -99,6 +100,9 @@ class ServicesConfigUpdater:
             return
 
         for service_name, service_config in updated_config.items():
+            if services and service_name not in services:
+                continue
+
             if ADD_SECTIONS == self._action:
                 self._add_service(service_name, service_config)
             if UPDATE_SECTIONS == self._action:
@@ -136,10 +140,11 @@ if __name__ == '__main__':
     parser.add_argument('file_or_directory', help='File (path or URL) or directory (path) containing services configuration.', type=str)
     parser.add_argument('action', help='Action to perform with provided file(s).', type=str, choices=[
         ADD_SECTIONS, UPDATE_SECTIONS, REMOVE_SECTIONS])
+    parser.add_argument('--services', help='Subset of services to be affected by the action.', default=None, type=str, nargs='*')
     options = parser.parse_args(sys.argv[1:])
 
     try:
         installer = ServicesConfigUpdater(options.action)
-        installer.update_configuration(options.file_or_directory)
+        installer.update_configuration(options.file_or_directory, options.services)
     except:
         logger.exception('Unable to perform services configuration update.')

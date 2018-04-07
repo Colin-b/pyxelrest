@@ -16,6 +16,7 @@ List all changes in various categories:
 - Use YAML format for configuration (remove restriction on the content of values).
 - Services are now loaded even if a service name is duplicated.
 - Allow to avoid auto update of some fields within configuration.
+- Allow to select services affected by an action during auto update.
 
 ### Bug fixes ###
 
