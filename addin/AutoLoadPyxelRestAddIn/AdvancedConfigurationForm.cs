@@ -75,8 +75,6 @@ namespace AutoLoadPyxelRestAddIn
             AutoScroll = true;
             StartPosition = FormStartPosition.CenterParent;
 
-            bool isPyxelRest = "pyxelrest".Equals(servicePanel.service.Name);
-
             var tabs = new TabControl { Dock = DockStyle.Fill };
 
             #region Standard settings
@@ -84,17 +82,9 @@ namespace AutoLoadPyxelRestAddIn
                 var tab = new TabPage("Standard");
                 var layout = new TableLayoutPanel { AutoSize = true };
 
-                #region Service Host
-                layout.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                var serviceHost = new TextBox { Text = servicePanel.service.OpenAPI.ContainsKey("service_host") ? servicePanel.service.OpenAPI["service_host"].ToString() : string.Empty, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
-                serviceHost.TextChanged += ServiceHost_TextChanged;
-                layout.Controls.Add(serviceHost, 1, 1);
-                #endregion
-
                 #region Methods
                 {
-                    layout.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    layout.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
                     var panel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
 
@@ -120,57 +110,49 @@ namespace AutoLoadPyxelRestAddIn
                     head.CheckedChanged += Head_CheckedChanged;
                     panel.Controls.Add(head, 6, 0);
 
-                    layout.Controls.Add(panel, 1, 2);
+                    layout.Controls.Add(panel, 1, 1);
                 }
                 #endregion
 
                 #region Max retries
-                layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+                layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                 var maxRetries = new NumericUpDown { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
                 maxRetries.ValueChanged += MaxRetries_ValueChanged;
-                layout.Controls.Add(maxRetries, 1, 3);
+                layout.Controls.Add(maxRetries, 1, 2);
                 #endregion
 
                 #region Timeout
 
                 #region Connect timeout
-                layout.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+                layout.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
                 var connectTimeout = new NumericUpDown { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
                 connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
-                layout.Controls.Add(connectTimeout, 1, 4);
+                layout.Controls.Add(connectTimeout, 1, 3);
                 #endregion
 
                 #region Read timeout
-                layout.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+                layout.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
                 var readTimeout = new NumericUpDown { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
                 readTimeout.ValueChanged += ReadTimeout_ValueChanged;
-                layout.Controls.Add(readTimeout, 1, 5);
-                #endregion
-
-                #region OpenAPI Definition read timeout
-                layout.Controls.Add(new Label { Text = "OpenAPI timeout", TextAlign = ContentAlignment.BottomLeft, Width=100 }, 0, 6);
-
-                var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Dock = DockStyle.Fill, Enabled = !isPyxelRest };
-                openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
-                layout.Controls.Add(openAPIDefinitionReadTimeout, 1, 6);
+                layout.Controls.Add(readTimeout, 1, 4);
                 #endregion
 
                 #endregion
 
                 #region API Key
-                layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
+                layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
                 var apiKey = new TextBox { Text = servicePanel.service.ApiKey, Dock = DockStyle.Fill };
                 apiKey.TextChanged += ApiKey_TextChanged;
-                layout.Controls.Add(apiKey, 1, 7);
+                layout.Controls.Add(apiKey, 1, 5);
                 #endregion
 
                 #region Return behavior
                 {
-                    layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 8);
+                    layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
 
                     var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
 
@@ -184,13 +166,7 @@ namespace AutoLoadPyxelRestAddIn
                     panel.Controls.Add(asynchronous, 1, 0);
                     #endregion
 
-                    #region Rely on definitions
-                    var relyOnDefinitions = new CheckBox { Text = "rely on definitions", Checked = servicePanel.service.OpenAPI.ContainsKey("rely_on_definitions") ? bool.Parse(servicePanel.service.OpenAPI["rely_on_definitions"].ToString()) : false, Width = 200, Enabled = !isPyxelRest };
-                    relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
-                    panel.Controls.Add(relyOnDefinitions, 2, 0);
-                    #endregion
-
-                    layout.Controls.Add(panel, 1, 8);
+                    layout.Controls.Add(panel, 1, 6);
                 }
                 #endregion
 
@@ -271,20 +247,54 @@ namespace AutoLoadPyxelRestAddIn
             }
             #endregion
 
-            if (!isPyxelRest)
+            if (!"pyxelrest".Equals(servicePanel.service.Name))
             {
-                #region Tags settings
+                #region OpenAPI settings
                 {
-                    var tab = new TabPage("Filters");
+                    var tab = new TabPage("OpenAPI");
                     var layout = new TableLayoutPanel { AutoSize = true };
 
-                    #region Add values
+                    #region Service Host
+                    {
+                        var hostPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Width = 530, Height=30 };
 
-                    var tagsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "OpenAPI tags" };
-                    layout.Controls.Add(tagsLabel, 0, 1);
+                        hostPanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft, Width = 130 }, 0, 1);
+
+                        var serviceHost = new TextBox { Text = servicePanel.service.OpenAPI.ContainsKey("service_host") ? servicePanel.service.OpenAPI["service_host"].ToString() : string.Empty, Width = 400 };
+                        serviceHost.TextChanged += ServiceHost_TextChanged;
+                        hostPanel.Controls.Add(serviceHost, 1, 1);
+
+                        layout.Controls.Add(hostPanel);
+                    }
+                    #endregion
+
+                    {
+                        var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Width = 530, Height = 30 };
+
+                        #region OpenAPI Definition read timeout
+                        panel.Controls.Add(new Label { Text = "Definition read timeout", TextAlign = ContentAlignment.BottomLeft, Width = 130 }, 0, 1);
+
+                        var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Width = 200 };
+                        openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
+                        panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 1);
+                        #endregion
+
+                        #region Rely on definitions
+                        var relyOnDefinitions = new CheckBox { Text = "Rely on definitions", Checked = servicePanel.service.OpenAPI.ContainsKey("rely_on_definitions") ? bool.Parse(servicePanel.service.OpenAPI["rely_on_definitions"].ToString()) : false, Width = 200 };
+                        relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
+                        panel.Controls.Add(relyOnDefinitions, 2, 1);
+                        #endregion
+
+                        layout.Controls.Add(panel);
+                    }
+
+                    #region Tags
+
+                    var tagsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Tags" };
+                    layout.Controls.Add(tagsLabel);
 
                     tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
-                    layout.Controls.Add(tagsPanel, 0, 2);
+                    layout.Controls.Add(tagsPanel);
 
                     {
                         var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill };
@@ -298,7 +308,7 @@ namespace AutoLoadPyxelRestAddIn
                         addTag.Click += AddTag_Click;
                         addPanel.Controls.Add(addTag, 1, 1);
 
-                        layout.Controls.Add(addPanel, 0, 3);
+                        layout.Controls.Add(addPanel);
                     }
 
                     #endregion
