@@ -88,7 +88,7 @@ def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
             headers = yml_content.setdefault('headers', {})
             headers[key[7:]] = value
         elif 'tags' == key:
-            yml_content.setdefault('open_api', {})['tags'] = [tag.strip() for tag in value.split(';')]
+            yml_content.setdefault('open_api', {})['selected_tags'] = [tag.strip() for tag in value.split(';')]
         elif 'udf_return_type' == key:
             yml_content['udf_return_types'] = [return_type.strip() for return_type in value.split(';')]
         elif 'rely_on_definitions' == key:

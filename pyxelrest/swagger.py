@@ -125,13 +125,13 @@ class ServiceConfigSection(ConfigSection):
         self.definition_read_timeout = open_api.get('definition_read_timeout', 5)
         self.service_host = open_api.get('service_host', self.open_api_definition_url_parsed.netloc)
         self.rely_on_definitions = open_api.get('rely_on_definitions')
-        self.tags = open_api.get('tags', [])
+        self.selected_tags = open_api.get('selected_tags', [])
 
     def _allow_tags(self, method_tags):
-        if not self.tags or not method_tags:
+        if not self.selected_tags or not method_tags:
             return True
         for method_tag in method_tags:
-            if method_tag in self.tags:
+            if method_tag in self.selected_tags:
                 return True
         return False
 

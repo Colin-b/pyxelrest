@@ -5,7 +5,7 @@ usual_parameters:
 filtered_tags:
   open_api:
     definition: "http://localhost:8944/"
-    tags:
+    selected_tags:
       - "tag 1"
       - "tag 2"
 

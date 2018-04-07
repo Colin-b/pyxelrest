@@ -35,8 +35,8 @@ namespace AutoLoadPyxelRestAddIn
             foreach (var header in servicePanel.service.Headers)
                 AddHeader(header.Key, header.Value.ToString());
 
-            if (servicePanel.service.OpenAPI.ContainsKey("tags"))
-                foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["tags"])
+            if (servicePanel.service.OpenAPI.ContainsKey("selected_tags"))
+                foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["selected_tags"])
                     AddTag(tag);
 
             var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
@@ -641,10 +641,10 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddTag()
         {
-            if (!servicePanel.service.OpenAPI.ContainsKey("tags"))
-                servicePanel.service.OpenAPI["tags"] = new List<string>();
+            if (!servicePanel.service.OpenAPI.ContainsKey("selected_tags"))
+                servicePanel.service.OpenAPI["selected_tags"] = new List<string>();
 
-            ((IList<string>)servicePanel.service.OpenAPI["tags"]).Add(tagName.Text);
+            ((IList<string>)servicePanel.service.OpenAPI["selected_tags"]).Add(tagName.Text);
 
             AddTag(tagName.Text);
 
@@ -670,10 +670,10 @@ namespace AutoLoadPyxelRestAddIn
             var panel = ((DeleteButton)sender).Parent;
             Label tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
 
-            var tags = (IList<string>)servicePanel.service.OpenAPI["tags"];
+            var tags = (IList<string>)servicePanel.service.OpenAPI["selected_tags"];
             tags.Remove(tagLabel.Text);
             if (tags.Count == 0)
-                servicePanel.service.OpenAPI.Remove("tags");
+                servicePanel.service.OpenAPI.Remove("selected_tags");
 
             tagsPanel.Controls.Remove(panel);
         }
