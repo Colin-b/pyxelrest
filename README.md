@@ -231,6 +231,12 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Optional</td>
         <td>any float value</td>
     </tr>
+    <tr>
+        <td><strong>skip_update_for</strong></td>
+        <td>List of section names that should not be auto-updated.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 #### OpenAPI ####

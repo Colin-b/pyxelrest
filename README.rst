@@ -186,6 +186,8 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 | read_timeout            | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.                                                               | Optional  | any float value                              |
 |                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| skip_update_for         | List of section names that should not be auto-updated.                                                                                                         | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
 OpenAPI
 -------
