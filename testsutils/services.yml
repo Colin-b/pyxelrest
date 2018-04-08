@@ -16,6 +16,22 @@ excluded_tags:
       - "tag 1"
       - "tag 2"
 
+selected_operation_ids:
+  open_api:
+    definition: "http://localhost:8944/"
+    selected_operation_ids:
+      - "get_tags"
+      - "post_tags"
+      - "put_tags"
+
+excluded_operation_ids:
+  open_api:
+    definition: "http://localhost:8944/"
+    excluded_operation_ids:
+      - "get_tags"
+      - "post_tags"
+      - "put_tags"
+
 values_false:
   open_api:
     definition: "http://localhost:8945/"

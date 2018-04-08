@@ -127,30 +127,56 @@ class ServiceConfigSection(ConfigSection):
         self.rely_on_definitions = open_api.get('rely_on_definitions')
         self.selected_tags = open_api.get('selected_tags', [])
         self.excluded_tags = open_api.get('excluded_tags', [])
+        self.excluded_operation_ids = open_api.get('excluded_operation_ids', [])
+        self.selected_operation_ids = open_api.get('selected_operation_ids', [])
 
     def _allow_tags(self, method_tags):
         if not method_tags:
             return True
 
-        if self.selected_tags or self.excluded_tags:
-            # Search excluded first
+        # Search excluded first
+        if self.excluded_tags:
             for method_tag in method_tags:
                 if method_tag in self.excluded_tags:
                     return False
 
+        if self.selected_tags:
             for method_tag in method_tags:
                 if method_tag in self.selected_tags:
                     return True
+            return False
 
-            return not self.selected_tags
+        return True
+
+    def _allow_operation_id(self, method_operation_id):
+        if not method_operation_id:
+            return True
+
+        if self.excluded_operation_ids:
+            for excluded_operation_id in self.excluded_operation_ids:
+                try:
+                    if re.match(excluded_operation_id, method_operation_id):
+                        return False
+                except:  # Handle non regex values
+                    pass
+
+        if self.selected_operation_ids:
+            for selected_operation_id in self.selected_operation_ids:
+                try:
+                    if re.match(selected_operation_id, method_operation_id):
+                        return True
+                except:  # Handle non regex values
+                    pass
+            return False
 
         return True
 
     def should_provide_method(self, http_verb, open_api_method):
         if http_verb not in self.requested_methods:
             return False
-        return self._allow_tags(open_api_method.get('tags')) and return_type_can_be_handled(
-            open_api_method.get('produces', []))
+        return self._allow_tags(open_api_method.get('tags')) \
+               and self._allow_operation_id(open_api_method.get('operationId')) \
+               and return_type_can_be_handled(open_api_method.get('produces', []))
 
 
 class PyxelRestConfigSection(ConfigSection):

@@ -272,6 +272,18 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td></td>
     </tr>
     <tr>
+        <td><strong>excluded_operation_ids</strong></td>
+        <td>List of operation_id (or regular expressions) within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>selected_operation_ids</strong></td>
+        <td>List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_id already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
         <td><strong>rely_on_definitions</strong></td>
         <td>Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.</td>
         <td>Optional</td>

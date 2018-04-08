@@ -18,6 +18,7 @@ List all changes in various categories:
 - Allow to avoid auto update of some fields within configuration.
 - Allow to select services affected by an action during auto update.
 - Allow to exclude OpenAPI tags.
+- Allow to include or exclude OpenAPI operation_ids.
 
 ### Bug fixes ###
 

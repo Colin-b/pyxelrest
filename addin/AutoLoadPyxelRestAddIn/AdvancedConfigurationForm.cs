@@ -15,8 +15,11 @@ namespace AutoLoadPyxelRestAddIn
 
         private TableLayoutPanel tagsPanel;
         private TextBox tagName;
-        private CheckedListBox excludedTag;
         private AddButton addTag;
+
+        private TableLayoutPanel operationIDsPanel;
+        private TextBox operationIDName;
+        private AddButton addOperationID;
 
         private TableLayoutPanel headersPanel;
         private TextBox headerName;
@@ -43,6 +46,14 @@ namespace AutoLoadPyxelRestAddIn
             if (servicePanel.service.OpenAPI.ContainsKey("selected_tags"))
                 foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["selected_tags"])
                     AddTag(tag, false);
+
+            if (servicePanel.service.OpenAPI.ContainsKey("excluded_operation_ids"))
+                foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["excluded_operation_ids"])
+                    AddOperationID(tag, true);
+
+            if (servicePanel.service.OpenAPI.ContainsKey("selected_operation_ids"))
+                foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["selected_operation_ids"])
+                    AddOperationID(tag, false);
 
             var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
             foreach (var oauth2Item in servicePanel.service.OAuth2)
@@ -302,7 +313,7 @@ namespace AutoLoadPyxelRestAddIn
                     layout.Controls.Add(tagsPanel);
 
                     {
-                        var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill };
+                        var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
 
                         tagName = new TextBox { Text = string.Empty, Width = 530 };
                         tagName.TextChanged += TagName_TextChanged;
@@ -312,6 +323,31 @@ namespace AutoLoadPyxelRestAddIn
                         addTag = new AddButton();
                         addTag.Click += AddTag_Click;
                         addPanel.Controls.Add(addTag, 1, 1);
+
+                        layout.Controls.Add(addPanel);
+                    }
+
+                    #endregion
+
+                    #region Operation IDs
+
+                    var operationIdsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Operation IDs" };
+                    layout.Controls.Add(operationIdsLabel);
+
+                    operationIDsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                    layout.Controls.Add(operationIDsPanel);
+
+                    {
+                        var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+
+                        operationIDName = new TextBox { Text = string.Empty, Width = 530 };
+                        operationIDName.TextChanged += OperationIDName_TextChanged;
+                        operationIDName.KeyDown += OperationIDName_KeyDown;
+                        addPanel.Controls.Add(operationIDName, 0, 1);
+
+                        addOperationID = new AddButton();
+                        addOperationID.Click += AddOperationID_Click;
+                        addPanel.Controls.Add(addOperationID, 1, 1);
 
                         layout.Controls.Add(addPanel);
                     }
@@ -619,6 +655,30 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.Synchronous = ((CheckBox)sender).Checked;
         }
 
+        private void AddValueToList(string value, string listName)
+        {
+            if (!servicePanel.service.OpenAPI.ContainsKey(listName))
+                servicePanel.service.OpenAPI[listName] = new List<string>();
+
+            ((IList<string>)servicePanel.service.OpenAPI[listName]).Add(value);
+        }
+
+        private void MoveFromListToList(string value, string fromList, string toList)
+        {
+            RemoveValueFromList(value, fromList);
+            AddValueToList(value, toList);
+        }
+
+        private void RemoveValueFromList(string value, string listName)
+        {
+            var values = (IList<string>)servicePanel.service.OpenAPI[listName];
+            values.Remove(value);
+            if (values.Count == 0)
+                servicePanel.service.OpenAPI.Remove(listName);
+        }
+
+        #region Tags
+
         private void TagName_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -647,32 +707,10 @@ namespace AutoLoadPyxelRestAddIn
         private void AddTag()
         {
             // Service update
-            AddTag(tagName.Text, "selected_tags");
+            AddValueToList(tagName.Text, "selected_tags");
             // Visual update
             AddTag(tagName.Text, false);
             tagName.Text = "";
-        }
-
-        private void AddTag(string tagValue, string listName)
-        {
-            if (!servicePanel.service.OpenAPI.ContainsKey(listName))
-                servicePanel.service.OpenAPI[listName] = new List<string>();
-
-            ((IList<string>)servicePanel.service.OpenAPI[listName]).Add(tagValue);
-        }
-
-        private void MoveTag(string tagValue, string fromList, string toList)
-        {
-            RemoveTag(tagValue, fromList);
-            AddTag(tagValue, toList);
-        }
-
-        private void RemoveTag(string tagValue, string listName)
-        {
-            var tags = (IList<string>)servicePanel.service.OpenAPI[listName];
-            tags.Remove(tagValue);
-            if (tags.Count == 0)
-                servicePanel.service.OpenAPI.Remove(listName);
         }
 
         private void AddTag(string value, bool excluded)
@@ -701,9 +739,9 @@ namespace AutoLoadPyxelRestAddIn
             Label tagLabel = (Label)tagSelected.Parent.Controls.Find("tagLabel", false)[0];
 
             if (tagSelected.Checked) // Moved from excluded to selected
-                MoveTag(tagLabel.Text, "excluded_tags", "selected_tags");
+                MoveFromListToList(tagLabel.Text, "excluded_tags", "selected_tags");
             else // Move from selected to excluded
-                MoveTag(tagLabel.Text, "selected_tags", "excluded_tags");
+                MoveFromListToList(tagLabel.Text, "selected_tags", "excluded_tags");
         }
 
         private void RemoveTag_Click(object sender, EventArgs e)
@@ -712,10 +750,92 @@ namespace AutoLoadPyxelRestAddIn
             var tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
             var tagSelected = (RadioButton)panel.Controls.Find("tagSelected", false)[0];
 
-            RemoveTag(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
+            RemoveValueFromList(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
 
             tagsPanel.Controls.Remove(panel);
         }
+
+        #endregion
+
+        #region Operation IDs
+
+        private void OperationIDName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addOperationID.Enabled)
+                        AddOperationID();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void OperationIDName_TextChanged(object sender, EventArgs e)
+        {
+            addOperationID.Enabled = ((TextBox)sender).Text.Length > 0;
+        }
+
+        private void AddOperationID_Click(object sender, EventArgs e)
+        {
+            AddOperationID();
+        }
+
+        private void AddOperationID()
+        {
+            // Service update
+            AddValueToList(operationIDName.Text, "selected_operation_ids");
+            // Visual update
+            AddOperationID(operationIDName.Text, false);
+            operationIDName.Text = "";
+        }
+
+        private void AddOperationID(string value, bool excluded)
+        {
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+
+            panel.Controls.Add(new Label { Name = "operationIDLabel", Text = value, Width = 335, Dock = DockStyle.Fill }, 0, 1);
+
+            panel.Controls.Add(new RadioButton { Text = "excluded", Width = 90, Checked = excluded }, 1, 1);
+
+            var operationIDSelected = new RadioButton { Name = "operationIDSelected", Text = "selected", Width = 90, Checked = !excluded };
+            operationIDSelected.CheckedChanged += OperationIDSelected_CheckedChanged;
+            panel.Controls.Add(operationIDSelected, 2, 1);
+
+            var remove = new DeleteButton();
+            remove.Click += RemoveOperationID_Click;
+            panel.Controls.Add(remove, 3, 1);
+
+            operationIDsPanel.Controls.Add(panel);
+            operationIDsPanel.SetColumnSpan(panel, 2);
+        }
+
+        private void OperationIDSelected_CheckedChanged(object sender, EventArgs e)
+        {
+            var operationIDSelected = (RadioButton)sender;
+            Label operationIDLabel = (Label)operationIDSelected.Parent.Controls.Find("operationIDLabel", false)[0];
+
+            if (operationIDSelected.Checked) // Moved from excluded to selected
+                MoveFromListToList(operationIDLabel.Text, "excluded_operation_ids", "selected_operation_ids");
+            else // Move from selected to excluded
+                MoveFromListToList(operationIDLabel.Text, "selected_operation_ids", "excluded_operation_ids");
+        }
+
+        private void RemoveOperationID_Click(object sender, EventArgs e)
+        {
+            var panel = ((DeleteButton)sender).Parent;
+            var operationIDLabel = (Label)panel.Controls.Find("operationIDLabel", false)[0];
+            var operationIDSelected = (RadioButton)panel.Controls.Find("operationIDSelected", false)[0];
+
+            RemoveValueFromList(operationIDLabel.Text, operationIDSelected.Checked ? "selected_operation_ids" : "excluded_operation_ids");
+
+            operationIDsPanel.Controls.Remove(panel);
+        }
+
+        #endregion
 
         private void HeaderValue_KeyDown(object sender, KeyEventArgs e)
         {
