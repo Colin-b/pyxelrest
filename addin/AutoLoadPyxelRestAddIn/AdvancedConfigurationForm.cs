@@ -663,6 +663,14 @@ namespace AutoLoadPyxelRestAddIn
             ((IList<string>)servicePanel.service.OpenAPI[listName]).Add(value);
         }
 
+        private bool ContainsValue(string value, string listName)
+        {
+            if (!servicePanel.service.OpenAPI.ContainsKey(listName))
+                return false;
+
+            return ((IList<string>)servicePanel.service.OpenAPI[listName]).Contains(value);
+        }
+
         private void MoveFromListToList(string value, string fromList, string toList)
         {
             RemoveValueFromList(value, fromList);
@@ -696,7 +704,8 @@ namespace AutoLoadPyxelRestAddIn
 
         private void TagName_TextChanged(object sender, EventArgs e)
         {
-            addTag.Enabled = ((TextBox)sender).Text.Length > 0;
+            var tagValue = ((TextBox)sender).Text;
+            addTag.Enabled = tagValue.Length > 0 && !ContainsValue(tagValue, "selected_tags") && !ContainsValue(tagValue, "excluded_tags");
         }
 
         private void AddTag_Click(object sender, EventArgs e)
@@ -776,7 +785,8 @@ namespace AutoLoadPyxelRestAddIn
 
         private void OperationIDName_TextChanged(object sender, EventArgs e)
         {
-            addOperationID.Enabled = ((TextBox)sender).Text.Length > 0;
+            var operationIDValue = ((TextBox)sender).Text;
+            addOperationID.Enabled = operationIDValue.Length > 0 && !ContainsValue(operationIDValue, "selected_operation_ids") && !ContainsValue(operationIDValue, "excluded_operation_ids");
         }
 
         private void AddOperationID_Click(object sender, EventArgs e)
@@ -872,9 +882,14 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private bool ContainsHeader(string value)
+        {
+            return servicePanel.service.Headers.ContainsKey(value);
+        }
+
         private void HeaderName_TextChanged(object sender, EventArgs e)
         {
-            addHeader.Enabled = ((TextBox)sender).Text.Length > 0 && headerValue.Text.Length > 0;
+            addHeader.Enabled = ((TextBox)sender).Text.Length > 0 && headerValue.Text.Length > 0 && !ContainsHeader(((TextBox)sender).Text);
         }
 
         private void AddHeader_Click(object sender, EventArgs e)
@@ -943,6 +958,11 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
+        private bool ContainsOAuth2Param(string value)
+        {
+            return servicePanel.service.OAuth2.ContainsKey(value);
+        }
+
         private void Oauth2ParamValue_TextChanged(object sender, EventArgs e)
         {
             addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamName.Text.Length > 0;
@@ -965,7 +985,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void Oauth2ParamName_TextChanged(object sender, EventArgs e)
         {
-            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0;
+            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0 && !ContainsOAuth2Param(((TextBox)sender).Text);
         }
 
         private void AddOAuth2Param_Click(object sender, EventArgs e)

@@ -25,6 +25,7 @@ List all changes in various categories:
 - If UDFs are not generated at startup according to user configuration. checkbox is now reflecting it.
 - Microsoft Excel only allows 3 lines of UDF parameter description. Avoid one line per restricted values.
 - UDF Parameter description now contains default value.
+- Handle more parameter checks (maximum, exclusiveMaximum, minimum, exclusiveMinimum, maxLength, minLength, maxItems, minItems, uniqueItems, multipleOf)
 
 ## 0.66.0 (2018-03-30) ##
 

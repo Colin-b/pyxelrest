@@ -491,6 +491,16 @@ class UDFParameter:
         self.format = open_api_parameter.get('format')  # date (string type), date-time (string type)
         self.choices = open_api_parameter.get('enum')  # string type
         self.default_value = open_api_parameter.get('default')
+        self.maximum = open_api_parameter.get('maximum')  # Apply to integer and number
+        self.exclusive_maximum = open_api_parameter.get('exclusiveMaximum')  # Apply to integer and number
+        self.minimum = open_api_parameter.get('minimum')  # Apply to integer and number
+        self.exclusive_minimum = open_api_parameter.get('exclusiveMinimum')  # Apply to integer and number
+        self.max_length = open_api_parameter.get('maxLength')  # Apply to string
+        self.min_length = open_api_parameter.get('minLength')  # Apply to string
+        self.max_items = open_api_parameter.get('maxItems')  # Apply to array
+        self.min_items = open_api_parameter.get('minItems')  # Apply to array
+        self.unique_items = open_api_parameter.get('uniqueItems')  # Apply to array
+        self.multiple_of = open_api_parameter.get('multipleOf')  # Apply to integer and number
 
         open_api_array_parameter = self._get_open_api_array_parameter(open_api_parameter)
         if open_api_array_parameter:
@@ -498,9 +508,9 @@ class UDFParameter:
                 self._convert_to_type = self._convert_to_dict_list
                 self.description = self._get_dict_list_documentation(open_api_parameter)
             else:
-                inner_parameter = UDFParameter(open_api_array_parameter, {})
-                self._convert_to_type = self._get_convert_array_method(inner_parameter)
-                self.description = self._get_list_documentation(open_api_parameter, inner_parameter)
+                self.array_parameter = UDFParameter(open_api_array_parameter, {})
+                self._convert_to_type = self._convert_to_array
+                self.description = self._get_list_documentation(open_api_parameter)
         else:
             self._convert_to_type = self._get_convert_method()
             self.description = self._get_documentation(open_api_parameter)
@@ -533,11 +543,34 @@ class UDFParameter:
     def _convert_to_int(self, value):
         if not isinstance(value, int):
             raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+        self._check_number(value)
         return value
+
+    def _check_number(self, value):
+        if self.maximum is not None:
+            if self.exclusive_maximum:
+                if value >= self.maximum:
+                    raise Exception('{0} value "{1}" must be strictly inferior to {2}.'.format(self.name, value, self.maximum))
+            else:
+                if value > self.maximum:
+                    raise Exception('{0} value "{1}" must be inferior or equals to {2}.'.format(self.name, value, self.maximum))
+
+        if self.minimum is not None:
+            if self.exclusive_minimum:
+                if value <= self.minimum:
+                    raise Exception('{0} value "{1}" must be strictly superior to {2}.'.format(self.name, value, self.minimum))
+            else:
+                if value < self.minimum:
+                    raise Exception('{0} value "{1}" must be superior or equals to {2}.'.format(self.name, value, self.minimum))
+
+        if self.multiple_of:
+            if (value % self.multiple_of) == 0:
+                raise Exception('{0} value "{1}" must be a multiple of {2}.'.format(self.name, value, self.multiple_of))
 
     def _convert_to_float(self, value):
         if not isinstance(value, float):
             raise Exception('{0} value "{1}" must be a number.'.format(self.name, value))
+        self._check_number(value)
         return value
 
     def _convert_to_date(self, value):
@@ -557,6 +590,12 @@ class UDFParameter:
             value = str(value)
         if self.choices and value not in self.choices:
             raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, self.choices.join(' or ')))
+        if self.max_length is not None:
+            if len(value) > self.max_length:
+                raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(self.name, value, self.max_length))
+        if self.min_length is not None:
+            if len(value) < self.min_length:
+                raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(self.name, value, self.min_length))
         return value
 
     def _convert_to_bool(self, value):
@@ -576,20 +615,40 @@ class UDFParameter:
             raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
         if len(value) < 2:
             raise Exception('{0} value should contains at least two rows. Header and values.'.format(self.name))
-        return list_to_dict_list(value[0], value[1:])
+        list_value = list_to_dict_list(value[0], value[1:])
+        self._check_array(list_value)
+        return list_value
 
     def _convert_to_file(self, value):
         if os.path.isfile(value):  # Can be a path to a file
             return open(value, 'rb')
         return self.server_param_name, value  # Or the content of the file
 
-    def _get_convert_array_method(self, array_parameter):
-        return lambda value: [
-            array_parameter._convert_to_type(item) if item is not None else None
-            for item in value
-        ] if isinstance(value, list) else [
-            array_parameter._convert_to_type(value)
-        ]
+    def _convert_to_array(self, value):
+        if isinstance(value, list):
+            list_value = [
+                self.array_parameter._convert_to_type(item) if item is not None else None
+                for item in value
+            ]
+        else:
+            list_value = [
+                self.array_parameter._convert_to_type(value)
+            ]
+        self._check_array(list_value)
+        return list_value
+
+    def _check_array(self, value):
+        if self.unique_items:
+            if len(set(value)) != len(value):
+                raise Exception('{0} contains duplicated items.'.format(self.name))
+
+        if self.max_items is not None:
+            if len(value) > self.max_items:
+                raise Exception('{0} cannot contains more than {1} items.'.format(self.name, self.max_items))
+
+        if self.min_items is not None:
+            if len(value) > self.min_items:
+                raise Exception('{0} cannot contains less than {1} items.'.format(self.name, self.min_items))
 
     def _get_convert_method(self):
         if self.type == 'integer':
@@ -644,22 +703,22 @@ class UDFParameter:
         description += '\nValue must be an array of at least two rows (field names, values).'
         return description.replace('\'', '')
 
-    def _get_list_documentation(self, open_api_parameter, inner_parameter):
+    def _get_list_documentation(self, open_api_parameter):
         description = self._common_documentation(open_api_parameter)
-        if inner_parameter.type == 'integer':
+        if self.array_parameter.type == 'integer':
             description += '\nValue must be an array of integers.'
-        elif inner_parameter.type == 'number':
+        elif self.array_parameter.type == 'number':
             description += '\nValue must be an array of numbers.'
-        elif inner_parameter.type == 'string':
-            if inner_parameter.format == 'date':
+        elif self.array_parameter.type == 'string':
+            if self.array_parameter.format == 'date':
                 description += '\nValue must be an array of date formatted cells.'
-            elif inner_parameter.format == 'date-time':
+            elif self.array_parameter.format == 'date-time':
                 description += '\nValue must be an array of date-time formatted cells.'
             else:
                 description += '\nValue must be an array of text formatted cells.'
-        elif inner_parameter.type == 'boolean':
+        elif self.array_parameter.type == 'boolean':
             description += '\nValue must be an array of boolean formatted cells.'
-        elif inner_parameter.type == 'file':
+        elif self.array_parameter.type == 'file':
             description += '\nValue must be an array of cells with files content or files paths.'
         return description.replace('\'', '')
 
