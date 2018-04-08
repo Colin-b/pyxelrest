@@ -17,6 +17,7 @@ List all changes in various categories:
 - Services are now loaded even if a service name is duplicated.
 - Allow to avoid auto update of some fields within configuration.
 - Allow to select services affected by an action during auto update.
+- Allow to exclude OpenAPI tags.
 
 ### Bug fixes ###
 

@@ -260,8 +260,14 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>any float value</td>
     </tr>
     <tr>
+        <td><strong>excluded_tags</strong></td>
+        <td>List of tags within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
         <td><strong>selected_tags</strong></td>
-        <td>List of tags within OpenAPI definition that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>List of tags within OpenAPI definition that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
         <td>Optional</td>
         <td></td>
     </tr>

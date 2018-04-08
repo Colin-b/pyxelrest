@@ -126,14 +126,25 @@ class ServiceConfigSection(ConfigSection):
         self.service_host = open_api.get('service_host', self.open_api_definition_url_parsed.netloc)
         self.rely_on_definitions = open_api.get('rely_on_definitions')
         self.selected_tags = open_api.get('selected_tags', [])
+        self.excluded_tags = open_api.get('excluded_tags', [])
 
     def _allow_tags(self, method_tags):
-        if not self.selected_tags or not method_tags:
+        if not method_tags:
             return True
-        for method_tag in method_tags:
-            if method_tag in self.selected_tags:
-                return True
-        return False
+
+        if self.selected_tags or self.excluded_tags:
+            # Search excluded first
+            for method_tag in method_tags:
+                if method_tag in self.excluded_tags:
+                    return False
+
+            for method_tag in method_tags:
+                if method_tag in self.selected_tags:
+                    return True
+
+            return not self.selected_tags
+
+        return True
 
     def should_provide_method(self, http_verb, open_api_method):
         if http_verb not in self.requested_methods:

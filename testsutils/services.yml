@@ -2,10 +2,17 @@ usual_parameters:
   open_api:
     definition: "http://localhost:8943/"
 
-filtered_tags:
+selected_tags:
   open_api:
     definition: "http://localhost:8944/"
     selected_tags:
+      - "tag 1"
+      - "tag 2"
+
+excluded_tags:
+  open_api:
+    definition: "http://localhost:8944/"
+    excluded_tags:
       - "tag 1"
       - "tag 2"
 

@@ -15,6 +15,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private TableLayoutPanel tagsPanel;
         private TextBox tagName;
+        private CheckedListBox excludedTag;
         private AddButton addTag;
 
         private TableLayoutPanel headersPanel;
@@ -35,9 +36,13 @@ namespace AutoLoadPyxelRestAddIn
             foreach (var header in servicePanel.service.Headers)
                 AddHeader(header.Key, header.Value.ToString());
 
+            if (servicePanel.service.OpenAPI.ContainsKey("excluded_tags"))
+                foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["excluded_tags"])
+                    AddTag(tag, true);
+
             if (servicePanel.service.OpenAPI.ContainsKey("selected_tags"))
                 foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["selected_tags"])
-                    AddTag(tag);
+                    AddTag(tag, false);
 
             var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
             foreach (var oauth2Item in servicePanel.service.OAuth2)
@@ -641,43 +646,76 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddTag()
         {
-            if (!servicePanel.service.OpenAPI.ContainsKey("selected_tags"))
-                servicePanel.service.OpenAPI["selected_tags"] = new List<string>();
-
-            ((IList<string>)servicePanel.service.OpenAPI["selected_tags"]).Add(tagName.Text);
-
-            AddTag(tagName.Text);
-
+            // Service update
+            AddTag(tagName.Text, "selected_tags");
+            // Visual update
+            AddTag(tagName.Text, false);
             tagName.Text = "";
         }
 
-        private void AddTag(string value)
+        private void AddTag(string tagValue, string listName)
+        {
+            if (!servicePanel.service.OpenAPI.ContainsKey(listName))
+                servicePanel.service.OpenAPI[listName] = new List<string>();
+
+            ((IList<string>)servicePanel.service.OpenAPI[listName]).Add(tagValue);
+        }
+
+        private void MoveTag(string tagValue, string fromList, string toList)
+        {
+            RemoveTag(tagValue, fromList);
+            AddTag(tagValue, toList);
+        }
+
+        private void RemoveTag(string tagValue, string listName)
+        {
+            var tags = (IList<string>)servicePanel.service.OpenAPI[listName];
+            tags.Remove(tagValue);
+            if (tags.Count == 0)
+                servicePanel.service.OpenAPI.Remove(listName);
+        }
+
+        private void AddTag(string value, bool excluded)
         {
             var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
 
-            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Width=527, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Width = 335, Dock = DockStyle.Fill }, 0, 1);
+
+            panel.Controls.Add(new RadioButton { Text = "excluded", Width = 90, Checked = excluded }, 1, 1);
+
+            var tagSelected = new RadioButton { Name = "tagSelected", Text = "selected", Width = 90, Checked = !excluded };
+            tagSelected.CheckedChanged += TagSelected_CheckedChanged;
+            panel.Controls.Add(tagSelected, 2, 1);
 
             var remove = new DeleteButton();
             remove.Click += RemoveTag_Click;
-            panel.Controls.Add(remove, 1, 1);
+            panel.Controls.Add(remove, 3, 1);
 
             tagsPanel.Controls.Add(panel);
             tagsPanel.SetColumnSpan(panel, 2);
         }
 
+        private void TagSelected_CheckedChanged(object sender, EventArgs e)
+        {
+            var tagSelected = (RadioButton) sender;
+            Label tagLabel = (Label)tagSelected.Parent.Controls.Find("tagLabel", false)[0];
+
+            if (tagSelected.Checked) // Moved from excluded to selected
+                MoveTag(tagLabel.Text, "excluded_tags", "selected_tags");
+            else // Move from selected to excluded
+                MoveTag(tagLabel.Text, "selected_tags", "excluded_tags");
+        }
+
         private void RemoveTag_Click(object sender, EventArgs e)
         {
             var panel = ((DeleteButton)sender).Parent;
-            Label tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
+            var tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
+            var tagSelected = (RadioButton)panel.Controls.Find("tagSelected", false)[0];
 
-            var tags = (IList<string>)servicePanel.service.OpenAPI["selected_tags"];
-            tags.Remove(tagLabel.Text);
-            if (tags.Count == 0)
-                servicePanel.service.OpenAPI.Remove("selected_tags");
+            RemoveTag(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
 
             tagsPanel.Controls.Remove(panel);
         }
-
 
         private void HeaderValue_KeyDown(object sender, KeyEventArgs e)
         {

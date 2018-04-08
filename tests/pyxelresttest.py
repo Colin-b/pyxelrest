@@ -149,30 +149,49 @@ class PyxelRestTest(unittest.TestCase):
             ]
         )
 
-    def test_get_with_tags(self):
+    def test_get_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'Second tag is one of the accepted tags',
-            pyxelrestgenerator.filtered_tags_get_tags()
+            pyxelrestgenerator.selected_tags_get_tags()
         )
 
-    def test_post_with_tags(self):
+    def test_post_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'All tags are accepted',
-            pyxelrestgenerator.filtered_tags_post_tags()
+            pyxelrestgenerator.selected_tags_post_tags()
         )
 
-    def test_put_with_tags(self):
+    def test_put_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'First tag is one of the accepted tags',
-            pyxelrestgenerator.filtered_tags_put_tags()
+            pyxelrestgenerator.selected_tags_put_tags()
         )
 
-    def test_delete_with_tags(self):
+    def test_delete_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_delete_with_tags'))
+        self.assertFalse(hasattr(pyxelrestgenerator, 'selected_tags_delete_tags'))
+
+    def test_get_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_tags_get_tags'))
+
+    def test_post_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_tags_post_tags'))
+
+    def test_put_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_tags_put_tags'))
+
+    def test_delete_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'This method should not be available',
+            pyxelrestgenerator.excluded_tags_delete_tags()
+        )
 
     def test_get_with_zero_integer(self):
         from pyxelrest import pyxelrestgenerator
