@@ -19,9 +19,9 @@ def open_api_definition():
                        }
                    },
                    paths={
-                       '/string_array_parameter': {
+                       '/string_multi_array_parameter': {
                            'get': {
-                               'operationId': 'get_string_array_parameter',
+                               'operationId': 'get_string_multi_array_parameter',
                                'parameters': [
                                    {
                                        'description': 'string array parameter',
@@ -31,7 +31,8 @@ def open_api_definition():
                                        'items': {
                                            'type': 'string'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    }
                                ],
                                'responses': {
@@ -46,12 +47,181 @@ def open_api_definition():
                                    }
                                }
                            }
-                       }
+                       },
+                       '/string_default_array_parameter': {
+                           'get': {
+                               'operationId': 'get_string_default_array_parameter',
+                               'parameters': [
+                                   {
+                                       'description': 'string array parameter',
+                                       'in': 'query',
+                                       'name': 'string_array',
+                                       'required': True,
+                                       'items': {
+                                           'type': 'string'
+                                       },
+                                       'type': 'array',
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/TestObject'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/string_csv_array_parameter': {
+                           'get': {
+                               'operationId': 'get_string_csv_array_parameter',
+                               'parameters': [
+                                   {
+                                       'description': 'string array parameter',
+                                       'in': 'query',
+                                       'name': 'string_array',
+                                       'required': True,
+                                       'items': {
+                                           'type': 'string'
+                                       },
+                                       'type': 'array',
+                                       'collectionFormat': 'csv',
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/TestObject'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/string_ssv_array_parameter': {
+                           'get': {
+                               'operationId': 'get_string_ssv_array_parameter',
+                               'parameters': [
+                                   {
+                                       'description': 'string array parameter',
+                                       'in': 'query',
+                                       'name': 'string_array',
+                                       'required': True,
+                                       'items': {
+                                           'type': 'string'
+                                       },
+                                       'type': 'array',
+                                       'collectionFormat': 'ssv',
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/TestObject'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/string_tsv_array_parameter': {
+                           'get': {
+                               'operationId': 'get_string_tsv_array_parameter',
+                               'parameters': [
+                                   {
+                                       'description': 'string array parameter',
+                                       'in': 'query',
+                                       'name': 'string_array',
+                                       'required': True,
+                                       'items': {
+                                           'type': 'string'
+                                       },
+                                       'type': 'array',
+                                       'collectionFormat': 'tsv',
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/TestObject'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '/string_pipes_array_parameter': {
+                           'get': {
+                               'operationId': 'get_string_pipes_array_parameter',
+                               'parameters': [
+                                   {
+                                       'description': 'string array parameter',
+                                       'in': 'query',
+                                       'name': 'string_array',
+                                       'required': True,
+                                       'items': {
+                                           'type': 'string'
+                                       },
+                                       'type': 'array',
+                                       'collectionFormat': 'pipes',
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/TestObject'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
+                       },
                    })
 
 
-@app.route('/string_array_parameter', methods=['GET'])
-def string_array_parameter():
+@app.route('/string_multi_array_parameter', methods=['GET'])
+def string_multi_array_parameter():
+    return ', '.join(_request_args(request.args))
+
+
+@app.route('/string_default_array_parameter', methods=['GET'])
+def string_default_array_parameter():
+    return ', '.join(_request_args(request.args))
+
+
+@app.route('/string_csv_array_parameter', methods=['GET'])
+def string_csv_array_parameter():
+    return ', '.join(_request_args(request.args))
+
+
+@app.route('/string_ssv_array_parameter', methods=['GET'])
+def string_ssv_array_parameter():
+    return ', '.join(_request_args(request.args))
+
+
+@app.route('/string_tsv_array_parameter', methods=['GET'])
+def string_tsv_array_parameter():
+    return ', '.join(_request_args(request.args))
+
+
+@app.route('/string_pipes_array_parameter', methods=['GET'])
+def string_pipes_array_parameter():
     return ', '.join(_request_args(request.args))
 
 

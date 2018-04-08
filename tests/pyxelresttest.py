@@ -59,13 +59,58 @@ class PyxelRestTest(unittest.TestCase):
             (async_service, 8958),
         )
 
-    def test_string_array_parameter(self):
+    def test_string_multi_array_parameter(self):
         from pyxelrest import pyxelrestgenerator
         if platform.python_version()[0] == '3':
             result = 'string_array="[\'str1\', \'str2\']"'
         else:
             result = u'string_array="[u\'str1\', u\'str2\']"'
-        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_array_parameter(['str1', 'str2']),
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_multi_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_default_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1,str2\']"'
+        else:
+            result = u'string_array="[u\'str1,str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_default_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_csv_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1,str2\']"'
+        else:
+            result = u'string_array="[u\'str1,str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_csv_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_ssv_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1 str2\']"'
+        else:
+            result = u'string_array="[u\'str1 str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_ssv_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_tsv_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1\\tstr2\']"'
+        else:
+            result = u'string_array="[u\'str1\\tstr2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_tsv_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_pipes_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1|str2\']"'
+        else:
+            result = u'string_array="[u\'str1|str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_pipes_array_parameter(['str1', 'str2']),
                          result)
 
     def test_plain_without_parameter(self):

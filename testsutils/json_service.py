@@ -64,6 +64,7 @@ def open_api_definition():
                                    'items': {
                                        '$ref': '#/definitions/Dict',
                                    },
+                                   'collectionFormat': 'multi',
                                },
                                'dict_field1': {
                                    'type': 'string',
@@ -84,7 +85,9 @@ def open_api_definition():
                                        'items': {
                                            'type': 'string',
                                        },
+                                       'collectionFormat': 'multi',
                                    },
+                                   'collectionFormat': 'multi',
                                },
                                'dict_field1': {
                                    'type': 'string',
@@ -114,14 +117,16 @@ def open_api_definition():
                                    'items': {
                                        'type': 'string',
                                        'format': 'date'
-                                   }
+                                   },
+                                   'collectionFormat': 'multi',
                                },
                                'query_array_date_time': {
                                    'type': 'array',
                                    'items': {
                                        'type': 'string',
                                        'format': 'date-time'
-                                   }
+                                   },
+                                   'collectionFormat': 'multi',
                                },
                                'query_array_double': {
                                },
@@ -267,6 +272,7 @@ def open_api_definition():
                                            'items': {
                                                '$ref': "#/definitions/DictWithReadOnly",
                                            },
+                                           'collectionFormat': 'multi',
                                        },
                                    },
                                ],
@@ -350,6 +356,7 @@ def open_api_definition():
                                            'items': {
                                                '$ref': "#/definitions/DictWithDict",
                                            },
+                                           'collectionFormat': 'multi',
                                        },
                                    },
                                ],
@@ -535,7 +542,8 @@ def open_api_definition():
                                        'items': {
                                            'type': 'integer'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'integer 32 array parameter',
@@ -546,7 +554,8 @@ def open_api_definition():
                                            'type': 'integer',
                                            'format': 'int32'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'integer 64 array parameter',
@@ -557,7 +566,8 @@ def open_api_definition():
                                            'type': 'integer',
                                            'format': 'int64'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'number array parameter',
@@ -567,7 +577,8 @@ def open_api_definition():
                                        'items': {
                                            'type': 'number'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'number float array parameter',
@@ -578,7 +589,8 @@ def open_api_definition():
                                            'type': 'number',
                                            'format': 'float'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'number double array parameter',
@@ -589,7 +601,8 @@ def open_api_definition():
                                            'type': 'number',
                                            'format': 'double'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'string array parameter',
@@ -599,7 +612,8 @@ def open_api_definition():
                                        'items': {
                                            'type': 'string'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'string byte array parameter',
@@ -610,7 +624,8 @@ def open_api_definition():
                                            'type': 'string',
                                            'format': 'byte'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'string binary array parameter',
@@ -621,7 +636,8 @@ def open_api_definition():
                                            'type': 'string',
                                            'format': 'binary'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'boolean array parameter',
@@ -631,7 +647,8 @@ def open_api_definition():
                                        'items': {
                                            'type': 'boolean'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'date array parameter',
@@ -642,7 +659,8 @@ def open_api_definition():
                                            'type': 'string',
                                            'format': 'date'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'date time array parameter',
@@ -653,7 +671,8 @@ def open_api_definition():
                                            'type': 'string',
                                            'format': 'date-time'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    },
                                    {
                                        'description': 'password array parameter',
@@ -664,7 +683,8 @@ def open_api_definition():
                                            'type': 'string',
                                            'format': 'password'
                                        },
-                                       'type': 'array'
+                                       'type': 'array',
+                                       'collectionFormat': 'multi',
                                    }
                                ],
                                'responses': {

@@ -26,6 +26,7 @@ List all changes in various categories:
 - Microsoft Excel only allows 3 lines of UDF parameter description. Avoid one line per restricted values.
 - UDF Parameter description now contains default value.
 - Handle more parameter checks (maximum, exclusiveMaximum, minimum, exclusiveMinimum, maxLength, minLength, maxItems, minItems, uniqueItems, multipleOf)
+- collectionFormat was ignored and considered as multi. It is now properly handled.
 
 ## 0.66.0 (2018-03-30) ##
 

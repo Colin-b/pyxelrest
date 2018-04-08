@@ -501,6 +501,7 @@ class UDFParameter:
         self.min_items = open_api_parameter.get('minItems')  # Apply to array
         self.unique_items = open_api_parameter.get('uniqueItems')  # Apply to array
         self.multiple_of = open_api_parameter.get('multipleOf')  # Apply to integer and number
+        self.collection_format = open_api_parameter.get('collectionFormat')  # Apply to arrays
 
         open_api_array_parameter = self._get_open_api_array_parameter(open_api_parameter)
         if open_api_array_parameter:
@@ -521,7 +522,9 @@ class UDFParameter:
             open_api_array_parameter.update(open_api_parameter['items'])
             return open_api_array_parameter
         elif self.schema.get('type') == 'array':
-            return dict(open_api_parameter)
+            open_api_array_parameter = dict(open_api_parameter)
+            self.collection_format = self.schema.get('collectionFormat')
+            return open_api_array_parameter
 
     def validate_path(self, value):
         if value is None or isinstance(value, list) and all(x is None for x in value):
@@ -635,7 +638,20 @@ class UDFParameter:
                 self.array_parameter._convert_to_type(value)
             ]
         self._check_array(list_value)
-        return list_value
+        return self._apply_collection_format(list_value)
+
+    def _apply_collection_format(self, list_value):
+        if not self.collection_format or 'csv' == self.collection_format:
+            return ','.join([str(value) for value in list_value])
+        if 'multi' == self.collection_format:
+            return list_value  # requests module will send one parameter per item in list
+        if 'ssv' == self.collection_format:
+            return ' '.join([str(value) for value in list_value])
+        if 'tsv' == self.collection_format:
+            return '\t'.join([str(value) for value in list_value])
+        if 'pipes' == self.collection_format:
+            return '|'.join([str(value) for value in list_value])
+        raise Exception('Collection format {0} is invalid.'.format(self.collection_format))
 
     def _check_array(self, value):
         if self.unique_items:
