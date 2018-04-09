@@ -22,6 +22,12 @@ from pyxelrest import fileadapter
 logger = logging.getLogger(__name__)
 
 
+def to_valid_regex(user_friendly_regex):
+    if '*' in user_friendly_regex and '.*' not in user_friendly_regex:
+        return '^{0}$'.format(user_friendly_regex.replace('*', '.*'))
+    return '^{0}$'.format(user_friendly_regex)
+
+
 def to_valid_python_vba(str_value):
     return re.sub('[^a-zA-Z_]+[^a-zA-Z_0-9]*', '', str_value)
 
@@ -155,7 +161,7 @@ class ServiceConfigSection(ConfigSection):
         if self.excluded_operation_ids:
             for excluded_operation_id in self.excluded_operation_ids:
                 try:
-                    if re.match(excluded_operation_id, method_operation_id):
+                    if re.match(to_valid_regex(excluded_operation_id), method_operation_id):
                         return False
                 except:  # Handle non regex values
                     pass
@@ -163,7 +169,7 @@ class ServiceConfigSection(ConfigSection):
         if self.selected_operation_ids:
             for selected_operation_id in self.selected_operation_ids:
                 try:
-                    if re.match(selected_operation_id, method_operation_id):
+                    if re.match(to_valid_regex(selected_operation_id), method_operation_id):
                         return True
                 except:  # Handle non regex values
                     pass
