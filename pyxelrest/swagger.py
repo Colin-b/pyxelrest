@@ -344,6 +344,7 @@ class UDFMethod:
         self.requests_method = http_method
         self.open_api_method = open_api_method
         self.auto_expand_result = service.config.auto_expand_result(udf_return_type)
+        self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []

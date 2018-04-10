@@ -51,37 +51,61 @@ open_api_methods = None  # Will be set after load
 {% endif %}
 {% endmacro %}
 
+{% macro return_udf_response(open_api_method) %}
+    def get_result():
+        response = None
+        try:
+            response = session.get({{ open_api_method.service.config.max_retries }}).request('{{ open_api_method.requests_method }}', '{{ open_api_method.uri }}'.format(
+                {%- for path_parameter in open_api_method.path_parameters %}{{ path_parameter.server_param_name }}={{ path_parameter.name }}{% if not loop.last %}, {% endif %}{% endfor -%}
+            ){% if open_api_method.contains_body_parameters %}, json=request_content.payload{% endif %}{% if open_api_method.contains_query_parameters %}, params=request_content.parameters{% endif %}{% if open_api_method.contains_file_parameters %}, files=request_content.files{% endif %}{% if open_api_method.requires_authentication() %}, auth={{ authentication.get_auth(open_api_method.service.config.name, open_api_method.security()) }}{% endif %}, verify=False, headers=request_content.header, proxies={{ open_api_method.service.config.proxies }}, timeout=({{ open_api_method.service.config.connect_timeout }}, {{ open_api_method.service.config.read_timeout }}))
+            response.raise_for_status()
+            logger.info("[status=Valid] response received for [function={{ open_api_method.udf_name }}] [url={0}].".format(response.request.url))
+            if 202 == response.status_code:
+                return [['Status URL'], [response.headers['location']]]
+            if response.headers['content-type'] == 'application/json':
+                all_responses = {{ open_api_method.responses }}
+                return json_as_list(response, all_responses, all_definitions.get('{{ open_api_method.service.config.name }}'), {{ open_api_method.service.config.rely_on_definitions }})
+            elif response.headers['content-type'] == 'application/msgpackpandas':
+                return msgpackpandas_as_list(response.content)
+            else:
+                return response.text[:255]
+        except requests.exceptions.ConnectionError:
+            logger.exception("Connection [status=error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
+            return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", open_api_method) }}
+        except Exception as error:
+            # Check "is not None" because response.ok is overridden according to HTTP status code.
+            if response is not None:
+                logger.exception("[status=Error] occurred while handling [function={{ open_api_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
+            else:
+                logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
+            return {{ convert_to_return_type('describe_error(response, error)', open_api_method) }}
+        finally:
+            # Check "is not None" because response.ok is overridden according to HTTP status code.
+            if response is not None:
+                response.close()
+{% endmacro %}
+
 {% macro handle_udf_response(open_api_method) %}
-    response = None
-    try:
-        response = session.get({{ open_api_method.service.config.max_retries }}).request('{{ open_api_method.requests_method }}', '{{ open_api_method.uri }}'.format(
-            {%- for path_parameter in open_api_method.path_parameters %}{{ path_parameter.server_param_name }}={{ path_parameter.name }}{% if not loop.last %}, {% endif %}{% endfor -%}
-        ){% if open_api_method.contains_body_parameters %}, json=request_content.payload{% endif %}{% if open_api_method.contains_query_parameters %}, params=request_content.parameters{% endif %}{% if open_api_method.contains_file_parameters %}, files=request_content.files{% endif %}{% if open_api_method.requires_authentication() %}, auth={{ authentication.get_auth(open_api_method.service.config.name, open_api_method.security()) }}{% endif %}, verify=False, headers=request_content.header, proxies={{ open_api_method.service.config.proxies }}, timeout=({{ open_api_method.service.config.connect_timeout }}, {{ open_api_method.service.config.read_timeout }}))
-        response.raise_for_status()
-        logger.info("[status=Valid] response received for [function={{ open_api_method.udf_name }}] [url={0}].".format(response.request.url))
-        if 202 == response.status_code:
-            return [['Status URL'], [response.headers['location']]]
-        if response.headers['content-type'] == 'application/json':
-            all_responses = {{ open_api_method.responses }}
-            return json_as_list(response, all_responses, all_definitions.get('{{ open_api_method.service.config.name }}'), {{ open_api_method.service.config.rely_on_definitions }})
-        elif response.headers['content-type'] == 'application/msgpackpandas':
-            return msgpackpandas_as_list(response.content)
-        else:
-            return response.text[:255]
-    except requests.exceptions.ConnectionError:
-        logger.exception("Connection [status=error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
-        return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", open_api_method) }}
-    except Exception as error:
-        # Check "is not None" because response.ok is overridden according to HTTP status code.
-        if response is not None:
-            logger.exception("[status=Error] occurred while handling [function={{ open_api_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
-        else:
+    {{- return_udf_response(open_api_method) }}
+    return get_result()
+
+{% endmacro %}
+
+{% macro handle_async_udf_response(open_api_method) %}
+    {{- return_udf_response(open_api_method) }}
+    def get_and_send_result(range, nb_rows, nb_columns):
+        try:
+            add_idle_task(DelayWrite(range, {'expand': 'table'}, get_result(), (nb_rows, nb_columns)))
+        except Exception as error:
             logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
-        return {{ convert_to_return_type('describe_error(response, error)', open_api_method) }}
-    finally:
-        # Check "is not None" because response.ok is overridden according to HTTP status code.
-        if response is not None:
-            response.close()
+    try:
+        range = xw.Range(impl=xw.xlplatform.Range(xl=excel_caller))
+        Thread(target=get_and_send_result, args=(range, excel_caller.Rows.Count, excel_caller.Columns.Count)).start()
+        return ['Processing request...']
+    except Exception as error:
+        logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
+        return {{ convert_to_return_type('describe_error(None, error)', open_api_method) }}
+
 {% endmacro %}
 
 {# Macro generating the UDF related to provided method #}
@@ -89,6 +113,8 @@ open_api_methods = None  # Will be set after load
 {% if 'get' == open_api_method.requests_method %}@caching
 {% endif %}
 @xw.func(category='{{ open_api_method.service.config.name }}', call_in_wizard=False{% if open_api_method.help_url %}, help_file='{{ open_api_method.help_url }}'{% endif %})
+{% if open_api_method.is_asynchronous %}@xw.arg('excel_caller', is_excel_caller=True)
+{% endif %}
 {% for parameter in open_api_method.path_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
@@ -102,6 +128,7 @@ open_api_methods = None  # Will be set after load
 @xw.ret(expand='table')
 {% endif %}
 def {{ open_api_method.udf_name }}(
+    {%- if open_api_method.is_asynchronous %}excel_caller{% if open_api_method.has_path_parameters() or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}, {% endif %}{% endif %}
     {%- for parameter in open_api_method.path_parameters %}{{ parameter.name }}{% if not loop.last or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}, {% endif %}{% endfor %}
     {%- for parameter in open_api_method.required_parameters %}{{ parameter.name }}{% if not loop.last or open_api_method.has_optional_parameters() %}, {% endif %}{% endfor %}
     {%- for parameter in open_api_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
@@ -127,7 +154,11 @@ def {{ open_api_method.udf_name }}(
         logger.exception("Unable to validate parameters.")
         return {{ convert_to_return_type('str(e)', open_api_method) }}
 {% endif %}
+{% if open_api_method.is_asynchronous %}
+    {{- handle_async_udf_response(open_api_method) -}}
+{% else %}
     {{- handle_udf_response(open_api_method) -}}
+{% endif %}
 
 {% endmacro %}
 all_definitions = {}
