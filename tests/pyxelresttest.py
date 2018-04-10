@@ -144,8 +144,8 @@ class PyxelRestTest(unittest.TestCase):
     def test_service_without_sync_does_not_have_sync(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(AttributeError) as cm:
-            pyxelrestgenerator.sync_without_parameter_delete_without_parameter()
-        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_without_parameter_delete_without_parameter'")
+            pyxelrestgenerator.vba_without_parameter_delete_without_parameter()
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'vba_without_parameter_delete_without_parameter'")
 
     def test_get_header_parameter(self):
         from pyxelrest import pyxelrestgenerator
@@ -155,15 +155,15 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_get_header_parameter_sync(self):
         from pyxelrest import pyxelrestgenerator
-        headers = pyxelrestgenerator.sync_header_parameter_get_header('sent header')
+        headers = pyxelrestgenerator.vba_header_parameter_get_header('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
-    def test_service_only_sync_does_not_have_sync_prefix(self):
+    def test_service_only_sync_does_not_have_vba_prefix(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(AttributeError) as cm:
-            pyxelrestgenerator.sync_header_advanced_configuration_get_header('sent header')
-        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_header_advanced_configuration_get_header'")
+            pyxelrestgenerator.vba_header_advanced_configuration_get_header('sent header')
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'vba_header_advanced_configuration_get_header'")
 
     def test_get_header_advanced_configuration(self):
         from pyxelrest import pyxelrestgenerator
@@ -526,7 +526,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['X-Custom-Header1', 'X-Custom-Header2'],
                 ['custom1', 'custom2']
             ],
-            pyxelrestgenerator.sync_pyxelrest_get_url(
+            pyxelrestgenerator.vba_pyxelrest_get_url(
                 'http://localhost:8958/async/status',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
@@ -558,7 +558,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['X-Custom-Header1', 'X-Custom-Header2'],
                 ['custom1', 'custom2']
             ],
-            pyxelrestgenerator.sync_pyxelrest_delete_url(
+            pyxelrestgenerator.vba_pyxelrest_delete_url(
                 'http://localhost:8958/unlisted',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
@@ -611,7 +611,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['value1', 1, 'value3'],
                 ['other1', 2, 'other3'],
             ],
-            pyxelrestgenerator.sync_pyxelrest_post_url(
+            pyxelrestgenerator.vba_pyxelrest_post_url(
                 'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
@@ -696,7 +696,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['key1', 'key2', 'key3'],
                 ['value1', 1, 'value3'],
             ],
-            pyxelrestgenerator.sync_pyxelrest_put_url(
+            pyxelrestgenerator.vba_pyxelrest_put_url(
                 'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
