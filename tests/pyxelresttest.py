@@ -455,14 +455,14 @@ class PyxelRestTest(unittest.TestCase):
     def test_msgpackpandas_content_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'application/msgpackpandas' if support_pandas() else '*/*',
+            ['application/msgpackpandas'] if support_pandas() else ['*/*'],
             pyxelrestgenerator.content_type_get_msgpackpandas()
         )
 
     def test_json_content_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'application/json',
+            ['application/json'],
             pyxelrestgenerator.content_type_get_json()
         )
 

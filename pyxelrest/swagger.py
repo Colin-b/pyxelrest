@@ -4,7 +4,13 @@ import logging
 import os
 import re
 import requests
+import requests.exceptions
+import sys
 import yaml
+import threading
+import xlwings
+import xlwings.conversion
+import xlwings.server
 
 try:
     # Python 3
@@ -13,10 +19,42 @@ except ImportError:
     # Python 2
     from urlparse import urlsplit
 
-from pyxelrest import vba, SERVICES_CONFIGURATION_FILE_PATH
+
+from pyxelrest import (
+    authentication,
+    custom_logging,
+    session,
+    fileadapter,
+    definition_deserializer,
+    vba,
+    SERVICES_CONFIGURATION_FILE_PATH
+)
+from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.pyxelresterrors import *
-from pyxelrest import authentication
-from pyxelrest import fileadapter
+from pyxelrest.definition_deserializer import Response
+
+
+def support_ujson():
+    try:
+        import ujson
+        return True
+    except:
+        return False
+
+
+def support_pandas():
+    try:
+        import pandas
+        return True
+    except:
+        return False
+
+
+if support_ujson():
+    import ujson
+
+if support_pandas():
+    import pandas
 
 
 logger = logging.getLogger(__name__)
@@ -197,25 +235,249 @@ class PyxelRestConfigSection(ConfigSection):
         :param service_config: Dictionary containing service details.
         """
         ConfigSection.__init__(self, service_name, service_config)
+        self.rely_on_definitions = False
 
     def should_provide_method(self, http_verb):
         return http_verb in self.requested_methods
 
 
+class PyxelRestService:
+    def __init__(self, service_name, service_config, flattenize):
+        """
+        Load service information from configuration.
+        :param service_name: Will be used as prefix to use in front of services UDFs
+        to avoid duplicate between services.
+        :param service_config: Dictionary containing service details.
+        :param flattenize: Flatten results so that it can be consumed by Microsoft Excel.
+        """
+        self.flattenize = flattenize
+        self.methods = {}
+        self.uri = ''
+        self.config = PyxelRestConfigSection(service_name, service_config)
+        self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
+        self.open_api_definitions = {}
+
+    def create_method(self, http_method, udf_return_type):
+        udf = PyxelRestUDFMethod(self, http_method, udf_return_type)
+        self.methods[udf.udf_name] = udf
+        return udf
+
+
+class UDFMethod:
+    def __init__(self, service, http_method, path, udf_return_type):
+        self.service = service
+        self.requests_method = http_method
+        self.uri = '{0}{1}'.format(service.uri, path)
+        self.help_url = ''
+        self.auto_expand_result = service.config.auto_expand_result(udf_return_type)
+        self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
+        self.path_parameters = []
+        self.required_parameters = []
+        self.optional_parameters = []
+        self.contains_body_parameters = False
+        self.contains_file_parameters = False
+        self.contains_query_parameters = False
+        udf_parameters = self._create_udf_parameters()
+        self.parameters = {}
+        for udf_parameter in udf_parameters:
+            self.parameters[udf_parameter.name] = udf_parameter
+            if udf_parameter.location == 'path':
+                self.path_parameters.append(udf_parameter)
+            # Required but not in path
+            elif udf_parameter.required:
+                self.update_information_on_parameter_type(udf_parameter)
+                self.required_parameters.append(udf_parameter)
+            else:
+                self.update_information_on_parameter_type(udf_parameter)
+                self.optional_parameters.append(udf_parameter)
+
+    def _create_udf_parameters(self):
+        return []
+
+    def update_information_on_parameter_type(self, parameter):
+        if parameter.location == 'body':
+            self.contains_body_parameters = True
+        elif parameter.location == 'formData':
+            if parameter.type == 'file':
+                self.contains_file_parameters = True
+            else:
+                self.contains_body_parameters = True
+        elif parameter.location == 'query':
+            self.contains_query_parameters = True
+
+    def has_path_parameters(self):
+        return len(self.path_parameters) > 0
+
+    def has_required_parameters(self):
+        return len(self.required_parameters) > 0
+
+    def has_optional_parameters(self):
+        return len(self.optional_parameters) > 0
+
+    def initial_header(self):
+        """
+        Initial header content
+        For more details refer to https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+        """
+        return self.service.config.custom_headers
+
+    def requires_authentication(self):
+        return self.service.config.auth
+
+
+class UDFParameter:
+    def __init__(self, name, server_param_name, location, required, field_type):
+        self.name = name
+        self.server_param_name = server_param_name
+        self.location = location
+        self.required = required
+        self.type = field_type
+
+    def validate(self, request_content):
+        pass
+
+    def validate_required(self, value, request_content):
+        if value is None or isinstance(value, list) and all(x is None for x in value):
+            raise self._not_provided()
+        self.validate_optional(value, request_content)
+
+    def validate_optional(self, value, request_content):
+        pass
+
+    def _not_provided(self):
+        return Exception('{0} is required.'.format(self.name))
+
+
+class PyxelRestUDFMethod(UDFMethod):
+    class ParseBodyAsParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'parse_body_as',
+                'parse_body_as',
+                '',
+                False,
+                'string'
+            )
+            self.choices = ['dict', 'dict_list']
+            self.description = 'How the body should be sent (dict, dict_list).'
+
+        def _convert_to_str(self, value):
+            if isinstance(value, datetime.date):
+                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+            if isinstance(value, int) or isinstance(value, float):
+                value = str(value)
+            if value and value not in self.choices:
+                raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_str(value)
+            self.received_value = value  # Save it to be used by body parameter
+
+    class UrlParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'url',
+                'url',
+                'path',
+                True,
+                'string'
+            )
+            self.description = 'URL to query.'
+
+        def _convert_to_str(self, value):
+            if isinstance(value, datetime.date):
+                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+            if isinstance(value, int) or isinstance(value, float):
+                value = str(value)
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_str(value)
+            request_content.add_value(self, value)
+
+    class BodyParameter(UDFParameter):
+        def __init__(self, parse_body_as_parameter):
+            UDFParameter.__init__(
+                self,
+                'body',
+                'body',
+                'body',
+                True,
+                'object'
+            )
+            self.description = 'Content of the body.'
+            self.parse_body_as_parameter = parse_body_as_parameter
+
+        def validate_optional(self, value, request_content):
+            self.received_value = value  # Save value as is to serialize it properly afterwards
+
+        def validate(self, request_content):
+            request_content.payload = list_as_json(self.received_value, self.parse_body_as_parameter.received_value)
+
+    class ExtraHeadersParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'extra_headers',
+                'extra_headers',
+                'headers',
+                False,
+                'object'
+            )
+            self.description = 'Extra headers to send in the query.'
+
+        def validate_optional(self, value, request_content):
+            self.received_value = value  # TODO Validate dict
+
+        def validate(self, request_content):
+            request_content.header.update(self.received_value)
+
+    def __init__(self, service, http_method, udf_return_type):
+        UDFMethod.__init__(self, service, http_method, '{url}', udf_return_type)
+        self.udf_name = '{0}_{1}_url'.format(service.config.udf_prefix(udf_return_type), http_method)
+        self.responses = {}
+
+    def _create_udf_parameters(self):
+        parameters = [
+            self.UrlParameter(),
+            self.ExtraHeadersParameter(),
+        ]
+
+        if self.requests_method in ['post', 'put']:
+            parse_body_as = self.ParseBodyAsParameter()
+            parameters.append(self.BodyParameter(parse_body_as))
+            parameters.append(parse_body_as)
+
+        return parameters
+
+    def summary(self):
+        return 'Send a HTTP {0} request to specified URL.'.format(self.requests_method)
+
+    def return_a_list(self):
+        return True
+
+
 class OpenAPI:
-    def __init__(self, service_name, service_config):
+    def __init__(self, service_name, service_config, flattenize):
         """
         Load service information from configuration and OpenAPI definition.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param service_config: Dictionary containing service details.
+        :param flattenize: Flatten results so that it can be consumed by Microsoft Excel.
         """
+        self.flattenize = flattenize
         self.methods = {}
         self.config = ServiceConfigSection(service_name, service_config)
         self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
         self.open_api_definition = self._retrieve_open_api_definition()
         self.validate_open_api_version()
-        self.open_api_definitions = self.open_api_definition.get('definitions')
+        self.open_api_definitions = self.open_api_definition.get('definitions') or {}
         # Remove trailing slashes (as paths must starts with a slash)
         self.uri = self._extract_uri().rstrip('/')
         authentication.add_service_security(self.config.name, self.open_api_definition, service_config)
@@ -237,7 +499,7 @@ class OpenAPI:
         return scheme + '://' + host + base_path if base_path else scheme + '://' + host
 
     def create_method(self, http_method, open_api_method, method_path, udf_return_type):
-        udf = UDFMethod(self, http_method, open_api_method, method_path, udf_return_type)
+        udf = OpenAPIUDFMethod(self, http_method, open_api_method, method_path, udf_return_type)
         self.methods[udf.udf_name] = udf
         return udf
 
@@ -337,43 +599,24 @@ class OpenAPI:
         return '[{0}] service. {1}'.format(self.config.name, self.uri)
 
 
-class UDFMethod:
+class OpenAPIUDFMethod(UDFMethod):
     def __init__(self, service, http_method, open_api_method, path, udf_return_type):
-        self.uri = '{0}{1}'.format(service.uri, path)
-        self.service = service
-        self.requests_method = http_method
         self.open_api_method = open_api_method
-        self.auto_expand_result = service.config.auto_expand_result(udf_return_type)
-        self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
-        self.path_parameters = []
-        self.required_parameters = []
-        self.optional_parameters = []
-        self.contains_body_parameters = False
-        self.contains_file_parameters = False
-        self.contains_query_parameters = False
-        udf_parameters = []
-        for open_api_parameter in open_api_method.get('parameters', []):
-            udf_parameters.extend(self._to_parameters(open_api_parameter))
-        self._avoid_duplicated_names(udf_parameters)
-        self.parameters = {}
-        for udf_parameter in udf_parameters:
-            self.parameters[udf_parameter.name] = udf_parameter
-            if udf_parameter.location == 'path':
-                self.path_parameters.append(udf_parameter)
-            # Required but not in path
-            elif udf_parameter.required:
-                self.update_information_on_parameter_type(udf_parameter)
-                self.required_parameters.append(udf_parameter)
-            else:
-                self.update_information_on_parameter_type(udf_parameter)
-                self.optional_parameters.append(udf_parameter)
+        UDFMethod.__init__(self, service, http_method, path, udf_return_type)
         # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
-        self.help_url = UDFMethod.extract_url(open_api_method.get('description') or '')
+        self.help_url = self.extract_url(open_api_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
         self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type), self.open_api_method['operationId'])
         self.responses = open_api_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
+
+    def _create_udf_parameters(self):
+        udf_parameters = []
+        for open_api_parameter in self.open_api_method.get('parameters', []):
+            udf_parameters.extend(self._to_parameters(open_api_parameter))
+        self._avoid_duplicated_names(udf_parameters)
+        return udf_parameters
 
     def _compute_operation_id(self, udf_return_type, path):
         """
@@ -385,17 +628,6 @@ class UDFMethod:
         operation_id = self.open_api_method.get('operationId') or \
                        '{0}{1}'.format(self.requests_method, path.replace('/', '_'))
         self.open_api_method['operationId'] = self.service.get_unique_operation_id(udf_return_type, operation_id)
-
-    def update_information_on_parameter_type(self, parameter):
-        if parameter.location == 'body':
-            self.contains_body_parameters = True
-        elif parameter.location == 'formData':
-            if parameter.type == 'file':
-                self.contains_file_parameters = True
-            else:
-                self.contains_body_parameters = True
-        elif parameter.location == 'query':
-            self.contains_query_parameters = True
 
     def return_a_list(self):
         return ('application/json' in self.open_api_method['produces']) or \
@@ -437,15 +669,6 @@ class UDFMethod:
 
         return header
 
-    def has_path_parameters(self):
-        return len(self.path_parameters) > 0
-
-    def has_required_parameters(self):
-        return len(self.required_parameters) > 0
-
-    def has_optional_parameters(self):
-        return len(self.optional_parameters) > 0
-
     @staticmethod
     def extract_url(text):
         """
@@ -459,7 +682,7 @@ class UDFMethod:
 
     def _to_parameters(self, open_api_parameter):
         if 'type' in open_api_parameter:  # Type usually means that this is not a complex type
-            return [UDFParameter(open_api_parameter, {})]
+            return [APIUDFParameter(open_api_parameter, {})]
 
         schema = open_api_parameter['schema']
         ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
@@ -472,7 +695,7 @@ class UDFMethod:
                 inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
                 inner_parameter['in'] = open_api_parameter['in']
                 inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
-                parameters.append(UDFParameter(inner_parameter, schema))
+                parameters.append(APIUDFParameter(inner_parameter, schema))
         return parameters
 
     def _avoid_duplicated_names(self, udf_parameters):
@@ -490,17 +713,20 @@ class UDFMethod:
             self._avoid_duplicated_names(udf_parameters)
 
 
-class UDFParameter:
+class APIUDFParameter(UDFParameter):
     def __init__(self, open_api_parameter, schema):
-        self.name = open_api_parameter['name']
-        self.server_param_name = open_api_parameter['server_param_name']
+        UDFParameter.__init__(
+            self,
+            open_api_parameter['name'],
+            open_api_parameter['server_param_name'],
+            open_api_parameter['in'],  # path, body, formData, query, header
+            open_api_parameter.get('required'),
+            open_api_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
+        )
         self.schema = schema
-        self.location = open_api_parameter['in']  # path, body, formData, query, header
-        self.required = open_api_parameter.get('required')
-        self.type = open_api_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
-        self.format = open_api_parameter.get('format')  # date (string type), date-time (string type)
         self.choices = open_api_parameter.get('enum')  # string type
         self.default_value = open_api_parameter.get('default')
+        self.format = open_api_parameter.get('format')  # date (string type), date-time (string type)
         self.maximum = open_api_parameter.get('maximum')  # Apply to integer and number
         self.exclusive_maximum = open_api_parameter.get('exclusiveMaximum')  # Apply to integer and number
         self.minimum = open_api_parameter.get('minimum')  # Apply to integer and number
@@ -519,12 +745,17 @@ class UDFParameter:
                 self._convert_to_type = self._convert_to_dict_list
                 self.description = self._get_dict_list_documentation(open_api_parameter)
             else:
-                self.array_parameter = UDFParameter(open_api_array_parameter, {})
+                self.array_parameter = APIUDFParameter(open_api_array_parameter, {})
                 self._convert_to_type = self._convert_to_array
                 self.description = self._get_list_documentation(open_api_parameter)
         else:
             self._convert_to_type = self._get_convert_method()
             self.description = self._get_documentation(open_api_parameter)
+
+    def validate_optional(self, value, request_content):
+        if value is not None:
+            value = self._convert_to_type(value)
+        request_content.add_value(self, value)
 
     def _get_open_api_array_parameter(self, open_api_parameter):
         if self.type == 'array':
@@ -535,23 +766,6 @@ class UDFParameter:
             open_api_array_parameter = dict(open_api_parameter)
             self.collection_format = self.schema.get('collectionFormat')
             return open_api_array_parameter
-
-    def validate_path(self, value):
-        if value is None or isinstance(value, list) and all(x is None for x in value):
-            raise self._not_provided()
-
-    def validate_required(self, value, request_content):
-        if value is None or isinstance(value, list) and all(x is None for x in value):
-            raise self._not_provided()
-        self.validate_optional(value, request_content)
-
-    def validate_optional(self, value, request_content):
-        if value is not None:
-            value = self._convert_to_type(value)
-        request_content.add_value(self, value)
-
-    def _not_provided(self):
-        return Exception('{0} is required.'.format(self.name))
 
     def _convert_to_int(self, value):
         if not isinstance(value, int):
@@ -602,7 +816,7 @@ class UDFParameter:
         if isinstance(value, int) or isinstance(value, float):
             value = str(value)
         if self.choices and value not in self.choices:
-            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, self.choices.join(' or ')))
+            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
         if self.max_length is not None:
             if len(value) > self.max_length:
                 raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(self.name, value, self.max_length))
@@ -750,13 +964,19 @@ class UDFParameter:
 
 
 class RequestContent:
-    def __init__(self, open_api_method):
-        self.header = open_api_method.initial_header()
+    def __init__(self, udf_method):
+        self.udf_method = udf_method
+        self.header = udf_method.initial_header()
         self.payload = {}
         self.files = {}
         self.parameters = {}
+        self.path_values = {}
         # Contains parameters that were not provided but may still need to be sent with None value
         self._none_parameters = []
+
+    def validate(self):
+        for udf_parameter in self.udf_method.parameters.values():
+            udf_parameter.validate(self)
 
     def add_value(self, parameter, value):
         if parameter.location == 'query':
@@ -767,10 +987,15 @@ class RequestContent:
             self._add_form_parameter(parameter, value)
         elif parameter.location == 'header':
             self._add_header_parameter(parameter, value)
+        elif parameter.location == 'path':
+            self._add_path_parameter(parameter, value)
 
     def _add_query_parameter(self, parameter, value):
         if value is not None:
             self.parameters[parameter.server_param_name] = value
+
+    def _add_path_parameter(self, parameter, value):
+        self.path_values[parameter.server_param_name] = value
 
     def _add_body_parameter(self, parameter, value):
         if parameter.schema.get('type') == 'array':
@@ -835,19 +1060,10 @@ class RequestContent:
             self.header[parameter.server_param_name] = value
 
 
-def support_pandas():
-    try:
-        import pandas
-        return True
-    except:
-        return False
-
-
-def load_services():
+def load_services(flattenize=True):
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
-    :return: List of OpenAPI instances, size is the same one as the number of sections within configuration file
-    and the loaded pyxelrest configuration if provided
+    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within configuration file
     """
     if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
         raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
@@ -859,23 +1075,23 @@ def load_services():
 
     logging.debug('Loading services from "{0}"...'.format(SERVICES_CONFIGURATION_FILE_PATH))
     loaded_services = []
-    pyxelrest_config = None
     for service_name, service_config in config.items():
         if 'pyxelrest' == service_name:
-            pyxelrest_config = PyxelRestConfigSection(service_name, service_config)
+            pyxelrest_service = PyxelRestService(service_name, service_config, flattenize)
+            loaded_services.append(pyxelrest_service)
         else:
-            service = load_service(service_name, service_config)
+            service = load_service(service_name, service_config, flattenize)
             if service:
                 loaded_services.append(service)
 
     check_for_duplicates(loaded_services)
-    return loaded_services, pyxelrest_config
+    return loaded_services
 
 
-def load_service(service_name, service_config):
+def load_service(service_name, service_config, flattenize):
     logger.debug('Loading "{0}" service...'.format(service_name))
     try:
-        service = OpenAPI(service_name, service_config)
+        service = OpenAPI(service_name, service_config, flattenize)
         logger.info('"{0}" service will be available.'.format(service_name))
         logger.debug(str(service))
         return service
@@ -893,3 +1109,144 @@ def check_for_duplicates(loaded_services):
         if len(service_names) > 1:
             logger.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
                            'only the last declared one will be available.'.format(service_names, udf_prefix))
+
+
+def get_result(udf_method, request_content):
+    response = None
+    try:
+        response = session.get(udf_method.service.config.max_retries).request(
+            udf_method.requests_method,
+            udf_method.uri.format(**request_content.path_values),
+            json=request_content.payload if udf_method.contains_body_parameters else None,
+            params=request_content.parameters if udf_method.contains_query_parameters else None,
+            files=request_content.files if udf_method.contains_file_parameters else None,
+            auth=authentication.get_auth(udf_method.service.config.name, udf_method.security()) if udf_method.requires_authentication() else None,
+            verify=False,
+            headers=request_content.header,
+            proxies=udf_method.service.config.proxies,
+            timeout=(udf_method.service.config.connect_timeout, udf_method.service.config.read_timeout)
+        )
+        response.raise_for_status()
+        logger.info('[status=Valid] response received for [function={1}] [url={0}].'.format(response.request.url, udf_method.udf_name))
+        if 202 == response.status_code:
+            return [['Status URL'], [response.headers['location']]]
+        if response.headers['content-type'] == 'application/json':
+            return json_as_list(response, udf_method)
+        elif response.headers['content-type'] == 'application/msgpackpandas':
+            return msgpackpandas_as_list(response.content)
+        else:
+            return convert_to_return_type(response.text[:255], udf_method)
+    except requests.exceptions.ConnectionError:
+        logger.exception('Connection [status=error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+        return convert_to_return_type('Cannot connect to service. Please retry once connection is re-established.', udf_method)
+    except Exception as error:
+        # Check "is not None" because response.ok is overridden according to HTTP status code.
+        if response is not None:
+            logger.exception('[status=Error] occurred while handling [function={0}] [url={1}] response: [response={2}].'.format(udf_method.udf_name, response.request.url, response.text[:64]))
+        else:
+            logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+        return convert_to_return_type(describe_error(response, error), udf_method)
+    finally:
+        # Check "is not None" because response.ok is overridden according to HTTP status code.
+        if response is not None:
+            response.close()
+
+
+class DelayWrite(object):
+    def __init__(self, rng, options, value, skip):
+        self.range = rng
+        self.options = options
+        self.value = value
+        self.skip = skip
+
+    def __call__(self, *args, **kwargs):
+        xlwings.conversion.write(
+            self.value,
+            self.range,
+            xlwings.conversion.Options(self.options)
+            .override(_skip_tl_cells=self.skip)
+        )
+
+
+def get_result_async(udf_method, request_content, excel_caller):
+    def get_and_send_result(excel_range, nb_rows, nb_columns):
+        try:
+            result = get_result(udf_method, request_content)
+            xlwings.server.add_idle_task(DelayWrite(excel_range, {'expand': 'table'}, result, (nb_rows, nb_columns)))
+        except:
+            logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+    try:
+        excel_range = xlwings.Range(impl=xlwings.xlplatform.Range(xl=excel_caller))
+        threading.Thread(
+            target=get_and_send_result,
+            args=(excel_range, excel_caller.Rows.Count, excel_caller.Columns.Count)
+        ).start()
+        return ['Processing request...']
+    except Exception as error:
+        logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+        return convert_to_return_type(describe_error(None, error), udf_method)
+
+
+def convert_to_return_type(str_value, udf_method):
+    return [str_value] if udf_method.return_a_list() else str_value
+
+
+def describe_error(response, error):
+    # Check "is not None" because response.ok is overridden according to HTTP status code.
+    if response is not None:
+        return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
+    return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
+
+
+def json_as_list(response, udf_method):
+    if udf_method.service.config.rely_on_definitions:
+        definition_deserializer.all_definitions = {}
+        if support_ujson():
+            response_text = response.text
+            logger.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
+            json_data = ujson.loads(response_text) if response_text != '' else response_text
+        else:
+            logger.debug('Converting JSON string to corresponding python structure (relying on definitions)...')
+            json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
+        all_definitions = udf_method.service.open_api_definitions
+        return Response(udf_method.responses, response.status_code, all_definitions).rows(json_data)
+
+    logger.debug('Converting JSON string to corresponding python structure...')
+    json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
+    if udf_method.service.flattenize:
+        all_definitions = udf_method.service.open_api_definitions
+        return Flattenizer(udf_method.responses, response.status_code, all_definitions).to_list(json_data)
+    else:
+        return json_data
+
+
+def msgpackpandas_as_list(msgpack_pandas):
+    if support_pandas():
+        logger.debug('Converting message pack pandas to list...')
+        data = pandas.read_msgpack(msgpack_pandas)
+        logger.debug('Converting dictionary to list...')
+        if sys.version_info[0] < 3:
+            header = [header_name.decode() for header_name in data.columns.values.tolist()]
+        else:
+            header = data.columns.tolist()
+        values = data.values.tolist()
+        flatten_data = [header] + values if values else [header]
+        logger.debug('Data converted to list.')
+        return flatten_data
+    else:
+        logger.warning('Pandas module is required to decode response.')
+        return ['Please install pandas module to be able to decode result.']
+
+
+def list_as_json(lists, parse_as):
+    if 'dict' == parse_as:
+        if len(lists) != 2:
+            return ['There should be only two rows. Header and values.']
+        return list_to_dict(lists[0], lists[1])
+
+    if 'dict_list' == parse_as:
+        if len(lists) < 2:
+            return ['There should be at least two rows. Header and first dictionary values.']
+        return list_to_dict_list(lists[0], lists[1:])
+
+    return lists

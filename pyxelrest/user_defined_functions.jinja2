@@ -4,38 +4,13 @@ Source file: {{ self._TemplateReference__context.name }}
 Generation date (UTC): {{ current_utc_time }}
 """
 import xlwings as xw
-import requests
-import requests.exceptions
 import datetime
 import logging
-import sys
-from pyxelrest import custom_logging
 from pyxelrest.caching import caching
-from pyxelrest import session
-{% if support_ujson %}
-import ujson
-{% endif %}
-from collections import OrderedDict
-{% if support_pandas %}
-import pandas
-{% endif %}
-from pyxelrest.fast_deserializer import Flattenizer
-from pyxelrest.definition_deserializer import Response
-from pyxelrest import definition_deserializer
-from pyxelrest import authentication
-from pyxelrest.swagger import RequestContent, list_to_dict, list_to_dict_list
+from pyxelrest.swagger import RequestContent, get_result, get_result_async, convert_to_return_type
 
 logger = logging.getLogger(__name__)
-open_api_methods = None  # Will be set after load
-
-{% macro convert_to_return_type(str_value, open_api_method) %}
-{% if open_api_method.return_a_list() -%}
-[{{ str_value }}]
-{% else -%}
-{{ str_value }}
-{% endif %}
-{% endmacro %}
-
+udf_methods = None  # Will be set after load
 {# Macro generating the converter for the parameter if needed #}
 {% macro param_converter(parameter) %}
 {%- if parameter.type == 'integer' %}
@@ -50,411 +25,79 @@ open_api_methods = None  # Will be set after load
     {%- endif %}
 {% endif %}
 {% endmacro %}
-
-{% macro return_udf_response(open_api_method) %}
-    def get_result():
-        response = None
-        try:
-            response = session.get({{ open_api_method.service.config.max_retries }}).request('{{ open_api_method.requests_method }}', '{{ open_api_method.uri }}'.format(
-                {%- for path_parameter in open_api_method.path_parameters %}{{ path_parameter.server_param_name }}={{ path_parameter.name }}{% if not loop.last %}, {% endif %}{% endfor -%}
-            ){% if open_api_method.contains_body_parameters %}, json=request_content.payload{% endif %}{% if open_api_method.contains_query_parameters %}, params=request_content.parameters{% endif %}{% if open_api_method.contains_file_parameters %}, files=request_content.files{% endif %}{% if open_api_method.requires_authentication() %}, auth={{ authentication.get_auth(open_api_method.service.config.name, open_api_method.security()) }}{% endif %}, verify=False, headers=request_content.header, proxies={{ open_api_method.service.config.proxies }}, timeout=({{ open_api_method.service.config.connect_timeout }}, {{ open_api_method.service.config.read_timeout }}))
-            response.raise_for_status()
-            logger.info("[status=Valid] response received for [function={{ open_api_method.udf_name }}] [url={0}].".format(response.request.url))
-            if 202 == response.status_code:
-                return [['Status URL'], [response.headers['location']]]
-            if response.headers['content-type'] == 'application/json':
-                all_responses = {{ open_api_method.responses }}
-                return json_as_list(response, all_responses, all_definitions.get('{{ open_api_method.service.config.name }}'), {{ open_api_method.service.config.rely_on_definitions }})
-            elif response.headers['content-type'] == 'application/msgpackpandas':
-                return msgpackpandas_as_list(response.content)
-            else:
-                return response.text[:255]
-        except requests.exceptions.ConnectionError:
-            logger.exception("Connection [status=error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
-            return {{ convert_to_return_type("'Cannot connect to service. Please retry once connection is re-established.'", open_api_method) }}
-        except Exception as error:
-            # Check "is not None" because response.ok is overridden according to HTTP status code.
-            if response is not None:
-                logger.exception("[status=Error] occurred while handling [function={{ open_api_method.udf_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
-            else:
-                logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
-            return {{ convert_to_return_type('describe_error(response, error)', open_api_method) }}
-        finally:
-            # Check "is not None" because response.ok is overridden according to HTTP status code.
-            if response is not None:
-                response.close()
-{% endmacro %}
-
-{% macro handle_udf_response(open_api_method) %}
-    {{- return_udf_response(open_api_method) }}
-    return get_result()
-
-{% endmacro %}
-
-{% macro handle_async_udf_response(open_api_method) %}
-    {{- return_udf_response(open_api_method) }}
-    def get_and_send_result(range, nb_rows, nb_columns):
-        try:
-            add_idle_task(DelayWrite(range, {'expand': 'table'}, get_result(), (nb_rows, nb_columns)))
-        except Exception as error:
-            logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
-    try:
-        range = xw.Range(impl=xw.xlplatform.Range(xl=excel_caller))
-        Thread(target=get_and_send_result, args=(range, excel_caller.Rows.Count, excel_caller.Columns.Count)).start()
-        return ['Processing request...']
-    except Exception as error:
-        logger.exception("[status=Error] occurred while calling [function={{ open_api_method.udf_name }}] [url={{ open_api_method.uri }}].")
-        return {{ convert_to_return_type('describe_error(None, error)', open_api_method) }}
-
-{% endmacro %}
-
 {# Macro generating the UDF related to provided method #}
-{% macro add_udf(open_api_method) %}
-{% if 'get' == open_api_method.requests_method %}@caching
+{% macro add_udf(udf_method) %}
+
+
+{% if 'get' == udf_method.requests_method %}@caching
 {% endif %}
-@xw.func(category='{{ open_api_method.service.config.name }}', call_in_wizard=False{% if open_api_method.help_url %}, help_file='{{ open_api_method.help_url }}'{% endif %})
-{% if open_api_method.is_asynchronous %}@xw.arg('excel_caller', is_excel_caller=True)
+@xw.func(category='{{ udf_method.service.config.name }}', call_in_wizard=False{% if udf_method.help_url %}, help_file='{{ udf_method.help_url }}'{% endif %})
+{% if udf_method.is_asynchronous %}@xw.arg('excel_caller', is_excel_caller=True)
 {% endif %}
-{% for parameter in open_api_method.path_parameters %}
+{% for parameter in udf_method.path_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% for parameter in open_api_method.required_parameters %}
+{% for parameter in udf_method.required_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% for parameter in open_api_method.optional_parameters %}
+{% for parameter in udf_method.optional_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% if open_api_method.return_a_list() and open_api_method.auto_expand_result %}
+{% if udf_method.return_a_list() and udf_method.auto_expand_result %}
 @xw.ret(expand='table')
 {% endif %}
-def {{ open_api_method.udf_name }}(
-    {%- if open_api_method.is_asynchronous %}excel_caller{% if open_api_method.has_path_parameters() or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}, {% endif %}{% endif %}
-    {%- for parameter in open_api_method.path_parameters %}{{ parameter.name }}{% if not loop.last or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in open_api_method.required_parameters %}{{ parameter.name }}{% if not loop.last or open_api_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in open_api_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
-{% if open_api_method.summary() %}
-    """{{ open_api_method.summary() }}"""
+def {{ udf_method.udf_name }}(
+    {%- if udf_method.is_asynchronous %}excel_caller{% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endif %}
+    {%- for parameter in udf_method.path_parameters %}{{ parameter.name }}{% if not loop.last or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in udf_method.required_parameters %}{{ parameter.name }}{% if not loop.last or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for parameter in udf_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
+{% if udf_method.summary() %}
+    """{{ udf_method.summary() }}"""
 {% endif %}
-    logger.info("[status=Calling] [function={{ open_api_method.udf_name }}]...")
-    open_api_method = open_api_methods['{{ open_api_method.udf_name }}']
-    request_content = RequestContent(open_api_method)
-{% if open_api_method.has_path_parameters() or open_api_method.has_required_parameters() or open_api_method.has_optional_parameters() %}
+    logger.info("[status=Calling] [function={{ udf_method.udf_name }}]...")
+    udf_method = udf_methods['{{ udf_method.udf_name }}']
+    request_content = RequestContent(udf_method)
+{% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}
 
     try:
-{% for parameter in open_api_method.path_parameters %}
-        open_api_method.parameters['{{ parameter.name }}'].validate_path({{ parameter.name }})
+{% for parameter in udf_method.path_parameters %}
+        udf_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
 {% endfor %}
-{% for parameter in open_api_method.required_parameters %}
-        open_api_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
+{% for parameter in udf_method.required_parameters %}
+        udf_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
 {% endfor %}
-{% for parameter in open_api_method.optional_parameters %}
-        open_api_method.parameters['{{ parameter.name }}'].validate_optional({{ parameter.name }}, request_content)
+{% for parameter in udf_method.optional_parameters %}
+        udf_method.parameters['{{ parameter.name }}'].validate_optional({{ parameter.name }}, request_content)
 {% endfor %}
+        request_content.validate()
     except Exception as e:
-        logger.exception("Unable to validate parameters.")
-        return {{ convert_to_return_type('str(e)', open_api_method) }}
+        logger.exception('Unable to validate parameters.')
+        return convert_to_return_type(str(e), udf_method)
 {% endif %}
-{% if open_api_method.is_asynchronous %}
-    {{- handle_async_udf_response(open_api_method) -}}
+{% if udf_method.is_asynchronous %}
+    return get_result_async(udf_method, request_content, excel_caller)
 {% else %}
-    {{- handle_udf_response(open_api_method) -}}
+    return get_result(udf_method, request_content)
 {% endif %}
-
 {% endmacro %}
-all_definitions = {}
-
 {% for service in services %}
-all_definitions['{{ service.config.name }}'] = {{ service.open_api_definitions }}
-
-
-    {% for method_path, methods in service.open_api_definition['paths'].items() %}
-        {% for http_method, open_api_method in methods.items() %}
-            {%- if service.config.should_provide_method(http_method, open_api_method) -%}
+    {% if service.config.name == 'pyxelrest' %}
+        {% for http_method in ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] %}
+            {%- if service.config.should_provide_method(http_method) -%}
                 {% for udf_return_type in service.config.udf_return_types %}
-                    {{- add_udf(service.create_method(http_method, open_api_method, method_path, udf_return_type)) -}}
+                    {{- add_udf(service.create_method(http_method, udf_return_type)) -}}
                 {% endfor %}
             {%- endif -%}
-        {% endfor %}
-    {%- endfor %}
+        {%- endfor %}
+    {% else %}
+        {% for method_path, open_api_methods in service.open_api_definition['paths'].items() %}
+            {% for http_method, open_api_method in open_api_methods.items() %}
+                {%- if service.config.should_provide_method(http_method, open_api_method) -%}
+                    {% for udf_return_type in service.config.udf_return_types %}
+                        {{- add_udf(service.create_method(http_method, open_api_method, method_path, udf_return_type)) -}}
+                    {% endfor %}
+                {%- endif -%}
+            {% endfor %}
+        {%- endfor %}
+    {% endif %}
 {% endfor %}
-
-{# Macro generating the UDF related to provided method #}
-{% macro handle_pyxelrest_response(method_name) %}
-        response.raise_for_status()
-        logger.info("[status=Valid] response received for [function={{ method_name }}] [url={0}].".format(response.request.url))
-        if 202 == response.status_code:
-            return [['Status URL'], [response.headers['location']]]
-        if response.headers['content-type'] == 'application/json':
-            return json_as_list(response, {}, None, False)
-        elif response.headers['content-type'] == 'application/msgpackpandas':
-            return msgpackpandas_as_list(response.content)
-        else:
-            return response.text[:255]
-    except requests.exceptions.ConnectionError:
-        logger.exception("Connection [status=error] occurred while calling [function={{ method_name }}] [url={0}].".format(url))
-        return ["'Cannot connect to service. Please retry once connection is re-established.'"]
-    except Exception as error:
-        # Check "is not None" because response.ok is overridden according to HTTP status code.
-        if response is not None:
-            logger.exception("[status=Error] occurred while handling [function={{ method_name }}] [url={1}] response: [response={0}].".format(response.text[:64], response.request.url))
-        else:
-            logger.exception("[status=Error] occurred while calling [function={{ method_name }}] [url={0}].".format(url))
-        return [describe_error(response, error)]
-    finally:
-        # Check "is not None" because response.ok is overridden according to HTTP status code.
-        if response is not None:
-            response.close()
-
-{% endmacro %}
-
-{% if pyxelrest_config %}
-
-{% for udf_return_type in pyxelrest_config.udf_return_types %}
-{% if pyxelrest_config.should_provide_method('get') %}
-@caching
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to query.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_get_url(url, extra_headers=None):
-    """Send a HTTP GET request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_get_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('get', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_get_url') }}
-{% endif %}
-
-{% if pyxelrest_config.should_provide_method('post') %}
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to POST to.')
-@xw.arg('body', doc='Content of the body.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-@xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_post_url(url, body, extra_headers=None, parse_body_as=None):
-    """Send a HTTP POST request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_post_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    if not body:
-        logger.error('body is required.')
-        return ['body is required.']
-
-    json_body = list_as_json(body, parse_body_as)
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('post', url, json=json_body{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_post_url') }}
-{% endif %}
-
-{% if pyxelrest_config.should_provide_method('put') %}
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to PUT to.')
-@xw.arg('body', doc='Content of the body.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-@xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_put_url(url, body, extra_headers=None, parse_body_as=None):
-    """Send a HTTP PUT request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_put_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    if not body:
-        logger.error('body is required.')
-        return ['body is required.']
-
-    json_body = list_as_json(body, parse_body_as)
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('put', url, json=json_body{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_put_url') }}
-{% endif %}
-
-{% if pyxelrest_config.should_provide_method('delete') %}
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to query.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_delete_url(url, extra_headers=None):
-    """Send a HTTP DELETE request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_delete_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('delete', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_delete_url') }}
-{% endif %}
-
-{% if pyxelrest_config.should_provide_method('patch') %}
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to query.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_patch_url(url, extra_headers=None):
-    """Send a HTTP PATCH request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_patch_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('patch', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_patch_url') }}
-{% endif %}
-
-{% if pyxelrest_config.should_provide_method('options') %}
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to query.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_options_url(url, extra_headers=None):
-    """Send a HTTP OPTIONS request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_options_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('options', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_options_url') }}
-{% endif %}
-
-{% if pyxelrest_config.should_provide_method('head') %}
-@xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
-@xw.arg('url', doc='URL to query.')
-@xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
-@xw.ret(expand='table')
-{% endif %}
-def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_head_url(url, extra_headers=None):
-    """Send a HTTP HEAD request to specified URL."""
-    logger.info("[status=Calling] [function={{ pyxelrest_config.udf_prefix(udf_return_type) }}_head_url]...")
-    request_header = {{ pyxelrest_config.custom_headers }}
-    if extra_headers:
-        request_header.update(extra_headers)
-
-    if not url:
-        logger.error('url is required.')
-        return ['url is required.']
-
-    response = None
-    try:
-        response = session.get({{ pyxelrest_config.max_retries }}).request('head', url{% if pyxelrest_config.auth %}, auth={{ authentication.get_auth(pyxelrest_config.name, None) }}{% endif %}, verify=False, headers=request_header, proxies={{ pyxelrest_config.proxies }}, timeout=({{ pyxelrest_config.connect_timeout }}, {{ pyxelrest_config.read_timeout }}))
-{{ handle_pyxelrest_response('pyxelrest_head_url') }}
-{% endif %}
-{% endfor %}
-
-{% endif %}
-
-def json_as_list(response, all_responses, all_definitions, rely_on_definitions):
-    if rely_on_definitions:
-        definition_deserializer.all_definitions = {}
-{% if support_ujson %}
-        response_text = response.text
-        logger.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
-        json_data = ujson.loads(response_text) if response_text != '' else response_text
-{% else %}
-        logger.debug('Converting JSON string to corresponding python structure (relying on definitions)...')
-        json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
-{% endif %}
-        return Response(all_responses, response.status_code, all_definitions).rows(json_data)
-
-    logger.debug('Converting JSON string to corresponding python structure...')
-    json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
-{% if flattenize %}
-    return Flattenizer(all_responses, response.status_code, all_definitions).to_list(json_data)
-{% else %}
-    return json_data
-{% endif %}
-
-
-def msgpackpandas_as_list(msgpack_pandas):
-{% if support_pandas %}
-    logger.debug('Converting message pack pandas to list...')
-    data = pandas.read_msgpack(msgpack_pandas)
-    logger.debug('Converting dictionary to list...')
-    if sys.version_info[0] < 3:
-        header = [header_name.decode() for header_name in data.columns.values.tolist()]
-    else:
-        header = data.columns.tolist()
-    values = data.values.tolist()
-    flatten_data = [header] + values if values else [header]
-    logger.debug('Data converted to list.')
-    return flatten_data
-{% else %}
-    logger.warning('Pandas module is required to decode response.')
-    return ['Please install pandas module to be able to decode result.']
-{% endif %}
-
-
-def describe_error(response, error):
-    # Check "is not None" because response.ok is overridden according to HTTP status code.
-    if response is not None:
-        return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
-    return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
-
-
-def list_as_json(lists, parse_as):
-    if 'dict' == parse_as:
-        if len(lists) != 2:
-            return ['There should be only two rows. Header and values.']
-        return list_to_dict(lists[0], lists[1])
-
-    if 'dict_list' == parse_as:
-        if len(lists) < 2:
-            return ['There should be at least two rows. Header and first dictionary values.']
-        return list_to_dict_list(lists[0], lists[1:])
-
-    return lists

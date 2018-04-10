@@ -26,7 +26,7 @@ else:
     from imp import reload
 
 
-def user_defined_functions(loaded_services, pyxelrest_config, flattenize=True):
+def user_defined_functions(loaded_services):
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
     :return: A string containing python code with all xlwings UDFs.
@@ -38,22 +38,8 @@ def user_defined_functions(loaded_services, pyxelrest_config, flattenize=True):
     )
     return renderer.get_template('user_defined_functions.jinja2').render(
         current_utc_time=datetime.datetime.utcnow().isoformat(),
-        services=loaded_services,
-        pyxelrest_config=pyxelrest_config,
-        modified_parameters={value: key for key, value in vba.vba_restricted_keywords.items()},
-        support_pandas=swagger.support_pandas(),
-        support_ujson=support_ujson(),
-        authentication=authentication,
-        flattenize=flattenize
+        services=loaded_services
     )
-
-
-def support_ujson():
-    try:
-        import ujson
-        return True
-    except:
-        return False
 
 
 def generate_user_defined_functions(output='user_defined_functions.py', flattenize=True):
@@ -62,11 +48,11 @@ def generate_user_defined_functions(output='user_defined_functions.py', flatteni
     :param flattenize: Set to False if you want the JSON dictionary as result of your UDF call.
     :return: None
     """
-    services, pyxelrest_config = swagger.load_services()
+    services = swagger.load_services(flattenize)
     logging.debug('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), output), 'w', encoding='utf-8') \
             as generated_file:
-        generated_file.write(user_defined_functions(services, pyxelrest_config, flattenize))
+        generated_file.write(user_defined_functions(services))
     return services
 
 
@@ -79,7 +65,7 @@ def reload_user_defined_functions(services):
     """
     reload(import_module('pyxelrest.user_defined_functions'))
     from pyxelrest import user_defined_functions as udfs
-    udfs.open_api_methods = {
+    udfs.udf_methods = {
         udf_name: method
         for service in services
         for udf_name, method in service.methods.items()

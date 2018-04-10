@@ -32,6 +32,7 @@ List all changes in various categories:
 - UDF Parameter description now contains default value.
 - Handle more parameter checks (maximum, exclusiveMaximum, minimum, exclusiveMinimum, maxLength, minLength, maxItems, minItems, uniqueItems, multipleOf)
 - collectionFormat was ignored and considered as multi. It is now properly handled.
+- Return a list with one string item in case response from server is not JSON but JSON was expected.
 
 ## 0.66.0 (2018-03-30) ##
 

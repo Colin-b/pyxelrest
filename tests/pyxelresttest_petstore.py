@@ -13,7 +13,7 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         now = datetime.datetime.utcnow()
         new_order_response = pyxelrestgenerator.petstore_placeOrder(
-            id=444444,
+            id=10,
             petId=222222,
             quantity=1,
             shipDate=now,
@@ -24,15 +24,15 @@ class PyxelRestPetstoreTest(unittest.TestCase):
         del new_order_response[1][3]
         self.assertEqual([
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
-            [444444, 222222, 1, 'placed', False]
+            [10, 222222, 1, 'placed', False]
         ], new_order_response)
 
-        get_order_response = pyxelrestgenerator.petstore_getOrderById(444444)
+        get_order_response = pyxelrestgenerator.petstore_getOrderById(10)
         # Petstore is replying with server time...
         del get_order_response[1][3]
         self.assertEqual([
             ['id', 'petId', 'quantity', 'shipDate', 'status', 'complete'],
-            [444444, 222222, 1, 'placed', False]
+            [10, 222222, 1, 'placed', False]
         ], get_order_response)
 
     def test_get_user_by_name(self):
