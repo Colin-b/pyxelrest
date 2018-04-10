@@ -56,8 +56,8 @@ header_parameter:
   open_api:
     definition: "http://localhost:8951/"
   udf_return_types:
-    - "synchronous"
-    - "asynchronous"
+    - "vba_compatible"
+    - "auto_expand"
 
 header_advanced_configuration:
   open_api:
@@ -106,5 +106,5 @@ async:
 
 pyxelrest:
   udf_return_types:
-    - "synchronous"
-    - "asynchronous"
+    - "vba_compatible"
+    - "auto_expand"

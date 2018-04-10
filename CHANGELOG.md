@@ -8,6 +8,10 @@ List all changes in various categories:
 
 ## 0.67.0 (next) ##
 
+### Release notes ###
+
+- Previous services configuration files are not compatible anymore but convert is performed when updating.
+
 ### Enhancements ###
 
 - Microsoft Excel add-in allows to select services from within a list as well as manually.

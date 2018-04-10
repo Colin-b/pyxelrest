@@ -94,18 +94,18 @@ class ConfigSection:
         self.connect_timeout = service_config.get('connect_timeout', 1)
         self.read_timeout = service_config.get('read_timeout')
         self.auth = authentication.add_service_custom_authentication(self.name, service_config)
-        # UDFs will be Asynchronous by default (if required, ie: result does not fit in a single cell)
-        self.udf_return_types = service_config.get('udf_return_types', ['asynchronous'])
+        # UDFs will be auto expanded by default (if required, ie: result does not fit in a single cell)
+        self.udf_return_types = service_config.get('udf_return_types', ['auto_expand'])
         self.max_retries = service_config.get('max_retries', 5)
         self.custom_headers = service_config.get('headers', {})
         self.proxies = service_config.get('proxies', {})
 
-    def is_asynchronous(self, udf_return_type):
-        return udf_return_type == 'asynchronous'
+    def auto_expand_result(self, udf_return_type):
+        return udf_return_type == 'auto_expand'
 
     def udf_prefix(self, udf_return_type):
         service_name_prefix = to_valid_python_vba(self.name)
-        if (len(self.udf_return_types) == 1) or self.is_asynchronous(udf_return_type):
+        if (len(self.udf_return_types) == 1) or self.auto_expand_result(udf_return_type):
             return service_name_prefix
         return 'sync_{0}'.format(service_name_prefix)
 
@@ -340,7 +340,7 @@ class UDFMethod:
         self.service = service
         self.requests_method = http_method
         self.open_api_method = open_api_method
-        self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
+        self.auto_expand_result = service.config.auto_expand_result(udf_return_type)
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []

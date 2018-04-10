@@ -65,7 +65,7 @@ open_api_methods = None  # Will be set after load
 {% for parameter in open_api_method.optional_parameters %}
 @xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
 {% endfor %}
-{% if open_api_method.return_a_list() and open_api_method.is_asynchronous %}
+{% if open_api_method.return_a_list() and open_api_method.auto_expand_result %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ open_api_method.udf_name }}(
@@ -181,7 +181,7 @@ all_definitions['{{ service.config.name }}'] = {{ service.open_api_definitions }
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_get_url(url, extra_headers=None):
@@ -207,7 +207,7 @@ def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_get_url(url, extra_header
 @xw.arg('body', doc='Content of the body.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
 @xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_post_url(url, body, extra_headers=None, parse_body_as=None):
@@ -239,7 +239,7 @@ def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_post_url(url, body, extra
 @xw.arg('body', doc='Content of the body.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
 @xw.arg('parse_body_as', doc='How the body should be sent (dict, dict_list).')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_put_url(url, body, extra_headers=None, parse_body_as=None):
@@ -269,7 +269,7 @@ def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_put_url(url, body, extra_
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_delete_url(url, extra_headers=None):
@@ -293,7 +293,7 @@ def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_delete_url(url, extra_hea
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_patch_url(url, extra_headers=None):
@@ -317,7 +317,7 @@ def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_patch_url(url, extra_head
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_options_url(url, extra_headers=None):
@@ -341,7 +341,7 @@ def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_options_url(url, extra_he
 @xw.func(category='{{ pyxelrest_config.name }}', call_in_wizard=False)
 @xw.arg('url', doc='URL to query.')
 @xw.arg('extra_headers', doc='Extra headers to send in the query.')
-{% if pyxelrest_config.is_asynchronous(udf_return_type) %}
+{% if pyxelrest_config.auto_expand_result(udf_return_type) %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ pyxelrest_config.udf_prefix(udf_return_type) }}_head_url(url, extra_headers=None):

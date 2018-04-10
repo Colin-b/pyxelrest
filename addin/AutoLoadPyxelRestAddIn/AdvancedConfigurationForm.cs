@@ -173,13 +173,13 @@ namespace AutoLoadPyxelRestAddIn
                     var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
 
                     #region UDF Return types
-                    var synchronous = new CheckBox { Text = "synchronous", Checked = servicePanel.service.Synchronous };
-                    synchronous.CheckedChanged += Synchronous_CheckedChanged;
-                    panel.Controls.Add(synchronous, 0, 0);
+                    var vbaCompatible = new CheckBox { Text = "VBA compatible", Checked = servicePanel.service.VBACompatible };
+                    vbaCompatible.CheckedChanged += VBACompatible_CheckedChanged;
+                    panel.Controls.Add(vbaCompatible, 0, 0);
 
-                    var asynchronous = new CheckBox { Text = "asynchronous", Checked = servicePanel.service.Asynchronous };
-                    asynchronous.CheckedChanged += Asynchronous_CheckedChanged;
-                    panel.Controls.Add(asynchronous, 1, 0);
+                    var autoExpand = new CheckBox { Text = "Auto expand", Checked = servicePanel.service.AutoExpand };
+                    autoExpand.CheckedChanged += AutoExpand_CheckedChanged;
+                    panel.Controls.Add(autoExpand, 1, 0);
                     #endregion
 
                     layout.Controls.Add(panel, 1, 6);
@@ -645,14 +645,14 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.ApiKey = ((TextBox)sender).Text;
         }
 
-        private void Asynchronous_CheckedChanged(object sender, EventArgs e)
+        private void AutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Asynchronous = ((CheckBox)sender).Checked;
+            servicePanel.service.AutoExpand = ((CheckBox)sender).Checked;
         }
 
-        private void Synchronous_CheckedChanged(object sender, EventArgs e)
+        private void VBACompatible_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Synchronous = ((CheckBox)sender).Checked;
+            servicePanel.service.VBACompatible = ((CheckBox)sender).Checked;
         }
 
         private void AddValueToList(string value, string listName)

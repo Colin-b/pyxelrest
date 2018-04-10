@@ -31,8 +31,8 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string OPTIONS = "options";
         private static readonly string HEAD = "head";
 
-        private static readonly string SYNCHRONOUS = "synchronous";
-        private static readonly string ASYNCHRONOUS = "asynchronous";
+        private static readonly string VBA_COMPATIBLE = "vba_compatible";
+        private static readonly string AUTO_EXPAND = "auto_expand";
 
         internal readonly string Name;
         private string description;
@@ -53,8 +53,8 @@ namespace AutoLoadPyxelRestAddIn
         public IDictionary<string, object> Basic;
         public IDictionary<string, object> Ntlm;
 
-        public bool Synchronous;
-        public bool Asynchronous;
+        public bool VBACompatible;
+        public bool AutoExpand;
 
         public int MaxRetries;
         public IDictionary<string, object> Headers;
@@ -179,8 +179,8 @@ namespace AutoLoadPyxelRestAddIn
 
             if (!skipUpdateFor.Contains(UDF_RETURN_TYPES_PROPERTY))
             {
-                Synchronous = updated.Synchronous;
-                Asynchronous = updated.Asynchronous;
+                VBACompatible = updated.VBACompatible;
+                AutoExpand = updated.AutoExpand;
             }
 
             if (!skipUpdateFor.Contains(MAX_RETRIES_PROPERTY))
@@ -234,8 +234,8 @@ namespace AutoLoadPyxelRestAddIn
 
             var udfReturnTypesNode = (YamlSequenceNode)GetProperty(section, UDF_RETURN_TYPES_PROPERTY);
             IList<string> udfReturnTypes = udfReturnTypesNode == null ? DefaultUdfReturnTypes() : ToList(udfReturnTypesNode);
-            Synchronous = udfReturnTypes.Contains(SYNCHRONOUS);
-            Asynchronous = udfReturnTypes.Contains(ASYNCHRONOUS);
+            VBACompatible = udfReturnTypes.Contains(VBA_COMPATIBLE);
+            AutoExpand = udfReturnTypes.Contains(AUTO_EXPAND);
 
             var maxRetries = (YamlScalarNode)GetProperty(section, MAX_RETRIES_PROPERTY);
             MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
@@ -321,8 +321,8 @@ namespace AutoLoadPyxelRestAddIn
             Basic = new Dictionary<string, object>();
             Ntlm = new Dictionary<string, object>();
 
-            Synchronous = false;
-            Asynchronous = true;
+            VBACompatible = false;
+            AutoExpand = true;
 
             MaxRetries = 5;
             Headers = new Dictionary<string, object>();
@@ -353,10 +353,10 @@ namespace AutoLoadPyxelRestAddIn
         private IList<string> GetUdfReturnTypes()
         {
             var list = new List<string>();
-            if (Synchronous)
-                list.Add(SYNCHRONOUS);
-            if (Asynchronous)
-                list.Add(ASYNCHRONOUS);
+            if (VBACompatible)
+                list.Add(VBA_COMPATIBLE);
+            if (AutoExpand)
+                list.Add(AUTO_EXPAND);
             return list;
         }
 
@@ -367,7 +367,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private IList<string> DefaultUdfReturnTypes()
         {
-            return new List<string> { ASYNCHRONOUS };
+            return new List<string> { AUTO_EXPAND };
         }
     }
 }
