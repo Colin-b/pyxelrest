@@ -177,11 +177,11 @@ namespace AutoLoadPyxelRestAddIn
                     vbaCompatible.CheckedChanged += VBACompatible_CheckedChanged;
                     panel.Controls.Add(vbaCompatible, 0, 0);
 
-                    var synchronousAutoExpand = new RadioButton { Text = "Auto expand (synchronous)", Checked = servicePanel.service.SynchronousAutoExpand };
+                    var synchronousAutoExpand = new RadioButton { Text = "Auto expand (synchronous)", Checked = servicePanel.service.SynchronousAutoExpand, Width = 160 };
                     synchronousAutoExpand.CheckedChanged += SynchronousAutoExpand_CheckedChanged;
                     panel.Controls.Add(synchronousAutoExpand, 1, 0);
 
-                    var asynchronousAutoExpand = new RadioButton { Text = "Auto expand (asynchronous)", Checked = servicePanel.service.AsynchronousAutoExpand };
+                    var asynchronousAutoExpand = new RadioButton { Text = "Auto expand (asynchronous)", Checked = servicePanel.service.AsynchronousAutoExpand, Width = 170 };
                     asynchronousAutoExpand.CheckedChanged += AsynchronousAutoExpand_CheckedChanged;
                     panel.Controls.Add(asynchronousAutoExpand, 2, 0);
                     #endregion
