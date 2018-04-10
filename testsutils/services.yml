@@ -57,13 +57,13 @@ header_parameter:
     definition: "http://localhost:8951/"
   udf_return_types:
     - "vba_compatible"
-    - "auto_expand"
+    - "sync_auto_expand"
 
 header_advanced_configuration:
   open_api:
     definition: "http://localhost:8951/"
   udf_return_types:
-    - synchronous
+    - "vba_compatible"
   headers:
     X-PXL-CUSTOM: "MyCustomValue"
     X-PXL-OTHER: "MyOtherValue"
@@ -107,4 +107,4 @@ async:
 pyxelrest:
   udf_return_types:
     - "vba_compatible"
-    - "auto_expand"
+    - "sync_auto_expand"

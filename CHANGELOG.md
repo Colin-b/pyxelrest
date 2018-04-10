@@ -23,6 +23,7 @@ List all changes in various categories:
 - Allow to select services affected by an action during auto update.
 - Allow to exclude OpenAPI tags.
 - Allow to include or exclude OpenAPI operation_ids.
+- Experimental support for Asynchronous UDFs.
 
 ### Bug fixes ###
 

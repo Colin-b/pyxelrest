@@ -203,9 +203,9 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
     <tr>
         <td><strong>udf_return_types</strong></td>
-        <td>List of user defined function return types. vba_compatible if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. Only auto_expand by default.</td>
+        <td>List of user defined function return types. vba_compatible if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. sync_auto_expand (synchronous call auto expanding the result) by default. Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.</td>
         <td>Optional</td>
-        <td>auto_expand or vba_compatible.</td>
+        <td>async_auto_expand, sync_auto_expand or vba_compatible.</td>
     </tr>
     <tr>
         <td><strong>max_retries</strong></td>

@@ -177,9 +177,13 @@ namespace AutoLoadPyxelRestAddIn
                     vbaCompatible.CheckedChanged += VBACompatible_CheckedChanged;
                     panel.Controls.Add(vbaCompatible, 0, 0);
 
-                    var autoExpand = new CheckBox { Text = "Auto expand", Checked = servicePanel.service.AutoExpand };
-                    autoExpand.CheckedChanged += AutoExpand_CheckedChanged;
-                    panel.Controls.Add(autoExpand, 1, 0);
+                    var synchronousAutoExpand = new RadioButton { Text = "Auto expand (synchronous)", Checked = servicePanel.service.SynchronousAutoExpand };
+                    synchronousAutoExpand.CheckedChanged += SynchronousAutoExpand_CheckedChanged;
+                    panel.Controls.Add(synchronousAutoExpand, 1, 0);
+
+                    var asynchronousAutoExpand = new RadioButton { Text = "Auto expand (asynchronous)", Checked = servicePanel.service.AsynchronousAutoExpand };
+                    asynchronousAutoExpand.CheckedChanged += AsynchronousAutoExpand_CheckedChanged;
+                    panel.Controls.Add(asynchronousAutoExpand, 2, 0);
                     #endregion
 
                     layout.Controls.Add(panel, 1, 6);
@@ -645,9 +649,14 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.ApiKey = ((TextBox)sender).Text;
         }
 
-        private void AutoExpand_CheckedChanged(object sender, EventArgs e)
+        private void AsynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.AutoExpand = ((CheckBox)sender).Checked;
+            servicePanel.service.AsynchronousAutoExpand = ((CheckBox)sender).Checked;
+        }
+
+        private void SynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.SynchronousAutoExpand = ((CheckBox)sender).Checked;
         }
 
         private void VBACompatible_CheckedChanged(object sender, EventArgs e)

@@ -95,19 +95,22 @@ class ConfigSection:
         self.read_timeout = service_config.get('read_timeout')
         self.auth = authentication.add_service_custom_authentication(self.name, service_config)
         # UDFs will be auto expanded by default (if required, ie: result does not fit in a single cell)
-        self.udf_return_types = service_config.get('udf_return_types', ['auto_expand'])
+        self.udf_return_types = service_config.get('udf_return_types', ['sync_auto_expand'])
         self.max_retries = service_config.get('max_retries', 5)
         self.custom_headers = service_config.get('headers', {})
         self.proxies = service_config.get('proxies', {})
 
+    def is_asynchronous(self, udf_return_type):
+        return 'async_auto_expand' == udf_return_type
+
     def auto_expand_result(self, udf_return_type):
-        return udf_return_type == 'auto_expand'
+        return udf_return_type.endswith('_auto_expand')
 
     def udf_prefix(self, udf_return_type):
         service_name_prefix = to_valid_python_vba(self.name)
         if (len(self.udf_return_types) == 1) or self.auto_expand_result(udf_return_type):
             return service_name_prefix
-        return 'sync_{0}'.format(service_name_prefix)
+        return 'vba_{0}'.format(service_name_prefix)
 
 
 class ServiceConfigSection(ConfigSection):
