@@ -1,13 +1,13 @@
 import unittest
-import testsutils.loader as loader
 
+from testsutils import loader
 import pyxelrest
 
 
 class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
     def test_without_service_configuration_file(self):
         with self.assertRaises(Exception) as cm:
-            loader.load('non_existing_configuration.ini')
+            loader.load('non_existing.yml')
         self.assertEqual(
             cm.exception.args[0],
             '"{0}" configuration file cannot be read.'.format(pyxelrest.SERVICES_CONFIGURATION_FILE_PATH))

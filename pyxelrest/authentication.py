@@ -13,46 +13,44 @@ oauth2_tokens_cache_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'conf
 OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
 
 
-def add_service_custom_authentication(service_name, security_details):
-    auth = security_details.get('auth')
-    if 'ntlm' == auth:
-        custom_authentications[service_name] = NTLM(security_details.get('username'), security_details.get('password'))
-        return auth
+def add_service_custom_authentication(service_name, service_config):
+    ntlm_config = service_config.get('ntlm')
+    if ntlm_config:
+        custom_authentications[service_name] = NTLM(ntlm_config.get('username'), ntlm_config.get('password'))
+        return 'ntlm'
 
 
-def add_service_security(service_name, swagger, security_details):
-    json_security_definitions = swagger.get('securityDefinitions', {})
+def add_service_security(service_name, open_api_definition, service_config):
+    json_security_definitions = open_api_definition.get('securityDefinitions', {})
     for security_definition_key in json_security_definitions.keys():
         security_definition = json_security_definitions[security_definition_key]
         try:
-            authentication = _create_authentication(security_definition, security_details)
+            authentication = _create_authentication(security_definition, service_config)
             if authentication:
                 security_definitions[service_name, security_definition_key] = authentication
         except Exception as e:
             logger.error('Authentication cannot be handled ({}) for {}'.format(e, security_definition))
 
 
-def _create_authentication(security_definition, security_details):
+def _create_authentication(security_definition, service_config):
     if 'oauth2' == security_definition.get('type'):
+        oauth2_config = dict(service_config.get('oauth2', {}))
         if security_definition.get('flow') == 'implicit':
-            additional_authorization_parameters = {
-                security_detail_key[7:]: security_details[security_detail_key]
-                for security_detail_key in security_details.keys() if security_detail_key.startswith('oauth2.')
-            }
             return OAuth2(authorization_url=security_definition['authorizationUrl'],
-                          redirect_uri_port=security_details.get('port'),
-                          token_reception_timeout=security_details.get('timeout'),
-                          token_reception_success_display_time=security_details.get('success_display_time'),
-                          token_reception_failure_display_time=security_details.get('failure_display_time'),
-                          **additional_authorization_parameters)
+                          redirect_uri_port=oauth2_config.pop('port', None),
+                          token_reception_timeout=oauth2_config.pop('timeout', None),
+                          token_reception_success_display_time=oauth2_config.pop('success_display_time', None),
+                          token_reception_failure_display_time=oauth2_config.pop('failure_display_time', None),
+                          **oauth2_config)
         # TODO Handle all OAuth2 flows
         logger.warning('OAuth2 flow is not supported: {0}'.format(security_definition))
     elif 'apiKey' == security_definition.get('type'):
         if security_definition['in'] == 'query':
-            return QueryApiKey(security_details.get('api_key'), security_definition['name'])
-        return HeaderApiKey(security_details.get('api_key'), security_definition['name'])
+            return QueryApiKey(service_config.get('api_key'), security_definition['name'])
+        return HeaderApiKey(service_config.get('api_key'), security_definition['name'])
     elif 'basic' == security_definition.get('type'):
-        return Basic(security_details.get('username'), security_details.get('password'))
+        basic_config = service_config.get('basic', {})
+        return Basic(basic_config.get('username'), basic_config.get('password'))
     else:
         logger.error('Unexpected security definition type: {0}'.format(security_definition))
 

@@ -1,0 +1,11 @@
+usual_parameters:
+  open_api:
+    definition: "http://localhost:8943/"
+  methods:
+    - "get"
+
+usual_parameters:
+  open_api:
+    definition: "http://localhost:8943/"
+  methods:
+    - "get"

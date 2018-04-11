@@ -1,19 +1,19 @@
-class InvalidSwaggerDefinition(Exception):
-    """ Invalid Swagger Definition. """
+class InvalidOpenAPIDefinition(Exception):
+    """ Invalid OpenAPI Definition. """
     def __init__(self, message, *args, **kwargs):  # real signature unknown
         Exception.__init__(self, 'Invalid Definition: ' + message)
 
 
-class SwaggerVersionNotProvided(InvalidSwaggerDefinition):
-    """ Swagger version is not provided. """
+class OpenAPIVersionNotProvided(InvalidOpenAPIDefinition):
+    """ OpenAPI version is not provided. """
     def __init__(self, *args, **kwargs):
-        InvalidSwaggerDefinition.__init__(self, 'Version not provided.')
+        InvalidOpenAPIDefinition.__init__(self, 'Version not provided.')
 
 
-class UnsupportedSwaggerVersion(InvalidSwaggerDefinition):
-    """ Swagger version is not supported. """
+class UnsupportedOpenAPIVersion(InvalidOpenAPIDefinition):
+    """ OpenAPI version is not supported. """
     def __init__(self, version, *args, **kwargs):
-        InvalidSwaggerDefinition.__init__(self, 'Version {} not supported.'.format(version))
+        InvalidOpenAPIDefinition.__init__(self, 'Version {} not supported.'.format(version))
 
 
 class MandatoryPropertyNotProvided(Exception):
@@ -35,7 +35,7 @@ class DuplicatedParameters(Exception):
                                                                                              method['parameters']))
 
 
-class EmptyResponses(InvalidSwaggerDefinition):
-    """ Responses are not set in Swagger. """
+class EmptyResponses(InvalidOpenAPIDefinition):
+    """ Responses are not set in OpenAPI definition. """
     def __init__(self, method_name, *args, **kwargs):
-        InvalidSwaggerDefinition.__init__(self, 'At least one response must be specified for "{0}".'.format(method_name))
+        InvalidOpenAPIDefinition.__init__(self, 'At least one response must be specified for "{0}".'.format(method_name))

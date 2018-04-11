@@ -1,21 +1,16 @@
 import argparse
-import sys
-import os
 import logging
+import os
 import requests
-try:
-    # Python 3
-    from configparser import ConfigParser
-except ImportError:
-    # Python 2
-    from ConfigParser import ConfigParser
+import sys
+import yaml
 
 if __name__ == '__main__':
     logger = logging.getLogger("pyxelrest.pyxelrest_update_services_config")
 else:
     logger = logging.getLogger(__name__)
 
-_USER_CONFIG_FILE_PATH = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.ini')
+_USER_CONFIG_FILE_PATH = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'services.yml')
 
 # Below are the values for the action option
 ADD_SECTIONS = 'add'  # Provided configuration(s) will be appended (updated if section is already existing)
@@ -31,12 +26,12 @@ def open_config(file_or_directory):
 
 def open_file_config(file_or_directory):
     try:
+        loaded_yaml = {}
         config_file_names = to_file_paths(file_or_directory)
-        config_parser = ConfigParser(interpolation=None)
-        if not config_parser.read(config_file_names):
-            logger.warning('Configuration files "{0}" cannot be read.'.format(config_file_names))
-            return None
-        return config_parser
+        for config_file_name in config_file_names:
+            with open(config_file_name, 'r') as config_file:
+                loaded_yaml.update(yaml.load(config_file))
+        return loaded_yaml
     except:
         logger.exception('Configuration files "{0}" cannot be read.'.format(file_or_directory))
         return None
@@ -46,9 +41,7 @@ def open_url_config(configuration_file_url):
     try:
         response = requests.get(configuration_file_url)
         response.raise_for_status()
-        config_parser = ConfigParser(interpolation=None)
-        config_parser.read_string(response.text)
-        return config_parser
+        return yaml.load(response.text)
     except requests.HTTPError as e:
         logger.warning('Configuration file URL "{0}" cannot be reached: {1}.'.format(configuration_file_url, str(e)))
         return None
@@ -63,7 +56,7 @@ def to_absolute_path(file_path):
 
 def to_file_paths(file_or_directory):
     if os.path.isfile(file_or_directory):
-        return to_absolute_path(file_or_directory)
+        return [to_absolute_path(file_or_directory)]
 
     if not os.path.isdir(file_or_directory):
         raise Exception('Invalid path "{}" provided.'.format(file_or_directory))
@@ -91,23 +84,29 @@ class ServicesConfigUpdater:
             raise Exception('Services configuration cannot be opened.')
         self._action = action
 
-    def update_configuration(self, file_or_directory):
+    def update_configuration(self, file_or_directory, services=None):
         """
 
         :param file_or_directory: Absolute or relative path to a configuration file
         or a directory or an URL to a file containing configuration file(s).
+        :param services: List of service names to be affected.
         """
         logger.info('Updating services configuration...')
+        # TODO Remove once every client will have this version in conf
+        file_or_directory = file_or_directory.replace('all_services.ini', 'services.yml')
         updated_config = open_config(file_or_directory)
         if not updated_config:
             logger.error('Services configuration cannot be updated.')
             return
 
-        for service_name in updated_config.sections():
+        for service_name, service_config in updated_config.items():
+            if services and service_name not in services:
+                continue
+
             if ADD_SECTIONS == self._action:
-                self._add_service(service_name, updated_config)
+                self._add_service(service_name, service_config)
             if UPDATE_SECTIONS == self._action:
-                self._update_service(service_name, updated_config)
+                self._update_service(service_name, service_config)
             if REMOVE_SECTIONS == self._action:
                 self._remove_service(service_name)
 
@@ -116,32 +115,23 @@ class ServicesConfigUpdater:
 
     def _save_configuration(self):
         with open(_USER_CONFIG_FILE_PATH, 'w') as file:
-            self._user_config.write(file)
+            yaml.dump(self._user_config, file, default_flow_style=False)
 
     def _add_service(self, service_name, updated_config):
-        # Update section content in case it already exists
-        if self._user_config.has_section(service_name):
-            self._user_config.remove_section(service_name)
-
-        self._user_config.add_section(service_name)
-        for updated_key, updated_value in updated_config.items(service_name):
-            self._user_config.set(service_name, updated_key, updated_value)
+        self._user_config[service_name] = updated_config
         logger.info('"{0}" configuration added.'.format(service_name))
 
     def _update_service(self, service_name, updated_config):
-        if not self._user_config.has_section(service_name):
+        if service_name not in self._user_config:
             logger.debug('User does not have the {0} section in configuration. Nothing to update.'.format(service_name))
             return
 
-        self._user_config.remove_section(service_name)
-        self._user_config.add_section(service_name)
-        for updated_key, updated_value in updated_config.items(service_name):
-            self._user_config.set(service_name, updated_key, updated_value)
+        skip_update = updated_config.get('skip_update_for', [])
+        self._user_config[service_name] = {key: value for key, value in updated_config.items() if key not in skip_update}
         logger.info('"{0}" configuration updated.'.format(service_name))
 
     def _remove_service(self, service_name):
-        if self._user_config.has_section(service_name):
-            self._user_config.remove_section(service_name)
+        if self._user_config.pop(service_name):
             logger.info('"{0}" configuration removed.'.format(service_name))
 
 
@@ -150,10 +140,11 @@ if __name__ == '__main__':
     parser.add_argument('file_or_directory', help='File (path or URL) or directory (path) containing services configuration.', type=str)
     parser.add_argument('action', help='Action to perform with provided file(s).', type=str, choices=[
         ADD_SECTIONS, UPDATE_SECTIONS, REMOVE_SECTIONS])
+    parser.add_argument('--services', help='Subset of services to be affected by the action.', default=None, type=str, nargs='*')
     options = parser.parse_args(sys.argv[1:])
 
     try:
         installer = ServicesConfigUpdater(options.action)
-        installer.update_configuration(options.file_or_directory)
+        installer.update_configuration(options.file_or_directory, options.services)
     except:
         logger.exception('Unable to perform services configuration update.')

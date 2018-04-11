@@ -1,0 +1,3 @@
+without_available_swagger:
+  open_api:
+    definition: "http://localhost:8950/swagger.json"

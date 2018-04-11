@@ -57,8 +57,8 @@ setup(name='pyxelrest',
       packages=find_packages(exclude=['tests', 'testsutils']),
       package_data={
          'pyxelrest': [
-             'default_logging_configuration.ini.jinja2',
-             'default_services_configuration.ini',
+             'default_logging_configuration.yml.jinja2',
+             'default_services_configuration.yml',
              'user_defined_functions.jinja2',
          ]
       },
@@ -70,8 +70,6 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.dll.manifest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/AutoLoadPyxelRestAddIn.vsto',
                   # Package Dependencies to ensure that it will work on any client
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/INIFileParser.dll',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/INIFileParser.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.dll',
@@ -81,7 +79,9 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.dll',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml'
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.dll',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.xml',
               ]
           ),
           (
@@ -101,9 +101,14 @@ setup(name='pyxelrest',
               'pyxelrest_addin/resources', [
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/folder-3-128.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-4-16.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-4-16_grey.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-5-16.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/refresh-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-16.ico',
-                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-128.png'
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/settings-8-128.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/x-mark-3-16.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/x-mark-4-16.png'
               ]
           ),
       ],
@@ -125,8 +130,8 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==223',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.11.7',
-          # Used to parse logging configuration file
+          'xlwings==0.11.7.1',
+          # Used to parse configuration files
           'pyaml==17.12.1',
           # Used to manage authentication
           'requests_auth==1.0.2',

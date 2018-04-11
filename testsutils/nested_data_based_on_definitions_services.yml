@@ -1,0 +1,9 @@
+nested_data:
+  open_api:
+    definition: "http://localhost:8947/"
+    rely_on_definitions: true
+  methods:
+    - "get"
+    - "post"
+    - "put"
+    - "delete"

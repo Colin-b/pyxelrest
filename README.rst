@@ -133,7 +133,9 @@ Services configuration can be done within Microsoft Excel thanks to the ``Config
 
    Configuration screen
 
-Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\configuration\services.ini`` file.
+Configuration can also be manually updated thanks to ``%APPDATA%\pyxelrest\configuration\services.yml`` file.
+
+File is following [YAML](http://yaml.org/start.html) formatting.
 
 Each section name will be used as the UDFs category.
 
@@ -141,45 +143,79 @@ Each UDF will be prefixed by the section name (only [a-zA-Z0-9_] characters will
 
 The following options are available for each section:
 
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-|                        | Description                                                                                                                                                    | Mandatory | Possible values                              |
-+========================+================================================================================================================================================================+===========+==============================================+
-| swagger_url            | URL to the Swagger definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL | Mandatory |                                              |
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| proxy_url              | Proxy that should be used to reach service. If this is an URL, then this proxy will be used for the swagger_url scheme only.                                   | Optional  |                                              |
-|                        | If you want to specify a proxy for a different scheme, then this value should be scheme=proxy_url_for_this_scheme.                                             |           |                                              |
-|                        | You can specify multiple schemes by using comma as a separator. You can also use no_proxy as a scheme for a no_proxy url.                                      |           |                                              |
-|                        | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies                                                                     |           |                                              |
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| service_host           | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| methods                | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head).                 | Optional  | get, post, put, delete, patch, options, head |
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| security_details       | Extra security information not provided by swagger. Refer to Security Details section for more information.                                                    | Optional  | port=XX,timeout=YY                           |
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| advanced_configuration | Additional configuration details. Refer to Advanced Configuration section for more information.                                                                | Optional  | udf_return_type=XX,rely_on_definitions=YY    |
-+------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-
-Security Details
-----------------
-
-Additional security details can be provided thanks to ``security_details`` property.
-
-This property is supposed to contains key=value information. Separator is ',' (comma).
-
-Values cannot contains "," character.
 Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
 
-Depending on the type of authentication, the following keys are available:
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+|                         | Description                                                                                                                                                    | Mandatory | Possible values                              |
++=========================+================================================================================================================================================================+===========+==============================================+
+| open_api                | Dictionary describing the OpenAPI definition. Refer to OpenAPI section for more information.                                                                   | Mandatory |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| description             | A small description of this service. To be displayed within Microsoft Excel add-in services configuration screen.                                              | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| proxies                 | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy.                                  | Optional  |                                              |
+|                         | If the key is a scheme then the value should be the proxy URL.                                                                                                 |           |                                              |
+|                         | Otherwise the value should be the URL for which proxies should be ignored.                                                                                     |           |                                              |
+|                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies                                                                     |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| service_host            | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| methods                 | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head).                 | Optional  | get, post, put, delete, patch, options, head |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| oauth2                  | Dictionary containing OAuth2 related settings. Refer to OAuth 2 section for more information.                                                                  | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| api_key                 | User API Key.                                                                                                                                                  | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| basic                   | Dictionary containing Basic authentication related settings. Refer to Basic section for more information.                                                      | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| ntlm                    | Dictionary containing NTLM related settings. Refer to NTLM section for more information.                                                                       | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| udf_return_types        | List of user defined function return types.                                                                                                                    | Optional  | async_auto_expand                            |
+|                         | vba_compatible if you want your UDF to return the final result immediately.                                                                                    |           | sync_auto_expand                             |
+|                         | It means that you will have to specify all the cells that will contains the result.                                                                            |           | vba_compatible                               |
+|                         | sync_auto_expand (synchronous call auto expanding the result) by default.                                                                                      |           |                                              |
+|                         | Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.                                                                     |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| max_retries             | Maximum number of time a request should be retried before considered as failed. 5 by default.                                                                  | Optional  | Any positive integer value                   |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| headers                 | Dictionary containing headers where key is the name of the header that should be sent with every request sent to this service.                                 | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| connect_timeout         | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default.                                                    | Optional  | any float value                              |
+|                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| read_timeout            | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default.                                                               | Optional  | any float value                              |
+|                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| skip_update_for         | List of section names that should not be auto-updated.                                                                                                         | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
-Common
-------
+OpenAPI
+-------
 
-+------+--------------------------------------------------------------------------------------------------------------------+
-|      | Description                                                                                                        |
-+======+====================================================================================================================+
-| auth | Custom authentication mechanism. Valid value is ntlm (requiring ``requests_ntlm`` or ``requests_negotiate_sspi``). |
-+------+--------------------------------------------------------------------------------------------------------------------+
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+|                         | Description                                                                                                                                                    | Mandatory | Possible values                              |
++=========================+================================================================================================================================================================+===========+==============================================+
+| definition              | URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL | Mandatory |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default.                                              | Optional  | any float value                              |
+|                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| excluded_tags           | List of tags within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied.                                                | Optional  |                                              |
+|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| selected_tags           | List of tags within OpenAPI definition that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied.              | Optional  |                                              |
+|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| excluded_operation_ids  | List of operation_id (or regular expressions) within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied.               | Optional  |                                              |
+|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| selected_operation_ids  | List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_id already).                | Optional  |                                              |
+|                         | If not specified, no filtering is applied.                                                                                                                     | Optional  |                                              |
+|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| rely_on_definitions     | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.                                                              | Optional  | true or false                                |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| service_host            | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
 OAuth 2
 -------
@@ -193,21 +229,12 @@ If response_type is not provided in authorization_url, token is expected to be r
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 | timeout              | Maximum number of seconds to wait for the authentication response to be received. Default value is 1 minute.                                                     | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
-| oauth2.XXXX          | Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1                 | Optional  |
-+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 | success_display_time | Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel. Default value is 1 millisecond. | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 | failure_display_time | Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel. Default value is 5 seconds.     | Optional  |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
-
-API Key
--------
-
-+---------+---------------+-----------+
-|         | Description   | Mandatory |
-+=========+===============+===========+
-| api_key | User API Key. | Mandatory |
-+---------+---------------+-----------+
+| XXXX                 | Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1                 | Optional  |
++----------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 
 Basic
 -----
@@ -223,6 +250,8 @@ Basic
 NTLM
 ----
 
+Requiring ``requests_ntlm`` or ``requests_negotiate_sspi`` python modules.
+
 +----------+------------------------------------------------------------------------------------------+-----------+
 |          | Description                                                                              | Mandatory |
 +==========+==========================================================================================+===========+
@@ -230,36 +259,6 @@ NTLM
 +----------+------------------------------------------------------------------------------------------+-----------+
 | password | User password. Default value is the logged in user password.                             | Optional  |
 +----------+------------------------------------------------------------------------------------------+-----------+
-
-Advanced Configuration
-----------------------
-
-Additional configuration details can be provided thanks to ``advanced_configuration`` property.
-
-This property is supposed to contains key=value information. Separator is ',' (comma).
-
-Values cannot contains "," character.
-Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
-
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-|                      | Description                                                                                                                                                                                                  | Possible values                                                                       |
-+======================+==============================================================================================================================================================================================================+=======================================================================================+
-| udf_return_type      | synchronous if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. asynchronous by default.                        | asynchronous or synchronous. Both values can be provided separated by ';' (semicolon) |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| rely_on_definitions  | Rely on swagger definitions to re-order fields received in JSON response. Deactivated by default.                                                                                                            | True or False                                                                         |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| max_retries          | Maximum number of time a request should be retried before considered as failed. 5 by default.                                                                                                                | Any positive integer value                                                            |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| header.XXXX          | Where XXXX is the name of the header that should be sent with every request sent to this service.                                                                                                            |                                                                                       |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| connect_timeout      | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts      | any float value (decimal separator is .)                                              |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| read_timeout         | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                 | any float value (decimal separator is .)                                              |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| swagger_read_timeout | Maximum amount of time, in seconds, to wait when requesting a swagger definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts | any float value (decimal separator is .)                                              |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
-| tags                 | Swagger tags that should be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                         | any value separated by ';' (semicolon)                                                |
-+----------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
 PyxelRest Service Configuration
 -------------------------------
@@ -276,23 +275,7 @@ You can also use the "pyxelrest" service name to activate [Postman](https://www.
 
    Selecting UDF
 
-It can be configured the same way than a usual service, except you cannot provide the following options as they do not make sense anymore:
-
-+--------------+
-| swagger_url  |
-+--------------+
-| service_host |
-+--------------+
-
-Also the following advanced configuration options will not be taken into account:
-
-+----------------------+
-| rely_on_definitions  |
-+----------------------+
-| swagger_read_timeout |
-+----------------------+
-| tags                 |
-+----------------------+
+It can be configured the same way than a usual service, except that open_api section is not used anymore.
 
 Logging Configuration
 ---------------------

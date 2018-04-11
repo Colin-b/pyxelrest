@@ -1,0 +1,42 @@
+usual_parameters:
+  open_api:
+    definition: "http://localhost:8943/"
+    rely_on_definitions: true
+
+filtered_tags:
+  open_api:
+    definition: "http://localhost:8944/"
+    selected_tags:
+      - "tag 1"
+      - "tag 2"
+    rely_on_definitions: true
+
+values_false:
+  open_api:
+    definition: "http://localhost:8945/"
+    rely_on_definitions: true
+
+output_order:
+  open_api:
+    definition: "http://localhost:8946/"
+    rely_on_definitions: true
+
+without_parameter:
+  open_api:
+    definition: "http://localhost:8950/"
+    rely_on_definitions: true
+
+header_parameter:
+  open_api:
+    definition: "http://localhost:8951/"
+    rely_on_definitions: true
+
+form_parameter:
+  open_api:
+    definition: "http://localhost:8952/"
+    rely_on_definitions: true
+
+array_parameter:
+  open_api:
+    definition: "http://localhost:8953/"
+    rely_on_definitions: true

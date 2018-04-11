@@ -1,15 +1,15 @@
-import unittest
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
-import tempfile
 import os.path
+import tempfile
+import unittest
+
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestTestFiles(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_files_services_configuration.ini')
+        loader.load('files_services.yml')
 
     @classmethod
     def tearDownClass(cls):

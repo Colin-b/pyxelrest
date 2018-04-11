@@ -3,6 +3,7 @@ import sys
 import platform
 import logging.config
 import logging.handlers
+import yaml
 
 from pyxelrest import _version, LOGGING_CONFIGURATION_FILE_PATH
 from distutils import sysconfig
@@ -25,8 +26,6 @@ def load_logging_configuration():
     :return: None
     """
     if os.path.isfile(LOGGING_CONFIGURATION_FILE_PATH):
-        # Only consider YAML as mandatory  in case a specific user logging configuration is provided.
-        import yaml
         with open(LOGGING_CONFIGURATION_FILE_PATH, 'r') as config_file:
              log_config_dict = yaml.load(config_file)
              logging.config.dictConfig(log_config_dict)

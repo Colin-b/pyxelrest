@@ -1,0 +1,8 @@
+vba_keywords:
+  methods:
+    - "get"
+    - "post"
+    - "put"
+    - "delete"
+  open_api:
+    definition: "http://localhost:8949/"

@@ -1,8 +1,9 @@
-﻿using IniParser;
-using IniParser.Model;
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using YamlDotNet.RepresentationModel;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -13,51 +14,116 @@ namespace AutoLoadPyxelRestAddIn
         internal static readonly string DEFAULT_SECTION = "DEFAULT";
 
         private readonly List<Service> services = new List<Service>();
+        private readonly YamlStream config;
+
+        public Configuration(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                Log.Warn("Configuration cannot be loaded as configuration path was not provided.");
+                config = null;
+            }
+            else
+            {
+                config = LoadPath(path);
+            }
+        }
+
+        public static string GetDefaultConfigFilePath()
+        {
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            return appDataFolder == null ? null : Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.yml");
+        }
+
+        private YamlStream LoadPath(string path)
+        {
+            try
+            {
+                return File.GetAttributes(path).HasFlag(FileAttributes.Directory) ? LoadFolder(path) : LoadFile(path);
+            }
+            catch (ArgumentException)
+            {
+                return LoadUrl(path);
+            }
+        }
+
+        private YamlStream LoadUrl(string fileUrl)
+        {
+            HttpWebResponse response = UrlChecker.ConnectTo(fileUrl, UrlChecker.GetProxyFor(fileUrl), close: false);
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
+            {
+                string details = response == null ? "" : response.StatusDescription;
+                Log.ErrorFormat("Configuration cannot be loaded from {0}: {1}.", fileUrl, details);
+                if (response != null)
+                    response.Close();
+                return null;
+            }
+
+            Log.InfoFormat("Configuration loaded from {0}: {1}.", fileUrl, response.StatusDescription);
+            var parser = new YamlStream();
+            var reader = new StreamReader(response.GetResponseStream());
+            parser.Load(reader);
+            reader.Close();
+            response.Close();
+            return parser;
+        }
+
+        private YamlStream LoadFile(string filePath)
+        {
+            var parser = new YamlStream();
+            var reader = new StreamReader(filePath);
+            parser.Load(reader);
+            reader.Close();
+            return parser;
+        }
+
+        private YamlStream LoadFolder(string folderPath)
+        {
+            Log.Warn("Configuration cannot be loaded as configuration folder path loading is not yet implemented.");
+            return null;  // TODO Add ability to load a folder content into a single ini data
+        }
 
         public List<Service> Load()
         {
-            var parser = new FileIniDataParser();
-            string configurationFilePath = GetConfigurationFilePath();
-            if (configurationFilePath == null)
-            {
-                Log.Error("Configuration cannot be loaded as configuration file path cannot be found.");
+            services.Clear();
+            if (config == null || config.Documents.Count == 0)
                 return services;
-            }
 
-            IniData config = parser.ReadFile(configurationFilePath);
-
-            foreach (var section in config.Sections)
+            var mapping = (YamlMappingNode)config.Documents[0].RootNode;
+            foreach (var section in mapping.Children)
             {
-                if (DEFAULT_SECTION.Equals(section.SectionName))
-                    continue;
+                string serviceName = ((YamlScalarNode)section.Key).Value;
                 try
                 {
-                    Service service = AddService(section.SectionName);
-                    service.FromConfig(config);
+                    Service service = AddService(serviceName);
+                    service.FromConfig((YamlMappingNode) section.Value);
                 }
                 catch (Exception e)
                 {
-                    Log.Error(string.Format("Unable to load '{0}' service configuration", section.SectionName), e);
+                    Log.Error(string.Format("Unable to load '{0}' service configuration", serviceName), e);
                 }
             }
             return services;
         }
 
-        public void Save()
+        public void Save(string configurationFilePath)
         {
-            var parser = new FileIniDataParser();
-            string configurationFilePath = GetConfigurationFilePath();
             if (configurationFilePath == null)
             {
-                Log.Error("Configuration cannot be saved as configuration file path cannot be found.");
+                Log.Error("Configuration cannot be saved as configuration file path was not provided.");
                 return;
             }
-            IniData config = parser.ReadFile(configurationFilePath);
 
-            config.Sections.Clear();
+            var parser = new YamlStream();
+            var mapping = new YamlMappingNode();
+
             foreach (Service service in services)
-                config.Sections.Add(service.ToConfig());
-            parser.WriteFile(configurationFilePath, config);
+                mapping.Add(new YamlScalarNode(service.Name), service.ToConfig());
+
+            parser.Add(new YamlDocument(mapping));
+            var writer = new StreamWriter(configurationFilePath);
+            parser.Save(writer);
+            writer.Close();
             Log.Info("Services configuration updated.");
         }
 
@@ -76,12 +142,9 @@ namespace AutoLoadPyxelRestAddIn
             return service;
         }
 
-        private string GetConfigurationFilePath()
+        internal void AddService(Service service)
         {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (appDataFolder != null)
-                return System.IO.Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.ini");
-            return null;
+            services.Add(service);
         }
 
         internal void Remove(Service service)

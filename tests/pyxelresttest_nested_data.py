@@ -1,6 +1,6 @@
 import unittest
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
+
+from testsutils import (serviceshandler, loader)
 
 
 def support_pandas():
@@ -16,7 +16,7 @@ class PyxelRestNestedDataTest(unittest.TestCase):
     def setUpClass(cls):
         import testsutils.nested_data_service as nested_data_service
         serviceshandler.start_services((nested_data_service, 8947))
-        loader.load('pyxelresttest_nested_data_services_configuration.ini')
+        loader.load('nested_data_services.yml')
 
     @classmethod
     def tearDownClass(cls):

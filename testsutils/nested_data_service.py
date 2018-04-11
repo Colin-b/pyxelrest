@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def swagger():
+def open_api_definition():
     return jsonify(swagger='2.0',
                    definitions={
                        'Column': {

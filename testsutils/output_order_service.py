@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def swagger():
-    swagger_json = """{
+def open_api_definition():
+    open_api_definition_json = """{
     "swagger": "2.0",
     "definitions": {
         "Price": {
@@ -94,7 +94,7 @@ def swagger():
         }
     }
 }"""
-    return Response(swagger_json, content_type='application/json')
+    return Response(open_api_definition_json, content_type='application/json')
 
 
 @app.route('/price/unordered', methods=['GET'])

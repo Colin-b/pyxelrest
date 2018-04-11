@@ -18,8 +18,8 @@ pattern = "ordos_local_test_explain"
 
 workbook = xlsxwriter.Workbook('services.xlsx')
 for service in load_services():
-    for path in sorted(service.swagger['paths']):
-        services_infos = service.swagger['paths'][path]
+    for path in sorted(service.open_api_definition['paths']):
+        services_infos = service.open_api_definition['paths'][path]
         service_methods = set(service.methods).intersection(services_infos)
         for method in service_methods:
             spec = services_infos[method]

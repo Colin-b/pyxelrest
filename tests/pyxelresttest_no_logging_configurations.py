@@ -1,13 +1,12 @@
 import unittest
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
+
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
     def setUp(self):
         from testsutils import usual_parameters_service
         serviceshandler.start_services((usual_parameters_service, 8943))
-        loader.load('pyxelresttest_no_logging_services_configuration.ini', 'non_existing_configuration.ini')
 
     def tearDown(self):
         serviceshandler.stop_services()
@@ -16,7 +15,7 @@ class PyxelRestNoLoggingConfigurationTest(unittest.TestCase):
         """
         This test case assert that pyxelrest can be loaded without logging configuration
         """
-        self.assertTrue(True)
+        loader.load('no_logging_services.yml', 'non_existing_configuration.yml')
 
 
 if __name__ == '__main__':

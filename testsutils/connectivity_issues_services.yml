@@ -1,0 +1,8 @@
+without_parameter:
+  open_api:
+    definition: "http://localhost:8950/"
+  methods:
+    - "get"
+    - "post"
+    - "put"
+    - "delete"

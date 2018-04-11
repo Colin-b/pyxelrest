@@ -1,16 +1,15 @@
+from requests_auth import authentication
+import time
 import unittest
 
-from requests_auth import authentication
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
-import time
+from testsutils import (serviceshandler, loader)
 
 
 class PyxelRestAuthenticationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_authentication_services_configuration.ini')
+        loader.load('authentication_services.yml')
 
     @classmethod
     def tearDownClass(cls):

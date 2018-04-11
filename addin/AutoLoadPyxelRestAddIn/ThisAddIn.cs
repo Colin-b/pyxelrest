@@ -45,7 +45,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             Config = LoadConfig();
             log4net.Config.XmlConfigurator.Configure(new FileInfo(Config.FilePath));
-            Log.DebugFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
+            Log.InfoFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
             Log.DebugFormat("Configuration loaded from {0}", Config.FilePath);
             Application.WorkbookOpen += OnOpenWorkBook;
             Application.WorkbookActivate += OnActivateWorkBook;
@@ -208,6 +208,7 @@ namespace AutoLoadPyxelRestAddIn
                 else
                 {
                     Log.DebugFormat("Activating '{0}' workbook. Generating user defined functions...", Wb.Name);
+                    ServiceConfigurationForm.UpdateServices();
                     ImportUserDefinedFunctions();
                 }
             }
@@ -236,6 +237,7 @@ namespace AutoLoadPyxelRestAddIn
                 else
                 {
                     Log.DebugFormat("Opening '{0}' workbook. Generating user defined functions...", Wb.Name);
+                    ServiceConfigurationForm.UpdateServices();
                     ImportUserDefinedFunctions();
                 }
             }
@@ -258,11 +260,12 @@ namespace AutoLoadPyxelRestAddIn
             else
             {
                 Log.Debug("Microsoft Excel started with a blank document. Generating user defined functions...");
+                ServiceConfigurationForm.UpdateServices();
                 ImportUserDefinedFunctions();
             }
         }
 
-        private bool GenerateUDFAtStartup()
+        internal static bool GenerateUDFAtStartup()
         {
             string generateUDFAtStartup = GetSetting("GenerateUDFAtStartup");
             return string.IsNullOrEmpty(generateUDFAtStartup) || "True".Equals(generateUDFAtStartup);

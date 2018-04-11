@@ -1,0 +1,110 @@
+usual_parameters:
+  open_api:
+    definition: "http://localhost:8943/"
+
+selected_tags:
+  open_api:
+    definition: "http://localhost:8944/"
+    selected_tags:
+      - "tag 1"
+      - "tag 2"
+
+excluded_tags:
+  open_api:
+    definition: "http://localhost:8944/"
+    excluded_tags:
+      - "tag 1"
+      - "tag 2"
+
+selected_operation_ids:
+  open_api:
+    definition: "http://localhost:8944/"
+    selected_operation_ids:
+      - "get_tags"
+      - "post_tags"
+      - "put_tags"
+
+excluded_operation_ids:
+  open_api:
+    definition: "http://localhost:8944/"
+    excluded_operation_ids:
+      - "get_tags"
+      - "post_tags"
+      - "put_tags"
+
+values_false:
+  open_api:
+    definition: "http://localhost:8945/"
+
+output_order:
+  open_api:
+    definition: "http://localhost:8946/"
+
+operation_id_not_provided:
+  open_api:
+    definition: "http://localhost:8948/operation_id_not_provided"
+
+operation_id_not_always_provided:
+  open_api:
+    definition: "http://localhost:8948/operation_id_not_always_provided"
+
+without_parameter:
+  open_api:
+    definition: "http://localhost:8950/"
+
+header_parameter:
+  open_api:
+    definition: "http://localhost:8951/"
+  udf_return_types:
+    - "vba_compatible"
+    - "sync_auto_expand"
+
+header_advanced_configuration:
+  open_api:
+    definition: "http://localhost:8951/"
+  udf_return_types:
+    - "vba_compatible"
+  headers:
+    X-PXL-CUSTOM: "MyCustomValue"
+    X-PXL-OTHER: "MyOtherValue"
+
+form_parameter:
+  open_api:
+    definition: "http://localhost:8952/"
+
+open_api_definition_loaded_from_file:
+  open_api:
+    definition: "file://../testsutils/static_open_api_definition.json"
+
+array_parameter:
+  open_api:
+    definition: "http://localhost:8953/"
+
+http_methods:
+  open_api:
+    definition: "http://localhost:8955/"
+  methods:
+    - "get"
+    - "post"
+    - "put"
+    - "delete"
+    - "patch"
+    - "options"
+    - "head"
+
+content_type:
+  open_api:
+    definition: "http://localhost:8956/"
+
+base_path_ending_with_slash:
+  open_api:
+    definition: "http://localhost:8957/"
+
+async:
+  open_api:
+    definition: "http://localhost:8958/"
+
+pyxelrest:
+  udf_return_types:
+    - "vba_compatible"
+    - "sync_auto_expand"

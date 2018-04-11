@@ -56,7 +56,7 @@ def create_logger():
         logger = logging.getLogger(__name__)
 
     logging_configuration_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration',
-                                                   'auto_update_logging.ini')
+                                                   'auto_update_logging.yml')
     default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', 'pyxelrest_auto_update.log')
     if os.path.isfile(logging_configuration_file_path):
         with open(logging_configuration_file_path, 'r') as config_file:

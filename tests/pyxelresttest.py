@@ -1,9 +1,9 @@
 import datetime
+from dateutil.tz import tzutc
 import unittest
 import platform
-from dateutil.tz import tzutc
-import testsutils.serviceshandler as serviceshandler
-import testsutils.loader as loader
+
+from testsutils import (serviceshandler, loader)
 
 
 def support_pandas():
@@ -18,7 +18,7 @@ class PyxelRestTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.start_services()
-        loader.load('pyxelresttest_services_configuration.ini')
+        loader.load('services.yml')
 
     @classmethod
     def tearDownClass(cls):
@@ -31,7 +31,7 @@ class PyxelRestTest(unittest.TestCase):
             filtered_tags_service,
             values_false_service,
             output_order_service,
-            swagger_parsing_service,
+            open_api_definition_parsing_service,
             without_parameter_service,
             header_parameter_service,
             form_parameter_service,
@@ -47,7 +47,7 @@ class PyxelRestTest(unittest.TestCase):
             (filtered_tags_service, 8944),
             (values_false_service, 8945),
             (output_order_service, 8946),
-            (swagger_parsing_service, 8948),
+            (open_api_definition_parsing_service, 8948),
             (without_parameter_service, 8950),
             (header_parameter_service, 8951),
             (form_parameter_service, 8952),
@@ -59,13 +59,58 @@ class PyxelRestTest(unittest.TestCase):
             (async_service, 8958),
         )
 
-    def test_string_array_parameter(self):
+    def test_string_multi_array_parameter(self):
         from pyxelrest import pyxelrestgenerator
         if platform.python_version()[0] == '3':
             result = 'string_array="[\'str1\', \'str2\']"'
         else:
             result = u'string_array="[u\'str1\', u\'str2\']"'
-        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_array_parameter(['str1', 'str2']),
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_multi_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_default_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1,str2\']"'
+        else:
+            result = u'string_array="[u\'str1,str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_default_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_csv_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1,str2\']"'
+        else:
+            result = u'string_array="[u\'str1,str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_csv_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_ssv_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1 str2\']"'
+        else:
+            result = u'string_array="[u\'str1 str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_ssv_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_tsv_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1\\tstr2\']"'
+        else:
+            result = u'string_array="[u\'str1\\tstr2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_tsv_array_parameter(['str1', 'str2']),
+                         result)
+
+    def test_string_pipes_array_parameter(self):
+        from pyxelrest import pyxelrestgenerator
+        if platform.python_version()[0] == '3':
+            result = 'string_array="[\'str1|str2\']"'
+        else:
+            result = u'string_array="[u\'str1|str2\']"'
+        self.assertEqual(pyxelrestgenerator.array_parameter_get_string_pipes_array_parameter(['str1', 'str2']),
                          result)
 
     def test_plain_without_parameter(self):
@@ -99,8 +144,8 @@ class PyxelRestTest(unittest.TestCase):
     def test_service_without_sync_does_not_have_sync(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(AttributeError) as cm:
-            pyxelrestgenerator.sync_without_parameter_delete_without_parameter()
-        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_without_parameter_delete_without_parameter'")
+            pyxelrestgenerator.vba_without_parameter_delete_without_parameter()
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'vba_without_parameter_delete_without_parameter'")
 
     def test_get_header_parameter(self):
         from pyxelrest import pyxelrestgenerator
@@ -110,15 +155,15 @@ class PyxelRestTest(unittest.TestCase):
 
     def test_get_header_parameter_sync(self):
         from pyxelrest import pyxelrestgenerator
-        headers = pyxelrestgenerator.sync_header_parameter_get_header('sent header')
+        headers = pyxelrestgenerator.vba_header_parameter_get_header('sent header')
         header_param_index = headers[0].index('Header-String')
         self.assertEqual(headers[1][header_param_index], 'sent header')
 
-    def test_service_only_sync_does_not_have_sync_prefix(self):
+    def test_service_only_sync_does_not_have_vba_prefix(self):
         from pyxelrest import pyxelrestgenerator
         with self.assertRaises(AttributeError) as cm:
-            pyxelrestgenerator.sync_header_advanced_configuration_get_header('sent header')
-        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'sync_header_advanced_configuration_get_header'")
+            pyxelrestgenerator.vba_header_advanced_configuration_get_header('sent header')
+        self.assertEqual(cm.exception.args[0], "module 'pyxelrest.pyxelrestgenerator' has no attribute 'vba_header_advanced_configuration_get_header'")
 
     def test_get_header_advanced_configuration(self):
         from pyxelrest import pyxelrestgenerator
@@ -137,7 +182,7 @@ class PyxelRestTest(unittest.TestCase):
         self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
 
         user_agent_index = headers[0].index('User-Agent')
-        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.66.0')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.67.0')
 
     def test_post_form_parameter(self):
         from pyxelrest import pyxelrestgenerator
@@ -149,30 +194,93 @@ class PyxelRestTest(unittest.TestCase):
             ]
         )
 
-    def test_get_with_tags(self):
+    def test_get_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'Second tag is one of the accepted tags',
-            pyxelrestgenerator.filtered_tags_get_tags()
+            pyxelrestgenerator.selected_tags_get_tags()
         )
 
-    def test_post_with_tags(self):
+    def test_post_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'All tags are accepted',
-            pyxelrestgenerator.filtered_tags_post_tags()
+            pyxelrestgenerator.selected_tags_post_tags()
         )
 
-    def test_put_with_tags(self):
+    def test_put_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'First tag is one of the accepted tags',
-            pyxelrestgenerator.filtered_tags_put_tags()
+            pyxelrestgenerator.selected_tags_put_tags()
         )
 
-    def test_delete_with_tags(self):
+    def test_delete_with_selected_tags(self):
         from pyxelrest import pyxelrestgenerator
-        self.assertFalse(hasattr(pyxelrestgenerator, 'filtered_tags_delete_with_tags'))
+        self.assertFalse(hasattr(pyxelrestgenerator, 'selected_tags_delete_tags'))
+
+    def test_get_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_tags_get_tags'))
+
+    def test_post_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_tags_post_tags'))
+
+    def test_put_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_tags_put_tags'))
+
+    def test_delete_with_excluded_tags(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'This method should not be available',
+            pyxelrestgenerator.excluded_tags_delete_tags()
+        )
+
+    def test_get_with_selected_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'Second tag is one of the accepted tags',
+            pyxelrestgenerator.selected_operation_ids_get_tags()
+        )
+
+    def test_post_with_selected_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'All tags are accepted',
+            pyxelrestgenerator.selected_operation_ids_post_tags()
+        )
+
+    def test_put_with_selected_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'First tag is one of the accepted tags',
+            pyxelrestgenerator.selected_operation_ids_put_tags()
+        )
+
+    def test_delete_with_selected_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'selected_operation_ids_delete_tags'))
+
+    def test_get_with_excluded_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_operation_ids_get_tags'))
+
+    def test_post_with_excluded_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_operation_ids_post_tags'))
+
+    def test_put_with_excluded_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertFalse(hasattr(pyxelrestgenerator, 'excluded_operation_ids_put_tags'))
+
+    def test_delete_with_excluded_operation_ids(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            'This method should not be available',
+            pyxelrestgenerator.excluded_operation_ids_delete_tags()
+        )
 
     def test_get_with_zero_integer(self):
         from pyxelrest import pyxelrestgenerator
@@ -287,11 +395,11 @@ class PyxelRestTest(unittest.TestCase):
             pyxelrestgenerator.usual_parameters_get_date_time_encoding(encoded_date_time=date_time)
         )
 
-    def test_get_static_swagger_file(self):
+    def test_get_static_open_api_definition(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
             'success',
-            pyxelrestgenerator.swagger_loaded_from_file_get_static_file_call()
+            pyxelrestgenerator.open_api_definition_loaded_from_file_get_static_file_call()
         )
 
     def test_get_http_method(self):
@@ -347,14 +455,14 @@ class PyxelRestTest(unittest.TestCase):
     def test_msgpackpandas_content_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'application/msgpackpandas' if support_pandas() else '*/*',
+            ['application/msgpackpandas'] if support_pandas() else ['*/*'],
             pyxelrestgenerator.content_type_get_msgpackpandas()
         )
 
     def test_json_content_type(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(
-            'application/json',
+            ['application/json'],
             pyxelrestgenerator.content_type_get_json()
         )
 
@@ -418,7 +526,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['X-Custom-Header1', 'X-Custom-Header2'],
                 ['custom1', 'custom2']
             ],
-            pyxelrestgenerator.sync_pyxelrest_get_url(
+            pyxelrestgenerator.vba_pyxelrest_get_url(
                 'http://localhost:8958/async/status',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
@@ -450,7 +558,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['X-Custom-Header1', 'X-Custom-Header2'],
                 ['custom1', 'custom2']
             ],
-            pyxelrestgenerator.sync_pyxelrest_delete_url(
+            pyxelrestgenerator.vba_pyxelrest_delete_url(
                 'http://localhost:8958/unlisted',
                 extra_headers=[
                     ['X-Custom-Header1', 'custom1'],
@@ -503,7 +611,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['value1', 1, 'value3'],
                 ['other1', 2, 'other3'],
             ],
-            pyxelrestgenerator.sync_pyxelrest_post_url(
+            pyxelrestgenerator.vba_pyxelrest_post_url(
                 'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],
@@ -588,7 +696,7 @@ class PyxelRestTest(unittest.TestCase):
                 ['key1', 'key2', 'key3'],
                 ['value1', 1, 'value3'],
             ],
-            pyxelrestgenerator.sync_pyxelrest_put_url(
+            pyxelrestgenerator.vba_pyxelrest_put_url(
                 'http://localhost:8958/dict',
                 [
                     ['key1', 'key2', 'key3'],

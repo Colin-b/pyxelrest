@@ -7,7 +7,7 @@ class LocalFileAdapter(requests.adapters.BaseAdapter):
     """
     Protocol Adapter to allow Requests to GET file:// URLs
 
-    Example: file:///C:\path\to\swagger.json
+    Example: file:///C:\path\to\open_api_definition.json
     """
 
     @staticmethod

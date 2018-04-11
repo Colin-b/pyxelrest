@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 @app.route('/swagger.json')
-def swagger():
+def open_api_definition():
     # Do not respond to this call (simulate service down behind a reverse proxy)
     time.sleep(3600)
 
