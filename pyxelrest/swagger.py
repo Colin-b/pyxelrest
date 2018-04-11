@@ -508,7 +508,7 @@ class OpenAPI:
         Retrieve OpenAPI JSON definition from service.
         :return: Dictionary representation of the retrieved Open API JSON definition.
         """
-        requests_session = requests.session()
+        requests_session = session.get(0)
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
         response = requests_session.get(self.config.open_api_definition, proxies=self.config.proxies, verify=False,
                                         timeout=(self.config.connect_timeout, self.config.definition_read_timeout))
