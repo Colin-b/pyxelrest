@@ -6,7 +6,7 @@ import jinja2
 import logging.config
 import logging.handlers
 import datetime
-from importlib import import_module
+import sys
 from pyxelrest import (
     vba,
     authentication,
