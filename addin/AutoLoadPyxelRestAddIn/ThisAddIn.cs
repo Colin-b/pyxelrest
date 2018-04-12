@@ -151,8 +151,14 @@ namespace AutoLoadPyxelRestAddIn
 
         private void KillPython()
         {
-            Log.Debug("Killing Python process...");
             Process[] pythonProcesses = Process.GetProcessesByName("pythonw");
+            if (pythonProcesses.Length == 0)
+            {
+                Log.Debug("No need to kill Python as no Python process is running.");
+                return;
+            }
+
+            Log.Debug("Killing Python process...");
             Application.Run(string.Format("{0}!KillPy", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
 
             // As Python process is not killed instantly, ensure it is killed before trying to launch it again.
