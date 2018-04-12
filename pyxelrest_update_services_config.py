@@ -16,6 +16,7 @@ _USER_CONFIG_FILE_PATH = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'config
 ADD_SECTIONS = 'add'  # Provided configuration(s) will be appended (updated if section is already existing)
 UPDATE_SECTIONS = 'update'  # Provided configuration(s) will be updated (if section is already existing)
 REMOVE_SECTIONS = 'remove'  # Provided configuration(s) will be removed (only based on section name)
+LIST_SECTIONS = 'list'  # Provided configuration(s) will be listed (section name and description)
 
 
 def open_config(file_or_directory):
@@ -91,7 +92,9 @@ class ServicesConfigUpdater:
         or a directory or an URL to a file containing configuration file(s).
         :param services: List of service names to be affected.
         """
-        logger.info('Updating services configuration...')
+        if LIST_SECTIONS != self._action:
+            logger.info('Updating services configuration...')
+
         # TODO Remove once every client will have this version in conf
         file_or_directory = file_or_directory.replace('all_services.ini', 'services.yml')
         updated_config = open_config(file_or_directory)
@@ -109,9 +112,12 @@ class ServicesConfigUpdater:
                 self._update_service(service_name, service_config)
             if REMOVE_SECTIONS == self._action:
                 self._remove_service(service_name)
+            if LIST_SECTIONS == self._action:
+                self._log_service(service_name, service_config)
 
-        self._save_configuration()
-        logger.info('Services configuration updated.')
+        if LIST_SECTIONS != self._action:
+            self._save_configuration()
+            logger.info('Services configuration updated.')
 
     def _save_configuration(self):
         with open(_USER_CONFIG_FILE_PATH, 'w') as file:
@@ -134,12 +140,18 @@ class ServicesConfigUpdater:
         if self._user_config.pop(service_name):
             logger.info('"{0}" configuration removed.'.format(service_name))
 
+    def _log_service(self, service_name, updated_config):
+        if 'description' in updated_config:
+            logger.info('{0} ({1})'.format(updated_config.get('description'), service_name))
+        else:
+            logger.info(service_name)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('file_or_directory', help='File (path or URL) or directory (path) containing services configuration.', type=str)
     parser.add_argument('action', help='Action to perform with provided file(s).', type=str, choices=[
-        ADD_SECTIONS, UPDATE_SECTIONS, REMOVE_SECTIONS])
+        ADD_SECTIONS, UPDATE_SECTIONS, REMOVE_SECTIONS, LIST_SECTIONS])
     parser.add_argument('--services', help='Subset of services to be affected by the action.', default=None, type=str, nargs='*')
     options = parser.parse_args(sys.argv[1:])
 
