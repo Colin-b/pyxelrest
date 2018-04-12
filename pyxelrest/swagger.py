@@ -459,7 +459,8 @@ class PyxelRestUDFMethod(UDFMethod):
             self.received_value = value  # TODO Validate dict
 
         def validate(self, request_content):
-            request_content.header.update(self.received_value)
+            if self.received_value:
+                request_content.header.update(self.received_value)
 
     def __init__(self, service, http_method, udf_return_type):
         UDFMethod.__init__(self, service, http_method, '{url}', udf_return_type)
