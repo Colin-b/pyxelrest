@@ -108,12 +108,12 @@ class ServicesConfigUpdater:
 
             if ADD_SECTIONS == self._action:
                 self._add_service(service_name, service_config)
-            if UPDATE_SECTIONS == self._action:
+            elif UPDATE_SECTIONS == self._action:
                 self._update_service(service_name, service_config)
-            if REMOVE_SECTIONS == self._action:
+            elif REMOVE_SECTIONS == self._action:
                 self._remove_service(service_name)
-            if LIST_SECTIONS == self._action:
-                self._log_service(service_name, service_config)
+            elif LIST_SECTIONS == self._action:
+                self._print_service(service_name, service_config)
 
         if LIST_SECTIONS != self._action:
             self._save_configuration()
@@ -140,11 +140,11 @@ class ServicesConfigUpdater:
         if self._user_config.pop(service_name):
             logger.info('"{0}" configuration removed.'.format(service_name))
 
-    def _log_service(self, service_name, updated_config):
+    def _print_service(self, service_name, updated_config):
         if 'description' in updated_config:
-            logger.info('{0} ({1})'.format(updated_config.get('description'), service_name))
+            print('{0} ({1})'.format(updated_config.get('description'), service_name))
         else:
-            logger.info(service_name)
+            print(service_name)
 
 
 if __name__ == '__main__':
