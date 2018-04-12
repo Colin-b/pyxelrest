@@ -651,12 +651,12 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AsynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.AsynchronousAutoExpand = ((CheckBox)sender).Checked;
+            servicePanel.service.AsynchronousAutoExpand = ((RadioButton)sender).Checked;
         }
 
         private void SynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.SynchronousAutoExpand = ((CheckBox)sender).Checked;
+            servicePanel.service.SynchronousAutoExpand = ((RadioButton)sender).Checked;
         }
 
         private void VBACompatible_CheckedChanged(object sender, EventArgs e)

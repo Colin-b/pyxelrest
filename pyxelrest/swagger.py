@@ -6,8 +6,9 @@ import re
 import requests
 import requests.exceptions
 import sys
-import yaml
 import threading
+import time
+import yaml
 import xlwings
 import xlwings.conversion
 import xlwings.server
@@ -374,7 +375,31 @@ class PyxelRestUDFMethod(UDFMethod):
         def validate_optional(self, value, request_content):
             if value is not None:
                 value = self._convert_to_str(value)
-            self.received_value = value  # Save it to be used by body parameter
+            request_content.add_value(self, value)
+
+    class WaitForRedirectParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'wait_redirect_every',
+                'wait_redirect_every',
+                '',
+                False,
+                'integer'
+            )
+            self.description = 'Number of seconds to wait for a redirection before sending result.'
+
+        def _convert_to_int(self, value):
+            if not isinstance(value, int):
+                raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+            if value < 0:
+                raise Exception('{0} value "{1}" must be superior or equals to 0.'.format(self.name, value))
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_int(value)
+            request_content.add_value(self, value)
 
     class UrlParameter(UDFParameter):
         def __init__(self):
@@ -401,7 +426,7 @@ class PyxelRestUDFMethod(UDFMethod):
             request_content.add_value(self, value)
 
     class BodyParameter(UDFParameter):
-        def __init__(self, parse_body_as_parameter):
+        def __init__(self):
             UDFParameter.__init__(
                 self,
                 'body',
@@ -411,13 +436,12 @@ class PyxelRestUDFMethod(UDFMethod):
                 'object'
             )
             self.description = 'Content of the body.'
-            self.parse_body_as_parameter = parse_body_as_parameter
 
         def validate_optional(self, value, request_content):
             self.received_value = value  # Save value as is to serialize it properly afterwards
 
         def validate(self, request_content):
-            request_content.payload = list_as_json(self.received_value, self.parse_body_as_parameter.received_value)
+            request_content.payload = list_as_json(self.received_value, request_content.extra_parameters.get('parse_body_as'))
 
     class ExtraHeadersParameter(UDFParameter):
         def __init__(self):
@@ -446,12 +470,12 @@ class PyxelRestUDFMethod(UDFMethod):
         parameters = [
             self.UrlParameter(),
             self.ExtraHeadersParameter(),
+            self.WaitForRedirectParameter(),
         ]
 
         if self.requests_method in ['post', 'put']:
-            parse_body_as = self.ParseBodyAsParameter()
-            parameters.append(self.BodyParameter(parse_body_as))
-            parameters.append(parse_body_as)
+            parameters.append(self.BodyParameter())
+            parameters.append(self.ParseBodyAsParameter())
 
         return parameters
 
@@ -974,6 +998,8 @@ class RequestContent:
         self.path_values = {}
         # Contains parameters that were not provided but may still need to be sent with None value
         self._none_parameters = []
+        # Parameters that should not be sent by interpreted by pyxelrest
+        self.extra_parameters = {}
 
     def validate(self):
         for udf_parameter in self.udf_method.parameters.values():
@@ -990,10 +1016,15 @@ class RequestContent:
             self._add_header_parameter(parameter, value)
         elif parameter.location == 'path':
             self._add_path_parameter(parameter, value)
+        elif parameter.location == '':
+            self._add_extra_parameter(parameter, value)
 
     def _add_query_parameter(self, parameter, value):
         if value is not None:
             self.parameters[parameter.server_param_name] = value
+
+    def _add_extra_parameter(self, parameter, value):
+        self.extra_parameters[parameter.server_param_name] = value
 
     def _add_path_parameter(self, parameter, value):
         self.path_values[parameter.server_param_name] = value
@@ -1128,6 +1159,15 @@ def get_result(udf_method, request_content):
             timeout=(udf_method.service.config.connect_timeout, udf_method.service.config.read_timeout)
         )
         response.raise_for_status()
+
+        # Wait for redirection if needed
+        if 'wait_redirect_every' in request_content.extra_parameters:
+            wait_redirect_every = request_content.extra_parameters['wait_redirect_every']
+            if wait_redirect_every and not response.is_redirect:
+                logger.info('Wait for a redirection in {0} seconds.'.format(wait_redirect_every))
+                time.sleep(wait_redirect_every)
+                return get_result(udf_method, request_content)
+
         logger.info('[status=Valid] response received for [function={1}] [url={0}].'.format(response.request.url, udf_method.udf_name))
         if 202 == response.status_code:
             return [['Status URL'], [response.headers['location']]]
