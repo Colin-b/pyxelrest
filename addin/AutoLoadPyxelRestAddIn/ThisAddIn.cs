@@ -156,7 +156,7 @@ namespace AutoLoadPyxelRestAddIn
             Application.Run(string.Format("{0}!KillPy", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
 
             // As Python process is not killed instantly, ensure it is killed before trying to launch it again.
-            // Check 10 times at max every 10ms for one Python process to be killed
+            // Check 10 times at max every 100ms for one Python process to be killed
             for (int check = 0; check < 10; check++)
             {
                 foreach(Process pythonProcess in pythonProcesses)
@@ -168,7 +168,7 @@ namespace AutoLoadPyxelRestAddIn
                     }
                 }
                 Log.Debug("Waiting 10ms for Python process to be killed.");
-                System.Threading.Thread.Sleep(10);
+                System.Threading.Thread.Sleep(100);
             }
             Log.Debug("Considering Python process as killed even if it might not be (time out).");
         }
