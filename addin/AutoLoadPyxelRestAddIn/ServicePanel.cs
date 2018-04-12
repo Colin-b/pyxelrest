@@ -74,7 +74,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region OpenAPI Definition
                 servicePanel.Controls.Add(new Label { Text = "OpenAPI Definition", TextAlign = ContentAlignment.BottomLeft, Width=120 }, 0, 0);
 
-                openAPIDefinition = new TextBox { Text = service.OpenAPI["definition"].ToString(), Dock = DockStyle.Fill, Width = 290 };
+                openAPIDefinition = new TextBox { Text = service.OpenAPI.ContainsKey("definition") ? service.OpenAPI["definition"].ToString() : string.Empty, Dock = DockStyle.Fill, Width = 290 };
                 openAPIDefinition.TextChanged += OpenAPIDefinition_TextChanged;
                 servicePanel.Controls.Add(openAPIDefinition, 1, 0);
                 #endregion
