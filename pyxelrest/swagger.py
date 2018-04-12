@@ -377,17 +377,17 @@ class PyxelRestUDFMethod(UDFMethod):
                 value = self._convert_to_str(value)
             request_content.add_value(self, value)
 
-    class WaitForRedirectParameter(UDFParameter):
+    class WaitForStatusParameter(UDFParameter):
         def __init__(self):
             UDFParameter.__init__(
                 self,
-                'wait_redirect_every',
-                'wait_redirect_every',
+                'wait_for_status',
+                'wait_for_status',
                 '',
                 False,
                 'integer'
             )
-            self.description = 'Number of seconds to wait for a redirection before sending result.'
+            self.description = 'HTTP status code to wait for before returning response.'
 
         def _convert_to_int(self, value):
             if not isinstance(value, int):
@@ -399,6 +399,32 @@ class PyxelRestUDFMethod(UDFMethod):
         def validate_optional(self, value, request_content):
             if value is not None:
                 value = self._convert_to_int(value)
+            request_content.add_value(self, value)
+
+    class CheckIntervalParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'check_interval',
+                'check_interval',
+                '',
+                False,
+                'integer'
+            )
+            self.description = 'Number of seconds to wait before sending a new request. Wait for 30 seconds by default.'
+
+        def _convert_to_int(self, value):
+            if not isinstance(value, int):
+                raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+            if value < 0:
+                raise Exception('{0} value "{1}" must be superior or equals to 0.'.format(self.name, value))
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_int(value)
+            else:
+                value = 30
             request_content.add_value(self, value)
 
     class UrlParameter(UDFParameter):
@@ -471,7 +497,8 @@ class PyxelRestUDFMethod(UDFMethod):
         parameters = [
             self.UrlParameter(),
             self.ExtraHeadersParameter(),
-            self.WaitForRedirectParameter(),
+            self.WaitForStatusParameter(),
+            self.CheckIntervalParameter(),
         ]
 
         if self.requests_method in ['post', 'put']:
@@ -1161,12 +1188,13 @@ def get_result(udf_method, request_content):
         )
         response.raise_for_status()
 
-        # Wait for redirection if needed
-        if 'wait_redirect_every' in request_content.extra_parameters:
-            wait_redirect_every = request_content.extra_parameters['wait_redirect_every']
-            if wait_redirect_every and not response.is_redirect:
-                logger.info('Wait for a redirection in {0} seconds.'.format(wait_redirect_every))
-                time.sleep(wait_redirect_every)
+        # Wait for a specific status if needed
+        wait_for_status = request_content.extra_parameters.get('wait_for_status')
+        if wait_for_status:
+            if not response.history or (response.history[0].status_code != wait_for_status):
+                check_interval = request_content.extra_parameters['check_interval']
+                logger.info('Waiting for {0} status. Sending a new request in {1} seconds.'.format(wait_for_status, check_interval))
+                time.sleep(check_interval)
                 return get_result(udf_method, request_content)
 
         logger.info('[status=Valid] response received for [function={1}] [url={0}].'.format(response.request.url, udf_method.udf_name))
