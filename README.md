@@ -128,7 +128,9 @@ Services configuration can be done within Microsoft Excel thanks to the `Configu
 
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 
-![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_services.PNG)
+![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services.PNG)
+
+![Advanced configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service.PNG)
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\services.yml` file.
 
@@ -372,7 +374,9 @@ Requiring requests_ntlm or requests_negotiate_sspi python modules.
 
 You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
-![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_pyxelrest_service.PNG)
+![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services_pyxelrest.PNG)
+
+![Advanced configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service_pyxelrest.PNG)
 
 ![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG)
 
