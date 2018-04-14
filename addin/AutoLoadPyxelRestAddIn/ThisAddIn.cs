@@ -138,8 +138,11 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     KillPython();
                 }
-                Application.Run(string.Format("{0}!ImportPythonUDFs", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
-                Log.Debug("User defined functions generated.");
+                dynamic errorCode = Application.Run(string.Format("{0}!ImportPythonUDFs", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
+                if (errorCode != null)
+                    Log.DebugFormat("User defined functions were not generated (return code {0})", errorCode);
+                else
+                    Log.Debug("User defined functions generated.");
                 return true;
             }
             catch (Exception ex)
@@ -158,23 +161,25 @@ namespace AutoLoadPyxelRestAddIn
                 return;
             }
 
-            Log.Debug("Killing Python process...");
-            Application.Run(string.Format("{0}!KillPy", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
+            Log.DebugFormat("{0} Python processes runnning. Killing Python process...", pythonProcesses.Length);
+            dynamic returnCode = Application.Run(string.Format("{0}!KillPy", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
+            if (returnCode != null)
+                Log.DebugFormat("Killing request failed (return code {0}).", returnCode);
 
             // As Python process is not killed instantly, ensure it is killed before trying to launch it again.
             // Check 10 times at max every 100ms for one Python process to be killed
             for (int check = 0; check < 10; check++)
             {
-                foreach(Process pythonProcess in pythonProcesses)
+                Log.Debug("Waiting 100ms for Python process to be killed.");
+                System.Threading.Thread.Sleep(100);
+                foreach (Process pythonProcess in pythonProcesses)
                 {
                     if (pythonProcess.HasExited)
                     {
-                        Log.Debug("Python process killed.");
+                        Log.DebugFormat("Python process {0} killed.", pythonProcess.Id);
                         return;
                     }
                 }
-                Log.Debug("Waiting 10ms for Python process to be killed.");
-                System.Threading.Thread.Sleep(100);
             }
             Log.Debug("Considering Python process as killed even if it might not be (time out).");
         }
