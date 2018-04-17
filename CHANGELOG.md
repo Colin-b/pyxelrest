@@ -35,6 +35,7 @@ List all changes in various categories:
 - collectionFormat was ignored and considered as multi. It is now properly handled.
 - Return a list with one string item in case response from server is not JSON but JSON was expected.
 - Exceptions were not properly handled on workbook activation event.
+- PyxelRest service now allows to specify authentication
 
 ## 0.66.0 (2018-03-30) ##
 

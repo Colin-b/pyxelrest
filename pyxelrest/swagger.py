@@ -132,12 +132,15 @@ class ConfigSection:
         self.requested_methods = service_config.get('methods', ['get', 'post', 'put', 'delete', 'patch', 'options', 'head'])
         self.connect_timeout = service_config.get('connect_timeout', 1)
         self.read_timeout = service_config.get('read_timeout')
-        self.auth = authentication.add_service_custom_authentication(self.name, service_config)
         # UDFs will be auto expanded by default (if required, ie: result does not fit in a single cell)
         self.udf_return_types = service_config.get('udf_return_types', ['sync_auto_expand'])
         self.max_retries = service_config.get('max_retries', 5)
         self.custom_headers = service_config.get('headers', {})
         self.proxies = service_config.get('proxies', {})
+        self.oauth2 = service_config.get('oauth2', {})
+        self.basic = service_config.get('basic', {})
+        self.api_key = service_config.get('api_key')
+        self.ntlm_auth = service_config.get('ntlm', {})
 
     def is_asynchronous(self, udf_return_type):
         return 'async_auto_expand' == udf_return_type
@@ -257,6 +260,25 @@ class PyxelRestService:
         self.config = PyxelRestConfigSection(service_name, service_config)
         self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
         self.open_api_definitions = {}
+        self.open_api_definition = {
+            'securityDefinitions': {
+                'oauth2_implicit': {
+                    'type': 'oauth2',
+                    'flow': 'implicit',
+                },
+                'api_key_header': {
+                    'type': 'apiKey',
+                    'in': 'header',
+                },
+                'api_key_query': {
+                    'type': 'apiKey',
+                    'in': 'query',
+                },
+                'basic': {
+                    'type': 'basic',
+                },
+            }
+        }
 
     def create_method(self, http_method, udf_return_type):
         udf = PyxelRestUDFMethod(self, http_method, udf_return_type)
@@ -322,8 +344,11 @@ class UDFMethod:
         """
         return self.service.config.custom_headers
 
-    def requires_authentication(self):
-        return self.service.config.auth
+    def requires_authentication(self, request_content):
+        return self.security(request_content) or self.service.config.ntlm_auth
+
+    def security(self, request_content):
+        pass
 
 
 class UDFParameter:
@@ -361,7 +386,7 @@ class PyxelRestUDFMethod(UDFMethod):
                 'string'
             )
             self.choices = ['dict', 'dict_list']
-            self.description = 'How the body should be sent (dict, dict_list).'
+            self.description = 'How the body should be sent ({0}).'.format(self.choices)
 
         def _convert_to_str(self, value):
             if isinstance(value, datetime.date):
@@ -488,6 +513,61 @@ class PyxelRestUDFMethod(UDFMethod):
             if self.received_value:
                 request_content.header.update(self.received_value)
 
+    class AuthenticationParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'auth',
+                'auth',
+                '',
+                False,
+                'array'
+            )
+            self.choices = ['oauth2_implicit', 'api_key_header', 'api_key_query', 'basic']
+            self.description = 'Authentication methods to use. ({0})'.format(self.choices)
+
+        def _convert_to_str(self, value):
+            if value and value not in self.choices:
+                raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
+            return value
+
+        def _convert_to_array(self, value):
+            if isinstance(value, list):
+                return [
+                    self._convert_to_str(item)
+                    for item in value if item is not None
+                ]
+            return [self._convert_to_str(value)]
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_str(value)
+            request_content.add_value(self, value)
+
+    class OAuth2AuthorizationUrlParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'oauth2_auth_url',
+                'oauth2_auth_url',
+                '',
+                False,
+                'string'
+            )
+            self.description = 'OAuth2 authorization URL.'
+
+        def _convert_to_str(self, value):
+            if isinstance(value, datetime.date):
+                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+            if isinstance(value, int) or isinstance(value, float):
+                value = str(value)
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_str(value)
+            request_content.add_value(self, value)
+
     def __init__(self, service, http_method, udf_return_type):
         UDFMethod.__init__(self, service, http_method, '{url}', udf_return_type)
         self.udf_name = '{0}_{1}_url'.format(service.config.udf_prefix(udf_return_type), http_method)
@@ -499,6 +579,8 @@ class PyxelRestUDFMethod(UDFMethod):
             self.ExtraHeadersParameter(),
             self.WaitForStatusParameter(),
             self.CheckIntervalParameter(),
+            self.AuthenticationParameter(),
+            self.OAuth2AuthorizationUrlParameter(),
         ]
 
         if self.requests_method in ['post', 'put']:
@@ -512,6 +594,10 @@ class PyxelRestUDFMethod(UDFMethod):
 
     def return_a_list(self):
         return True
+
+    def security(self, request_content):
+        auths = request_content.extra_parameters.get('auth')
+        return [{auth: '' for auth in auths}] if auths else []
 
 
 class OpenAPI:
@@ -532,7 +618,6 @@ class OpenAPI:
         self.open_api_definitions = self.open_api_definition.get('definitions') or {}
         # Remove trailing slashes (as paths must starts with a slash)
         self.uri = self._extract_uri().rstrip('/')
-        authentication.add_service_security(self.config.name, self.open_api_definition, service_config)
 
     def _extract_uri(self):
         # The default scheme to be used is the one used to access the OpenAPI definition itself.
@@ -647,8 +732,8 @@ class OpenAPI:
             raise UnsupportedOpenAPIVersion(self.open_api_definition['swagger'])
 
     def __str__(self):
-        if self.config.auth:
-            return '[{0}] service. {1} (custom {2} authentication)'.format(self.config.name, self.uri, self.config.auth)
+        if self.config.ntlm_auth:
+            return '[{0}] service. {1} ({2})'.format(self.config.name, self.uri, self.config.ntlm_auth)
         return '[{0}] service. {1}'.format(self.config.name, self.uri)
 
 
@@ -686,10 +771,7 @@ class OpenAPIUDFMethod(UDFMethod):
         return ('application/json' in self.open_api_method['produces']) or \
                ('application/msgpackpandas' in self.open_api_method['produces'])
 
-    def requires_authentication(self):
-        return self.security() or self.service.config.auth
-
-    def security(self):
+    def security(self, request_content):
         return self.open_api_method.get('security')
 
     def summary(self):
@@ -1180,7 +1262,7 @@ def get_result(udf_method, request_content):
             json=request_content.payload if udf_method.contains_body_parameters else None,
             params=request_content.parameters if udf_method.contains_query_parameters else None,
             files=request_content.files if udf_method.contains_file_parameters else None,
-            auth=authentication.get_auth(udf_method.service.config.name, udf_method.security()) if udf_method.requires_authentication() else None,
+            auth=authentication.get_auth(udf_method, request_content),
             verify=False,
             headers=request_content.header,
             proxies=udf_method.service.config.proxies,

@@ -8,10 +8,7 @@ import logging.handlers
 import datetime
 import sys
 from pyxelrest import (
-    vba,
-    authentication,
     swagger,
-    _version,
     GENERATE_UDF_ON_IMPORT,
     custom_logging
 )
@@ -60,11 +57,6 @@ def load_user_defined_functions(services):
     }
 
 
-def reset_authentication():
-    authentication.security_definitions = {}
-    authentication.custom_authentications = {}
-
-
 if __name__ == '__main__':
     logger = logging.getLogger("pyxelrest.pyxelrestgenerator")
 else:
@@ -73,7 +65,6 @@ else:
 # TODO Generate one service per file instead of a full file
 if GENERATE_UDF_ON_IMPORT:
     custom_logging.load_logging_configuration()
-    reset_authentication()
     try:
         services = generate_user_defined_functions()
     except Exception as e:
