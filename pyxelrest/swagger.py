@@ -541,7 +541,7 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def validate_optional(self, value, request_content):
             if value is not None:
-                value = self._convert_to_str(value)
+                value = self._convert_to_array(value)
             request_content.add_value(self, value)
 
     class OAuth2AuthorizationUrlParameter(UDFParameter):
@@ -568,6 +568,30 @@ class PyxelRestUDFMethod(UDFMethod):
                 value = self._convert_to_str(value)
             request_content.add_value(self, value)
 
+    class ApiKeyNameParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'api_key_name',
+                'api_key_name',
+                '',
+                False,
+                'string'
+            )
+            self.description = 'Name of the field containing API key.'
+
+        def _convert_to_str(self, value):
+            if isinstance(value, datetime.date):
+                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+            if isinstance(value, int) or isinstance(value, float):
+                value = str(value)
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_str(value)
+            request_content.add_value(self, value)
+
     def __init__(self, service, http_method, udf_return_type):
         UDFMethod.__init__(self, service, http_method, '{url}', udf_return_type)
         self.udf_name = '{0}_{1}_url'.format(service.config.udf_prefix(udf_return_type), http_method)
@@ -581,6 +605,7 @@ class PyxelRestUDFMethod(UDFMethod):
             self.CheckIntervalParameter(),
             self.AuthenticationParameter(),
             self.OAuth2AuthorizationUrlParameter(),
+            self.ApiKeyNameParameter(),
         ]
 
         if self.requests_method in ['post', 'put']:

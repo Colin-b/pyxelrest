@@ -23,8 +23,8 @@ def _create_authentication(service_config, open_api_security_definition, request
         logger.warning('OAuth2 flow is not supported: {0}'.format(open_api_security_definition))
     elif 'apiKey' == open_api_security_definition.get('type'):
         if open_api_security_definition['in'] == 'query':
-            return QueryApiKey(service_config.api_key, open_api_security_definition['name'])
-        return HeaderApiKey(service_config.api_key, open_api_security_definition['name'])
+            return QueryApiKey(service_config.api_key, open_api_security_definition.get('name', request_content.extra_parameters.get('api_key_name')))
+        return HeaderApiKey(service_config.api_key, open_api_security_definition.get('name', request_content.extra_parameters.get('api_key_name')))
     elif 'basic' == open_api_security_definition.get('type'):
         return Basic(service_config.basic.get('username'), service_config.basic.get('password'))
     else:

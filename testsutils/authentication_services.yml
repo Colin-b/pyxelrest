@@ -23,3 +23,11 @@ oauth_cutom_response_port:
 non_authenticated:
   open_api:
     definition: "http://localhost:8948/"
+
+pyxelrest:
+  api_key: "my_provided_api_key"
+  basic:
+    username: "test_user"
+    password: "test_pwd"
+  oauth2:
+    timeout: 10
