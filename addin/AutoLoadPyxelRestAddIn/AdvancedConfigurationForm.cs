@@ -444,7 +444,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Password
                 layout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-                var password = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
+                var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
                 password.TextChanged += BasicPassword_TextChanged;
                 layout.Controls.Add(password, 1, 2);
                 #endregion
@@ -470,7 +470,7 @@ namespace AutoLoadPyxelRestAddIn
                 #region Password
                 layout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-                var password = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Ntlm.ContainsKey("password") ? (string)servicePanel.service.Ntlm["password"] : string.Empty };
+                var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Ntlm.ContainsKey("password") ? (string)servicePanel.service.Ntlm["password"] : string.Empty };
                 password.TextChanged += NtlmPassword_TextChanged;
                 layout.Controls.Add(password, 1, 2);
                 #endregion
