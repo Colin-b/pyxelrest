@@ -174,11 +174,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | ntlm                    | Dictionary containing NTLM related settings. Refer to NTLM section for more information.                                                                       | Optional  |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| udf_return_types        | List of user defined function return types.                                                                                                                    | Optional  | async_auto_expand                            |
-|                         | vba_compatible if you want your UDF to return the final result immediately.                                                                                    |           | sync_auto_expand                             |
-|                         | It means that you will have to specify all the cells that will contains the result.                                                                            |           | vba_compatible                               |
-|                         | sync_auto_expand (synchronous call auto expanding the result) by default.                                                                                      |           |                                              |
-|                         | Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.                                                                     |           |                                              |
+| udf                     | Dictionary containing user defined function related settings. Refer to User Defined Function section for more information.                                     | Optional  |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | max_retries             | Maximum number of time a request should be retried before considered as failed. 5 by default.                                                                  | Optional  | Any positive integer value                   |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
@@ -220,6 +216,21 @@ OpenAPI
 | rely_on_definitions     | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.                                                              | Optional  | true or false                                |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 | service_host            | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+
+User Defined Function
+---------------------
+
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+|                         | Description                                                                                                                                                    | Mandatory | Possible values                              |
++=========================+================================================================================================================================================================+===========+==============================================+
+| return_types            | List of user defined function return types.                                                                                                                    | Optional  | async_auto_expand                            |
+|                         | vba_compatible if you want your UDF to return the final result immediately.                                                                                    |           | sync_auto_expand                             |
+|                         | It means that you will have to specify all the cells that will contains the result.                                                                            |           | vba_compatible                               |
+|                         | sync_auto_expand (synchronous call auto expanding the result) by default.                                                                                      |           |                                              |
+|                         | Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.                                                                     |           |                                              |
++-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| shift_result            | Shift result by one column to the right. False by default.                                                                                                     | Optional  | true or false                                |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
 OAuth 2

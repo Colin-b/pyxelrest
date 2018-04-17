@@ -91,7 +91,9 @@ def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
             yml_content.setdefault('open_api', {})['selected_tags'] = [tag.strip() for tag in value.split(';')]
         elif 'udf_return_type' == key:
             new_return_types = {'asynchronous': 'sync_auto_expand', 'synchronous': 'vba_compatible'}
-            yml_content['udf_return_types'] = [new_return_types.get(return_type.strip()) for return_type in value.split(';')]
+            yml_content['udf'] = {
+                'return_types': [new_return_types.get(return_type.strip()) for return_type in value.split(';')]
+            }
         elif 'rely_on_definitions' == key:
             yml_content.setdefault('open_api', {})['rely_on_definitions'] = value == 'True'
         else:

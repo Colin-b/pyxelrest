@@ -170,23 +170,37 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
 
-                    var panel = new TableLayoutPanel { Dock = DockStyle.Fill };
+                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
                     #region UDF Return types
-                    var vbaCompatible = new CheckBox { Text = "VBA compatible", Checked = servicePanel.service.VBACompatible };
+                    var vbaCompatible = new CheckBox { Text = "VBA compatible", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("vba_compatible") : false };
                     vbaCompatible.CheckedChanged += VBACompatible_CheckedChanged;
                     panel.Controls.Add(vbaCompatible, 0, 0);
 
-                    var synchronousAutoExpand = new RadioButton { Text = "Auto expand (synchronous)", Checked = servicePanel.service.SynchronousAutoExpand, Width = 160 };
+                    var synchronousAutoExpand = new RadioButton { Text = "Auto expand (synchronous)", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") : true, Width = 160 };
                     synchronousAutoExpand.CheckedChanged += SynchronousAutoExpand_CheckedChanged;
                     panel.Controls.Add(synchronousAutoExpand, 1, 0);
 
-                    var asynchronousAutoExpand = new RadioButton { Text = "Auto expand (asynchronous)", Checked = servicePanel.service.AsynchronousAutoExpand, Width = 170 };
+                    var asynchronousAutoExpand = new RadioButton { Text = "Auto expand (asynchronous)", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("async_auto_expand") : false, Width = 170 };
                     asynchronousAutoExpand.CheckedChanged += AsynchronousAutoExpand_CheckedChanged;
                     panel.Controls.Add(asynchronousAutoExpand, 2, 0);
                     #endregion
 
                     layout.Controls.Add(panel, 1, 6);
+                }
+                #endregion
+
+                #region Shift results
+                {
+                    layout.Controls.Add(new Label { Text = "UDF ", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
+
+                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
+
+                    var shiftResult = new CheckBox { Text = "Shift results", Checked = servicePanel.service.Udf.ContainsKey("shift_result") ? (bool)servicePanel.service.Udf["shift_result"] : false };
+                    shiftResult.CheckedChanged += ShiftResult_CheckedChanged;
+                    panel.Controls.Add(shiftResult, 0, 0);
+
+                    layout.Controls.Add(panel, 1, 7);
                 }
                 #endregion
 
@@ -651,17 +665,45 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AsynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.AsynchronousAutoExpand = ((RadioButton)sender).Checked;
+            if (((RadioButton)sender).Checked)
+                AddValueToUdfList("async_auto_expand", "return_types");
+            else
+                RemoveValueToUdfList("async_auto_expand", "return_types");
         }
 
         private void SynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.SynchronousAutoExpand = ((RadioButton)sender).Checked;
+            if (((RadioButton)sender).Checked)
+                AddValueToUdfList("sync_auto_expand", "return_types");
+            else
+                RemoveValueToUdfList("sync_auto_expand", "return_types");
         }
 
         private void VBACompatible_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.VBACompatible = ((CheckBox)sender).Checked;
+            if (((CheckBox)sender).Checked)
+                AddValueToUdfList("vba_compatible", "return_types");
+            else
+                RemoveValueToUdfList("vba_compatible", "return_types");
+        }
+
+        private void AddValueToUdfList(string value, string listName)
+        {
+            if (!servicePanel.service.Udf.ContainsKey(listName))
+                servicePanel.service.Udf[listName] = new List<string>();
+
+            ((IList<string>)servicePanel.service.Udf[listName]).Add(value);
+        }
+
+        private void RemoveValueToUdfList(string value, string listName)
+        {
+            if (servicePanel.service.Udf.ContainsKey(listName))
+                ((IList<string>)servicePanel.service.Udf[listName]).Remove(value);
+        }
+
+        private void ShiftResult_CheckedChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Udf["shift_result"] = ((CheckBox)sender).Checked;
         }
 
         private void AddValueToList(string value, string listName)

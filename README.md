@@ -199,10 +199,10 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td></td>
     </tr>
     <tr>
-        <td><strong>udf_return_types</strong></td>
-        <td>List of user defined function return types. vba_compatible if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. sync_auto_expand (synchronous call auto expanding the result) by default. Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.</td>
+        <td><strong>udf</strong></td>
+        <td>Dictionary containing user defined function related settings. Refer to User Defined Function section for more information.</td>
         <td>Optional</td>
-        <td>async_auto_expand, sync_auto_expand or vba_compatible.</td>
+        <td></td>
     </tr>
     <tr>
         <td><strong>max_retries</strong></td>
@@ -291,6 +291,28 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Service host in case your service is behind a reverse proxy.</td>
         <td>Optional</td>
         <td></td>
+    </tr>
+</table>
+
+#### User Defined Function ####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
+    </th>
+    <tr>
+        <td><strong>return_types</strong></td>
+        <td>List of user defined function return types. vba_compatible if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. sync_auto_expand (synchronous call auto expanding the result) by default. Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.</td>
+        <td>Optional</td>
+        <td>async_auto_expand, sync_auto_expand or vba_compatible.</td>
+    </tr>
+    <tr>
+        <td><strong>shift_result</strong></td>
+        <td>Shift result by one column to the right. False by default.</td>
+        <td>Optional</td>
+        <td>true or false.</td>
     </tr>
 </table>
 

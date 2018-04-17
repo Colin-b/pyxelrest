@@ -25,6 +25,7 @@ List all changes in various categories:
 - Allow to exclude OpenAPI tags.
 - Allow to include or exclude OpenAPI operation_ids.
 - Experimental support for Asynchronous UDFs.
+- Allow to shift results by one column to the right.
 
 ### Bug fixes ###
 

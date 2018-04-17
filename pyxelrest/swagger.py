@@ -132,8 +132,10 @@ class ConfigSection:
         self.requested_methods = service_config.get('methods', ['get', 'post', 'put', 'delete', 'patch', 'options', 'head'])
         self.connect_timeout = service_config.get('connect_timeout', 1)
         self.read_timeout = service_config.get('read_timeout')
+        udf = service_config.get('udf', {})
         # UDFs will be auto expanded by default (if required, ie: result does not fit in a single cell)
-        self.udf_return_types = service_config.get('udf_return_types', ['sync_auto_expand'])
+        self.udf_return_types = udf.get('return_types', ['sync_auto_expand'])
+        self.shift_result = udf.get('shift_result', False)
         self.max_retries = service_config.get('max_retries', 5)
         self.custom_headers = service_config.get('headers', {})
         self.proxies = service_config.get('proxies', {})
@@ -1306,11 +1308,11 @@ def get_result(udf_method, request_content):
 
         logger.info('[status=Valid] response received for [function={1}] [url={0}].'.format(response.request.url, udf_method.udf_name))
         if 202 == response.status_code:
-            return [['Status URL'], [response.headers['location']]]
+            return shift_result([['Status URL'], [response.headers['location']]], udf_method)
         if response.headers['content-type'] == 'application/json':
-            return json_as_list(response, udf_method)
+            return shift_result(json_as_list(response, udf_method), udf_method)
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            return msgpackpandas_as_list(response.content)
+            return shift_result(msgpackpandas_as_list(response.content), udf_method)
         else:
             return convert_to_return_type(response.text[:255], udf_method)
     except requests.exceptions.ConnectionError:
@@ -1427,3 +1429,14 @@ def list_as_json(lists, parse_as):
         return list_to_dict_list(lists[0], lists[1:])
 
     return lists
+
+
+def shift_result(result, udf_method):
+    if udf_method.service.config.shift_result:
+        if result:
+            if isinstance(result[0], list):
+                for row in result:
+                    row.insert(0, '')
+            elif isinstance(result, list):
+                result = [['', value] for value in result]
+    return result
