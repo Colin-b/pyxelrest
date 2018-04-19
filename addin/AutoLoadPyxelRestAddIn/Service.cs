@@ -1,6 +1,8 @@
 ﻿using log4net;
 using System.Collections.Generic;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet;
+using YamlDotNet.Serialization;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -91,7 +93,13 @@ namespace AutoLoadPyxelRestAddIn
                 if (item.Value.NodeType == YamlNodeType.Sequence)
                     dict.Add(key, ToList((YamlSequenceNode)item.Value));
                 else
-                    dict.Add(key, ((YamlScalarNode)item.Value).Value);
+                {
+                    string strValue = ((YamlScalarNode)item.Value).Value;
+                    if ("true".Equals(strValue) || "false".Equals(strValue))
+                        dict.Add(key, "true".Equals(strValue));
+                    else
+                        dict.Add(key, strValue);
+                }
             }
             return dict;
         }
@@ -106,6 +114,10 @@ namespace AutoLoadPyxelRestAddIn
                     var listValue = (IList<string>)item.Value;
                     if (listValue.Count > 0)
                         nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlSequenceNode(FromList(listValue))));
+                }
+                else if (typeof(bool) == item.Value.GetType())
+                {
+                    nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode((bool)item.Value ? "true" : "false")));
                 }
                 else
                 {

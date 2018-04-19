@@ -1360,7 +1360,7 @@ def get_result_async(udf_method, request_content, excel_caller):
             target=get_and_send_result,
             args=(excel_range, excel_caller.Rows.Count, excel_caller.Columns.Count)
         ).start()
-        return ['Processing request...']
+        return shift_result(['Processing request...'], udf_method)
     except Exception as error:
         logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
         return convert_to_return_type(describe_error(None, error), udf_method)

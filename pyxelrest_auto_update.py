@@ -200,6 +200,8 @@ class PyxelRestUpdater:
         updating_queue = multiprocessing.JoinableQueue()
         updating_process = multiprocessing.Process(target=_start_update_process, args=(self.path_to_up_to_date_configurations, updating_queue))
         app = UpdateGUI(root, updating_process, updating_queue, self.pyxelrest_package.version, self.pyxelrest_package.latest_version)
+        root.wm_attributes('-topmost', True)
+        root.tkraise()
         root.mainloop()
 
     def _is_update_available(self):

@@ -37,6 +37,7 @@ List all changes in various categories:
 - Return a list with one string item in case response from server is not JSON but JSON was expected.
 - Exceptions were not properly handled on workbook activation event.
 - PyxelRest service now allows to specify authentication
+- Update Notification window will now be raised on forefront to prevent user missing it
 
 ## 0.66.0 (2018-03-30) ##
 
