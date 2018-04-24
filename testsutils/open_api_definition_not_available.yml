@@ -1,3 +1,7 @@
 without_available_swagger:
   open_api:
     definition: "http://localhost:8950/swagger.json"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false

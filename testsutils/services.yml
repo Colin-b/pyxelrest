@@ -1,6 +1,10 @@
 usual_parameters:
   open_api:
     definition: "http://localhost:8943/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 selected_tags:
   open_api:
@@ -8,6 +12,10 @@ selected_tags:
     selected_tags:
       - "tag 1"
       - "tag 2"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 excluded_tags:
   open_api:
@@ -15,6 +23,10 @@ excluded_tags:
     excluded_tags:
       - "tag 1"
       - "tag 2"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 selected_operation_ids:
   open_api:
@@ -23,6 +35,10 @@ selected_operation_ids:
       - "get_tags"
       - "post_tags"
       - "put_tags"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 excluded_operation_ids:
   open_api:
@@ -31,39 +47,67 @@ excluded_operation_ids:
       - "get_tags"
       - "post_tags"
       - "put_tags"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 values_false:
   open_api:
     definition: "http://localhost:8945/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 output_order:
   open_api:
     definition: "http://localhost:8946/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 operation_id_not_provided:
   open_api:
     definition: "http://localhost:8948/operation_id_not_provided"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 operation_id_not_always_provided:
   open_api:
     definition: "http://localhost:8948/operation_id_not_always_provided"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 without_parameter:
   open_api:
     definition: "http://localhost:8950/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 header_parameter:
   open_api:
     definition: "http://localhost:8951/"
-  udf_return_types:
-    - "vba_compatible"
-    - "sync_auto_expand"
+  udf:
+    return_types:
+      - "vba_compatible"
+      - "sync_auto_expand"
+    shift_result: false
 
 header_advanced_configuration:
   open_api:
     definition: "http://localhost:8951/"
-  udf_return_types:
-    - "vba_compatible"
+  udf:
+    return_types:
+      - "vba_compatible"
+    shift_result: false
   headers:
     X-PXL-CUSTOM: "MyCustomValue"
     X-PXL-OTHER: "MyOtherValue"
@@ -71,14 +115,26 @@ header_advanced_configuration:
 form_parameter:
   open_api:
     definition: "http://localhost:8952/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 open_api_definition_loaded_from_file:
   open_api:
     definition: "file://../testsutils/static_open_api_definition.json"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 array_parameter:
   open_api:
     definition: "http://localhost:8953/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 http_methods:
   open_api:
@@ -91,20 +147,38 @@ http_methods:
     - "patch"
     - "options"
     - "head"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 content_type:
   open_api:
     definition: "http://localhost:8956/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 base_path_ending_with_slash:
   open_api:
     definition: "http://localhost:8957/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 async:
   open_api:
     definition: "http://localhost:8958/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 pyxelrest:
-  udf_return_types:
-    - "vba_compatible"
-    - "sync_auto_expand"
+  udf:
+    return_types:
+      - "vba_compatible"
+      - "sync_auto_expand"
+    shift_result: false

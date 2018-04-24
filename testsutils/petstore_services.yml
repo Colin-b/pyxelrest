@@ -4,3 +4,7 @@ petstore:
   proxies:
     http: "http://10.22.218.80:8088"
     no_proxy: "http://google.be"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false

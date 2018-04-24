@@ -3,9 +3,17 @@ usual_parameters:
     definition: "http://localhost:8943/"
   methods:
     - "get"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
 
 usual_parameters:
   open_api:
     definition: "http://localhost:8943/"
   methods:
     - "get"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false

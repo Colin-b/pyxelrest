@@ -6,3 +6,7 @@ vba_keywords:
     - "delete"
   open_api:
     definition: "http://localhost:8949/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
