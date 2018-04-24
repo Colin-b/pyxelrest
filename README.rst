@@ -227,10 +227,10 @@ User Defined Function
 | return_types            | List of user defined function return types.                                                                                                                    | Optional  | async_auto_expand                            |
 |                         | vba_compatible if you want your UDF to return the final result immediately.                                                                                    |           | sync_auto_expand                             |
 |                         | It means that you will have to specify all the cells that will contains the result.                                                                            |           | vba_compatible                               |
-|                         | sync_auto_expand (synchronous call auto expanding the result) by default.                                                                                      |           |                                              |
-|                         | Note that async_auto_expand (asynchronous call auto expanding the result) is experimental.                                                                     |           |                                              |
+|                         | Use sync_auto_expand so that UDF call will be a synchronous call auto expanding the result.                                                                    |           |                                              |
+|                         | async_auto_expand (asynchronous call auto expanding the result) by default.                                                                                    |           |                                              |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| shift_result            | Shift result by one column to the right. False by default.                                                                                                     | Optional  | true or false                                |
+| shift_result            | Shift auto expand result by one column to the right. True by default.                                                                                          | Optional  | true or false                                |
 +-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
 OAuth 2
