@@ -1432,7 +1432,7 @@ def list_as_json(lists, parse_as):
 
 
 def shift_result(result, udf_method):
-    if udf_method.service.config.shift_result:
+    if udf_method.service.config.shift_result and udf_method.auto_expand_result:
         if result:
             if isinstance(result[0], list):
                 for row in result:
