@@ -38,6 +38,8 @@ List all changes in various categories:
 - Exceptions were not properly handled on workbook activation event.
 - PyxelRest service now allows to specify authentication.
 - Update Notification window will now be raised on forefront to prevent user missing it.
+- Consider float value sent for a string field as an integer string value if there is no decimal (send 1.0 as '1').
+- When receiving a single row and an array of array is expected, an array containing this single row (as one array) should now be sent.
 
 ## 0.66.0 (2018-03-30) ##
 

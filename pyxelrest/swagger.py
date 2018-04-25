@@ -904,6 +904,7 @@ class APIUDFParameter(UDFParameter):
         open_api_array_parameter = self._get_open_api_array_parameter(open_api_parameter)
         if open_api_array_parameter:
             if open_api_array_parameter.get('type') == 'object' or ('$ref' in open_api_array_parameter):
+                self.array_parameter = None
                 self._convert_to_type = self._convert_to_dict_list
                 self.description = self._get_dict_list_documentation(open_api_parameter)
             else:
@@ -911,6 +912,7 @@ class APIUDFParameter(UDFParameter):
                 self._convert_to_type = self._convert_to_array
                 self.description = self._get_list_documentation(open_api_parameter)
         else:
+            self.array_parameter = None
             self._convert_to_type = self._get_convert_method()
             self.description = self._get_documentation(open_api_parameter)
 
@@ -975,8 +977,14 @@ class APIUDFParameter(UDFParameter):
     def _convert_to_str(self, value):
         if isinstance(value, datetime.date):
             raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
-        if isinstance(value, int) or isinstance(value, float):
+        if isinstance(value, int):
             value = str(value)
+        if isinstance(value, float):
+            # Send float values without decimal as int string values
+            if value == float(int(value)):
+                value = str(int(value))
+            else:
+                value = str(value)
         if self.choices and value not in self.choices:
             raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
         if self.max_length is not None:
@@ -1015,16 +1023,27 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_array(self, value):
         if isinstance(value, list):
-            list_value = [
-                self.array_parameter._convert_to_type(item) if item is not None else None
-                for item in value
-            ]
+            list_value = self._convert_list_to_array(value)
         else:
             list_value = [
                 self.array_parameter._convert_to_type(value)
             ]
         self._check_array(list_value)
         return self._apply_collection_format(list_value)
+
+    def _convert_list_to_array(self, list_value):
+        # If a list of list is expected
+        if self.array_parameter.array_parameter:
+            # And a single list is provided
+            if list_value and not isinstance(list_value[0], list):
+                return [
+                    self.array_parameter._convert_to_type(list_value)
+                ]
+
+        return [
+            self.array_parameter._convert_to_type(list_item) if list_item is not None else None
+            for list_item in list_value
+        ]
 
     def _apply_collection_format(self, list_value):
         if not self.collection_format or 'csv' == self.collection_format:

@@ -2969,7 +2969,7 @@ class PyxelRestJsonTest(unittest.TestCase):
             [['OK']]
         )
 
-    def test_list_of_list_form_post_with_non_str(self):
+    def test_list_of_list_form_post_with_non_str_date_failure(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
             rules=[
@@ -2984,6 +2984,14 @@ class PyxelRestJsonTest(unittest.TestCase):
             ],
         ),
             'items value "2017-03-04 00:00:00" must be formatted as text.'
+        )
+
+    def test_list_of_list_form_post_with_non_str(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
+            items=[1.0, 1.2, 'SNCF']
+        ),
+            [['OK']]
         )
 
     def test_list_of_list_form_post_with_single_list(self):

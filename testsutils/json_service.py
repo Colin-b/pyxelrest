@@ -3570,7 +3570,7 @@ def post_dict_string():
 def post_dict_with_list_of_list():
     if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1', 'key2', 'key3'], ['value10', 'value20', 'value30'], ['value11', 'value21', 'value31'], ['value12', 'value22', 'value32']]}:
         return jsonify('OK')
-    if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1'], ['key2'], ['key3']]}:
+    if request.json == {'dict_field1': 'value000', 'dict_field2': 'value010', 'inner_list_of_list': [['key1', 'key2', 'key3']]}:
         return jsonify('OK')
     return jsonify(request.json)
 
@@ -3594,7 +3594,9 @@ def post_dict_with_dict():
 def post_lists_of_list_form():
     if request.json == {'rules': [['1', 'EBE', 'SNCF', 'rule_1', 'output_1'], ['1', 'EFR,EDE', 'ENGIE', 'rule_2', 'output_2']], 'items': [['Deal Number', 'Underlying', 'Client'], ['0001', 'EBE', 'SNCF'], ['0002', 'EFR', 'ENGIE'], ['0003', 'EDE', 'ENGIE']]}:
         return jsonify('OK')
-    if request.json == {'rules': [['rule1'], ['rule2'], ['rule3']], 'items': [['item1'], ['item2'], ['item3']]}:
+    if request.json == {'rules': [['rule1', 'rule2', 'rule3']], 'items': [['item1', 'item2', 'item3']]}:
+        return jsonify('OK')
+    if request.json == {'rules': None, 'items': [['1', '1.2', 'SNCF']]}:
         return jsonify('OK')
     return jsonify(request.json)
 
