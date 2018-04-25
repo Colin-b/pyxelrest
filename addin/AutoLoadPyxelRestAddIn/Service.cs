@@ -73,7 +73,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             if (string.IsNullOrEmpty(description))
                 return Name;
-            return string.Format("{0} ({1})", description, Name);
+            return string.Format("{0} - {1}", Name, description);
         }
 
         private YamlNode GetProperty(YamlMappingNode parent, string name)

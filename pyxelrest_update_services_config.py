@@ -142,7 +142,7 @@ class ServicesConfigUpdater:
 
     def _print_service(self, service_name, updated_config):
         if 'description' in updated_config:
-            print('{0} ({1})'.format(updated_config.get('description'), service_name))
+            print('{0} - {1}'.format(service_name, updated_config.get('description')))
         else:
             print(service_name)
 
