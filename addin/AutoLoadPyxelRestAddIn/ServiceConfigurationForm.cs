@@ -135,12 +135,18 @@ namespace AutoLoadPyxelRestAddIn
             #region New Service
             var newServicePanel = new TableLayoutPanel { Width=520, Height=30 };
 
+            ToolTip serviceNameTooltip = new ToolTip { ToolTipTitle = "Enter service name", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
             serviceNameField = new ComboBox { Width=480 };
+            serviceNameTooltip.SetToolTip(serviceNameField, "Value should only contains alpha numeric characters. eg: my_service");
             serviceNameField.TextChanged += ServiceNameField_TextChanged;
             serviceNameField.KeyDown += ServiceNameField_KeyDown;
             newServicePanel.Controls.Add(serviceNameField, 0, 0);
 
+            ToolTip addServiceTooltip = new ToolTip { ToolTipTitle = "Add a new service configuration", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
             addServiceButton = new AddButton();
+            addServiceTooltip.SetToolTip(addServiceButton, "Do not forget to save once configured.");
             addServiceButton.Click += AddServiceSection;
             newServicePanel.Controls.Add(addServiceButton, 1, 0);
 
@@ -148,9 +154,14 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Save
-            saveButton = new Button { ForeColor = Color.DarkGreen, BackColor = Color.LightGreen, DialogResult = DialogResult.Yes, Dock = DockStyle.Fill, Text = "Save Configuration" };
-            saveButton.Click += Save;
-            layout.Controls.Add(saveButton);
+            {
+                ToolTip tooltip = new ToolTip { ToolTipTitle = "Save modifications", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                saveButton = new Button { ForeColor = Color.DarkGreen, BackColor = Color.LightGreen, DialogResult = DialogResult.Yes, Dock = DockStyle.Fill, Text = "Save Configuration" };
+                tooltip.SetToolTip(saveButton, "User defined functions will be automatically reloaded.");
+                saveButton.Click += Save;
+                layout.Controls.Add(saveButton);
+            }
             #endregion
 
             Controls.Add(layout);
@@ -204,7 +215,6 @@ namespace AutoLoadPyxelRestAddIn
             addServiceButton.Enabled = false;
             ServicePanel panel = new ServicePanel(this, service);
             DisplayService(panel, true);
-
         }
 
         private void LoadServices()

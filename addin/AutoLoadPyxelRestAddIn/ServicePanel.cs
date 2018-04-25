@@ -74,7 +74,10 @@ namespace AutoLoadPyxelRestAddIn
                 #region OpenAPI Definition
                 servicePanel.Controls.Add(new Label { Text = "OpenAPI Definition", TextAlign = ContentAlignment.BottomLeft, Width=120 }, 0, 0);
 
+                ToolTip tooltip = new ToolTip { ToolTipTitle = "URL to the OpenAPI definition of the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
                 openAPIDefinition = new TextBox { Text = service.OpenAPI.ContainsKey("definition") ? service.OpenAPI["definition"].ToString() : string.Empty, Dock = DockStyle.Fill, Width = 290 };
+                tooltip.SetToolTip(openAPIDefinition, "It must starts with http, https or file.");
                 openAPIDefinition.TextChanged += OpenAPIDefinition_TextChanged;
                 servicePanel.Controls.Add(openAPIDefinition, 1, 0);
                 #endregion
@@ -91,9 +94,14 @@ namespace AutoLoadPyxelRestAddIn
             #endregion
 
             #region Delete
-            var deleteButton = new DeleteButton();
-            deleteButton.Click += DeleteButton_Click;
-            buttons.Controls.Add(deleteButton, 1, 1);
+            {
+                ToolTip tooltip = new ToolTip { ToolTipTitle = "Remove this service configuration", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                var deleteButton = new DeleteButton();
+                tooltip.SetToolTip(deleteButton, "User defined functions will only be removed when restarting Microsoft Excel.");
+                deleteButton.Click += DeleteButton_Click;
+                buttons.Controls.Add(deleteButton, 1, 1);
+            }
             #endregion
 
             servicePanel.Controls.Add(buttons);
