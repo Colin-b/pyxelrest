@@ -112,6 +112,7 @@ setup(name='pyxelrest',
               ]
           ),
       ],
+      python_requires='>=2.7',
       tests_require=[
           # Used to run tests
           'nose',
