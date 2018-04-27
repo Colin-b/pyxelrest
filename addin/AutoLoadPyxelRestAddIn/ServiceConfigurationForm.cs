@@ -26,6 +26,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal Accordion accordion;
         private ComboBox serviceNameField;
+        private ToolTip addServiceTooltip;
         private PictureBox addServiceButton;
         private List<ServicePanel> services = new List<ServicePanel>();
         private List<Service> upToDateServices = new List<Service>();
@@ -135,7 +136,7 @@ namespace AutoLoadPyxelRestAddIn
             #region New Service
             var newServicePanel = new TableLayoutPanel { Width=520, Height=30 };
 
-            ToolTip serviceNameTooltip = new ToolTip { ToolTipTitle = "Enter service name", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+            var serviceNameTooltip = new ToolTip { ToolTipTitle = "Enter service name", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
             serviceNameField = new ComboBox { Width=480 };
             serviceNameTooltip.SetToolTip(serviceNameField, "Value should only contains alpha numeric characters. eg: my_service");
@@ -143,7 +144,7 @@ namespace AutoLoadPyxelRestAddIn
             serviceNameField.KeyDown += ServiceNameField_KeyDown;
             newServicePanel.Controls.Add(serviceNameField, 0, 0);
 
-            ToolTip addServiceTooltip = new ToolTip { ToolTipTitle = "Add a new service configuration", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+            addServiceTooltip = new ToolTip { ToolTipTitle = "Add a new service configuration", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
             addServiceButton = new AddButton();
             addServiceTooltip.SetToolTip(addServiceButton, "Do not forget to save once configured.");
@@ -184,13 +185,20 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ServiceNameField_TextChanged(object sender, EventArgs e)
         {
-            addServiceButton.Enabled = IsServiceNameValid();
+            var selectedService = (Service)serviceNameField.SelectedItem;
+            var serviceName = selectedService == null ? serviceNameField.Text : selectedService.Name;
+
+            addServiceButton.Enabled = IsServiceNameValid(serviceName);
+            if (addServiceButton.Enabled)
+            {
+                addServiceTooltip.ToolTipTitle = string.Format("Add {0} service configuration", serviceName);
+            }
         }
 
-        private bool IsServiceNameValid()
+        private bool IsServiceNameValid(string serviceName)
         {
-            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(serviceNameField.Text, "");
-            return serviceNameField.Text.Length > 0 && serviceNameField.Text.Equals(validatedServiceName) && !services.Exists(s => s.Exists(serviceNameField.Text));
+            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(serviceName, "");
+            return serviceName.Length > 0 && serviceName.Equals(validatedServiceName) && !services.Exists(s => s.Exists(serviceName));
         }
 
         private void AddServiceSection(object sender, EventArgs e)
@@ -200,21 +208,22 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddServiceSection()
         {
-            string serviceName = serviceNameField.Text;
-            Service service = upToDateServices.Find(s => s.Name.Equals(serviceName));
-            if (service == null)  // Service is unknown, new one
+            var selectedService = (Service)serviceNameField.SelectedItem;
+            if (selectedService == null)  // Allow to specify existing service by typing name instead of selecting it
+                selectedService = upToDateServices.Find(service => serviceNameField.Text.Equals(service.Name));
+
+            if (selectedService == null)  // Service is unknown, new one
             {
-                service = configuration.AddDefaultService(serviceName);
+                selectedService = configuration.AddDefaultService(serviceNameField.Text);
             }
             else  // Service corresponds to an up to date service 
             {
-                serviceNameField.Items.Remove(service);
-                configuration.AddService(service);
+                serviceNameField.Items.Remove(selectedService);
+                configuration.AddService(selectedService);
             }
             serviceNameField.Text = "";
             addServiceButton.Enabled = false;
-            ServicePanel panel = new ServicePanel(this, service);
-            DisplayService(panel, true);
+            DisplayService(new ServicePanel(this, selectedService), true);
         }
 
         private void LoadServices()

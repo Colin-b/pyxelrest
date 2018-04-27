@@ -66,7 +66,7 @@ namespace AutoLoadPyxelRestAddIn
 
         public override string ToString()
         {
-            return Name;
+            return Description();
         }
 
         public string Description()
