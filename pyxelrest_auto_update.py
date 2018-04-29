@@ -76,7 +76,7 @@ create_logger()
 def _outdated_package(package_name):
     """Faster outdated check when running it for a single package."""
     list_command = ListCommand()
-    command_options, _ = list_command.parse_args([])
+    command_options, _ = list_command.parse_args(['--pre'])  # Include development releases
     installed_package = _installed_package(package_name)
     if installed_package:
         packages = list_command.get_outdated([installed_package], command_options)
@@ -125,7 +125,7 @@ class UpdateProcess:
 
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
-        result = InstallCommand().main(['pyxelrest', '--upgrade', '--disable-pip-version-check', '--log', default_log_file_path])
+        result = InstallCommand().main(['pyxelrest', '--upgrade', '--disable-pip-version-check', '--log', default_log_file_path, '--pre'])
         create_logger()  # PyxelRest logger is lost while trying to update
         if result == 0:
             self.updating_queue.put((PYTHON_STEP, DONE))
