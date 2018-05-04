@@ -3250,6 +3250,18 @@ class PyxelRestJsonTest(unittest.TestCase):
             ]
         )
 
+    def test_post_list_dict_no_ref(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_list_dict_no_ref(
+            payload=[['header1', 'header2'], ['value1', 'value2'], ['value10', 'value20']],
+        ),
+            [
+                ['header1', 'header2'],
+                ['value1', 'value2'],
+                ['value10', 'value20'],
+            ]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

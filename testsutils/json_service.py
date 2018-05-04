@@ -182,6 +182,29 @@ def open_api_definition():
                        }
                    },
                    paths={
+                       '/list_dict_no_ref': {
+                           'post': {
+                               'operationId': 'post_list_dict_no_ref',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           'type': "array",
+                                           'items': {
+                                               'type': 'object',
+                                           }
+                                       },
+                                   },
+                               ],
+                            },
+                        },
                        '/different_location_same_name/{dict_field1}': {
                            'post': {
                                'operationId': 'post_different_location_same_name',
@@ -3540,6 +3563,11 @@ def open_api_definition():
                            }
                        }
                    })
+
+
+@app.route('/list_dict_no_ref', methods=['POST'])
+def post_list_dict_no_ref():
+    return jsonify(request.json)
 
 
 @app.route('/list_parameter', methods=['GET', 'DELETE'])

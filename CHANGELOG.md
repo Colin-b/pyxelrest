@@ -40,6 +40,7 @@ List all changes in various categories:
 - Update Notification window will now be raised on forefront to prevent user missing it.
 - Consider float value sent for a string field as an integer string value if there is no decimal (send 1.0 as '1').
 - When receiving a single row and an array of array is expected, an array containing this single row (as one array) should now be sent.
+- Allow to send non-described body.
 
 ## 0.66.0 (2018-03-30) ##
 

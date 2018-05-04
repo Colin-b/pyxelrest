@@ -847,17 +847,23 @@ class OpenAPIUDFMethod(UDFMethod):
             return [APIUDFParameter(open_api_parameter, {})]
 
         schema = open_api_parameter['schema']
-        ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
+        ref = schema['$ref'] if '$ref' in schema else schema['items'].get('$ref', '')
         ref = ref[len('#/definitions/'):]
         parameters = []
-        open_api_definition = self.service.open_api_definitions[ref]
-        for inner_parameter_name, inner_parameter in open_api_definition['properties'].items():
-            if not inner_parameter.get('readOnly', False):
-                inner_parameter['server_param_name'] = inner_parameter_name
-                inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
-                inner_parameter['in'] = open_api_parameter['in']
-                inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
-                parameters.append(APIUDFParameter(inner_parameter, schema))
+        open_api_definition = self.service.open_api_definitions.get(ref, {})
+        if open_api_definition:
+            for inner_parameter_name, inner_parameter in open_api_definition['properties'].items():
+                if not inner_parameter.get('readOnly', False):
+                    inner_parameter['server_param_name'] = inner_parameter_name
+                    inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+                    inner_parameter['in'] = open_api_parameter['in']
+                    inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
+                    parameters.append(APIUDFParameter(inner_parameter, schema))
+        else:
+            inner_parameter = dict(open_api_parameter)
+            inner_parameter.update(schema['items'])
+            inner_parameter['server_param_name'] = None  # Indicate that this is the whole body
+            parameters.append(APIUDFParameter(inner_parameter, schema))
         return parameters
 
     def _avoid_duplicated_names(self, udf_parameters):
@@ -1189,7 +1195,10 @@ class RequestContent:
         if parameter.schema.get('type') == 'array':
             self._add_body_list_parameter(parameter, value)
         else:
-            self.payload[parameter.server_param_name] = value
+            if parameter.server_param_name:
+                self.payload[parameter.server_param_name] = value
+            else:
+                self.payload = value
 
     def _add_body_list_parameter(self, parameter, value):
         # Change the default payload to list
@@ -1226,7 +1235,10 @@ class RequestContent:
                     self.payload.append(dict(empty_item))
 
                 for index, parameter_list_item in enumerate(value):
-                    self.payload[index][parameter.server_param_name] = parameter_list_item
+                    if parameter.server_param_name:
+                        self.payload[index][parameter.server_param_name] = parameter_list_item
+                    else:
+                        self.payload[index] = parameter_list_item
 
             # Some items will be updated with a new provided value and remaining will contains None
             else:
