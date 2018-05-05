@@ -105,20 +105,25 @@ In order to do so, you need to add a test certificate.
 
 ### Optional Dependencies ###
 
-- Support for `application/msgpackpandas`
-    - Pandas encoded msgpack will be used if `pandas` and `msgpack-python` modules are available.
+- Support for ``application/msgpackpandas`` encoded data.
+    - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
+    - ``pandas_msgpack`` extra requires can be used to install those dependencies.
 
-- Support for ``ujson``
+- Support for faster JSON handling.
     - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
+    - ``ujson`` extra requires can be used to install those dependencies.
 
-- Support for ``requests_ntlm``
-    - ``requests_ntlm`` is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
+- Support for NTLM authentication (with user credentials provided),
+    - ``requests_ntlm`` module is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
+    - ``ntlm`` extra requires can be used to install those dependencies.
 
-- Support for ``requests_negotiate_sspi``
-    - ``requests_negotiate_sspi`` is required in case auth=ntlm is set in ``security_details`` property and logged in user credentials should be used.
+- Support for automatic NTLM authentication.
+    - ``requests_negotiate_sspi`` module is required in case auth=ntlm is set in ``security_details`` property and logged in user credentials should be used.
+    - ``ntlm`` extra requires can be used to install those dependencies.
 
-- Support for ``cachetool``
-    - ``cachetool`` is required to be able to use in-memory caching.
+- Support for in-memory caching.
+    - ``cachetool`` module is required to be able to use in-memory caching.
+    - ``cachetool`` extra requires can be used to install those dependencies.
 
 ## Configuration ##
 

@@ -26,6 +26,7 @@ List all changes in various categories:
 - Allow to include or exclude OpenAPI operation_ids.
 - Experimental support for Asynchronous UDFs.
 - Allow to shift results by one column to the right.
+- Additional dependencies can be installed via extra_requires.
 
 ### Bug fixes ###
 
