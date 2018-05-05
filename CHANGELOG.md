@@ -27,6 +27,7 @@ List all changes in various categories:
 - Experimental support for Asynchronous UDFs.
 - Allow to shift results by one column to the right.
 - Additional dependencies can be installed via extra_requires.
+- Optional UDF parameters can be hidden.
 
 ### Bug fixes ###
 

@@ -281,7 +281,19 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
     <tr>
         <td><strong>selected_operation_ids</strong></td>
-        <td>List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_id already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>excluded_parameters</strong></td>
+        <td>List of parameter names (or regular expressions) within OpenAPI definition that should not be exposed. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>selected_parameters</strong></td>
+        <td>List of parameter names (or regular expressions) within OpenAPI definition that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
         <td>Optional</td>
         <td></td>
     </tr>

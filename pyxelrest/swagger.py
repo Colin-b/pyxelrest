@@ -182,6 +182,8 @@ class ServiceConfigSection(ConfigSection):
         self.excluded_tags = open_api.get('excluded_tags', [])
         self.excluded_operation_ids = open_api.get('excluded_operation_ids', [])
         self.selected_operation_ids = open_api.get('selected_operation_ids', [])
+        self.excluded_parameters = open_api.get('excluded_parameters', [])
+        self.selected_parameters = open_api.get('selected_parameters', [])
 
     def _allow_tags(self, method_tags):
         if not method_tags:
@@ -217,6 +219,26 @@ class ServiceConfigSection(ConfigSection):
             for selected_operation_id in self.selected_operation_ids:
                 try:
                     if re.match(to_valid_regex(selected_operation_id), method_operation_id):
+                        return True
+                except:  # Handle non regex values
+                    pass
+            return False
+
+        return True
+
+    def allow_parameter(self, parameter_name):
+        if self.excluded_parameters:
+            for excluded_parameter in self.excluded_parameters:
+                try:
+                    if re.match(to_valid_regex(excluded_parameter), parameter_name):
+                        return False
+                except:  # Handle non regex values
+                    pass
+
+        if self.selected_parameters:
+            for selected_parameter in self.selected_parameters:
+                try:
+                    if re.match(to_valid_regex(selected_parameter), parameter_name):
                         return True
                 except:  # Handle non regex values
                     pass
@@ -305,7 +327,6 @@ class UDFMethod:
         udf_parameters = self._create_udf_parameters()
         self.parameters = {}
         for udf_parameter in udf_parameters:
-            self.parameters[udf_parameter.name] = udf_parameter
             if udf_parameter.location == 'path':
                 self.path_parameters.append(udf_parameter)
             # Required but not in path
@@ -313,8 +334,12 @@ class UDFMethod:
                 self.update_information_on_parameter_type(udf_parameter)
                 self.required_parameters.append(udf_parameter)
             else:
+                if not self.service.config.allow_parameter(udf_parameter.name):
+                    continue
                 self.update_information_on_parameter_type(udf_parameter)
                 self.optional_parameters.append(udf_parameter)
+
+            self.parameters[udf_parameter.name] = udf_parameter
 
     def _create_udf_parameters(self):
         return []
