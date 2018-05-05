@@ -414,6 +414,11 @@ Frequently Asked Question
 Microsoft Excel Wizard does not show any parameter
 --------------------------------------------------
 
+.. figure:: addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG
+   :align: center
+
+   Microsoft Excel Wizard bug
+
 Microsoft Excel function wizard is not able to handle functions with a long definition.
 
 The total length of parameter names (and commas to separate them) should not exceed 253 characters,

@@ -540,6 +540,8 @@ The cachetools module is required for this feature to be available.
 
 ### Microsoft Excel Wizard does not show any parameter ###
 
+![Microsoft Excel Wizard bug](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG)
+
 Microsoft Excel function wizard is not able to handle functions with a long definition.
 
 The total length of parameter names (and commas to separate them) should not exceed 253 characters,
