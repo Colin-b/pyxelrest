@@ -542,7 +542,10 @@ The cachetools module is required for this feature to be available.
 
 In case your UDF has a lot of parameters (or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
 
-Try reducing the number of parameters in your service (or the length of your parameter names).
+To overcome this Microsoft Excel limitation you can try the following:
+ * Exclude some parameters (refer to Open API configuration section for more information)
+ * Remove some parameters in your service.
+ * Reduce the length of your service parameter names.
 
 ### No command specified in the configuration, cannot autostart server ###
 
