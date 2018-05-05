@@ -414,7 +414,11 @@ Frequently Asked Question
 Microsoft Excel Wizard does not show any parameter
 --------------------------------------------------
 
-In case your UDF has a lot of parameters (or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
+Microsoft Excel function wizard is not able to handle functions with a long definition.
+
+The total length of parameter names (and commas to separate them) should not exceed 253 characters,
+
+In case it does (your UDF has a lot of parameters or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
 
 To overcome this Microsoft Excel limitation you can try the following:
 - Exclude some parameters (refer to Open API configuration section for more information)
