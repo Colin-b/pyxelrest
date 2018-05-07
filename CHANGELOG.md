@@ -6,7 +6,7 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.67.0 (next) ##
+## 0.67.0 (2018-05-07) ##
 
 ### Release notes ###
 
