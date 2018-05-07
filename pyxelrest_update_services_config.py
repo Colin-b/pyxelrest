@@ -137,7 +137,7 @@ class ServicesConfigUpdater:
         # Add up to date fields
         self._user_config[service_name] = {key: value for key, value in updated_config.items() if key not in skip_update}
         # Add non updated fields
-        self._user_config[service_name].extend({key: value for key, value in previous_config.items() if key in skip_update})
+        self._user_config[service_name].update({key: value for key, value in previous_config.items() if key in skip_update})
         logger.info('"{0}" configuration updated.'.format(service_name))
 
     def _remove_service(self, service_name):
