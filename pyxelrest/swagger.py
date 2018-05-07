@@ -268,6 +268,9 @@ class PyxelRestConfigSection(ConfigSection):
     def should_provide_method(self, http_verb):
         return http_verb in self.requested_methods
 
+    def allow_parameter(self, parameter_name):
+        return True
+
 
 class PyxelRestService:
     def __init__(self, service_name, service_config, flattenize):
