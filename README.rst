@@ -450,3 +450,8 @@ Dates with a year higher than 3000 are not converted to local timezone
 ----------------------------------------------------------------------
 
 Due to timestamp limitation, dates after `3000-12-31` and date time after `3001-01-01T07:59:59+00:00` cannot be converted to local timezone.
+
+Python process exited before it was possible to create the interface object
+---------------------------------------------------------------------------
+
+You need to check log files to identify the underlying issue.
