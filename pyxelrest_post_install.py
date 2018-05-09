@@ -100,6 +100,12 @@ def convert_advanced_configuration_to_yml(yml_content, advanced_configuration):
         else:
             yml_content[key] = value
 
+    if 'udf' not in yml_content:
+        yml_content['udf'] = {
+            'return_types': ['sync_auto_expand'],
+            'shift_result': False
+        }
+
 
 class PostInstall:
     def __init__(self, installation_files_folder=None):

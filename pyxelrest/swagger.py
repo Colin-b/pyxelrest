@@ -182,6 +182,8 @@ class ServiceConfigSection(ConfigSection):
         self.excluded_tags = open_api.get('excluded_tags', [])
         self.excluded_operation_ids = open_api.get('excluded_operation_ids', [])
         self.selected_operation_ids = open_api.get('selected_operation_ids', [])
+        self.excluded_parameters = open_api.get('excluded_parameters', [])
+        self.selected_parameters = open_api.get('selected_parameters', [])
 
     def _allow_tags(self, method_tags):
         if not method_tags:
@@ -224,6 +226,26 @@ class ServiceConfigSection(ConfigSection):
 
         return True
 
+    def allow_parameter(self, parameter_name):
+        if self.excluded_parameters:
+            for excluded_parameter in self.excluded_parameters:
+                try:
+                    if re.match(to_valid_regex(excluded_parameter), parameter_name):
+                        return False
+                except:  # Handle non regex values
+                    pass
+
+        if self.selected_parameters:
+            for selected_parameter in self.selected_parameters:
+                try:
+                    if re.match(to_valid_regex(selected_parameter), parameter_name):
+                        return True
+                except:  # Handle non regex values
+                    pass
+            return False
+
+        return True
+
     def should_provide_method(self, http_verb, open_api_method):
         if http_verb not in self.requested_methods:
             return False
@@ -245,6 +267,9 @@ class PyxelRestConfigSection(ConfigSection):
 
     def should_provide_method(self, http_verb):
         return http_verb in self.requested_methods
+
+    def allow_parameter(self, parameter_name):
+        return True
 
 
 class PyxelRestService:
@@ -305,7 +330,6 @@ class UDFMethod:
         udf_parameters = self._create_udf_parameters()
         self.parameters = {}
         for udf_parameter in udf_parameters:
-            self.parameters[udf_parameter.name] = udf_parameter
             if udf_parameter.location == 'path':
                 self.path_parameters.append(udf_parameter)
             # Required but not in path
@@ -313,8 +337,12 @@ class UDFMethod:
                 self.update_information_on_parameter_type(udf_parameter)
                 self.required_parameters.append(udf_parameter)
             else:
+                if not self.service.config.allow_parameter(udf_parameter.name):
+                    continue
                 self.update_information_on_parameter_type(udf_parameter)
                 self.optional_parameters.append(udf_parameter)
+
+            self.parameters[udf_parameter.name] = udf_parameter
 
     def _create_udf_parameters(self):
         return []
@@ -847,17 +875,23 @@ class OpenAPIUDFMethod(UDFMethod):
             return [APIUDFParameter(open_api_parameter, {})]
 
         schema = open_api_parameter['schema']
-        ref = schema['$ref'] if '$ref' in schema else schema['items']['$ref']
+        ref = schema['$ref'] if '$ref' in schema else schema['items'].get('$ref', '')
         ref = ref[len('#/definitions/'):]
         parameters = []
-        open_api_definition = self.service.open_api_definitions[ref]
-        for inner_parameter_name, inner_parameter in open_api_definition['properties'].items():
-            if not inner_parameter.get('readOnly', False):
-                inner_parameter['server_param_name'] = inner_parameter_name
-                inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
-                inner_parameter['in'] = open_api_parameter['in']
-                inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
-                parameters.append(APIUDFParameter(inner_parameter, schema))
+        open_api_definition = self.service.open_api_definitions.get(ref, {})
+        if open_api_definition:
+            for inner_parameter_name, inner_parameter in open_api_definition['properties'].items():
+                if not inner_parameter.get('readOnly', False):
+                    inner_parameter['server_param_name'] = inner_parameter_name
+                    inner_parameter['name'] = to_vba_valid_name(inner_parameter_name)
+                    inner_parameter['in'] = open_api_parameter['in']
+                    inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
+                    parameters.append(APIUDFParameter(inner_parameter, schema))
+        else:
+            inner_parameter = dict(open_api_parameter)
+            inner_parameter.update(schema['items'])
+            inner_parameter['server_param_name'] = None  # Indicate that this is the whole body
+            parameters.append(APIUDFParameter(inner_parameter, schema))
         return parameters
 
     def _avoid_duplicated_names(self, udf_parameters):
@@ -1189,7 +1223,10 @@ class RequestContent:
         if parameter.schema.get('type') == 'array':
             self._add_body_list_parameter(parameter, value)
         else:
-            self.payload[parameter.server_param_name] = value
+            if parameter.server_param_name:
+                self.payload[parameter.server_param_name] = value
+            else:
+                self.payload = value
 
     def _add_body_list_parameter(self, parameter, value):
         # Change the default payload to list
@@ -1226,7 +1263,10 @@ class RequestContent:
                     self.payload.append(dict(empty_item))
 
                 for index, parameter_list_item in enumerate(value):
-                    self.payload[index][parameter.server_param_name] = parameter_list_item
+                    if parameter.server_param_name:
+                        self.payload[index][parameter.server_param_name] = parameter_list_item
+                    else:
+                        self.payload[index] = parameter_list_item
 
             # Some items will be updated with a new provided value and remaining will contains None
             else:

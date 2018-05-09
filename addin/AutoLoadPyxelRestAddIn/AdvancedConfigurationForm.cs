@@ -21,6 +21,10 @@ namespace AutoLoadPyxelRestAddIn
         private TextBox operationIDName;
         private AddButton addOperationID;
 
+        private TableLayoutPanel parametersPanel;
+        private TextBox parameterName;
+        private AddButton addParameter;
+
         private TableLayoutPanel headersPanel;
         private TextBox headerName;
         private TextBox headerValue;
@@ -425,33 +429,63 @@ namespace AutoLoadPyxelRestAddIn
                     #endregion
 
                     #region Operation IDs
-
-                    var operationIdsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Operation IDs" };
-                    layout.Controls.Add(operationIdsLabel);
-
-                    operationIDsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
-                    layout.Controls.Add(operationIDsPanel);
-
                     {
-                        var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+                        var operationIdsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Operation IDs" };
+                        layout.Controls.Add(operationIdsLabel);
+
+                        operationIDsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                        layout.Controls.Add(operationIDsPanel);
 
                         {
-                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                            var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
 
-                            operationIDName = new TextBox { Text = string.Empty, Width = 530 };
-                            tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
-                            operationIDName.TextChanged += OperationIDName_TextChanged;
-                            operationIDName.KeyDown += OperationIDName_KeyDown;
-                            addPanel.Controls.Add(operationIDName, 0, 1);
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                operationIDName = new TextBox { Text = string.Empty, Width = 530 };
+                                tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
+                                operationIDName.TextChanged += OperationIDName_TextChanged;
+                                operationIDName.KeyDown += OperationIDName_KeyDown;
+                                addPanel.Controls.Add(operationIDName, 0, 1);
+                            }
+
+                            addOperationID = new AddButton();
+                            addOperationID.Click += AddOperationID_Click;
+                            addPanel.Controls.Add(addOperationID, 1, 1);
+
+                            layout.Controls.Add(addPanel);
                         }
-
-                        addOperationID = new AddButton();
-                        addOperationID.Click += AddOperationID_Click;
-                        addPanel.Controls.Add(addOperationID, 1, 1);
-
-                        layout.Controls.Add(addPanel);
                     }
+                    #endregion
 
+                    #region Parameters
+                    {
+                        var parametersLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Parameters" };
+                        layout.Controls.Add(parametersLabel);
+
+                        parametersPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                        layout.Controls.Add(parametersPanel);
+
+                        {
+                            var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI parameter to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                parameterName = new TextBox { Text = string.Empty, Width = 530 };
+                                tooltip.SetToolTip(parameterName, "You will be able to filter in/out this parameter.");
+                                parameterName.TextChanged += ParameterName_TextChanged;
+                                parameterName.KeyDown += ParameterName_KeyDown;
+                                addPanel.Controls.Add(parameterName, 0, 1);
+                            }
+
+                            addParameter = new AddButton();
+                            addParameter.Click += AddParameter_Click;
+                            addPanel.Controls.Add(addParameter, 1, 1);
+
+                            layout.Controls.Add(addPanel);
+                        }
+                    }
                     #endregion
 
                     tab.Controls.Add(layout);
@@ -1024,6 +1058,87 @@ namespace AutoLoadPyxelRestAddIn
             RemoveValueFromList(operationIDLabel.Text, operationIDSelected.Checked ? "selected_operation_ids" : "excluded_operation_ids");
 
             operationIDsPanel.Controls.Remove(panel);
+        }
+
+        #endregion
+
+        #region Parameters
+
+        private void ParameterName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addParameter.Enabled)
+                        AddParameter();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void ParameterName_TextChanged(object sender, EventArgs e)
+        {
+            var parameterValue = ((TextBox)sender).Text;
+            addParameter.Enabled = parameterValue.Length > 0 && !ContainsValue(parameterValue, "selected_parameters") && !ContainsValue(parameterValue, "excluded_parameters");
+        }
+
+        private void AddParameter_Click(object sender, EventArgs e)
+        {
+            AddParameter();
+        }
+
+        private void AddParameter()
+        {
+            // Service update
+            AddValueToList(parameterName.Text, "selected_parameters");
+            // Visual update
+            AddParameter(parameterName.Text, false);
+            parameterName.Text = "";
+        }
+
+        private void AddParameter(string value, bool excluded)
+        {
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+
+            panel.Controls.Add(new Label { Name = "parameterLabel", Text = value, Width = 335, Dock = DockStyle.Fill }, 0, 1);
+
+            panel.Controls.Add(new RadioButton { Text = "excluded", Width = 90, Checked = excluded }, 1, 1);
+
+            var parameterSelected = new RadioButton { Name = "parameterSelected", Text = "selected", Width = 90, Checked = !excluded };
+            parameterSelected.CheckedChanged += ParameterSelected_CheckedChanged;
+            panel.Controls.Add(parameterSelected, 2, 1);
+
+            var remove = new DeleteButton();
+            remove.Click += RemoveParameter_Click;
+            panel.Controls.Add(remove, 3, 1);
+
+            parametersPanel.Controls.Add(panel);
+            parametersPanel.SetColumnSpan(panel, 2);
+        }
+
+        private void ParameterSelected_CheckedChanged(object sender, EventArgs e)
+        {
+            var parameterSelected = (RadioButton)sender;
+            Label parameterLabel = (Label)parameterSelected.Parent.Controls.Find("parameterLabel", false)[0];
+
+            if (parameterSelected.Checked) // Moved from excluded to selected
+                MoveFromListToList(parameterLabel.Text, "excluded_parameters", "selected_parameters");
+            else // Move from selected to excluded
+                MoveFromListToList(parameterLabel.Text, "selected_parameters", "excluded_parameters");
+        }
+
+        private void RemoveParameter_Click(object sender, EventArgs e)
+        {
+            var panel = ((DeleteButton)sender).Parent;
+            var parameterLabel = (Label)panel.Controls.Find("parameterLabel", false)[0];
+            var parameterSelected = (RadioButton)panel.Controls.Find("parameterSelected", false)[0];
+
+            RemoveValueFromList(parameterLabel.Text, parameterSelected.Checked ? "selected_parameters" : "excluded_parameters");
+
+            parametersPanel.Controls.Remove(panel);
         }
 
         #endregion

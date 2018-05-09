@@ -141,6 +141,26 @@ setup(name='pyxelrest',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
           'future==0.16.0',
       ],
+      extra_requires={
+          # Support for `application/msgpackpandas`
+          'pandas_msgpack': [
+              'pandas',
+              'msgpack-python',
+          ],
+          # Support for faster JSON serialization / deserialization
+          'ujson': [
+              'ujson',
+          ],
+          # Support for NTLM authentication
+          'ntlm': [
+              'requests_ntlm',
+              'requests_negotiate_sspi',
+          ],
+          # Support for in-memory caching
+          'cachetool': [
+              'cachetool',
+          ],
+      },
       scripts=[
           'pyxelrest_auto_update.py',
           'pyxelrest_post_install.py',

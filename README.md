@@ -105,20 +105,25 @@ In order to do so, you need to add a test certificate.
 
 ### Optional Dependencies ###
 
-- Support for `application/msgpackpandas`
-    - Pandas encoded msgpack will be used if `pandas` and `msgpack-python` modules are available.
+- Support for ``application/msgpackpandas`` encoded data.
+    - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
+    - ``pandas_msgpack`` extra requires can be used to install those dependencies.
 
-- Support for ``ujson``
+- Support for faster JSON handling.
     - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
+    - ``ujson`` extra requires can be used to install those dependencies.
 
-- Support for ``requests_ntlm``
-    - ``requests_ntlm`` is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
+- Support for NTLM authentication (with user credentials provided),
+    - ``requests_ntlm`` module is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
+    - ``ntlm`` extra requires can be used to install those dependencies.
 
-- Support for ``requests_negotiate_sspi``
-    - ``requests_negotiate_sspi`` is required in case auth=ntlm is set in ``security_details`` property and logged in user credentials should be used.
+- Support for automatic NTLM authentication.
+    - ``requests_negotiate_sspi`` module is required in case auth=ntlm is set in ``security_details`` property and logged in user credentials should be used.
+    - ``ntlm`` extra requires can be used to install those dependencies.
 
-- Support for ``cachetool``
-    - ``cachetool`` is required to be able to use in-memory caching.
+- Support for in-memory caching.
+    - ``cachetool`` module is required to be able to use in-memory caching.
+    - ``cachetool`` extra requires can be used to install those dependencies.
 
 ## Configuration ##
 
@@ -276,7 +281,19 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
     <tr>
         <td><strong>selected_operation_ids</strong></td>
-        <td>List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_id already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>excluded_parameters</strong></td>
+        <td>List of parameter names (or regular expressions) within OpenAPI definition that should not be exposed. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>selected_parameters</strong></td>
+        <td>List of parameter names (or regular expressions) within OpenAPI definition that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
         <td>Optional</td>
         <td></td>
     </tr>
@@ -523,9 +540,18 @@ The cachetools module is required for this feature to be available.
 
 ### Microsoft Excel Wizard does not show any parameter ###
 
-In case your UDF has a lot of parameters (or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
+![Microsoft Excel Wizard bug](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG)
 
-Try reducing the number of parameters in your service (or the length of your parameter names).
+Microsoft Excel function wizard is not able to handle functions with a long definition.
+
+The total length of parameter names (and commas to separate them) should not exceed 253 characters,
+
+In case it does (your UDF has a lot of parameters or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
+
+To overcome this Microsoft Excel limitation you can try the following:
+ * Exclude some parameters (refer to Open API configuration section for more information)
+ * Remove some parameters in your service.
+ * Reduce the length of your service parameter names.
 
 ### No command specified in the configuration, cannot autostart server ###
 
@@ -544,3 +570,7 @@ In case you encounter an issue like `...An application with the same identity is
 ### Dates with a year higher than 3000 are not converted to local timezone ###
 
 Due to timestamp limitation, dates after 3000-12-31 and date time after 3001-01-01T07:59:59+00:00 cannot be converted to local timezone.
+
+### Python process exited before it was possible to create the interface object ###
+
+You need to check log files to identify the underlying issue.
