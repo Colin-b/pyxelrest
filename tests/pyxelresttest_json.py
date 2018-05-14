@@ -3262,6 +3262,15 @@ class PyxelRestJsonTest(unittest.TestCase):
             ]
         )
 
+    def test_post_min_and_max_items(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_min_and_max_items(
+            items=[['value10', 'value11', 'value12'], ['value20', 'value21', 'value22'], ['value30', 'value31', 'value32']],
+            rule_set=[['value10', 'value11', 'value12'], ['value20', 'value21', 'value22'], ['value30', 'value31', 'value32']],
+        ),
+            [['OK']]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

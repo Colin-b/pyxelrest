@@ -1103,7 +1103,7 @@ class APIUDFParameter(UDFParameter):
                 raise Exception('{0} cannot contains more than {1} items.'.format(self.name, self.max_items))
 
         if self.min_items is not None:
-            if len(value) > self.min_items:
+            if len(value) < self.min_items:
                 raise Exception('{0} cannot contains less than {1} items.'.format(self.name, self.min_items))
 
     def _get_convert_method(self):
