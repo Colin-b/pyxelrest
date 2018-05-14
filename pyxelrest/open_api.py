@@ -1413,6 +1413,8 @@ def get_result_async(udf_method, request_content, excel_caller):
         except:
             logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
     try:
+        if not hasattr(excel_caller, 'Rows'):
+            return convert_to_return_type('Asynchronous UDF called from VBA.', udf_method)
         excel_range = xlwings.Range(impl=xlwings.xlplatform.Range(xl=excel_caller))
         threading.Thread(
             target=get_and_send_result,

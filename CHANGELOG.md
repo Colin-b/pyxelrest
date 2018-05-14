@@ -13,6 +13,7 @@ List all changes in various categories:
 - Environment variables were not interpreted anymore for headers and api_key since 0.67.0
 - Minimum length of arrays were not properly checked, leading to invalid rejection.
 - Prompt user only once per update.
+- Return a proper error message in case asynchronous method is called by VBA.
 
 ## 0.67.0 (2018-05-07) ##
 
