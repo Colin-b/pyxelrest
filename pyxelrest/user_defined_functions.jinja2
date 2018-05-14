@@ -7,20 +7,20 @@ import xlwings as xw
 import datetime
 import logging
 from pyxelrest.caching import caching
-from pyxelrest.swagger import RequestContent, get_result, get_result_async, convert_to_return_type
+from pyxelrest.open_api import RequestContent, get_result, get_result_async, convert_to_return_type
 
 logger = logging.getLogger(__name__)
 udf_methods = None  # Will be set after load
 {# Macro generating the converter for the parameter if needed #}
-{% macro param_converter(parameter) %}
-{%- if parameter.type == 'integer' %}
+{% macro param_converter(udf_parameter) %}
+{%- if udf_parameter.type == 'integer' %}
  numbers=int,
-{%- elif parameter.type == 'number' %}
+{%- elif udf_parameter.type == 'number' %}
  numbers=float,
-{%- elif parameter.type == 'string' %}
-    {%- if parameter.format == 'date' %}
+{%- elif udf_parameter.type == 'string' %}
+    {%- if udf_parameter.format == 'date' %}
  dates=datetime.date,
-    {%- elif parameter.format == 'date-time' %}
+    {%- elif udf_parameter.format == 'date-time' %}
  dates=datetime.datetime,
     {%- endif %}
 {% endif %}
@@ -34,23 +34,23 @@ udf_methods = None  # Will be set after load
 @xw.func(category='{{ udf_method.service.config.name }}', call_in_wizard=False{% if udf_method.help_url %}, help_file='{{ udf_method.help_url }}'{% endif %})
 {% if udf_method.is_asynchronous %}@xw.arg('excel_caller', is_excel_caller=True)
 {% endif %}
-{% for parameter in udf_method.path_parameters %}
-@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
+{% for udf_parameter in udf_method.path_parameters %}
+@xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
 {% endfor %}
-{% for parameter in udf_method.required_parameters %}
-@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
+{% for udf_parameter in udf_method.required_parameters %}
+@xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
 {% endfor %}
-{% for parameter in udf_method.optional_parameters %}
-@xw.arg('{{ parameter.name }}',{{ param_converter(parameter) }} doc="""{{ parameter.description }}""")
+{% for udf_parameter in udf_method.optional_parameters %}
+@xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
 {% endfor %}
 {% if udf_method.return_a_list() and udf_method.auto_expand_result %}
 @xw.ret(expand='table')
 {% endif %}
 def {{ udf_method.udf_name }}(
     {%- if udf_method.is_asynchronous %}excel_caller{% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endif %}
-    {%- for parameter in udf_method.path_parameters %}{{ parameter.name }}{% if not loop.last or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in udf_method.required_parameters %}{{ parameter.name }}{% if not loop.last or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for parameter in udf_method.optional_parameters %}{{ parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
+    {%- for udf_parameter in udf_method.path_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for udf_parameter in udf_method.required_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
 {% if udf_method.summary() %}
     """{{ udf_method.summary() }}"""
 {% endif %}
@@ -60,14 +60,14 @@ def {{ udf_method.udf_name }}(
 {% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}
 
     try:
-{% for parameter in udf_method.path_parameters %}
-        udf_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
+{% for udf_parameter in udf_method.path_parameters %}
+        udf_method.parameters['{{ udf_parameter.name }}'].validate_required({{ udf_parameter.name }}, request_content)
 {% endfor %}
-{% for parameter in udf_method.required_parameters %}
-        udf_method.parameters['{{ parameter.name }}'].validate_required({{ parameter.name }}, request_content)
+{% for udf_parameter in udf_method.required_parameters %}
+        udf_method.parameters['{{ udf_parameter.name }}'].validate_required({{ udf_parameter.name }}, request_content)
 {% endfor %}
-{% for parameter in udf_method.optional_parameters %}
-        udf_method.parameters['{{ parameter.name }}'].validate_optional({{ parameter.name }}, request_content)
+{% for udf_parameter in udf_method.optional_parameters %}
+        udf_method.parameters['{{ udf_parameter.name }}'].validate_optional({{ udf_parameter.name }}, request_content)
 {% endfor %}
         request_content.validate()
     except Exception as e:

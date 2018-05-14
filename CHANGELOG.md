@@ -8,6 +8,10 @@ List all changes in various categories:
 
 ## 0.68.0 (next) ##
 
+### Bug fixes ###
+
+- Environment variables were not interpreted anymore for headers and api_key since 0.67.0
+
 ## 0.67.0 (2018-05-07) ##
 
 ### Release notes ###

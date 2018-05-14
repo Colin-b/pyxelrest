@@ -108,11 +108,10 @@ def list_to_dict_list(header, values_list):
     ]
 
 
-def convert_environment_variable(loader, node):
+def convert_environment_variable(value):
     """
     Value can be an environment variable formatted as %MY_ENV_VARIABLE%
     """
-    value = loader.construct_scalar(node)
     environment_variables_match = re.match('^%(.*)%$', value)
     if environment_variables_match:
         environment_variable = environment_variables_match.group(1)
@@ -137,11 +136,13 @@ class ConfigSection:
         self.udf_return_types = udf.get('return_types', ['async_auto_expand'])
         self.shift_result = udf.get('shift_result', True)
         self.max_retries = service_config.get('max_retries', 5)
-        self.custom_headers = service_config.get('headers', {})
+        self.custom_headers = {key: convert_environment_variable(value) for key, value in service_config.get('headers', {}).items()}
         self.proxies = service_config.get('proxies', {})
         self.oauth2 = service_config.get('oauth2', {})
         self.basic = service_config.get('basic', {})
         self.api_key = service_config.get('api_key')
+        if self.api_key:
+            self.api_key = convert_environment_variable(self.api_key)
         self.ntlm_auth = service_config.get('ntlm', {})
 
     def is_asynchronous(self, udf_return_type):
@@ -1296,8 +1297,6 @@ def load_services(flattenize=True):
     if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
         raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
 
-    yaml.add_constructor(u'!environment_variable', convert_environment_variable)
-    yaml.add_implicit_resolver(u'!environment_variable', re.compile('^%(.*)%$'))
     with open(SERVICES_CONFIGURATION_FILE_PATH, 'r') as config_file:
         config = yaml.load(config_file)
 

@@ -2,6 +2,7 @@ import datetime
 from dateutil.tz import tzutc
 import unittest
 import platform
+import os
 
 from testsutils import (serviceshandler, loader)
 
@@ -175,6 +176,9 @@ class PyxelRestTest(unittest.TestCase):
         other_header_index = headers[0].index('X-Pxl-Other')
         self.assertEqual(headers[1][other_header_index], 'MyOtherValue')
 
+        envvar_header_index = headers[0].index('X-Pxl-Envvar')
+        self.assertEqual(headers[1][envvar_header_index], os.environ['USERNAME'])
+
         request_header_index = headers[0].index('X-Pxl-Request')
         self.assertIsNotNone(request_header_index)
 
@@ -182,7 +186,7 @@ class PyxelRestTest(unittest.TestCase):
         self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
 
         user_agent_index = headers[0].index('User-Agent')
-        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.67.0')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.68.0.dev1')
 
     def test_post_form_parameter(self):
         from pyxelrest import pyxelrestgenerator

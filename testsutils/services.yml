@@ -111,6 +111,7 @@ header_advanced_configuration:
   headers:
     X-PXL-CUSTOM: "MyCustomValue"
     X-PXL-OTHER: "MyOtherValue"
+    X-PXL-ENVVAR: "%USERNAME%"
 
 form_parameter:
   open_api:

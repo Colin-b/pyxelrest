@@ -8,7 +8,7 @@ import logging.handlers
 import datetime
 import sys
 from pyxelrest import (
-    swagger,
+    open_api,
     GENERATE_UDF_ON_IMPORT,
     custom_logging
 )
@@ -40,7 +40,7 @@ def generate_user_defined_functions(output='user_defined_functions.py', flatteni
     :param flattenize: Set to False if you want the JSON dictionary as result of your UDF call.
     :return: None
     """
-    services = swagger.load_services(flattenize)
+    services = open_api.load_services(flattenize)
     logging.debug('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), output), 'w', encoding='utf-8') \
             as generated_file:
