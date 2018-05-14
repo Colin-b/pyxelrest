@@ -14,6 +14,7 @@ List all changes in various categories:
 - Minimum length of arrays were not properly checked, leading to invalid rejection.
 - Prompt user only once per update.
 - Return a proper error message in case asynchronous method is called by VBA.
+- Allow to switch a configuration to VBA compatible only using add-in.
 
 ## 0.67.0 (2018-05-07) ##
 
