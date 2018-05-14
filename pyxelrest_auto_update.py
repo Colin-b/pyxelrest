@@ -90,6 +90,15 @@ def _installed_package(package_name):
             return package
 
 
+def _is_already_updating():
+    update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
+    if os.path.isfile(update_is_in_progress):
+        return True
+    # Create file if this is the first update (most cases)
+    with open(update_is_in_progress, 'w'):
+        return False
+
+
 def _update_is_finished():
     update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
     os.remove(update_is_in_progress)
@@ -180,10 +189,6 @@ class PyxelRestUpdater:
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
 
     def check_update(self):
-        if self._is_already_updating():
-            logger.debug('Skip update check as another update is ongoing.')
-            return
-
         logger.debug('Checking if an update is available...')
         if self._is_update_available():
             logger.info('Update {0} available (from {1}).'.format(self.pyxelrest_package.latest_version, self.pyxelrest_package.version))
@@ -207,14 +212,6 @@ class PyxelRestUpdater:
     def _is_update_available(self):
         self.pyxelrest_package = _outdated_package('pyxelrest')
         return self.pyxelrest_package
-
-    def _is_already_updating(self):
-        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
-        if os.path.isfile(update_is_in_progress):
-            return True
-        # Create file if this is the first update (most cases)
-        with open(update_is_in_progress, 'w'):
-            return False
 
 
 def _get_versions(current_version, new_version, group_number):
@@ -376,18 +373,22 @@ class UpdateGUI(tkinter.Frame):
 
 
 if __name__ == '__main__':
-    logger.debug('Starting auto update script...')
     parser = argparse.ArgumentParser()
     parser.add_argument('--path_to_up_to_date_configurations',
                         help='File (path or URL) or directory (path) containing up to date services configuration.',
                         default=None,
                         type=str)
     options = parser.parse_args(sys.argv[1:])
-    try:
-        updater = PyxelRestUpdater(options.path_to_up_to_date_configurations)
-        updater.check_update()
-    except:
-        logger.exception('An error occurred while checking for update.')
-        raise
-    finally:
-        _update_is_finished()
+
+    logger.debug('Starting auto update script...')
+    if _is_already_updating():
+        logger.debug('Skip update check as another update is ongoing.')
+    else:
+        try:
+            updater = PyxelRestUpdater(options.path_to_up_to_date_configurations)
+            updater.check_update()
+        except:
+            logger.exception('An error occurred while checking for update.')
+            raise
+        finally:
+            _update_is_finished()
