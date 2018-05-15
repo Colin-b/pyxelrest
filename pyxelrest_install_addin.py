@@ -174,7 +174,7 @@ class Installer:
         xlwings_config.create_file()
         xlwings_config.create_vb_addin()
 
-        self._install_auto_load_addin(xlwings_config)
+        self._install_auto_load_addin()
 
     @staticmethod
     def _is_excel_running():
@@ -197,7 +197,7 @@ class Installer:
         pyxelrest_vb_addin_path = os.path.join(xlstart_folder, 'pyxelrest.xlam')
         shutil.copyfile(pyxelrest_vb_file_path, pyxelrest_vb_addin_path)
 
-    def _install_auto_load_addin(self, xlwings_config):
+    def _install_auto_load_addin(self):
         """
         Install Excel addin in a different folder than the python copied one as it must be uninstalled prior to
         installation and python copy is performed before running post installation script.
@@ -215,10 +215,9 @@ class Installer:
             # Avoid next install trying to uninstall an addin that was not properly installed
             dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
             raise
-        self._update_auto_load_addin_config(xlwings_config)
+        self._update_auto_load_addin_config()
 
-    def _update_auto_load_addin_config(self, xlwings_config):
-        # TODO Use regular expressions to update settings
+    def _update_auto_load_addin_config(self):
         def write_addin_configuration_line(addin_settings_line, addin_settings_file):
             if 'PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
@@ -234,10 +233,6 @@ class Installer:
                 # There is no way to know if a wrong path is set in this property
                 new_line = addin_settings_line.replace('AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
                                                        auto_update_script_path)
-                addin_settings_file.write(new_line)
-            elif 'XLWINGS_CONFIG_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION' in addin_settings_line:
-                new_line = addin_settings_line.replace('XLWINGS_CONFIG_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION',
-                                                       xlwings_config.xlwings_config_path)
                 addin_settings_file.write(new_line)
             elif '</appSettings>' in addin_settings_line:
                 if self.path_to_up_to_date_configuration:
