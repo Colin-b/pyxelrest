@@ -82,6 +82,8 @@ setup(name='pyxelrest',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.dll',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.xml',
+                  # VB Add-in
+                  'addin/pyxelrest.xlam',
               ]
           ),
           (
@@ -131,7 +133,7 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==223',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.11.7.1',
+          'xlwings==0.11.8.1',
           # Used to parse configuration files
           'pyaml==17.12.1',
           # Used to manage authentication
