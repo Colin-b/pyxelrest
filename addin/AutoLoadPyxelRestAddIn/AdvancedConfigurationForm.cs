@@ -39,6 +39,10 @@ namespace AutoLoadPyxelRestAddIn
         private RadioButton asynchronousAutoExpand;
         private CheckBox shiftResult;
 
+        private TableLayoutPanel pythonModulesPanel;
+        private TextBox pythonModuleName;
+        private AddButton addPythonModule;
+
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
             this.servicePanel = servicePanel;
@@ -69,6 +73,9 @@ namespace AutoLoadPyxelRestAddIn
                 if (!oauth2NonParam.Contains(oauth2Item.Key))
                     AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
             }
+
+            foreach (var pythonModule in servicePanel.service.PythonModules)
+                AddPythonModule(pythonModule);
         }
 
         /**
@@ -679,6 +686,43 @@ namespace AutoLoadPyxelRestAddIn
             }
             #endregion
 
+            #region Python modules settings
+            {
+                var tab = new TabPage("Extra modules");
+                var layout = new TableLayoutPanel { AutoSize = true };
+
+                var pythonModulesLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Extra python modules" };
+                layout.Controls.Add(pythonModulesLabel);
+
+                pythonModulesPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(pythonModulesPanel);
+
+                {
+                    var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an extra python module", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        pythonModuleName = new TextBox { Text = string.Empty, Width = 530 };
+                        tooltip.SetToolTip(pythonModuleName, "Module will be installed at UDF loading.");
+                        pythonModuleName.TextChanged += PythonModuleName_TextChanged;
+                        pythonModuleName.KeyDown += PythonModuleName_KeyDown;
+                        addPanel.Controls.Add(pythonModuleName, 0, 1);
+                    }
+
+                    addPythonModule = new AddButton();
+                    addPythonModule.Click += AddPythonModule_Click;
+                    addPanel.Controls.Add(addPythonModule, 1, 1);
+
+                    layout.Controls.Add(addPanel);
+                }
+
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
+            #endregion
+
             Controls.Add(tabs);
         }
 
@@ -1037,6 +1081,69 @@ namespace AutoLoadPyxelRestAddIn
             RemoveValueFromList(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
 
             tagsPanel.Controls.Remove(panel);
+        }
+
+        #endregion
+
+        #region Python Modules
+
+        private void PythonModuleName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addPythonModule.Enabled)
+                        AddPythonModule();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void PythonModuleName_TextChanged(object sender, EventArgs e)
+        {
+            var pythonModuleValue = ((TextBox)sender).Text;
+            addPythonModule.Enabled = pythonModuleValue.Length > 0 && !servicePanel.service.PythonModules.Contains(pythonModuleValue);
+        }
+
+        private void AddPythonModule_Click(object sender, EventArgs e)
+        {
+            AddPythonModule();
+        }
+
+        private void AddPythonModule()
+        {
+            // Service update
+            servicePanel.service.PythonModules.Add(pythonModuleName.Text);
+            // Visual update
+            AddPythonModule(pythonModuleName.Text);
+            pythonModuleName.Text = "";
+        }
+
+        private void AddPythonModule(string value)
+        {
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+
+            panel.Controls.Add(new Label { Name = "pythonModuleLabel", Text = value, Width = 515, Dock = DockStyle.Fill }, 0, 1);
+
+            var remove = new DeleteButton();
+            remove.Click += RemovePythonModule_Click;
+            panel.Controls.Add(remove, 1, 1);
+
+            pythonModulesPanel.Controls.Add(panel);
+            pythonModulesPanel.SetColumnSpan(panel, 2);
+        }
+
+        private void RemovePythonModule_Click(object sender, EventArgs e)
+        {
+            var panel = ((DeleteButton)sender).Parent;
+            var pythonModuleLabel = (Label)panel.Controls.Find("pythonModuleLabel", false)[0];
+
+            servicePanel.service.PythonModules.Remove(pythonModuleLabel.Text);
+
+            pythonModulesPanel.Controls.Remove(panel);
         }
 
         #endregion

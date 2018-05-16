@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Enhancements ###
 
 - Update the usage of xlwings to be able to switch to the official version (possible since 0.11.8).
+- Allow to provide extra python modules in configuration.
 
 ### Bug fixes ###
 

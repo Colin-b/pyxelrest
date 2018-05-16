@@ -239,6 +239,12 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Optional</td>
         <td></td>
     </tr>
+    <tr>
+        <td><strong>python_modules</strong></td>
+        <td>List of extra python module names that should be installed.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 #### OpenAPI ####
