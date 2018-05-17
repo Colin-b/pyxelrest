@@ -145,19 +145,6 @@ class ConfigSection:
         if self.api_key:
             self.api_key = convert_environment_variable(self.api_key)
         self.ntlm_auth = service_config.get('ntlm', {})
-        self._install_python_modules(service_config.get('python_modules', []))
-
-    @staticmethod
-    def _install_python_modules(python_modules):
-        try:
-            for extra_module_name in python_modules:
-                result = InstallCommand().main([extra_module_name, '--upgrade', '--disable-pip-version-check'])
-                if result == 0:
-                    logger.info('{0} package updated.'.format(extra_module_name))
-                else:
-                    logger.warning('{0} package update failed.'.format(extra_module_name))
-        except:
-            logger.exception('Unable to install python modules.')
 
     def is_asynchronous(self, udf_return_type):
         return 'async_auto_expand' == udf_return_type

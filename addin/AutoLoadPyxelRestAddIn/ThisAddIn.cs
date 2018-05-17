@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Configuration;
 using System.IO;
+using System.Collections.Generic;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -83,6 +84,43 @@ namespace AutoLoadPyxelRestAddIn
             }
             // If custom configuration cannot be found, load internal one (default)
             return ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        }
+
+        internal void InstallPythonModules()
+        {
+            try {
+                string configurationFilePath = Configuration.GetDefaultConfigFilePath();
+                var configuration = new Configuration(configurationFilePath);
+                List<Service> services = configuration.Load();
+                foreach (Service service in services)
+                    InstallPythonModules(service.PythonModules);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to install extra python modules.", ex);
+            }
+        }
+
+        private void InstallPythonModules(IList<string> pythonModules)
+        {
+            if (pythonModules == null || pythonModules.Count == 0)
+                return;
+
+            string pythonPath = GetSetting("PathToPython");
+            if (!File.Exists(pythonPath))
+                throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
+
+            string commandLine = "-m pip --update install ";
+            foreach (string pythonModule in pythonModules)
+                commandLine += string.Format("{0} ", pythonModule);
+
+            Log.Debug("Install python modules...");
+            Process installModules = new Process();
+            installModules.StartInfo.FileName = pythonPath;
+            installModules.StartInfo.Arguments = commandLine;
+            installModules.StartInfo.UseShellExecute = false;
+            installModules.StartInfo.CreateNoWindow = true;
+            installModules.Start();
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
@@ -229,6 +267,7 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     Log.DebugFormat("Activating '{0}' workbook. Generating user defined functions...", Wb.Name);
                     ServiceConfigurationForm.UpdateServices();
+                    InstallPythonModules();
                     LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
@@ -259,6 +298,7 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     Log.DebugFormat("Opening '{0}' workbook. Generating user defined functions...", Wb.Name);
                     ServiceConfigurationForm.UpdateServices();
+                    InstallPythonModules();
                     LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
@@ -283,6 +323,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Debug("Microsoft Excel started with a blank document. Generating user defined functions...");
                 ServiceConfigurationForm.UpdateServices();
+                InstallPythonModules();
                 LoadXlWings();
                 ImportUserDefinedFunctions();
             }

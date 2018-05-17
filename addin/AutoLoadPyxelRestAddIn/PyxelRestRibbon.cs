@@ -67,6 +67,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             if (DialogResult.Yes == new ServiceConfigurationForm().ShowDialog())
             {
+                Globals.ThisAddIn.InstallPythonModules();
                 if (!Globals.ThisAddIn.ImportUserDefinedFunctions(reload:true))
                     MessageBox.Show(
                         UDF_IMPORT_FAILURE_MSG,
