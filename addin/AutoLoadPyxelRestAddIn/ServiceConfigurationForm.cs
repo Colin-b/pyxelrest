@@ -108,9 +108,10 @@ namespace AutoLoadPyxelRestAddIn
             if (!File.Exists(pythonPath))
                 throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
 
-            string commandLine = "-m pip --update install ";
+            string commandLine = "-m pip install ";
             foreach (string pythonModule in pythonModules)
                 commandLine += string.Format("{0} ", pythonModule);
+            commandLine += "--upgrade";
 
             Log.Debug("Install python modules...");
             Process installModules = new Process();
