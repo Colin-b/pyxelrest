@@ -390,6 +390,7 @@ class UDFParameter:
         self.location = location
         self.required = required
         self.type = field_type
+        self.array_dimension = 0
 
     def validate(self, request_content):
         pass
@@ -945,6 +946,7 @@ class APIUDFParameter(UDFParameter):
                 self.description = self._get_dict_list_documentation(open_api_parameter)
             else:
                 self.array_parameter = APIUDFParameter(open_api_array_parameter, {})
+                self.array_dimension = 1 + self.array_parameter.array_dimension
                 self._convert_to_type = self._convert_to_array
                 self.description = self._get_list_documentation(open_api_parameter)
         else:
@@ -1068,14 +1070,6 @@ class APIUDFParameter(UDFParameter):
         return self._apply_collection_format(list_value)
 
     def _convert_list_to_array(self, list_value):
-        # If a list of list is expected
-        if self.array_parameter.array_parameter:
-            # And a single list is provided
-            if list_value and not isinstance(list_value[0], list):
-                return [
-                    self.array_parameter._convert_to_type(list_value)
-                ]
-
         return [
             self.array_parameter._convert_to_type(list_item) if list_item is not None else None
             for list_item in list_value
