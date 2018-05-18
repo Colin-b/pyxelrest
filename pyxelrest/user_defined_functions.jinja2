@@ -23,7 +23,8 @@ udf_methods = None  # Will be set after load
     {%- elif udf_parameter.format == 'date-time' %}
  dates=datetime.datetime,
     {%- endif %}
-{%- elif udf_parameter.array_dimension > 0 %}
+{% endif %}
+{%- if udf_parameter.array_dimension > 0 %}
  ndim={{ udf_parameter.array_dimension }},
 {% endif %}
 {% endmacro %}
