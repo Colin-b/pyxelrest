@@ -12,6 +12,7 @@ List all changes in various categories:
 
 - Update the usage of xlwings to be able to switch to the official version (possible since 0.11.8).
 - Allow to provide extra python modules in configuration.
+- Increment python-dateutil dependency to latest version (2.7.3)
 
 ### Bug fixes ###
 
