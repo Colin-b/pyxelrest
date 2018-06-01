@@ -22,6 +22,7 @@ List all changes in various categories:
 - Allow to switch a configuration to VBA compatible only using add-in.
 - Use xlwings ndim option to convert arrays
 - Look for more than one location to ensure that "Programmatic Access to VBA Project" is enabled.
+- Error message is now displayed in case results should be shifted.
 
 ## 0.67.0 (2018-05-07) ##
 
