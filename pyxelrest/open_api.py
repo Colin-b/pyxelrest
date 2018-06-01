@@ -2,16 +2,17 @@ from collections import OrderedDict
 import datetime
 import logging
 import os
+from pip.commands.install import InstallCommand
 import re
 import requests
 import requests.exceptions
 import sys
 import threading
 import time
-import yaml
 import xlwings
 import xlwings.conversion
 import xlwings.server
+import yaml
 
 try:
     # Python 3
@@ -108,11 +109,10 @@ def list_to_dict_list(header, values_list):
     ]
 
 
-def convert_environment_variable(loader, node):
+def convert_environment_variable(value):
     """
     Value can be an environment variable formatted as %MY_ENV_VARIABLE%
     """
-    value = loader.construct_scalar(node)
     environment_variables_match = re.match('^%(.*)%$', value)
     if environment_variables_match:
         environment_variable = environment_variables_match.group(1)
@@ -137,11 +137,13 @@ class ConfigSection:
         self.udf_return_types = udf.get('return_types', ['async_auto_expand'])
         self.shift_result = udf.get('shift_result', True)
         self.max_retries = service_config.get('max_retries', 5)
-        self.custom_headers = service_config.get('headers', {})
+        self.custom_headers = {key: convert_environment_variable(value) for key, value in service_config.get('headers', {}).items()}
         self.proxies = service_config.get('proxies', {})
         self.oauth2 = service_config.get('oauth2', {})
         self.basic = service_config.get('basic', {})
         self.api_key = service_config.get('api_key')
+        if self.api_key:
+            self.api_key = convert_environment_variable(self.api_key)
         self.ntlm_auth = service_config.get('ntlm', {})
 
     def is_asynchronous(self, udf_return_type):
@@ -388,6 +390,7 @@ class UDFParameter:
         self.location = location
         self.required = required
         self.type = field_type
+        self.array_dimension = 0
 
     def validate(self, request_content):
         pass
@@ -943,6 +946,7 @@ class APIUDFParameter(UDFParameter):
                 self.description = self._get_dict_list_documentation(open_api_parameter)
             else:
                 self.array_parameter = APIUDFParameter(open_api_array_parameter, {})
+                self.array_dimension = 1 + self.array_parameter.array_dimension
                 self._convert_to_type = self._convert_to_array
                 self.description = self._get_list_documentation(open_api_parameter)
         else:
@@ -1066,14 +1070,6 @@ class APIUDFParameter(UDFParameter):
         return self._apply_collection_format(list_value)
 
     def _convert_list_to_array(self, list_value):
-        # If a list of list is expected
-        if self.array_parameter.array_parameter:
-            # And a single list is provided
-            if list_value and not isinstance(list_value[0], list):
-                return [
-                    self.array_parameter._convert_to_type(list_value)
-                ]
-
         return [
             self.array_parameter._convert_to_type(list_item) if list_item is not None else None
             for list_item in list_value
@@ -1102,7 +1098,7 @@ class APIUDFParameter(UDFParameter):
                 raise Exception('{0} cannot contains more than {1} items.'.format(self.name, self.max_items))
 
         if self.min_items is not None:
-            if len(value) > self.min_items:
+            if len(value) < self.min_items:
                 raise Exception('{0} cannot contains less than {1} items.'.format(self.name, self.min_items))
 
     def _get_convert_method(self):
@@ -1296,8 +1292,6 @@ def load_services(flattenize=True):
     if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
         raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
 
-    yaml.add_constructor(u'!environment_variable', convert_environment_variable)
-    yaml.add_implicit_resolver(u'!environment_variable', re.compile('^%(.*)%$'))
     with open(SERVICES_CONFIGURATION_FILE_PATH, 'r') as config_file:
         config = yaml.load(config_file)
 
@@ -1414,6 +1408,8 @@ def get_result_async(udf_method, request_content, excel_caller):
         except:
             logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
     try:
+        if not hasattr(excel_caller, 'Rows'):
+            return convert_to_return_type('Asynchronous UDF called from VBA.', udf_method)
         excel_range = xlwings.Range(impl=xlwings.xlplatform.Range(xl=excel_caller))
         threading.Thread(
             target=get_and_send_result,

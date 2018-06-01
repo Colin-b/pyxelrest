@@ -35,6 +35,14 @@ namespace AutoLoadPyxelRestAddIn
         private TextBox oauth2ParamValue;
         private AddButton addOAuth2Param;
 
+        private RadioButton synchronousAutoExpand;
+        private RadioButton asynchronousAutoExpand;
+        private CheckBox shiftResult;
+
+        private TableLayoutPanel pythonModulesPanel;
+        private TextBox pythonModuleName;
+        private AddButton addPythonModule;
+
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
             this.servicePanel = servicePanel;
@@ -65,6 +73,9 @@ namespace AutoLoadPyxelRestAddIn
                 if (!oauth2NonParam.Contains(oauth2Item.Key))
                     AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
             }
+
+            foreach (var pythonModule in servicePanel.service.PythonModules)
+                AddPythonModule(pythonModule);
         }
 
         /**
@@ -190,6 +201,8 @@ namespace AutoLoadPyxelRestAddIn
                 }
                 #endregion
 
+                var autoExpandEnabled = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") || ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("async_auto_expand") : true;
+
                 #region Return behavior
                 {
                     layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
@@ -198,7 +211,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     #region UDF Return types
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF can be used in VBA", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var vbaCompatible = new CheckBox { Text = "VBA compatible", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("vba_compatible") : false };
                         tooltip.SetToolTip(vbaCompatible, "Results will only fill selected cells.");
@@ -206,20 +219,12 @@ namespace AutoLoadPyxelRestAddIn
                         panel.Controls.Add(vbaCompatible, 0, 0);
                     }
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF cannot be used in VBA", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var synchronousAutoExpand = new RadioButton { Text = "Auto expand (synchronous)", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") : false, Width = 160 };
-                        tooltip.SetToolTip(synchronousAutoExpand, "Results will automatically fill cells.");
-                        synchronousAutoExpand.CheckedChanged += SynchronousAutoExpand_CheckedChanged;
-                        panel.Controls.Add(synchronousAutoExpand, 1, 0);
-                    }
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will not lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var asynchronousAutoExpand = new RadioButton { Text = "Auto expand (asynchronous)", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("async_auto_expand") : true, Width = 170 };
-                        tooltip.SetToolTip(asynchronousAutoExpand, "Results will automatically fill cells when received.");
-                        asynchronousAutoExpand.CheckedChanged += AsynchronousAutoExpand_CheckedChanged;
-                        panel.Controls.Add(asynchronousAutoExpand, 2, 0);
+                        var autoExpand = new CheckBox { Text = "Auto expand", Checked = autoExpandEnabled, Width = 160 };
+                        tooltip.SetToolTip(autoExpand, "Results will automatically fill cells.");
+                        autoExpand.CheckedChanged += AutoExpand_CheckedChanged;
+                        panel.Controls.Add(autoExpand, 1, 0);
                     }
                     #endregion
 
@@ -227,18 +232,41 @@ namespace AutoLoadPyxelRestAddIn
                 }
                 #endregion
 
-                #region Shift results
+                #region Auto expand behavior
                 {
-                    layout.Controls.Add(new Label { Text = "UDF ", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
+                    layout.Controls.Add(new Label { Text = "Auto expand", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
 
                     var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift auto expanded results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    var synchronousChecked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") : false;
 
-                    var shiftResult = new CheckBox { Text = "Shift results", Checked = servicePanel.service.Udf.ContainsKey("shift_result") ? (bool)servicePanel.service.Udf["shift_result"] : true };
-                    tooltip.SetToolTip(shiftResult, "Left column will be empty.");
-                    shiftResult.CheckedChanged += ShiftResult_CheckedChanged;
-                    panel.Controls.Add(shiftResult, 0, 0);
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        synchronousAutoExpand = new RadioButton { Text = "Synchronous", Checked = synchronousChecked, Width = 160 };
+                        tooltip.SetToolTip(synchronousAutoExpand, "Results will automatically fill cells.");
+                        synchronousAutoExpand.CheckedChanged += SynchronousAutoExpand_CheckedChanged;
+                        synchronousAutoExpand.Enabled = autoExpandEnabled;
+                        panel.Controls.Add(synchronousAutoExpand, 0, 0);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will not lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        asynchronousAutoExpand = new RadioButton { Text = "Asynchronous", Checked = !synchronousChecked, Width = 170 };
+                        tooltip.SetToolTip(asynchronousAutoExpand, "Results will automatically fill cells when received.");
+                        asynchronousAutoExpand.CheckedChanged += AsynchronousAutoExpand_CheckedChanged;
+                        asynchronousAutoExpand.Enabled = autoExpandEnabled;
+                        panel.Controls.Add(asynchronousAutoExpand, 1, 0);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift auto expanded results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        shiftResult = new CheckBox { Text = "Shift results", Checked = servicePanel.service.Udf.ContainsKey("shift_result") ? (bool)servicePanel.service.Udf["shift_result"] : true };
+                        tooltip.SetToolTip(shiftResult, "Left column will be empty.");
+                        shiftResult.CheckedChanged += ShiftResult_CheckedChanged;
+                        shiftResult.Enabled = autoExpandEnabled;
+                        panel.Controls.Add(shiftResult, 2, 0);
+                    }
 
                     layout.Controls.Add(panel, 1, 7);
                 }
@@ -658,6 +686,43 @@ namespace AutoLoadPyxelRestAddIn
             }
             #endregion
 
+            #region Python modules settings
+            {
+                var tab = new TabPage("Extra modules");
+                var layout = new TableLayoutPanel { AutoSize = true };
+
+                var pythonModulesLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Extra python modules" };
+                layout.Controls.Add(pythonModulesLabel);
+
+                pythonModulesPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                layout.Controls.Add(pythonModulesPanel);
+
+                {
+                    var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an extra python module", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        pythonModuleName = new TextBox { Text = string.Empty, Width = 530 };
+                        tooltip.SetToolTip(pythonModuleName, "Module will be installed at UDF loading.");
+                        pythonModuleName.TextChanged += PythonModuleName_TextChanged;
+                        pythonModuleName.KeyDown += PythonModuleName_KeyDown;
+                        addPanel.Controls.Add(pythonModuleName, 0, 1);
+                    }
+
+                    addPythonModule = new AddButton();
+                    addPythonModule.Click += AddPythonModule_Click;
+                    addPanel.Controls.Add(addPythonModule, 1, 1);
+
+                    layout.Controls.Add(addPanel);
+                }
+
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
+            #endregion
+
             Controls.Add(tabs);
         }
 
@@ -827,9 +892,38 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.ApiKey = ((TextBox)sender).Text;
         }
 
+        private void AutoExpand_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked)
+            {
+                AsynchronousAutoExpand_CheckedChanged();
+                SynchronousAutoExpand_CheckedChanged();
+                ShiftResult_CheckedChanged();
+
+                asynchronousAutoExpand.Enabled = true;
+                synchronousAutoExpand.Enabled = true;
+                shiftResult.Enabled = true;
+            }
+            else
+            {
+                RemoveValueToUdfList("async_auto_expand", "return_types");
+                RemoveValueToUdfList("sync_auto_expand", "return_types");
+                servicePanel.service.Udf.Remove("shift_result");
+
+                asynchronousAutoExpand.Enabled = false;
+                synchronousAutoExpand.Enabled = false;
+                shiftResult.Enabled = false;
+            }
+        }
+
         private void AsynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            if (((RadioButton)sender).Checked)
+            AsynchronousAutoExpand_CheckedChanged();
+        }
+
+        private void AsynchronousAutoExpand_CheckedChanged()
+        {
+            if (asynchronousAutoExpand.Checked)
                 AddValueToUdfList("async_auto_expand", "return_types");
             else
                 RemoveValueToUdfList("async_auto_expand", "return_types");
@@ -837,7 +931,12 @@ namespace AutoLoadPyxelRestAddIn
 
         private void SynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
         {
-            if (((RadioButton)sender).Checked)
+            SynchronousAutoExpand_CheckedChanged();
+        }
+
+        private void SynchronousAutoExpand_CheckedChanged()
+        {
+            if (synchronousAutoExpand.Checked)
                 AddValueToUdfList("sync_auto_expand", "return_types");
             else
                 RemoveValueToUdfList("sync_auto_expand", "return_types");
@@ -867,7 +966,12 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ShiftResult_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Udf["shift_result"] = ((CheckBox)sender).Checked;
+            ShiftResult_CheckedChanged();
+        }
+
+        private void ShiftResult_CheckedChanged()
+        {
+            servicePanel.service.Udf["shift_result"] = shiftResult.Checked;
         }
 
         private void AddValueToList(string value, string listName)
@@ -977,6 +1081,69 @@ namespace AutoLoadPyxelRestAddIn
             RemoveValueFromList(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
 
             tagsPanel.Controls.Remove(panel);
+        }
+
+        #endregion
+
+        #region Python Modules
+
+        private void PythonModuleName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addPythonModule.Enabled)
+                        AddPythonModule();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void PythonModuleName_TextChanged(object sender, EventArgs e)
+        {
+            var pythonModuleValue = ((TextBox)sender).Text;
+            addPythonModule.Enabled = pythonModuleValue.Length > 0 && !servicePanel.service.PythonModules.Contains(pythonModuleValue);
+        }
+
+        private void AddPythonModule_Click(object sender, EventArgs e)
+        {
+            AddPythonModule();
+        }
+
+        private void AddPythonModule()
+        {
+            // Service update
+            servicePanel.service.PythonModules.Add(pythonModuleName.Text);
+            // Visual update
+            AddPythonModule(pythonModuleName.Text);
+            pythonModuleName.Text = "";
+        }
+
+        private void AddPythonModule(string value)
+        {
+            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+
+            panel.Controls.Add(new Label { Name = "pythonModuleLabel", Text = value, Width = 515, Dock = DockStyle.Fill }, 0, 1);
+
+            var remove = new DeleteButton();
+            remove.Click += RemovePythonModule_Click;
+            panel.Controls.Add(remove, 1, 1);
+
+            pythonModulesPanel.Controls.Add(panel);
+            pythonModulesPanel.SetColumnSpan(panel, 2);
+        }
+
+        private void RemovePythonModule_Click(object sender, EventArgs e)
+        {
+            var panel = ((DeleteButton)sender).Parent;
+            var pythonModuleLabel = (Label)panel.Controls.Find("pythonModuleLabel", false)[0];
+
+            servicePanel.service.PythonModules.Remove(pythonModuleLabel.Text);
+
+            pythonModulesPanel.Controls.Remove(panel);
         }
 
         #endregion

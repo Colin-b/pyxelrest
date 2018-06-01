@@ -2,6 +2,7 @@
 using Opulos.Core.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -83,6 +84,7 @@ namespace AutoLoadPyxelRestAddIn
                         if (upToDateService != null)
                         {
                             service.UpdateFrom(upToDateService);
+                            InstallPythonModules(service.PythonModules);
                             updated = true;
                         }
                     }
@@ -95,6 +97,29 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Error("Unable to keep services configuration up to date.", ex);
             }
+        }
+
+        private static void InstallPythonModules(IList<string> pythonModules)
+        {
+            if (pythonModules == null || pythonModules.Count == 0)
+                return;
+
+            string pythonPath = ThisAddIn.GetSetting("PathToPython");
+            if (!File.Exists(pythonPath))
+                throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
+
+            string commandLine = "-m pip install ";
+            foreach (string pythonModule in pythonModules)
+                commandLine += string.Format("{0} ", pythonModule);
+            commandLine += "--upgrade";
+
+            Log.Debug("Install python modules...");
+            Process installModules = new Process();
+            installModules.StartInfo.FileName = pythonPath;
+            installModules.StartInfo.Arguments = commandLine;
+            installModules.StartInfo.UseShellExecute = false;
+            installModules.StartInfo.CreateNoWindow = true;
+            installModules.Start();
         }
 
         private Timer StartHostReachabilityTimer()
@@ -279,6 +304,8 @@ namespace AutoLoadPyxelRestAddIn
         {
             try
             {
+                foreach (ServicePanel service in services)
+                    InstallPythonModules(service.service.PythonModules);
                 configuration.Save(configurationFilePath);
             }
             catch (Exception ex)

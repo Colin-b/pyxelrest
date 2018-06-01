@@ -24,6 +24,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
         private static readonly string DESCRIPTION_PROPERTY = "description";
         private static readonly string SKIP_UPDATE_FOR_PROPERTY = "skip_update_for";
+        private static readonly string PYTHON_MODULES_PROPERTY = "python_modules";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -36,6 +37,7 @@ namespace AutoLoadPyxelRestAddIn
         internal readonly string Name;
         private string description;
         private IList<string> skipUpdateFor;
+        public IList<string> PythonModules;
         public IDictionary<string, object> OpenAPI;
         public IDictionary<string, object> Proxies;
 
@@ -199,6 +201,9 @@ namespace AutoLoadPyxelRestAddIn
 
             if (!skipUpdateFor.Contains(READ_TIMEOUT_PROPERTY))
                 ReadTimeout = updated.ReadTimeout;
+
+            if (!skipUpdateFor.Contains(PYTHON_MODULES_PROPERTY))
+                PythonModules = updated.PythonModules;
         }
 
         internal void FromConfig(YamlMappingNode section)
@@ -251,6 +256,9 @@ namespace AutoLoadPyxelRestAddIn
 
             var readTimeout = (YamlScalarNode)GetProperty(section, READ_TIMEOUT_PROPERTY);
             ReadTimeout = readTimeout == null ? 0 : decimal.Parse(readTimeout.Value);
+
+            var pythonModulesNode = (YamlSequenceNode)GetProperty(section, PYTHON_MODULES_PROPERTY);
+            PythonModules = pythonModulesNode == null ? new List<string>() : ToList(pythonModulesNode);
         }
 
         internal YamlMappingNode ToConfig()
@@ -300,6 +308,9 @@ namespace AutoLoadPyxelRestAddIn
             if (ReadTimeout > 0)
                 section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.ToString()));
 
+            if (PythonModules != null && PythonModules.Count > 0)
+                section.Add(new YamlScalarNode(PYTHON_MODULES_PROPERTY), new YamlSequenceNode(FromList(PythonModules)));
+
             return section;
         }
 
@@ -329,6 +340,7 @@ namespace AutoLoadPyxelRestAddIn
             Headers = new Dictionary<string, object>();
             ConnectTimeout = 1;
             ReadTimeout = 0;
+            PythonModules = new List<string>();
         }
 
         private IList<string> GetMethods()

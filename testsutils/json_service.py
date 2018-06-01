@@ -7,6 +7,34 @@ app = Flask(__name__)
 def open_api_definition():
     return jsonify(swagger='2.0',
                    definitions={
+                       'min_and_max_items': {
+                           'required': [
+                               'items',
+                               'rule_set'
+                           ],
+                           'properties': {
+                               'rule_set': {
+                                   'type': 'array',
+                                   'items': {
+                                       'type': 'array',
+                                       'minItems': 2,
+                                       'maxItems': 3,
+                                       'items': {
+                                           'type': 'string'
+                                       }
+                                   }
+                               },
+                               'items': {
+                                   'type': 'array',
+                                   'items': {
+                                       'type': 'array',
+                                       'items': {
+                                           'type': 'string'
+                                       }
+                                   }
+                               }
+                           }
+                       },
                        'DictWithReadOnly': {
                            'type': 'object',
                            'required': [
@@ -182,6 +210,26 @@ def open_api_definition():
                        }
                    },
                    paths={
+                       '/min_and_max_items' : {
+                           'post': {
+                               'operationId': 'post_min_and_max_items',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           '$ref': "#/definitions/min_and_max_items",
+                                       },
+                                   },
+                               ],
+                           }
+                       },
                        '/list_dict_no_ref': {
                            'post': {
                                'operationId': 'post_list_dict_no_ref',
@@ -3563,6 +3611,13 @@ def open_api_definition():
                            }
                        }
                    })
+
+
+@app.route('/min_and_max_items', methods=['POST'])
+def post_min_and_max_items():
+    if request.json == {'items': 'value10,value11,value12,value20,value21,value22,value30,value31,value32', 'rule_set': 'value10,value11,value12,value20,value21,value22,value30,value31,value32'}:
+        return jsonify('OK')
+    return jsonify(request.json)
 
 
 @app.route('/list_dict_no_ref', methods=['POST'])

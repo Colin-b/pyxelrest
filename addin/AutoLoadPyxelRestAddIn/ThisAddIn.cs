@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Configuration;
 using System.IO;
+using System.Collections.Generic;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -22,6 +23,7 @@ namespace AutoLoadPyxelRestAddIn
             "> File > Options > Trust Center > Trust Center Settings > Macro Settings\n";
 
         private static System.Configuration.Configuration Config = LoadConfig();
+        private static string PathToBasFile;
 
         internal static string GetSetting(string key)
         {
@@ -65,6 +67,14 @@ namespace AutoLoadPyxelRestAddIn
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
             {
+                PathToBasFile = Path.Combine(appDataFolder, "pyxelrest", "configuration", "xlwings.bas");
+                if (!File.Exists(PathToBasFile))
+                {
+                    Log.WarnFormat("No XLWings module can be found to load in '{0}'.", PathToBasFile);
+                    PathToBasFile = null;
+                }
+
+
                 var configMap = new ExeConfigurationFileMap
                 {
                     ExeConfigFilename = Path.Combine(appDataFolder, "pyxelrest", "configuration", "addin.config")
@@ -101,7 +111,7 @@ namespace AutoLoadPyxelRestAddIn
 
         internal string GetPyxelRestVersion()
         {
-            string pythonPath = ThisAddIn.GetSetting("PathToPython");
+            string pythonPath = GetSetting("PathToPython");
             if (!File.Exists(pythonPath))
                 return string.Empty;
 
@@ -138,7 +148,7 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     KillPython();
                 }
-                dynamic errorCode = Application.Run(string.Format("{0}!ImportPythonUDFs", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
+                dynamic errorCode = Application.Run(string.Format("{0}!ImportPythonUDFs", PYXELREST_VB_PROJECT_FILE_NAME));
                 if (errorCode != null)
                     Log.DebugFormat("User defined functions were not generated (return code {0})", errorCode);
                 else
@@ -162,7 +172,7 @@ namespace AutoLoadPyxelRestAddIn
             }
 
             Log.DebugFormat("{0} Python processes runnning. Killing Python process...", pythonProcesses.Length);
-            dynamic returnCode = Application.Run(string.Format("{0}!KillPy", PYXELREST_VB_PROJECT_FILE_NAME), GetSetting("PathToXlWingsConfiguration"));
+            dynamic returnCode = Application.Run(string.Format("{0}!KillPy", PYXELREST_VB_PROJECT_FILE_NAME));
             if (returnCode != null)
                 Log.DebugFormat("Killing request failed (return code {0}).", returnCode);
 
@@ -239,6 +249,7 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     Log.DebugFormat("Activating '{0}' workbook. Generating user defined functions...", Wb.Name);
                     ServiceConfigurationForm.UpdateServices();
+                    LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
             }
@@ -268,6 +279,7 @@ namespace AutoLoadPyxelRestAddIn
                 {
                     Log.DebugFormat("Opening '{0}' workbook. Generating user defined functions...", Wb.Name);
                     ServiceConfigurationForm.UpdateServices();
+                    LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
             }
@@ -291,6 +303,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 Log.Debug("Microsoft Excel started with a blank document. Generating user defined functions...");
                 ServiceConfigurationForm.UpdateServices();
+                LoadXlWings();
                 ImportUserDefinedFunctions();
             }
         }
@@ -317,6 +330,32 @@ namespace AutoLoadPyxelRestAddIn
                     return true;
             }
             return false;
+        }
+
+        private bool LoadXlWings()
+        {
+            try
+            {
+                if (!TrustAccessToTheVBAObjectModel())
+                    return false;
+                VBProject vbProject = GetPyxelRestVBProject();
+                if (vbProject == null)
+                {
+                    Log.Error("PyxelRest VB Project cannot be found.");
+                    return false;
+                }
+                if (PathToBasFile == null)
+                    return false;
+
+                vbProject.VBComponents.Import(PathToBasFile);
+                Log.Debug("XLWings module imported.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("XlWings module could not be imported.", ex);
+                return false;
+            };
         }
 
         private VBProject GetPyxelRestVBProject()

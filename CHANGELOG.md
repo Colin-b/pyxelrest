@@ -6,6 +6,22 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.68.0 (next) ##
+
+### Enhancements ###
+
+- Update the usage of xlwings to be able to switch to the official version (possible since 0.11.8).
+- Allow to provide extra python modules in configuration.
+
+### Bug fixes ###
+
+- Environment variables were not interpreted anymore for headers and api_key since 0.67.0
+- Minimum length of arrays were not properly checked, leading to invalid rejection.
+- Prompt user only once per update.
+- Return a proper error message in case asynchronous method is called by VBA.
+- Allow to switch a configuration to VBA compatible only using add-in.
+- Use xlwings ndim option to convert arrays
+
 ## 0.67.0 (2018-05-07) ##
 
 ### Release notes ###

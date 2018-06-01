@@ -2989,7 +2989,7 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_list_of_list_form_post_with_non_str(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
-            items=[1.0, 1.2, 'SNCF']
+            items=[[1.0, 1.2, 'SNCF']]
         ),
             [['OK']]
         )
@@ -2998,10 +2998,10 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_post_list_of_list_form(
             rules=[
-                'rule1', 'rule2', 'rule3',
+                ['rule1', 'rule2', 'rule3'],
             ],
             items=[
-                'item1', 'item2', 'item3',
+                ['item1', 'item2', 'item3'],
             ],
         ),
             [['OK']]
@@ -3082,7 +3082,7 @@ class PyxelRestJsonTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_post_dict_with_list_of_list(
             inner_list_of_list=[
-                'key1', 'key2', 'key3',
+                ['key1', 'key2', 'key3'],
             ],
             dict_field1='value000',
             dict_field2='value010',
@@ -3260,6 +3260,15 @@ class PyxelRestJsonTest(unittest.TestCase):
                 ['value1', 'value2'],
                 ['value10', 'value20'],
             ]
+        )
+
+    def test_post_min_and_max_items(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_min_and_max_items(
+            items=[['value10', 'value11', 'value12'], ['value20', 'value21', 'value22'], ['value30', 'value31', 'value32']],
+            rule_set=[['value10', 'value11', 'value12'], ['value20', 'value21', 'value22'], ['value30', 'value31', 'value32']],
+        ),
+            [['OK']]
         )
 
 
