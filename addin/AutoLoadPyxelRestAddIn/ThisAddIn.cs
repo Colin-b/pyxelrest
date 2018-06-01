@@ -190,18 +190,37 @@ namespace AutoLoadPyxelRestAddIn
                 "HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security",
                 "AccessVBOM", 
                 null) as int?;
-            if(!accessVBOM.HasValue || accessVBOM.Value != 1)
+            if(!IsValidAccessVBOM(accessVBOM))
             {
-                Log.Error("'Trust access to the VBA project object model' is not enabled.");
-                MessageBox.Show(
-                    VBA_OBJ_MODEL_FAILURE_MSG,
-                    "Access to VBA object model is not enabled",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
-                return false;
+                accessVBOM = Registry.GetValue(
+                    "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security",
+                    "AccessVBOM",
+                    null) as int?;
+                if (!IsValidAccessVBOM(accessVBOM))
+                {
+                    accessVBOM = Registry.GetValue(
+                        "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\excel\\security",
+                        "accessvbom",
+                        null) as int?;
+                    if (!IsValidAccessVBOM(accessVBOM))
+                    {
+                        Log.Error("'Trust access to the VBA project object model' is not enabled.");
+                        MessageBox.Show(
+                            VBA_OBJ_MODEL_FAILURE_MSG,
+                            "Access to VBA object model is not enabled",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
+                        return false;
+                    }
+                }
             }
             Log.Debug("'Trust access to the VBA project object model' is enabled.");
             return true;
+        }
+
+        private bool IsValidAccessVBOM(int? accessVBOM)
+        {
+            return accessVBOM.HasValue && accessVBOM.Value == 1;
         }
 
         private void OnActivateWorkBook(Excel.Workbook Wb)
