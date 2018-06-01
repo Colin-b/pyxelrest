@@ -21,6 +21,7 @@ List all changes in various categories:
 - Return a proper error message in case asynchronous method is called by VBA.
 - Allow to switch a configuration to VBA compatible only using add-in.
 - Use xlwings ndim option to convert arrays
+- Look for more than one location to ensure that "Programmatic Access to VBA Project" is enabled.
 
 ## 0.67.0 (2018-05-07) ##
 
