@@ -11,7 +11,7 @@ using System.Security;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Engie")]
 [assembly: AssemblyProduct("AutoLoadPyxelRestAddIn")]
-[assembly: AssemblyCopyright("Copyright © Engie 2018")]
+[assembly: AssemblyCopyright("MIT License")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
