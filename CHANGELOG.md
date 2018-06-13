@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.68.1 (next) ##
+
+### Bug fixes ###
+
+- XlWings users using RunPython were not able to access the workbook.
+
 ## 0.68.0 (2018-06-08) ##
 
 ### Enhancements ###

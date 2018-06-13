@@ -129,6 +129,12 @@ class XlWingsConfig:
                    '    End If\n' \
                    '\n' \
                    '    If SheetExists("xlwings.conf") = True Then\n'
+        elif 'ThisWorkbook' in line:
+            if 'GetUdfModules' in line:
+                # Keep refering to ThisWorkbook for pyxelrest
+                return line
+            # Allow users to use xlwings with workbooks
+            return line.replace('ThisWorkbook', 'ActiveWorkbook')
         return line
 
 
