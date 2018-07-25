@@ -129,7 +129,7 @@ setup(name='pyxelrest',
           # Used to generate UDFs python file from a template
           'jinja2==2.10',
           # Used to communicate with services
-          'requests==2.18.4',
+          'requests==2.19.1',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==223',
           # Used to communicate with Microsoft Excel
