@@ -80,14 +80,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_integer value "str value" must be an integer.'])
+            ['query_integer value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_integer_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_integer='str value'),
-            ['query_integer value "str value" must be an integer.'])
+            ['query_integer value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_array_integer_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -219,7 +219,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_integer value "str value" must be an integer.'])
+            ['query_array_integer value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_array_integer_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -254,20 +254,20 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_integer value "str value" must be an integer.'])
+            ['query_array_integer value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_array_integer_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer='str value'),
-            ['query_array_integer value "str value" must be an integer.'])
+            ['query_array_integer value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_array_integer_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer=['str value']
         ),
-            ['query_array_integer value "str value" must be an integer.'])
+            ['query_array_integer value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_integer32_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -329,14 +329,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_integer32 value "str value" must be an integer.'])
+            ['query_integer32 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_integer32_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_integer32='str value'),
-            ['query_integer32 value "str value" must be an integer.'])
+            ['query_integer32 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_array_integer32_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -468,7 +468,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_integer32 value "str value" must be an integer.'])
+            ['query_array_integer32 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -502,19 +502,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_integer32 value "str value" must be an integer.'])
+            ['query_array_integer32 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_array_integer32_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer32='str value'),
-            ['query_array_integer32 value "str value" must be an integer.'])
+            ['query_array_integer32 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_array_integer32_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer32=['str value']),
-            ['query_array_integer32 value "str value" must be an integer.'])
+            ['query_array_integer32 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_integer64_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -576,14 +576,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_integer64 value "str value" must be an integer.'])
+            ['query_integer64 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_integer64_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_integer64='str value'),
-            ['query_integer64 value "str value" must be an integer.'])
+            ['query_integer64 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_array_integer64_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -715,7 +715,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_integer64 value "str value" must be an integer.'])
+            ['query_array_integer64 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -749,19 +749,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_integer64 value "str value" must be an integer.'])
+            ['query_array_integer64 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_array_integer64_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer64='str value'),
-            ['query_array_integer64 value "str value" must be an integer.'])
+            ['query_array_integer64 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_optional_array_integer64_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_integer64=['str value']),
-            ['query_array_integer64 value "str value" must be an integer.'])
+            ['query_array_integer64 value "str value" (<class \'str\'> type) must be an integer.'])
 
     def test_mandatory_number_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -823,14 +823,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_number value "str value" must be a number.'])
+            ['query_number value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_number_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_number='str value'),
-            ['query_number value "str value" must be a number.'])
+            ['query_number value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_array_number_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -962,7 +962,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_number value "str value" must be a number.'])
+            ['query_array_number value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_array_number_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -996,19 +996,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_number value "str value" must be a number.'])
+            ['query_array_number value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_array_number_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_number='str value'),
-            ['query_array_number value "str value" must be a number.'])
+            ['query_array_number value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_array_number_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_number=['str value']),
-            ['query_array_number value "str value" must be a number.'])
+            ['query_array_number value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_float_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -1070,14 +1070,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_float value "str value" must be a number.'])
+            ['query_float value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_float_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_float='str value'),
-            ['query_float value "str value" must be a number.'])
+            ['query_float value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_array_float_number_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -1209,7 +1209,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_float value "str value" must be a number.'])
+            ['query_array_float value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_array_float_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -1243,20 +1243,20 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_float value "str value" must be a number.'])
+            ['query_array_float value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_array_float_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_array_float='str value'),
-            ['query_array_float value "str value" must be a number.'])
+            ['query_array_float value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_array_float_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_float=['str value']),
-            ['query_array_float value "str value" must be a number.'])
+            ['query_array_float value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_double_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -1318,14 +1318,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_double value "str value" must be a number.'])
+            ['query_double value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_double_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_double='str value'),
-            ['query_double value "str value" must be a number.'])
+            ['query_double value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_array_double_number_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -1457,7 +1457,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_double value "str value" must be a number.'])
+            ['query_array_double value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_array_double_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -1491,19 +1491,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_double value "str value" must be a number.'])
+            ['query_array_double value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_array_double_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_double='str value'),
-            ['query_array_double value "str value" must be a number.'])
+            ['query_array_double value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_optional_array_double_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_double=['str value']),
-            ['query_array_double value "str value" must be a number.'])
+            ['query_array_double value "str value" (<class \'str\'> type) must be a number.'])
 
     def test_mandatory_string_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -2151,14 +2151,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_boolean value "non boolean" must be a boolean.'])
+            ['query_boolean value "non boolean" (<class \'str\'> type) must be a boolean.'])
 
     def test_optional_boolean_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_boolean='non boolean'),
-            ['query_boolean value "non boolean" must be a boolean.'])
+            ['query_boolean value "non boolean" (<class \'str\'> type) must be a boolean.'])
 
     def test_mandatory_array_boolean_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -2302,7 +2302,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_boolean value "non boolean" must be a boolean.'])
+            ['query_array_boolean value "non boolean" (<class \'str\'> type) must be a boolean.'])
 
     def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -2339,19 +2339,19 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_boolean value "non boolean" must be a boolean.'])
+            ['query_array_boolean value "non boolean" (<class \'str\'> type) must be a boolean.'])
 
     def test_optional_array_boolean_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_boolean='non boolean'),
-            ['query_array_boolean value "non boolean" must be a boolean.'])
+            ['query_array_boolean value "non boolean" (<class \'str\'> type) must be a boolean.'])
 
     def test_optional_array_boolean_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_boolean=['non boolean']),
-            ['query_array_boolean value "non boolean" must be a boolean.'])
+            ['query_array_boolean value "non boolean" (<class \'str\'> type) must be a boolean.'])
 
     def test_mandatory_date_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -2413,14 +2413,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_date value "str value" must be a date.'])
+            ['query_date value "str value" (<class \'str\'> type) must be a date.'])
 
     def test_optional_date_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_date='str value'),
-            ['query_date value "str value" must be a date.'])
+            ['query_date value "str value" (<class \'str\'> type) must be a date.'])
 
     def test_mandatory_array_date_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -2564,7 +2564,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date='str value',
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_date value "str value" must be a date.'])
+            ['query_array_date value "str value" (<class \'str\'> type) must be a date.'])
 
     def test_mandatory_array_date_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -2600,20 +2600,20 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=['str value'],
             query_array_date_time=None,
             query_array_password=None),
-            ['query_array_date value "str value" must be a date.'])
+            ['query_array_date value "str value" (<class \'str\'> type) must be a date.'])
 
     def test_optional_array_date_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_array_date='str value'),
-            ['query_array_date value "str value" must be a date.'])
+            ['query_array_date value "str value" (<class \'str\'> type) must be a date.'])
 
     def test_optional_array_date_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_date=['str value']),
-            ['query_array_date value "str value" must be a date.'])
+            ['query_array_date value "str value" (<class \'str\'> type) must be a date.'])
 
     def test_mandatory_date_time_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -2677,14 +2677,14 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=None,
             query_array_date_time=None,
             query_array_password=None),
-            ['query_date_time value "str value" must be a date time.'])
+            ['query_date_time value "str value" (<class \'str\'> type) must be a date time.'])
 
     def test_optional_date_time_parameter_with_wrong_type(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(
             user_defined_functions.json_get_all_optional_parameters_types(
                 query_date_time='str value'),
-            ['query_date_time value "str value" must be a date time.'])
+            ['query_date_time value "str value" (<class \'str\'> type) must be a date time.'])
 
     def test_mandatory_array_date_time_parameter_not_provided(self):
         from pyxelrest import user_defined_functions
@@ -2828,7 +2828,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date=[today_date],
             query_array_date_time='str value',
             query_array_password=None),
-            ['query_array_date_time value "str value" must be a date time.'])
+            ['query_array_date_time value "str value" (<class \'str\'> type) must be a date time.'])
 
     def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
@@ -2865,7 +2865,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
             query_array_date_time=[
                 'str value'],
             query_array_password=None),
-            ['query_array_date_time value "str value" must be a date time.'])
+            ['query_array_date_time value "str value" (<class \'str\'> type) must be a date time.'])
 
     def test_valid_mandatory_parameters(self):
         from pyxelrest import user_defined_functions
@@ -2959,13 +2959,13 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_date_time='str value'),
-            ['query_array_date_time value "str value" must be a date time.'])
+            ['query_array_date_time value "str value" (<class \'str\'> type) must be a date time.'])
 
     def test_optional_array_date_time_parameter_with_wrong_type_in_array(self):
         from pyxelrest import user_defined_functions
         self.assertEqual(user_defined_functions.json_get_all_optional_parameters_types(
             query_array_date_time=['str value']),
-            ['query_array_date_time value "str value" must be a date time.'])
+            ['query_array_date_time value "str value" (<class \'str\'> type) must be a date time.'])
 
 
 if __name__ == '__main__':

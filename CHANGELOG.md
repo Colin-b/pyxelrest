@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.68.2 (next) ##
+
+### Bug fixes ###
+
+- Convert array parameters to the proper type whenever possible (integers, float, date and date-time).
+
 ## 0.68.1 (2018-06-21) ##
 
 ### Bug fixes ###

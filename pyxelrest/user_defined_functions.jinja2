@@ -11,8 +11,8 @@ from pyxelrest.open_api import RequestContent, get_result, get_result_async, con
 
 logger = logging.getLogger(__name__)
 udf_methods = None  # Will be set after load
-{# Macro generating the converter for the parameter if needed #}
-{% macro param_converter(udf_parameter) %}
+{# Macro generating the converter for the inner type if needed #}
+{% macro type_converter(udf_parameter) %}
 {%- if udf_parameter.type == 'integer' %}
  numbers=int,
 {%- elif udf_parameter.type == 'number' %}
@@ -24,8 +24,13 @@ udf_methods = None  # Will be set after load
  dates=datetime.datetime,
     {%- endif %}
 {% endif %}
+{% endmacro %}
+{# Macro generating the converter for the parameter if needed #}
+{% macro param_converter(udf_parameter) %}
 {%- if udf_parameter.array_dimension > 0 %}
- ndim={{ udf_parameter.array_dimension }},
+{{ type_converter(udf_parameter.array_parameter) }} ndim={{ udf_parameter.array_dimension }},
+{%- else %}
+{{ type_converter(udf_parameter) }}
 {% endif %}
 {% endmacro %}
 {# Macro generating the UDF related to provided method #}

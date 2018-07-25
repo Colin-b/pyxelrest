@@ -971,7 +971,7 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_int(self, value):
         if not isinstance(value, int):
-            raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be an integer.'.format(self.name, value, type(value)))
         self._check_number(value)
         return value
 
@@ -998,23 +998,23 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_float(self, value):
         if not isinstance(value, float):
-            raise Exception('{0} value "{1}" must be a number.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be a number.'.format(self.name, value, type(value)))
         self._check_number(value)
         return value
 
     def _convert_to_date(self, value):
         if not isinstance(value, datetime.date):
-            raise Exception('{0} value "{1}" must be a date.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be a date.'.format(self.name, value, type(value)))
         return value
 
     def _convert_to_date_time(self, value):
         if not isinstance(value, datetime.datetime):
-            raise Exception('{0} value "{1}" must be a date time.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be a date time.'.format(self.name, value, type(value)))
         return value.isoformat()
 
     def _convert_to_str(self, value):
         if isinstance(value, datetime.date):
-            raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be formatted as text.'.format(self.name, value, type(value)))
         if isinstance(value, int):
             value = str(value)
         if isinstance(value, float):
@@ -1035,19 +1035,19 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_bool(self, value):
         if not isinstance(value, bool):
-            raise Exception('{0} value "{1}" must be a boolean.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be a boolean.'.format(self.name, value, type(value)))
         return value
 
     def _convert_to_dict(self, value):
         if not isinstance(value, list):
-            raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be a list.'.format(self.name, value, type(value)))
         if len(value) != 2:
             raise Exception('{0} value should contains only two rows. Header and values.'.format(self.name))
         return list_to_dict(value[0], value[1])
 
     def _convert_to_dict_list(self, value):
         if not isinstance(value, list):
-            raise Exception('{0} value "{1}" must be a list.'.format(self.name, value))
+            raise Exception('{0} value "{1}" ({2} type) must be a list.'.format(self.name, value, type(value)))
         if len(value) < 2:
             raise Exception('{0} value should contains at least two rows. Header and values.'.format(self.name))
         list_value = list_to_dict_list(value[0], value[1:])
