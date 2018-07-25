@@ -16,6 +16,7 @@ namespace AutoLoadPyxelRestAddIn
     {
         private static readonly ILog Log = LogManager.GetLogger("AutoLoadPyxelRestAddIn");
 
+        private static readonly string XLWINGS_MODULE_NAME = "xlwings";
         private static readonly string GENERATED_UDFS_MODULE_NAME = "xlwings_udfs";
         private static readonly string PYXELREST_VB_PROJECT_FILE_NAME = "pyxelrest.xlam";
         private static readonly string VBA_OBJ_MODEL_FAILURE_MSG = 
@@ -142,8 +143,11 @@ namespace AutoLoadPyxelRestAddIn
                 }
                 if (!TrustAccessToTheVBAObjectModel())
                     return false;
-                if (GetPyxelRestVBProject() == null)
+                VBProject vbProject = GetPyxelRestVBProject();
+                if (vbProject == null)
                     return false;  // This should never happen but still user can manually remove/update the xlam file
+                if (XlWingsIsNotLoaded(vbProject))
+                    LoadXlWings(pyxelRest:vbProject);  // It can happen if UDFs were not supposed to be loaded at startup
                 if (reload)
                 {
                     KillPython();
@@ -332,13 +336,23 @@ namespace AutoLoadPyxelRestAddIn
             return false;
         }
 
-        private bool LoadXlWings()
+        private bool XlWingsIsNotLoaded(VBProject pyxelRest)
+        {
+            foreach (VBComponent vbComponent in pyxelRest.VBComponents)
+            {
+                if (XLWINGS_MODULE_NAME.Equals(vbComponent.Name))
+                    return false;
+            }
+            return true;
+        }
+
+        private bool LoadXlWings(VBProject pyxelRest=null)
         {
             try
             {
                 if (!TrustAccessToTheVBAObjectModel())
                     return false;
-                VBProject vbProject = GetPyxelRestVBProject();
+                VBProject vbProject = pyxelRest == null ? GetPyxelRestVBProject() : pyxelRest;
                 if (vbProject == null)
                 {
                     Log.Error("PyxelRest VB Project cannot be found.");

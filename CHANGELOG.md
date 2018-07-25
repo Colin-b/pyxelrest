@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Bug fixes ###
 
 - Convert array parameters to the proper type whenever possible (integers, float, date and date-time).
+- Allow to load UDFs even if UDFs are not loaded at startup.
 
 ## 0.68.1 (2018-06-21) ##
 
