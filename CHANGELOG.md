@@ -6,13 +6,14 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.68.2 (next) ##
+## 0.68.2 (2018-07-26) ##
 
 ### Bug fixes ###
 
 - Convert array parameters to the proper type whenever possible (integers, float, date and date-time).
 - Allow to load UDFs even if UDFs are not loaded at startup.
 - Update requests dependency to latest version (2.19.1)
+- Fix PyYaml version (as it is not fixed by Pyaml) and update it to latest stable one (3.13)
 
 ## 0.68.1 (2018-06-21) ##
 

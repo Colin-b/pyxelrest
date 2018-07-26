@@ -135,6 +135,7 @@ setup(name='pyxelrest',
           # Used to communicate with Microsoft Excel
           'xlwings==0.11.8.1',
           # Used to parse configuration files
+          'pyyaml==3.13',
           'pyaml==17.12.1',
           # Used to manage authentication
           'requests_auth==1.0.2',
