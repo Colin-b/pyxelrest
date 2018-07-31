@@ -3282,6 +3282,25 @@ class PyxelRestJsonTest(unittest.TestCase):
             ]
         )
 
+    def test_get_valid_int_choice(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_get_int_choices(
+            int_param=1,
+        ),
+            [
+                ['int_param'],
+                ['1'],
+            ]
+        )
+
+    def test_get_invalid_int_choice(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_get_int_choices(
+            int_param=2,
+        ),
+            'int_param value "2" should be 1 or 10 or 100.'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

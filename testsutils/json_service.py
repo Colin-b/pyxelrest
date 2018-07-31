@@ -3641,6 +3641,32 @@ def open_api_definition():
                                ],
                            },
                        },
+                       '/int_choices': {
+                           'get': {
+                               'operationId': 'get_int_choices',
+                               'parameters': [
+                                   {
+                                       'description': 'restricted int values',
+                                       'in': 'query',
+                                       'name': 'int_param',
+                                       'required': True,
+                                       'enum': [1, 10, 100],
+                                       'type': 'integer',
+                                   }
+                               ],
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                       'schema': {
+                                           'items': {
+                                               '$ref': '#/definitions/TestObject'
+                                           },
+                                           'type': 'array'
+                                       }
+                                   }
+                               }
+                           }
+                       }
                    })
 
 
@@ -3728,6 +3754,11 @@ def get_all_optional_parameters_types():
 @app.route('/body_with_properties', methods=['POST'])
 def post_body_with_properties():
     return jsonify(request.json)
+
+
+@app.route('/int_choices', methods=['GET'])
+def get_int_choices():
+    return jsonify(request.args)
 
 
 def start_server(port):

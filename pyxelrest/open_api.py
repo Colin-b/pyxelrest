@@ -933,7 +933,7 @@ class APIUDFParameter(UDFParameter):
             open_api_parameter.get('type')  # file (formData location), integer, number, string, boolean, array
         )
         self.schema = schema
-        self.choices = open_api_parameter.get('enum')  # string type
+        self.choices = open_api_parameter.get('enum')  # Apply to integer, number, string
         self.default_value = open_api_parameter.get('default')
         self.format = open_api_parameter.get('format')  # date (string type), date-time (string type)
         self.maximum = open_api_parameter.get('maximum')  # Apply to integer and number
@@ -985,6 +985,12 @@ class APIUDFParameter(UDFParameter):
         self._check_number(value)
         return value
 
+    def _convert_to_float(self, value):
+        if not isinstance(value, float):
+            raise Exception('{0} value "{1}" ({2} type) must be a number.'.format(self.name, value, type(value)))
+        self._check_number(value)
+        return value
+
     def _check_number(self, value):
         if self.maximum is not None:
             if self.exclusive_maximum:
@@ -1006,11 +1012,7 @@ class APIUDFParameter(UDFParameter):
             if (value % self.multiple_of) == 0:
                 raise Exception('{0} value "{1}" must be a multiple of {2}.'.format(self.name, value, self.multiple_of))
 
-    def _convert_to_float(self, value):
-        if not isinstance(value, float):
-            raise Exception('{0} value "{1}" ({2} type) must be a number.'.format(self.name, value, type(value)))
-        self._check_number(value)
-        return value
+        self._check_choices(value)
 
     def _convert_to_date(self, value):
         if not isinstance(value, datetime.date):
@@ -1033,8 +1035,7 @@ class APIUDFParameter(UDFParameter):
                 value = str(int(value))
             else:
                 value = str(value)
-        if self.choices and value not in self.choices:
-            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
+        self._check_choices(value)
         if self.max_length is not None:
             if len(value) > self.max_length:
                 raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(self.name, value, self.max_length))
@@ -1042,6 +1043,10 @@ class APIUDFParameter(UDFParameter):
             if len(value) < self.min_length:
                 raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(self.name, value, self.min_length))
         return value
+
+    def _check_choices(self, value):
+        if self.choices and value not in self.choices:
+            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join([str(choice) for choice in self.choices])))
 
     def _convert_to_bool(self, value):
         if not isinstance(value, bool):
@@ -1133,7 +1138,7 @@ class APIUDFParameter(UDFParameter):
     def _common_documentation(self, open_api_parameter):
         description = open_api_parameter.get('description', '') or ''
         if self.choices:
-            description += ' Valid values are: {0}.'.format(', '.join(self.choices))
+            description += ' Valid values are: {0}.'.format(', '.join([str(choice) for choice in self.choices]))
         if self.default_value:
             description += ' Default value is: {0}.'.format(self.default_value)
         return description
