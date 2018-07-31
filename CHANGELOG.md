@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.68.3 (next) ##
+
+### Bug fixes ###
+
+- Handle object parameter without ref in schema but properties instead.
+
 ## 0.68.2 (2018-07-26) ##
 
 ### Bug fixes ###

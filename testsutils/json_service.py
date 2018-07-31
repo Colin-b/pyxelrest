@@ -3609,7 +3609,38 @@ def open_api_definition():
                                    }
                                }
                            }
-                       }
+                       },
+                       '/body_with_properties': {
+                           'post': {
+                               'operationId': 'post_body_with_properties',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           'properties': {
+                                               'int_field': {
+                                                   'type': 'integer',
+                                               },
+                                               'str_field': {
+                                                   'type': 'string',
+                                               },
+                                               'bool_field': {
+                                                   'type': 'boolean',
+                                               }
+                                           },
+                                           'required': ['bool_field']
+                                       },
+                                   },
+                               ],
+                           },
+                       },
                    })
 
 
@@ -3692,6 +3723,11 @@ def get_all_parameters_types():
 @app.route('/all_optional_parameters_types', methods=['GET'])
 def get_all_optional_parameters_types():
     return jsonify(request.args)
+
+
+@app.route('/body_with_properties', methods=['POST'])
+def post_body_with_properties():
+    return jsonify(request.json)
 
 
 def start_server(port):

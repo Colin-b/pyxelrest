@@ -1,6 +1,4 @@
-from collections import OrderedDict
 from flask import Flask, Response, jsonify
-import json
 
 app = Flask(__name__)
 

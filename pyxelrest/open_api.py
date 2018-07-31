@@ -878,10 +878,8 @@ class OpenAPIUDFMethod(UDFMethod):
             return [APIUDFParameter(open_api_parameter, {})]
 
         schema = open_api_parameter['schema']
-        ref = schema['$ref'] if '$ref' in schema else schema['items'].get('$ref', '')
-        ref = ref[len('#/definitions/'):]
         parameters = []
-        open_api_definition = self.service.open_api_definitions.get(ref, {})
+        open_api_definition = self._get_definition(schema)
         if open_api_definition:
             for inner_parameter_name, inner_parameter in open_api_definition['properties'].items():
                 if not inner_parameter.get('readOnly', False):
@@ -890,12 +888,24 @@ class OpenAPIUDFMethod(UDFMethod):
                     inner_parameter['in'] = open_api_parameter['in']
                     inner_parameter['required'] = inner_parameter_name in open_api_definition.get('required', [])
                     parameters.append(APIUDFParameter(inner_parameter, schema))
-        else:
+        elif 'items' in schema:
             inner_parameter = dict(open_api_parameter)
             inner_parameter.update(schema['items'])
             inner_parameter['server_param_name'] = None  # Indicate that this is the whole body
             parameters.append(APIUDFParameter(inner_parameter, schema))
+        else:
+            raise Exception('Unable to extract parameters from {0}'.format(open_api_parameter))
         return parameters
+
+    def _get_definition(self, schema: dict):
+        if '$ref' in schema:
+            ref = schema['$ref'][len('#/definitions/'):]
+            return self.service.open_api_definitions.get(ref, {})
+        if 'items' in schema:
+            return self._get_definition(schema['items'])
+        if 'properties' in schema:
+            return schema
+        return {}
 
     def _avoid_duplicated_names(self, udf_parameters):
         parameters_by_name = {}

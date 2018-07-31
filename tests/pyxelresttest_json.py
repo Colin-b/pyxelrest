@@ -3271,6 +3271,17 @@ class PyxelRestJsonTest(unittest.TestCase):
             [['OK']]
         )
 
+    def test_post_body_with_properties(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_body_with_properties(
+            bool_field=True,
+        ),
+            [
+                ['bool_field', 'int_field', 'str_field'],
+                [True, '', ''],
+            ]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

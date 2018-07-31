@@ -92,5 +92,6 @@ def get_with_operation_id():
 def start_server(port):
     app.run(port=port)
 
+
 if __name__ == '__main__':
     start_server(8948)
