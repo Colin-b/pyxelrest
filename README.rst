@@ -432,6 +432,16 @@ To overcome this Microsoft Excel limitation you can try the following:
 - Remove some parameters in your service.
 - Reduce the length of your service parameter names.
 
+Microsoft Excel Wizard only list some functions
+-----------------------------------------------
+
+Microsoft Excel function wizard is not able to list more than a certain amount of functions per category.
+
+However all functions can be directly accessed in cells.
+
+To overcome this Microsoft Excel limitation you can try the following:
+ * Exclude some functions in your service (refer to Open API configuration section for more information).
+
 No command specified in the configuration, cannot autostart server
 ------------------------------------------------------------------
 
