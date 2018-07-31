@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Bug fixes ###
 
 - Handle object parameter without ref in schema but properties instead.
+- Add a ClickOnce version number for the add-in.
 
 ## 0.68.2 (2018-07-26) ##
 
