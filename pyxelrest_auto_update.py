@@ -90,12 +90,31 @@ def _installed_package(package_name):
             return package
 
 
+def _process_ids():
+    processes = win32com.client.GetObject('winmgmts:').InstancesOf('Win32_Process')
+    return [p.Properties_('ProcessId').Value for p in processes]
+
+
 def _is_already_updating():
-    update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
-    if os.path.isfile(update_is_in_progress):
-        return True
-    # Create file if this is the first update (most cases)
-    with open(update_is_in_progress, 'w'):
+    try:
+        update_is_in_progress = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'update_is_in_progress')
+        if os.path.isfile(update_is_in_progress):
+            with open(update_is_in_progress, 'r') as update_details:
+                process_id = int(update_details.readline())
+                if process_id in _process_ids():
+                    return True
+                else:
+                    logger.warning('Update is theoratically still in progress but process cannot be found. Considering that no update is in progress.')
+    except:
+        logger.exception('Unable to know if an update is in progress. Considering that no update is in progress.')
+
+    try:
+        # Create file if this is the first update (most cases)
+        with open(update_is_in_progress, 'w') as update_details:
+            update_details.write(str(os.getpid()))
+    except:
+        logger.exception('Unable to set update as in progress. Concurrent update might occur.')
+    finally:
         return False
 
 

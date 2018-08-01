@@ -13,6 +13,7 @@ List all changes in various categories:
 - Handle object parameter without ref in schema but properties instead.
 - Add a ClickOnce version number for the add-in.
 - Handle enum on numbers.
+- Update now longer considered as ongoing if process is killed while updating. This was preventing automatic upgrade.
 
 ## 0.68.2 (2018-07-26) ##
 
