@@ -8,6 +8,10 @@ List all changes in various categories:
 
 ## 0.68.3 (next) ##
 
+### Enhancements ###
+
+- Allow to authenticate for OpenAPI definition retrieval.
+
 ### Bug fixes ###
 
 - Handle object parameter without ref in schema but properties instead.

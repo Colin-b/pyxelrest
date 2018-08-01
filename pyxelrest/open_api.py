@@ -186,6 +186,7 @@ class ServiceConfigSection(ConfigSection):
         self.selected_operation_ids = open_api.get('selected_operation_ids', [])
         self.excluded_parameters = open_api.get('excluded_parameters', [])
         self.selected_parameters = open_api.get('selected_parameters', [])
+        self.definition_retrieval_auths = open_api.get('definition_retrieval_auths', {})
 
     def _allow_tags(self, method_tags):
         if not method_tags:
@@ -707,7 +708,8 @@ class OpenAPI:
         requests_session.mount('file://', fileadapter.LocalFileAdapter())
         response = requests_session.get(self.config.open_api_definition, proxies=self.config.proxies, verify=False,
                                         headers=self.config.custom_headers,
-                                        timeout=(self.config.connect_timeout, self.config.definition_read_timeout))
+                                        timeout=(self.config.connect_timeout, self.config.definition_read_timeout),
+                                        auth=authentication.get_definition_retrieval_auth(self.config))
         response.raise_for_status()
         # Always keep the order provided by server (for definitions)
         open_api_definition = response.json(object_pairs_hook=OrderedDict)

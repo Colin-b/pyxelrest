@@ -46,9 +46,9 @@ Pre requisites
 User Installation (using PIP)
 -----------------------------
 
-#. Within Microsoft Excel, ``Trust access to the VBA project object model`` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
-#. Microsoft Excel must be closed while executing the following command:
+- Within Microsoft Excel, ``Trust access to the VBA project object model`` should be enabled.
+        > File > Options > Trust Center > Trust Center Settings > Macro Settings
+- Microsoft Excel must be closed while executing the following command:
         >>> pip install pyxelrest
 
 User add-in installation
@@ -90,10 +90,10 @@ Developer Installation (using PIP)
 ----------------------------------
 
 1. Within Microsoft Excel, ``Trust access to the VBA project object model`` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
+        > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the add-in C# solution:
-In order to do so, you need to add a test certificate.
-> Project > AutoLoadPyxelRestAddIn > Signing
+        In order to do so, you need to add a test certificate.
+                > Project > AutoLoadPyxelRestAddIn > Signing
 3. Microsoft Excel must be closed while executing the following script from within pyxelrest root folder:
         >>> developer_install.bat
 
@@ -199,38 +199,42 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 OpenAPI
 -------
 
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-|                         | Description                                                                                                                                                    | Mandatory | Possible values                              |
-+=========================+================================================================================================================================================================+===========+==============================================+
-| definition              | URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL | Mandatory |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default.                                              | Optional  | any float value                              |
-|                         | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| excluded_tags           | List of tags within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied.                                                | Optional  |                                              |
-|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| selected_tags           | List of tags within OpenAPI definition that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied.              | Optional  |                                              |
-|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| excluded_operation_ids  | List of operation_id (or regular expressions) within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied.               | Optional  |                                              |
-|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| selected_operation_ids  | List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_ids already).               | Optional  |                                              |
-|                         | If not specified, no filtering is applied.                                                                                                                     |           |                                              |
-|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| excluded_parameters     | List of parameter names (or regular expressions) within OpenAPI definition that should not be exposed. If not specified, no filtering is applied.              | Optional  |                                              |
-|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| selected_parameters     | List of parameter names (or regular expressions) within OpenAPI definition that should be exposed (if not within excluded parameters already).                 | Optional  |                                              |
-|                         | If not specified, no filtering is applied.                                                                                                                     |           |                                              |
-|                         | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| rely_on_definitions     | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.                                                              | Optional  | true or false                                |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
-| service_host            | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
-+-------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+|                                     | Description                                                                                                                                                    | Mandatory | Possible values                              |
++=====================================+================================================================================================================================================================+===========+==============================================+
+| definition                          | URL to the OpenAPI definition. http, https and file scheme are supported.                                                                                      | Mandatory |                                              |
+|                                     | For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL                                                                           |           |                                              |
+|                                     | If you would like to point to a static file such as C:\swagger.json, the value should be file://C:/swagger.json                                                |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| definition_read_timeout             | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default.                                              | Optional  | any float value                              |
+|                                     | For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts                                                                    |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| definition_retrieval_auths          | List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default.                                          | Optional  | oauth2, api_key, basic, ntlm                 |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| excluded_tags                       | List of tags within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied.                                                | Optional  |                                              |
+|                                     | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| selected_tags                       | List of tags within OpenAPI definition that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied.              | Optional  |                                              |
+|                                     | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| excluded_operation_ids              | List of operation_id (or regular expressions) within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied.               | Optional  |                                              |
+|                                     | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| selected_operation_ids              | List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_ids already).               | Optional  |                                              |
+|                                     | If not specified, no filtering is applied.                                                                                                                     |           |                                              |
+|                                     | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| excluded_parameters                 | List of parameter names (or regular expressions) within OpenAPI definition that should not be exposed. If not specified, no filtering is applied.              | Optional  |                                              |
+|                                     | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| selected_parameters                 | List of parameter names (or regular expressions) within OpenAPI definition that should be exposed (if not within excluded parameters already).                 | Optional  |                                              |
+|                                     | If not specified, no filtering is applied.                                                                                                                     |           |                                              |
+|                                     | For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md                                                             |           |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| rely_on_definitions                 | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.                                                              | Optional  | true or false                                |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
+| service_host                        | Service host in case your service is behind a reverse proxy.                                                                                                   | Optional  |                                              |
++-------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+----------------------------------------------+
 
 User Defined Function
 ---------------------

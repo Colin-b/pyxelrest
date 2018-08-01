@@ -257,7 +257,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </th>
     <tr>
         <td><strong>definition</strong></td>
-        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL</td>
+        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file://C:/swagger.json</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
@@ -266,6 +266,12 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
         <td>Optional</td>
         <td>any float value</td>
+    </tr>
+    <tr>
+        <td><strong>definition_retrieval_auths</strong></td>
+        <td>List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default.</td>
+        <td>Optional</td>
+        <td>oauth2, api_key, basic, ntlm</td>
     </tr>
     <tr>
         <td><strong>excluded_tags</strong></td>
