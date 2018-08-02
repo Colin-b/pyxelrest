@@ -41,6 +41,11 @@ namespace AutoLoadPyxelRestAddIn
             {
                 return File.GetAttributes(path).HasFlag(FileAttributes.Directory) ? LoadFolder(path) : LoadFile(path);
             }
+            catch (DirectoryNotFoundException)
+            {
+                Log.Warn("Path corresponds to a file that does not exists, consider as empty YAML.");
+                return new YamlStream();
+            }
             catch (ArgumentException)
             {
                 return LoadUrl(path);

@@ -18,6 +18,7 @@ List all changes in various categories:
 - Add a ClickOnce version number for the add-in.
 - Handle enum on numbers.
 - Update now longer considered as ongoing if process is killed while updating. This was preventing automatic upgrade.
+- Editing the configuration via the add-in without any configuration file is now valid.
 
 ## 0.68.2 (2018-07-26) ##
 
