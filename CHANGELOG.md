@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Enhancements ###
 
 - Allow to authenticate for OpenAPI definition retrieval.
+- "Save configuration" button is now grey when deactivated (instead of a lighter green).
 
 ### Bug fixes ###
 
@@ -19,6 +20,7 @@ List all changes in various categories:
 - Handle enum on numbers.
 - Update now longer considered as ongoing if process is killed while updating. This was preventing automatic upgrade.
 - Editing the configuration via the add-in without any configuration file is now valid.
+- Disable the "Save configuration" button by default. Only activate when an actual modification occurred.
 
 ## 0.68.2 (2018-07-26) ##
 

@@ -183,7 +183,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 ToolTip tooltip = new ToolTip { ToolTipTitle = "Save modifications", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                saveButton = new Button { ForeColor = Color.DarkGreen, BackColor = Color.LightGreen, DialogResult = DialogResult.Yes, Dock = DockStyle.Fill, Text = "Save Configuration" };
+                saveButton = new Button { Enabled = false, DialogResult = DialogResult.Yes, Dock = DockStyle.Fill, Text = "Save Configuration" };
                 tooltip.SetToolTip(saveButton, "User defined functions will be automatically reloaded.");
                 saveButton.Click += Save;
                 layout.Controls.Add(saveButton);
@@ -289,7 +289,23 @@ namespace AutoLoadPyxelRestAddIn
         {
             service.Display(expanded);
             services.Add(service);
-            saveButton.Enabled = IsValid();
+            UpdateSaveButtonState();
+        }
+
+        private void UpdateSaveButtonState()
+        {
+            if (IsValid())
+            {
+                saveButton.Enabled = true;
+                saveButton.ForeColor = Color.DarkGreen;
+                saveButton.BackColor = Color.LightGreen;
+            }
+            else
+            {
+                saveButton.Enabled = false;
+                saveButton.ForeColor = Color.Black;
+                saveButton.BackColor = Color.FromArgb(255, 240, 240, 240);
+            }
         }
 
         private bool IsValid()
@@ -320,12 +336,12 @@ namespace AutoLoadPyxelRestAddIn
             Service removedService = upToDateServices.Find(s => service.Exists(s.Name));
             if (removedService != null)
                 serviceNameField.Items.Add(removedService);
-            saveButton.Enabled = IsValid();
+            UpdateSaveButtonState();
         }
 
         internal void ServiceUpdated()
         {
-            saveButton.Enabled = IsValid();
+            UpdateSaveButtonState();
         }
     }
 }
