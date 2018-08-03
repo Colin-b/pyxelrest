@@ -206,6 +206,9 @@
     <Compile Include="Accordion.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="SelectFileButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AddButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -281,7 +284,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\add-file-16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\data-transfer-download-128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\file-4-16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\folder-3-128.png">

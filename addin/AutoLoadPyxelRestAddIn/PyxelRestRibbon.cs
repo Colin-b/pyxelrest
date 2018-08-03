@@ -60,7 +60,11 @@ namespace AutoLoadPyxelRestAddIn
         {
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
-                Process.Start(System.IO.Path.Combine(appDataFolder, "pyxelrest", "logs"));
+            {
+                string logsFolder = System.IO.Path.Combine(appDataFolder, "pyxelrest", "logs");
+                if (System.IO.File.Exists(logsFolder))
+                    Process.Start(logsFolder);
+            }
         }
 
         private void ConfigureServices(object sender, RibbonControlEventArgs e)

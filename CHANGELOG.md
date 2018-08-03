@@ -12,6 +12,7 @@ List all changes in various categories:
 
 - Allow to authenticate for OpenAPI definition retrieval.
 - "Save configuration" button is now grey when deactivated (instead of a lighter green).
+- Allow to select a file when providing an OpenAPI definition.
 
 ### Bug fixes ###
 
@@ -21,6 +22,7 @@ List all changes in various categories:
 - Update now longer considered as ongoing if process is killed while updating. This was preventing automatic upgrade.
 - Editing the configuration via the add-in without any configuration file is now valid.
 - Disable the "Save configuration" button by default. Only activate when an actual modification occurred.
+- Trying to open logs when logs folder does not exists does not prompt for an error anymore.
 
 ## 0.68.2 (2018-07-26) ##
 

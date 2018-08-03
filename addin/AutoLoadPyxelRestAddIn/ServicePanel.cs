@@ -80,6 +80,10 @@ namespace AutoLoadPyxelRestAddIn
                 tooltip.SetToolTip(openAPIDefinition, "It must starts with http, https or file.");
                 openAPIDefinition.TextChanged += OpenAPIDefinition_TextChanged;
                 servicePanel.Controls.Add(openAPIDefinition, 1, 0);
+
+                SelectFileButton selectFile = new SelectFileButton();
+                selectFile.Click += SelectFile_Click;
+                servicePanel.Controls.Add(selectFile, 2, 0);
                 #endregion
             }
 
@@ -89,6 +93,7 @@ namespace AutoLoadPyxelRestAddIn
             var advancedConfigButton = new Button { Text = "Configure", Width = 410 };
             advancedConfigButton.Click += AdvancedConfigButton_Click;
             buttons.Controls.Add(advancedConfigButton, 0, 1);
+            buttons.SetColumnSpan(advancedConfigButton, 2);
 
             advancedConfigurationForm = new AdvancedConfigurationForm(this);
             #endregion
@@ -100,14 +105,21 @@ namespace AutoLoadPyxelRestAddIn
                 var deleteButton = new DeleteButton();
                 tooltip.SetToolTip(deleteButton, "User defined functions will only be removed when restarting Microsoft Excel.");
                 deleteButton.Click += DeleteButton_Click;
-                buttons.Controls.Add(deleteButton, 1, 1);
+                buttons.Controls.Add(deleteButton, 2, 1);
             }
             #endregion
 
             servicePanel.Controls.Add(buttons);
-            servicePanel.SetColumnSpan(buttons, 2);
+            servicePanel.SetColumnSpan(buttons, 3);
 
             return servicePanel;
+        }
+
+        private void SelectFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileSelection = new OpenFileDialog();
+            if (DialogResult.OK == fileSelection.ShowDialog())
+                openAPIDefinition.Text = string.Format("file://{0}", fileSelection.FileName.Replace('\\', '/'));
         }
 
         private void OpenAPIDefinition_TextChanged(object sender, EventArgs e)
