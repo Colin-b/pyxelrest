@@ -64,6 +64,8 @@ namespace AutoLoadPyxelRestAddIn
                 string logsFolder = System.IO.Path.Combine(appDataFolder, "pyxelrest", "logs");
                 if (System.IO.File.Exists(logsFolder))
                     Process.Start(logsFolder);
+                else
+                    Log.WarnFormat("{0} folder does not exists. Thus it cannot be opened.");
             }
         }
 
