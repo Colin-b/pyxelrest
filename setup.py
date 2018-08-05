@@ -101,7 +101,9 @@ setup(name='pyxelrest',
           ),
           (
               'pyxelrest_addin/resources', [
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/add-file-16.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png',
+                  'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/file-4-16.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/folder-3-128.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-4-16.png',
                   'addin/AutoLoadPyxelRestAddIn/bin/Release/resources/plus-4-16_grey.png',
