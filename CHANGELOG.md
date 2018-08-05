@@ -21,8 +21,9 @@ List all changes in various categories:
 - Add a ClickOnce version number for the add-in.
 - Handle enum on numbers.
 - Update now longer considered as ongoing if process is killed while updating. This was preventing automatic upgrade.
-- Services configuration file is now created if needed. Previously generating an error.
-- Logs folder is now created if needed. Previously generating an error.
+- Services configuration file is now created by add-in if needed. Previously generating an error.
+- Logs folder is now created by add-in if needed. Previously generating an error.
+- Default logs folder is now created by pyxelrest if needed. Previously generating an error in case default logging should be used.
 
 ## 0.68.2 (2018-07-26) ##
 

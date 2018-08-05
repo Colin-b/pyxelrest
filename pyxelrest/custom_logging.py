@@ -39,6 +39,9 @@ def load_logging_configuration():
 
 def set_file_logger(filename, level=logging.INFO):
     default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', filename + '.log')
+    default_log_folder = os.path.dirname(default_log_file_path)
+    if not os.path.exists(default_log_folder):
+        os.makedirs(default_log_folder)
     logging.basicConfig(
         format='%(asctime)s - %(levelname)s - %(process)d:%(thread)d - %(filename)s:%(lineno)d - %(message)s',
         handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
