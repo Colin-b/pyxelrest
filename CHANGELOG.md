@@ -24,6 +24,7 @@ List all changes in various categories:
 - Services configuration file is now created by add-in if needed. Previously generating an error.
 - Logs folder is now created by add-in if needed. Previously generating an error.
 - Default logs folder is now created by pyxelrest if needed. Previously generating an error in case default logging should be used.
+- In case asynchronous calls are not shifted and result is on a single cell, result was not displayed. It is now shifted in this case.
 
 ## 0.68.2 (2018-07-26) ##
 

@@ -1504,6 +1504,15 @@ def list_as_json(lists, parse_as):
 
 
 def shift_result(result, udf_method):
+    # First result cell is stuck to "computing..." in such case
+    if udf_method.is_asynchronous and not udf_method.service.config.shift_result:
+        # If result is a single cell, force the shift to make sure client knows the computation is over
+        if result and len(result) == 1:
+            if isinstance(result[0], list) and len(result[0]) == 1:
+                result[0].insert(0, '')
+            elif isinstance(result, list):
+                result = [['', value] for value in result]
+
     if udf_method.service.config.shift_result and udf_method.auto_expand_result:
         if result:
             if isinstance(result[0], list):
