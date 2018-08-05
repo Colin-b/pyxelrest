@@ -6,7 +6,7 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.68.3 (next) ##
+## 0.68.3 (2018-08-05) ##
 
 ### Enhancements ###
 
