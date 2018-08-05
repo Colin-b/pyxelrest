@@ -118,6 +118,12 @@ namespace AutoLoadPyxelRestAddIn
                 Log.Error("Configuration cannot be saved as configuration file path was not provided.");
                 return;
             }
+            if (!File.Exists(configurationFilePath))
+            {
+                Log.WarnFormat("{0} configuration file does not exists. Creating it.", configurationFilePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(configurationFilePath));
+                File.Create(configurationFilePath).Close();
+            }
 
             var parser = new YamlStream();
             var mapping = new YamlMappingNode();
