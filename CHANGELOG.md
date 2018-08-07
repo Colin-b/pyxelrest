@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.68.4 (2018-08-07) ##
+
+### Bug fixes ###
+
+- First cell in case of an asynchronous call will now contains "Formula" instead of being blank. To help users in case of non-shifted results.
+
 ## 0.68.3 (2018-08-05) ##
 
 ### Enhancements ###
