@@ -11,6 +11,7 @@ List all changes in various categories:
 ### Bug fixes ###
 
 - Do not truncate logs in case of error reception from REST api call.
+- Do not limit values of NumericUpDown within add-in configuration form.
 
 ## 0.68.4 (2018-08-07) ##
 

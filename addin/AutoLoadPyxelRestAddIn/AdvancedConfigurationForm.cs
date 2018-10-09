@@ -151,7 +151,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var maxRetries = new NumericUpDown { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
+                    var maxRetries = new NumericUpDown { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill, Maximum = int.MaxValue };
                     tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
                     maxRetries.ValueChanged += MaxRetries_ValueChanged;
                     layout.Controls.Add(maxRetries, 1, 2);
@@ -166,7 +166,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var connectTimeout = new NumericUpDown { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
+                    var connectTimeout = new NumericUpDown { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill, Maximum = int.MaxValue };
                     tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
                     connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
                     layout.Controls.Add(connectTimeout, 1, 3);
@@ -179,7 +179,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var readTimeout = new NumericUpDown { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
+                    var readTimeout = new NumericUpDown { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill, Maximum = int.MaxValue };
                     tooltip.SetToolTip(readTimeout, "Infinite wait by default.");
                     readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                     layout.Controls.Add(readTimeout, 1, 4);
@@ -405,7 +405,7 @@ namespace AutoLoadPyxelRestAddIn
 
                             ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Width = 200 };
+                            var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Width = 200, Maximum = int.MaxValue };
                             tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
                             openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
                             panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 1);
@@ -546,7 +546,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var timeout = new NumericUpDown { Maximum = 1000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60 };
+                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60, Maximum = int.MaxValue };
                     tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
                     timeout.TextChanged += Oauth2Timeout_TextChanged;
                     layout.Controls.Add(timeout, 1, 2);
@@ -559,7 +559,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var successDisplayTime = new NumericUpDown { Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1 };
+                    var successDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1, Maximum = int.MaxValue };
                     tooltip.SetToolTip(successDisplayTime, "Wait for 1 millisecond by default.");
                     successDisplayTime.TextChanged += Oauth2SuccessDisplayTime_TextChanged;
                     layout.Controls.Add(successDisplayTime, 1, 3);
@@ -572,7 +572,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var failureDisplayTime = new NumericUpDown { Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000 };
+                    var failureDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000, Maximum = int.MaxValue };
                     tooltip.SetToolTip(failureDisplayTime, "Wait for 5 seconds (5000 millisecond by default.");
                     failureDisplayTime.TextChanged += Oauth2FailureDisplayTime_TextChanged;
                     layout.Controls.Add(failureDisplayTime, 1, 4);
