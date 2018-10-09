@@ -1391,7 +1391,7 @@ def get_result(udf_method, request_content):
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception('[status=Error] occurred while handling [function={0}] [url={1}] response: [response={2}].'.format(udf_method.udf_name, response.request.url, response.text[:64]))
+            logger.exception('[status=Error] occurred while handling [function={0}] [url={1}] response: [response={2}].'.format(udf_method.udf_name, response.request.url, response.text))
         else:
             logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
         return shift_result(convert_to_return_type(describe_error(response, error), udf_method), udf_method)

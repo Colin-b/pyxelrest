@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## 0.68.5 (2018-10-XX) ##
+
+### Bug fixes ###
+
+- Do not truncate logs in case of error reception from REST api call.
+
 ## 0.68.4 (2018-08-07) ##
 
 ### Bug fixes ###
