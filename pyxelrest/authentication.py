@@ -1,6 +1,6 @@
 import logging
 import os
-from requests_auth.authentication import NTLM, OAuth2, HeaderApiKey, QueryApiKey, Basic, Auths
+from requests_auth import NTLM, OAuth2, HeaderApiKey, QueryApiKey, Basic, Auths
 from requests_auth.oauth2_tokens import JsonTokenFileCache
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,7 @@ def get_auth(udf_method, request_content):
             return authentication_modes[0]
         # Multiple authentication methods are required and PyxelRest support it
         if len(authentication_modes) > 1:
-            return Auths(authentication_modes)
+            return Auths(*authentication_modes)
         # Otherwise check if there is another security available
 
     # Default to custom authentication if no security is supported
@@ -102,7 +102,7 @@ def get_definition_retrieval_auth(service_config):
             return authentication_modes[0]
         # Multiple authentication methods are required and PyxelRest support it
         if len(authentication_modes) > 1:
-            return Auths(authentication_modes)
+            return Auths(*authentication_modes)
         # Otherwise check if there is another security available
 
     # Default to custom authentication if no security is supported
