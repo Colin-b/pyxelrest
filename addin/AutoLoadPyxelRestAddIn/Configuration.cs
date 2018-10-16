@@ -85,7 +85,7 @@ namespace AutoLoadPyxelRestAddIn
         private YamlStream LoadFolder(string folderPath)
         {
             Log.Warn("Configuration cannot be loaded as configuration folder path loading is not yet implemented.");
-            return null;  // TODO Add ability to load a folder content into a single ini data
+            return null;  // TODO Add ability to load a folder content into a single YAML data
         }
 
         public List<Service> Load()

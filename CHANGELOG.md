@@ -16,6 +16,7 @@ List all changes in various categories:
 - Update dependencies to latest version (except pywin32 to avoid failure on update).
 - Handle . (dot) in parameter name.
 - Allow to specify header name and header value for the non-standard OAuth2 services.
+- Properly check that logs folder does not exists (warning was always issued).
 
 ## 0.68.4 (2018-08-07) ##
 
