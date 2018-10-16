@@ -681,6 +681,54 @@ class PyxelRestVBAKeywordsTest(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_python_restricted_keywords(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['with.a.dot'],
+                ['with.a.dot value']
+            ],
+            pyxelrestgenerator.vba_keywords_get_python_restricted_keywords(
+                with_a_dot='with.a.dot value'
+            )
+        )
+
+    def test_post_python_restricted_keywords(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['with.a.dot'],
+                ['with.a.dot value']
+            ],
+            pyxelrestgenerator.vba_keywords_post_python_restricted_keywords(
+                with_a_dot='with.a.dot value'
+            )
+        )
+
+    def test_put_python_restricted_keywords(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['with.a.dot'],
+                ['with.a.dot value']
+            ],
+            pyxelrestgenerator.vba_keywords_put_python_restricted_keywords(
+                with_a_dot='with.a.dot value'
+            )
+        )
+
+    def test_delete_python_restricted_keywords(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['with.a.dot'],
+                ['with.a.dot value']
+            ],
+            pyxelrestgenerator.vba_keywords_delete_python_restricted_keywords(
+                with_a_dot='with.a.dot value'
+            )
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

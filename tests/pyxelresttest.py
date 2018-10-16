@@ -186,7 +186,7 @@ class PyxelRestTest(unittest.TestCase):
         self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
 
         user_agent_index = headers[0].index('User-Agent')
-        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.68.4')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.68.5.dev1')
 
     def test_post_form_parameter(self):
         from pyxelrest import pyxelrestgenerator

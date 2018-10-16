@@ -283,17 +283,17 @@ def open_api_definition():
 
 @app.route('/oauth2/authentication/success', methods=['GET'])
 def get_oauth2_authentication_success():
-    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+    return jsonify([{'Authorization': request.headers.get('Authorization')}])
 
 
 @app.route('/oauth2/authentication/success/with/custom/response/type', methods=['GET'])
 def get_oauth2_authentication_success_with_custom_response_type():
-    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+    return jsonify([{'Authorization': request.headers.get('Authorization')}])
 
 
 @app.route('/oauth2/authentication/success/without/response/type', methods=['GET'])
 def get_oauth2_authentication_success_without_response_type():
-    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+    return jsonify([{'Authorization': request.headers.get('Authorization')}])
 
 
 @app.route('/oauth2/authentication/failure', methods=['GET'])
@@ -308,7 +308,7 @@ def get_oauth2_authentication_timeout():
 
 @app.route('/oauth2/authentication/success/quick/expiry', methods=['GET'])
 def get_oauth2_authentication_success_quick_expiry():
-    return jsonify([{'Bearer': request.headers.get('Bearer')}])
+    return jsonify([{'Authorization': request.headers.get('Authorization')}])
 
 
 @app.route('/api/key/header/authentication/success', methods=['GET'])
@@ -358,6 +358,7 @@ def get_api_key_or_basic_authentication_success():
 
 def start_server(port):
     app.run(port=port)
+
 
 if __name__ == '__main__':
     start_server(8946)

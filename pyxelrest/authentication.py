@@ -14,10 +14,6 @@ def _create_authentication(service_config, open_api_security_definition, request
         oauth2_config = dict(service_config.oauth2)
         if open_api_security_definition.get('flow') == 'implicit':
             return OAuth2(authorization_url=open_api_security_definition.get('authorizationUrl', request_content.extra_parameters.get('oauth2_auth_url')),
-                          redirect_uri_port=oauth2_config.pop('port', None),
-                          token_reception_timeout=oauth2_config.pop('timeout', None),
-                          token_reception_success_display_time=oauth2_config.pop('success_display_time', None),
-                          token_reception_failure_display_time=oauth2_config.pop('failure_display_time', None),
                           **oauth2_config)
         # TODO Handle all OAuth2 flows
         logger.warning('OAuth2 flow is not supported: {0}'.format(open_api_security_definition))
@@ -34,12 +30,7 @@ def _create_authentication(service_config, open_api_security_definition, request
 def _create_authentication_from_config(service_config, authentication_mode, authentication):
     if 'oauth2' == authentication_mode:
         oauth2_config = dict(service_config.oauth2)
-        return OAuth2(authorization_url=authentication.get('oauth2_auth_url'),
-                      redirect_uri_port=oauth2_config.pop('port', None),
-                      token_reception_timeout=oauth2_config.pop('timeout', None),
-                      token_reception_success_display_time=oauth2_config.pop('success_display_time', None),
-                      token_reception_failure_display_time=oauth2_config.pop('failure_display_time', None),
-                      **oauth2_config)
+        return OAuth2(authorization_url=authentication.get('oauth2_auth_url'), **oauth2_config)
     elif 'api_key' == authentication_mode:
         if authentication.get('in') == 'query':
             return QueryApiKey(service_config.api_key, authentication.get('name'))

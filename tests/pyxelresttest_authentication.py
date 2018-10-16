@@ -34,18 +34,18 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
     def test_oauth2_authentication_on_custom_server_port(self):
         from pyxelrest import pyxelrestgenerator
         first_token = pyxelrestgenerator.oauth_cutom_response_port_get_oauth2_authentication_success()
-        self.assertEqual(first_token[0], ['Bearer'])
+        self.assertEqual(first_token[0], ['Authorization'])
         # Wait for 1 second and send a second request from another server to the same auth server
         # (should not request another token)
         time.sleep(1)
         second_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-        self.assertEqual(second_token[0], ['Bearer'])
+        self.assertEqual(second_token[0], ['Authorization'])
         self.assertEqual(first_token[1], second_token[1])
 
     def test_oauth2_authentication_success(self):
         from pyxelrest import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-        self.assertEqual(token[0], ['Bearer'])
+        self.assertEqual(token[0], ['Authorization'])
         self.assertIsNotNone(token[1])
 
     def test_pyxelrest_oauth2_authentication_success(self):
@@ -55,19 +55,19 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
             auth=['oauth2_implicit'],
             oauth2_auth_url='http://localhost:8947/auth_success?response_type=id_token'
         )
-        self.assertEqual(token[0], ['Bearer'])
+        self.assertEqual(token[0], ['Authorization'])
         self.assertIsNotNone(token[1])
 
     def test_oauth2_authentication_success_with_custom_response_type(self):
         from pyxelrest import pyxelrestgenerator
         token = pyxelrestgenerator.oauth_custom_token_name_get_oauth2_authentication_success_with_custom_response_type()
-        self.assertEqual(token[0], ['Bearer'])
+        self.assertEqual(token[0], ['Authorization'])
         self.assertIsNotNone(token[1])
 
     def test_oauth2_authentication_success_without_response_type(self):
         from pyxelrest import pyxelrestgenerator
         token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success_without_response_type()
-        self.assertEqual(token[0], ['Bearer'])
+        self.assertEqual(token[0], ['Authorization'])
         self.assertIsNotNone(token[1])
 
     def test_pyxelrest_oauth2_authentication_success_without_response_type(self):
@@ -77,13 +77,13 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
             auth=['oauth2_implicit'],
             oauth2_auth_url='http://localhost:8947/auth_success_without_response_type'
         )
-        self.assertEqual(token[0], ['Bearer'])
+        self.assertEqual(token[0], ['Authorization'])
         self.assertIsNotNone(token[1])
 
     def test_oauth2_authentication_token_reuse(self):
         from pyxelrest import pyxelrestgenerator
         first_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-        self.assertEqual(first_token[0], ['Bearer'])
+        self.assertEqual(first_token[0], ['Authorization'])
         # As the token should not be expired, this call should use the same token
         second_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
         self.assertEqual(first_token, second_token)
@@ -95,7 +95,7 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
             auth=['oauth2_implicit'],
             oauth2_auth_url='http://localhost:8947/auth_success?response_type=id_token'
         )
-        self.assertEqual(first_token[0], ['Bearer'])
+        self.assertEqual(first_token[0], ['Authorization'])
         second_token = pyxelrestgenerator.pyxelrest_get_url(
             'http://localhost:8946/oauth2/authentication/success',
             auth=['oauth2_implicit'],
@@ -125,11 +125,11 @@ class PyxelRestAuthenticationTest(unittest.TestCase):
         from pyxelrest import pyxelrestgenerator
         # This token will expires in 1 seconds
         first_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success_quick_expiry()
-        self.assertEqual(first_token[0], ['Bearer'], str(first_token))
+        self.assertEqual(first_token[0], ['Authorization'], str(first_token))
         time.sleep(2)
         # Token should now be expired, a new one should be requested
         second_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success_quick_expiry()
-        self.assertEqual(second_token[0], ['Bearer'])
+        self.assertEqual(second_token[0], ['Authorization'])
         self.assertNotEqual(first_token[1], second_token[1])
 
     def test_api_key_header_authentication_success(self):

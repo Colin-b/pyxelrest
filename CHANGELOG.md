@@ -14,6 +14,8 @@ List all changes in various categories:
 - Do not limit values of NumericUpDown within add-in configuration form.
 - Send OAuth2 token within Authorization header by default.
 - Update dependencies to latest version (except pywin32 to avoid failure on update).
+- Handle . (dot) in parameter name.
+- Allow to specify header name and header value for the non-standard OAuth2 services.
 
 ## 0.68.4 (2018-08-07) ##
 

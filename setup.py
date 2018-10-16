@@ -20,7 +20,7 @@ class install_pyxelrest_data(install_data):
         post_install.perform_post_installation_tasks()
 
 
-with open(os.path.join(this_dir, 'README.rst'), 'r') as f:
+with open(os.path.join(this_dir, 'README.md'), 'r') as f:
     long_description = f.read()
 
 from pyxelrest import _version

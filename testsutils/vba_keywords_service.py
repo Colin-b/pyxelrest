@@ -316,7 +316,13 @@ def open_api_definition():
                                 'xor': {
                                 }
                            }
-                       }
+                       },
+                       'PythonKeywords': {
+                           'properties': {
+                               'with.a.dot': {
+                                },
+                           }
+                       },
                    },
                    produces=[
                        "application/json"
@@ -1465,18 +1471,81 @@ def open_api_definition():
                                    }
                                }
                            }
-                       }
+                       },
+                       '/python_restricted_keywords': {
+                           'parameters': [
+                               {
+                                   'description': '',
+                                   'in': 'query',
+                                   'name': 'with.a.dot',
+                                   'required': True,
+                                   'type': 'string'
+                               },
+                           ],
+                           'get': {
+                               'operationId': 'get_python_restricted_keywords',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       'schema': {
+                                           '$ref': '#/definitions/PythonKeywords'
+                                       }
+                                   }
+                               }
+                           },
+                           'post': {
+                               'operationId': 'post_python_restricted_keywords',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/PythonKeywords'
+                                   }
+                               },
+                               'produces': [
+                                   "application/json"
+                               ]
+                           },
+                           'put': {
+                               'operationId': 'put_python_restricted_keywords',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/PythonKeywords'
+                                   }
+                                },
+                               'produces': [
+                                   "application/json"
+                               ]
+                           },
+                           'delete': {
+                               'operationId': 'delete_python_restricted_keywords',
+                               'responses': {
+                                   '200': {
+                                       'description': 'return value',
+                                       '$ref': '#/definitions/PythonKeywords'
+                                   }
+                               },
+                               'produces': [
+                                   "application/json"
+                               ]
+                           }
+                       },
                    })
 
 
 @app.route('/vba_restricted_keywords', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def get_vba_restricted_keywords():
+def vba_restricted_keywords():
     return jsonify(request.args)
 
 
 @app.route('/<string:attribute>/vba/restricted/keyword/in/uri/parameter', methods=['GET'])
 def get_attribute_vba_restricted_keyword_in_uri_parameter(attribute):
     return jsonify({'attribute': attribute})
+
+
+@app.route('/python_restricted_keywords', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def python_restricted_keywords():
+    return jsonify(request.args)
 
 
 def start_server(port):

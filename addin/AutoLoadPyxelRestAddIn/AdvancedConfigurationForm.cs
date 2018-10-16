@@ -546,7 +546,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60, Maximum = int.MaxValue };
+                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60 };
                     tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
                     timeout.TextChanged += Oauth2Timeout_TextChanged;
                     layout.Controls.Add(timeout, 1, 2);
@@ -559,7 +559,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var successDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1, Maximum = int.MaxValue };
+                    var successDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1 };
                     tooltip.SetToolTip(successDisplayTime, "Wait for 1 millisecond by default.");
                     successDisplayTime.TextChanged += Oauth2SuccessDisplayTime_TextChanged;
                     layout.Controls.Add(successDisplayTime, 1, 3);
@@ -572,17 +572,43 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var failureDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000, Maximum = int.MaxValue };
-                    tooltip.SetToolTip(failureDisplayTime, "Wait for 5 seconds (5000 millisecond by default.");
+                    var failureDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000 };
+                    tooltip.SetToolTip(failureDisplayTime, "Wait for 5 seconds (5000 millisecond) by default.");
                     failureDisplayTime.TextChanged += Oauth2FailureDisplayTime_TextChanged;
                     layout.Controls.Add(failureDisplayTime, 1, 4);
+                }
+                #endregion
+
+                #region Header name
+                {
+                    layout.Controls.Add(new Label { Width = 150, Text = "Header name", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field used to send token.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var headerName = new TextBox { Dock = DockStyle.Fill, Text = servicePanel.service.OAuth2.ContainsKey("header_name") ? (string)servicePanel.service.OAuth2["header_name"] : string.Empty };
+                    tooltip.SetToolTip(headerName, "Token will be sent in Authorization header field by default.");
+                    headerName.TextChanged += Oauth2HeaderName_TextChanged;
+                    layout.Controls.Add(headerName, 1, 5);
+                }
+                #endregion
+
+                #region Header value
+                {
+                    layout.Controls.Add(new Label { Width = 150, Text = "Header value", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Format used to send the token value. '{token}' must be present as it will be replaced by the actual token.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var headerValue = new TextBox { Dock = DockStyle.Fill, Text = servicePanel.service.OAuth2.ContainsKey("header_value") ? (string)servicePanel.service.OAuth2["header_value"] : string.Empty };
+                    tooltip.SetToolTip(headerValue, "Token will be sent as 'Bearer {token}' by default.");
+                    headerValue.TextChanged += Oauth2HeaderValue_TextChanged;
+                    layout.Controls.Add(headerValue, 1, 6);
                 }
                 #endregion
 
                 #region Add items
 
                 oauth2ParamsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
-                layout.Controls.Add(oauth2ParamsPanel, 0, 5);
+                layout.Controls.Add(oauth2ParamsPanel, 0, 7);
                 layout.SetColumnSpan(oauth2ParamsPanel, 3);
 
                 {
@@ -592,7 +618,7 @@ namespace AutoLoadPyxelRestAddIn
                     tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
                     oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
                     oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
-                    layout.Controls.Add(oauth2ParamName, 0, 6);
+                    layout.Controls.Add(oauth2ParamName, 0, 8);
                 }
                 {
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -601,11 +627,11 @@ namespace AutoLoadPyxelRestAddIn
                     tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
                     oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
                     oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
-                    layout.Controls.Add(oauth2ParamValue, 1, 6);
+                    layout.Controls.Add(oauth2ParamValue, 1, 8);
                 }
                 addOAuth2Param = new AddButton();
                 addOAuth2Param.Click += AddOAuth2Param_Click;
-                layout.Controls.Add(addOAuth2Param, 2, 6);
+                layout.Controls.Add(addOAuth2Param, 2, 8);
 
                 #endregion
 
@@ -758,6 +784,22 @@ namespace AutoLoadPyxelRestAddIn
                 servicePanel.service.Basic.Remove("username");
             else
                 servicePanel.service.Basic["username"] = ((TextBox)sender).Text;
+        }
+
+        private void Oauth2HeaderValue_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                servicePanel.service.OAuth2.Remove("header_value");
+            else
+                servicePanel.service.OAuth2["header_value"] = ((TextBox)sender).Text;
+        }
+
+        private void Oauth2HeaderName_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                servicePanel.service.OAuth2.Remove("header_name");
+            else
+                servicePanel.service.OAuth2["header_name"] = ((TextBox)sender).Text;
         }
 
         private void Oauth2FailureDisplayTime_TextChanged(object sender, EventArgs e)

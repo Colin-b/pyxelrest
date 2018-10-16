@@ -82,6 +82,8 @@ def to_vba_valid_name(open_api_name):
     # replace '-'
     if "-" in open_api_name:
         open_api_name = open_api_name.replace("-", "_")
+    if "." in open_api_name:
+        open_api_name = open_api_name.replace(".", "_")
     if open_api_name.startswith("_"):  # TODO Handle more than one
         open_api_name = open_api_name[1:]
     return open_api_name
@@ -129,7 +131,9 @@ class ConfigSection:
         :param service_config: Dictionary containing service details.
         """
         self.name = service_name
-        self.requested_methods = service_config.get('methods', ['get', 'post', 'put', 'delete', 'patch', 'options', 'head'])
+        self.requested_methods = service_config.get(
+            'methods', ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']
+        )
         self.connect_timeout = service_config.get('connect_timeout', 1)
         self.read_timeout = service_config.get('read_timeout')
         udf = service_config.get('udf', {})
@@ -137,19 +141,32 @@ class ConfigSection:
         self.udf_return_types = udf.get('return_types', ['async_auto_expand'])
         self.shift_result = udf.get('shift_result', True)
         self.max_retries = service_config.get('max_retries', 5)
-        self.custom_headers = {key: convert_environment_variable(value) for key, value in service_config.get('headers', {}).items()}
+        self.custom_headers = {
+            key: convert_environment_variable(value)
+            for key, value in service_config.get('headers', {}).items()
+        }
         self.proxies = service_config.get('proxies', {})
         self.oauth2 = service_config.get('oauth2', {})
+        if 'port' in self.oauth2:
+            self.oauth2['redirect_uri_port'] = self.oauth2.pop('port')
+        if 'timeout' in self.oauth2:
+            self.oauth2['token_reception_timeout'] = self.oauth2.pop('timeout')
+        if 'success_display_time' in self.oauth2:
+            self.oauth2['token_reception_success_display_time'] = self.oauth2.pop('success_display_time')
+        if 'failure_display_time' in self.oauth2:
+            self.oauth2['token_reception_failure_display_time'] = self.oauth2.pop('failure_display_time')
         self.basic = service_config.get('basic', {})
         self.api_key = service_config.get('api_key')
         if self.api_key:
             self.api_key = convert_environment_variable(self.api_key)
         self.ntlm_auth = service_config.get('ntlm', {})
 
-    def is_asynchronous(self, udf_return_type):
+    @staticmethod
+    def is_asynchronous(udf_return_type):
         return 'async_auto_expand' == udf_return_type
 
-    def auto_expand_result(self, udf_return_type):
+    @staticmethod
+    def auto_expand_result(udf_return_type):
         return udf_return_type.endswith('_auto_expand')
 
     def udf_prefix(self, udf_return_type):

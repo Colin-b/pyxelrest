@@ -375,6 +375,16 @@ If response_type is not provided in authorization_url, token is expected to be r
         <td>Optional</td>
     </tr>
     <tr>
+        <td><strong>header_name</strong></td>
+        <td>Name of the header field used to send token. Default value is Authorization.</td>
+        <td>Optional</td>
+    </tr>
+    <tr>
+        <td><strong>header_value</strong></td>
+        <td>Format used to send the token value. "{token}" must be present as it will be replaced by the actual token. Token will be sent as "Bearer {token}" by default.</td>
+        <td>Optional</td>
+    </tr>
+    <tr>
         <td><strong>XXXX</strong></td>
         <td>Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1</td>
         <td>Optional</td>
