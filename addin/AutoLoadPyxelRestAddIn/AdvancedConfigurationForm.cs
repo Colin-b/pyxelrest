@@ -151,7 +151,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var maxRetries = new NumericUpDown { Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill, Maximum = int.MaxValue };
+                    var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
                     tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
                     maxRetries.ValueChanged += MaxRetries_ValueChanged;
                     layout.Controls.Add(maxRetries, 1, 2);
@@ -166,7 +166,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var connectTimeout = new NumericUpDown { Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill, Maximum = int.MaxValue };
+                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
                     tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
                     connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
                     layout.Controls.Add(connectTimeout, 1, 3);
@@ -179,7 +179,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var readTimeout = new NumericUpDown { Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill, Maximum = int.MaxValue };
+                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
                     tooltip.SetToolTip(readTimeout, "Infinite wait by default.");
                     readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                     layout.Controls.Add(readTimeout, 1, 4);
@@ -405,7 +405,7 @@ namespace AutoLoadPyxelRestAddIn
 
                             ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            var openAPIDefinitionReadTimeout = new NumericUpDown { Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Width = 200, Maximum = int.MaxValue };
+                            var openAPIDefinitionReadTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Width = 200 };
                             tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
                             openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
                             panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 1);
