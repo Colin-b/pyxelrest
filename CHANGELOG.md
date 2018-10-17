@@ -6,17 +6,24 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.68.5 (2018-10-XX) ##
+## 0.69.0 (2018-10-XX) ##
+
+## Enhancements ##
+
+- Provide UDF book name, sheet name and cell address within X-Pxl-Cell header.
+- Send OAuth2 token within Authorization header by default.
+- Allow to specify header name and header value for the non-standard OAuth2 services.
+- Logs are now identifying the Book, Sheet and Cell performing the call.
+- Document value 303 in wait_for_status pyxelrest_get_url parameter.
 
 ### Bug fixes ###
 
 - Do not truncate logs in case of error reception from REST api call.
 - Do not limit values of NumericUpDown within add-in configuration form.
-- Send OAuth2 token within Authorization header by default.
 - Update dependencies to latest version.
 - Handle . (dot) in parameter name.
-- Allow to specify header name and header value for the non-standard OAuth2 services.
 - Properly check that logs folder does not exists (warning was always issued).
+- Previous results are now cleared when using asynchronous UDFs with shifted results.
 
 ## 0.68.4 (2018-08-07) ##
 

@@ -463,7 +463,7 @@ class PyxelRestUDFMethod(UDFMethod):
                 False,
                 'integer'
             )
-            self.description = 'HTTP status code to wait for before returning response.'
+            self.description = 'HTTP status code to wait for before returning response. 303 means that result is now provided in another URL.'
 
         def _convert_to_int(self, value):
             if not isinstance(value, int):
@@ -1209,9 +1209,10 @@ class APIUDFParameter(UDFParameter):
 
 
 class RequestContent:
-    def __init__(self, udf_method):
+    def __init__(self, udf_method, excel_caller_address):
         self.udf_method = udf_method
         self.header = udf_method.initial_header()
+        self.header['X-Pxl-Cell'] = excel_caller_address
         self.payload = {}
         self.files = {}
         self.parameters = {}
@@ -1367,7 +1368,7 @@ def check_for_duplicates(loaded_services):
                            'only the last declared one will be available.'.format(service_names, udf_prefix))
 
 
-def get_result(udf_method, request_content):
+def get_result(udf_method, request_content, excel_application):
     response = None
     try:
         response = session.get(udf_method.service.config.max_retries).request(
@@ -1391,9 +1392,11 @@ def get_result(udf_method, request_content):
                 check_interval = request_content.extra_parameters['check_interval']
                 logger.info('Waiting for {0} status. Sending a new request in {1} seconds.'.format(wait_for_status, check_interval))
                 time.sleep(check_interval)
-                return get_result(udf_method, request_content)
+                return get_result(udf_method, request_content, excel_application)
 
-        logger.info('[status=Valid] response received for [function={1}] [url={0}].'.format(response.request.url, udf_method.udf_name))
+        logger.info('{0} [status=Valid] response received for [function={1}] [url={2}].'.format(
+            get_caller_address(excel_application), udf_method.udf_name, response.request.url)
+        )
         if 202 == response.status_code:
             return shift_result([['Status URL'], [response.headers['location']]], udf_method)
         if response.headers['content-type'] == 'application/json':
@@ -1403,14 +1406,20 @@ def get_result(udf_method, request_content):
         else:
             return shift_result(convert_to_return_type(response.text[:255], udf_method), udf_method)
     except requests.exceptions.ConnectionError:
-        logger.exception('Connection [status=error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+        logger.exception('{0} Connection [status=error] occurred while calling [function={1}] [url={2}].'.format(
+            get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
+        )
         return shift_result(convert_to_return_type('Cannot connect to service. Please retry once connection is re-established.', udf_method), udf_method)
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception('[status=Error] occurred while handling [function={0}] [url={1}] response: [response={2}].'.format(udf_method.udf_name, response.request.url, response.text))
+            logger.exception('{0} [status=Error] occurred while handling [function={1}] [url={2}] response: [response={3}].'.format(
+                get_caller_address(excel_application), udf_method.udf_name, response.request.url, response.text)
+            )
         else:
-            logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+            logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
+                get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
+            )
         return shift_result(convert_to_return_type(describe_error(response, error), udf_method), udf_method)
     finally:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
@@ -1434,25 +1443,51 @@ class DelayWrite(object):
         )
 
 
-def get_result_async(udf_method, request_content, excel_caller):
+def get_result_async(udf_method, request_content, excel_application):
     def get_and_send_result(excel_range, nb_rows, nb_columns):
         try:
-            result = get_result(udf_method, request_content)
+            result = get_result(udf_method, request_content, excel_application)
             xlwings.server.add_idle_task(DelayWrite(excel_range, {'expand': 'table'}, result, (nb_rows, nb_columns)))
         except:
-            logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+            logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
+                get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
+            )
     try:
+        excel_caller = excel_application.Caller if excel_application else None
         if not hasattr(excel_caller, 'Rows'):
+            logger.error('[status=Error] Asynchronous UDF called from VBA [function={0}] [url={1}].'.format(
+                udf_method.udf_name, udf_method.uri)
+            )
             return convert_to_return_type('Asynchronous UDF called from VBA.', udf_method)
         excel_range = xlwings.Range(impl=xlwings.xlplatform.Range(xl=excel_caller))
+        # Ensure that previous results are removed if shifted
+        if udf_method.service.config.shift_result:
+            excel_range_to_clear = xlwings.Range((excel_range.row, excel_range.column + 1))
+            nb_rows_to_clear = excel_range_to_clear.expand().shape[0] - 1
+        else:
+            nb_rows_to_clear = 0
         threading.Thread(
             target=get_and_send_result,
             args=(excel_range, excel_caller.Rows.Count, excel_caller.Columns.Count)
         ).start()
-        return shift_result(['Processing request...'], udf_method)
+        return shift_result(['Processing request...'] + [''] * nb_rows_to_clear, udf_method)
     except Exception as error:
-        logger.exception('[status=Error] occurred while calling [function={0}] [url={1}].'.format(udf_method.udf_name, udf_method.uri))
+        logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
+            get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
+        )
         return convert_to_return_type(describe_error(None, error), udf_method)
+
+
+def get_caller_address(excel_application):
+    try:
+        if not excel_application:
+            return 'Python'  # TODO Return details on caller of UDF?
+        excel_caller = excel_application.Caller
+        if not hasattr(excel_caller, 'Rows'):
+            return 'VBA'  # TODO Return details on VBA file?
+        return str(xlwings.xlplatform.Range(xl=excel_caller).get_address(True, True, True))
+    except:
+        return ''
 
 
 def convert_to_return_type(str_value, udf_method):

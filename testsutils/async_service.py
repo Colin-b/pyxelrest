@@ -40,6 +40,7 @@ skipped_headers = [
     'Content-Length',
     'X-Pxl-Request',
     'X-Pxl-Session',
+    'X-Pxl-Cell',
 ]
 
 

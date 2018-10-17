@@ -7,7 +7,7 @@ import xlwings as xw
 import datetime
 import logging
 from pyxelrest.caching import caching
-from pyxelrest.open_api import RequestContent, get_result, get_result_async, convert_to_return_type
+from pyxelrest.open_api import RequestContent, get_result, get_result_async, convert_to_return_type, get_caller_address
 
 logger = logging.getLogger(__name__)
 udf_methods = None  # Will be set after load
@@ -40,8 +40,7 @@ udf_methods = None  # Will be set after load
 {% if 'get' == udf_method.requests_method %}@caching
 {% endif %}
 @xw.func(category='{{ udf_method.service.config.name }}', call_in_wizard=False{% if udf_method.help_url %}, help_file='{{ udf_method.help_url }}'{% endif %})
-{% if udf_method.is_asynchronous %}@xw.arg('excel_caller', is_excel_caller=True)
-{% endif %}
+@xw.arg('excel_application', vba='Application')
 {% for udf_parameter in udf_method.path_parameters %}
 @xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
 {% endfor %}
@@ -55,16 +54,17 @@ udf_methods = None  # Will be set after load
 @xw.ret(expand='table')
 {% endif %}
 def {{ udf_method.udf_name }}(
-    {%- if udf_method.is_asynchronous %}excel_caller{% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endif %}
     {%- for udf_parameter in udf_method.path_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
     {%- for udf_parameter in udf_method.required_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}):
+    {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}
+    {%- if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}excel_application=None):
 {% if udf_method.summary() %}
     """{{ udf_method.summary() }}"""
 {% endif %}
-    logger.info("[status=Calling] [function={{ udf_method.udf_name }}]...")
+    excel_caller_address = get_caller_address(excel_application)
+    logger.info("{0} [status=Calling] [function={{ udf_method.udf_name }}]...".format(excel_caller_address))
     udf_method = udf_methods['{{ udf_method.udf_name }}']
-    request_content = RequestContent(udf_method)
+    request_content = RequestContent(udf_method, excel_caller_address)
 {% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}
 
     try:
@@ -79,13 +79,13 @@ def {{ udf_method.udf_name }}(
 {% endfor %}
         request_content.validate()
     except Exception as e:
-        logger.exception('Unable to validate parameters.')
+        logger.exception('{0} Unable to validate parameters.'.format(excel_caller_address))
         return convert_to_return_type(str(e), udf_method)
 {% endif %}
 {% if udf_method.is_asynchronous %}
-    return get_result_async(udf_method, request_content, excel_caller)
+    return get_result_async(udf_method, request_content, excel_application)
 {% else %}
-    return get_result(udf_method, request_content)
+    return get_result(udf_method, request_content, excel_application)
 {% endif %}
 {% endmacro %}
 {% for service in services %}
