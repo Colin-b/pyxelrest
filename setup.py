@@ -10,7 +10,7 @@ data_dir = os.path.join(modules_dir, '..', '..')
 scripts_dir = os.path.join(modules_dir, '..', '..', 'Scripts')
 
 
-class install_pyxelrest_data(install_data):
+class CustomInstall(install_data):
     def run(self):
         install_data.run(self)
 
@@ -133,7 +133,7 @@ setup(name='pyxelrest',
           # Used to communicate with services
           'requests==2.19.1',
           # Used to check that Excel is not running and required by xlwings
-          'pywin32==223',
+          'pywin32==224',
           # Used to communicate with Microsoft Excel
           'xlwings==0.11.8.1',
           # Used to parse configuration files
@@ -176,6 +176,6 @@ setup(name='pyxelrest',
           'Windows',
       ],
       cmdclass={
-          'install_data': install_pyxelrest_data,
+          'install_data': CustomInstall,
       }
       )
