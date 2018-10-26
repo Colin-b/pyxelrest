@@ -131,11 +131,11 @@ setup(name='pyxelrest',
           # Used to generate UDFs python file from a template
           'jinja2==2.10',
           # Used to communicate with services
-          'requests==2.19.1',
+          'requests==2.20.0',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==224',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.11.8.1',
+          'xlwings==0.13.0',
           # Used to parse configuration files
           'pyyaml==3.13',
           'pyaml==17.12.1',
@@ -149,21 +149,21 @@ setup(name='pyxelrest',
       extra_requires={
           # Support for `application/msgpackpandas`
           'pandas_msgpack': [
-              'pandas',
-              'msgpack-python',
+              'pandas==0.23.4',
+              'msgpack-python==0.5.6',
           ],
           # Support for faster JSON serialization / deserialization
           'ujson': [
-              'ujson',
+              'ujson==1.35',
           ],
           # Support for NTLM authentication
           'ntlm': [
-              'requests_ntlm',
-              'requests_negotiate_sspi',
+              'requests_ntlm==1.1.0',
+              'requests_negotiate_sspi==0.5.2',
           ],
           # Support for in-memory caching
-          'cachetool': [
-              'cachetool',
+          'cachetools': [
+              'cachetools==2.1.0',
           ],
       },
       scripts=[
