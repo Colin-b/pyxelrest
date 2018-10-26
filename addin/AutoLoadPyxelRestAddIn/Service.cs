@@ -25,6 +25,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string DESCRIPTION_PROPERTY = "description";
         private static readonly string SKIP_UPDATE_FOR_PROPERTY = "skip_update_for";
         private static readonly string PYTHON_MODULES_PROPERTY = "python_modules";
+        private static readonly string CACHING_PROPERTY = "caching";
 
         private static readonly string GET = "get";
         private static readonly string POST = "post";
@@ -40,6 +41,7 @@ namespace AutoLoadPyxelRestAddIn
         public IList<string> PythonModules;
         public IDictionary<string, object> OpenAPI;
         public IDictionary<string, object> Proxies;
+        public IDictionary<string, object> Caching;
 
         public bool Get;
         public bool Post;
@@ -204,6 +206,9 @@ namespace AutoLoadPyxelRestAddIn
 
             if (!skipUpdateFor.Contains(PYTHON_MODULES_PROPERTY))
                 PythonModules = updated.PythonModules;
+
+            if (!skipUpdateFor.Contains(CACHING_PROPERTY))
+                Caching = updated.Caching;
         }
 
         internal void FromConfig(YamlMappingNode section)
@@ -259,6 +264,9 @@ namespace AutoLoadPyxelRestAddIn
 
             var pythonModulesNode = (YamlSequenceNode)GetProperty(section, PYTHON_MODULES_PROPERTY);
             PythonModules = pythonModulesNode == null ? new List<string>() : ToList(pythonModulesNode);
+
+            var caching = (YamlMappingNode)GetProperty(section, CACHING_PROPERTY);
+            Caching = caching == null ? new Dictionary<string, object>() : ToDict(caching);
         }
 
         internal YamlMappingNode ToConfig()
@@ -311,6 +319,9 @@ namespace AutoLoadPyxelRestAddIn
             if (PythonModules != null && PythonModules.Count > 0)
                 section.Add(new YamlScalarNode(PYTHON_MODULES_PROPERTY), new YamlSequenceNode(FromList(PythonModules)));
 
+            if (Caching != null && Caching.Count > 0)
+                section.Add(new YamlScalarNode(CACHING_PROPERTY), new YamlMappingNode(FromDict(Caching)));
+
             return section;
         }
 
@@ -341,6 +352,7 @@ namespace AutoLoadPyxelRestAddIn
             ConnectTimeout = 1;
             ReadTimeout = 0;
             PythonModules = new List<string>();
+            Caching = new Dictionary<string, object>();
         }
 
         private IList<string> GetMethods()

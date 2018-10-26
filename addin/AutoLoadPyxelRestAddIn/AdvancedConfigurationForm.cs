@@ -749,6 +749,42 @@ namespace AutoLoadPyxelRestAddIn
             }
             #endregion
 
+            #region Caching settings
+            {
+                var tab = new TabPage("Caching");
+                var layout = new TableLayoutPanel { AutoSize = true };
+
+                #region Result caching time
+                {
+                    layout.Controls.Add(new Label { Text = "Result caching time", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = 450, Dock = DockStyle.Fill, Value = servicePanel.service.Caching.ContainsKey("result_caching_time") ? int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) : 0 };
+                    tooltip.SetToolTip(resultCachingTime, "Always send a new request by default.");
+                    resultCachingTime.TextChanged += CachingResultTime_TextChanged;
+                    layout.Controls.Add(resultCachingTime, 1, 1);
+                }
+                #endregion
+
+                #region Maximum number of results
+                {
+                    layout.Controls.Add(new Label { Text = "Maximum number of results", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = 450, Dock = DockStyle.Fill, Value = servicePanel.service.Caching.ContainsKey("max_nb_results") ? int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) : 100 };
+                    tooltip.SetToolTip(maxNbresults, "100 by default.");
+                    maxNbresults.TextChanged += CachingMaxNumber_TextChanged;
+                    layout.Controls.Add(maxNbresults, 1, 2);
+                }
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
+            #endregion
+
             Controls.Add(tabs);
         }
 
@@ -768,6 +804,22 @@ namespace AutoLoadPyxelRestAddIn
                 servicePanel.service.Ntlm.Remove("username");
             else
                 servicePanel.service.Ntlm["username"] = ((TextBox)sender).Text;
+        }
+
+        private void CachingResultTime_TextChanged(object sender, EventArgs e)
+        {
+            if (((NumericUpDown)sender).Value == 0)
+                servicePanel.service.Caching.Remove("result_caching_time");
+            else
+                servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
+        }
+
+        private void CachingMaxNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (((NumericUpDown)sender).Value == 0)
+                servicePanel.service.Caching.Remove("max_nb_results");
+            else
+                servicePanel.service.Caching["max_nb_results"] = ((NumericUpDown)sender).Value;
         }
 
         private void BasicPassword_TextChanged(object sender, EventArgs e)
@@ -1352,6 +1404,8 @@ namespace AutoLoadPyxelRestAddIn
 
         #endregion
 
+        #region Header
+
         private void HeaderValue_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -1448,6 +1502,10 @@ namespace AutoLoadPyxelRestAddIn
             headersPanel.Controls.Remove(panel);
         }
 
+        #endregion
+
+        #region OAuth2
+
         private void Oauth2ParamValue_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -1543,6 +1601,8 @@ namespace AutoLoadPyxelRestAddIn
 
             oauth2ParamsPanel.Controls.Remove(panel);
         }
+
+        #endregion
 
         #endregion
     }
