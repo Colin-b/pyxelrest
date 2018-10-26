@@ -1,57 +1,175 @@
 import unittest
-import os
 import time
 
+from testsutils import (serviceshandler, loader)
 
-class PyxelRestCacheTest(unittest.TestCase):
-    mod = 0
 
-    def test_no_caching(self):
-        from pyxelrest.caching import caching, no_cache
-        no_cache()
+class PyxelRestCachingTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from testsutils import caching_service
+        serviceshandler.start_services((caching_service, 8949))
+        loader.load('caching_services.yml')
 
-        @caching
-        def toto1(x):
-            return x * x + self.mod
+    @classmethod
+    def tearDownClass(cls):
+        serviceshandler.stop_services()
 
-        self.mod = 0
-        self.assertEqual(toto1(2), 4)
-        self.mod = 1
-        self.assertEqual(toto1(2), 5)
+    def test_get_cached(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [1, '1', '2']
+            ],
+            pyxelrestgenerator.caching_get_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [2, '1', '3']
+            ],
+            pyxelrestgenerator.caching_get_cached(test1='1', test2='3')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [1, '1', '2']
+            ],
+            pyxelrestgenerator.caching_get_cached(test1='1', test2='2')
+        )
+        time.sleep(5)
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [3, '1', '2']
+            ],
+            pyxelrestgenerator.caching_get_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [3, '1', '2']
+            ],
+            pyxelrestgenerator.caching_get_cached(test1='1', test2='2')
+        )
 
-    def test_lru_caching(self):
-        from pyxelrest.caching import caching, init_memory_cache
-        init_memory_cache(5, 1)
+    def test_post_cached(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [1, '1', '2']
+            ],
+            pyxelrestgenerator.caching_post_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [2, '1', '3']
+            ],
+            pyxelrestgenerator.caching_post_cached(test1='1', test2='3')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [3, '1', '2']
+            ],
+            pyxelrestgenerator.caching_post_cached(test1='1', test2='2')
+        )
+        time.sleep(5)
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [4, '1', '2']
+            ],
+            pyxelrestgenerator.caching_post_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [5, '1', '2']
+            ],
+            pyxelrestgenerator.caching_post_cached(test1='1', test2='2')
+        )
 
-        @caching
-        def toto2(x):
-            return x * x + self.mod
+    def test_put_cached(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [1, '1', '2']
+            ],
+            pyxelrestgenerator.caching_put_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [2, '1', '3']
+            ],
+            pyxelrestgenerator.caching_put_cached(test1='1', test2='3')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [3, '1', '2']
+            ],
+            pyxelrestgenerator.caching_put_cached(test1='1', test2='2')
+        )
+        time.sleep(5)
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [4, '1', '2']
+            ],
+            pyxelrestgenerator.caching_put_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [5, '1', '2']
+            ],
+            pyxelrestgenerator.caching_put_cached(test1='1', test2='2')
+        )
 
-        self.mod = 0
-        self.assertEqual(toto2(2), 4)
-        # cache effect
-        self.mod = 1
-        self.assertEqual(toto2(2), 4)
-        # cache expired
-        time.sleep(2)
-        self.assertEqual(toto2(2), 5)
-
-    def test_disk_caching(self):
-        from pyxelrest.caching import caching, init_disk_cache
-        filename = "c:\\tmp\\cache.shelve"
-        if os.path.exists(filename):
-            os.remove(filename)
-        init_disk_cache(filename)
-
-        @caching
-        def toto3(x):
-            return x * x + self.mod
-
-        self.mod = 0
-        self.assertEqual(toto3(2), 4)
-        # cache effect
-        self.mod = 1
-        self.assertEqual(toto3(2), 4)
+    def test_delete_cached(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [1, '1', '2']
+            ],
+            pyxelrestgenerator.caching_delete_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [2, '1', '3']
+            ],
+            pyxelrestgenerator.caching_delete_cached(test1='1', test2='3')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [3, '1', '2']
+            ],
+            pyxelrestgenerator.caching_delete_cached(test1='1', test2='2')
+        )
+        time.sleep(5)
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [4, '1', '2']
+            ],
+            pyxelrestgenerator.caching_delete_cached(test1='1', test2='2')
+        )
+        self.assertEqual(
+            [
+                ['request_nb', 'test1', 'test2'],
+                [5, '1', '2']
+            ],
+            pyxelrestgenerator.caching_delete_cached(test1='1', test2='2')
+        )
 
 
 if __name__ == '__main__':

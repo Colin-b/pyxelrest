@@ -29,6 +29,7 @@ from pyxelrest import (
     fileadapter,
     definition_deserializer,
     vba,
+    caching,
     SERVICES_CONFIGURATION_FILE_PATH
 )
 from pyxelrest.fast_deserializer import Flattenizer
@@ -160,6 +161,20 @@ class ConfigSection:
         if self.api_key:
             self.api_key = convert_environment_variable(self.api_key)
         self.ntlm_auth = service_config.get('ntlm', {})
+        caching_conf = service_config.get('caching', {})
+        max_nb_results = self._to_positive_int(caching_conf.get('max_nb_results')) or 100
+        result_caching_time = self._to_positive_int(caching_conf.get('result_caching_time'))
+        self.cache = caching.create_cache(max_nb_results, result_caching_time) if result_caching_time else None
+        caching.caches[self.name] = self.cache
+
+    @staticmethod
+    def _to_positive_int(value):
+        if value:
+            try:
+                value = int(value)
+                return value if value else None
+            except ValueError:
+                logger.warning('Invalid positive value provided: {0}. Considering as not set.'.format(value))
 
     @staticmethod
     def is_asynchronous(udf_return_type):

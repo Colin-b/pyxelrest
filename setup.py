@@ -36,14 +36,17 @@ setup(name='pyxelrest',
       long_description=long_description,
       download_url='http://www.engie.com',
       classifiers=[
-          "Development Status :: 4 - Beta",
+          "Development Status :: 5 - Production/Stable",
           "Intended Audience :: Developers",
+          "License :: OSI Approved :: MIT License",
+          "Natural Language :: English",
           "Programming Language :: Python",
           "Programming Language :: Python :: 2",
           "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3",
           "Programming Language :: Python :: 3.5",
           "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
           "Operating System :: Microsoft :: Windows :: Windows 7",
       ],
       keywords=[
@@ -119,13 +122,13 @@ setup(name='pyxelrest',
       python_requires='>=2.7',
       tests_require=[
           # Used to run tests
-          'nose',
+          'nose==1.3.7',
           # Used to generate a jwt token
-          'pyjwt',
-          # used for caching results
-          'cachetools',
+          'pyjwt==1.6.4',
+          # used for testing cache of results
+          'cachetools==2.1.0',
           # Used to create test services
-          'flask',
+          'flask==1.0.2',
       ],
       install_requires=[
           # Used to generate UDFs python file from a template

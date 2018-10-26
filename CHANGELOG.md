@@ -16,6 +16,7 @@ List all changes in various categories:
 - Logs are now identifying the Book, Sheet and Cell performing the call.
 - Document value 303 in wait_for_status pyxelrest_get_url parameter.
 - Rely on latest official xlwings release (0.13.0).
+- Allow to cache GET requests results.
 
 ### Bug fixes ###
 

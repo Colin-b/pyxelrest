@@ -245,6 +245,12 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Optional</td>
         <td></td>
     </tr>
+    <tr>
+        <td><strong>caching</strong></td>
+        <td>Dictionary containing caching related settings. Refer to Caching section for more information.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
 </table>
 
 #### OpenAPI ####
@@ -430,6 +436,28 @@ Requiring requests_ntlm or requests_negotiate_sspi python modules.
         <td>Optional</td>
     </tr>
 </table>
+
+#### Caching ####
+
+Requiring cachetools python module.
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+    </th>
+    <tr>
+        <td><strong>result_caching_time</strong></td>
+        <td>Number of seconds during which a GET request will return previous result. Always send a new request by default.</td>
+        <td>Optional</td>
+    </tr>
+    <tr>
+        <td><strong>max_nb_results</strong></td>
+        <td>Maximum number of results to store in cache. 100 by default.</td>
+        <td>Optional</td>
+    </tr>
+</table>
+
 
 #### PyxelRest Service Configuration ####
 

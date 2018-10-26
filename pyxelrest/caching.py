@@ -1,69 +1,34 @@
-"""
-Global caching decorator
-- init_disk_cache(filename) => stores all the data in the shelve file <filename>, marshalling is done via pickle
-- init_memory_cache(size,ttl) => stores up to <size> results for <ttl> seconds
-- nothing or no_cache() => no decoration and no caching
-"""
 import logging
 
-global_caching = None
 logger = logging.getLogger(__name__)
+caches = {}
 
 
-def init_disk_cache(filename):
+def create_cache(max_nb_results, ttl):
     """
-    Initialize for a disk cache
-    :param filename: filename for the cache
-    """
-    import shelve
-    global global_caching
-    global_caching = shelve.open(filename)
+    Create a new in-memory cache.
 
-
-def init_memory_cache(size, ttl):
-    """
-    Initialize for a memory lru cache
-    :param size: max number of items
+    :param max_nb_results: Maximum number of results that can be stored.
     :param ttl: max time to live for items in seconds
+    :return The newly created memory cache or None if not created.
     """
-    import cachetools
-    global global_caching
-    global_caching = cachetools.TTLCache(size, ttl)
+    try:
+        import cachetools
+        return cachetools.TTLCache(max_nb_results, ttl)
+    except ImportError:
+        logger.warning('cachetools module is required to initialize a memory cache.')
 
 
-def no_cache():
-    """
-    Deactivate caching
-    """
-    global global_caching
-    global_caching = None
-
-
-def clear_cache():
-    """
-    Clear the cache if initialized
-    """
-    global global_caching
-    if global_caching is not None:
-        global_caching.clear()
-
-
-def caching(f):
-    """
-    Decorator for caching results
-    :param f: the function to decorate
-    :return: the decorated function if caching is activated before
-    """
-    if global_caching is not None:
-        def wrapper(*args, **kwargs):
-            global global_caching
-            # key must be hashable
-            key = f.__name__ + '(' + str(args) + ',' + str(kwargs) + ')'
-            if key in global_caching:
-                logger.debug('Using cache for [function={}]'.format(f.__name__))
-                return global_caching[key]
-            res = f(*args, **kwargs)
-            global_caching[key] = res
-            return res
-        return wrapper
-    return f
+def cache_result(f):
+    def wrapper(*args, **kwargs):
+        # key must be hashable
+        global caches
+        key = f.__name__ + '(' + str(args) + ',' + str(kwargs) + ')'
+        cache = caches[f.__xlfunc__['category']]
+        if key in cache:
+            logger.debug('Using cache for {}'.format(key))
+            return cache[key]
+        res = f(*args, **kwargs)
+        cache[key] = res
+        return res
+    return wrapper
