@@ -553,7 +553,7 @@ from pyxelrest import pyxelrestgenerator
 
 # Generate UDFs for the following import
 services = pyxelrestgenerator.generate_user_defined_functions()
-pyxelrestgenerator.reload_user_defined_functions(services)
+pyxelrestgenerator.load_user_defined_functions(services)
 
 from pyxelrest import user_defined_functions
 
@@ -633,3 +633,7 @@ Due to timestamp limitation, dates after 3000-12-31 and date time after 3001-01-
 ### Python process exited before it was possible to create the interface object ###
 
 You need to check log files to identify the underlying issue.
+
+### pyxelrest.xlam is not available ###
+
+The add-in might be disabled. Check File/Option/addin/Manage: Disabled Items
