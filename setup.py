@@ -145,7 +145,7 @@ setup(name='pyxelrest',
           # Used to manage authentication
           'requests_auth==2.0.0',
           # Used to parse all date-time formats in a easy way
-          'python-dateutil==2.7.3',
+          'python-dateutil==2.7.5',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
           'future==0.16.0',
       ],
