@@ -809,9 +809,16 @@ namespace AutoLoadPyxelRestAddIn
         private void CachingResultTime_TextChanged(object sender, EventArgs e)
         {
             if (((NumericUpDown)sender).Value == 0)
+            {
                 servicePanel.service.Caching.Remove("result_caching_time");
+                servicePanel.service.PythonModules.Remove("cachetools==2.1.0");
+            }
             else
+            {
                 servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
+                if (!servicePanel.service.PythonModules.Contains("cachetools==2.1.0"))
+                    servicePanel.service.PythonModules.Add("cachetools==2.1.0");
+            }
         }
 
         private void CachingMaxNumber_TextChanged(object sender, EventArgs e)
