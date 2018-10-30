@@ -123,12 +123,12 @@ class XlWingsConfig:
 
     def _to_add_in_line(self, line):
         # Ensure that Xlwings will load PyxelRest configuration
-        if '    If SheetExists("xlwings.conf") = True Then\n' == line:
-            return '    If GetConfigFromFile("' + self.xlwings_config_path + '", configKey, configValue) Then\n' \
-                   '        GetConfig = configValue\n' \
-                   '    End If\n' \
+        if '        If SheetExists("xlwings.conf") = True Then\n' == line:
+            return '        If GetConfigFromFile("' + self.xlwings_config_path + '", configKey, configValue) Then\n' \
+                   '            GetConfig = configValue\n' \
+                   '        End If\n' \
                    '\n' \
-                   '    If SheetExists("xlwings.conf") = True Then\n'
+                   '        If SheetExists("xlwings.conf") = True Then\n'
         elif 'ThisWorkbook' in line:
             if 'GetUdfModules' in line:
                 # Keep refering to ThisWorkbook for pyxelrest
