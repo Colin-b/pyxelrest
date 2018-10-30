@@ -67,7 +67,6 @@ if __name__ == '__main__':
 else:
     logger = logging.getLogger(__name__)
 
-# TODO Generate one service per file instead of a full file
 if GENERATE_UDF_ON_IMPORT:
     custom_logging.load_logging_configuration()
     try:
