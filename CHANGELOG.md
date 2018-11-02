@@ -27,6 +27,7 @@ List all changes in various categories:
 - Properly check that logs folder does not exists (warning was always issued).
 - Previous results are now cleared when using asynchronous UDFs with shifted results.
 - Make sure null values are sent in array only if swagger explicitly state that null values are allowed.
+- Handle date and date-time prior or equal to 1970-01-01T01:00:00+00:00
 
 ## 0.68.4 (2018-08-07) ##
 

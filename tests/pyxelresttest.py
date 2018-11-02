@@ -368,6 +368,8 @@ class PyxelRestTest(unittest.TestCase):
                 [datetime.datetime(2014, 3, 5, 0, 0)],
                 [datetime.datetime(9999, 1, 1, 0, 0)],
                 [datetime.datetime(3001, 1, 1, 0, 0)],
+                [datetime.datetime(1970, 1, 1, 0, 0)],
+                [datetime.datetime(1900, 1, 1, 0, 0)],
             ],
             pyxelrestgenerator.usual_parameters_get_date()
         )
@@ -383,6 +385,8 @@ class PyxelRestTest(unittest.TestCase):
                 [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
                 [datetime.datetime(9999, 1, 1, 0, 0, 0, 0, tzinfo=tzutc())],
                 [datetime.datetime(3001, 1, 1, 8, 0, 0, 0, tzinfo=tzutc())],
+                [datetime.datetime(1970, 1, 1, 1, 0, 0, 0, tzinfo=tzutc())],
+                [datetime.datetime(1970, 1, 1, 2, 0, 0, 0, tzinfo=tzutc())],
             ],
             pyxelrestgenerator.usual_parameters_get_date_time()
         )
