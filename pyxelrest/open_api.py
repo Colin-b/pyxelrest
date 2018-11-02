@@ -29,7 +29,6 @@ from pyxelrest import (
     fileadapter,
     definition_deserializer,
     vba,
-    caching,
     SERVICES_CONFIGURATION_FILE_PATH
 )
 from pyxelrest.fast_deserializer import Flattenizer
@@ -164,8 +163,22 @@ class ConfigSection:
         caching_conf = service_config.get('caching', {})
         max_nb_results = self._to_positive_int(caching_conf.get('max_nb_results')) or 100
         result_caching_time = self._to_positive_int(caching_conf.get('result_caching_time'))
-        self.cache = caching.create_cache(max_nb_results, result_caching_time) if result_caching_time else None
-        caching.caches[self.name] = self.cache
+        self.cache = self._create_cache(max_nb_results, result_caching_time) if result_caching_time else None
+
+    @staticmethod
+    def _create_cache(max_nb_results, ttl):
+        """
+        Create a new in-memory cache.
+
+        :param max_nb_results: Maximum number of results that can be stored.
+        :param ttl: max time to live for items in seconds
+        :return The newly created memory cache or None if not created.
+        """
+        try:
+            import cachetools
+            return cachetools.TTLCache(max_nb_results, ttl)
+        except ImportError:
+            logger.warning('cachetools module is required to initialize a memory cache.')
 
     @staticmethod
     def _to_positive_int(value):
@@ -381,6 +394,28 @@ class UDFMethod:
 
     def _create_udf_parameters(self):
         return []
+
+    def get_cached_result(self, request_content):
+        if self.service.config.cache is None:
+            return
+        # Caching is only effective on GET requests
+        if 'get' != self.requests_method:
+            return
+
+        request_id = request_content.unique_id()
+        if request_id in self.service.config.cache:
+            logger.debug('Retrieving cached result for {0}'.format(request_id))
+            return self.service.config.cache[request_id]
+        else:
+            logger.debug('No result yet cached for {0}'.format(request_id))
+
+    def cache_result(self, request_content, result):
+        if self.service.config.cache is None:
+            return
+
+        request_id = request_content.unique_id()
+        logger.debug('Cache result for {0}'.format(request_id))
+        self.service.config.cache[request_id] = result
 
     def update_information_on_parameter_type(self, parameter):
         if parameter.location == 'body':
@@ -1228,18 +1263,25 @@ class RequestContent:
         self.udf_method = udf_method
         self.header = udf_method.initial_header()
         self.header['X-Pxl-Cell'] = excel_caller_address
+        self.header_parameters = {}
         self.payload = {}
         self.files = {}
         self.parameters = {}
         self.path_values = {}
         # Contains parameters that were not provided but may still need to be sent with None value
         self._none_parameters = []
-        # Parameters that should not be sent by interpreted by pyxelrest
+        # Parameters that should not be sent but interpreted by pyxelrest
         self.extra_parameters = {}
 
     def validate(self):
         for udf_parameter in self.udf_method.parameters.values():
             udf_parameter.validate(self)
+
+    def unique_id(self):
+        return 'method={0},payload={1},files={2},parameters={3},path={4},headers={5}'.format(
+            self.udf_method.requests_method, self.payload, self.files, self.parameters, self.path_values,
+            self.header_parameters
+        )
 
     def add_value(self, parameter, value):
         if parameter.location == 'query':
@@ -1332,6 +1374,7 @@ class RequestContent:
     def _add_header_parameter(self, parameter, value):
         if value is not None:
             self.header[parameter.server_param_name] = value
+            self.header_parameters[parameter.server_param_name] = value
 
 
 def load_services(flattenize=True):
@@ -1384,6 +1427,10 @@ def check_for_duplicates(loaded_services):
 
 
 def get_result(udf_method, request_content, excel_application):
+    cached_result = udf_method.get_cached_result(request_content)
+    if cached_result is not None:
+        return shift_result(cached_result, udf_method)
+
     response = None
     try:
         response = session.get(udf_method.service.config.max_retries).request(
@@ -1413,13 +1460,15 @@ def get_result(udf_method, request_content, excel_application):
             get_caller_address(excel_application), udf_method.udf_name, response.request.url)
         )
         if 202 == response.status_code:
-            return shift_result([['Status URL'], [response.headers['location']]], udf_method)
-        if response.headers['content-type'] == 'application/json':
-            return shift_result(json_as_list(response, udf_method), udf_method)
+            result = [['Status URL'], [response.headers['location']]]
+        elif response.headers['content-type'] == 'application/json':
+            result = json_as_list(response, udf_method)
         elif response.headers['content-type'] == 'application/msgpackpandas':
-            return shift_result(msgpackpandas_as_list(response.content), udf_method)
+            result = msgpackpandas_as_list(response.content)
         else:
-            return shift_result(convert_to_return_type(response.text[:255], udf_method), udf_method)
+            result = convert_to_return_type(response.text[:255], udf_method)
+        udf_method.cache_result(request_content, result)
+        return shift_result(result, udf_method)
     except requests.exceptions.ConnectionError:
         logger.exception('{0} Connection [status=error] occurred while calling [function={1}] [url={2}].'.format(
             get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
@@ -1459,6 +1508,10 @@ class DelayWrite(object):
 
 
 def get_result_async(udf_method, request_content, excel_application):
+    cached_result = udf_method.get_cached_result(request_content)
+    if cached_result is not None:
+        return shift_result(cached_result, udf_method)
+
     def get_and_send_result(excel_range, nb_rows, nb_columns):
         try:
             result = get_result(udf_method, request_content, excel_application)

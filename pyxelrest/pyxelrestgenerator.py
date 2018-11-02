@@ -55,11 +55,6 @@ def load_user_defined_functions(services):
         for service in services
         for udf_name, method in service.methods.items()
     }
-    udfs.caches = {
-        service.config.name: service.config.cache
-        for service in services
-        if service.config.cache
-    }
 
 
 if __name__ == '__main__':
