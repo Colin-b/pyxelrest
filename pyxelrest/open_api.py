@@ -78,14 +78,8 @@ def to_vba_valid_name(open_api_name):
     # replace vba restricted keywords
     if open_api_name.lower() in vba.vba_restricted_keywords:
         open_api_name = vba.vba_restricted_keywords[open_api_name.lower()]
-    # replace '-'
-    if "-" in open_api_name:
-        open_api_name = open_api_name.replace("-", "_")
-    if "." in open_api_name:
-        open_api_name = open_api_name.replace(".", "_")
-    if open_api_name.startswith("_"):  # TODO Handle more than one
-        open_api_name = open_api_name[1:]
-    return open_api_name
+    # replace forbidden VBA or Python characters (carets, dots and leading underscores)
+    return open_api_name.replace("-", "_").replace(".", "_").lstrip('_')
 
 
 def return_type_can_be_handled(method_produces):

@@ -143,9 +143,6 @@ class Installer:
         if not sys.platform.startswith('win'):
             raise Exception('Auto Load add-in can only be installed on Microsoft Windows.')
 
-        # TODO Remove once every client will have this version in conf
-        path_to_up_to_date_configuration = path_to_up_to_date_configuration.replace('all_services.ini', 'services.yml')
-
         self.scripts_folder = scripts_folder or os.path.abspath(os.path.dirname(__file__))
 
         if not add_in_folder:
