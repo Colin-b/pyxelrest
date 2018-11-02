@@ -84,6 +84,21 @@ def open_api_definition():
                            },
                            'title': 'Test'
                        },
+                       'DictWithDictAllowingNull': {
+                           'type': 'object',
+                           'properties': {
+                               'inner_dict': {
+                                   'type': 'object',
+                               },
+                               'dict_field1': {
+                                   'type': ['string', 'null'],
+                               },
+                               'dict_field2': {
+                                   'type': ['null', 'string'],
+                               }
+                           },
+                           'title': 'Test'
+                       },
                        'DictWithDictList': {
                            'type': 'object',
                            'properties': {
@@ -426,6 +441,30 @@ def open_api_definition():
                                            'type': 'array',
                                            'items': {
                                                '$ref': "#/definitions/DictWithDict",
+                                           },
+                                           'collectionFormat': 'multi',
+                                       },
+                                   },
+                               ],
+                           },
+                       },
+                       '/list_of_dict_with_dict_allowing_null': {
+                           'post': {
+                               'operationId': 'post_list_of_dict_with_dict_allowing_null',
+                               'responses': {
+                                   200: {
+                                       'description': 'successful operation',
+                                   }
+                               },
+                               'parameters': [
+                                   {
+                                       'name': "payload",
+                                       'required': True,
+                                       'in': "body",
+                                       'schema': {
+                                           'type': 'array',
+                                           'items': {
+                                               '$ref': "#/definitions/DictWithDictAllowingNull",
                                            },
                                            'collectionFormat': 'multi',
                                        },
@@ -3722,6 +3761,11 @@ def post_dict_with_dict_list():
 
 @app.route('/list_of_dict_with_dict', methods=['POST'])
 def post_list_of_dict_with_dict():
+    return jsonify(request.json)
+
+
+@app.route('/list_of_dict_with_dict_allowing_null', methods=['POST'])
+def post_list_of_dict_with_dict_allowing_null():
     return jsonify(request.json)
 
 

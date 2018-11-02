@@ -457,6 +457,15 @@ class UDFParameter:
         self.server_param_name = server_param_name
         self.location = location
         self.required = required
+        self.allow_null = False
+        if isinstance(field_type, list):
+            field_type = list(field_type)  # Copy to avoid propagate changes
+            if 'null' in field_type:
+                field_type.remove('null')
+                self.allow_null = True
+            if len(field_type) != 1:
+                raise Exception('Unable to guess field type amongst {0}'.format(field_type))
+            field_type = field_type[0]
         self.type = field_type
         self.array_dimension = 0
 
@@ -1147,9 +1156,10 @@ class APIUDFParameter(UDFParameter):
         if isinstance(value, list):
             list_value = self._convert_list_to_array(value)
         else:
-            list_value = [
-                self.array_parameter._convert_to_type(value)
-            ]
+            if value is not None or self.allow_null:
+                list_value = [self.array_parameter._convert_to_type(value)]
+            else:
+                list_value = []
         self._check_array(list_value)
         return self._apply_collection_format(list_value)
 
@@ -1157,6 +1167,7 @@ class APIUDFParameter(UDFParameter):
         return [
             self.array_parameter._convert_to_type(list_item) if list_item is not None else None
             for list_item in list_value
+            if list_item is not None or self.allow_null
         ]
 
     def _apply_collection_format(self, list_value):

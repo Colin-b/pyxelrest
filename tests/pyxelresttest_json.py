@@ -3137,7 +3137,6 @@ class PyxelRestJsonTest(unittest.TestCase):
             [
                 ['dict_field1', 'dict_field2', 'inner_dict'],
                 ['', '1', ''],
-                ['', '', ''],
                 ['', '4', ''],
             ]
         )
@@ -3145,6 +3144,40 @@ class PyxelRestJsonTest(unittest.TestCase):
     def test_list_of_dict_with_dict_json_post_with_different_list_length(self):
         from pyxelrest import pyxelrestgenerator
         self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict(
+            dict_field1='000',
+            dict_field2=['1', None, '4'],
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'inner_dict'],
+                ['000', '1', ''],
+                ['', '4', ''],
+            ]
+        )
+
+    def test_list_of_dict_with_dict_allowing_null_json_post_without_any_required(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(),
+            [
+                [''],
+            ]
+        )
+
+    def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(
+            dict_field2=['1', None, '4'],
+        ),
+            [
+                ['dict_field1', 'dict_field2', 'inner_dict'],
+                ['', '1', ''],
+                ['', '', ''],
+                ['', '4', ''],
+            ]
+        )
+
+    def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_length(self):
+        from pyxelrest import pyxelrestgenerator
+        self.assertEqual(pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(
             dict_field1='000',
             dict_field2=['1', None, '4'],
         ),

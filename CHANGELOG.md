@@ -26,6 +26,7 @@ List all changes in various categories:
 - Handle . (dot) in parameter name.
 - Properly check that logs folder does not exists (warning was always issued).
 - Previous results are now cleared when using asynchronous UDFs with shifted results.
+- Make sure null values are sent in array only if swagger explicitly state that null values are allowed.
 
 ## 0.68.4 (2018-08-07) ##
 
