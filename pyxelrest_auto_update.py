@@ -10,9 +10,14 @@ import re
 import logging
 import logging.config
 import logging.handlers
-from pip.commands.list import ListCommand
-from pip.commands.install import InstallCommand
-from pip.utils import get_installed_distributions
+try:
+    from pip.commands.list import ListCommand
+    from pip.commands.install import InstallCommand
+    from pip.utils import get_installed_distributions
+except ModuleNotFoundError:  # Occurs since pip > 9
+    from pip._internal.commands.list import ListCommand
+    from pip._internal.commands.install import InstallCommand
+    from pip._internal.utils.misc import get_installed_distributions
 
 try:
     # Python 3

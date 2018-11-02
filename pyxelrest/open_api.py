@@ -2,7 +2,6 @@ from collections import OrderedDict
 import datetime
 import logging
 import os
-from pip.commands.install import InstallCommand
 import re
 import requests
 import requests.exceptions
