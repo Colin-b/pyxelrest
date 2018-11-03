@@ -20,6 +20,8 @@ class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
                 [datetime.datetime(2014, 3, 5, 0, 0)],
                 [datetime.datetime(9999, 1, 1, 0, 0)],
                 [datetime.datetime(3001, 1, 1, 0, 0)],
+                [datetime.datetime(1970, 1, 1, 0, 0)],
+                [datetime.datetime(1900, 1, 1, 0, 0)],
             ],
             pyxelrestgenerator.usual_parameters_get_date()
         )

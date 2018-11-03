@@ -15,7 +15,7 @@ class PyxelRestOpenAPIDefinitionNotAvailableTest(unittest.TestCase):
 
     def test_service_can_be_loaded_without_hitting_timeout(self):
         nb_seconds = timeit.timeit('from pyxelrest import pyxelrestgenerator', number=1) * 1e6
-        self.assertTrue(nb_seconds < 8, 'Time to load pyxelrest should be around timeout.')
+        self.assertLess(nb_seconds, 8, 'Time to load pyxelrest should be around timeout.')
 
 
 if __name__ == '__main__':
