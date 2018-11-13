@@ -6,7 +6,7 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.69.0 (2018-10-XX) ##
+## 0.69.0 (2018-11-XX) ##
 
 ## Enhancements ##
 
@@ -15,8 +15,9 @@ List all changes in various categories:
 - Allow to specify header name and header value for the non-standard OAuth2 services.
 - Logs are now identifying the Book, Sheet and Cell performing the call.
 - Document value 303 in wait_for_status pyxelrest_get_url parameter.
-- Rely on latest official xlwings release (0.13.0).
+- Rely on latest official xlwings release (0.14.1).
 - Allow to cache GET requests results.
+- Support all authentication mechanism.
 
 ### Bug fixes ###
 

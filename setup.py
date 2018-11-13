@@ -126,7 +126,7 @@ setup(name='pyxelrest',
           # Used to generate a jwt token
           'pyjwt==1.6.4',
           # used for testing cache of results
-          'cachetools==2.1.0',
+          'cachetools==3.0.0',
           # Used to create test services
           'flask==1.0.2',
       ],
@@ -134,20 +134,20 @@ setup(name='pyxelrest',
           # Used to generate UDFs python file from a template
           'jinja2==2.10',
           # Used to communicate with services
-          'requests==2.20.0',
+          'requests==2.20.1',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==224',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.13.0',
+          'xlwings==0.14.1',
           # Used to parse configuration files
           'pyyaml==3.13',
           'pyaml==17.12.1',
           # Used to manage authentication
-          'requests_auth==2.0.0',
+          'requests_auth==3.0.0',
           # Used to parse all date-time formats in a easy way
           'python-dateutil==2.7.5',
           # Used to maintain compatibility with Python 2.7 and Python 3.X
-          'future==0.16.0',
+          'future==0.17.1',
       ],
       extra_requires={
           # Support for `application/msgpackpandas`
@@ -166,7 +166,7 @@ setup(name='pyxelrest',
           ],
           # Support for in-memory caching
           'cachetools': [
-              'cachetools==2.1.0',
+              'cachetools==3.0.0',
           ],
       },
       scripts=[

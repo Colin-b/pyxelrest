@@ -277,7 +277,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><strong>definition_retrieval_auths</strong></td>
         <td>List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default.</td>
         <td>Optional</td>
-        <td>oauth2, api_key, basic, ntlm</td>
+        <td>oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm</td>
     </tr>
     <tr>
         <td><strong>excluded_tags</strong></td>
@@ -353,49 +353,9 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
 
 #### OAuth 2 ####
 
-If response_type is not provided in authorization_url, token is expected to be received in "token" field.
+Depending on the flow, every parameter described in [requests-auth documentation](https://github.com/Colin-b/requests_auth/blob/master/README.md) can be provided.
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-    </th>
-    <tr>
-        <td><strong>port</strong></td>
-        <td>Port on which the authentication response is supposed to be received. Default value is 5000.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>timeout</strong></td>
-        <td>Maximum number of seconds to wait for the authentication response to be received. Default value is 1 minute.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>success_display_time</strong></td>
-        <td>Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel. Default value is 1 millisecond.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>failure_display_time</strong></td>
-        <td>Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel. Default value is 5 seconds.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>header_name</strong></td>
-        <td>Name of the header field used to send token. Default value is Authorization.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>header_value</strong></td>
-        <td>Format used to send the token value. "{token}" must be present as it will be replaced by the actual token. Token will be sent as "Bearer {token}" by default.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>XXXX</strong></td>
-        <td>Where XXXX is the name of the parameter in the authorization URL. You can find more details on https://tools.ietf.org/html/rfc6749#section-4.2.1</td>
-        <td>Optional</td>
-    </tr>
-</table>
+Note that token_url and authorization_url are extracted from OpenAPI documentation, thus they do not need to be provided.
 
 #### Basic ####
 

@@ -671,6 +671,30 @@ class PyxelRestUDFMethod(UDFMethod):
                 value = self._convert_to_str(value)
             request_content.add_value(self, value)
 
+    class OAuth2TokenUrlParameter(UDFParameter):
+        def __init__(self):
+            UDFParameter.__init__(
+                self,
+                'oauth2_token_url',
+                'oauth2_token_url',
+                '',
+                False,
+                'string'
+            )
+            self.description = 'OAuth2 token URL.'
+
+        def _convert_to_str(self, value):
+            if isinstance(value, datetime.date):
+                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+            if isinstance(value, int) or isinstance(value, float):
+                value = str(value)
+            return value
+
+        def validate_optional(self, value, request_content):
+            if value is not None:
+                value = self._convert_to_str(value)
+            request_content.add_value(self, value)
+
     class ApiKeyNameParameter(UDFParameter):
         def __init__(self):
             UDFParameter.__init__(
@@ -708,6 +732,7 @@ class PyxelRestUDFMethod(UDFMethod):
             self.CheckIntervalParameter(),
             self.AuthenticationParameter(),
             self.OAuth2AuthorizationUrlParameter(),
+            self.OAuth2TokenUrlParameter(),
             self.ApiKeyNameParameter(),
         ]
 

@@ -811,13 +811,13 @@ namespace AutoLoadPyxelRestAddIn
             if (((NumericUpDown)sender).Value == 0)
             {
                 servicePanel.service.Caching.Remove("result_caching_time");
-                servicePanel.service.PythonModules.Remove("cachetools==2.1.0");
+                servicePanel.service.PythonModules.Remove("cachetools==3.0.0");
             }
             else
             {
                 servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
-                if (!servicePanel.service.PythonModules.Contains("cachetools==2.1.0"))
-                    servicePanel.service.PythonModules.Add("cachetools==2.1.0");
+                if (!servicePanel.service.PythonModules.Contains("cachetools==3.0.0"))
+                    servicePanel.service.PythonModules.Add("cachetools==3.0.0");
             }
         }
 

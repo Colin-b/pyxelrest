@@ -1,6 +1,6 @@
 import logging
 import os
-from requests_auth import NTLM, OAuth2, HeaderApiKey, QueryApiKey, Basic, Auths
+from requests_auth import NTLM, OAuth2Implicit, OAuth2AuthorizationCode, OAuth2ClientCredentials, OAuth2ResourceOwnerPasswordCredentials, HeaderApiKey, QueryApiKey, Basic, Auths, OAuth2
 from requests_auth.oauth2_tokens import JsonTokenFileCache
 
 logger = logging.getLogger(__name__)
@@ -11,12 +11,30 @@ OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
 
 def _create_authentication(service_config, open_api_security_definition, request_content):
     if 'oauth2' == open_api_security_definition.get('type'):
+        flow = open_api_security_definition.get('flow')
         oauth2_config = dict(service_config.oauth2)
-        if open_api_security_definition.get('flow') == 'implicit':
-            return OAuth2(authorization_url=open_api_security_definition.get('authorizationUrl', request_content.extra_parameters.get('oauth2_auth_url')),
-                          **oauth2_config)
-        # TODO Handle all OAuth2 flows
-        logger.warning('OAuth2 flow is not supported: {0}'.format(open_api_security_definition))
+        if flow == 'implicit':
+            return OAuth2Implicit(
+                authorization_url=open_api_security_definition.get('authorizationUrl', request_content.extra_parameters.get('oauth2_auth_url')),
+                **oauth2_config
+            )
+        elif flow == 'accessCode':
+            return OAuth2AuthorizationCode(
+                authorization_url=open_api_security_definition.get('authorizationUrl', request_content.extra_parameters.get('oauth2_auth_url')),
+                token_url=open_api_security_definition.get('tokenUrl', request_content.extra_parameters.get('oauth2_token_url')),
+                **oauth2_config
+            )
+        elif flow == 'password':
+            return OAuth2ResourceOwnerPasswordCredentials(
+                token_url=open_api_security_definition.get('tokenUrl', request_content.extra_parameters.get('oauth2_token_url')),
+                **oauth2_config
+            )
+        elif flow == 'application':
+            return OAuth2ClientCredentials(
+                token_url=open_api_security_definition.get('tokenUrl', request_content.extra_parameters.get('oauth2_token_url')),
+                **oauth2_config
+            )
+        logger.warning('Unexpected OAuth2 flow: {0}'.format(open_api_security_definition))
     elif 'apiKey' == open_api_security_definition.get('type'):
         if open_api_security_definition['in'] == 'query':
             return QueryApiKey(service_config.api_key, open_api_security_definition.get('name', request_content.extra_parameters.get('api_key_name')))
@@ -28,9 +46,18 @@ def _create_authentication(service_config, open_api_security_definition, request
 
 
 def _create_authentication_from_config(service_config, authentication_mode, authentication):
-    if 'oauth2' == authentication_mode:
+    if 'oauth2_implicit' == authentication_mode:
         oauth2_config = dict(service_config.oauth2)
-        return OAuth2(authorization_url=authentication.get('oauth2_auth_url'), **oauth2_config)
+        return OAuth2Implicit(authorization_url=authentication.get('oauth2_auth_url'), **oauth2_config)
+    elif 'oauth2_access_code' == authentication_mode:
+        oauth2_config = dict(service_config.oauth2)
+        return OAuth2AuthorizationCode(authorization_url=authentication.get('oauth2_auth_url'), token_url=authentication.get('oauth2_token_url'), **oauth2_config)
+    elif 'oauth2_password' == authentication_mode:
+        oauth2_config = dict(service_config.oauth2)
+        return OAuth2ResourceOwnerPasswordCredentials(token_url=authentication.get('oauth2_token_url'), **oauth2_config)
+    elif 'oauth2_application' == authentication_mode:
+        oauth2_config = dict(service_config.oauth2)
+        return OAuth2ClientCredentials(token_url=authentication.get('oauth2_token_url'), **oauth2_config)
     elif 'api_key' == authentication_mode:
         if authentication.get('in') == 'query':
             return QueryApiKey(service_config.api_key, authentication.get('name'))
