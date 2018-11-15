@@ -314,15 +314,15 @@ class PyxelRestConfigSection(ConfigSection):
 
 
 class PyxelRestService:
-    def __init__(self, service_name, service_config, flattenize):
+    def __init__(self, service_name, service_config, flatten_results):
         """
         Load service information from configuration.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param service_config: Dictionary containing service details.
-        :param flattenize: Flatten results so that it can be consumed by Microsoft Excel.
+        :param flatten_results: Flatten results so that it can be consumed by Microsoft Excel.
         """
-        self.flattenize = flattenize
+        self.flatten_results = flatten_results
         self.methods = {}
         self.uri = ''
         self.config = PyxelRestConfigSection(service_name, service_config)
@@ -754,15 +754,15 @@ class PyxelRestUDFMethod(UDFMethod):
 
 
 class OpenAPI:
-    def __init__(self, service_name, service_config, flattenize):
+    def __init__(self, service_name, service_config, flatten_results):
         """
         Load service information from configuration and OpenAPI definition.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param service_config: Dictionary containing service details.
-        :param flattenize: Flatten results so that it can be consumed by Microsoft Excel.
+        :param flatten_results: Flatten results so that it can be consumed by Microsoft Excel.
         """
-        self.flattenize = flattenize
+        self.flatten_results = flatten_results
         self.methods = {}
         self.config = ServiceConfigSection(service_name, service_config)
         self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
@@ -1400,7 +1400,7 @@ class RequestContent:
             self.header_parameters[parameter.server_param_name] = value
 
 
-def load_services(flattenize=True):
+def load_services(flatten_results=True):
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within configuration file
@@ -1415,10 +1415,10 @@ def load_services(flattenize=True):
     loaded_services = []
     for service_name, service_config in config.items():
         if 'pyxelrest' == service_name:
-            pyxelrest_service = PyxelRestService(service_name, service_config, flattenize)
+            pyxelrest_service = PyxelRestService(service_name, service_config, flatten_results)
             loaded_services.append(pyxelrest_service)
         else:
-            service = load_service(service_name, service_config, flattenize)
+            service = load_service(service_name, service_config, flatten_results)
             if service:
                 loaded_services.append(service)
 
@@ -1426,10 +1426,10 @@ def load_services(flattenize=True):
     return loaded_services
 
 
-def load_service(service_name, service_config, flattenize):
+def load_service(service_name, service_config, flatten_results):
     logger.debug('Loading "{0}" service...'.format(service_name))
     try:
-        service = OpenAPI(service_name, service_config, flattenize)
+        service = OpenAPI(service_name, service_config, flatten_results)
         logger.info('"{0}" service will be available.'.format(service_name))
         logger.debug(str(service))
         return service
@@ -1607,7 +1607,7 @@ def json_as_list(response, udf_method):
 
     logger.debug('Converting JSON string to corresponding python structure...')
     json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
-    if udf_method.service.flattenize:
+    if udf_method.service.flatten_results:
         all_definitions = udf_method.service.open_api_definitions
         return Flattenizer(udf_method.responses, response.status_code, all_definitions).to_list(json_data)
     else:

@@ -34,13 +34,13 @@ def user_defined_functions(loaded_services):
     )
 
 
-def generate_user_defined_functions(output='user_defined_functions.py', flattenize=True):
+def generate_user_defined_functions(output='user_defined_functions.py', flatten_results=True):
     """
     Load services and create user_defined_functions.py python file containing generated xlwings User Defined Functions.
-    :param flattenize: Set to False if you want the JSON dictionary as result of your UDF call.
+    :param flatten_results: Set to False if you want the JSON dictionary as result of your UDF call.
     :return: List of loaded services
     """
-    services = open_api.load_services(flattenize)
+    services = open_api.load_services(flatten_results)
     logging.debug('Generating user defined functions.')
     with open(os.path.join(os.path.dirname(__file__), output), 'w', encoding='utf-8') \
             as generated_file:

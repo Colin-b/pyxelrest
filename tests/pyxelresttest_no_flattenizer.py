@@ -13,7 +13,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
         import pyxelrest
         pyxelrest.GENERATE_UDF_ON_IMPORT = False
         from pyxelrest import pyxelrestgenerator
-        services = pyxelrestgenerator.generate_user_defined_functions(flattenize=False)
+        services = pyxelrestgenerator.generate_user_defined_functions(flatten_results=False)
         pyxelrestgenerator.load_user_defined_functions(services)
 
     @classmethod
