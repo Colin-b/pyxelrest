@@ -11,8 +11,8 @@ from distutils import sysconfig
 logger = logging.getLogger(__name__)
 
 
-def log_uncaught_exception(excType, excValue, traceback, logger=logging):
-    logger.error("Logging an uncaught exception", exc_info=(excType, excValue, traceback))
+def log_uncaught_exception(exec_type, exex_value, traceback, logger=logging):
+    logger.error("Logging an uncaught exception", exc_info=(exec_type, exex_value, traceback))
 
 
 sys.excepthook = log_uncaught_exception

@@ -154,7 +154,7 @@ class Flattenizer:
         for level in self.__header_per_level.keys():
             for row in self.__all_rows:
                 if level not in row:
-                    row[level] = ['' for header_value in self.__header_per_level[level]]
+                    row[level] = [''] * len(self.__header_per_level[level])
         # Flatten Header
         for level in self.__header_per_level.keys():
             if level in self.__indexes_per_level:

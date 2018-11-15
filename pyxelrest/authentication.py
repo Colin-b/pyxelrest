@@ -1,6 +1,17 @@
 import logging
 import os
-from requests_auth import NTLM, OAuth2Implicit, OAuth2AuthorizationCode, OAuth2ClientCredentials, OAuth2ResourceOwnerPasswordCredentials, HeaderApiKey, QueryApiKey, Basic, Auths, OAuth2
+from requests_auth import (
+    NTLM,
+    OAuth2Implicit,
+    OAuth2AuthorizationCode,
+    OAuth2ClientCredentials,
+    OAuth2ResourceOwnerPasswordCredentials,
+    HeaderApiKey,
+    QueryApiKey,
+    Basic,
+    Auths,
+    OAuth2,
+)
 from requests_auth.oauth2_tokens import JsonTokenFileCache
 
 logger = logging.getLogger(__name__)

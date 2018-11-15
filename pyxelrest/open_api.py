@@ -515,7 +515,8 @@ class PyxelRestUDFMethod(UDFMethod):
                 False,
                 'integer'
             )
-            self.description = 'HTTP status code to wait for before returning response. 303 means that result is now provided in another URL.'
+            self.description = 'HTTP status code to wait for before returning response. ' \
+                               '303 means that result is now provided in another URL.'
 
         def _convert_to_int(self, value):
             if not isinstance(value, int):
@@ -595,7 +596,8 @@ class PyxelRestUDFMethod(UDFMethod):
             self.received_value = value  # Save value as is to serialize it properly afterwards
 
         def validate(self, request_content):
-            request_content.payload = list_as_json(self.received_value, request_content.extra_parameters.get('parse_body_as'))
+            request_content.payload = list_as_json(self.received_value,
+                                                   request_content.extra_parameters.get('parse_body_as'))
 
     class ExtraHeadersParameter(UDFParameter):
         def __init__(self):
@@ -898,7 +900,8 @@ class OpenAPIUDFMethod(UDFMethod):
         # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
         self.help_url = self.extract_url(open_api_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
-        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type), self.open_api_method['operationId'])
+        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type),
+                                         self.open_api_method['operationId'])
         self.responses = open_api_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
@@ -1091,18 +1094,26 @@ class APIUDFParameter(UDFParameter):
         if self.maximum is not None:
             if self.exclusive_maximum:
                 if value >= self.maximum:
-                    raise Exception('{0} value "{1}" must be strictly inferior to {2}.'.format(self.name, value, self.maximum))
+                    raise Exception('{0} value "{1}" must be strictly inferior to {2}.'.format(
+                        self.name, value, self.maximum
+                    ))
             else:
                 if value > self.maximum:
-                    raise Exception('{0} value "{1}" must be inferior or equals to {2}.'.format(self.name, value, self.maximum))
+                    raise Exception('{0} value "{1}" must be inferior or equals to {2}.'.format(
+                        self.name, value, self.maximum
+                    ))
 
         if self.minimum is not None:
             if self.exclusive_minimum:
                 if value <= self.minimum:
-                    raise Exception('{0} value "{1}" must be strictly superior to {2}.'.format(self.name, value, self.minimum))
+                    raise Exception('{0} value "{1}" must be strictly superior to {2}.'.format(
+                        self.name, value, self.minimum
+                    ))
             else:
                 if value < self.minimum:
-                    raise Exception('{0} value "{1}" must be superior or equals to {2}.'.format(self.name, value, self.minimum))
+                    raise Exception('{0} value "{1}" must be superior or equals to {2}.'.format(
+                        self.name, value, self.minimum
+                    ))
 
         if self.multiple_of and (value % self.multiple_of) == 0:
             raise Exception('{0} value "{1}" must be a multiple of {2}.'.format(self.name, value, self.multiple_of))
@@ -1121,7 +1132,9 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_str(self, value):
         if isinstance(value, datetime.date):
-            raise Exception('{0} value "{1}" ({2} type) must be formatted as text.'.format(self.name, value, type(value)))
+            raise Exception('{0} value "{1}" ({2} type) must be formatted as text.'.format(
+                self.name, value, type(value)
+            ))
         if isinstance(value, int):
             value = str(value)
         if isinstance(value, float):
@@ -1132,14 +1145,20 @@ class APIUDFParameter(UDFParameter):
                 value = str(value)
         self._check_choices(value)
         if self.max_length is not None and len(value) > self.max_length:
-            raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(self.name, value, self.max_length))
+            raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(
+                self.name, value, self.max_length
+            ))
         if self.min_length is not None and len(value) < self.min_length:
-            raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(self.name, value, self.min_length))
+            raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(
+                self.name, value, self.min_length
+            ))
         return value
 
     def _check_choices(self, value):
         if self.choices and value not in self.choices:
-            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join([str(choice) for choice in self.choices])))
+            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join([
+                str(choice) for choice in self.choices
+            ])))
 
     def _convert_to_bool(self, value):
         if not isinstance(value, bool):
@@ -1403,7 +1422,8 @@ class RequestContent:
 def load_services(flatten_results=True):
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
-    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within configuration file
+    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
+    configuration file
     """
     if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
         raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
@@ -1475,7 +1495,9 @@ def get_result(udf_method, request_content, excel_application):
         if wait_for_status:
             if not response.history or (response.history[0].status_code != wait_for_status):
                 check_interval = request_content.extra_parameters['check_interval']
-                logger.info('Waiting for {0} status. Sending a new request in {1} seconds.'.format(wait_for_status, check_interval))
+                logger.info('Waiting for {0} status. Sending a new request in {1} seconds.'.format(
+                    wait_for_status, check_interval
+                ))
                 time.sleep(check_interval)
                 return get_result(udf_method, request_content, excel_application)
 
@@ -1496,11 +1518,14 @@ def get_result(udf_method, request_content, excel_application):
         logger.exception('{0} Connection [status=error] occurred while calling [function={1}] [url={2}].'.format(
             get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
         )
-        return shift_result(convert_to_return_type('Cannot connect to service. Please retry once connection is re-established.', udf_method), udf_method)
+        return shift_result(convert_to_return_type('Cannot connect to service. '
+                                                   'Please retry once connection is re-established.', udf_method),
+                            udf_method)
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception('{0} [status=Error] occurred while handling [function={1}] [url={2}] response: [response={3}].'.format(
+            logger.exception('{0} [status=Error] occurred while handling '
+                             '[function={1}] [url={2}] response: [response={3}].'.format(
                 get_caller_address(excel_application), udf_method.udf_name, response.request.url, response.text)
             )
         else:
@@ -1597,7 +1622,8 @@ def json_as_list(response, udf_method):
         definition_deserializer.all_definitions = {}
         if support_ujson():
             response_text = response.text
-            logger.debug('Converting JSON string to corresponding python structure using ujson (relying on definitions)...')
+            logger.debug('Converting JSON string to corresponding python structure using ujson '
+                         '(relying on definitions)...')
             json_data = ujson.loads(response_text) if response_text != '' else response_text
         else:
             logger.debug('Converting JSON string to corresponding python structure (relying on definitions)...')
@@ -1648,19 +1674,19 @@ def list_as_json(lists, parse_as):
 
 def shift_result(result, udf_method):
     # First result cell is stuck to "computing..." in such case
-    if udf_method.is_asynchronous and not udf_method.service.config.shift_result:
-        # If result is a single cell, force the shift to make sure client knows the computation is over
-        if result and len(result) == 1:
-            if isinstance(result[0], list) and len(result[0]) == 1:
-                result[0].insert(0, 'Formula')
-            elif isinstance(result, list):
-                result = [['Formula', value] for value in result]
+    # If result is a single cell, force the shift to make sure client knows the computation is over
+    if udf_method.is_asynchronous \
+            and not udf_method.service.config.shift_result\
+            and result and len(result) == 1:
+        if isinstance(result[0], list) and len(result[0]) == 1:
+            result[0].insert(0, 'Formula')
+        elif isinstance(result, list):
+            result = [['Formula', value] for value in result]
 
-    if udf_method.service.config.shift_result and udf_method.auto_expand_result:
-        if result:
-            if isinstance(result[0], list):
-                for row in result:
-                    row.insert(0, '')
-            elif isinstance(result, list):
-                result = [['', value] for value in result]
+    if udf_method.service.config.shift_result and udf_method.auto_expand_result and result:
+        if isinstance(result[0], list):
+            for row in result:
+                row.insert(0, '')
+        elif isinstance(result, list):
+            result = [['', value] for value in result]
     return result
