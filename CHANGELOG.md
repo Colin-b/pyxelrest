@@ -31,6 +31,7 @@ List all changes in various categories:
 - Handle date and date-time prior or equal to 1970-01-01T01:00:00+00:00
 - Support for pip > 9 (shipped with recent Python versions).
 - Handle more than one leading underscore in field name.
+- Send date as ISO Format instead of a datetime.
 
 ## 0.68.4 (2018-08-07) ##
 

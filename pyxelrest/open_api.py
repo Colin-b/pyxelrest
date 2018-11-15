@@ -1104,16 +1104,15 @@ class APIUDFParameter(UDFParameter):
                 if value < self.minimum:
                     raise Exception('{0} value "{1}" must be superior or equals to {2}.'.format(self.name, value, self.minimum))
 
-        if self.multiple_of:
-            if (value % self.multiple_of) == 0:
-                raise Exception('{0} value "{1}" must be a multiple of {2}.'.format(self.name, value, self.multiple_of))
+        if self.multiple_of and (value % self.multiple_of) == 0:
+            raise Exception('{0} value "{1}" must be a multiple of {2}.'.format(self.name, value, self.multiple_of))
 
         self._check_choices(value)
 
     def _convert_to_date(self, value):
         if not isinstance(value, datetime.date):
             raise Exception('{0} value "{1}" ({2} type) must be a date.'.format(self.name, value, type(value)))
-        return value
+        return value.isoformat()
 
     def _convert_to_date_time(self, value):
         if not isinstance(value, datetime.datetime):
@@ -1132,12 +1131,10 @@ class APIUDFParameter(UDFParameter):
             else:
                 value = str(value)
         self._check_choices(value)
-        if self.max_length is not None:
-            if len(value) > self.max_length:
-                raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(self.name, value, self.max_length))
-        if self.min_length is not None:
-            if len(value) < self.min_length:
-                raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(self.name, value, self.min_length))
+        if self.max_length is not None and len(value) > self.max_length:
+            raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(self.name, value, self.max_length))
+        if self.min_length is not None and len(value) < self.min_length:
+            raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(self.name, value, self.min_length))
         return value
 
     def _check_choices(self, value):
@@ -1202,17 +1199,14 @@ class APIUDFParameter(UDFParameter):
         raise Exception('Collection format {0} is invalid.'.format(self.collection_format))
 
     def _check_array(self, value):
-        if self.unique_items:
-            if len(set(value)) != len(value):
-                raise Exception('{0} contains duplicated items.'.format(self.name))
+        if self.unique_items and len(set(value)) != len(value):
+            raise Exception('{0} contains duplicated items.'.format(self.name))
 
-        if self.max_items is not None:
-            if len(value) > self.max_items:
-                raise Exception('{0} cannot contains more than {1} items.'.format(self.name, self.max_items))
+        if self.max_items is not None and len(value) > self.max_items:
+            raise Exception('{0} cannot contains more than {1} items.'.format(self.name, self.max_items))
 
-        if self.min_items is not None:
-            if len(value) < self.min_items:
-                raise Exception('{0} cannot contains less than {1} items.'.format(self.name, self.min_items))
+        if self.min_items is not None and len(value) < self.min_items:
+            raise Exception('{0} cannot contains less than {1} items.'.format(self.name, self.min_items))
 
     def _get_convert_method(self):
         if self.type == 'integer':
