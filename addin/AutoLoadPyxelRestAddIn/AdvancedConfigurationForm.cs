@@ -527,19 +527,6 @@ namespace AutoLoadPyxelRestAddIn
                 var tab = new TabPage("OAuth2");
                 var layout = new TableLayoutPanel { AutoSize = true };
 
-                #region Port
-                {
-                    layout.Controls.Add(new Label { Width = 150, Text = "Port", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Local port on which the authentication response is supposed to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var port = new NumericUpDown { Width = 380, Maximum = 100000, Dock = DockStyle.Fill, Value = servicePanel.service.OAuth2.ContainsKey("port") ? (decimal)servicePanel.service.OAuth2["port"] : 5000 };
-                    tooltip.SetToolTip(port, "Use port 5000 by default.");
-                    port.TextChanged += Oauth2Port_TextChanged;
-                    layout.Controls.Add(port, 1, 1);
-                }
-                #endregion
-
                 #region Timeout
                 {
                     layout.Controls.Add(new Label { Width = 150, Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
@@ -552,33 +539,7 @@ namespace AutoLoadPyxelRestAddIn
                     layout.Controls.Add(timeout, 1, 2);
                 }
                 #endregion
-
-                #region Success display time
-                {
-                    layout.Controls.Add(new Label { Width = 150, Text = "Success display time", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Amount of milliseconds to wait before closing the authentication response page on success and returning back to Microsoft Excel", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var successDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OAuth2.ContainsKey("success_display_time") ? (decimal)servicePanel.service.OAuth2["success_display_time"] : 1 };
-                    tooltip.SetToolTip(successDisplayTime, "Wait for 1 millisecond by default.");
-                    successDisplayTime.TextChanged += Oauth2SuccessDisplayTime_TextChanged;
-                    layout.Controls.Add(successDisplayTime, 1, 3);
-                }
-                #endregion
-
-                #region Failure display time
-                {
-                    layout.Controls.Add(new Label { Width = 150, Text = "Failure display time", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Amount of milliseconds to wait before closing the authentication response page on failure and returning back to Microsoft Excel", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var failureDisplayTime = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OAuth2.ContainsKey("failure_display_time") ? (decimal)servicePanel.service.OAuth2["failure_display_time"] : 5000 };
-                    tooltip.SetToolTip(failureDisplayTime, "Wait for 5 seconds (5000 millisecond) by default.");
-                    failureDisplayTime.TextChanged += Oauth2FailureDisplayTime_TextChanged;
-                    layout.Controls.Add(failureDisplayTime, 1, 4);
-                }
-                #endregion
-
+                
                 #region Header name
                 {
                     layout.Controls.Add(new Label { Width = 150, Text = "Header name", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
@@ -859,30 +820,6 @@ namespace AutoLoadPyxelRestAddIn
                 servicePanel.service.OAuth2.Remove("header_name");
             else
                 servicePanel.service.OAuth2["header_name"] = ((TextBox)sender).Text;
-        }
-
-        private void Oauth2FailureDisplayTime_TextChanged(object sender, EventArgs e)
-        {
-            if (((NumericUpDown)sender).Value == 0)
-                servicePanel.service.OAuth2.Remove("failure_display_time");
-            else
-                servicePanel.service.OAuth2["failure_display_time"] = ((NumericUpDown)sender).Value;
-        }
-
-        private void Oauth2SuccessDisplayTime_TextChanged(object sender, EventArgs e)
-        {
-            if (((NumericUpDown)sender).Value == 0)
-                servicePanel.service.OAuth2.Remove("success_display_time");
-            else
-                servicePanel.service.OAuth2["success_display_time"] = ((NumericUpDown)sender).Value;
-        }
-
-        private void Oauth2Port_TextChanged(object sender, EventArgs e)
-        {
-            if (((NumericUpDown)sender).Value == 0)
-                servicePanel.service.OAuth2.Remove("port");
-            else
-                servicePanel.service.OAuth2["port"] = ((NumericUpDown)sender).Value;
         }
 
         private void Oauth2Timeout_TextChanged(object sender, EventArgs e)

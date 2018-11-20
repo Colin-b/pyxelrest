@@ -138,10 +138,10 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==224',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.14.1',
+          'xlwings==0.15.0',
           # Used to parse configuration files
           'pyyaml==3.13',
-          'pyaml==17.12.1',
+          'pyaml==18.11.0',
           # Used to manage authentication
           'requests_auth==3.0.0',
           # Used to parse all date-time formats in a easy way

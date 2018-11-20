@@ -186,7 +186,7 @@ class PyxelRestTest(unittest.TestCase):
         self.assertRegexpMatches(headers[1][session_header_index], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d')
 
         user_agent_index = headers[0].index('User-Agent')
-        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.69.0.dev2')
+        self.assertEqual(headers[1][user_agent_index], 'PyxelRest v0.69.0.dev3')
 
         cell_header_index = headers[0].index('X-Pxl-Cell')
         self.assertEqual(headers[1][cell_header_index], 'Python')

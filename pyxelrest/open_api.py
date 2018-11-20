@@ -140,14 +140,6 @@ class ConfigSection:
         }
         self.proxies = service_config.get('proxies', {})
         self.oauth2 = service_config.get('oauth2', {})
-        if 'port' in self.oauth2:
-            self.oauth2['redirect_uri_port'] = self.oauth2.pop('port')
-        if 'timeout' in self.oauth2:
-            self.oauth2['token_reception_timeout'] = self.oauth2.pop('timeout')
-        if 'success_display_time' in self.oauth2:
-            self.oauth2['token_reception_success_display_time'] = self.oauth2.pop('success_display_time')
-        if 'failure_display_time' in self.oauth2:
-            self.oauth2['token_reception_failure_display_time'] = self.oauth2.pop('failure_display_time')
         self.basic = service_config.get('basic', {})
         self.api_key = service_config.get('api_key')
         if self.api_key:
@@ -1537,61 +1529,6 @@ def get_result(udf_method, request_content, excel_application):
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
             response.close()
-
-
-class DelayWrite(object):
-    def __init__(self, rng, options, value, skip):
-        self.range = rng
-        self.options = options
-        self.value = value
-        self.skip = skip
-
-    def __call__(self, *args, **kwargs):
-        xlwings.conversion.write(
-            self.value,
-            self.range,
-            xlwings.conversion.Options(self.options)
-            .override(_skip_tl_cells=self.skip)
-        )
-
-
-def get_result_async(udf_method, request_content, excel_application):
-    cached_result = udf_method.get_cached_result(request_content)
-    if cached_result is not None:
-        return shift_result(cached_result, udf_method)
-
-    def get_and_send_result(excel_range, nb_rows, nb_columns):
-        try:
-            result = get_result(udf_method, request_content, excel_application)
-            xlwings.server.add_idle_task(DelayWrite(excel_range, {'expand': 'table'}, result, (nb_rows, nb_columns)))
-        except:
-            logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
-                get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
-            )
-    try:
-        excel_caller = excel_application.Caller if excel_application else None
-        if not hasattr(excel_caller, 'Rows'):
-            logger.error('[status=Error] Asynchronous UDF called from VBA [function={0}] [url={1}].'.format(
-                udf_method.udf_name, udf_method.uri)
-            )
-            return convert_to_return_type('Asynchronous UDF called from VBA.', udf_method)
-        excel_range = xlwings.Range(impl=xlwings.xlplatform.Range(xl=excel_caller))
-        # Ensure that previous results are removed if shifted
-        if udf_method.service.config.shift_result:
-            excel_range_to_clear = xlwings.Range((excel_range.row, excel_range.column + 1))
-            nb_rows_to_clear = excel_range_to_clear.expand().shape[0] - 1
-        else:
-            nb_rows_to_clear = 0
-        threading.Thread(
-            target=get_and_send_result,
-            args=(excel_range, excel_caller.Rows.Count, excel_caller.Columns.Count)
-        ).start()
-        return shift_result(['Processing request...'] + [''] * nb_rows_to_clear, udf_method)
-    except Exception as error:
-        logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
-            get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
-        )
-        return convert_to_return_type(describe_error(None, error), udf_method)
 
 
 def get_caller_address(excel_application):

@@ -26,7 +26,7 @@ oauth_cutom_response_port:
   open_api:
     definition: "http://localhost:8946/"
   oauth2:
-    port: 5001
+    redirect_uri_port: 5001
   udf:
     return_types:
       - "sync_auto_expand"

@@ -8,6 +8,10 @@ List all changes in various categories:
 
 ## 0.69.0 (2018-11-XX) ##
 
+## Release notes ##
+
+- OAuth2 parameters should now match the one handled by requests_auth.
+
 ## Enhancements ##
 
 - Provide UDF book name, sheet name and cell address within X-Pxl-Cell header.
