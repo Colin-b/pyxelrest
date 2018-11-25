@@ -1411,9 +1411,10 @@ class RequestContent:
             self.header_parameters[parameter.server_param_name] = value
 
 
-def load_services(flatten_results=True):
+def load_services_from_yaml(flatten_results=True):
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
+    :param flatten_results: Set to False if you want the unmodified service response.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
     configuration file
     """
@@ -1424,6 +1425,19 @@ def load_services(flatten_results=True):
         config = yaml.load(config_file)
 
     logging.debug('Loading services from "{0}"...'.format(SERVICES_CONFIGURATION_FILE_PATH))
+    return load_services(config, flatten_results)
+
+
+def load_services(config, flatten_results=False):
+    """
+    Retrieve OpenAPI JSON definition for each service defined in configuration.
+    :param flatten_results: Set to True if you want the service response to be flatten as a 2D array.
+    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
+    configuration.
+    """
+    if not isinstance(config, dict):
+        raise Exception('Configuration must be a dictionary.')
+
     loaded_services = []
     for service_name, service_config in config.items():
         if 'pyxelrest' == service_name:

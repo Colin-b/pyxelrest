@@ -22,6 +22,7 @@ List all changes in various categories:
 - Rely on latest official xlwings release (0.14.1).
 - Allow to cache GET requests results.
 - Support all authentication mechanism.
+- Ease up usage of pyxelrest as a python module.
 
 ### Bug fixes ###
 

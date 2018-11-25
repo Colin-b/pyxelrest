@@ -18,7 +18,7 @@ if sys.version_info.major > 2:
     from builtins import open
 
 
-def user_defined_functions(loaded_services):
+def _user_defined_functions(loaded_services):
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
     :return: A string containing python code with all xlwings UDFs.
@@ -34,23 +34,18 @@ def user_defined_functions(loaded_services):
     )
 
 
-def generate_user_defined_functions(output='user_defined_functions.py', flatten_results=True):
+def generate_python_file(services, file_name='user_defined_functions.py'):
     """
-    Load services and create user_defined_functions.py python file containing generated xlwings User Defined Functions.
-    :param flatten_results: Set to False if you want the JSON dictionary as result of your UDF call.
-    :return: List of loaded services
+    Create python file containing generated xlwings User Defined Functions.
     """
-    services = open_api.load_services(flatten_results)
-    logging.debug('Generating user defined functions.')
-    with open(os.path.join(os.path.dirname(__file__), output), 'w', encoding='utf-8') \
-            as generated_file:
-        generated_file.write(user_defined_functions(services))
-    return services
+    logging.debug('Generating {0}.'.format(file_name))
+    with open(os.path.join(os.path.dirname(__file__), file_name), 'w', encoding='utf-8') as generated_file:
+        generated_file.write(_user_defined_functions(services))
 
 
 def load_user_defined_functions(services):
-    from pyxelrest import user_defined_functions as udfs
-    udfs.udf_methods = {
+    from pyxelrest import user_defined_functions
+    user_defined_functions.udf_methods = {
         udf_name: method
         for service in services
         for udf_name, method in service.methods.items()
@@ -65,7 +60,8 @@ else:
 if GENERATE_UDF_ON_IMPORT:
     custom_logging.load_logging_configuration()
     try:
-        services = generate_user_defined_functions()
+        services = open_api.load_services_from_yaml()
+        generate_python_file(services)
     except Exception as e:
         logger.exception('Cannot generate user defined functions.')
         raise
