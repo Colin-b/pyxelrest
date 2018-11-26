@@ -77,7 +77,7 @@ def {{ udf_method.udf_name }}(
         request_content.validate()
     except Exception as e:
         logger.exception('{0} Unable to validate parameters.'.format(excel_caller_address))
-        return convert_to_return_type(str(e), udf_method)
+        return handle_exception(udf_method, str(e), e)
 {% endif %}
     return get_result(udf_method, request_content, excel_application)
 {% endmacro %}

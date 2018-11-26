@@ -14,6 +14,15 @@ def load(config):
     from pyxelrest import pyxelrestgenerator, open_api
     GENERATE_UDF_ON_IMPORT = True
 
+    # Send raw results and propagate exceptions by default
+    for service in config.values():
+        result = service.setdefault('result', {})
+        result.setdefault('flatten', False)
+        result.setdefault('raise_exception', True)
+
+        udf = service.setdefault('udf', {})
+        udf.setdefault('shift_result', False)
+
     services = open_api.load_services(config)
     pyxelrestgenerator.generate_python_file(services)
     pyxelrestgenerator.load_user_defined_functions(services)

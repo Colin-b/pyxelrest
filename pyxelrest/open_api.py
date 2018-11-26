@@ -149,6 +149,9 @@ class ConfigSection:
         max_nb_results = self._to_positive_int(caching_conf.get('max_nb_results')) or 100
         result_caching_time = self._to_positive_int(caching_conf.get('result_caching_time'))
         self.cache = self._create_cache(max_nb_results, result_caching_time) if result_caching_time else None
+        results = service_config.get('result', {})
+        self.flatten_results = bool(results.get('flatten', True))
+        self.raise_exception = bool(results.get('raise_exception', False))
 
     @staticmethod
     def _create_cache(max_nb_results, ttl):
@@ -306,15 +309,13 @@ class PyxelRestConfigSection(ConfigSection):
 
 
 class PyxelRestService:
-    def __init__(self, service_name, service_config, flatten_results):
+    def __init__(self, service_name, service_config):
         """
         Load service information from configuration.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param service_config: Dictionary containing service details.
-        :param flatten_results: Flatten results so that it can be consumed by Microsoft Excel.
         """
-        self.flatten_results = flatten_results
         self.methods = {}
         self.uri = ''
         self.config = PyxelRestConfigSection(service_name, service_config)
@@ -748,15 +749,13 @@ class PyxelRestUDFMethod(UDFMethod):
 
 
 class OpenAPI:
-    def __init__(self, service_name, service_config, flatten_results):
+    def __init__(self, service_name, service_config):
         """
         Load service information from configuration and OpenAPI definition.
         :param service_name: Will be used as prefix to use in front of services UDFs
         to avoid duplicate between services.
         :param service_config: Dictionary containing service details.
-        :param flatten_results: Flatten results so that it can be consumed by Microsoft Excel.
         """
-        self.flatten_results = flatten_results
         self.methods = {}
         self.config = ServiceConfigSection(service_name, service_config)
         self.existing_operation_ids = {udf_return_type: [] for udf_return_type in self.config.udf_return_types}
@@ -1411,10 +1410,9 @@ class RequestContent:
             self.header_parameters[parameter.server_param_name] = value
 
 
-def load_services_from_yaml(flatten_results=True):
+def load_services_from_yaml():
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
-    :param flatten_results: Set to False if you want the unmodified service response.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
     configuration file
     """
@@ -1425,13 +1423,12 @@ def load_services_from_yaml(flatten_results=True):
         config = yaml.load(config_file)
 
     logging.debug('Loading services from "{0}"...'.format(SERVICES_CONFIGURATION_FILE_PATH))
-    return load_services(config, flatten_results)
+    return load_services(config)
 
 
-def load_services(config, flatten_results=False):
+def load_services(config):
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration.
-    :param flatten_results: Set to True if you want the service response to be flatten as a 2D array.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
     configuration.
     """
@@ -1441,10 +1438,10 @@ def load_services(config, flatten_results=False):
     loaded_services = []
     for service_name, service_config in config.items():
         if 'pyxelrest' == service_name:
-            pyxelrest_service = PyxelRestService(service_name, service_config, flatten_results)
+            pyxelrest_service = PyxelRestService(service_name, service_config)
             loaded_services.append(pyxelrest_service)
         else:
-            service = load_service(service_name, service_config, flatten_results)
+            service = load_service(service_name, service_config)
             if service:
                 loaded_services.append(service)
 
@@ -1452,10 +1449,10 @@ def load_services(config, flatten_results=False):
     return loaded_services
 
 
-def load_service(service_name, service_config, flatten_results):
+def load_service(service_name, service_config):
     logger.debug('Loading "{0}" service...'.format(service_name))
     try:
-        service = OpenAPI(service_name, service_config, flatten_results)
+        service = OpenAPI(service_name, service_config)
         logger.info('"{0}" service will be available.'.format(service_name))
         logger.debug(str(service))
         return service
@@ -1520,13 +1517,11 @@ def get_result(udf_method, request_content, excel_application):
             result = convert_to_return_type(response.text[:255], udf_method)
         udf_method.cache_result(request_content, result)
         return shift_result(result, udf_method)
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as e:
         logger.exception('{0} Connection [status=error] occurred while calling [function={1}] [url={2}].'.format(
             get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
         )
-        return shift_result(convert_to_return_type('Cannot connect to service. '
-                                                   'Please retry once connection is re-established.', udf_method),
-                            udf_method)
+        return handle_exception(udf_method, 'Cannot connect to service. Please retry once connection is re-established.', e)
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
@@ -1538,7 +1533,7 @@ def get_result(udf_method, request_content, excel_application):
             logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
                 get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
             )
-        return shift_result(convert_to_return_type(describe_error(response, error), udf_method), udf_method)
+        return handle_exception(udf_method, describe_error(response, error), error)
     finally:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
@@ -1568,6 +1563,13 @@ def describe_error(response, error):
     return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
 
 
+def handle_exception(udf_method, exception_message, exception):
+    if udf_method.service.config.raise_exception:
+        raise exception
+
+    return shift_result(convert_to_return_type(exception_message, udf_method), udf_method)
+
+
 def json_as_list(response, udf_method):
     if udf_method.service.config.rely_on_definitions:
         definition_deserializer.all_definitions = {}
@@ -1584,7 +1586,7 @@ def json_as_list(response, udf_method):
 
     logger.debug('Converting JSON string to corresponding python structure...')
     json_data = response.json(object_pairs_hook=OrderedDict) if len(response.content) else ''
-    if udf_method.service.flatten_results:
+    if udf_method.service.config.flatten_results:
         all_definitions = udf_method.service.open_api_definitions
         return Flattenizer(udf_method.responses, response.status_code, all_definitions).to_list(json_data)
     else:
