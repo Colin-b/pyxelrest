@@ -251,6 +251,18 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td>Optional</td>
         <td></td>
     </tr>
+    <tr>
+        <td><strong>result</strong></td>
+        <td>Dictionary containing result related settings. Refer to Result section for more information.</td>
+        <td>Optional</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><strong>prefix_udf_name</strong></td>
+        <td>True to prefix udf name with service name. False to avoid prefixing (higher risk of duplicates).</td>
+        <td>Optional</td>
+        <td>True</td>
+    </tr>
 </table>
 
 #### OpenAPI ####
@@ -414,6 +426,25 @@ Requiring cachetools python module.
     <tr>
         <td><strong>max_nb_results</strong></td>
         <td>Maximum number of results to store in cache. 100 by default.</td>
+        <td>Optional</td>
+    </tr>
+</table>
+
+#### Result ####
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+    </th>
+    <tr>
+        <td><strong>flatten</strong></td>
+        <td>Flatten received JSON to a 2D array. Default to True.</td>
+        <td>Optional</td>
+    </tr>
+    <tr>
+        <td><strong>raise_exception</strong></td>
+        <td>Raise received exceptions to client. False by default.</td>
         <td>Optional</td>
     </tr>
 </table>

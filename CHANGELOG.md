@@ -23,6 +23,7 @@ List all changes in various categories:
 - Allow to cache GET requests results.
 - Support all authentication mechanism.
 - Ease up usage of pyxelrest as a python module.
+- Add parameter to configure result flatten, raising of exceptions and udf name prefix.
 
 ### Bug fixes ###
 
