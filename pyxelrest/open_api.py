@@ -152,6 +152,7 @@ class ConfigSection:
         results = service_config.get('result', {})
         self.flatten_results = bool(results.get('flatten', True))
         self.raise_exception = bool(results.get('raise_exception', False))
+        self.prefix_udf_name = bool(service_config.get('prefix_udf_name', True))
 
     @staticmethod
     def _create_cache(max_nb_results, ttl):
@@ -891,8 +892,10 @@ class OpenAPIUDFMethod(UDFMethod):
         # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
         self.help_url = self.extract_url(open_api_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
-        self.udf_name = '{0}_{1}'.format(service.config.udf_prefix(udf_return_type),
-                                         self.open_api_method['operationId'])
+        prefix = ''
+        if service.config.prefix_udf_name:
+            prefix = '{0}_'.format(service.config.udf_prefix(udf_return_type))
+        self.udf_name = '{0}{1}'.format(prefix, self.open_api_method['operationId'])
         self.responses = open_api_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
