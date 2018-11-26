@@ -258,10 +258,10 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td></td>
     </tr>
     <tr>
-        <td><strong>prefix_udf_name</strong></td>
-        <td>True to prefix udf name with service name. False to avoid prefixing (higher risk of duplicates).</td>
+        <td><strong>udf_name_prefix</strong></td>
+        <td>Prefix to be used in front of UDf name.</td>
         <td>Optional</td>
-        <td>True</td>
+        <td>{service_name}_</td>
     </tr>
 </table>
 
