@@ -9,12 +9,7 @@ class PyxelRestJsonNoFlattenizerTest(unittest.TestCase):
     def setUpClass(cls):
         import testsutils.json_service as json_service
         serviceshandler.start_services((json_service, 8954))
-        loader.load('json_services.yml')
-        import pyxelrest
-        pyxelrest.GENERATE_UDF_ON_IMPORT = False
-        from pyxelrest import pyxelrestgenerator
-        services = pyxelrestgenerator.generate_user_defined_functions(flatten_results=False)
-        pyxelrestgenerator.load_user_defined_functions(services)
+        loader.load('json_services_no_flatten.yml')
 
     @classmethod
     def tearDownClass(cls):

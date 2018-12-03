@@ -6,7 +6,7 @@ Generation date (UTC): {{ current_utc_time }}
 import xlwings as xw
 import datetime
 import logging
-from pyxelrest.open_api import RequestContent, get_result, convert_to_return_type, get_caller_address
+from pyxelrest.open_api import RequestContent, get_result, convert_to_return_type, get_caller_address, handle_exception
 
 logger = logging.getLogger(__name__)
 udf_methods = None  # Will be set after load
