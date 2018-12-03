@@ -124,7 +124,7 @@ setup(name='pyxelrest',
           # Used to run tests
           'nose==1.3.7',
           # Used to generate a jwt token
-          'pyjwt==1.6.4',
+          'pyjwt==1.7.0',
           # used for testing cache of results
           'cachetools==3.0.0',
           # Used to create test services
@@ -138,7 +138,7 @@ setup(name='pyxelrest',
           # Used to check that Excel is not running and required by xlwings
           'pywin32==224',
           # Used to communicate with Microsoft Excel
-          'xlwings==0.15.0',
+          'xlwings==0.15.1',
           # Used to parse configuration files
           'pyyaml==3.13',
           'pyaml==18.11.0',
