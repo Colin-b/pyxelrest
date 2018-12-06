@@ -380,7 +380,7 @@ class Response:
     def rows(self, data):
         logger.debug('Converting response to list...')
         rows = self.field.convert(None, data).header_and_rows()
-        logger.debug('Response converted to list.')
+        logger.debug('Response converted to list of {0} elements.'.format(len(rows)))
         return rows
 
 
