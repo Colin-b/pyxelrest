@@ -1547,9 +1547,10 @@ def get_caller_address(excel_application):
             return 'Python'  # TODO Return details on caller of UDF?
         excel_caller = excel_application.Caller
         if not hasattr(excel_caller, 'Rows'):
-            return 'VBA'  # TODO Return details on VBA file?
+            return 'VBA:{0}'.format(excel_application.VBE.ActiveCodePane.CodeModule)
         return str(xlwings.xlplatform.Range(xl=excel_caller).get_address(True, True, True))
     except:
+        logger.exception('Unable to retrieve caller address.')
         return ''
 
 
