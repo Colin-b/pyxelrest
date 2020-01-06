@@ -177,11 +177,14 @@ class Flattenizer:
             self.__flatten_header = self.__flatten_header[1:]
             self.__all_flatten_rows = [flatten_row[1:] for flatten_row in self.__all_flatten_rows]
         if not self.__flatten_header or self.__flatten_header == ['']:
-            logger.debug('Response converted to list.')
-            return self.__all_flatten_rows if self.__all_flatten_rows and self.__all_flatten_rows != [[]] else ['']
+            if self.__all_flatten_rows and self.__all_flatten_rows != [[]]:
+                logger.debug('Response converted to list of {0} elements.'.format(len(self.__all_flatten_rows)))
+                return self.__all_flatten_rows
+            logger.debug('Response converted to empty list.')
+            return ['']
         flatten_data = [self.__flatten_header]
         flatten_data.extend(self.__all_flatten_rows)
-        logger.debug('Response converted to list.')
+        logger.debug('Response converted to list of {0} elements.'.format(len(flatten_data)))
         return flatten_data
 
 
