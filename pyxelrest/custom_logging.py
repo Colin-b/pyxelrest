@@ -5,7 +5,7 @@ import logging.config
 import logging.handlers
 import yaml
 
-from pyxelrest import _version, LOGGING_CONFIGURATION_FILE_PATH
+from pyxelrest import version, LOGGING_CONFIGURATION_FILE_PATH
 from distutils import sysconfig
 
 logger = logging.getLogger(__name__)
@@ -30,14 +30,14 @@ def load_logging_configuration():
              log_config_dict = yaml.load(config_file)
              logging.config.dictConfig(log_config_dict)
              logger.info('Loading PyxelRest: {} Python: {} OS: {} Lib: {}'.format(
-                 _version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))
+                 version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))
     else:
         set_file_logger('pyxelrest')
         logger.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
             LOGGING_CONFIGURATION_FILE_PATH))
 
 
-def set_file_logger(filename, level=logging.INFO):
+def set_file_logger(filename: str, level=logging.INFO):
     default_log_file_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'logs', filename + '.log')
     default_log_folder = os.path.dirname(default_log_file_path)
     if not os.path.exists(default_log_folder):
@@ -47,4 +47,4 @@ def set_file_logger(filename, level=logging.INFO):
         handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
         level=level)
     logger.info('Loading PyxelRest: {} Python: {} OS: {} Lib: {}'.format(
-        _version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))
+        version.__version__, sys.version, platform.platform(), sysconfig.get_python_lib()))

@@ -20,7 +20,7 @@ oauth2_tokens_cache_path = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'conf
 OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
 
 
-def _create_authentication(service_config, open_api_security_definition, request_content):
+def _create_authentication(service_config, open_api_security_definition: dict, request_content):
     if 'oauth2' == open_api_security_definition.get('type'):
         flow = open_api_security_definition.get('flow')
         oauth2_config = dict(service_config.oauth2)
@@ -56,7 +56,7 @@ def _create_authentication(service_config, open_api_security_definition, request
         logger.error('Unexpected security definition type: {0}'.format(open_api_security_definition))
 
 
-def _create_authentication_from_config(service_config, authentication_mode, authentication):
+def _create_authentication_from_config(service_config, authentication_mode: str, authentication: dict):
     if 'oauth2_implicit' == authentication_mode:
         oauth2_config = dict(service_config.oauth2)
         return OAuth2Implicit(authorization_url=authentication.get('oauth2_auth_url'), **oauth2_config)

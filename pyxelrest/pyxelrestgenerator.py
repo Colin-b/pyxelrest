@@ -13,9 +13,7 @@ from pyxelrest import (
     custom_logging
 )
 
-if sys.version_info.major > 2:
-    # Python 3
-    from builtins import open
+from builtins import open
 
 
 def _user_defined_functions(loaded_services):

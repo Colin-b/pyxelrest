@@ -13,12 +13,7 @@ import xlwings.conversion
 import xlwings.server
 import yaml
 
-try:
-    # Python 3
-    from urllib.parse import urlsplit
-except ImportError:
-    # Python 2
-    from urlparse import urlsplit
+from urllib.parse import urlsplit
 
 
 from pyxelrest import (
@@ -63,8 +58,8 @@ logger = logging.getLogger(__name__)
 
 def to_valid_regex(user_friendly_regex):
     if '*' in user_friendly_regex and '.*' not in user_friendly_regex:
-        return '^{0}$'.format(user_friendly_regex.replace('*', '.*'))
-    return '^{0}$'.format(user_friendly_regex)
+        return f'^{user_friendly_regex.replace("*", ".*")}$'
+    return f'^{user_friendly_regex}$'
 
 
 def to_valid_python_vba(str_value):
@@ -176,7 +171,7 @@ class ConfigSection:
                 value = int(value)
                 return value if value else None
             except ValueError:
-                logger.warning('Invalid positive value provided: {0}. Considering as not set.'.format(value))
+                logger.warning(f'Invalid positive value provided: {value}. Considering as not set.')
 
     @staticmethod
     def is_asynchronous(udf_return_type):
@@ -190,7 +185,7 @@ class ConfigSection:
         service_name_prefix = to_valid_python_vba(self.name)
         if (len(self.udf_return_types) == 1) or self.auto_expand_result(udf_return_type):
             return service_name_prefix
-        return 'vba_{0}'.format(service_name_prefix)
+        return f'vba_{service_name_prefix}'
 
 
 class ServiceConfigSection(ConfigSection):
@@ -451,7 +446,7 @@ class UDFParameter:
                 field_type.remove('null')
                 self.allow_null = True
             if len(field_type) != 1:
-                raise Exception('Unable to guess field type amongst {0}'.format(field_type))
+                raise Exception(f'Unable to guess field type amongst {field_type}')
             field_type = field_type[0]
         self.type = field_type
         self.array_dimension = 0
@@ -483,15 +478,15 @@ class PyxelRestUDFMethod(UDFMethod):
                 'string'
             )
             self.choices = ['dict', 'dict_list']
-            self.description = 'How the body should be sent ({0}).'.format(self.choices)
+            self.description = f'How the body should be sent ({self.choices}).'
 
         def _convert_to_str(self, value):
             if isinstance(value, datetime.date):
-                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be formatted as text.')
             if isinstance(value, int) or isinstance(value, float):
                 value = str(value)
             if value and value not in self.choices:
-                raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
+                raise Exception(f'{self.name} value "{value}" should be {" or ".join(self.choices)}.')
             return value
 
         def validate_optional(self, value, request_content):

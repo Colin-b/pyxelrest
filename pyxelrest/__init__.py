@@ -1,4 +1,5 @@
 import os
+from pyxelrest.version import __version__
 
 # Set to False in order to avoid generating UDFs on loading pyxelrestgenerator
 GENERATE_UDF_ON_IMPORT = True
@@ -7,7 +8,7 @@ SERVICES_CONFIGURATION_FILE_PATH = os.path.join(os.getenv('APPDATA'), 'pyxelrest
 LOGGING_CONFIGURATION_FILE_PATH = os.path.join(os.getenv('APPDATA'), 'pyxelrest', 'configuration', 'logging.yml')
 
 
-def load(config):
+def load(config: dict):
     global GENERATE_UDF_ON_IMPORT
 
     GENERATE_UDF_ON_IMPORT = False

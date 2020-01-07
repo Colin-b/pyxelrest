@@ -6,13 +6,15 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
-## 0.69.1 (201X-XX-XX) ##
+## 0.69.1 (2020-XX-XX) ##
 
 ## Bug fixes ##
 
 - Log number of received results.
 - Log error in case caller cell cannot be retrieved.
 - Add more information on VBA caller.
+- Do not use a fixed dependency version.
+- Drop support for python < 3.6
 
 ## 0.69.0 (2018-12-03) ##
 
