@@ -18,7 +18,7 @@ def to_absolute_path(file_path):
 
 def create_folder(folder_path):
     if not os.path.exists(folder_path):
-        logger.info('Creating {0} folder'.format(folder_path))
+        logger.info(f'Creating {folder_path} folder')
         os.makedirs(folder_path)
 
 
@@ -38,19 +38,17 @@ class VSTOManager:
                                                     version,
                                                     'VSTOInstaller.exe')
             if not os.path.isfile(self.vsto_installer_path):
-                raise Exception('Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {0}.'
-                                .format(self.vsto_installer_path))
+                raise Exception(f'Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {self.vsto_installer_path}.')
 
     def install_auto_load_addin(self, add_in_folder):
         logger.info('Try to install Microsoft Excel add-in...')
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
-            raise Exception('Auto Load PyxelRest add-in cannot be found in {0}.'.format(vsto_file_path))
+            raise Exception(f'Auto Load PyxelRest add-in cannot be found in {vsto_file_path}.')
         self._clear_click_once_cache()
         failed_silent_install = subprocess.call([self.vsto_installer_path, '/Silent', '/Install', vsto_file_path])
         if failed_silent_install:
-            logger.warning('Silent add-in installation failed (returned {0}). Try non-silent installation...'.format(
-                failed_silent_install))
+            logger.warning(f'Silent add-in installation failed (returned {failed_silent_install}). Try non-silent installation...')
             subprocess.check_call([self.vsto_installer_path, '/Install', vsto_file_path])
         logger.info('Add-in installation completed.')
 
@@ -63,8 +61,7 @@ class VSTOManager:
                 self.vsto_installer_path, '/Silent', '/Uninstall', vsto_file_path
             ])
             if failed_silent_uninstall:
-                logger.warning('Silent add-in uninstallation failed (returned {0}). Try non-silent uninstallation...'.format(
-                    failed_silent_uninstall))
+                logger.warning(f'Silent add-in uninstallation failed (returned {failed_silent_uninstall}). Try non-silent uninstallation...')
                 subprocess.check_call([self.vsto_installer_path, '/Uninstall', vsto_file_path])
             logger.info('Add-in uninstallation completed.')
 
@@ -75,7 +72,7 @@ class VSTOManager:
         logger.info('Clearing ClickOnce application cache...')
         # Do not check result of cache clearing as it might not be required.
         failed_clickonce_cache_cleanup = subprocess.call(['rundll32', 'dfshim', 'CleanOnlineAppCache'])
-        logger.info('ClickOnce application cache cleared (returned {0})'.format(failed_clickonce_cache_cleanup))
+        logger.info(f'ClickOnce application cache cleared (returned {failed_clickonce_cache_cleanup})')
 
     @staticmethod
     def get_auto_load_vsto_file_path(add_in_folder):
@@ -96,11 +93,11 @@ class XlWingsConfig:
         python_path = os.path.dirname(sys.executable)
         pythonw_path = os.path.join(python_path, 'pythonw.exe')
         if not os.path.isfile(pythonw_path):
-            raise Exception('Python executable cannot be found in {0}'.format(pythonw_path))
+            raise Exception(f'Python executable cannot be found in {pythonw_path}')
 
         with open(self.xlwings_config_path, 'w') as config_file:
             config_file.writelines([
-                '"INTERPRETER", "{0}"'.format(pythonw_path),
+                f'"INTERPRETER", "{pythonw_path}"',
                 '"UDF MODULES","pyxelrest.pyxelrestgenerator"',
             ])
         logger.info('XLWings PyxelRest configuration created.')
@@ -115,7 +112,7 @@ class XlWingsConfig:
             xlwings_path = xlwings.__path__[0]
             xlwings_bas_path = os.path.join(xlwings_path, 'xlwings.bas')
             if not os.path.isfile(xlwings_bas_path):
-                raise Exception('XLWings BAS file cannot be found in {0}'.format(xlwings_bas_path))
+                raise Exception(f'XLWings BAS file cannot be found in {xlwings_bas_path}')
             with open(xlwings_bas_path) as default_settings:
                 for line in default_settings:
                     add_in_file.write(self._to_add_in_line(line))
@@ -151,8 +148,7 @@ class Installer:
 
         self.add_in_folder = to_absolute_path(add_in_folder)
         if not os.path.isdir(self.add_in_folder):
-            raise Exception('PyxelRest Microsoft Excel Auto-Load Add-In cannot be found in {0}.'
-                            .format(self.add_in_folder))
+            raise Exception(f'PyxelRest Microsoft Excel Auto-Load Add-In cannot be found in {self.add_in_folder}.')
 
         self.pyxelrest_appdata_folder = os.path.join(os.getenv('APPDATA'), 'pyxelrest')
         self.pyxelrest_appdata_addin_folder = os.path.join(self.pyxelrest_appdata_folder, 'excel_addin')
@@ -191,8 +187,7 @@ class Installer:
     def _install_pyxelrest_vb_addin(self):
         pyxelrest_vb_file_path = os.path.join(self.add_in_folder, 'pyxelrest.xlam')
         if not os.path.isfile(pyxelrest_vb_file_path):
-            raise Exception('Visual Basic PyxelRest Excel Add-In cannot be found in {0}.'
-                            .format(pyxelrest_vb_file_path))
+            raise Exception(f'Visual Basic PyxelRest Excel Add-In cannot be found in {pyxelrest_vb_file_path}.')
 
         xlstart_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Excel', 'XLSTART')
         if not os.path.exists(xlstart_folder):
@@ -239,7 +234,7 @@ class Installer:
                 addin_settings_file.write(new_line)
             elif '</appSettings>' in addin_settings_line:
                 if self.path_to_up_to_date_configuration:
-                    addin_settings_file.write('    <add key="PathToUpToDateConfigurations" value="{0}" />\n'.format(self.path_to_up_to_date_configuration))
+                    addin_settings_file.write(f'    <add key="PathToUpToDateConfigurations" value="{self.path_to_up_to_date_configuration}" />\n')
                 addin_settings_file.write(addin_settings_line)
             else:
                 addin_settings_file.write(addin_settings_line)

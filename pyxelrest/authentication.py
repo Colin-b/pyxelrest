@@ -45,7 +45,7 @@ def _create_authentication(service_config, open_api_security_definition: dict, r
                 token_url=open_api_security_definition.get('tokenUrl', request_content.extra_parameters.get('oauth2_token_url')),
                 **oauth2_config
             )
-        logger.warning('Unexpected OAuth2 flow: {0}'.format(open_api_security_definition))
+        logger.warning(f'Unexpected OAuth2 flow: {open_api_security_definition}')
     elif 'apiKey' == open_api_security_definition.get('type'):
         if open_api_security_definition['in'] == 'query':
             return QueryApiKey(service_config.api_key, open_api_security_definition.get('name', request_content.extra_parameters.get('api_key_name')))
@@ -53,7 +53,7 @@ def _create_authentication(service_config, open_api_security_definition: dict, r
     elif 'basic' == open_api_security_definition.get('type'):
         return Basic(service_config.basic.get('username'), service_config.basic.get('password'))
     else:
-        logger.error('Unexpected security definition type: {0}'.format(open_api_security_definition))
+        logger.error(f'Unexpected security definition type: {open_api_security_definition}')
 
 
 def _create_authentication_from_config(service_config, authentication_mode: str, authentication: dict):
@@ -76,7 +76,7 @@ def _create_authentication_from_config(service_config, authentication_mode: str,
     elif 'basic' == authentication_mode:
         return Basic(service_config.basic.get('username'), service_config.basic.get('password'))
     else:
-        logger.error('Unexpected security definition type: {0}'.format(authentication_mode))
+        logger.error(f'Unexpected security definition type: {authentication_mode}')
 
 
 def get_auth(udf_method, request_content):
@@ -98,7 +98,7 @@ def get_auth(udf_method, request_content):
                 if auth:
                     authentication_modes.append(auth)
             except:
-                logger.exception('{0} authentication cannot be handled.'.format(security_definition_key))
+                logger.exception(f'{security_definition_key} authentication cannot be handled.')
         # A single authentication method is required and PyxelRest support it
         if len(authentication_modes) == 1:
             return authentication_modes[0]

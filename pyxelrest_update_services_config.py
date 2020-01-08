@@ -34,7 +34,7 @@ def open_file_config(file_or_directory):
                 loaded_yaml.update(yaml.load(config_file))
         return loaded_yaml
     except:
-        logger.exception('Configuration files "{0}" cannot be read.'.format(file_or_directory))
+        logger.exception(f'Configuration files "{file_or_directory}" cannot be read.')
         return None
 
 
@@ -44,10 +44,10 @@ def open_url_config(configuration_file_url):
         response.raise_for_status()
         return yaml.load(response.text)
     except requests.HTTPError as e:
-        logger.warning('Configuration file URL "{0}" cannot be reached: {1}.'.format(configuration_file_url, str(e)))
+        logger.warning(f'Configuration file URL "{configuration_file_url}" cannot be reached: {e}.')
         return None
     except:
-        logger.exception('Configuration file URL "{0}" cannot be reached.'.format(configuration_file_url))
+        logger.exception(f'Configuration file URL "{configuration_file_url}" cannot be reached.')
         return None
 
 
@@ -60,7 +60,7 @@ def to_file_paths(file_or_directory):
         return [to_absolute_path(file_or_directory)]
 
     if not os.path.isdir(file_or_directory):
-        raise Exception('Invalid path "{}" provided.'.format(file_or_directory))
+        raise Exception(f'Invalid path "{file_or_directory}" provided.')
 
     directory_files = []
     for file in os.listdir(file_or_directory):
@@ -68,7 +68,7 @@ def to_file_paths(file_or_directory):
         if os.path.isfile(file_path):
             directory_files.append(file_path)
         else:
-            logger.warning('"{0}" is not a file and will be skipped.'.format(file_path))
+            logger.warning(f'"{file_path}" is not a file and will be skipped.')
     return directory_files
 
 
@@ -123,11 +123,11 @@ class ServicesConfigUpdater:
 
     def _add_service(self, service_name, updated_config):
         self._user_config[service_name] = updated_config
-        logger.info('"{0}" configuration added.'.format(service_name))
+        logger.info(f'"{service_name}" configuration added.')
 
     def _update_service(self, service_name, updated_config):
         if service_name not in self._user_config:
-            logger.debug('User does not have the {0} section in configuration. Nothing to update.'.format(service_name))
+            logger.debug(f'User does not have the {service_name} section in configuration. Nothing to update.')
             return
 
         skip_update = updated_config.get('skip_update_for', [])
@@ -136,15 +136,15 @@ class ServicesConfigUpdater:
         self._user_config[service_name] = {key: value for key, value in updated_config.items() if key not in skip_update}
         # Add non updated fields
         self._user_config[service_name].update({key: value for key, value in previous_config.items() if key in skip_update})
-        logger.info('"{0}" configuration updated.'.format(service_name))
+        logger.info(f'"{service_name}" configuration updated.')
 
     def _remove_service(self, service_name):
         if self._user_config.pop(service_name):
-            logger.info('"{0}" configuration removed.'.format(service_name))
+            logger.info(f'"{service_name}" configuration removed.')
 
     def _print_service(self, service_name, updated_config):
         if 'description' in updated_config:
-            print('{0} - {1}'.format(service_name, updated_config.get('description')))
+            print(f"{service_name} - {updated_config.get('description')}")
         else:
             print(service_name)
 

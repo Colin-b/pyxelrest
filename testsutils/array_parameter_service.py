@@ -226,7 +226,7 @@ def string_pipes_array_parameter():
 
 
 def _request_args(args):
-    return ['{0}="{1}"'.format(arg, args.getlist(arg)) for arg in args]
+    return [f'{arg}="{args.getlist(arg)}"' for arg in args]
 
 
 def start_server(port):

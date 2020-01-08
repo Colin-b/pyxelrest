@@ -54,12 +54,12 @@ def submit_a_form_with_a_token(token_expiry, response_type):
     redirect_uri = flask.request.args.get('redirect_uri')
     state = flask.request.args.get('state')
     token = jwt.encode({'exp': token_expiry}, 'secret').decode('unicode_escape')
-    return """
+    return f"""
 <html>
     <body>
-        <form method="POST" name="hiddenform" action="{0}">
-            <input type="hidden" name="{1}" value="{2}" />
-            <input type="hidden" name="state" value="{3}" />
+        <form method="POST" name="hiddenform" action="{redirect_uri}">
+            <input type="hidden" name="{response_type}" value="{token}" />
+            <input type="hidden" name="state" value="{state}" />
             <noscript>
                 <p>Script is disabled. Click Submit to continue.</p>
                 <input type="submit" value="Submit" />
@@ -68,15 +68,15 @@ def submit_a_form_with_a_token(token_expiry, response_type):
         <script language="javascript">document.forms[0].submit();</script>
     </body>
 </html>
-        """.format(redirect_uri, response_type, token, state)
+        """
 
 
 def submit_an_empty_form():
     redirect_uri = flask.request.args.get('redirect_uri')
-    return """
+    return f"""
 <html>
     <body>
-        <form method="POST" name="hiddenform" action="{0}">
+        <form method="POST" name="hiddenform" action="{redirect_uri}">
             <noscript>
                 <p>Script is disabled. Click Submit to continue.</p>
                 <input type="submit" value="Submit" />
@@ -85,7 +85,7 @@ def submit_an_empty_form():
         <script language="javascript">document.forms[0].submit();</script>
     </body>
 </html>
-        """.format(redirect_uri)
+        """
 
 
 def close_page():
@@ -98,7 +98,7 @@ def close_page():
 
 
 def start_server(port):
-    logger.info('Starting server on localhost:{0}'.format(port))
+    logger.info(f'Starting server on localhost:{port}')
     app.run(port=port)
 
 

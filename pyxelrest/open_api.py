@@ -347,7 +347,7 @@ class UDFMethod:
     def __init__(self, service, http_method, path, udf_return_type):
         self.service = service
         self.requests_method = http_method
-        self.uri = '{0}{1}'.format(service.uri, path)
+        self.uri = f'{service.uri}{path}'
         self.help_url = ''
         self.auto_expand_result = service.config.auto_expand_result(udf_return_type)
         self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
@@ -386,17 +386,17 @@ class UDFMethod:
 
         request_id = request_content.unique_id()
         if request_id in self.service.config.cache:
-            logger.debug('Retrieving cached result for {0}'.format(request_id))
+            logger.debug(f'Retrieving cached result for {request_id}')
             return self.service.config.cache[request_id]
         else:
-            logger.debug('No result yet cached for {0}'.format(request_id))
+            logger.debug(f'No result yet cached for {request_id}')
 
     def cache_result(self, request_content, result):
         if self.service.config.cache is None:
             return
 
         request_id = request_content.unique_id()
-        logger.debug('Cache result for {0}'.format(request_id))
+        logger.debug(f'Cache result for {request_id}')
         self.service.config.cache[request_id] = result
 
     def update_information_on_parameter_type(self, parameter):
@@ -463,7 +463,7 @@ class UDFParameter:
         pass
 
     def _not_provided(self):
-        return Exception('{0} is required.'.format(self.name))
+        return Exception(f'{self.name} is required.')
 
 
 class PyxelRestUDFMethod(UDFMethod):
@@ -933,11 +933,8 @@ class OpenAPIUDFMethod(UDFMethod):
             if not consumes or 'application/json' in consumes:
                 header['Content-Type'] = 'application/json'
             else:
-                logger.warning('{0} is expecting {0} encoded body. '
-                               'For now PyxelRest only send JSON body so request might fail.'.format(
-                    self.uri,
-                    self.open_api_method['consumes']
-                ))
+                logger.warning(f"{self.uri} is expecting {self.open_api_method['consumes']} encoded body. "
+                               "For now PyxelRest only send JSON body so request might fail.")
 
         if 'application/msgpackpandas' in self.open_api_method['produces'] and support_pandas():
             header['Accept'] = 'application/msgpackpandas'
@@ -1138,16 +1135,16 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_dict(self, value):
         if not isinstance(value, list):
-            raise Exception('{0} value "{1}" ({2} type) must be a list.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be a list.')
         if len(value) != 2:
-            raise Exception('{0} value should contains only two rows. Header and values.'.format(self.name))
+            raise Exception(f'{self.name} value should contains only two rows. Header and values.')
         return list_to_dict(value[0], value[1])
 
     def _convert_to_dict_list(self, value):
         if not isinstance(value, list):
-            raise Exception('{0} value "{1}" ({2} type) must be a list.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be a list.')
         if len(value) < 2:
-            raise Exception('{0} value should contains at least two rows. Header and values.'.format(self.name))
+            raise Exception(f'{self.name} value should contains at least two rows. Header and values.')
         list_value = list_to_dict_list(value[0], value[1:])
         self._check_array(list_value)
         return list_value
@@ -1186,17 +1183,17 @@ class APIUDFParameter(UDFParameter):
             return '\t'.join([str(value) for value in list_value])
         if 'pipes' == self.collection_format:
             return '|'.join([str(value) for value in list_value])
-        raise Exception('Collection format {0} is invalid.'.format(self.collection_format))
+        raise Exception(f'Collection format {self.collection_format} is invalid.')
 
     def _check_array(self, value):
         if self.unique_items and len(set(value)) != len(value):
-            raise Exception('{0} contains duplicated items.'.format(self.name))
+            raise Exception(f'{self.name} contains duplicated items.')
 
         if self.max_items is not None and len(value) > self.max_items:
-            raise Exception('{0} cannot contains more than {1} items.'.format(self.name, self.max_items))
+            raise Exception(f'{self.name} cannot contains more than {self.max_items} items.')
 
         if self.min_items is not None and len(value) < self.min_items:
-            raise Exception('{0} cannot contains less than {1} items.'.format(self.name, self.min_items))
+            raise Exception(f'{self.name} cannot contains less than {self.min_items} items.')
 
     def _get_convert_method(self):
         if self.type == 'integer':
@@ -1220,9 +1217,9 @@ class APIUDFParameter(UDFParameter):
     def _common_documentation(self, open_api_parameter):
         description = open_api_parameter.get('description', '') or ''
         if self.choices:
-            description += ' Valid values are: {0}.'.format(', '.join([str(choice) for choice in self.choices]))
+            description += f" Valid values are: {', '.join([str(choice) for choice in self.choices])}."
         if self.default_value:
-            description += ' Default value is: {0}.'.format(self.default_value)
+            description += f' Default value is: {self.default_value}.'
         return description
 
     def _get_documentation(self, open_api_parameter):
@@ -1291,10 +1288,7 @@ class RequestContent:
             udf_parameter.validate(self)
 
     def unique_id(self):
-        return 'method={0},payload={1},files={2},parameters={3},path={4},headers={5}'.format(
-            self.udf_method.requests_method, self.payload, self.files, self.parameters, self.path_values,
-            self.header_parameters
-        )
+        return f'method={self.udf_method.requests_method},payload={self.payload},files={self.files},parameters={self.parameters},path={self.path_values},headers={self.header_parameters}'
 
     def add_value(self, parameter, value):
         if parameter.location == 'query':
@@ -1402,7 +1396,7 @@ def load_services_from_yaml():
     with open(SERVICES_CONFIGURATION_FILE_PATH, 'r') as config_file:
         config = yaml.load(config_file)
 
-    logging.debug('Loading services from "{0}"...'.format(SERVICES_CONFIGURATION_FILE_PATH))
+    logging.debug(f'Loading services from "{SERVICES_CONFIGURATION_FILE_PATH}"...')
     return load_services(config)
 
 
@@ -1430,14 +1424,14 @@ def load_services(config):
 
 
 def load_service(service_name, service_config):
-    logger.debug('Loading "{0}" service...'.format(service_name))
+    logger.debug(f'Loading "{service_name}" service...')
     try:
         service = OpenAPI(service_name, service_config)
-        logger.info('"{0}" service will be available.'.format(service_name))
+        logger.info(f'"{service_name}" service will be available.')
         logger.debug(str(service))
         return service
     except Exception as e:
-        logger.error('"{0}" service will not be available: {1}'.format(service_name, e))
+        logger.error(f'"{service_name}" service will not be available: {e}')
 
 
 def check_for_duplicates(loaded_services):
@@ -1448,8 +1442,8 @@ def check_for_duplicates(loaded_services):
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]
         if len(service_names) > 1:
-            logger.warning('{0} services will use the same "{1}" prefix, in case there is the same call available, '
-                           'only the last declared one will be available.'.format(service_names, udf_prefix))
+            logger.warning(f'{service_names} services will use the same "{udf_prefix}" prefix, in case there is the same call available, '
+                           'only the last declared one will be available.')
 
 
 def get_result(udf_method, request_content, excel_application):
@@ -1478,15 +1472,11 @@ def get_result(udf_method, request_content, excel_application):
         if wait_for_status:
             if not response.history or (response.history[0].status_code != wait_for_status):
                 check_interval = request_content.extra_parameters['check_interval']
-                logger.info('Waiting for {0} status. Sending a new request in {1} seconds.'.format(
-                    wait_for_status, check_interval
-                ))
+                logger.info(f'Waiting for {wait_for_status} status. Sending a new request in {check_interval} seconds.')
                 time.sleep(check_interval)
                 return get_result(udf_method, request_content, excel_application)
 
-        logger.info('{0} [status=Valid] response received for [function={1}] [url={2}].'.format(
-            get_caller_address(excel_application), udf_method.udf_name, response.request.url)
-        )
+        logger.info(f'{get_caller_address(excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}].')
         if 202 == response.status_code:
             result = [['Status URL'], [response.headers['location']]]
         elif response.headers['content-type'] == 'application/json':
@@ -1498,21 +1488,15 @@ def get_result(udf_method, request_content, excel_application):
         udf_method.cache_result(request_content, result)
         return shift_result(result, udf_method)
     except requests.exceptions.ConnectionError as e:
-        logger.exception('{0} Connection [status=error] occurred while calling [function={1}] [url={2}].'.format(
-            get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
-        )
+        logger.exception(f'{get_caller_address(excel_application)} Connection [status=error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}].')
         return handle_exception(udf_method, 'Cannot connect to service. Please retry once connection is re-established.', e)
     except Exception as error:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
-            logger.exception('{0} [status=Error] occurred while handling '
-                             '[function={1}] [url={2}] response: [response={3}].'.format(
-                get_caller_address(excel_application), udf_method.udf_name, response.request.url, response.text)
-            )
+            logger.exception(f'{get_caller_address(excel_application)} [status=Error] occurred while handling '
+                             f'[function={udf_method.udf_name}] [url={response.request.url}] response: [response={response.text}].')
         else:
-            logger.exception('{0} [status=Error] occurred while calling [function={1}] [url={2}].'.format(
-                get_caller_address(excel_application), udf_method.udf_name, udf_method.uri)
-            )
+            logger.exception(f'{get_caller_address(excel_application)} [status=Error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}].')
         return handle_exception(udf_method, describe_error(response, error), error)
     finally:
         # Check "is not None" because response.ok is overridden according to HTTP status code.
@@ -1526,7 +1510,7 @@ def get_caller_address(excel_application):
             return 'Python'  # TODO Return details on caller of UDF?
         excel_caller = excel_application.Caller
         if not hasattr(excel_caller, 'Rows'):
-            return 'VBA:{0}'.format(excel_application.VBE.ActiveCodePane.CodeModule)
+            return f'VBA:{excel_application.VBE.ActiveCodePane.CodeModule}'
         return str(xlwings.xlplatform.Range(xl=excel_caller).get_address(True, True, True))
     except:
         logger.exception('Unable to retrieve caller address.')
@@ -1540,8 +1524,8 @@ def convert_to_return_type(str_value, udf_method):
 def describe_error(response, error):
     # Check "is not None" because response.ok is overridden according to HTTP status code.
     if response is not None:
-        return 'An error occurred. Please check logs for full details: "{0}"'.format(response.text[:198])
-    return 'An error occurred. Please check logs for full details: "{0}"'.format(str(error)[:198])
+        return f'An error occurred. Please check logs for full details: "{response.text[:198]}"'
+    return f'An error occurred. Please check logs for full details: "{str(error)[:198]}"'
 
 
 def handle_exception(udf_method, exception_message, exception):

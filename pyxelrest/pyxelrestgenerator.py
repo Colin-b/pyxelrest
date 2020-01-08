@@ -36,7 +36,7 @@ def generate_python_file(services, file_name='user_defined_functions.py'):
     """
     Create python file containing generated xlwings User Defined Functions.
     """
-    logging.debug('Generating {0}.'.format(file_name))
+    logging.debug(f'Generating {file_name}.')
     with open(os.path.join(os.path.dirname(__file__), file_name), 'w', encoding='utf-8') as generated_file:
         generated_file.write(_user_defined_functions(services))
 

@@ -4,17 +4,12 @@ import os
 import shutil
 import sys
 import yaml
-try:
-    # Python 3
-    from configparser import ConfigParser
-except ImportError:
-    # Python 2
-    from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 
 def create_folder(folder_path):
     if not os.path.exists(folder_path):
-        log.info('Creating {0} folder'.format(folder_path))
+        log.info(f'Creating {folder_path} folder')
         os.makedirs(folder_path)
 
 
@@ -138,8 +133,7 @@ class PostInstall:
                 shutil.copyfile(default_config_file, user_config_file)
                 log.info('Services configuration file created.')
         else:
-            raise Exception('Default services configuration file cannot be found in provided PyxelRest directory. {0}'
-                            .format(default_config_file))
+            raise Exception(f'Default services configuration file cannot be found in provided PyxelRest directory. {default_config_file}')
 
     def _create_pyxelrest_logging_configuration(self):
         self._create_logging_configuration('pyxelrest.log', 'logging.yml')
@@ -155,7 +149,7 @@ class PostInstall:
             if os.path.isfile(init_config_file_path):
                 os.remove(init_config_file_path)
         except:
-            log.warn('{0} logging configuration file cannot be removed.'.format(ini_config_file_name))
+            log.warn(f'{ini_config_file_name} logging configuration file cannot be removed.')
 
     def _create_logging_configuration(self, log_file_name, config_file_name):
         config_file_path = os.path.join(self.pyxelrest_appdata_config_folder, config_file_name)
@@ -167,7 +161,7 @@ class PostInstall:
         with open(config_file_path, 'w') as generated_file:
             generated_file.write(renderer.get_template('default_logging_configuration.yml.jinja2')
                                  .render(path_to_log_file=log_file_path))
-        log.info('{0} logging configuration file created.'.format(config_file_name))
+        log.info(f'{config_file_name} logging configuration file created.')
 
 
 if __name__ == '__main__':

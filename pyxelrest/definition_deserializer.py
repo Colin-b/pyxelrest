@@ -2,7 +2,6 @@ from collections import OrderedDict
 import logging
 import dateutil.tz
 import dateutil.parser
-from past.builtins import basestring
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +12,7 @@ def append_prefix(prefix, values_list):
     This method is used to update header for inner fields.
     """
     if prefix:
-        return ['{0} / {1}'.format(prefix, value) if value else prefix for value in values_list]
+        return [f'{prefix} / {value}' if value else prefix for value in values_list]
     return values_list
 
 
@@ -154,7 +153,7 @@ class RowsMerger:
         self.rows = new_rows
 
     def append_list_to_list(self, new_header, new_list):
-        raise Exception('Merging two lists is not handled for now. {0} merged to {1}'.format(new_list, self.rows))
+        raise Exception(f'Merging two lists is not handled for now. {new_list} merged to {self.rows}')
 
     def append_list_of_list_to_list_of_list(self, new_header, new_list_of_list):
         self.header.extend(new_header)
@@ -167,7 +166,7 @@ class RowsMerger:
         self.rows = new_rows
 
     def append_list_to_list_of_list(self, new_header, new_list):
-        raise Exception('Merging two lists is not handled for now. {0} merged to {1}'.format(new_list, self.rows))
+        raise Exception(f'Merging two lists is not handled for now. {new_list} merged to {self.rows}')
 
     def append_list_to_value(self, new_header, new_list):
         """
@@ -254,7 +253,7 @@ class Field:
         if value is None or value == []:
             return RowsMerger()
         if isinstance(value, dict):
-            raise Exception('{0} is supposed to be a list: {1}'.format(self.description, value))
+            raise Exception(f'{self.description} is supposed to be a list: {value}')
 
         merger = RowsMerger()
 
@@ -271,7 +270,7 @@ class Field:
 
     def convert_simple_type(self, value):
         merger = RowsMerger()
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             if self.format == 'date-time' or self.format == 'date':
                 value = to_date_time(value)
             else:
@@ -318,7 +317,7 @@ class DefaultField(object):
     @staticmethod
     def convert_simple_type(value):
         merger = RowsMerger()
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             # Return first 255 characters otherwise value will not be valid
             value = value[:255]
         merger.rows = value
@@ -344,7 +343,7 @@ class Definition:
         """
         definition_reference = definition_reference[len('#/definitions/'):]
         if definition_reference not in json_definitions:
-            raise Exception('"{0}" is not within {1}'.format(definition_reference, json_definitions))
+            raise Exception(f'"{definition_reference}" is not within {json_definitions}')
         self.json_definition = json_definitions[definition_reference]
         self.type = self.json_definition.get('type')
         self.title = self.json_definition.get('title')
@@ -355,7 +354,7 @@ class Definition:
 
     def convert(self, data):
         if not isinstance(data, dict):
-            raise Exception('{0} is supposed to be a dict: {1}'.format(self.title, data))
+            raise Exception(f'{self.title} is supposed to be a dict: {data}')
 
         merger = RowsMerger()
 
@@ -366,7 +365,7 @@ class Definition:
 
         undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields and field_name[:6].lower() != 'x-pxl-']
         if undefined_fields:
-            raise Exception('The following fields are not part of the definition: {0}'.format(undefined_fields))
+            raise Exception(f'The following fields are not part of the definition: {undefined_fields}')
 
         return merger
 
@@ -380,7 +379,7 @@ class Response:
     def rows(self, data):
         logger.debug('Converting response to list...')
         rows = self.field.convert(None, data).header_and_rows()
-        logger.debug('Response converted to list of {0} elements.'.format(len(rows)))
+        logger.debug(f'Response converted to list of {len(rows)} elements.')
         return rows
 
 

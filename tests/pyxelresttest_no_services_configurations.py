@@ -10,7 +10,7 @@ class PyxelRestNoServicesConfigurationTest(unittest.TestCase):
             loader.load('non_existing.yml')
         self.assertEqual(
             cm.exception.args[0],
-            '"{0}" configuration file cannot be read.'.format(pyxelrest.SERVICES_CONFIGURATION_FILE_PATH))
+            f'"{pyxelrest.SERVICES_CONFIGURATION_FILE_PATH}" configuration file cannot be read.')
 
 
 if __name__ == '__main__':
