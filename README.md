@@ -1,10 +1,21 @@
-# Access REST APIs from Microsoft Excel using User Defined Functions (UDF)
+<h2 align="center">Access REST APIs from Microsoft Excel using User Defined Functions (UDF)</h2>
+
+<p align="center">
+<a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>
+<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Build status" src="https://api.travis-ci.org/Colin-b/pyxelrest.svg?branch=master"></a>
+<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Coverage" src="https://img.shields.io/badge/coverage-XXX%25-brightgreen"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Number of tests" src="https://img.shields.io/badge/tests-XXX passed-blue"></a>
+<a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
+</p>
 
 PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Microsoft Excel User Defined Functions.
 
-1. [Usage](#Usage)
-2. [Installation](#Installation)
-3. [Configuration](#Configuration)
+## Table of Contents
+
+  * [Usage](#Usage)
+  * [Installation](#Installation)
+  * [Configuration](#Configuration)
 
 ## Usage
 
