@@ -509,9 +509,9 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def _convert_to_int(self, value):
             if not isinstance(value, int):
-                raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be an integer.')
             if value < 0:
-                raise Exception('{0} value "{1}" must be superior or equals to 0.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be superior or equals to 0.')
             return value
 
         def validate_optional(self, value, request_content):
@@ -533,9 +533,9 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def _convert_to_int(self, value):
             if not isinstance(value, int):
-                raise Exception('{0} value "{1}" must be an integer.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be an integer.')
             if value < 0:
-                raise Exception('{0} value "{1}" must be superior or equals to 0.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be superior or equals to 0.')
             return value
 
         def validate_optional(self, value, request_content):
@@ -559,7 +559,7 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def _convert_to_str(self, value):
             if isinstance(value, datetime.date):
-                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be formatted as text.')
             if isinstance(value, int) or isinstance(value, float):
                 value = str(value)
             return value
@@ -618,11 +618,11 @@ class PyxelRestUDFMethod(UDFMethod):
                 'array'
             )
             self.choices = ['oauth2_implicit', 'api_key_header', 'api_key_query', 'basic']
-            self.description = 'Authentication methods to use. ({0})'.format(self.choices)
+            self.description = f'Authentication methods to use. ({self.choices})'
 
         def _convert_to_str(self, value):
             if value and value not in self.choices:
-                raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join(self.choices)))
+                raise Exception(f'{self.name} value "{value}" should be {" or ".join(self.choices)}.')
             return value
 
         def _convert_to_array(self, value):
@@ -652,7 +652,7 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def _convert_to_str(self, value):
             if isinstance(value, datetime.date):
-                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be formatted as text.')
             if isinstance(value, int) or isinstance(value, float):
                 value = str(value)
             return value
@@ -676,7 +676,7 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def _convert_to_str(self, value):
             if isinstance(value, datetime.date):
-                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be formatted as text.')
             if isinstance(value, int) or isinstance(value, float):
                 value = str(value)
             return value
@@ -700,7 +700,7 @@ class PyxelRestUDFMethod(UDFMethod):
 
         def _convert_to_str(self, value):
             if isinstance(value, datetime.date):
-                raise Exception('{0} value "{1}" must be formatted as text.'.format(self.name, value))
+                raise Exception(f'{self.name} value "{value}" must be formatted as text.')
             if isinstance(value, int) or isinstance(value, float):
                 value = str(value)
             return value
@@ -712,7 +712,7 @@ class PyxelRestUDFMethod(UDFMethod):
 
     def __init__(self, service, http_method, udf_return_type):
         UDFMethod.__init__(self, service, http_method, '{url}', udf_return_type)
-        self.udf_name = '{0}_{1}_url'.format(service.config.udf_prefix(udf_return_type), http_method)
+        self.udf_name = f'{service.config.udf_prefix(udf_return_type)}_{http_method}_url'
         self.responses = {}
 
     def _create_udf_parameters(self):
@@ -734,7 +734,7 @@ class PyxelRestUDFMethod(UDFMethod):
         return parameters
 
     def summary(self):
-        return 'Send a HTTP {0} request to specified URL.'.format(self.requests_method)
+        return f'Send a HTTP {self.requests_method} request to specified URL.'
 
     def return_a_list(self):
         return True
@@ -862,8 +862,8 @@ class OpenAPI:
     def get_unique_operation_id(self, udf_return_type, potential_duplicated_operation_id):
         unique_operation_id = potential_duplicated_operation_id  # At this time, this might not be unique
         if potential_duplicated_operation_id in self.existing_operation_ids[udf_return_type]:
-            logger.warning('Duplicated operationId found: {0}.'.format(potential_duplicated_operation_id))
-            unique_operation_id = 'duplicated_{0}'.format(potential_duplicated_operation_id)
+            logger.warning(f'Duplicated operationId found: {potential_duplicated_operation_id}.')
+            unique_operation_id = f'duplicated_{potential_duplicated_operation_id}'
 
         self.existing_operation_ids[udf_return_type].append(unique_operation_id)
         return unique_operation_id
@@ -876,8 +876,8 @@ class OpenAPI:
 
     def __str__(self):
         if self.config.ntlm_auth:
-            return '[{0}] service. {1} ({2})'.format(self.config.name, self.uri, self.config.ntlm_auth)
-        return '[{0}] service. {1}'.format(self.config.name, self.uri)
+            return f'[{self.config.name}] service. {self.uri} ({self.config.ntlm_auth})'
+        return f'[{self.config.name}] service. {self.uri}'
 
 
 class OpenAPIUDFMethod(UDFMethod):
@@ -888,7 +888,7 @@ class OpenAPIUDFMethod(UDFMethod):
         self.help_url = self.extract_url(open_api_method.get('description') or '')
         self._compute_operation_id(udf_return_type, path)
         prefix = service.config.udf_name_prefix.format(service_name=service.config.udf_prefix(udf_return_type))
-        self.udf_name = '{0}{1}'.format(prefix, self.open_api_method['operationId'])
+        self.udf_name = f"{prefix}{self.open_api_method['operationId']}"
         self.responses = open_api_method.get('responses')
         if not self.responses:
             raise EmptyResponses(self.udf_name)
@@ -908,7 +908,7 @@ class OpenAPIUDFMethod(UDFMethod):
         :param path: path provided in OpenAPI definition for this method
         """
         operation_id = self.open_api_method.get('operationId') or \
-                       '{0}{1}'.format(self.requests_method, path.replace('/', '_'))
+                       f"{self.requests_method}{path.replace('/', '_')}"
         self.open_api_method['operationId'] = self.service.get_unique_operation_id(udf_return_type, operation_id)
 
     def return_a_list(self):
@@ -980,7 +980,7 @@ class OpenAPIUDFMethod(UDFMethod):
             inner_parameter['server_param_name'] = None  # Indicate that this is the whole body
             parameters.append(APIUDFParameter(inner_parameter, schema))
         else:
-            raise Exception('Unable to extract parameters from {0}'.format(open_api_parameter))
+            raise Exception(f'Unable to extract parameters from {open_api_parameter}')
         return parameters
 
     def _get_definition(self, schema: dict):
@@ -1002,7 +1002,7 @@ class OpenAPIUDFMethod(UDFMethod):
                 for parameter in parameters:
                     # Keep original name for body and form as they make the more sense for those location
                     if parameter.location != 'body' and parameter.location != 'formData':
-                        parameter.name = '{0}_{1}'.format(parameter.location, parameter.name)
+                        parameter.name = f'{parameter.location}_{parameter.name}'
         # Ensure that names are not duplicated anymore
         if len(parameters_by_name) != len(udf_parameters):
             self._avoid_duplicated_names(udf_parameters)
@@ -1067,13 +1067,13 @@ class APIUDFParameter(UDFParameter):
 
     def _convert_to_int(self, value):
         if not isinstance(value, int):
-            raise Exception('{0} value "{1}" ({2} type) must be an integer.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be an integer.')
         self._check_number(value)
         return value
 
     def _convert_to_float(self, value):
         if not isinstance(value, float):
-            raise Exception('{0} value "{1}" ({2} type) must be a number.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be a number.')
         self._check_number(value)
         return value
 
@@ -1081,47 +1081,37 @@ class APIUDFParameter(UDFParameter):
         if self.maximum is not None:
             if self.exclusive_maximum:
                 if value >= self.maximum:
-                    raise Exception('{0} value "{1}" must be strictly inferior to {2}.'.format(
-                        self.name, value, self.maximum
-                    ))
+                    raise Exception(f'{self.name} value "{value}" must be strictly inferior to {self.maximum}.')
             else:
                 if value > self.maximum:
-                    raise Exception('{0} value "{1}" must be inferior or equals to {2}.'.format(
-                        self.name, value, self.maximum
-                    ))
+                    raise Exception(f'{self.name} value "{value}" must be inferior or equals to {self.maximum}.')
 
         if self.minimum is not None:
             if self.exclusive_minimum:
                 if value <= self.minimum:
-                    raise Exception('{0} value "{1}" must be strictly superior to {2}.'.format(
-                        self.name, value, self.minimum
-                    ))
+                    raise Exception(f'{self.name} value "{value}" must be strictly superior to {self.minimum}.')
             else:
                 if value < self.minimum:
-                    raise Exception('{0} value "{1}" must be superior or equals to {2}.'.format(
-                        self.name, value, self.minimum
-                    ))
+                    raise Exception(f'{self.name} value "{value}" must be superior or equals to {self.minimum}.')
 
         if self.multiple_of and (value % self.multiple_of) == 0:
-            raise Exception('{0} value "{1}" must be a multiple of {2}.'.format(self.name, value, self.multiple_of))
+            raise Exception(f'{self.name} value "{value}" must be a multiple of {self.multiple_of}.')
 
         self._check_choices(value)
 
     def _convert_to_date(self, value):
         if not isinstance(value, datetime.date):
-            raise Exception('{0} value "{1}" ({2} type) must be a date.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be a date.')
         return value.isoformat()
 
     def _convert_to_date_time(self, value):
         if not isinstance(value, datetime.datetime):
-            raise Exception('{0} value "{1}" ({2} type) must be a date time.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be a date time.')
         return value.isoformat()
 
     def _convert_to_str(self, value):
         if isinstance(value, datetime.date):
-            raise Exception('{0} value "{1}" ({2} type) must be formatted as text.'.format(
-                self.name, value, type(value)
-            ))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be formatted as text.')
         if isinstance(value, int):
             value = str(value)
         if isinstance(value, float):
@@ -1132,24 +1122,18 @@ class APIUDFParameter(UDFParameter):
                 value = str(value)
         self._check_choices(value)
         if self.max_length is not None and len(value) > self.max_length:
-            raise Exception('{0} value "{1}" cannot contains more than {2} characters.'.format(
-                self.name, value, self.max_length
-            ))
+            raise Exception(f'{self.name} value "{value}" cannot contains more than {self.max_length} characters.')
         if self.min_length is not None and len(value) < self.min_length:
-            raise Exception('{0} value "{1}" cannot contains less than {2} characters.'.format(
-                self.name, value, self.min_length
-            ))
+            raise Exception(f'{self.name} value "{value}" cannot contains less than {self.min_length} characters.')
         return value
 
     def _check_choices(self, value):
         if self.choices and value not in self.choices:
-            raise Exception('{0} value "{1}" should be {2}.'.format(self.name, value, ' or '.join([
-                str(choice) for choice in self.choices
-            ])))
+            raise Exception(f'{self.name} value "{value}" should be {" or ".join([str(choice) for choice in self.choices])}.')
 
     def _convert_to_bool(self, value):
         if not isinstance(value, bool):
-            raise Exception('{0} value "{1}" ({2} type) must be a boolean.'.format(self.name, value, type(value)))
+            raise Exception(f'{self.name} value "{value}" ({type(value)} type) must be a boolean.')
         return value
 
     def _convert_to_dict(self, value):
