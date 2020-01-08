@@ -41,7 +41,7 @@ The updater make sure that the python module, the Microsoft Excel add-in and the
 ### Pre requisites
 
 * [Python >= 3.6](https://www.python.org/downloads/) must be installed (with `pip` and `tkinter`).
-* [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed.
+* [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed (Office 365 is supported).
 * [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
 
 ### User installation (using PIP)
