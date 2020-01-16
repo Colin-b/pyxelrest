@@ -1,20 +1,34 @@
-import pytest
 from responses import RequestsMock
 
-from testsutils import serviceshandler, loader
+from testsutils import loader
 
 
-@pytest.fixture
-def usual_parameters_service(responses: RequestsMock):
-    from testsutils import usual_parameters_service
-
-    serviceshandler.start_services((usual_parameters_service, 8943))
-    yield 1
-    serviceshandler.stop_services()
-
-
-def test_without_logging_configuration_file(usual_parameters_service):
+def test_without_logging_configuration_file(responses: RequestsMock):
     """
     This test case assert that pyxelrest can be loaded without logging configuration
     """
+    responses.add(
+        responses.GET,
+        url="http://localhost:8943/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/date": {
+                    "get": {
+                        "operationId": "get_date",
+                        "responses": {
+                            "200": {
+                                "description": "return value",
+                                "schema": {
+                                    "type": "array",
+                                    "items": {"type": "string", "format": "date"},
+                                },
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
     loader.load("no_logging_services.yml", "non_existing_configuration.yml")
