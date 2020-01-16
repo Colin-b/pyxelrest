@@ -1,19 +1,24 @@
 import timeit
+import time
 
 import pytest
 from responses import RequestsMock
 
-from testsutils import serviceshandler, loader
+from testsutils import loader
 
 
 @pytest.fixture
 def open_api_definition_not_responding_service(responses: RequestsMock):
-    from testsutils import open_api_definition_not_responding_service
+    def reply_after_one_hour():
+        # Do not respond to this call (simulate service down behind a reverse proxy)
+        time.sleep(3600)
 
-    serviceshandler.start_services((open_api_definition_not_responding_service, 8950))
+    responses.add_callback(
+        responses.GET,
+        url="http://localhost:8950/swagger.json",
+        callback=reply_after_one_hour,
+    )
     loader.load("open_api_definition_not_available.yml", load_pyxelrest=False)
-    yield 1
-    serviceshandler.stop_services()
 
 
 def test_service_can_be_loaded_without_hitting_timeout(
