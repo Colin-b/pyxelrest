@@ -6564,16 +6564,38 @@ def test_different_location_same_name(json_service):
     ]
 
 
-def test_post_list_dict_no_ref(json_service):
+def test_post_list_dict_no_ref(json_service, responses):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8954/list_dict_no_ref",
+        json=[
+            {"header1": "value1", "header2": "value2"},
+            {"header1": "value10", "header2": "value20"},
+        ],
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.json_post_list_dict_no_ref(
         payload=[["header1", "header2"], ["value1", "value2"], ["value10", "value20"]]
     ) == [["header1", "header2"], ["value1", "value2"], ["value10", "value20"]]
 
+    assert (
+        _get_request(responses, "http://localhost:8954/list_dict_no_ref").body
+        == b'[{"header1": "value1", "header2": "value2"}, {"header1": "value10", "header2": "value20"}]'
+    )
 
-def test_post_min_and_max_items(json_service):
+
+def test_post_min_and_max_items(json_service, responses):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8954/min_and_max_items",
+        json="OK",
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.json_post_min_and_max_items(
         items=[
@@ -6587,6 +6609,11 @@ def test_post_min_and_max_items(json_service):
             ["value30", "value31", "value32"],
         ],
     ) == [["OK"]]
+
+    assert (
+        _get_request(responses, "http://localhost:8954/min_and_max_items").body
+        == b'{"rule_set": "value10,value11,value12,value20,value21,value22,value30,value31,value32", "items": "value10,value11,value12,value20,value21,value22,value30,value31,value32"}'
+    )
 
 
 def test_post_body_with_properties(json_service, responses):
