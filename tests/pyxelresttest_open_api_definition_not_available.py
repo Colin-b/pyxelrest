@@ -1,22 +1,23 @@
 import timeit
-import unittest
 
-from testsutils import (serviceshandler, loader)
+import pytest
+from responses import RequestsMock
 
-
-class PyxelRestOpenAPIDefinitionNotAvailableTest(unittest.TestCase):
-    def setUp(self):
-        from testsutils import open_api_definition_not_responding_service
-        serviceshandler.start_services((open_api_definition_not_responding_service, 8950))
-        loader.load('open_api_definition_not_available.yml', load_pyxelrest=False)
-
-    def tearDown(self):
-        serviceshandler.stop_services()
-
-    def test_service_can_be_loaded_without_hitting_timeout(self):
-        nb_seconds = timeit.timeit('from pyxelrest import pyxelrestgenerator', number=1)
-        self.assertLess(nb_seconds, 8, 'Time to load pyxelrest should be around timeout.')
+from testsutils import serviceshandler, loader
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.fixture
+def open_api_definition_not_responding_service(responses: RequestsMock):
+    from testsutils import open_api_definition_not_responding_service
+
+    serviceshandler.start_services((open_api_definition_not_responding_service, 8950))
+    loader.load("open_api_definition_not_available.yml", load_pyxelrest=False)
+    yield 1
+    serviceshandler.stop_services()
+
+
+def test_service_can_be_loaded_without_hitting_timeout(
+    open_api_definition_not_responding_service,
+):
+    nb_seconds = timeit.timeit("from pyxelrest import pyxelrestgenerator", number=1)
+    assert nb_seconds < 8, "Time to load pyxelrest should be around timeout."

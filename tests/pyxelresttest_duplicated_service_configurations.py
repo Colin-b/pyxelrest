@@ -1,31 +1,28 @@
 import datetime
-import unittest
 
-from testsutils import (serviceshandler, loader)
+import pytest
+from responses import RequestsMock
 
-
-class PyxelRestDuplicatedServiceConfigurationTest(unittest.TestCase):
-    def setUp(self):
-        from testsutils import usual_parameters_service
-        serviceshandler.start_services((usual_parameters_service, 8943))
-
-    def tearDown(self):
-        serviceshandler.stop_services()
-
-    def test_without_service_configuration_file(self):
-        loader.load('duplicated_service.yml')
-        from pyxelrest import pyxelrestgenerator
-        self.assertEqual(
-            [
-                [datetime.datetime(2014, 3, 5, 0, 0)],
-                [datetime.datetime(9999, 1, 1, 0, 0)],
-                [datetime.datetime(3001, 1, 1, 0, 0)],
-                [datetime.datetime(1970, 1, 1, 0, 0)],
-                [datetime.datetime(1900, 1, 1, 0, 0)],
-            ],
-            pyxelrestgenerator.usual_parameters_get_date()
-        )
+from testsutils import serviceshandler, loader
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.fixture
+def usual_parameters_service(responses: RequestsMock):
+    from testsutils import usual_parameters_service
+
+    serviceshandler.start_services((usual_parameters_service, 8943))
+    yield 1
+    serviceshandler.stop_services()
+
+
+def test_without_service_configuration_file(usual_parameters_service):
+    loader.load("duplicated_service.yml")
+    from pyxelrest import pyxelrestgenerator
+
+    assert pyxelrestgenerator.usual_parameters_get_date() == [
+        [datetime.datetime(2014, 3, 5, 0, 0)],
+        [datetime.datetime(9999, 1, 1, 0, 0)],
+        [datetime.datetime(3001, 1, 1, 0, 0)],
+        [datetime.datetime(1970, 1, 1, 0, 0)],
+        [datetime.datetime(1900, 1, 1, 0, 0)],
+    ]
