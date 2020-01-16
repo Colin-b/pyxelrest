@@ -6543,8 +6543,15 @@ def test_get_none_as_list_parameter(json_service):
     )
 
 
-def test_different_location_same_name(json_service):
+def test_different_location_same_name(json_service, responses):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8954/different_location_same_name/path%20value?dict_field1=query value",
+        json=[],
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.json_post_different_location_same_name(
         dict_field1=34,
@@ -6552,16 +6559,14 @@ def test_different_location_same_name(json_service):
         header_dict_field1="header value",
         query_dict_field1="query value",
         path_dict_field1="path value",
-    ) == [
-        [
-            "dict_field1",
-            "dict_field2",
-            "header_dict_field1",
-            "path_dict_field1",
-            "query_dict_field1",
-        ],
-        ["34", "test", "header value", "path value", "query value"],
-    ]
+    ) == [[""]]
+
+    request = _get_request(
+        responses,
+        "http://localhost:8954/different_location_same_name/path%20value?dict_field1=query+value",
+    )
+    assert request.body == b'{"dict_field1": "34", "dict_field2": "test"}'
+    assert request.headers["dict_field1"] == "header value"
 
 
 def test_post_list_dict_no_ref(json_service, responses):
