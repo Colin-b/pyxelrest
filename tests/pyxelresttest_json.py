@@ -7,6 +7,14 @@ from responses import RequestsMock
 from testsutils import loader
 
 
+def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+    for call in responses.calls:
+        if call.request.url == url:
+            # Pop out verified request (to be able to check multiple requests)
+            responses.calls._calls.remove(call)
+            return call.request
+
+
 @pytest.fixture
 def json_service(responses: RequestsMock):
     responses.add(
@@ -6640,14 +6648,6 @@ def test_post_body_with_properties(json_service, responses):
         _get_request(responses, "http://localhost:8954/body_with_properties").body
         == b'{"bool_field": true, "int_field": null, "str_field": null}'
     )
-
-
-def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
-    for call in responses.calls:
-        if call.request.url == url:
-            # Pop out verified request (to be able to check multiple requests)
-            responses.calls._calls.remove(call)
-            return call.request
 
 
 def test_get_valid_int_choice(json_service, responses):
