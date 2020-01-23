@@ -1,9 +1,18 @@
 import time
 
 import pytest
+from requests import PreparedRequest
 from responses import RequestsMock
 
 from testsutils import loader
+
+
+def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+    for call in responses.calls:
+        if call.request.url == url:
+            # Pop out verified request (to be able to check multiple requests)
+            responses.calls._calls.remove(call)
+            return call.request
 
 
 @pytest.fixture
@@ -59,102 +68,122 @@ def caching_service(responses: RequestsMock):
 def test_get_cached(caching_service, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
-    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [1, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="3") == [
-        ["request_nb", "test1", "test2"],
-        [2, "1", "3"],
-    ]
-    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [1, "1", "2"],
-    ]
+    responses.add(
+        responses.GET,
+        url="http://localhost:8949/cached?test1=1&test2=2",
+        json={},
+        match_querystring=True,
+    )
+
+    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8949/cached?test1=1&test2=3",
+        json={},
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="3") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+
+    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    # Wait for cache to be out of date
     time.sleep(5)
-    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [3, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [3, "1", "2"],
-    ]
+
+    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_post_cached(caching_service, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
-    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [1, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="3") == [
-        ["request_nb", "test1", "test2"],
-        [2, "1", "3"],
-    ]
-    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [3, "1", "2"],
-    ]
+    responses.add(
+        responses.POST,
+        url="http://localhost:8949/cached?test1=1&test2=2",
+        json={},
+        match_querystring=True,
+    )
+
+    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8949/cached?test1=1&test2=3",
+        json={},
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="3") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     time.sleep(5)
-    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [4, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [5, "1", "2"],
-    ]
+    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert pyxelrestgenerator.caching_post_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_put_cached(caching_service, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
-    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [1, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="3") == [
-        ["request_nb", "test1", "test2"],
-        [2, "1", "3"],
-    ]
-    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [3, "1", "2"],
-    ]
+    responses.add(
+        responses.PUT,
+        url="http://localhost:8949/cached?test1=1&test2=2",
+        json={},
+        match_querystring=True,
+    )
+
+    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    responses.add(
+        responses.PUT,
+        url="http://localhost:8949/cached?test1=1&test2=3",
+        json={},
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="3") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     time.sleep(5)
-    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [4, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [5, "1", "2"],
-    ]
+    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert pyxelrestgenerator.caching_put_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_delete_cached(caching_service, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
-    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [1, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="3") == [
-        ["request_nb", "test1", "test2"],
-        [2, "1", "3"],
-    ]
-    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [3, "1", "2"],
-    ]
+    responses.add(
+        responses.DELETE,
+        url="http://localhost:8949/cached?test1=1&test2=2",
+        json={},
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    responses.add(
+        responses.DELETE,
+        url="http://localhost:8949/cached?test1=1&test2=3",
+        json={},
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="3") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     time.sleep(5)
-    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [4, "1", "2"],
-    ]
-    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [
-        ["request_nb", "test1", "test2"],
-        [5, "1", "2"],
-    ]
+    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert pyxelrestgenerator.caching_delete_cached(test1="1", test2="2") == [[""]]
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
