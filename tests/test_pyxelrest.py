@@ -4,9 +4,18 @@ import re
 
 from dateutil.tz import tzutc
 import pytest
+from requests import PreparedRequest
 from responses import RequestsMock
 
 from testsutils import loader
+
+
+def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+    for call in responses.calls:
+        if call.request.url == url:
+            # Pop out verified request (to be able to check multiple requests)
+            responses.calls._calls.remove(call)
+            return call.request
 
 
 def support_pandas():
@@ -19,8 +28,7 @@ def support_pandas():
 
 
 @pytest.fixture
-def services(responses: RequestsMock):
-    # usual_parameters_service
+def usual_parameters_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8943/",
@@ -2601,7 +2609,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # filtered tags service
+
+
+@pytest.fixture
+def filtered_tags_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8944/",
@@ -2673,7 +2684,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # values false service
+
+
+@pytest.fixture
+def values_false_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8945/",
@@ -2797,7 +2811,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # output order service
+
+
+@pytest.fixture
+def output_order_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8946/",
@@ -2883,7 +2900,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # open_api_definition_parsing_service
+
+
+@pytest.fixture
+def open_api_definition_parsing_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8948/swagger_version_not_provided",
@@ -2948,7 +2968,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # without_parameter_service
+
+
+@pytest.fixture
+def without_parameter_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8950/",
@@ -3078,7 +3101,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # header_parameter_service
+
+
+@pytest.fixture
+def header_parameter_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8951/",
@@ -3125,7 +3151,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # form_parameter_service
+
+
+@pytest.fixture
+def form_parameter_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8952/",
@@ -3163,7 +3192,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # array_parameter_service
+
+
+@pytest.fixture
+def array_parameter_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8953/",
@@ -3330,8 +3362,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # TODO add static_file_call_service mock to the specific test case
-    # http_methods_service
+
+
+@pytest.fixture
+def http_methods_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8955/",
@@ -3372,7 +3406,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # content_type_service
+
+
+@pytest.fixture
+def content_type_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8956/",
@@ -3397,7 +3434,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # base_path_ending_with_slash_service
+
+
+@pytest.fixture
+def base_path_ending_with_slash_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8957/",
@@ -3436,7 +3476,10 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    # async_service
+
+
+@pytest.fixture
+def async_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8958/",
@@ -3458,22 +3501,45 @@ def services(responses: RequestsMock):
         },
         match_querystring=True,
     )
+
+
+@pytest.fixture
+def services(
+    responses: RequestsMock,
+    usual_parameters_service,
+    filtered_tags_service,
+    values_false_service,
+    output_order_service,
+    open_api_definition_parsing_service,
+    without_parameter_service,
+    header_parameter_service,
+    form_parameter_service,
+    array_parameter_service,
+    http_methods_service,
+    content_type_service,
+    base_path_ending_with_slash_service,
+    async_service,
+):
+    # TODO add static_file_call_service mock to the specific test case
     loader.load("services.yml")
 
 
-def test_string_multi_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
-
-    result = "string_array=\"['str1', 'str2']\""
-    assert (
-        pyxelrestgenerator.array_parameter_get_string_multi_array_parameter(
-            ["str1", "str2"]
-        )
-        == result
+def test_string_multi_array_parameter(responses: RequestsMock, services):
+    responses.add(
+        responses.GET,
+        url="http://localhost:8953/string_multi_array_parameter?string_array=str1&string_array=str2",
+        json={},
+        match_querystring=True,
     )
 
+    from pyxelrest import pyxelrestgenerator
 
-def test_string_default_array_parameter(services):
+    assert pyxelrestgenerator.array_parameter_get_string_multi_array_parameter(
+        ["str1", "str2"]
+    ) == [[""]]
+
+
+def test_string_default_array_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1,str2']\""
@@ -3485,7 +3551,7 @@ def test_string_default_array_parameter(services):
     )
 
 
-def test_string_csv_array_parameter(services):
+def test_string_csv_array_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1,str2']\""
@@ -3497,7 +3563,7 @@ def test_string_csv_array_parameter(services):
     )
 
 
-def test_string_ssv_array_parameter(services):
+def test_string_ssv_array_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1 str2']\""
@@ -3509,7 +3575,7 @@ def test_string_ssv_array_parameter(services):
     )
 
 
-def test_string_tsv_array_parameter(services):
+def test_string_tsv_array_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1\\tstr2']\""
@@ -3521,7 +3587,7 @@ def test_string_tsv_array_parameter(services):
     )
 
 
-def test_string_pipes_array_parameter(services):
+def test_string_pipes_array_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1|str2']\""
@@ -3533,7 +3599,7 @@ def test_string_pipes_array_parameter(services):
     )
 
 
-def test_plain_without_parameter(services):
+def test_plain_without_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3542,7 +3608,7 @@ def test_plain_without_parameter(services):
     )
 
 
-def test_post_without_parameter(services):
+def test_post_without_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3551,7 +3617,7 @@ def test_post_without_parameter(services):
     )
 
 
-def test_put_without_parameter(services):
+def test_put_without_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3560,7 +3626,7 @@ def test_put_without_parameter(services):
     )
 
 
-def test_delete_without_parameter(services):
+def test_delete_without_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3569,7 +3635,7 @@ def test_delete_without_parameter(services):
     )
 
 
-def test_service_without_sync_does_not_have_sync(services):
+def test_service_without_sync_does_not_have_sync(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     with pytest.raises(AttributeError) as exception_info:
@@ -3580,7 +3646,7 @@ def test_service_without_sync_does_not_have_sync(services):
     )
 
 
-def test_get_header_parameter(services):
+def test_get_header_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     headers = pyxelrestgenerator.header_parameter_get_header("sent header")
@@ -3588,7 +3654,7 @@ def test_get_header_parameter(services):
     assert headers[1][header_param_index] == "sent header"
 
 
-def test_get_header_parameter_sync(services):
+def test_get_header_parameter_sync(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     headers = pyxelrestgenerator.vba_header_parameter_get_header("sent header")
@@ -3596,7 +3662,7 @@ def test_get_header_parameter_sync(services):
     assert headers[1][header_param_index] == "sent header"
 
 
-def test_service_only_sync_does_not_have_vba_prefix(services):
+def test_service_only_sync_does_not_have_vba_prefix(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     with pytest.raises(AttributeError) as exception_info:
@@ -3607,7 +3673,7 @@ def test_service_only_sync_does_not_have_vba_prefix(services):
     )
 
 
-def test_get_header_advanced_configuration(services):
+def test_get_header_advanced_configuration(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     headers = pyxelrestgenerator.header_advanced_configuration_get_header("sent header")
@@ -3637,7 +3703,7 @@ def test_get_header_advanced_configuration(services):
     assert headers[1][cell_header_index] == "Python"
 
 
-def test_post_form_parameter(services):
+def test_post_form_parameter(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.form_parameter_post_form("sent string form data") == [
@@ -3646,7 +3712,7 @@ def test_post_form_parameter(services):
     ]
 
 
-def test_get_with_selected_tags(services):
+def test_get_with_selected_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3655,13 +3721,13 @@ def test_get_with_selected_tags(services):
     )
 
 
-def test_post_with_selected_tags(services):
+def test_post_with_selected_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.selected_tags_post_tags() == "All tags are accepted"
 
 
-def test_put_with_selected_tags(services):
+def test_put_with_selected_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3670,31 +3736,31 @@ def test_put_with_selected_tags(services):
     )
 
 
-def test_delete_with_selected_tags(services):
+def test_delete_with_selected_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "selected_tags_delete_tags")
 
 
-def test_get_with_excluded_tags(services):
+def test_get_with_excluded_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "excluded_tags_get_tags")
 
 
-def test_post_with_excluded_tags(services):
+def test_post_with_excluded_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "excluded_tags_post_tags")
 
 
-def test_put_with_excluded_tags(services):
+def test_put_with_excluded_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "excluded_tags_put_tags")
 
 
-def test_delete_with_excluded_tags(services):
+def test_delete_with_excluded_tags(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3703,7 +3769,7 @@ def test_delete_with_excluded_tags(services):
     )
 
 
-def test_get_with_selected_operation_ids(services):
+def test_get_with_selected_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3712,7 +3778,7 @@ def test_get_with_selected_operation_ids(services):
     )
 
 
-def test_post_with_selected_operation_ids(services):
+def test_post_with_selected_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3720,7 +3786,7 @@ def test_post_with_selected_operation_ids(services):
     )
 
 
-def test_put_with_selected_operation_ids(services):
+def test_put_with_selected_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3729,31 +3795,31 @@ def test_put_with_selected_operation_ids(services):
     )
 
 
-def test_delete_with_selected_operation_ids(services):
+def test_delete_with_selected_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "selected_operation_ids_delete_tags")
 
 
-def test_get_with_excluded_operation_ids(services):
+def test_get_with_excluded_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_get_tags")
 
 
-def test_post_with_excluded_operation_ids(services):
+def test_post_with_excluded_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_post_tags")
 
 
-def test_put_with_excluded_operation_ids(services):
+def test_put_with_excluded_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_put_tags")
 
 
-def test_delete_with_excluded_operation_ids(services):
+def test_delete_with_excluded_operation_ids(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3762,7 +3828,7 @@ def test_delete_with_excluded_operation_ids(services):
     )
 
 
-def test_get_with_zero_integer(services):
+def test_get_with_zero_integer(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_zero_integer() == [
@@ -3771,7 +3837,7 @@ def test_get_with_zero_integer(services):
     ]
 
 
-def test_get_with_zero_float(services):
+def test_get_with_zero_float(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_zero_float() == [
@@ -3780,7 +3846,7 @@ def test_get_with_zero_float(services):
     ]
 
 
-def test_get_with_false_boolean(services):
+def test_get_with_false_boolean(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_false_boolean() == [
@@ -3789,7 +3855,7 @@ def test_get_with_false_boolean(services):
     ]
 
 
-def test_get_with_empty_string(services):
+def test_get_with_empty_string(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_string() == [
@@ -3798,7 +3864,7 @@ def test_get_with_empty_string(services):
     ]
 
 
-def test_get_with_empty_list(services):
+def test_get_with_empty_list(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_list() == [
@@ -3807,7 +3873,7 @@ def test_get_with_empty_list(services):
     ]
 
 
-def test_get_with_empty_dictionary(services):
+def test_get_with_empty_dictionary(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_dictionary() == [
@@ -3816,7 +3882,7 @@ def test_get_with_empty_dictionary(services):
     ]
 
 
-def test_get_compare_output_order(services):
+def test_get_compare_output_order(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.output_order_get_price_unordered() == [
@@ -3827,7 +3893,7 @@ def test_get_compare_output_order(services):
     ]
 
 
-def test_get_date(services):
+def test_get_date(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.usual_parameters_get_date() == [
@@ -3839,7 +3905,7 @@ def test_get_date(services):
     ]
 
 
-def test_get_datetime(services):
+def test_get_datetime(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.usual_parameters_get_date_time() == [
@@ -3855,7 +3921,7 @@ def test_get_datetime(services):
     ]
 
 
-def test_get_datetime_encoding(services):
+def test_get_datetime_encoding(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     date_time = datetime.datetime.strptime("2017-09-13T15:20:35", "%Y-%m-%dT%H:%M:%S")
@@ -3881,7 +3947,7 @@ def test_get_datetime_encoding(services):
     )
 
 
-def test_get_static_open_api_definition(services):
+def test_get_static_open_api_definition(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3890,50 +3956,50 @@ def test_get_static_open_api_definition(services):
     )
 
 
-def test_get_http_method(services):
+def test_get_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.http_methods_get_http_methods() == "GET"
 
 
-def test_post_http_method(services):
+def test_post_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.http_methods_post_http_methods() == "POST"
 
 
-def test_put_http_method(services):
+def test_put_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.http_methods_put_http_methods() == "PUT"
 
 
-def test_delete_http_method(services):
+def test_delete_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.http_methods_delete_http_methods() == "DELETE"
 
 
-def test_patch_http_method(services):
+def test_patch_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.http_methods_patch_http_methods() == "PATCH"
 
 
-def test_options_http_method(services):
+def test_options_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.http_methods_options_http_methods() == "OPTIONS"
 
 
-def test_head_http_method(services):
+def test_head_http_method(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     # HEAD is already handled by Flask
     assert pyxelrestgenerator.http_methods_head_http_methods() == ""
 
 
-def test_msgpackpandas_content_type(services):
+def test_msgpackpandas_content_type(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3944,13 +4010,13 @@ def test_msgpackpandas_content_type(services):
     )
 
 
-def test_json_content_type(services):
+def test_json_content_type(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.content_type_get_json() == ["application/json"]
 
 
-def test_missing_operation_id(services):
+def test_missing_operation_id(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3959,7 +4025,7 @@ def test_missing_operation_id(services):
     )
 
 
-def test_mixed_operation_id(services):
+def test_mixed_operation_id(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3972,7 +4038,7 @@ def test_mixed_operation_id(services):
     )
 
 
-def test_get_base_path_ending_with_slash(services):
+def test_get_base_path_ending_with_slash(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3981,7 +4047,7 @@ def test_get_base_path_ending_with_slash(services):
     )
 
 
-def test_post_base_path_ending_with_slash(services):
+def test_post_base_path_ending_with_slash(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3990,7 +4056,7 @@ def test_post_base_path_ending_with_slash(services):
     )
 
 
-def test_put_base_path_ending_with_slash(services):
+def test_put_base_path_ending_with_slash(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -3999,7 +4065,7 @@ def test_put_base_path_ending_with_slash(services):
     )
 
 
-def test_delete_base_path_ending_with_slash(services):
+def test_delete_base_path_ending_with_slash(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert (
@@ -4008,7 +4074,7 @@ def test_delete_base_path_ending_with_slash(services):
     )
 
 
-def test_get_async_url(services):
+def test_get_async_url(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.async_get_async() == [
@@ -4017,7 +4083,7 @@ def test_get_async_url(services):
     ]
 
 
-def test_get_custom_url_sync(services):
+def test_get_custom_url_sync(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.vba_pyxelrest_get_url(
@@ -4029,7 +4095,7 @@ def test_get_custom_url_sync(services):
     ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
 
 
-def test_get_custom_url(services):
+def test_get_custom_url(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.pyxelrest_get_url(
@@ -4041,7 +4107,7 @@ def test_get_custom_url(services):
     ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
 
 
-def test_delete_custom_url_sync(services):
+def test_delete_custom_url_sync(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.vba_pyxelrest_delete_url(
@@ -4053,7 +4119,7 @@ def test_delete_custom_url_sync(services):
     ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
 
 
-def test_delete_custom_url(services):
+def test_delete_custom_url(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.pyxelrest_delete_url(
@@ -4065,7 +4131,7 @@ def test_delete_custom_url(services):
     ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
 
 
-def test_post_custom_url_dict(services):
+def test_post_custom_url_dict(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.pyxelrest_post_url(
@@ -4076,7 +4142,7 @@ def test_post_custom_url_dict(services):
     ) == [["key1", "key2", "key3"], ["value1", 1, "value3"]]
 
 
-def test_post_custom_url_dict_list_sync(services):
+def test_post_custom_url_dict_list_sync(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.vba_pyxelrest_post_url(
@@ -4087,7 +4153,7 @@ def test_post_custom_url_dict_list_sync(services):
     ) == [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]]
 
 
-def test_post_custom_url_dict_list(services):
+def test_post_custom_url_dict_list(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.pyxelrest_post_url(
@@ -4098,7 +4164,7 @@ def test_post_custom_url_dict_list(services):
     ) == [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]]
 
 
-def test_put_custom_url_dict_list(services):
+def test_put_custom_url_dict_list(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.pyxelrest_put_url(
@@ -4109,7 +4175,7 @@ def test_put_custom_url_dict_list(services):
     ) == [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]]
 
 
-def test_put_custom_url_dict(services):
+def test_put_custom_url_dict(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.pyxelrest_put_url(
@@ -4120,7 +4186,7 @@ def test_put_custom_url_dict(services):
     ) == [["key1", "key2", "key3"], ["value1", 1, "value3"]]
 
 
-def test_put_custom_url_dict_sync(services):
+def test_put_custom_url_dict_sync(responses: RequestsMock, services):
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.vba_pyxelrest_put_url(
