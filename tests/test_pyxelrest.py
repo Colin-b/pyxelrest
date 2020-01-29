@@ -13,15 +13,6 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
             return call.request
 
 
-def support_pandas():
-    try:
-        import pandas
-
-        return True
-    except:
-        return False
-
-
 @pytest.fixture
 def open_api_definition_parsing_service(responses: RequestsMock):
     responses.add(
@@ -82,34 +73,6 @@ def open_api_definition_parsing_service(responses: RequestsMock):
                         # This is obviously misleading but it can happen...
                         "operationId": "get_without_operationId",
                         "responses": {200: {"description": "successful operation"}},
-                    }
-                },
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
-def content_type_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8956/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/msgpackpandas": {
-                    "get": {
-                        "operationId": "get_msgpackpandas",
-                        "responses": {200: {"description": "successful operation"}},
-                        "produces": ["application/msgpackpandas"],
-                    }
-                },
-                "/json": {
-                    "get": {
-                        "operationId": "get_json",
-                        "responses": {200: {"description": "successful operation"}},
-                        "produces": ["application/json"],
                     }
                 },
             },
@@ -188,7 +151,6 @@ def async_service(responses: RequestsMock):
 @pytest.fixture
 def services(
     open_api_definition_parsing_service,
-    content_type_service,
     base_path_ending_with_slash_service,
     async_service,
 ):
@@ -203,23 +165,6 @@ def test_get_static_open_api_definition(responses: RequestsMock, services):
         pyxelrestgenerator.open_api_definition_loaded_from_file_get_static_file_call()
         == "success"
     )
-
-
-def test_msgpackpandas_content_type(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.content_type_get_msgpackpandas()
-        == ["application/msgpackpandas"]
-        if support_pandas()
-        else ["*/*"]
-    )
-
-
-def test_json_content_type(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.content_type_get_json() == ["application/json"]
 
 
 def test_missing_operation_id(responses: RequestsMock, services):
