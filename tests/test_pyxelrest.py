@@ -82,48 +82,6 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def base_path_ending_with_slash_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8957/",
-        json={
-            "swagger": "2.0",
-            "basePath": "//",
-            "paths": {
-                "/method": {
-                    "get": {
-                        "operationId": "get_method",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {"type": "string"},
-                            }
-                        },
-                    },
-                    "post": {
-                        "operationId": "post_method",
-                        "responses": {
-                            "200": {"description": "POST performed properly"}
-                        },
-                    },
-                    "put": {
-                        "operationId": "put_method",
-                        "responses": {"200": {"description": "PUT performed properly"}},
-                    },
-                    "delete": {
-                        "operationId": "delete_method",
-                        "responses": {
-                            "200": {"description": "DELETE performed properly"}
-                        },
-                    },
-                }
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
 def async_service(responses: RequestsMock):
     responses.add(
         responses.GET,
@@ -149,11 +107,7 @@ def async_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def services(
-    open_api_definition_parsing_service,
-    base_path_ending_with_slash_service,
-    async_service,
-):
+def services(open_api_definition_parsing_service, async_service):
     # TODO add static_file_call_service mock to the specific test case
     loader.load("services.yml")
 
@@ -186,42 +140,6 @@ def test_mixed_operation_id(responses: RequestsMock, services):
     assert (
         pyxelrestgenerator.operation_id_not_always_provided_duplicated_get_without_operationId()
         == "/without_operationId called."
-    )
-
-
-def test_get_base_path_ending_with_slash(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.base_path_ending_with_slash_get_method()
-        == "http://localhost:8957/method"
-    )
-
-
-def test_post_base_path_ending_with_slash(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.base_path_ending_with_slash_post_method()
-        == "http://localhost:8957/method"
-    )
-
-
-def test_put_base_path_ending_with_slash(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.base_path_ending_with_slash_put_method()
-        == "http://localhost:8957/method"
-    )
-
-
-def test_delete_base_path_ending_with_slash(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.base_path_ending_with_slash_delete_method()
-        == "http://localhost:8957/method"
     )
 
 
