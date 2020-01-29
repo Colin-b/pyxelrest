@@ -82,32 +82,7 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def async_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8958/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/async": {
-                    "get": {
-                        "operationId": "get_async",
-                        "responses": {
-                            "202": {
-                                "description": "return value",
-                                "schema": {"type": "string"},
-                            }
-                        },
-                    }
-                }
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
-def services(open_api_definition_parsing_service, async_service):
+def services(open_api_definition_parsing_service):
     # TODO add static_file_call_service mock to the specific test case
     loader.load("services.yml")
 
@@ -141,15 +116,6 @@ def test_mixed_operation_id(responses: RequestsMock, services):
         pyxelrestgenerator.operation_id_not_always_provided_duplicated_get_without_operationId()
         == "/without_operationId called."
     )
-
-
-def test_get_async_url(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.async_get_async() == [
-        ["Status URL"],
-        ["http://localhost:8958/async/status"],
-    ]
 
 
 def test_get_custom_url_sync(responses: RequestsMock, services):
