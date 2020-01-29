@@ -4,7 +4,7 @@ from responses import RequestsMock
 
 from testsutils import loader
 
-
+# TODO Put tests related to operation id filtering into another test file
 def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
     for call in responses.calls:
         if call.request.url == url:
