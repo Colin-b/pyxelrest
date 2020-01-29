@@ -2969,47 +2969,6 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def form_parameter_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8952/",
-        json={
-            "swagger": "2.0",
-            "definitions": {
-                "Form": {
-                    "type": "object",
-                    "properties": {"form_string": {"type": "string"}},
-                    "title": "Test",
-                }
-            },
-            "paths": {
-                "/form": {
-                    "post": {
-                        "operationId": "post_form",
-                        "parameters": [
-                            {
-                                "description": "form parameter",
-                                "in": "formData",
-                                "name": "form_string",
-                                "required": True,
-                                "type": "string",
-                            }
-                        ],
-                        "responses": {
-                            200: {
-                                "description": "successful operation",
-                                "schema": {"$ref": "#/definitions/Form"},
-                            }
-                        },
-                    }
-                }
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
 def http_methods_service(responses: RequestsMock):
     responses.add(
         responses.GET,
@@ -3155,7 +3114,6 @@ def services(
     values_false_service,
     output_order_service,
     open_api_definition_parsing_service,
-    form_parameter_service,
     http_methods_service,
     content_type_service,
     base_path_ending_with_slash_service,
@@ -3163,15 +3121,6 @@ def services(
 ):
     # TODO add static_file_call_service mock to the specific test case
     loader.load("services.yml")
-
-
-def test_post_form_parameter(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.form_parameter_post_form("sent string form data") == [
-        ["form_string"],
-        ["sent string form data"],
-    ]
 
 
 def test_get_with_selected_tags(responses: RequestsMock, services):
