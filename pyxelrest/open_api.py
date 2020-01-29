@@ -3,6 +3,8 @@ import datetime
 import logging
 import os
 import re
+from typing import List, Union
+
 import requests
 import requests.exceptions
 import sys
@@ -1498,23 +1500,25 @@ class RequestContent:
             self.header_parameters[parameter.server_param_name] = value
 
 
-def load_services_from_yaml():
+def load_services_from_yaml(
+    services_configuration_file_path: str,
+) -> List[Union[PyxelRestService, OpenAPI]]:
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
     configuration file
     """
-    if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
-        raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
+    if not os.path.isfile(services_configuration_file_path):
+        raise ConfigurationFileNotFound(services_configuration_file_path)
 
-    with open(SERVICES_CONFIGURATION_FILE_PATH, "r") as config_file:
+    with open(services_configuration_file_path, "r") as config_file:
         config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    logging.debug(f'Loading services from "{SERVICES_CONFIGURATION_FILE_PATH}"...')
+    logging.debug(f'Loading services from "{services_configuration_file_path}"...')
     return load_services(config)
 
 
-def load_services(config):
+def load_services(config: dict) -> List[Union[PyxelRestService, OpenAPI]]:
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
@@ -1537,7 +1541,7 @@ def load_services(config):
     return loaded_services
 
 
-def load_service(service_name, service_config):
+def load_service(service_name: str, service_config: dict) -> OpenAPI:
     logger.debug(f'Loading "{service_name}" service...')
     try:
         service = OpenAPI(service_name, service_config)
@@ -1548,7 +1552,7 @@ def load_service(service_name, service_config):
         logger.error(f'"{service_name}" service will not be available: {e}')
 
 
-def check_for_duplicates(loaded_services):
+def check_for_duplicates(loaded_services: List[Union[PyxelRestService, OpenAPI]]):
     services_by_prefix = {}
     for service in loaded_services:
         for udf_return_type in service.config.udf_return_types:
