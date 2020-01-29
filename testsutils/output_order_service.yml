@@ -1,0 +1,7 @@
+output_order:
+  open_api:
+    definition: "http://localhost:8946/"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
