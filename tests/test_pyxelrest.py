@@ -1,6 +1,4 @@
 import datetime
-import os
-import re
 
 from dateutil.tz import tzutc
 import pytest
@@ -2971,56 +2969,6 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def header_parameter_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8951/",
-        json={
-            "swagger": "2.0",
-            "definitions": {
-                "Header": {
-                    "type": "object",
-                    "properties": {
-                        "Accept": {"type": "string"},
-                        "Accept-Encoding": {"type": "string"},
-                        "Connection": {"type": "string"},
-                        "Content-Length": {"type": "string"},
-                        "Content-Type": {"type": "string"},
-                        "Header-String": {"type": "string"},
-                        "Host": {"type": "string"},
-                        "User-Agent": {"type": "string"},
-                    },
-                    "title": "Test",
-                }
-            },
-            "paths": {
-                "/header": {
-                    "get": {
-                        "operationId": "get_header",
-                        "parameters": [
-                            {
-                                "description": "header parameter",
-                                "in": "header",
-                                "name": "header_string",
-                                "required": True,
-                                "type": "string",
-                            }
-                        ],
-                        "responses": {
-                            200: {
-                                "description": "successful operation",
-                                "schema": {"$ref": "#/definitions/Header"},
-                            }
-                        },
-                    }
-                }
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
 def form_parameter_service(responses: RequestsMock):
     responses.add(
         responses.GET,
@@ -3207,7 +3155,6 @@ def services(
     values_false_service,
     output_order_service,
     open_api_definition_parsing_service,
-    header_parameter_service,
     form_parameter_service,
     http_methods_service,
     content_type_service,
@@ -3216,63 +3163,6 @@ def services(
 ):
     # TODO add static_file_call_service mock to the specific test case
     loader.load("services.yml")
-
-
-def test_get_header_parameter(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    headers = pyxelrestgenerator.header_parameter_get_header("sent header")
-    header_param_index = headers[0].index("Header-String")
-    assert headers[1][header_param_index] == "sent header"
-
-
-def test_get_header_parameter_sync(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    headers = pyxelrestgenerator.vba_header_parameter_get_header("sent header")
-    header_param_index = headers[0].index("Header-String")
-    assert headers[1][header_param_index] == "sent header"
-
-
-def test_service_only_sync_does_not_have_vba_prefix(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    with pytest.raises(AttributeError) as exception_info:
-        pyxelrestgenerator.vba_header_advanced_configuration_get_header("sent header")
-    assert (
-        str(exception_info.value)
-        == "module 'pyxelrest.pyxelrestgenerator' has no attribute 'vba_header_advanced_configuration_get_header'"
-    )
-
-
-def test_get_header_advanced_configuration(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    headers = pyxelrestgenerator.header_advanced_configuration_get_header("sent header")
-
-    custom_header_index = headers[0].index("X-Pxl-Custom")
-    assert headers[1][custom_header_index] == "MyCustomValue"
-
-    other_header_index = headers[0].index("X-Pxl-Other")
-    assert headers[1][other_header_index] == "MyOtherValue"
-
-    envvar_header_index = headers[0].index("X-Pxl-Envvar")
-    assert headers[1][envvar_header_index] == os.environ["USERNAME"]
-
-    request_header_index = headers[0].index("X-Pxl-Request")
-    assert request_header_index
-
-    session_header_index = headers[0].index("X-Pxl-Session")
-    assert re.match(
-        "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d",
-        headers[1][session_header_index],
-    )
-
-    user_agent_index = headers[0].index("User-Agent")
-    assert headers[1][user_agent_index] == "PyxelRest v0.69.0"
-
-    cell_header_index = headers[0].index("X-Pxl-Cell")
-    assert headers[1][cell_header_index] == "Python"
 
 
 def test_post_form_parameter(responses: RequestsMock, services):

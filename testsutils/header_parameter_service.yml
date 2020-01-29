@@ -1,0 +1,20 @@
+header_parameter:
+  open_api:
+    definition: "http://localhost:8951/"
+  udf:
+    return_types:
+      - "vba_compatible"
+      - "sync_auto_expand"
+    shift_result: false
+
+header_advanced_configuration:
+  open_api:
+    definition: "http://localhost:8951/"
+  udf:
+    return_types:
+      - "vba_compatible"
+    shift_result: false
+  headers:
+    X-PXL-CUSTOM: "MyCustomValue"
+    X-PXL-OTHER: "MyOtherValue"
+    X-PXL-ENVVAR: "%USERNAME%"
