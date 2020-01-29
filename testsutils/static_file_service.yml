@@ -1,0 +1,7 @@
+open_api_definition_loaded_from_file:
+  open_api:
+    definition: "file://../testsutils/static_open_api_definition.json"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false

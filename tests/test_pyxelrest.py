@@ -14,112 +14,19 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 
 
 @pytest.fixture
-def open_api_definition_parsing_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8948/swagger_version_not_provided",
-        json={
-            "paths": {
-                "/should_not_be_available": {
-                    "get": {
-                        "operationId": "get_should_not_be_available",
-                        "responses": {200: {"description": "successful operation"}},
-                    }
-                }
-            }
-        },
-        match_querystring=True,
-    )
-    responses.add(
-        responses.GET,
-        url="http://localhost:8948/swagger_version_not_supported",
-        json={
-            "swagger": "1.0",
-            "paths": {
-                "/should_not_be_available": {
-                    "get": {
-                        "operationId": "get_should_not_be_available",
-                        "responses": {200: {"description": "successful operation"}},
-                    }
-                }
-            },
-        },
-        match_querystring=True,
-    )
-    responses.add(
-        responses.GET,
-        url="http://localhost:8948/operation_id_not_provided",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/without_operationId": {
-                    "get": {"responses": {200: {"description": "successful operation"}}}
-                }
-            },
-        },
-        match_querystring=True,
-    )
-    responses.add(
-        responses.GET,
-        url="http://localhost:8948/operation_id_not_always_provided",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/without_operationId": {
-                    "get": {"responses": {200: {"description": "successful operation"}}}
-                },
-                "/with_operationId": {
-                    "get": {
-                        # This is obviously misleading but it can happen...
-                        "operationId": "get_without_operationId",
-                        "responses": {200: {"description": "successful operation"}},
-                    }
-                },
-            },
-        },
-        match_querystring=True,
-    )
+def pyxelrest_service():
+    loader.load("pyxelrest_service.yml")
 
 
-@pytest.fixture
-def services(open_api_definition_parsing_service):
-    # TODO add static_file_call_service mock to the specific test case
-    loader.load("services.yml")
-
-
-def test_get_static_open_api_definition(responses: RequestsMock, services):
+def test_get_custom_url_sync(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
 
-    assert (
-        pyxelrestgenerator.open_api_definition_loaded_from_file_get_static_file_call()
-        == "success"
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/async/status",
+        json={},
+        match_querystring=True,
     )
-
-
-def test_missing_operation_id(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.operation_id_not_provided_get_without_operationId()
-        == "/without_operationId called."
-    )
-
-
-def test_mixed_operation_id(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert (
-        pyxelrestgenerator.operation_id_not_always_provided_get_without_operationId()
-        == "/with_operationId called."
-    )
-    assert (
-        pyxelrestgenerator.operation_id_not_always_provided_duplicated_get_without_operationId()
-        == "/without_operationId called."
-    )
-
-
-def test_get_custom_url_sync(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.vba_pyxelrest_get_url(
         "http://localhost:8958/async/status",
@@ -127,11 +34,21 @@ def test_get_custom_url_sync(responses: RequestsMock, services):
             ["X-Custom-Header1", "custom1"],
             ["X-Custom-Header2", "custom2"],
         ],
-    ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8958/async/status").headers
+    assert headers["X-Custom-Header1"] == "custom1"
+    assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_get_custom_url(responses: RequestsMock, services):
+def test_get_custom_url(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/async/status",
+        json={},
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8958/async/status",
@@ -139,11 +56,21 @@ def test_get_custom_url(responses: RequestsMock, services):
             ["X-Custom-Header1", "custom1"],
             ["X-Custom-Header2", "custom2"],
         ],
-    ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8958/async/status").headers
+    assert headers["X-Custom-Header1"] == "custom1"
+    assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_delete_custom_url_sync(responses: RequestsMock, services):
+def test_delete_custom_url_sync(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.DELETE,
+        url="http://localhost:8958/unlisted",
+        json={},
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.vba_pyxelrest_delete_url(
         "http://localhost:8958/unlisted",
@@ -151,11 +78,21 @@ def test_delete_custom_url_sync(responses: RequestsMock, services):
             ["X-Custom-Header1", "custom1"],
             ["X-Custom-Header2", "custom2"],
         ],
-    ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8958/unlisted").headers
+    assert headers["X-Custom-Header1"] == "custom1"
+    assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_delete_custom_url(responses: RequestsMock, services):
+def test_delete_custom_url(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.DELETE,
+        url="http://localhost:8958/unlisted",
+        json={},
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.pyxelrest_delete_url(
         "http://localhost:8958/unlisted",
@@ -163,70 +100,133 @@ def test_delete_custom_url(responses: RequestsMock, services):
             ["X-Custom-Header1", "custom1"],
             ["X-Custom-Header2", "custom2"],
         ],
-    ) == [["X-Custom-Header1", "X-Custom-Header2"], ["custom1", "custom2"]]
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8958/unlisted").headers
+    assert headers["X-Custom-Header1"] == "custom1"
+    assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_post_custom_url_dict(responses: RequestsMock, services):
+def test_post_custom_url_dict(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8958/dict",
+        json={},
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.pyxelrest_post_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"]],
         extra_headers=[["Content-Type", "application/json"]],
         parse_body_as="dict",
-    ) == [["key1", "key2", "key3"], ["value1", 1, "value3"]]
+    ) == [[""]]
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'
 
 
-def test_post_custom_url_dict_list_sync(responses: RequestsMock, services):
+def test_post_custom_url_dict_list_sync(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8958/dict",
+        json={},
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.vba_pyxelrest_post_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]],
         extra_headers=[["Content-Type", "application/json"]],
         parse_body_as="dict_list",
-    ) == [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]]
+    ) == [[""]]
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert (
+        request.body
+        == b'[{"key1": "value1", "key2": 1, "key3": "value3"}, {"key1": "other1", "key2": 2, "key3": "other3"}]'
+    )
 
 
-def test_post_custom_url_dict_list(responses: RequestsMock, services):
+def test_post_custom_url_dict_list(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8958/dict",
+        json={},
+        match_querystring=True,
+    )
 
     assert pyxelrestgenerator.pyxelrest_post_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]],
         extra_headers=[["Content-Type", "application/json"]],
         parse_body_as="dict_list",
-    ) == [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]]
+    ) == [[""]]
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert (
+        request.body
+        == b'[{"key1": "value1", "key2": 1, "key3": "value3"}, {"key1": "other1", "key2": 2, "key3": "other3"}]'
+    )
 
 
-def test_put_custom_url_dict_list(responses: RequestsMock, services):
+def test_put_custom_url_dict_list(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
+    )
 
     assert pyxelrestgenerator.pyxelrest_put_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]],
         extra_headers=[["Content-Type", "application/json"]],
         parse_body_as="dict_list",
-    ) == [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]]
+    ) == [[""]]
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert (
+        request.body
+        == b'[{"key1": "value1", "key2": 1, "key3": "value3"}, {"key1": "other1", "key2": 2, "key3": "other3"}]'
+    )
 
 
-def test_put_custom_url_dict(responses: RequestsMock, services):
+def test_put_custom_url_dict(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
+    )
 
     assert pyxelrestgenerator.pyxelrest_put_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"]],
         extra_headers=[["Content-Type", "application/json"]],
         parse_body_as="dict",
-    ) == [["key1", "key2", "key3"], ["value1", 1, "value3"]]
+    ) == [[""]]
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'
 
 
-def test_put_custom_url_dict_sync(responses: RequestsMock, services):
+def test_put_custom_url_dict_sync(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
+    )
 
     assert pyxelrestgenerator.vba_pyxelrest_put_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"]],
         extra_headers=[["Content-Type", "application/json"]],
         parse_body_as="dict",
-    ) == [["key1", "key2", "key3"], ["value1", 1, "value3"]]
+    ) == [[""]]
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'

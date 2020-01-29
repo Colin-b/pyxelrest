@@ -1,0 +1,15 @@
+operation_id_not_provided:
+  open_api:
+    definition: "http://localhost:8948/operation_id_not_provided"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
+
+operation_id_not_always_provided:
+  open_api:
+    definition: "http://localhost:8948/operation_id_not_always_provided"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
