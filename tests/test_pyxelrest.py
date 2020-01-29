@@ -182,50 +182,6 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def http_methods_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8955/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/http_methods": {
-                    "get": {
-                        "operationId": "get_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                    "post": {
-                        "operationId": "post_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                    "put": {
-                        "operationId": "put_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                    "delete": {
-                        "operationId": "delete_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                    "patch": {
-                        "operationId": "patch_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                    "options": {
-                        "operationId": "options_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                    "head": {
-                        "operationId": "head_http_methods",
-                        "responses": {200: {"description": "successful operation"}},
-                    },
-                }
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
 def content_type_service(responses: RequestsMock):
     responses.add(
         responses.GET,
@@ -324,7 +280,6 @@ def async_service(responses: RequestsMock):
 def services(
     output_order_service,
     open_api_definition_parsing_service,
-    http_methods_service,
     content_type_service,
     base_path_ending_with_slash_service,
     async_service,
@@ -351,49 +306,6 @@ def test_get_static_open_api_definition(responses: RequestsMock, services):
         pyxelrestgenerator.open_api_definition_loaded_from_file_get_static_file_call()
         == "success"
     )
-
-
-def test_get_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.http_methods_get_http_methods() == "GET"
-
-
-def test_post_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.http_methods_post_http_methods() == "POST"
-
-
-def test_put_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.http_methods_put_http_methods() == "PUT"
-
-
-def test_delete_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.http_methods_delete_http_methods() == "DELETE"
-
-
-def test_patch_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.http_methods_patch_http_methods() == "PATCH"
-
-
-def test_options_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.http_methods_options_http_methods() == "OPTIONS"
-
-
-def test_head_http_method(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    # HEAD is already handled by Flask
-    assert pyxelrestgenerator.http_methods_head_http_methods() == ""
 
 
 def test_msgpackpandas_content_type(responses: RequestsMock, services):
