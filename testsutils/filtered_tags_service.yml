@@ -1,0 +1,45 @@
+selected_tags:
+  open_api:
+    definition: "http://localhost:8944/"
+    selected_tags:
+      - "tag 1"
+      - "tag 2"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
+
+excluded_tags:
+  open_api:
+    definition: "http://localhost:8944/"
+    excluded_tags:
+      - "tag 1"
+      - "tag 2"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
+
+selected_operation_ids:
+  open_api:
+    definition: "http://localhost:8944/"
+    selected_operation_ids:
+      - "get_tags"
+      - "post_tags"
+      - "put_tags"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
+
+excluded_operation_ids:
+  open_api:
+    definition: "http://localhost:8944/"
+    excluded_operation_ids:
+      - "get_tags"
+      - "post_tags"
+      - "put_tags"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
