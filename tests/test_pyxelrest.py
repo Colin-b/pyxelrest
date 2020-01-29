@@ -2610,133 +2610,6 @@ def usual_parameters_service(responses: RequestsMock):
 
 
 @pytest.fixture
-def values_false_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8945/",
-        json={
-            "swagger": "2.0",
-            "definitions": {
-                "ZeroInteger": {
-                    "properties": {
-                        "zero_integer": {"type": "integer", "format": "int32"}
-                    }
-                },
-                "ZeroFloat": {
-                    "properties": {"zero_float": {"type": "number", "format": "float"}}
-                },
-                "FalseBoolean": {"properties": {"false_boolean": {"type": "boolean"}}},
-                "EmptyString": {"properties": {"empty_string": {"type": "string"}}},
-                "EmptyList": {
-                    "properties": {
-                        "empty_list": {
-                            "type": "array",
-                            "items": {"$ref": "#/definitions/Empty"},
-                        }
-                    }
-                },
-                "EmptyDictionary": {
-                    "properties": {
-                        "empty_dictionary": {
-                            "type": "object",
-                            "$ref": "#/definitions/Empty",
-                        }
-                    }
-                },
-                "Empty": {"properties": {}},
-            },
-            "paths": {
-                "/with/zero/integer": {
-                    "get": {
-                        "operationId": "get_with_zero_integer",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {
-                                    "type": "array",
-                                    "items": {"$ref": "#/definitions/ZeroInteger"},
-                                },
-                            }
-                        },
-                    }
-                },
-                "/with/zero/float": {
-                    "get": {
-                        "operationId": "get_with_zero_float",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {
-                                    "type": "array",
-                                    "items": {"$ref": "#/definitions/ZeroFloat"},
-                                },
-                            }
-                        },
-                    }
-                },
-                "/with/false/boolean": {
-                    "get": {
-                        "operationId": "get_with_false_boolean",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {
-                                    "type": "array",
-                                    "items": {"$ref": "#/definitions/FalseBoolean"},
-                                },
-                            }
-                        },
-                    }
-                },
-                "/with/empty/string": {
-                    "get": {
-                        "operationId": "get_with_empty_string",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {
-                                    "type": "array",
-                                    "items": {"$ref": "#/definitions/EmptyString"},
-                                },
-                            }
-                        },
-                    }
-                },
-                "/with/empty/list": {
-                    "get": {
-                        "operationId": "get_with_empty_list",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {
-                                    "type": "array",
-                                    "items": {"$ref": "#/definitions/EmptyList"},
-                                },
-                            }
-                        },
-                    }
-                },
-                "/with/empty/dictionary": {
-                    "get": {
-                        "operationId": "get_with_empty_dictionary",
-                        "responses": {
-                            "200": {
-                                "description": "return value",
-                                "schema": {
-                                    "type": "array",
-                                    "items": {"$ref": "#/definitions/EmptyDictionary"},
-                                },
-                            }
-                        },
-                    }
-                },
-            },
-        },
-        match_querystring=True,
-    )
-
-
-@pytest.fixture
 def output_order_service(responses: RequestsMock):
     responses.add(
         responses.GET,
@@ -3035,7 +2908,6 @@ def async_service(responses: RequestsMock):
 @pytest.fixture
 def services(
     usual_parameters_service,
-    values_false_service,
     output_order_service,
     open_api_definition_parsing_service,
     http_methods_service,
@@ -3045,60 +2917,6 @@ def services(
 ):
     # TODO add static_file_call_service mock to the specific test case
     loader.load("services.yml")
-
-
-def test_get_with_zero_integer(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.values_false_get_with_zero_integer() == [
-        ["zero_integer"],
-        [0],
-    ]
-
-
-def test_get_with_zero_float(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.values_false_get_with_zero_float() == [
-        ["zero_float"],
-        [0.0],
-    ]
-
-
-def test_get_with_false_boolean(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.values_false_get_with_false_boolean() == [
-        ["false_boolean"],
-        [False],
-    ]
-
-
-def test_get_with_empty_string(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.values_false_get_with_empty_string() == [
-        ["empty_string"],
-        [""],
-    ]
-
-
-def test_get_with_empty_list(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.values_false_get_with_empty_list() == [
-        ["empty_list"],
-        [""],
-    ]
-
-
-def test_get_with_empty_dictionary(responses: RequestsMock, services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.values_false_get_with_empty_dictionary() == [
-        ["empty_dictionary"],
-        [""],
-    ]
 
 
 def test_get_compare_output_order(responses: RequestsMock, services):
