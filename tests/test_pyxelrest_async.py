@@ -27,10 +27,10 @@ def async_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("async_service.yml")
 
 
 def test_get_async_url(responses: RequestsMock, async_service):
+    loader.load("async_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8958/async",

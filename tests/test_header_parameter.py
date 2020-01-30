@@ -1,5 +1,4 @@
 import os
-import re
 
 import pytest
 from requests import PreparedRequest
@@ -64,10 +63,10 @@ def header_parameter_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("header_parameter_service.yml")
 
 
 def test_get_header_parameter(responses: RequestsMock, header_parameter_service):
+    loader.load("header_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
@@ -85,6 +84,7 @@ def test_get_header_parameter(responses: RequestsMock, header_parameter_service)
 
 
 def test_get_header_parameter_sync(responses: RequestsMock, header_parameter_service):
+    loader.load("header_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
@@ -102,6 +102,7 @@ def test_get_header_parameter_sync(responses: RequestsMock, header_parameter_ser
 
 
 def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service):
+    loader.load("header_parameter_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     with pytest.raises(AttributeError) as exception_info:
@@ -115,6 +116,7 @@ def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service):
 def test_get_header_advanced_configuration(
     responses: RequestsMock, header_parameter_service
 ):
+    loader.load("header_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
@@ -133,9 +135,7 @@ def test_get_header_advanced_configuration(
     assert headers["X-Pxl-Other"] == "MyOtherValue"
     assert headers["X-Pxl-Envvar"] == os.environ["USERNAME"]
     assert headers["X-Pxl-Request"]
-    # TODO Mock datetime to ensure the proper value is used
-    assert re.match(
-        "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\d\d\d\d", headers["X-Pxl-Session"]
-    )
     assert headers["User-Agent"] == "PyxelRest v0.69.1.dev1"
     assert headers["X-Pxl-Cell"] == "Python"
+    # TODO Mock datetime to ensure the proper value is used
+    assert headers["X-Pxl-Session"] == "2020-01-15T12:01:33.123456"

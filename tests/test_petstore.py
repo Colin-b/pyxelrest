@@ -6,7 +6,8 @@ from responses import RequestsMock
 from testsutils import loader
 
 
-def petstore_service_open_api_definition_v2(responses: RequestsMock):
+@pytest.fixture
+def petstore_service(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://petstore.swagger.io/v2/swagger.json",
@@ -703,13 +704,8 @@ def petstore_service_open_api_definition_v2(responses: RequestsMock):
     )
 
 
-@pytest.fixture
-def petstore_service(responses: RequestsMock):
-    petstore_service_open_api_definition_v2(responses)
-    loader.load("petstore_services.yml")
-
-
 def test_get_order_by_id(petstore_service):
+    loader.load("petstore_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     now = datetime.datetime.utcnow()
@@ -733,6 +729,7 @@ def test_get_order_by_id(petstore_service):
 
 
 def test_get_user_by_name(petstore_service):
+    loader.load("petstore_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     pyxelrestgenerator.petstore_createUser(

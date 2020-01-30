@@ -13,15 +13,6 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
             return call.request
 
 
-def support_pandas():
-    try:
-        import pandas
-
-        return True
-    except:
-        return False
-
-
 @pytest.fixture
 def content_type_service(responses: RequestsMock):
     responses.add(
@@ -48,10 +39,12 @@ def content_type_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
+
+
+def test_msgpackpandas_content_type_with_pandas(
+    responses: RequestsMock, content_type_service
+):
     loader.load("content_type_service.yml")
-
-
-def test_msgpackpandas_content_type(responses: RequestsMock, content_type_service):
     responses.add(
         responses.GET,
         url="http://localhost:8956/msgpackpandas",
@@ -62,13 +55,34 @@ def test_msgpackpandas_content_type(responses: RequestsMock, content_type_servic
     from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.content_type_get_msgpackpandas() == [[""]]
-    # TODO Add separate test case with and without pandas
-    assert _get_request(responses, "http://localhost:8956/msgpackpandas").headers[
-        "Accept"
-    ] == ("application/msgpackpandas" if support_pandas() else "*/*")
+    assert (
+        _get_request(responses, "http://localhost:8956/msgpackpandas").headers["Accept"]
+        == "application/msgpackpandas"
+    )
+
+
+def test_msgpackpandas_content_type_without_pandas(
+    responses: RequestsMock, content_type_service
+):
+    loader.load("content_type_service.yml")
+    responses.add(
+        responses.GET,
+        url="http://localhost:8956/msgpackpandas",
+        json={},
+        match_querystring=True,
+    )
+
+    from pyxelrest import pyxelrestgenerator
+
+    assert pyxelrestgenerator.content_type_get_msgpackpandas() == [[""]]
+    assert (
+        _get_request(responses, "http://localhost:8956/msgpackpandas").headers["Accept"]
+        == "*/*"
+    )
 
 
 def test_json_content_type(responses: RequestsMock, content_type_service):
+    loader.load("content_type_service.yml")
     responses.add(
         responses.GET, url="http://localhost:8956/json", json={}, match_querystring=True
     )

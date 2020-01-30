@@ -6,15 +6,6 @@ from responses import RequestsMock
 from testsutils import loader
 
 
-def support_pandas():
-    try:
-        import pandas
-
-        return True
-    except:
-        return False
-
-
 @pytest.fixture
 def nested_data_service(responses: RequestsMock):
     responses.add(
@@ -221,10 +212,10 @@ def nested_data_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("nested_data_services.yml")
 
 
 def test_get_dict_with_empty_nested_list(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -299,6 +290,7 @@ def test_get_dict_with_empty_nested_list(nested_data_service, responses):
 
 
 def test_get_dict_with_three_imbricated_levels(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -405,6 +397,7 @@ def test_get_dict_with_three_imbricated_levels(nested_data_service, responses):
 
 
 def test_get_dict_with_four_imbricated_levels(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -553,6 +546,7 @@ def test_get_dict_with_four_imbricated_levels(nested_data_service, responses):
 def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
     nested_data_service, responses
 ):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -699,6 +693,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
 
 
 def test_get_empty_dict(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -712,6 +707,7 @@ def test_get_empty_dict(nested_data_service, responses):
 
 
 def test_get_empty_list(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -725,6 +721,7 @@ def test_get_empty_list(nested_data_service, responses):
 
 
 def test_get_one_level_dict(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -741,6 +738,7 @@ def test_get_one_level_dict(nested_data_service, responses):
 
 
 def test_get_one_level_list(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -757,6 +755,7 @@ def test_get_one_level_list(nested_data_service, responses):
 
 
 def test_get_one_dict_entry_with_a_list(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -774,6 +773,7 @@ def test_get_one_dict_entry_with_a_list(nested_data_service, responses):
 
 
 def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -796,6 +796,7 @@ def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses):
 
 
 def test_get_list_of_dict(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -816,6 +817,7 @@ def test_get_list_of_dict(nested_data_service, responses):
 
 
 def test_get_dict_with_list(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -839,6 +841,7 @@ def test_get_dict_with_list(nested_data_service, responses):
 
 
 def test_get_dict_with_list_of_different_size(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -860,33 +863,31 @@ def test_get_dict_with_list_of_different_size(nested_data_service, responses):
     ]
 
 
-def test_pandas_msgpack_default_encoding(nested_data_service, responses):
+def test_pandas_msgpack_default_encoding_with_pandas(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
     from pyxelrest import pyxelrestgenerator
 
-    if support_pandas():
-        import pandas
+    import pandas
 
-        output = pandas.DataFrame(
+    output = pandas.DataFrame(
+        [
             [
-                [
-                    "data11",
-                    "data12_é&ç",
-                    u"data13_é&ç",
-                    datetime(2017, 12, 26, 1, 2, 3),
-                    1.1,
-                ],
-                [
-                    "data21",
-                    "data22_é&ç",
-                    u"data23_é&ç",
-                    datetime(2017, 12, 27, 1, 2, 3),
-                    2.2,
-                ],
+                "data11",
+                "data12_é&ç",
+                u"data13_é&ç",
+                datetime(2017, 12, 26, 1, 2, 3),
+                1.1,
             ],
-            columns=["col1", "col2_é&ç", u"col3_é&ç", "col4", "col5"],
-        ).to_msgpack(compress="zlib")
-    else:
-        output = b"This data cannot be read without pandas"
+            [
+                "data21",
+                "data22_é&ç",
+                u"data23_é&ç",
+                datetime(2017, 12, 27, 1, 2, 3),
+                2.2,
+            ],
+        ],
+        columns=["col1", "col2_é&ç", u"col3_é&ç", "col4", "col5"],
+    ).to_msgpack(compress="zlib")
 
     responses.add(
         responses.GET,
@@ -896,27 +897,37 @@ def test_pandas_msgpack_default_encoding(nested_data_service, responses):
         match_querystring=True,
     )
 
-    actual = pyxelrestgenerator.nested_data_get_pandas_msgpack_default_encoding()
-    # TODO Mock the fact that pandas is not importable and split in two test cases
-    if support_pandas():
-        from pandas import Timestamp
+    assert pyxelrestgenerator.nested_data_get_pandas_msgpack_default_encoding() == [
+        ["col1", "col2_é&ç", u"col3_é&ç", "col4", "col5"],
+        [
+            "data11",
+            "data12_é&ç",
+            u"data13_é&ç",
+            pandas.Timestamp("2017-12-26 01:02:03"),
+            1.1,
+        ],
+        [
+            "data21",
+            "data22_é&ç",
+            u"data23_é&ç",
+            pandas.Timestamp("2017-12-27 01:02:03"),
+            2.2,
+        ],
+    ]
 
-        assert actual == [
-            ["col1", "col2_é&ç", u"col3_é&ç", "col4", "col5"],
-            [
-                "data11",
-                "data12_é&ç",
-                u"data13_é&ç",
-                Timestamp("2017-12-26 01:02:03"),
-                1.1,
-            ],
-            [
-                "data21",
-                "data22_é&ç",
-                u"data23_é&ç",
-                Timestamp("2017-12-27 01:02:03"),
-                2.2,
-            ],
-        ]
-    else:
-        assert actual == ["Please install pandas module to be able to decode result."]
+
+def test_pandas_msgpack_default_encoding_without_pandas(nested_data_service, responses):
+    loader.load("nested_data_services.yml")
+    from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8947/pandas_msgpack_default_encoding",
+        body=b"This data cannot be read without pandas",
+        content_type="application/msgpackpandas",
+        match_querystring=True,
+    )
+
+    assert pyxelrestgenerator.nested_data_get_pandas_msgpack_default_encoding() == [
+        "Please install pandas module to be able to decode result."
+    ]

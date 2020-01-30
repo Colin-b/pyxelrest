@@ -70,12 +70,12 @@ def open_api_definition_parsing_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("open_api_definition_parsing_service.yml")
 
 
 def test_missing_operation_id(
     responses: RequestsMock, open_api_definition_parsing_service
 ):
+    loader.load("open_api_definition_parsing_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8948/without_operationId",
@@ -93,6 +93,7 @@ def test_missing_operation_id(
 def test_mixed_operation_id(
     responses: RequestsMock, open_api_definition_parsing_service
 ):
+    loader.load("open_api_definition_parsing_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8948/with_operationId",

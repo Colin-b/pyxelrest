@@ -46,10 +46,10 @@ def http_methods_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("http_methods_service.yml")
 
 
 def test_get_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8955/http_methods",
@@ -63,6 +63,7 @@ def test_get_http_method(responses: RequestsMock, http_methods_service):
 
 
 def test_post_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8955/http_methods",
@@ -76,6 +77,7 @@ def test_post_http_method(responses: RequestsMock, http_methods_service):
 
 
 def test_put_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.PUT,
         url="http://localhost:8955/http_methods",
@@ -89,6 +91,7 @@ def test_put_http_method(responses: RequestsMock, http_methods_service):
 
 
 def test_delete_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8955/http_methods",
@@ -102,6 +105,7 @@ def test_delete_http_method(responses: RequestsMock, http_methods_service):
 
 
 def test_patch_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.PATCH,
         url="http://localhost:8955/http_methods",
@@ -115,6 +119,7 @@ def test_patch_http_method(responses: RequestsMock, http_methods_service):
 
 
 def test_options_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.OPTIONS,
         url="http://localhost:8955/http_methods",
@@ -128,6 +133,7 @@ def test_options_http_method(responses: RequestsMock, http_methods_service):
 
 
 def test_head_http_method(responses: RequestsMock, http_methods_service):
+    loader.load("http_methods_service.yml")
     responses.add(
         responses.HEAD,
         url="http://localhost:8955/http_methods",

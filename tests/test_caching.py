@@ -62,10 +62,10 @@ def caching_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("caching_services.yml")
 
 
 def test_get_cached(caching_service, responses: RequestsMock):
+    loader.load("caching_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -101,6 +101,7 @@ def test_get_cached(caching_service, responses: RequestsMock):
 
 
 def test_post_cached(caching_service, responses: RequestsMock):
+    loader.load("caching_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -131,6 +132,7 @@ def test_post_cached(caching_service, responses: RequestsMock):
 
 
 def test_put_cached(caching_service, responses: RequestsMock):
+    loader.load("caching_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -161,6 +163,7 @@ def test_put_cached(caching_service, responses: RequestsMock):
 
 
 def test_delete_cached(caching_service, responses: RequestsMock):
+    loader.load("caching_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(

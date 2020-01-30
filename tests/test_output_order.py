@@ -102,10 +102,10 @@ def output_order_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("output_order_service.yml")
 
 
 def test_get_compare_output_order(responses: RequestsMock, output_order_service):
+    loader.load("output_order_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8946/price/unordered",

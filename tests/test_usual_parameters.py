@@ -2598,10 +2598,10 @@ def usual_parameters_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("usual_parameters_service.yml")
 
 
 def test_get_date(responses: RequestsMock, usual_parameters_service):
+    loader.load("usual_parameters_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8943/date",
@@ -2621,6 +2621,7 @@ def test_get_date(responses: RequestsMock, usual_parameters_service):
 
 
 def test_get_datetime(responses: RequestsMock, usual_parameters_service):
+    loader.load("usual_parameters_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime",
@@ -2654,6 +2655,7 @@ def test_get_datetime(responses: RequestsMock, usual_parameters_service):
 
 
 def test_get_datetime_encoding(responses: RequestsMock, usual_parameters_service):
+    loader.load("usual_parameters_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime/encoding?encoded_date_time=2017-09-13T15:20:35",

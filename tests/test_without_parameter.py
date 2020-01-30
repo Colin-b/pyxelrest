@@ -144,10 +144,10 @@ def without_parameter_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("without_parameter_service.yml")
 
 
 def test_plain_without_parameter(responses: RequestsMock, without_parameter_service):
+    loader.load("without_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8950/plain_text_without_parameter",
@@ -166,6 +166,7 @@ def test_plain_without_parameter(responses: RequestsMock, without_parameter_serv
 
 
 def test_post_without_parameter(responses: RequestsMock, without_parameter_service):
+    loader.load("without_parameter_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8950/without_parameter",
@@ -179,6 +180,7 @@ def test_post_without_parameter(responses: RequestsMock, without_parameter_servi
 
 
 def test_put_without_parameter(responses: RequestsMock, without_parameter_service):
+    loader.load("without_parameter_service.yml")
     responses.add(
         responses.PUT,
         url="http://localhost:8950/without_parameter",
@@ -192,6 +194,7 @@ def test_put_without_parameter(responses: RequestsMock, without_parameter_servic
 
 
 def test_delete_without_parameter(responses: RequestsMock, without_parameter_service):
+    loader.load("without_parameter_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8950/without_parameter",
@@ -205,6 +208,7 @@ def test_delete_without_parameter(responses: RequestsMock, without_parameter_ser
 
 
 def test_service_without_sync_does_not_have_sync(without_parameter_service):
+    loader.load("without_parameter_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     with pytest.raises(AttributeError) as exception_info:

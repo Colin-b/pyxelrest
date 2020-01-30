@@ -13,12 +13,8 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
             return call.request
 
 
-@pytest.fixture
-def pyxelrest_service():
+def test_get_custom_url_sync(responses: RequestsMock):
     loader.load("pyxelrest_service.yml")
-
-
-def test_get_custom_url_sync(responses: RequestsMock, pyxelrest_service):
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -40,7 +36,8 @@ def test_get_custom_url_sync(responses: RequestsMock, pyxelrest_service):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_get_custom_url(responses: RequestsMock, pyxelrest_service):
+def test_get_custom_url(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -62,7 +59,8 @@ def test_get_custom_url(responses: RequestsMock, pyxelrest_service):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_delete_custom_url_sync(responses: RequestsMock, pyxelrest_service):
+def test_delete_custom_url_sync(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -84,7 +82,8 @@ def test_delete_custom_url_sync(responses: RequestsMock, pyxelrest_service):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_delete_custom_url(responses: RequestsMock, pyxelrest_service):
+def test_delete_custom_url(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -106,7 +105,8 @@ def test_delete_custom_url(responses: RequestsMock, pyxelrest_service):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_post_custom_url_dict(responses: RequestsMock, pyxelrest_service):
+def test_post_custom_url_dict(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -127,7 +127,8 @@ def test_post_custom_url_dict(responses: RequestsMock, pyxelrest_service):
     assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'
 
 
-def test_post_custom_url_dict_list_sync(responses: RequestsMock, pyxelrest_service):
+def test_post_custom_url_dict_list_sync(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -151,7 +152,8 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock, pyxelrest_servi
     )
 
 
-def test_post_custom_url_dict_list(responses: RequestsMock, pyxelrest_service):
+def test_post_custom_url_dict_list(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -175,7 +177,8 @@ def test_post_custom_url_dict_list(responses: RequestsMock, pyxelrest_service):
     )
 
 
-def test_put_custom_url_dict_list(responses: RequestsMock, pyxelrest_service):
+def test_put_custom_url_dict_list(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -196,7 +199,8 @@ def test_put_custom_url_dict_list(responses: RequestsMock, pyxelrest_service):
     )
 
 
-def test_put_custom_url_dict(responses: RequestsMock, pyxelrest_service):
+def test_put_custom_url_dict(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(
@@ -214,7 +218,8 @@ def test_put_custom_url_dict(responses: RequestsMock, pyxelrest_service):
     assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'
 
 
-def test_put_custom_url_dict_sync(responses: RequestsMock, pyxelrest_service):
+def test_put_custom_url_dict_sync(responses: RequestsMock):
+    loader.load("pyxelrest_service.yml")
     from pyxelrest import pyxelrestgenerator
 
     responses.add(

@@ -1,16 +1,11 @@
 import datetime
-from importlib import reload, import_module
 
-import pytest
 from responses import RequestsMock
 
-from tests.test_petstore import petstore_service_open_api_definition_v2
+from tests.test_petstore import petstore_service
 
 
-@pytest.fixture
-def petstore_service_python(responses: RequestsMock):
-    petstore_service_open_api_definition_v2(responses)
-
+def load_petstore_as_python_module():
     import pyxelrest
 
     pyxelrest.load(
@@ -25,7 +20,8 @@ def petstore_service_python(responses: RequestsMock):
     )
 
 
-def test_get_order_by_id(responses: RequestsMock, petstore_service_python):
+def test_get_order_by_id(responses: RequestsMock, petstore_service):
+    load_petstore_as_python_module()
     responses.add(
         responses.POST,
         url="https://petstore.swagger.io/v2/store/order",
@@ -79,7 +75,8 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service_python):
     # TODO Assert what is sent to the server
 
 
-def test_get_user_by_name(responses: RequestsMock, petstore_service_python):
+def test_get_user_by_name(responses: RequestsMock, petstore_service):
+    load_petstore_as_python_module()
     responses.add(
         responses.POST,
         url="https://petstore.swagger.io/v2/user",

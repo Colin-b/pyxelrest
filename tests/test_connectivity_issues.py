@@ -135,10 +135,10 @@ def without_parameter_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("connectivity_issues_services.yml")
 
 
 def test_get_plain_text_with_service_down(without_parameter_service):
+    loader.load("connectivity_issues_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     assert (

@@ -52,10 +52,10 @@ def form_parameter_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("form_parameter_service.yml")
 
 
 def test_post_form_parameter(responses: RequestsMock, form_parameter_service):
+    loader.load("form_parameter_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8952/form",

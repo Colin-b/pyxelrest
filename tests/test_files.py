@@ -49,10 +49,10 @@ def files_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("files_services.yml")
 
 
 def test_files_parameter(files_service, responses: RequestsMock):
+    loader.load("files_services.yml")
     from pyxelrest import pyxelrestgenerator
 
     with tempfile.TemporaryDirectory() as temp_dir:

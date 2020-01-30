@@ -53,12 +53,12 @@ def base_path_ending_with_slash_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("base_path_ending_with_slash_service.yml")
 
 
 def test_get_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
+    loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8957/method",
@@ -74,6 +74,7 @@ def test_get_base_path_ending_with_slash(
 def test_post_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
+    loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8957/method",
@@ -89,6 +90,7 @@ def test_post_base_path_ending_with_slash(
 def test_put_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
+    loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.PUT,
         url="http://localhost:8957/method",
@@ -104,6 +106,7 @@ def test_put_base_path_ending_with_slash(
 def test_delete_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
+    loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8957/method",

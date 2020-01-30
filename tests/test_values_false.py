@@ -138,10 +138,10 @@ def values_false_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("values_false_service.yml")
 
 
 def test_get_with_zero_integer(responses: RequestsMock, values_false_service):
+    loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/integer",
@@ -158,6 +158,7 @@ def test_get_with_zero_integer(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_zero_float(responses: RequestsMock, values_false_service):
+    loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/float",
@@ -174,6 +175,7 @@ def test_get_with_zero_float(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_false_boolean(responses: RequestsMock, values_false_service):
+    loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/false/boolean",
@@ -190,6 +192,7 @@ def test_get_with_false_boolean(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_empty_string(responses: RequestsMock, values_false_service):
+    loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/string",
@@ -206,6 +209,7 @@ def test_get_with_empty_string(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_empty_list(responses: RequestsMock, values_false_service):
+    loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/list",
@@ -222,6 +226,7 @@ def test_get_with_empty_list(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_empty_dictionary(responses: RequestsMock, values_false_service):
+    loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/dictionary",

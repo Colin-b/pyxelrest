@@ -181,10 +181,10 @@ def array_parameter_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("array_parameter_service.yml")
 
 
 def test_string_multi_array_parameter(responses: RequestsMock, array_parameter_service):
+    loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_multi_array_parameter?string_array=str1&string_array=str2",
@@ -202,6 +202,7 @@ def test_string_multi_array_parameter(responses: RequestsMock, array_parameter_s
 def test_string_default_array_parameter(
     responses: RequestsMock, array_parameter_service
 ):
+    loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_default_array_parameter?string_array=str1,str2",
@@ -217,6 +218,7 @@ def test_string_default_array_parameter(
 
 
 def test_string_csv_array_parameter(responses: RequestsMock, array_parameter_service):
+    loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_csv_array_parameter?string_array=str1,str2",
@@ -232,6 +234,7 @@ def test_string_csv_array_parameter(responses: RequestsMock, array_parameter_ser
 
 
 def test_string_ssv_array_parameter(responses: RequestsMock, array_parameter_service):
+    loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_ssv_array_parameter?string_array=str1 str2",
@@ -247,6 +250,7 @@ def test_string_ssv_array_parameter(responses: RequestsMock, array_parameter_ser
 
 
 def test_string_tsv_array_parameter(responses: RequestsMock, array_parameter_service):
+    loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_tsv_array_parameter?string_array=str1\tstr2",
@@ -262,6 +266,7 @@ def test_string_tsv_array_parameter(responses: RequestsMock, array_parameter_ser
 
 
 def test_string_pipes_array_parameter(responses: RequestsMock, array_parameter_service):
+    loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_pipes_array_parameter?string_array=str1|str2",
