@@ -3255,11 +3255,10 @@ def services(responses: RequestsMock):
         match_querystring=True,
     )
 
-    loader.load("based_on_definitions_services.yml")
+    pyxelrestgenerator = loader.load("based_on_definitions_services.yml")
 
 
 def test_string_multi_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1', 'str2']\""
     assert (
@@ -3271,7 +3270,6 @@ def test_string_multi_array_parameter(services):
 
 
 def test_string_default_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1,str2']\""
     assert (
@@ -3283,7 +3281,6 @@ def test_string_default_array_parameter(services):
 
 
 def test_string_csv_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1,str2']\""
     assert (
@@ -3295,7 +3292,6 @@ def test_string_csv_array_parameter(services):
 
 
 def test_string_ssv_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1 str2']\""
     assert (
@@ -3307,7 +3303,6 @@ def test_string_ssv_array_parameter(services):
 
 
 def test_string_tsv_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1\\tstr2']\""
     assert (
@@ -3319,7 +3314,6 @@ def test_string_tsv_array_parameter(services):
 
 
 def test_string_pipes_array_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     result = "string_array=\"['str1|str2']\""
     assert (
@@ -3331,7 +3325,6 @@ def test_string_pipes_array_parameter(services):
 
 
 def test_plain_text_without_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.without_parameter_get_plain_text_without_parameter()
@@ -3340,7 +3333,6 @@ def test_plain_text_without_parameter(services):
 
 
 def test_post_without_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.without_parameter_post_without_parameter()
@@ -3349,7 +3341,6 @@ def test_post_without_parameter(services):
 
 
 def test_put_without_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.without_parameter_put_without_parameter()
@@ -3358,7 +3349,6 @@ def test_put_without_parameter(services):
 
 
 def test_delete_without_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.without_parameter_delete_without_parameter()
@@ -3367,7 +3357,6 @@ def test_delete_without_parameter(services):
 
 
 def test_get_header_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     headers = pyxelrestgenerator.header_parameter_get_header("sent header")
     header_param_index = headers[0].index("Header-String")
@@ -3375,7 +3364,6 @@ def test_get_header_parameter(services):
 
 
 def test_post_form_parameter(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.form_parameter_post_form("sent string form data") == [
         ["form_string"],
@@ -3384,7 +3372,6 @@ def test_post_form_parameter(services):
 
 
 def test_get_with_tags(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         "Second tag is one of the accepted tags"
@@ -3393,13 +3380,11 @@ def test_get_with_tags(services):
 
 
 def test_post_with_tags(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert "All tags are accepted" == pyxelrestgenerator.filtered_tags_post_tags()
 
 
 def test_put_with_tags(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         "First tag is one of the accepted tags"
@@ -3408,13 +3393,11 @@ def test_put_with_tags(services):
 
 
 def test_delete_with_tags(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert not hasattr(pyxelrestgenerator, "filtered_tags_delete_tags")
 
 
 def test_get_with_zero_integer(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_zero_integer() == [
         ["zero_integer"],
@@ -3423,7 +3406,6 @@ def test_get_with_zero_integer(services):
 
 
 def test_get_with_zero_float(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_zero_float() == [
         ["zero_float"],
@@ -3432,7 +3414,6 @@ def test_get_with_zero_float(services):
 
 
 def test_get_with_false_boolean(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_false_boolean() == [
         ["false_boolean"],
@@ -3441,7 +3422,6 @@ def test_get_with_false_boolean(services):
 
 
 def test_get_with_empty_string(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_string() == [
         ["empty_string"],
@@ -3450,19 +3430,16 @@ def test_get_with_empty_string(services):
 
 
 def test_get_with_empty_list(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_list() == [""]
 
 
 def test_get_with_empty_dictionary(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_dictionary() == [""]
 
 
 def test_get_compare_output_order(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.output_order_get_price_unordered() == [
         [u"ts", u"date", u"curve", u"mat"],
@@ -3473,7 +3450,6 @@ def test_get_compare_output_order(services):
 
 
 def test_get_date(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.usual_parameters_get_date() == [
         [datetime.datetime(2014, 3, 5, 0, 0)],
@@ -3485,7 +3461,6 @@ def test_get_date(services):
 
 
 def test_get_datetime(services):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.usual_parameters_get_date_time() == [
         [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],

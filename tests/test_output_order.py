@@ -105,7 +105,7 @@ def output_order_service(responses: RequestsMock):
 
 
 def test_get_compare_output_order(responses: RequestsMock, output_order_service):
-    loader.load("output_order_service.yml")
+    pyxelrestgenerator = loader.load("output_order_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8946/price/unordered",
@@ -121,8 +121,6 @@ def test_get_compare_output_order(responses: RequestsMock, output_order_service)
         ],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.output_order_get_price_unordered() == [
         ["ts", "curve", "date", "mat"],

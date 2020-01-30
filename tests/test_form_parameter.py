@@ -55,15 +55,13 @@ def form_parameter_service(responses: RequestsMock):
 
 
 def test_post_form_parameter(responses: RequestsMock, form_parameter_service):
-    loader.load("form_parameter_service.yml")
+    pyxelrestgenerator = loader.load("form_parameter_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8952/form",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.form_parameter_post_form("sent string form data") == [
         [""]

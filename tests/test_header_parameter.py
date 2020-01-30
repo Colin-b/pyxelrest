@@ -66,15 +66,13 @@ def header_parameter_service(responses: RequestsMock):
 
 
 def test_get_header_parameter(responses: RequestsMock, header_parameter_service):
-    loader.load("header_parameter_service.yml")
+    pyxelrestgenerator = loader.load("header_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.header_parameter_get_header("sent header") == [[""]]
     assert (
@@ -84,15 +82,13 @@ def test_get_header_parameter(responses: RequestsMock, header_parameter_service)
 
 
 def test_get_header_parameter_sync(responses: RequestsMock, header_parameter_service):
-    loader.load("header_parameter_service.yml")
+    pyxelrestgenerator = loader.load("header_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.vba_header_parameter_get_header("sent header") == [[""]]
     assert (
@@ -102,8 +98,7 @@ def test_get_header_parameter_sync(responses: RequestsMock, header_parameter_ser
 
 
 def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service):
-    loader.load("header_parameter_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("header_parameter_service.yml")
 
     with pytest.raises(AttributeError) as exception_info:
         pyxelrestgenerator.vba_header_advanced_configuration_get_header("sent header")
@@ -116,15 +111,13 @@ def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service):
 def test_get_header_advanced_configuration(
     responses: RequestsMock, header_parameter_service
 ):
-    loader.load("header_parameter_service.yml")
+    pyxelrestgenerator = loader.load("header_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.header_advanced_configuration_get_header(
         "sent header"

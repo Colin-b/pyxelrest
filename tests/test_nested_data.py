@@ -215,8 +215,7 @@ def nested_data_service(responses: RequestsMock):
 
 
 def test_get_dict_with_empty_nested_list(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -290,8 +289,7 @@ def test_get_dict_with_empty_nested_list(nested_data_service, responses):
 
 
 def test_get_dict_with_three_imbricated_levels(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -397,8 +395,7 @@ def test_get_dict_with_three_imbricated_levels(nested_data_service, responses):
 
 
 def test_get_dict_with_four_imbricated_levels(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -546,8 +543,7 @@ def test_get_dict_with_four_imbricated_levels(nested_data_service, responses):
 def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
     nested_data_service, responses
 ):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -693,8 +689,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
 
 
 def test_get_empty_dict(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -707,8 +702,7 @@ def test_get_empty_dict(nested_data_service, responses):
 
 
 def test_get_empty_list(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -721,8 +715,7 @@ def test_get_empty_list(nested_data_service, responses):
 
 
 def test_get_one_level_dict(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -738,8 +731,7 @@ def test_get_one_level_dict(nested_data_service, responses):
 
 
 def test_get_one_level_list(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -755,8 +747,7 @@ def test_get_one_level_list(nested_data_service, responses):
 
 
 def test_get_one_dict_entry_with_a_list(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -773,8 +764,7 @@ def test_get_one_dict_entry_with_a_list(nested_data_service, responses):
 
 
 def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -796,8 +786,7 @@ def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses):
 
 
 def test_get_list_of_dict(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -817,8 +806,7 @@ def test_get_list_of_dict(nested_data_service, responses):
 
 
 def test_get_dict_with_list(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -841,8 +829,7 @@ def test_get_dict_with_list(nested_data_service, responses):
 
 
 def test_get_dict_with_list_of_different_size(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,
@@ -864,8 +851,7 @@ def test_get_dict_with_list_of_different_size(nested_data_service, responses):
 
 
 def test_pandas_msgpack_default_encoding_with_pandas(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     import pandas
 
@@ -917,8 +903,7 @@ def test_pandas_msgpack_default_encoding_with_pandas(nested_data_service, respon
 
 
 def test_pandas_msgpack_default_encoding_without_pandas(nested_data_service, responses):
-    loader.load("nested_data_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("nested_data_services.yml")
 
     responses.add(
         responses.GET,

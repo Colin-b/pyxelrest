@@ -1,7 +1,9 @@
+import os
 import timeit
 import time
 
 import pytest
+import pyxelrest
 from responses import RequestsMock
 
 from testsutils import loader
@@ -23,6 +25,9 @@ def open_api_definition_not_responding_service(responses: RequestsMock):
 def test_service_can_be_loaded_without_hitting_timeout(
     open_api_definition_not_responding_service,
 ):
-    loader.load("open_api_definition_not_available.yml", load_pyxelrest=False)
+    this_dir = os.path.abspath(os.path.dirname(__file__))
+    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = os.path.join(
+        this_dir, "open_api_definition_not_available.yml"
+    )
     nb_seconds = timeit.timeit("from pyxelrest import pyxelrestgenerator", number=1)
     assert nb_seconds < 8, "Time to load pyxelrest should be around timeout."

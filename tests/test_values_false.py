@@ -141,15 +141,13 @@ def values_false_service(responses: RequestsMock):
 
 
 def test_get_with_zero_integer(responses: RequestsMock, values_false_service):
-    loader.load("values_false_service.yml")
+    pyxelrestgenerator = loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/integer",
         json=[{"zero_integer": 0}],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_zero_integer() == [
         ["zero_integer"],
@@ -158,15 +156,13 @@ def test_get_with_zero_integer(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_zero_float(responses: RequestsMock, values_false_service):
-    loader.load("values_false_service.yml")
+    pyxelrestgenerator = loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/float",
         json=[{"zero_float": 0.0}],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_zero_float() == [
         ["zero_float"],
@@ -175,15 +171,13 @@ def test_get_with_zero_float(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_false_boolean(responses: RequestsMock, values_false_service):
-    loader.load("values_false_service.yml")
+    pyxelrestgenerator = loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/false/boolean",
         json=[{"false_boolean": False}],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_false_boolean() == [
         ["false_boolean"],
@@ -192,15 +186,13 @@ def test_get_with_false_boolean(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_empty_string(responses: RequestsMock, values_false_service):
-    loader.load("values_false_service.yml")
+    pyxelrestgenerator = loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/string",
         json=[{"empty_string": ""}],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_string() == [
         ["empty_string"],
@@ -209,15 +201,13 @@ def test_get_with_empty_string(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_empty_list(responses: RequestsMock, values_false_service):
-    loader.load("values_false_service.yml")
+    pyxelrestgenerator = loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/list",
         json=[{"empty_list": []}],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_list() == [
         ["empty_list"],
@@ -226,15 +216,13 @@ def test_get_with_empty_list(responses: RequestsMock, values_false_service):
 
 
 def test_get_with_empty_dictionary(responses: RequestsMock, values_false_service):
-    loader.load("values_false_service.yml")
+    pyxelrestgenerator = loader.load("values_false_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/dictionary",
         json=[{"empty_dictionary": {}}],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.values_false_get_with_empty_dictionary() == [
         ["empty_dictionary"],

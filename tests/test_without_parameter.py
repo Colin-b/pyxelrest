@@ -147,7 +147,7 @@ def without_parameter_service(responses: RequestsMock):
 
 
 def test_plain_without_parameter(responses: RequestsMock, without_parameter_service):
-    loader.load("without_parameter_service.yml")
+    pyxelrestgenerator = loader.load("without_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8950/plain_text_without_parameter",
@@ -157,8 +157,6 @@ def test_plain_without_parameter(responses: RequestsMock, without_parameter_serv
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert (
         pyxelrestgenerator.without_parameter_get_plain_text_without_parameter()
         == "string value returned should be truncated so that the following information cannot be seen by user, because of the fact that Excel does not allow more than 255 characters in a cell. Only the 255 characters will be returned by the user defined functions:  "
@@ -166,7 +164,7 @@ def test_plain_without_parameter(responses: RequestsMock, without_parameter_serv
 
 
 def test_post_without_parameter(responses: RequestsMock, without_parameter_service):
-    loader.load("without_parameter_service.yml")
+    pyxelrestgenerator = loader.load("without_parameter_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8950/without_parameter",
@@ -174,13 +172,11 @@ def test_post_without_parameter(responses: RequestsMock, without_parameter_servi
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.without_parameter_post_without_parameter() == [[""]]
 
 
 def test_put_without_parameter(responses: RequestsMock, without_parameter_service):
-    loader.load("without_parameter_service.yml")
+    pyxelrestgenerator = loader.load("without_parameter_service.yml")
     responses.add(
         responses.PUT,
         url="http://localhost:8950/without_parameter",
@@ -188,13 +184,11 @@ def test_put_without_parameter(responses: RequestsMock, without_parameter_servic
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.without_parameter_put_without_parameter() == [[""]]
 
 
 def test_delete_without_parameter(responses: RequestsMock, without_parameter_service):
-    loader.load("without_parameter_service.yml")
+    pyxelrestgenerator = loader.load("without_parameter_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8950/without_parameter",
@@ -202,14 +196,11 @@ def test_delete_without_parameter(responses: RequestsMock, without_parameter_ser
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.without_parameter_delete_without_parameter() == [[""]]
 
 
 def test_service_without_sync_does_not_have_sync(without_parameter_service):
-    loader.load("without_parameter_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("without_parameter_service.yml")
 
     with pytest.raises(AttributeError) as exception_info:
         pyxelrestgenerator.vba_without_parameter_delete_without_parameter()

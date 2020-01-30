@@ -2601,15 +2601,13 @@ def usual_parameters_service(responses: RequestsMock):
 
 
 def test_get_date(responses: RequestsMock, usual_parameters_service):
-    loader.load("usual_parameters_service.yml")
+    pyxelrestgenerator = loader.load("usual_parameters_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8943/date",
         json=["2014-03-05", "9999-01-01", "3001-01-01", "1970-01-01", "1900-01-01"],
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.usual_parameters_get_date() == [
         [datetime.datetime(2014, 3, 5, 0, 0)],
@@ -2621,7 +2619,7 @@ def test_get_date(responses: RequestsMock, usual_parameters_service):
 
 
 def test_get_datetime(responses: RequestsMock, usual_parameters_service):
-    loader.load("usual_parameters_service.yml")
+    pyxelrestgenerator = loader.load("usual_parameters_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime",
@@ -2639,8 +2637,6 @@ def test_get_datetime(responses: RequestsMock, usual_parameters_service):
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.usual_parameters_get_date_time() == [
         [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
         [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
@@ -2655,15 +2651,13 @@ def test_get_datetime(responses: RequestsMock, usual_parameters_service):
 
 
 def test_get_datetime_encoding(responses: RequestsMock, usual_parameters_service):
-    loader.load("usual_parameters_service.yml")
+    pyxelrestgenerator = loader.load("usual_parameters_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime/encoding?encoded_date_time=2017-09-13T15:20:35",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     date_time = datetime.datetime.strptime("2017-09-13T15:20:35", "%Y-%m-%dT%H:%M:%S")
     assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(

@@ -184,15 +184,13 @@ def array_parameter_service(responses: RequestsMock):
 
 
 def test_string_multi_array_parameter(responses: RequestsMock, array_parameter_service):
-    loader.load("array_parameter_service.yml")
+    pyxelrestgenerator = loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_multi_array_parameter?string_array=str1&string_array=str2",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.array_parameter_get_string_multi_array_parameter(
         ["str1", "str2"]
@@ -202,7 +200,7 @@ def test_string_multi_array_parameter(responses: RequestsMock, array_parameter_s
 def test_string_default_array_parameter(
     responses: RequestsMock, array_parameter_service
 ):
-    loader.load("array_parameter_service.yml")
+    pyxelrestgenerator = loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_default_array_parameter?string_array=str1,str2",
@@ -210,15 +208,13 @@ def test_string_default_array_parameter(
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.array_parameter_get_string_default_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
 
 def test_string_csv_array_parameter(responses: RequestsMock, array_parameter_service):
-    loader.load("array_parameter_service.yml")
+    pyxelrestgenerator = loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_csv_array_parameter?string_array=str1,str2",
@@ -226,15 +222,13 @@ def test_string_csv_array_parameter(responses: RequestsMock, array_parameter_ser
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.array_parameter_get_string_csv_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
 
 def test_string_ssv_array_parameter(responses: RequestsMock, array_parameter_service):
-    loader.load("array_parameter_service.yml")
+    pyxelrestgenerator = loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_ssv_array_parameter?string_array=str1 str2",
@@ -242,15 +236,13 @@ def test_string_ssv_array_parameter(responses: RequestsMock, array_parameter_ser
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.array_parameter_get_string_ssv_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
 
 def test_string_tsv_array_parameter(responses: RequestsMock, array_parameter_service):
-    loader.load("array_parameter_service.yml")
+    pyxelrestgenerator = loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_tsv_array_parameter?string_array=str1\tstr2",
@@ -258,23 +250,19 @@ def test_string_tsv_array_parameter(responses: RequestsMock, array_parameter_ser
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.array_parameter_get_string_tsv_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
 
 def test_string_pipes_array_parameter(responses: RequestsMock, array_parameter_service):
-    loader.load("array_parameter_service.yml")
+    pyxelrestgenerator = loader.load("array_parameter_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8953/string_pipes_array_parameter?string_array=str1|str2",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.array_parameter_get_string_pipes_array_parameter(
         ["str1", "str2"]

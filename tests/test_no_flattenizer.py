@@ -3067,7 +3067,7 @@ def json_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("json_services_no_flatten.yml")
+    pyxelrestgenerator = loader.load("json_services_no_flatten.yml")
 
 
 def test_mandatory_integer_parameter_not_provided(json_service):

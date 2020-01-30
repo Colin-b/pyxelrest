@@ -4,8 +4,7 @@ from testsutils import loader
 
 
 def test_get_static_open_api_definition(responses: RequestsMock):
-    loader.load("static_file_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("static_file_service.yml")
 
     responses.add(
         responses.GET,

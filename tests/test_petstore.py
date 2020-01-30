@@ -705,8 +705,7 @@ def petstore_service(responses: RequestsMock):
 
 
 def test_get_order_by_id(petstore_service):
-    loader.load("petstore_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("petstore_services.yml")
 
     now = datetime.datetime.utcnow()
     new_order_response = pyxelrestgenerator.petstore_placeOrder(
@@ -729,8 +728,7 @@ def test_get_order_by_id(petstore_service):
 
 
 def test_get_user_by_name(petstore_service):
-    loader.load("petstore_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("petstore_services.yml")
 
     pyxelrestgenerator.petstore_createUser(
         id=666666,

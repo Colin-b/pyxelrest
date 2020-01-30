@@ -210,7 +210,7 @@ def nested_data_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("nested_data_based_on_definitions_services.yml")
+    pyxelrestgenerator = loader.load("nested_data_based_on_definitions_services.yml")
 
 
 def test_get_dict_with_empty_nested_list(nested_data_service, responses):

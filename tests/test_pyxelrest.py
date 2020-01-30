@@ -14,8 +14,7 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 
 
 def test_get_custom_url_sync(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.GET,
@@ -37,8 +36,7 @@ def test_get_custom_url_sync(responses: RequestsMock):
 
 
 def test_get_custom_url(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.GET,
@@ -60,8 +58,7 @@ def test_get_custom_url(responses: RequestsMock):
 
 
 def test_delete_custom_url_sync(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.DELETE,
@@ -83,8 +80,7 @@ def test_delete_custom_url_sync(responses: RequestsMock):
 
 
 def test_delete_custom_url(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.DELETE,
@@ -106,8 +102,7 @@ def test_delete_custom_url(responses: RequestsMock):
 
 
 def test_post_custom_url_dict(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.POST,
@@ -128,8 +123,7 @@ def test_post_custom_url_dict(responses: RequestsMock):
 
 
 def test_post_custom_url_dict_list_sync(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.POST,
@@ -153,8 +147,7 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock):
 
 
 def test_post_custom_url_dict_list(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.POST,
@@ -178,8 +171,7 @@ def test_post_custom_url_dict_list(responses: RequestsMock):
 
 
 def test_put_custom_url_dict_list(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
@@ -200,8 +192,7 @@ def test_put_custom_url_dict_list(responses: RequestsMock):
 
 
 def test_put_custom_url_dict(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
@@ -219,8 +210,7 @@ def test_put_custom_url_dict(responses: RequestsMock):
 
 
 def test_put_custom_url_dict_sync(responses: RequestsMock):
-    loader.load("pyxelrest_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
 
     responses.add(
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True

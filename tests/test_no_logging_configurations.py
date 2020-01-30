@@ -1,3 +1,6 @@
+import os
+
+import pyxelrest
 from responses import RequestsMock
 
 from testsutils import loader
@@ -31,4 +34,8 @@ def test_without_logging_configuration_file(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("no_logging_services.yml", "non_existing_configuration.yml")
+    this_dir = os.path.abspath(os.path.dirname(__file__))
+    pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(
+        this_dir, "non_existing_configuration.yml"
+    )
+    loader.load("no_logging_services.yml")

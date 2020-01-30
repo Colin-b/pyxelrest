@@ -58,7 +58,7 @@ def base_path_ending_with_slash_service(responses: RequestsMock):
 def test_get_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
-    loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8957/method",
@@ -66,15 +66,13 @@ def test_get_base_path_ending_with_slash(
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.base_path_ending_with_slash_get_method() == [[""]]
 
 
 def test_post_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
-    loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8957/method",
@@ -82,15 +80,13 @@ def test_post_base_path_ending_with_slash(
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.base_path_ending_with_slash_post_method() == [[""]]
 
 
 def test_put_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
-    loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.PUT,
         url="http://localhost:8957/method",
@@ -98,22 +94,18 @@ def test_put_base_path_ending_with_slash(
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.base_path_ending_with_slash_put_method() == [[""]]
 
 
 def test_delete_base_path_ending_with_slash(
     responses: RequestsMock, base_path_ending_with_slash_service
 ):
-    loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8957/method",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.base_path_ending_with_slash_delete_method() == [[""]]

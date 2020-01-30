@@ -3076,11 +3076,10 @@ def json_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("json_services.yml")
+    pyxelrestgenerator = loader.load("json_services.yml")
 
 
 def test_mandatory_integer_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=None,
@@ -3113,7 +3112,6 @@ def test_mandatory_integer_parameter_not_provided(json_service):
 
 
 def test_mandatory_integer_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer="str value",
@@ -3146,7 +3144,6 @@ def test_mandatory_integer_parameter_with_wrong_type(json_service):
 
 
 def test_optional_integer_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_integer="str value"
@@ -3154,7 +3151,6 @@ def test_optional_integer_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_integer_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3189,7 +3185,6 @@ def test_mandatory_array_integer_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_integer_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3224,7 +3219,6 @@ def test_mandatory_array_integer_parameter_provided_as_empty_array(json_service)
 
 
 def test_mandatory_array_integer_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3259,7 +3253,6 @@ def test_mandatory_array_integer_parameter_provided_as_none_filled_array(json_se
 
 
 def test_mandatory_array_integer_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3296,7 +3289,6 @@ def test_mandatory_array_integer_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_integer_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3333,7 +3325,6 @@ def test_mandatory_array_integer_parameter_with_wrong_type_in_array(json_service
 
 
 def test_optional_array_integer_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_integer="str value"
@@ -3343,7 +3334,6 @@ def test_optional_array_integer_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_integer_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_integer=["str value"]
@@ -3353,7 +3343,6 @@ def test_optional_array_integer_parameter_with_wrong_type_in_array(json_service)
 
 
 def test_mandatory_integer32_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -3386,7 +3375,6 @@ def test_mandatory_integer32_parameter_not_provided(json_service):
 
 
 def test_mandatory_integer32_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -3421,7 +3409,6 @@ def test_mandatory_integer32_parameter_with_wrong_type(json_service):
 
 
 def test_optional_integer32_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_integer32="str value"
@@ -3431,7 +3418,6 @@ def test_optional_integer32_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_integer32_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3466,7 +3452,6 @@ def test_mandatory_array_integer32_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_integer32_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3503,7 +3488,6 @@ def test_mandatory_array_integer32_parameter_provided_as_empty_array(json_servic
 def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3538,7 +3522,6 @@ def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_integer32_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3575,7 +3558,6 @@ def test_mandatory_array_integer32_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3612,7 +3594,6 @@ def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(json_servi
 
 
 def test_optional_array_integer32_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_integer32="str value"
@@ -3622,7 +3603,6 @@ def test_optional_array_integer32_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_integer32_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_integer32=["str value"]
@@ -3632,7 +3612,6 @@ def test_optional_array_integer32_parameter_with_wrong_type_in_array(json_servic
 
 
 def test_mandatory_integer64_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -3665,7 +3644,6 @@ def test_mandatory_integer64_parameter_not_provided(json_service):
 
 
 def test_mandatory_integer64_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -3700,7 +3678,6 @@ def test_mandatory_integer64_parameter_with_wrong_type(json_service):
 
 
 def test_optional_integer64_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_integer64="str value"
@@ -3710,7 +3687,6 @@ def test_optional_integer64_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_integer64_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3745,7 +3721,6 @@ def test_mandatory_array_integer64_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_integer64_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3782,7 +3757,6 @@ def test_mandatory_array_integer64_parameter_provided_as_empty_array(json_servic
 def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3817,7 +3791,6 @@ def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_integer64_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3854,7 +3827,6 @@ def test_mandatory_array_integer64_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -3891,7 +3863,6 @@ def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(json_servi
 
 
 def test_optional_array_integer64_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_integer64="str value"
@@ -3901,7 +3872,6 @@ def test_optional_array_integer64_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_integer64_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_integer64=["str value"]
@@ -3911,7 +3881,6 @@ def test_optional_array_integer64_parameter_with_wrong_type_in_array(json_servic
 
 
 def test_mandatory_number_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -3944,7 +3913,6 @@ def test_mandatory_number_parameter_not_provided(json_service):
 
 
 def test_mandatory_number_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -3977,7 +3945,6 @@ def test_mandatory_number_parameter_with_wrong_type(json_service):
 
 
 def test_optional_number_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_number="str value"
@@ -3985,7 +3952,6 @@ def test_optional_number_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_number_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4020,7 +3986,6 @@ def test_mandatory_array_number_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_number_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4055,7 +4020,6 @@ def test_mandatory_array_number_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_array_number_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4090,7 +4054,6 @@ def test_mandatory_array_number_parameter_provided_as_none_filled_array(json_ser
 
 
 def test_mandatory_array_number_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4127,7 +4090,6 @@ def test_mandatory_array_number_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_number_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4164,7 +4126,6 @@ def test_mandatory_array_number_parameter_with_wrong_type_in_array(json_service)
 
 
 def test_optional_array_number_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_number="str value"
@@ -4174,7 +4135,6 @@ def test_optional_array_number_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_number_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_number=["str value"]
@@ -4184,7 +4144,6 @@ def test_optional_array_number_parameter_with_wrong_type_in_array(json_service):
 
 
 def test_mandatory_float_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4217,7 +4176,6 @@ def test_mandatory_float_parameter_not_provided(json_service):
 
 
 def test_mandatory_float_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4250,7 +4208,6 @@ def test_mandatory_float_parameter_with_wrong_type(json_service):
 
 
 def test_optional_float_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_float="str value"
@@ -4258,7 +4215,6 @@ def test_optional_float_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_float_number_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4293,7 +4249,6 @@ def test_mandatory_array_float_number_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_float_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4328,7 +4283,6 @@ def test_mandatory_array_float_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_array_float_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4363,7 +4317,6 @@ def test_mandatory_array_float_parameter_provided_as_none_filled_array(json_serv
 
 
 def test_mandatory_array_float_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4400,7 +4353,6 @@ def test_mandatory_array_float_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_float_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4437,7 +4389,6 @@ def test_mandatory_array_float_parameter_with_wrong_type_in_array(json_service):
 
 
 def test_optional_array_float_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_float="str value"
@@ -4447,7 +4398,6 @@ def test_optional_array_float_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_float_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_float=["str value"]
@@ -4457,7 +4407,6 @@ def test_optional_array_float_parameter_with_wrong_type_in_array(json_service):
 
 
 def test_mandatory_double_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4490,7 +4439,6 @@ def test_mandatory_double_parameter_not_provided(json_service):
 
 
 def test_mandatory_double_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4523,7 +4471,6 @@ def test_mandatory_double_parameter_with_wrong_type(json_service):
 
 
 def test_optional_double_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_double="str value"
@@ -4531,7 +4478,6 @@ def test_optional_double_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_double_number_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4566,7 +4512,6 @@ def test_mandatory_array_double_number_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_double_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4601,7 +4546,6 @@ def test_mandatory_array_double_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_array_double_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4636,7 +4580,6 @@ def test_mandatory_array_double_parameter_provided_as_none_filled_array(json_ser
 
 
 def test_mandatory_array_double_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4673,7 +4616,6 @@ def test_mandatory_array_double_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_double_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4710,7 +4652,6 @@ def test_mandatory_array_double_parameter_with_wrong_type_in_array(json_service)
 
 
 def test_optional_array_double_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_double="str value"
@@ -4720,7 +4661,6 @@ def test_optional_array_double_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_double_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_double=["str value"]
@@ -4730,7 +4670,6 @@ def test_optional_array_double_parameter_with_wrong_type_in_array(json_service):
 
 
 def test_mandatory_string_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4763,7 +4702,6 @@ def test_mandatory_string_parameter_not_provided(json_service):
 
 
 def test_mandatory_string_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4796,7 +4734,6 @@ def test_mandatory_string_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_string_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4829,7 +4766,6 @@ def test_mandatory_string_parameter_provided_as_none_filled_array(json_service):
 
 
 def test_mandatory_array_string_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4864,7 +4800,6 @@ def test_mandatory_array_string_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_string_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4899,7 +4834,6 @@ def test_mandatory_array_string_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_array_string_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -4934,7 +4868,6 @@ def test_mandatory_array_string_parameter_provided_as_none_filled_array(json_ser
 
 
 def test_mandatory_string_byte_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -4967,7 +4900,6 @@ def test_mandatory_string_byte_parameter_not_provided(json_service):
 
 
 def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5000,7 +4932,6 @@ def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_string_byte_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5033,7 +4964,6 @@ def test_mandatory_string_byte_parameter_provided_as_none_filled_array(json_serv
 
 
 def test_mandatory_array_string_byte_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5068,7 +4998,6 @@ def test_mandatory_array_string_byte_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_string_byte_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5105,7 +5034,6 @@ def test_mandatory_array_string_byte_parameter_provided_as_empty_array(json_serv
 def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5140,7 +5068,6 @@ def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_string_binary_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5173,7 +5100,6 @@ def test_mandatory_string_binary_parameter_not_provided(json_service):
 
 
 def test_mandatory_string_binary_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5206,7 +5132,6 @@ def test_mandatory_string_binary_parameter_provided_as_empty_array(json_service)
 
 
 def test_mandatory_string_binary_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5239,7 +5164,6 @@ def test_mandatory_string_binary_parameter_provided_as_none_filled_array(json_se
 
 
 def test_mandatory_array_string_binary_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5274,7 +5198,6 @@ def test_mandatory_array_string_binary_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_string_binary_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5311,7 +5234,6 @@ def test_mandatory_array_string_binary_parameter_provided_as_empty_array(json_se
 def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5346,7 +5268,6 @@ def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_boolean_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5379,7 +5300,6 @@ def test_mandatory_boolean_parameter_not_provided(json_service):
 
 
 def test_mandatory_boolean_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5412,7 +5332,6 @@ def test_mandatory_boolean_parameter_with_wrong_type(json_service):
 
 
 def test_optional_boolean_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_boolean="non boolean"
@@ -5420,7 +5339,6 @@ def test_optional_boolean_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_boolean_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5455,7 +5373,6 @@ def test_mandatory_array_boolean_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_boolean_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5490,7 +5407,6 @@ def test_mandatory_array_boolean_parameter_provided_as_empty_array(json_service)
 
 
 def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5525,7 +5441,6 @@ def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(json_se
 
 
 def test_mandatory_array_boolean_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5562,7 +5477,6 @@ def test_mandatory_array_boolean_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5599,7 +5513,6 @@ def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(json_service
 
 
 def test_optional_array_boolean_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_boolean="non boolean"
@@ -5609,7 +5522,6 @@ def test_optional_array_boolean_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_boolean_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_boolean=["non boolean"]
@@ -5619,7 +5531,6 @@ def test_optional_array_boolean_parameter_with_wrong_type_in_array(json_service)
 
 
 def test_mandatory_date_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5652,7 +5563,6 @@ def test_mandatory_date_parameter_not_provided(json_service):
 
 
 def test_mandatory_date_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_parameters_types(
         query_integer=0,
@@ -5685,7 +5595,6 @@ def test_mandatory_date_parameter_with_wrong_type(json_service):
 
 
 def test_optional_date_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_date="str value"
@@ -5693,7 +5602,6 @@ def test_optional_date_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_date_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5728,7 +5636,6 @@ def test_mandatory_array_date_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_date_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5763,7 +5670,6 @@ def test_mandatory_array_date_parameter_provided_as_empty_array(json_service):
 
 
 def test_mandatory_array_date_parameter_provided_as_none_filled_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5798,7 +5704,6 @@ def test_mandatory_array_date_parameter_provided_as_none_filled_array(json_servi
 
 
 def test_mandatory_array_date_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5833,7 +5738,6 @@ def test_mandatory_array_date_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5868,7 +5772,6 @@ def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service):
 
 
 def test_optional_array_date_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_date="str value"
@@ -5876,7 +5779,6 @@ def test_optional_array_date_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_date_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_date=["str value"]
@@ -5884,7 +5786,6 @@ def test_optional_array_date_parameter_with_wrong_type_in_array(json_service):
 
 
 def test_mandatory_date_time_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     assert pyxelrestgenerator.json_get_all_parameters_types(
@@ -5918,7 +5819,6 @@ def test_mandatory_date_time_parameter_not_provided(json_service):
 
 
 def test_mandatory_date_time_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     assert pyxelrestgenerator.json_get_all_parameters_types(
@@ -5954,7 +5854,6 @@ def test_mandatory_date_time_parameter_with_wrong_type(json_service):
 
 
 def test_optional_date_time_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_date_time="str value"
@@ -5964,7 +5863,6 @@ def test_optional_date_time_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_date_time_parameter_not_provided(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -5999,7 +5897,6 @@ def test_mandatory_array_date_time_parameter_not_provided(json_service):
 
 
 def test_mandatory_array_date_time_parameter_provided_as_empty_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -6036,7 +5933,6 @@ def test_mandatory_array_date_time_parameter_provided_as_empty_array(json_servic
 def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -6071,7 +5967,6 @@ def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_date_time_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -6108,7 +6003,6 @@ def test_mandatory_array_date_time_parameter_with_wrong_type(json_service):
 
 
 def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
@@ -6145,7 +6039,6 @@ def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(json_servi
 
 
 def test_valid_mandatory_parameters(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     today_date = datetime.date.today()
     tomorrow_date = today_date + datetime.timedelta(days=1)
@@ -6243,7 +6136,6 @@ def test_valid_mandatory_parameters(json_service):
 
 
 def test_optional_array_date_time_parameter_with_wrong_type(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_date_time="str value"
@@ -6253,7 +6145,6 @@ def test_optional_array_date_time_parameter_with_wrong_type(json_service):
 
 
 def test_optional_array_date_time_parameter_with_wrong_type_in_array(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_all_optional_parameters_types(
         query_array_date_time=["str value"]
@@ -6263,7 +6154,6 @@ def test_optional_array_date_time_parameter_with_wrong_type_in_array(json_servic
 
 
 def test_list_of_list_form_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_list_form(
         rules=[
@@ -6280,7 +6170,6 @@ def test_list_of_list_form_post(json_service):
 
 
 def test_list_of_list_form_post_with_non_str_date_failure(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.json_post_list_of_list_form(
@@ -6300,7 +6189,6 @@ def test_list_of_list_form_post_with_non_str_date_failure(json_service):
 
 
 def test_list_of_list_form_post_with_non_str(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_list_form(
         items=[[1.0, 1.2, "SNCF"]]
@@ -6308,7 +6196,6 @@ def test_list_of_list_form_post_with_non_str(json_service):
 
 
 def test_list_of_list_form_post_with_single_list(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_list_form(
         rules=[["rule1", "rule2", "rule3"]], items=[["item1", "item2", "item3"]]
@@ -6316,7 +6203,6 @@ def test_list_of_list_form_post_with_single_list(json_service):
 
 
 def test_dict_with_dict_json_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_with_dict(
         inner_dict=[["key1", "key2", "key3"], ["value10", "value20", "value30"]],
@@ -6329,7 +6215,6 @@ def test_dict_with_dict_json_post(json_service):
 
 
 def test_list_of_dict_with_dict_json_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict(
         inner_dict=[
@@ -6349,7 +6234,6 @@ def test_list_of_dict_with_dict_json_post(json_service):
 
 
 def test_dict_with_dict_list_json_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_with_dict_list(
         inner_dict_list=[
@@ -6369,7 +6253,6 @@ def test_dict_with_dict_list_json_post(json_service):
 
 
 def test_dict_with_list_of_list_json_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_with_list_of_list(
         inner_list_of_list=[
@@ -6384,7 +6267,6 @@ def test_dict_with_list_of_list_json_post(json_service):
 
 
 def test_dict_with_list_of_list_json_post_a_single_list(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_with_list_of_list(
         inner_list_of_list=[["key1", "key2", "key3"]],
@@ -6394,7 +6276,6 @@ def test_dict_with_list_of_list_json_post_a_single_list(json_service):
 
 
 def test_dict_string_json_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_string(
         dict_field1=34, dict_field2=890.32  # Send as integer
@@ -6402,7 +6283,6 @@ def test_dict_string_json_post(json_service):
 
 
 def test_dict_string_json_post_without_non_required(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_string(dict_field1=34) == [
         ["dict_field1", "dict_field2"],
@@ -6411,7 +6291,6 @@ def test_dict_string_json_post_without_non_required(json_service):
 
 
 def test_dict_string_json_post_without_required(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     with pytest.raises(Exception) as exception_info:
         pyxelrestgenerator.json_post_dict_string(dict_field2=34.5)
@@ -6422,13 +6301,11 @@ def test_dict_string_json_post_without_required(json_service):
 
 
 def test_list_of_dict_with_dict_json_post_without_any_required(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict() == [[""]]
 
 
 def test_list_of_dict_with_dict_json_post_with_empty_lists(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict(
         dict_field2=["1", None, "4"]
@@ -6436,7 +6313,6 @@ def test_list_of_dict_with_dict_json_post_with_empty_lists(json_service):
 
 
 def test_list_of_dict_with_dict_json_post_with_different_list_length(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict(
         dict_field1="000", dict_field2=["1", None, "4"]
@@ -6446,13 +6322,11 @@ def test_list_of_dict_with_dict_json_post_with_different_list_length(json_servic
 def test_list_of_dict_with_dict_allowing_null_json_post_without_any_required(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null() == [[""]]
 
 
 def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(
         dict_field2=["1", None, "4"]
@@ -6467,7 +6341,6 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(json_se
 def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_length(
     json_service,
 ):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(
         dict_field1="000", dict_field2=["1", None, "4"]
@@ -6480,7 +6353,6 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_leng
 
 
 def test_dict_with_read_only_json_post(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_post_dict_with_read_only(
         dict_field1=34, dict_field3=[False, True, True]
@@ -6488,7 +6360,6 @@ def test_dict_with_read_only_json_post(json_service):
 
 
 def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     with pytest.raises(Exception) as exception_info:
         pyxelrestgenerator.json_post_dict_with_read_only(
@@ -6501,7 +6372,6 @@ def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(json_s
 
 
 def test_get_empty_list_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.json_get_list_parameter(list_parameter=[])
@@ -6510,7 +6380,6 @@ def test_get_empty_list_parameter(json_service):
 
 
 def test_get_none_filled_list_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.json_get_list_parameter(list_parameter=[None, None, None])
@@ -6519,7 +6388,6 @@ def test_get_none_filled_list_parameter(json_service):
 
 
 def test_get_none_as_first_list_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_list_parameter(
         list_parameter=[None, "valid"]
@@ -6527,7 +6395,6 @@ def test_get_none_as_first_list_parameter(json_service):
 
 
 def test_get_none_as_last_list_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_list_parameter(
         list_parameter=["valid", None]
@@ -6535,7 +6402,6 @@ def test_get_none_as_last_list_parameter(json_service):
 
 
 def test_get_none_in_list_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.json_get_list_parameter(
         list_parameter=["valid1", None, "valid2"]
@@ -6543,7 +6409,6 @@ def test_get_none_in_list_parameter(json_service):
 
 
 def test_get_none_as_list_parameter(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.json_get_list_parameter(list_parameter=None)
@@ -6552,7 +6417,6 @@ def test_get_none_as_list_parameter(json_service):
 
 
 def test_different_location_same_name(json_service, responses):
-    from pyxelrest import pyxelrestgenerator
 
     responses.add(
         responses.POST,
@@ -6578,7 +6442,6 @@ def test_different_location_same_name(json_service, responses):
 
 
 def test_post_list_dict_no_ref(json_service, responses):
-    from pyxelrest import pyxelrestgenerator
 
     responses.add(
         responses.POST,
@@ -6601,7 +6464,6 @@ def test_post_list_dict_no_ref(json_service, responses):
 
 
 def test_post_min_and_max_items(json_service, responses):
-    from pyxelrest import pyxelrestgenerator
 
     responses.add(
         responses.POST,
@@ -6630,7 +6492,6 @@ def test_post_min_and_max_items(json_service, responses):
 
 
 def test_post_body_with_properties(json_service, responses):
-    from pyxelrest import pyxelrestgenerator
 
     responses.add(
         responses.POST,
@@ -6651,7 +6512,6 @@ def test_post_body_with_properties(json_service, responses):
 
 
 def test_get_valid_int_choice(json_service, responses):
-    from pyxelrest import pyxelrestgenerator
 
     responses.add(
         responses.GET,
@@ -6667,7 +6527,6 @@ def test_get_valid_int_choice(json_service, responses):
 
 
 def test_get_invalid_int_choice(json_service):
-    from pyxelrest import pyxelrestgenerator
 
     assert (
         pyxelrestgenerator.json_get_int_choices(int_param=2)

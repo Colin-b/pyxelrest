@@ -2586,8 +2586,7 @@ def test_without_service_configuration_file(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    loader.load("duplicated_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("duplicated_service.yml")
 
     responses.add(
         responses.GET,

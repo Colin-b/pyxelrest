@@ -65,8 +65,7 @@ def caching_service(responses: RequestsMock):
 
 
 def test_get_cached(caching_service, responses: RequestsMock):
-    loader.load("caching_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("caching_services.yml")
 
     responses.add(
         responses.GET,
@@ -101,8 +100,7 @@ def test_get_cached(caching_service, responses: RequestsMock):
 
 
 def test_post_cached(caching_service, responses: RequestsMock):
-    loader.load("caching_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("caching_services.yml")
 
     responses.add(
         responses.POST,
@@ -132,8 +130,7 @@ def test_post_cached(caching_service, responses: RequestsMock):
 
 
 def test_put_cached(caching_service, responses: RequestsMock):
-    loader.load("caching_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("caching_services.yml")
 
     responses.add(
         responses.PUT,
@@ -163,8 +160,7 @@ def test_put_cached(caching_service, responses: RequestsMock):
 
 
 def test_delete_cached(caching_service, responses: RequestsMock):
-    loader.load("caching_services.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("caching_services.yml")
 
     responses.add(
         responses.DELETE,

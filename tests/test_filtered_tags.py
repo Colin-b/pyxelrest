@@ -89,19 +89,17 @@ def filtered_tags_service(responses: RequestsMock):
 
 
 def test_get_with_selected_tags(responses: RequestsMock, filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.GET, url="http://localhost:8944/tags", json={}, match_querystring=True
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     # Second tag is one of the accepted tags
     assert pyxelrestgenerator.selected_tags_get_tags() == [[""]]
 
 
 def test_post_with_selected_tags(responses: RequestsMock, filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8944/tags",
@@ -109,62 +107,52 @@ def test_post_with_selected_tags(responses: RequestsMock, filtered_tags_service)
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     # All tags are accepted
     assert pyxelrestgenerator.selected_tags_post_tags() == [[""]]
 
 
 def test_put_with_selected_tags(responses: RequestsMock, filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.PUT, url="http://localhost:8944/tags", json={}, match_querystring=True
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     # First tag is one of the accepted tags
     assert pyxelrestgenerator.selected_tags_put_tags() == [[""]]
 
 
 def test_delete_with_selected_tags(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "selected_tags_delete_tags")
 
 
 def test_get_with_excluded_tags(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "excluded_tags_get_tags")
 
 
 def test_post_with_excluded_tags(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "excluded_tags_post_tags")
 
 
 def test_put_with_excluded_tags(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "excluded_tags_put_tags")
 
 
 def test_delete_with_excluded_tags(responses: RequestsMock, filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8944/tags",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.excluded_tags_delete_tags() == [[""]]
 
@@ -172,12 +160,10 @@ def test_delete_with_excluded_tags(responses: RequestsMock, filtered_tags_servic
 def test_get_with_selected_operation_ids(
     responses: RequestsMock, filtered_tags_service
 ):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.GET, url="http://localhost:8944/tags", json={}, match_querystring=True
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.selected_operation_ids_get_tags() == [[""]]
 
@@ -185,7 +171,7 @@ def test_get_with_selected_operation_ids(
 def test_post_with_selected_operation_ids(
     responses: RequestsMock, filtered_tags_service
 ):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.POST,
         url="http://localhost:8944/tags",
@@ -193,48 +179,40 @@ def test_post_with_selected_operation_ids(
         match_querystring=True,
     )
 
-    from pyxelrest import pyxelrestgenerator
-
     assert pyxelrestgenerator.selected_operation_ids_post_tags() == [[""]]
 
 
 def test_put_with_selected_operation_ids(
     responses: RequestsMock, filtered_tags_service
 ):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.PUT, url="http://localhost:8944/tags", json={}, match_querystring=True
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.selected_operation_ids_put_tags() == [[""]]
 
 
 def test_delete_with_selected_operation_ids(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "selected_operation_ids_delete_tags")
 
 
 def test_get_with_excluded_operation_ids(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_get_tags")
 
 
 def test_post_with_excluded_operation_ids(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_post_tags")
 
 
 def test_put_with_excluded_operation_ids(filtered_tags_service):
-    loader.load("filtered_tags_service.yml")
-    from pyxelrest import pyxelrestgenerator
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
 
     assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_put_tags")
 
@@ -242,14 +220,12 @@ def test_put_with_excluded_operation_ids(filtered_tags_service):
 def test_delete_with_excluded_operation_ids(
     responses: RequestsMock, filtered_tags_service
 ):
-    loader.load("filtered_tags_service.yml")
+    pyxelrestgenerator = loader.load("filtered_tags_service.yml")
     responses.add(
         responses.DELETE,
         url="http://localhost:8944/tags",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.excluded_operation_ids_delete_tags() == [[""]]

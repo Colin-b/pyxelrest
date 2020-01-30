@@ -44,15 +44,13 @@ def content_type_service(responses: RequestsMock):
 def test_msgpackpandas_content_type_with_pandas(
     responses: RequestsMock, content_type_service
 ):
-    loader.load("content_type_service.yml")
+    pyxelrestgenerator = loader.load("content_type_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8956/msgpackpandas",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.content_type_get_msgpackpandas() == [[""]]
     assert (
@@ -64,15 +62,13 @@ def test_msgpackpandas_content_type_with_pandas(
 def test_msgpackpandas_content_type_without_pandas(
     responses: RequestsMock, content_type_service
 ):
-    loader.load("content_type_service.yml")
+    pyxelrestgenerator = loader.load("content_type_service.yml")
     responses.add(
         responses.GET,
         url="http://localhost:8956/msgpackpandas",
         json={},
         match_querystring=True,
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.content_type_get_msgpackpandas() == [[""]]
     assert (
@@ -82,12 +78,10 @@ def test_msgpackpandas_content_type_without_pandas(
 
 
 def test_json_content_type(responses: RequestsMock, content_type_service):
-    loader.load("content_type_service.yml")
+    pyxelrestgenerator = loader.load("content_type_service.yml")
     responses.add(
         responses.GET, url="http://localhost:8956/json", json={}, match_querystring=True
     )
-
-    from pyxelrest import pyxelrestgenerator
 
     assert pyxelrestgenerator.content_type_get_json() == [[""]]
     assert (
