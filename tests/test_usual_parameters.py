@@ -7,7 +7,8 @@ from responses import RequestsMock
 
 from testsutils import loader
 
-# TODO Rename into test_date
+
+# TODO Rename test file into test_date
 def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
     for call in responses.calls:
         if call.request.url == url:
