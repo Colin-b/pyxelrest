@@ -2,7 +2,7 @@ import os
 
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
 
 
 def test_get_static_open_api_definition(responses: RequestsMock, tmpdir):

@@ -2,7 +2,8 @@ import pytest
 from requests import PreparedRequest
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
+
 
 # TODO Put tests related to operation id filtering into another test file
 def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:

@@ -1,10 +1,7 @@
-import os
-from datetime import datetime
-
 import pytest
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
 
 
 @pytest.fixture

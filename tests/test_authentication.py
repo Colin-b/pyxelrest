@@ -4,7 +4,7 @@ from requests_auth import authentication
 import pytest
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
 
 
 @pytest.fixture

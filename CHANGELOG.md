@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Do not use a fixed dependency version.
 - Compatibility with Python 3.8
+- Ability to change the configuration and impact loaded functions within module without restarting python.
 
 ### Removed
 - Drop support for python < 3.6

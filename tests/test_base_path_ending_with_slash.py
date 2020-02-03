@@ -2,7 +2,7 @@ import pytest
 from requests import PreparedRequest
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
 
 
 def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:

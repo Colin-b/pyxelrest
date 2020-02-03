@@ -5,8 +5,6 @@ from importlib import import_module, reload
 import pyxelrest
 from responses import RequestsMock
 
-from testsutils import loader
-
 
 def test_duplicated_key_in_configuration(responses: RequestsMock, tmpdir):
     responses.add(

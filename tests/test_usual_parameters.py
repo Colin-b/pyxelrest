@@ -5,7 +5,7 @@ import pytest
 from requests import PreparedRequest
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
 
 
 # TODO Rename test file into test_date

@@ -2,6 +2,7 @@
 Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will generate xlwings User Defined Functions.
 """
 import os
+from importlib import reload, import_module
 from typing import List, Union
 
 import jinja2
@@ -52,7 +53,8 @@ def generate_python_file(
 def load_user_defined_functions(
     services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
 ):
-    from pyxelrest import user_defined_functions
+    # Ensure that newly generated file is reloaded as user_defined_functions
+    user_defined_functions = reload(import_module("pyxelrest.user_defined_functions"))
 
     user_defined_functions.udf_methods = {
         udf_name: method

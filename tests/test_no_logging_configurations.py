@@ -3,7 +3,7 @@ import os
 import pyxelrest
 from responses import RequestsMock
 
-from testsutils import loader
+from tests import loader
 
 
 def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
