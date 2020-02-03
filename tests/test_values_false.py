@@ -140,16 +140,30 @@ def values_false_service(responses: RequestsMock):
     )
 
 
-def test_get_with_zero_integer(responses: RequestsMock, values_false_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
-        tmpdir,
+@pytest.mark.parametrize(
+    "service_config",
+    [
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
             }
         },
-    )
+        {
+            "values_false": {
+                "open_api": {
+                    "definition": "http://localhost:8945/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_get_with_zero_integer(
+    responses: RequestsMock, values_false_service, tmpdir, service_config
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/integer",
@@ -163,16 +177,30 @@ def test_get_with_zero_integer(responses: RequestsMock, values_false_service, tm
     ]
 
 
-def test_get_with_zero_float(responses: RequestsMock, values_false_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
-        tmpdir,
+@pytest.mark.parametrize(
+    "service_config",
+    [
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
             }
         },
-    )
+        {
+            "values_false": {
+                "open_api": {
+                    "definition": "http://localhost:8945/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_get_with_zero_float(
+    responses: RequestsMock, values_false_service, tmpdir, service_config
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/float",
@@ -186,16 +214,30 @@ def test_get_with_zero_float(responses: RequestsMock, values_false_service, tmpd
     ]
 
 
-def test_get_with_false_boolean(responses: RequestsMock, values_false_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
-        tmpdir,
+@pytest.mark.parametrize(
+    "service_config",
+    [
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
             }
         },
-    )
+        {
+            "values_false": {
+                "open_api": {
+                    "definition": "http://localhost:8945/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_get_with_false_boolean(
+    responses: RequestsMock, values_false_service, tmpdir, service_config
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/false/boolean",
@@ -209,16 +251,30 @@ def test_get_with_false_boolean(responses: RequestsMock, values_false_service, t
     ]
 
 
-def test_get_with_empty_string(responses: RequestsMock, values_false_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
-        tmpdir,
+@pytest.mark.parametrize(
+    "service_config",
+    [
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
             }
         },
-    )
+        {
+            "values_false": {
+                "open_api": {
+                    "definition": "http://localhost:8945/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_get_with_empty_string(
+    responses: RequestsMock, values_false_service, tmpdir, service_config
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/string",
