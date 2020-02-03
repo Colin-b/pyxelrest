@@ -2601,8 +2601,30 @@ def usual_parameters_service(responses: RequestsMock):
     )
 
 
-def test_get_date(responses: RequestsMock, usual_parameters_service):
-    pyxelrestgenerator = loader.load("usual_parameters_service.yml")
+@pytest.mark.parametrize(
+    "service_config",
+    [
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://localhost:8943/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+        {
+            "usual_parameters": {
+                "open_api": {
+                    "definition": "http://localhost:8943/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_get_date(
+    responses: RequestsMock, usual_parameters_service, tmpdir, service_config: dict
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8943/date",
@@ -2619,8 +2641,30 @@ def test_get_date(responses: RequestsMock, usual_parameters_service):
     ]
 
 
-def test_get_datetime(responses: RequestsMock, usual_parameters_service):
-    pyxelrestgenerator = loader.load("usual_parameters_service.yml")
+@pytest.mark.parametrize(
+    "service_config",
+    [
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://localhost:8943/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+        {
+            "usual_parameters": {
+                "open_api": {
+                    "definition": "http://localhost:8943/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_get_datetime(
+    responses: RequestsMock, usual_parameters_service, tmpdir, service_config: dict
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime",
@@ -2651,8 +2695,18 @@ def test_get_datetime(responses: RequestsMock, usual_parameters_service):
     ]
 
 
-def test_get_datetime_encoding(responses: RequestsMock, usual_parameters_service):
-    pyxelrestgenerator = loader.load("usual_parameters_service.yml")
+def test_get_datetime_encoding(
+    responses: RequestsMock, usual_parameters_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://localhost:8943/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime/encoding?encoded_date_time=2017-09-13T15:20:35",
@@ -2686,3 +2740,53 @@ def test_get_datetime_encoding(responses: RequestsMock, usual_parameters_service
     assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
         encoded_date_time=date_time
     ) == [[""]]
+
+
+def test_get_datetime_encoding_based_on_definitions(
+    responses: RequestsMock, usual_parameters_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "usual_parameters": {
+                "open_api": {
+                    "definition": "http://localhost:8943/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://localhost:8943/datetime/encoding?encoded_date_time=2017-09-13T15:20:35",
+        json={},
+        match_querystring=True,
+    )
+
+    date_time = datetime.datetime.strptime("2017-09-13T15:20:35", "%Y-%m-%dT%H:%M:%S")
+    assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
+        encoded_date_time=date_time
+    ) == [""]
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8943/datetime/encoding?encoded_date_time=2017-09-13T15:20:00",
+        json={},
+        match_querystring=True,
+    )
+    date_time = datetime.datetime.strptime("2017-09-13T15:20", "%Y-%m-%dT%H:%M")
+    assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
+        encoded_date_time=date_time
+    ) == [""]
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8943/datetime/encoding?encoded_date_time=2017-09-13T15:00:00",
+        json={},
+        match_querystring=True,
+    )
+    date_time = datetime.datetime.strptime("2017-09-13 15", "%Y-%m-%d %H")
+    assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
+        encoded_date_time=date_time
+    ) == [""]
