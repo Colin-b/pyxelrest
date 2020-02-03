@@ -146,8 +146,30 @@ def without_parameter_service(responses: RequestsMock):
     )
 
 
-def test_plain_without_parameter(responses: RequestsMock, without_parameter_service):
-    pyxelrestgenerator = loader.load("without_parameter_service.yml")
+@pytest.mark.parametrize(
+    "service_config",
+    [
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://localhost:8950/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+        {
+            "without_parameter": {
+                "open_api": {
+                    "definition": "http://localhost:8950/",
+                    "rely_on_definitions": True,
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    ],
+)
+def test_plain_without_parameter(
+    responses: RequestsMock, without_parameter_service, tmpdir, service_config: dict
+):
+    pyxelrestgenerator = loader.load2(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8950/plain_text_without_parameter",
@@ -163,8 +185,18 @@ def test_plain_without_parameter(responses: RequestsMock, without_parameter_serv
     )
 
 
-def test_post_without_parameter(responses: RequestsMock, without_parameter_service):
-    pyxelrestgenerator = loader.load("without_parameter_service.yml")
+def test_post_without_parameter(
+    responses: RequestsMock, without_parameter_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://localhost:8950/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.POST,
         url="http://localhost:8950/without_parameter",
@@ -175,8 +207,18 @@ def test_post_without_parameter(responses: RequestsMock, without_parameter_servi
     assert pyxelrestgenerator.without_parameter_post_without_parameter() == [[""]]
 
 
-def test_put_without_parameter(responses: RequestsMock, without_parameter_service):
-    pyxelrestgenerator = loader.load("without_parameter_service.yml")
+def test_put_without_parameter(
+    responses: RequestsMock, without_parameter_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://localhost:8950/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.PUT,
         url="http://localhost:8950/without_parameter",
@@ -187,8 +229,18 @@ def test_put_without_parameter(responses: RequestsMock, without_parameter_servic
     assert pyxelrestgenerator.without_parameter_put_without_parameter() == [[""]]
 
 
-def test_delete_without_parameter(responses: RequestsMock, without_parameter_service):
-    pyxelrestgenerator = loader.load("without_parameter_service.yml")
+def test_delete_without_parameter(
+    responses: RequestsMock, without_parameter_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://localhost:8950/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.DELETE,
         url="http://localhost:8950/without_parameter",
@@ -199,8 +251,16 @@ def test_delete_without_parameter(responses: RequestsMock, without_parameter_ser
     assert pyxelrestgenerator.without_parameter_delete_without_parameter() == [[""]]
 
 
-def test_service_without_sync_does_not_have_sync(without_parameter_service):
-    pyxelrestgenerator = loader.load("without_parameter_service.yml")
+def test_service_without_sync_does_not_have_sync(without_parameter_service, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://localhost:8950/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
 
     with pytest.raises(AttributeError) as exception_info:
         pyxelrestgenerator.vba_without_parameter_delete_without_parameter()
