@@ -108,10 +108,28 @@ def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service):
     )
 
 
+class DateTimeMock:
+    @staticmethod
+    def today():
+        class UTCDateTimeMock:
+            @staticmethod
+            def isoformat():
+                return "2018-10-11T15:05:05.663979"
+
+        return UTCDateTimeMock
+
+
+class DateTimeModuleMock:
+    datetime = DateTimeMock
+
+
 def test_get_header_advanced_configuration(
-    responses: RequestsMock, header_parameter_service
+    responses: RequestsMock, header_parameter_service, monkeypatch
 ):
     pyxelrestgenerator = loader.load("header_parameter_service.yml")
+    import pyxelrest.session
+
+    monkeypatch.setattr(pyxelrest.session, "datetime", DateTimeModuleMock)
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
@@ -130,5 +148,4 @@ def test_get_header_advanced_configuration(
     assert headers["X-Pxl-Request"]
     assert headers["User-Agent"] == "PyxelRest v0.69.1.dev1"
     assert headers["X-Pxl-Cell"] == "Python"
-    # TODO Mock datetime to ensure the proper value is used
-    assert headers["X-Pxl-Session"] == "2020-01-15T12:01:33.123456"
+    assert headers["X-Pxl-Session"] == "2018-10-11T15:05:05.663979"
