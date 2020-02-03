@@ -56,9 +56,17 @@ def base_path_ending_with_slash_service(responses: RequestsMock):
 
 
 def test_get_base_path_ending_with_slash(
-    responses: RequestsMock, base_path_ending_with_slash_service
+    responses: RequestsMock, base_path_ending_with_slash_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "base_path_ending_with_slash": {
+                "open_api": {"definition": "http://localhost:8957/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8957/method",
@@ -70,9 +78,17 @@ def test_get_base_path_ending_with_slash(
 
 
 def test_post_base_path_ending_with_slash(
-    responses: RequestsMock, base_path_ending_with_slash_service
+    responses: RequestsMock, base_path_ending_with_slash_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "base_path_ending_with_slash": {
+                "open_api": {"definition": "http://localhost:8957/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.POST,
         url="http://localhost:8957/method",
@@ -84,9 +100,17 @@ def test_post_base_path_ending_with_slash(
 
 
 def test_put_base_path_ending_with_slash(
-    responses: RequestsMock, base_path_ending_with_slash_service
+    responses: RequestsMock, base_path_ending_with_slash_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "base_path_ending_with_slash": {
+                "open_api": {"definition": "http://localhost:8957/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.PUT,
         url="http://localhost:8957/method",
@@ -98,9 +122,17 @@ def test_put_base_path_ending_with_slash(
 
 
 def test_delete_base_path_ending_with_slash(
-    responses: RequestsMock, base_path_ending_with_slash_service
+    responses: RequestsMock, base_path_ending_with_slash_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("base_path_ending_with_slash_service.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "base_path_ending_with_slash": {
+                "open_api": {"definition": "http://localhost:8957/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.DELETE,
         url="http://localhost:8957/method",

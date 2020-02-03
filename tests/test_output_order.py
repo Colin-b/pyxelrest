@@ -107,7 +107,7 @@ def output_order_service(responses: RequestsMock):
 def test_get_compare_output_order(
     responses: RequestsMock, output_order_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "output_order": {
@@ -143,7 +143,7 @@ def test_get_compare_output_order(
 def test_get_compare_output_order_based_on_definition(
     responses: RequestsMock, output_order_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "output_order": {

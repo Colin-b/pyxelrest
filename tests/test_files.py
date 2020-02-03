@@ -51,8 +51,16 @@ def files_service(responses: RequestsMock):
     )
 
 
-def test_files_parameter(files_service, responses: RequestsMock):
-    pyxelrestgenerator = loader.load("files_services.yml")
+def test_files_parameter(files_service, responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "files": {
+                "open_api": {"definition": "http://localhost:8959/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
 
     with tempfile.TemporaryDirectory() as temp_dir:
         with open(os.path.join(temp_dir, "temp_file"), "wb") as temp_file:

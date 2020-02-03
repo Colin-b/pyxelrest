@@ -1366,7 +1366,7 @@ def vba_keywords_service(responses: RequestsMock):
 def test_get_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1542,7 +1542,7 @@ def test_get_vba_restricted_keywords(
 def test_post_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1718,7 +1718,7 @@ def test_post_vba_restricted_keywords(
 def test_put_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1894,7 +1894,7 @@ def test_put_vba_restricted_keywords(
 def test_delete_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2070,7 +2070,7 @@ def test_delete_vba_restricted_keywords(
 def test_attribute_vba_restricted_keyword_in_uri_parameter(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2096,7 +2096,7 @@ def test_attribute_vba_restricted_keyword_in_uri_parameter(
 def test_get_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2120,7 +2120,7 @@ def test_get_python_restricted_keywords(
 def test_post_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2144,7 +2144,7 @@ def test_post_python_restricted_keywords(
 def test_put_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2168,7 +2168,7 @@ def test_put_python_restricted_keywords(
 def test_delete_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "vba_keywords": {

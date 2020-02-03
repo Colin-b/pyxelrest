@@ -169,7 +169,7 @@ def without_parameter_service(responses: RequestsMock):
 def test_plain_without_parameter(
     responses: RequestsMock, without_parameter_service, tmpdir, service_config: dict
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8950/plain_text_without_parameter",
@@ -188,7 +188,7 @@ def test_plain_without_parameter(
 def test_post_without_parameter(
     responses: RequestsMock, without_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "without_parameter": {
@@ -210,7 +210,7 @@ def test_post_without_parameter(
 def test_put_without_parameter(
     responses: RequestsMock, without_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "without_parameter": {
@@ -232,7 +232,7 @@ def test_put_without_parameter(
 def test_delete_without_parameter(
     responses: RequestsMock, without_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "without_parameter": {
@@ -252,7 +252,7 @@ def test_delete_without_parameter(
 
 
 def test_service_without_sync_does_not_have_sync(without_parameter_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "without_parameter": {

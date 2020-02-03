@@ -75,7 +75,7 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 def test_missing_operation_id(
     responses: RequestsMock, open_api_definition_parsing_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "operation_id_not_provided": {
@@ -107,7 +107,7 @@ def test_missing_operation_id(
 def test_mixed_operation_id(
     responses: RequestsMock, open_api_definition_parsing_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "operation_id_not_provided": {

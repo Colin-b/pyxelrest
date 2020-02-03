@@ -705,7 +705,7 @@ def petstore_service(responses: RequestsMock):
 
 
 def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "petstore": {
@@ -761,7 +761,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
 
 
 def test_get_user_by_name(responses: RequestsMock, petstore_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "petstore": {

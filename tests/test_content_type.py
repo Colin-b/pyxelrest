@@ -34,8 +34,16 @@ def content_type_service(responses: RequestsMock):
     )
 
 
-def test_json_content_type(responses: RequestsMock, content_type_service):
-    pyxelrestgenerator = loader.load("content_type_service.yml")
+def test_json_content_type(responses: RequestsMock, content_type_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "content_type": {
+                "open_api": {"definition": "http://localhost:8956/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET, url="http://localhost:8956/json", json={}, match_querystring=True
     )

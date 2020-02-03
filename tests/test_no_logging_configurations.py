@@ -38,7 +38,7 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
     pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(
         this_dir, "non_existing_configuration.yml"
     )
-    loader.load2(
+    loader.load(
         tmpdir,
         {
             "usual_parameters": {

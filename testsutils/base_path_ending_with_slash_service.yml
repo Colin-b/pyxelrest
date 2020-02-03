@@ -1,7 +1,0 @@
-base_path_ending_with_slash:
-  open_api:
-    definition: "http://localhost:8957/"
-  udf:
-    return_types:
-      - "sync_auto_expand"
-    shift_result: false

@@ -65,8 +65,21 @@ def header_parameter_service(responses: RequestsMock):
     )
 
 
-def test_get_header_parameter(responses: RequestsMock, header_parameter_service):
-    pyxelrestgenerator = loader.load("header_parameter_service.yml")
+def test_get_header_parameter(
+    responses: RequestsMock, header_parameter_service, tmpdir
+):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "header_parameter": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                },
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
@@ -81,8 +94,21 @@ def test_get_header_parameter(responses: RequestsMock, header_parameter_service)
     )
 
 
-def test_get_header_parameter_sync(responses: RequestsMock, header_parameter_service):
-    pyxelrestgenerator = loader.load("header_parameter_service.yml")
+def test_get_header_parameter_sync(
+    responses: RequestsMock, header_parameter_service, tmpdir
+):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "header_parameter": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                },
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
@@ -97,8 +123,21 @@ def test_get_header_parameter_sync(responses: RequestsMock, header_parameter_ser
     )
 
 
-def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service):
-    pyxelrestgenerator = loader.load("header_parameter_service.yml")
+def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "header_advanced_configuration": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "udf": {"return_types": ["vba_compatible"], "shift_result": False},
+                "headers": {
+                    "X-PXL-CUSTOM": "MyCustomValue",
+                    "X-PXL-OTHER": "MyOtherValue",
+                    "X-PXL-ENVVAR": "%USERNAME%",
+                },
+            }
+        },
+    )
 
     with pytest.raises(AttributeError) as exception_info:
         pyxelrestgenerator.vba_header_advanced_configuration_get_header("sent header")
@@ -124,9 +163,22 @@ class DateTimeModuleMock:
 
 
 def test_get_header_advanced_configuration(
-    responses: RequestsMock, header_parameter_service, monkeypatch
+    responses: RequestsMock, header_parameter_service, monkeypatch, tmpdir
 ):
-    pyxelrestgenerator = loader.load("header_parameter_service.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "header_advanced_configuration": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "udf": {"return_types": ["vba_compatible"], "shift_result": False},
+                "headers": {
+                    "X-PXL-CUSTOM": "MyCustomValue",
+                    "X-PXL-OTHER": "MyOtherValue",
+                    "X-PXL-ENVVAR": "%USERNAME%",
+                },
+            }
+        },
+    )
     import pyxelrest.session
 
     monkeypatch.setattr(pyxelrest.session, "datetime", DateTimeModuleMock)

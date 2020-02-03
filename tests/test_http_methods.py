@@ -48,8 +48,17 @@ def http_methods_service(responses: RequestsMock):
     )
 
 
-def test_get_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_get_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8955/http_methods",
@@ -60,8 +69,17 @@ def test_get_http_method(responses: RequestsMock, http_methods_service):
     assert pyxelrestgenerator.http_methods_get_http_methods() == [[""]]
 
 
-def test_post_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_post_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.POST,
         url="http://localhost:8955/http_methods",
@@ -72,8 +90,17 @@ def test_post_http_method(responses: RequestsMock, http_methods_service):
     assert pyxelrestgenerator.http_methods_post_http_methods() == [[""]]
 
 
-def test_put_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_put_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.PUT,
         url="http://localhost:8955/http_methods",
@@ -84,8 +111,17 @@ def test_put_http_method(responses: RequestsMock, http_methods_service):
     assert pyxelrestgenerator.http_methods_put_http_methods() == [[""]]
 
 
-def test_delete_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_delete_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.DELETE,
         url="http://localhost:8955/http_methods",
@@ -96,8 +132,17 @@ def test_delete_http_method(responses: RequestsMock, http_methods_service):
     assert pyxelrestgenerator.http_methods_delete_http_methods() == [[""]]
 
 
-def test_patch_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_patch_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.PATCH,
         url="http://localhost:8955/http_methods",
@@ -108,8 +153,17 @@ def test_patch_http_method(responses: RequestsMock, http_methods_service):
     assert pyxelrestgenerator.http_methods_patch_http_methods() == [[""]]
 
 
-def test_options_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_options_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.OPTIONS,
         url="http://localhost:8955/http_methods",
@@ -120,8 +174,17 @@ def test_options_http_method(responses: RequestsMock, http_methods_service):
     assert pyxelrestgenerator.http_methods_options_http_methods() == [[""]]
 
 
-def test_head_http_method(responses: RequestsMock, http_methods_service):
-    pyxelrestgenerator = loader.load("http_methods_service.yml")
+def test_head_http_method(responses: RequestsMock, http_methods_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "http_methods": {
+                "open_api": {"definition": "http://localhost:8955/"},
+                "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.HEAD,
         url="http://localhost:8955/http_methods",

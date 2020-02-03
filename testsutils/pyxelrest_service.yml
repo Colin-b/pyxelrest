@@ -1,6 +1,0 @@
-pyxelrest:
-  udf:
-    return_types:
-      - "vba_compatible"
-      - "sync_auto_expand"
-    shift_result: false

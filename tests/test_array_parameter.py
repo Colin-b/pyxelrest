@@ -186,7 +186,7 @@ def array_parameter_service(responses: RequestsMock):
 def test_string_multi_array_parameter(
     responses: RequestsMock, array_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "array_parameter": {
@@ -210,7 +210,7 @@ def test_string_multi_array_parameter(
 def test_string_default_array_parameter(
     responses: RequestsMock, array_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "array_parameter": {
@@ -234,7 +234,7 @@ def test_string_default_array_parameter(
 def test_string_csv_array_parameter(
     responses: RequestsMock, array_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "array_parameter": {
@@ -258,7 +258,7 @@ def test_string_csv_array_parameter(
 def test_string_ssv_array_parameter(
     responses: RequestsMock, array_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "array_parameter": {
@@ -282,7 +282,7 @@ def test_string_ssv_array_parameter(
 def test_string_tsv_array_parameter(
     responses: RequestsMock, array_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "array_parameter": {
@@ -306,7 +306,7 @@ def test_string_tsv_array_parameter(
 def test_string_pipes_array_parameter(
     responses: RequestsMock, array_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "array_parameter": {

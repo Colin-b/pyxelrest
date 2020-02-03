@@ -210,7 +210,7 @@ def nested_data_service(responses: RequestsMock):
 
 
 def test_get_dict_with_empty_nested_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -294,7 +294,7 @@ def test_get_dict_with_empty_nested_list(nested_data_service, responses, tmpdir)
 def test_get_dict_with_empty_nested_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -370,7 +370,7 @@ def test_get_dict_with_empty_nested_list_based_on_definitions(
 
 
 def test_get_dict_with_three_imbricated_levels(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -486,7 +486,7 @@ def test_get_dict_with_three_imbricated_levels(nested_data_service, responses, t
 def test_get_dict_with_three_imbricated_levels_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -588,7 +588,7 @@ def test_get_dict_with_three_imbricated_levels_based_on_definitions(
 
 
 def test_get_dict_with_four_imbricated_levels(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -744,7 +744,7 @@ def test_get_dict_with_four_imbricated_levels(nested_data_service, responses, tm
 def test_get_dict_with_four_imbricated_levels_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -879,7 +879,7 @@ def test_get_dict_with_four_imbricated_levels_based_on_definitions(
 def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1035,7 +1035,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
 def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1168,7 +1168,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys_based_on_de
 
 
 def test_get_empty_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1189,7 +1189,7 @@ def test_get_empty_dict(nested_data_service, responses, tmpdir):
 
 
 def test_get_empty_dict_based_on_definitions(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1213,7 +1213,7 @@ def test_get_empty_dict_based_on_definitions(nested_data_service, responses, tmp
 
 
 def test_get_empty_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1234,7 +1234,7 @@ def test_get_empty_list(nested_data_service, responses, tmpdir):
 
 
 def test_get_empty_list_based_on_definitions(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1258,7 +1258,7 @@ def test_get_empty_list_based_on_definitions(nested_data_service, responses, tmp
 
 
 def test_get_one_level_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1284,7 +1284,7 @@ def test_get_one_level_dict(nested_data_service, responses, tmpdir):
 def test_get_one_level_dict_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1311,7 +1311,7 @@ def test_get_one_level_dict_based_on_definitions(
 
 
 def test_get_one_level_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1337,7 +1337,7 @@ def test_get_one_level_list(nested_data_service, responses, tmpdir):
 def test_get_one_level_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1364,7 +1364,7 @@ def test_get_one_level_list_based_on_definitions(
 
 
 def test_get_one_dict_entry_with_a_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1391,7 +1391,7 @@ def test_get_one_dict_entry_with_a_list(nested_data_service, responses, tmpdir):
 def test_get_one_dict_entry_with_a_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1419,7 +1419,7 @@ def test_get_one_dict_entry_with_a_list_based_on_definitions(
 
 
 def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1451,7 +1451,7 @@ def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses, 
 def test_get_one_dict_entry_with_a_list_of_dict_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1484,7 +1484,7 @@ def test_get_one_dict_entry_with_a_list_of_dict_based_on_definitions(
 
 
 def test_get_list_of_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1512,7 +1512,7 @@ def test_get_list_of_dict(nested_data_service, responses, tmpdir):
 
 
 def test_get_list_of_dict_based_on_definitions(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1543,7 +1543,7 @@ def test_get_list_of_dict_based_on_definitions(nested_data_service, responses, t
 
 
 def test_get_dict_with_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1576,7 +1576,7 @@ def test_get_dict_with_list(nested_data_service, responses, tmpdir):
 def test_get_dict_with_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1610,7 +1610,7 @@ def test_get_dict_with_list_based_on_definitions(
 
 
 def test_get_dict_with_list_of_different_size(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1642,7 +1642,7 @@ def test_get_dict_with_list_of_different_size(nested_data_service, responses, tm
 def test_get_dict_with_list_of_different_size_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "nested_data": {

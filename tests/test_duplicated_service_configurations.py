@@ -1,11 +1,14 @@
 import datetime
+import os
+from importlib import import_module, reload
 
+import pyxelrest
 from responses import RequestsMock
 
 from testsutils import loader
 
 
-def test_without_service_configuration_file(responses: RequestsMock):
+def test_duplicated_key_in_configuration(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://localhost:8943/",
@@ -2586,7 +2589,32 @@ def test_without_service_configuration_file(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    pyxelrestgenerator = loader.load("duplicated_service.yml")
+    config_file_path = os.path.join(tmpdir, "test_config.yml")
+    with open(config_file_path, "wt") as file:
+        file.write(
+            """usual_parameters:
+  open_api:
+    definition: "http://localhost:8943/"
+  methods:
+    - "get"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
+
+usual_parameters:
+  open_api:
+    definition: "http://localhost:8943/"
+  methods:
+    - "get"
+  udf:
+    return_types:
+      - "sync_auto_expand"
+    shift_result: false
+"""
+        )
+    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    pyxelrestgenerator = reload(import_module("pyxelrest.pyxelrestgenerator"))
 
     responses.add(
         responses.GET,

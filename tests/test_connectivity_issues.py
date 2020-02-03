@@ -137,8 +137,16 @@ def without_parameter_service(responses: RequestsMock):
     )
 
 
-def test_get_plain_text_with_service_down(without_parameter_service):
-    pyxelrestgenerator = loader.load("connectivity_issues_services.yml")
+def test_get_plain_text_with_service_down(without_parameter_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://localhost:8950/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
 
     assert (
         pyxelrestgenerator.without_parameter_get_plain_text_without_parameter()

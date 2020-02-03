@@ -14,7 +14,7 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 
 
 def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -46,7 +46,7 @@ def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
 
 
 def test_get_custom_url(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -78,7 +78,7 @@ def test_get_custom_url(responses: RequestsMock, tmpdir):
 
 
 def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -110,7 +110,7 @@ def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
 
 
 def test_delete_custom_url(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -142,7 +142,7 @@ def test_delete_custom_url(responses: RequestsMock, tmpdir):
 
 
 def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -173,7 +173,7 @@ def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
 
 
 def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -207,7 +207,7 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
 
 
 def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -241,7 +241,7 @@ def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
 
 
 def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -272,7 +272,7 @@ def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
 
 
 def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -300,7 +300,7 @@ def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
 
 
 def test_put_custom_url_dict_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "pyxelrest": {

@@ -163,7 +163,7 @@ def values_false_service(responses: RequestsMock):
 def test_get_with_zero_integer(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/integer",
@@ -200,7 +200,7 @@ def test_get_with_zero_integer(
 def test_get_with_zero_float(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/float",
@@ -237,7 +237,7 @@ def test_get_with_zero_float(
 def test_get_with_false_boolean(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/false/boolean",
@@ -274,7 +274,7 @@ def test_get_with_false_boolean(
 def test_get_with_empty_string(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/string",
@@ -289,7 +289,7 @@ def test_get_with_empty_string(
 
 
 def test_get_with_empty_list(responses: RequestsMock, values_false_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "values_false": {
@@ -314,7 +314,7 @@ def test_get_with_empty_list(responses: RequestsMock, values_false_service, tmpd
 def test_get_with_empty_dictionary(
     responses: RequestsMock, values_false_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "values_false": {

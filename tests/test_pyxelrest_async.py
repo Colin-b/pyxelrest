@@ -30,7 +30,7 @@ def async_service(responses: RequestsMock):
 
 
 def test_get_async_url(responses: RequestsMock, async_service, tmpdir):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "async": {

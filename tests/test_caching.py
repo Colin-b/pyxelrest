@@ -64,8 +64,17 @@ def caching_service(responses: RequestsMock):
     )
 
 
-def test_get_cached(caching_service, responses: RequestsMock):
-    pyxelrestgenerator = loader.load("caching_services.yml")
+def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "caching": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "caching": {"result_caching_time": 5},
+            }
+        },
+    )
 
     responses.add(
         responses.GET,
@@ -99,8 +108,17 @@ def test_get_cached(caching_service, responses: RequestsMock):
     assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
-def test_post_cached(caching_service, responses: RequestsMock):
-    pyxelrestgenerator = loader.load("caching_services.yml")
+def test_post_cached(caching_service, responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "caching": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "caching": {"result_caching_time": 5},
+            }
+        },
+    )
 
     responses.add(
         responses.POST,
@@ -129,8 +147,17 @@ def test_post_cached(caching_service, responses: RequestsMock):
     assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
-def test_put_cached(caching_service, responses: RequestsMock):
-    pyxelrestgenerator = loader.load("caching_services.yml")
+def test_put_cached(caching_service, responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "caching": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "caching": {"result_caching_time": 5},
+            }
+        },
+    )
 
     responses.add(
         responses.PUT,
@@ -159,8 +186,17 @@ def test_put_cached(caching_service, responses: RequestsMock):
     assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
-def test_delete_cached(caching_service, responses: RequestsMock):
-    pyxelrestgenerator = loader.load("caching_services.yml")
+def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "caching": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "caching": {"result_caching_time": 5},
+            }
+        },
+    )
 
     responses.add(
         responses.DELETE,

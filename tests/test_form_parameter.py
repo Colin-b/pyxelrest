@@ -54,8 +54,16 @@ def form_parameter_service(responses: RequestsMock):
     )
 
 
-def test_post_form_parameter(responses: RequestsMock, form_parameter_service):
-    pyxelrestgenerator = loader.load("form_parameter_service.yml")
+def test_post_form_parameter(responses: RequestsMock, form_parameter_service, tmpdir):
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "form_parameter": {
+                "open_api": {"definition": "http://localhost:8952/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.POST,
         url="http://localhost:8952/form",

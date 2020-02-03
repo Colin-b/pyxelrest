@@ -8,7 +8,7 @@ from testsutils import loader
 
 
 @pytest.fixture
-def services(responses: RequestsMock):
+def services(responses: RequestsMock, tmpdir):
     # authenticated_service
     responses.add(
         responses.GET,
@@ -196,7 +196,38 @@ def services(responses: RequestsMock):
         match_querystring=True,
     )
     # TODO Replace oauth2_authentication_service with a mock from requests_auth
-    loader.load("authentication_services.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "authenticated": {
+                "open_api": {"definition": "http://localhost:8946/"},
+                "api_key": "my_provided_api_key",
+                "basic": {"username": "test_user", "password": "test_pwd"},
+                "oauth2": {"timeout": 10},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+            "oauth_custom_token_name": {
+                "open_api": {"definition": "http://localhost:8946/"},
+                "oauth2": {"response_type": "my_custom_token"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+            "oauth_cutom_response_port": {
+                "open_api": {"definition": "http://localhost:8946/"},
+                "oauth2": {"redirect_uri_port": 5001},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+            "non_authenticated": {
+                "open_api": {"definition": "http://localhost:8948/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+            "pyxelrest": {
+                "api_key": "my_provided_api_key",
+                "basic": {"username": "test_user", "password": "test_pwd"},
+                "oauth2": {"timeout": 10},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+        },
+    )
     # TODO Properly clean token cache in mock from requests_auth
     authentication.OAuth2.token_cache.clear()
 

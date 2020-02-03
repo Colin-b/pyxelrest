@@ -2624,7 +2624,7 @@ def usual_parameters_service(responses: RequestsMock):
 def test_get_date(
     responses: RequestsMock, usual_parameters_service, tmpdir, service_config: dict
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8943/date",
@@ -2664,7 +2664,7 @@ def test_get_date(
 def test_get_datetime(
     responses: RequestsMock, usual_parameters_service, tmpdir, service_config: dict
 ):
-    pyxelrestgenerator = loader.load2(tmpdir, service_config)
+    pyxelrestgenerator = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime",
@@ -2698,7 +2698,7 @@ def test_get_datetime(
 def test_get_datetime_encoding(
     responses: RequestsMock, usual_parameters_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load2(
+    pyxelrestgenerator = loader.load(
         tmpdir,
         {
             "usual_parameters": {

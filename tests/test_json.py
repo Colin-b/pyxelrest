@@ -16,7 +16,7 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 
 
 @pytest.fixture
-def json_service(responses: RequestsMock):
+def json_service(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://localhost:8954/",
@@ -3076,7 +3076,15 @@ def json_service(responses: RequestsMock):
         },
         match_querystring=True,
     )
-    pyxelrestgenerator = loader.load("json_services.yml")
+    pyxelrestgenerator = loader.load(
+        tmpdir,
+        {
+            "json": {
+                "open_api": {"definition": "http://localhost:8954/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
 
 
 def test_mandatory_integer_parameter_not_provided(json_service):
