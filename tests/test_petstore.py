@@ -704,32 +704,81 @@ def petstore_service(responses: RequestsMock):
     )
 
 
-def test_get_order_by_id(petstore_service):
-    pyxelrestgenerator = loader.load("petstore_services.yml")
+def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "petstore": {
+                "open_api": {
+                    "definition": "http://petstore.swagger.io/v2/swagger.json"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+
+    responses.add(
+        responses.POST,
+        url="https://petstore.swagger.io/v2/store/order",
+        json={
+            "id": 10,
+            "petId": 222222,
+            "quantity": 1,
+            "shipDate": "2020-12-02",
+            "status": "placed",
+            "complete": False,
+        },
+        match_querystring=True,
+    )
 
     now = datetime.datetime.utcnow()
-    new_order_response = pyxelrestgenerator.petstore_placeOrder(
+    assert pyxelrestgenerator.petstore_placeOrder(
         id=10, petId=222222, quantity=1, shipDate=now, status="placed", complete=False
+    ) == [
+        ["id", "petId", "quantity", "shipDate", "status", "complete"],
+        [10, 222222, 1, datetime.datetime(2020, 12, 2, 0, 0), "placed", False],
+    ]
+    # TODO Assert what is sent to the server
+
+    responses.add(
+        responses.GET,
+        url="https://petstore.swagger.io/v2/store/order/10",
+        json={
+            "id": 10,
+            "petId": 222222,
+            "quantity": 1,
+            "shipDate": "2020-12-02",
+            "status": "placed",
+            "complete": False,
+        },
+        match_querystring=True,
     )
-    # Petstore is replying with server time...
-    del new_order_response[1][3]
-    assert new_order_response == [
+    assert pyxelrestgenerator.petstore_getOrderById(10) == [
         ["id", "petId", "quantity", "shipDate", "status", "complete"],
-        [10, 222222, 1, "placed", False],
+        [10, 222222, 1, datetime.datetime(2020, 12, 2, 0, 0), "placed", False],
     ]
-
-    get_order_response = pyxelrestgenerator.petstore_getOrderById(10)
-    # Petstore is replying with server time...
-    del get_order_response[1][3]
-    assert get_order_response == [
-        ["id", "petId", "quantity", "shipDate", "status", "complete"],
-        [10, 222222, 1, "placed", False],
-    ]
+    # TODO Assert what is sent to the server
 
 
-def test_get_user_by_name(petstore_service):
-    pyxelrestgenerator = loader.load("petstore_services.yml")
+def test_get_user_by_name(responses: RequestsMock, petstore_service, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "petstore": {
+                "open_api": {
+                    "definition": "http://petstore.swagger.io/v2/swagger.json"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
 
+    responses.add(
+        responses.POST,
+        url="https://petstore.swagger.io/v2/user",
+        json={},
+        match_querystring=True,
+    )
     pyxelrestgenerator.petstore_createUser(
         id=666666,
         username="JD",
@@ -739,6 +788,23 @@ def test_get_user_by_name(petstore_service):
         password="azerty",
         phone="0123456789",
         userStatus=0,
+    )
+    # TODO Assert what is sent to the server
+
+    responses.add(
+        responses.GET,
+        url="https://petstore.swagger.io/v2/user/JD",
+        json={
+            "id": 666666,
+            "username": "JD",
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "jdoe@petstore.com",
+            "password": "azerty",
+            "phone": "0123456789",
+            "userStatus": 0,
+        },
+        match_querystring=True,
     )
     assert pyxelrestgenerator.petstore_getUserByName("JD") == [
         [
@@ -753,3 +819,4 @@ def test_get_user_by_name(petstore_service):
         ],
         [666666, "JD", "John", "Doe", "jdoe@petstore.com", "azerty", "0123456789", 0],
     ]
+    # TODO Assert what is sent to the server
