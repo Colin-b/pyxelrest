@@ -1363,8 +1363,18 @@ def vba_keywords_service(responses: RequestsMock):
     )
 
 
-def test_get_vba_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_get_vba_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8949/vba_restricted_keywords?addhandler=addhandler+value&addressof=addressof+value&alias=alias+value&and=and+value&andalso=andalso+value&as=as+value&attribute=attribute+value&boolean=boolean+value&byref=byref+value&byte=byte+value&byval=byval+value&call=call+value&case=case+value&catch=catch+value&cbool=cbool+value&cbyte=cbyte+value&cchar=cchar+value&cdate=cdate+value&cdbl=cdbl+value&cdec=cdec+value&char=char+value&cint=cint+value&class=class+value&clng=clng+value&cobj=cobj+value&const=const+value&continue=continue+value&csbyte=csbyte+value&cshort=cshort+value&csng=csng+value&cstr=cstr+value&ctype=ctype+value&cuint=cuint+value&culng=culng+value&currency=currency+value&cushort=cushort+value&date=date+value&decimal=decimal+value&declare=declare+value&default=default+value&delegate=delegate+value&dim=dim+value&directcast=directcast+value&do=do+value&double=double+value&each=each+value&else=else+value&elseif=elseif+value&end=end+value&endif=endif+value&enum=enum+value&erase=erase+value&error=error+value&event=event+value&exit=exit+value&finally=finally+value&for=for+value&friend=friend+value&function=function+value&get=get+value&gettype=gettype+value&getxmlnamespace=getxmlnamespace+value&global=global+value&gosub=gosub+value&goto=goto+value&handles=handles+value&if=if+value&implements=implements+value&imports=imports+value&in=in+value&inherits=inherits+value&integer=integer+value&interface=interface+value&is=is+value&isnot=isnot+value&let=let+value&lib=lib+value&like=like+value&long=long+value&loop=loop+value&me=me+value&mod=mod+value&module=module+value&mustinherit=mustinherit+value&mustoverride=mustoverride+value&mybase=mybase+value&myclass=myclass+value&namespace=namespace+value&narrowing=narrowing+value&new=new+value&next=next+value&not=not+value&nothing=nothing+value&notinheritable=notinheritable+value&notoverridable=notoverridable+value&object=object+value&of=of+value&on=on+value&operator=operator+value&option=option+value&optional=optional+value&or=or+value&orelse=orelse+value&overloads=overloads+value&overridable=overridable+value&overrides=overrides+value&paramarray=paramarray+value&partial=partial+value&private=private+value&property=property+value&protected=protected+value&public=public+value&raiseevent=raiseevent+value&readonly=readonly+value&redim=redim+value&rem=rem+value&removehandler=removehandler+value&resume=resume+value&return=return+value&sbyte=sbyte+value&select=select+value&set=set+value&shadows=shadows+value&shared=shared+value&short=short+value&single=single+value&static=static+value&step=step+value&stop=stop+value&string=string+value&structure=structure+value&sub=sub+value&synclock=synclock+value&then=then+value&throw=throw+value&to=to+value&try=try+value&trycast=trycast+value&type=type+value&typeof=typeof+value&uinteger=uinteger+value&ulong=ulong+value&ushort=ushort+value&using=using+value&variant=variant+value&wend=wend+value&when=when+value&while=while+value&widening=widening+value&with=with+value&withevents=withevents+value&writeonly=writeonly+value&xor=xor+value",
@@ -1529,8 +1539,18 @@ def test_get_vba_restricted_keywords(responses: RequestsMock, vba_keywords_servi
     ) == [[""]]
 
 
-def test_post_vba_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_post_vba_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.POST,
         url="http://localhost:8949/vba_restricted_keywords?addhandler=addhandler+value&addressof=addressof+value&alias=alias+value&and=and+value&andalso=andalso+value&as=as+value&attribute=attribute+value&boolean=boolean+value&byref=byref+value&byte=byte+value&byval=byval+value&call=call+value&case=case+value&catch=catch+value&cbool=cbool+value&cbyte=cbyte+value&cchar=cchar+value&cdate=cdate+value&cdbl=cdbl+value&cdec=cdec+value&char=char+value&cint=cint+value&class=class+value&clng=clng+value&cobj=cobj+value&const=const+value&continue=continue+value&csbyte=csbyte+value&cshort=cshort+value&csng=csng+value&cstr=cstr+value&ctype=ctype+value&cuint=cuint+value&culng=culng+value&currency=currency+value&cushort=cushort+value&date=date+value&decimal=decimal+value&declare=declare+value&default=default+value&delegate=delegate+value&dim=dim+value&directcast=directcast+value&do=do+value&double=double+value&each=each+value&else=else+value&elseif=elseif+value&end=end+value&endif=endif+value&enum=enum+value&erase=erase+value&error=error+value&event=event+value&exit=exit+value&finally=finally+value&for=for+value&friend=friend+value&function=function+value&get=get+value&gettype=gettype+value&getxmlnamespace=getxmlnamespace+value&global=global+value&gosub=gosub+value&goto=goto+value&handles=handles+value&if=if+value&implements=implements+value&imports=imports+value&in=in+value&inherits=inherits+value&integer=integer+value&interface=interface+value&is=is+value&isnot=isnot+value&let=let+value&lib=lib+value&like=like+value&long=long+value&loop=loop+value&me=me+value&mod=mod+value&module=module+value&mustinherit=mustinherit+value&mustoverride=mustoverride+value&mybase=mybase+value&myclass=myclass+value&namespace=namespace+value&narrowing=narrowing+value&new=new+value&next=next+value&not=not+value&nothing=nothing+value&notinheritable=notinheritable+value&notoverridable=notoverridable+value&object=object+value&of=of+value&on=on+value&operator=operator+value&option=option+value&optional=optional+value&or=or+value&orelse=orelse+value&overloads=overloads+value&overridable=overridable+value&overrides=overrides+value&paramarray=paramarray+value&partial=partial+value&private=private+value&property=property+value&protected=protected+value&public=public+value&raiseevent=raiseevent+value&readonly=readonly+value&redim=redim+value&rem=rem+value&removehandler=removehandler+value&resume=resume+value&return=return+value&sbyte=sbyte+value&select=select+value&set=set+value&shadows=shadows+value&shared=shared+value&short=short+value&single=single+value&static=static+value&step=step+value&stop=stop+value&string=string+value&structure=structure+value&sub=sub+value&synclock=synclock+value&then=then+value&throw=throw+value&to=to+value&try=try+value&trycast=trycast+value&type=type+value&typeof=typeof+value&uinteger=uinteger+value&ulong=ulong+value&ushort=ushort+value&using=using+value&variant=variant+value&wend=wend+value&when=when+value&while=while+value&widening=widening+value&with=with+value&withevents=withevents+value&writeonly=writeonly+value&xor=xor+value",
@@ -1695,8 +1715,18 @@ def test_post_vba_restricted_keywords(responses: RequestsMock, vba_keywords_serv
     ) == [[""]]
 
 
-def test_put_vba_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_put_vba_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.PUT,
         url="http://localhost:8949/vba_restricted_keywords?addhandler=addhandler+value&addressof=addressof+value&alias=alias+value&and=and+value&andalso=andalso+value&as=as+value&attribute=attribute+value&boolean=boolean+value&byref=byref+value&byte=byte+value&byval=byval+value&call=call+value&case=case+value&catch=catch+value&cbool=cbool+value&cbyte=cbyte+value&cchar=cchar+value&cdate=cdate+value&cdbl=cdbl+value&cdec=cdec+value&char=char+value&cint=cint+value&class=class+value&clng=clng+value&cobj=cobj+value&const=const+value&continue=continue+value&csbyte=csbyte+value&cshort=cshort+value&csng=csng+value&cstr=cstr+value&ctype=ctype+value&cuint=cuint+value&culng=culng+value&currency=currency+value&cushort=cushort+value&date=date+value&decimal=decimal+value&declare=declare+value&default=default+value&delegate=delegate+value&dim=dim+value&directcast=directcast+value&do=do+value&double=double+value&each=each+value&else=else+value&elseif=elseif+value&end=end+value&endif=endif+value&enum=enum+value&erase=erase+value&error=error+value&event=event+value&exit=exit+value&finally=finally+value&for=for+value&friend=friend+value&function=function+value&get=get+value&gettype=gettype+value&getxmlnamespace=getxmlnamespace+value&global=global+value&gosub=gosub+value&goto=goto+value&handles=handles+value&if=if+value&implements=implements+value&imports=imports+value&in=in+value&inherits=inherits+value&integer=integer+value&interface=interface+value&is=is+value&isnot=isnot+value&let=let+value&lib=lib+value&like=like+value&long=long+value&loop=loop+value&me=me+value&mod=mod+value&module=module+value&mustinherit=mustinherit+value&mustoverride=mustoverride+value&mybase=mybase+value&myclass=myclass+value&namespace=namespace+value&narrowing=narrowing+value&new=new+value&next=next+value&not=not+value&nothing=nothing+value&notinheritable=notinheritable+value&notoverridable=notoverridable+value&object=object+value&of=of+value&on=on+value&operator=operator+value&option=option+value&optional=optional+value&or=or+value&orelse=orelse+value&overloads=overloads+value&overridable=overridable+value&overrides=overrides+value&paramarray=paramarray+value&partial=partial+value&private=private+value&property=property+value&protected=protected+value&public=public+value&raiseevent=raiseevent+value&readonly=readonly+value&redim=redim+value&rem=rem+value&removehandler=removehandler+value&resume=resume+value&return=return+value&sbyte=sbyte+value&select=select+value&set=set+value&shadows=shadows+value&shared=shared+value&short=short+value&single=single+value&static=static+value&step=step+value&stop=stop+value&string=string+value&structure=structure+value&sub=sub+value&synclock=synclock+value&then=then+value&throw=throw+value&to=to+value&try=try+value&trycast=trycast+value&type=type+value&typeof=typeof+value&uinteger=uinteger+value&ulong=ulong+value&ushort=ushort+value&using=using+value&variant=variant+value&wend=wend+value&when=when+value&while=while+value&widening=widening+value&with=with+value&withevents=withevents+value&writeonly=writeonly+value&xor=xor+value",
@@ -1861,8 +1891,18 @@ def test_put_vba_restricted_keywords(responses: RequestsMock, vba_keywords_servi
     ) == [[""]]
 
 
-def test_delete_vba_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_delete_vba_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.DELETE,
         url="http://localhost:8949/vba_restricted_keywords?addhandler=addhandler+value&addressof=addressof+value&alias=alias+value&and=and+value&andalso=andalso+value&as=as+value&attribute=attribute+value&boolean=boolean+value&byref=byref+value&byte=byte+value&byval=byval+value&call=call+value&case=case+value&catch=catch+value&cbool=cbool+value&cbyte=cbyte+value&cchar=cchar+value&cdate=cdate+value&cdbl=cdbl+value&cdec=cdec+value&char=char+value&cint=cint+value&class=class+value&clng=clng+value&cobj=cobj+value&const=const+value&continue=continue+value&csbyte=csbyte+value&cshort=cshort+value&csng=csng+value&cstr=cstr+value&ctype=ctype+value&cuint=cuint+value&culng=culng+value&currency=currency+value&cushort=cushort+value&date=date+value&decimal=decimal+value&declare=declare+value&default=default+value&delegate=delegate+value&dim=dim+value&directcast=directcast+value&do=do+value&double=double+value&each=each+value&else=else+value&elseif=elseif+value&end=end+value&endif=endif+value&enum=enum+value&erase=erase+value&error=error+value&event=event+value&exit=exit+value&finally=finally+value&for=for+value&friend=friend+value&function=function+value&get=get+value&gettype=gettype+value&getxmlnamespace=getxmlnamespace+value&global=global+value&gosub=gosub+value&goto=goto+value&handles=handles+value&if=if+value&implements=implements+value&imports=imports+value&in=in+value&inherits=inherits+value&integer=integer+value&interface=interface+value&is=is+value&isnot=isnot+value&let=let+value&lib=lib+value&like=like+value&long=long+value&loop=loop+value&me=me+value&mod=mod+value&module=module+value&mustinherit=mustinherit+value&mustoverride=mustoverride+value&mybase=mybase+value&myclass=myclass+value&namespace=namespace+value&narrowing=narrowing+value&new=new+value&next=next+value&not=not+value&nothing=nothing+value&notinheritable=notinheritable+value&notoverridable=notoverridable+value&object=object+value&of=of+value&on=on+value&operator=operator+value&option=option+value&optional=optional+value&or=or+value&orelse=orelse+value&overloads=overloads+value&overridable=overridable+value&overrides=overrides+value&paramarray=paramarray+value&partial=partial+value&private=private+value&property=property+value&protected=protected+value&public=public+value&raiseevent=raiseevent+value&readonly=readonly+value&redim=redim+value&rem=rem+value&removehandler=removehandler+value&resume=resume+value&return=return+value&sbyte=sbyte+value&select=select+value&set=set+value&shadows=shadows+value&shared=shared+value&short=short+value&single=single+value&static=static+value&step=step+value&stop=stop+value&string=string+value&structure=structure+value&sub=sub+value&synclock=synclock+value&then=then+value&throw=throw+value&to=to+value&try=try+value&trycast=trycast+value&type=type+value&typeof=typeof+value&uinteger=uinteger+value&ulong=ulong+value&ushort=ushort+value&using=using+value&variant=variant+value&wend=wend+value&when=when+value&while=while+value&widening=widening+value&with=with+value&withevents=withevents+value&writeonly=writeonly+value&xor=xor+value",
@@ -2028,9 +2068,17 @@ def test_delete_vba_restricted_keywords(responses: RequestsMock, vba_keywords_se
 
 
 def test_attribute_vba_restricted_keyword_in_uri_parameter(
-    responses: RequestsMock, vba_keywords_service
+    responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8949/my_attribute_value/vba/restricted/keyword/in/uri/parameter",
@@ -2045,8 +2093,18 @@ def test_attribute_vba_restricted_keyword_in_uri_parameter(
     ]
 
 
-def test_get_python_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_get_python_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8949/python_restricted_keywords?with.a.dot=with.a.dot+value",
@@ -2059,8 +2117,18 @@ def test_get_python_restricted_keywords(responses: RequestsMock, vba_keywords_se
     ) == [[""]]
 
 
-def test_post_python_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_post_python_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.POST,
         url="http://localhost:8949/python_restricted_keywords?with.a.dot=with.a.dot+value",
@@ -2073,8 +2141,18 @@ def test_post_python_restricted_keywords(responses: RequestsMock, vba_keywords_s
     ) == [[""]]
 
 
-def test_put_python_restricted_keywords(responses: RequestsMock, vba_keywords_service):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+def test_put_python_restricted_keywords(
+    responses: RequestsMock, vba_keywords_service, tmpdir
+):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.PUT,
         url="http://localhost:8949/python_restricted_keywords?with.a.dot=with.a.dot+value",
@@ -2088,9 +2166,17 @@ def test_put_python_restricted_keywords(responses: RequestsMock, vba_keywords_se
 
 
 def test_delete_python_restricted_keywords(
-    responses: RequestsMock, vba_keywords_service
+    responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("vba_keywords_services.yml")
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "vba_keywords": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.DELETE,
         url="http://localhost:8949/python_restricted_keywords?with.a.dot=with.a.dot+value",

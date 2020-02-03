@@ -29,8 +29,16 @@ def async_service(responses: RequestsMock):
     )
 
 
-def test_get_async_url(responses: RequestsMock, async_service):
-    pyxelrestgenerator = loader.load("async_service.yml")
+def test_get_async_url(responses: RequestsMock, async_service, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "async": {
+                "open_api": {"definition": "http://localhost:8958/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8958/async",

@@ -13,8 +13,18 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
             return call.request
 
 
-def test_get_custom_url_sync(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.GET,
@@ -35,8 +45,18 @@ def test_get_custom_url_sync(responses: RequestsMock):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_get_custom_url(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_get_custom_url(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.GET,
@@ -57,8 +77,18 @@ def test_get_custom_url(responses: RequestsMock):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_delete_custom_url_sync(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.DELETE,
@@ -79,8 +109,18 @@ def test_delete_custom_url_sync(responses: RequestsMock):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_delete_custom_url(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_delete_custom_url(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.DELETE,
@@ -101,8 +141,18 @@ def test_delete_custom_url(responses: RequestsMock):
     assert headers["X-Custom-Header2"] == "custom2"
 
 
-def test_post_custom_url_dict(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.POST,
@@ -122,8 +172,18 @@ def test_post_custom_url_dict(responses: RequestsMock):
     assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'
 
 
-def test_post_custom_url_dict_list_sync(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.POST,
@@ -146,8 +206,18 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock):
     )
 
 
-def test_post_custom_url_dict_list(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.POST,
@@ -170,8 +240,18 @@ def test_post_custom_url_dict_list(responses: RequestsMock):
     )
 
 
-def test_put_custom_url_dict_list(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
@@ -191,8 +271,18 @@ def test_put_custom_url_dict_list(responses: RequestsMock):
     )
 
 
-def test_put_custom_url_dict(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
@@ -209,8 +299,18 @@ def test_put_custom_url_dict(responses: RequestsMock):
     assert request.body == b'{"key1": "value1", "key2": 1, "key3": "value3"}'
 
 
-def test_put_custom_url_dict_sync(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("pyxelrest_service.yml")
+def test_put_custom_url_dict_sync(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "udf": {
+                    "return_types": ["vba_compatible", "sync_auto_expand"],
+                    "shift_result": False,
+                }
+            }
+        },
+    )
 
     responses.add(
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True

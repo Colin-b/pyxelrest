@@ -3,8 +3,18 @@ from responses import RequestsMock
 from testsutils import loader
 
 
-def test_get_static_open_api_definition(responses: RequestsMock):
-    pyxelrestgenerator = loader.load("static_file_service.yml")
+def test_get_static_open_api_definition(responses: RequestsMock, tmpdir):
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "open_api_definition_loaded_from_file": {
+                "open_api": {
+                    "definition": "file://../testsutils/static_open_api_definition.json"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
 
     responses.add(
         responses.GET,
