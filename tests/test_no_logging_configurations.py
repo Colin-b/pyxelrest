@@ -6,7 +6,7 @@ from responses import RequestsMock
 from testsutils import loader
 
 
-def test_without_logging_configuration_file(responses: RequestsMock):
+def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
     """
     This test case assert that pyxelrest can be loaded without logging configuration
     """
@@ -38,4 +38,12 @@ def test_without_logging_configuration_file(responses: RequestsMock):
     pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(
         this_dir, "non_existing_configuration.yml"
     )
-    loader.load("no_logging_services.yml")
+    loader.load2(
+        tmpdir,
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://localhost:8943/"},
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )

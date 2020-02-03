@@ -73,9 +73,25 @@ def open_api_definition_parsing_service(responses: RequestsMock):
 
 
 def test_missing_operation_id(
-    responses: RequestsMock, open_api_definition_parsing_service
+    responses: RequestsMock, open_api_definition_parsing_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("open_api_definition_parsing_service.yml")
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "operation_id_not_provided": {
+                "open_api": {
+                    "definition": "http://localhost:8948/operation_id_not_provided"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+            "operation_id_not_always_provided": {
+                "open_api": {
+                    "definition": "http://localhost:8948/operation_id_not_always_provided"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8948/without_operationId",
@@ -89,9 +105,25 @@ def test_missing_operation_id(
 
 
 def test_mixed_operation_id(
-    responses: RequestsMock, open_api_definition_parsing_service
+    responses: RequestsMock, open_api_definition_parsing_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load("open_api_definition_parsing_service.yml")
+    pyxelrestgenerator = loader.load2(
+        tmpdir,
+        {
+            "operation_id_not_provided": {
+                "open_api": {
+                    "definition": "http://localhost:8948/operation_id_not_provided"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+            "operation_id_not_always_provided": {
+                "open_api": {
+                    "definition": "http://localhost:8948/operation_id_not_always_provided"
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            },
+        },
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8948/with_operationId",

@@ -1,13 +1,18 @@
+import os
+from importlib import reload, import_module
+
 import pytest
 
-from testsutils import loader
 import pyxelrest
 
 
-def test_without_service_configuration_file():
+def test_without_service_configuration_file(tmpdir):
+    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = os.path.join(
+        tmpdir, "non_existing_file.yml"
+    )
     with pytest.raises(Exception) as exception_info:
-        loader.load("non_existing.yml")
+        reload(import_module("pyxelrest.pyxelrestgenerator"))
     assert (
         str(exception_info.value)
-        == f'"{pyxelrest.SERVICES_CONFIGURATION_FILE_PATH}" configuration file cannot be read.'
+        == f'"{os.path.join(tmpdir, "non_existing_file.yml")}" configuration file cannot be read.'
     )
