@@ -133,7 +133,7 @@ setup(
     ],
     extra_requires={
         # Support for `application/msgpackpandas`
-        "pandas_msgpack": ["pandas==0.25.*", "msgpack-python==0.5.*"],
+        "pandas_msgpack": ["pandas==1.*", "msgpack-python==0.5.*"],
         # Support for faster JSON serialization / deserialization
         "ujson": ["ujson==1.*"],
         # Support for NTLM authentication
@@ -151,6 +151,9 @@ setup(
             "cachetools==4.*",
             # Used to create test services
             "flask==1.*",
+            # Used to test pandas integration
+            "pandas==1.*",
+            "msgpack-python==0.5.*",
         ],
     },
     python_requires=">=3.6",

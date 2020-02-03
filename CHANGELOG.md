@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Do not use a fixed dependency version.
+- Compatibility with Python 3.8
+
+### Changed
+- Rely on pandas 1.* (instead of 0.25.*)
 
 ### Removed
 - Drop support for python < 3.6
