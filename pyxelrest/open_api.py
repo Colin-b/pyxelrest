@@ -8,7 +8,6 @@ from typing import List, Union
 import requests
 import requests.exceptions
 import sys
-import threading
 import time
 import xlwings
 import xlwings.conversion
@@ -18,15 +17,7 @@ import yaml
 from urllib.parse import urlsplit
 
 
-from pyxelrest import (
-    authentication,
-    custom_logging,
-    session,
-    fileadapter,
-    definition_deserializer,
-    vba,
-    SERVICES_CONFIGURATION_FILE_PATH,
-)
+from pyxelrest import authentication, session, fileadapter, definition_deserializer, vba
 from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.pyxelresterrors import *
 from pyxelrest.definition_deserializer import Response
@@ -41,20 +32,8 @@ def support_ujson():
         return False
 
 
-def support_pandas():
-    try:
-        import pandas
-
-        return True
-    except:
-        return False
-
-
 if support_ujson():
     import ujson
-
-if support_pandas():
-    import pandas
 
 
 logger = logging.getLogger(__name__)
@@ -938,9 +917,7 @@ class OpenAPIUDFMethod(UDFMethod):
         )
 
     def return_a_list(self):
-        return ("application/json" in self.open_api_method["produces"]) or (
-            "application/msgpackpandas" in self.open_api_method["produces"]
-        )
+        return "application/json" in self.open_api_method["produces"]
 
     def security(self, request_content):
         return self.open_api_method.get("security")
@@ -965,12 +942,7 @@ class OpenAPIUDFMethod(UDFMethod):
                     "For now PyxelRest only send JSON body so request might fail."
                 )
 
-        if (
-            "application/msgpackpandas" in self.open_api_method["produces"]
-            and support_pandas()
-        ):
-            header["Accept"] = "application/msgpackpandas"
-        elif "application/json" in self.open_api_method["produces"]:
+        if "application/json" in self.open_api_method["produces"]:
             header["Accept"] = "application/json"
 
         header.update(self.service.config.custom_headers)
@@ -1618,8 +1590,6 @@ def get_result(udf_method, request_content, excel_application):
             result = [["Status URL"], [response.headers["location"]]]
         elif response.headers["content-type"] == "application/json":
             result = json_as_list(response, udf_method)
-        elif response.headers["content-type"] == "application/msgpackpandas":
-            result = msgpackpandas_as_list(response.content)
         else:
             result = convert_to_return_type(response.text[:255], udf_method)
         udf_method.cache_result(request_content, result)
@@ -1725,26 +1695,6 @@ def json_as_list(response, udf_method):
         ).to_list(json_data)
     else:
         return json_data
-
-
-def msgpackpandas_as_list(msgpack_pandas):
-    if support_pandas():
-        logger.debug("Converting message pack pandas to list...")
-        data = pandas.read_msgpack(msgpack_pandas)
-        logger.debug("Converting dictionary to list...")
-        if sys.version_info[0] < 3:
-            header = [
-                header_name.decode() for header_name in data.columns.values.tolist()
-            ]
-        else:
-            header = data.columns.tolist()
-        values = data.values.tolist()
-        flatten_data = [header] + values if values else [header]
-        logger.debug("Data converted to list.")
-        return flatten_data
-    else:
-        logger.warning("Pandas module is required to decode response.")
-        return ["Please install pandas module to be able to decode result."]
 
 
 def list_as_json(lists, parse_as):

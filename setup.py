@@ -132,8 +132,6 @@ setup(
         "python-dateutil==2.*",
     ],
     extra_requires={
-        # Support for `application/msgpackpandas`
-        "pandas_msgpack": ["pandas==1.*", "msgpack-python==0.5.*"],
         # Support for faster JSON serialization / deserialization
         "ujson": ["ujson==1.*"],
         # Support for NTLM authentication
@@ -149,11 +147,6 @@ setup(
             "pyjwt==1.*",
             # used for testing cache of results
             "cachetools==4.*",
-            # Used to create test services
-            "flask==1.*",
-            # Used to test pandas integration
-            "pandas==1.*",
-            "msgpack-python==0.5.*",
         ],
     },
     python_requires=">=3.6",

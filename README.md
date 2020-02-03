@@ -116,10 +116,6 @@ In order to do so, you need to add a test certificate.
 
 ### Optional Dependencies
 
-- Support for ``application/msgpackpandas`` encoded data.
-    - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
-    - ``pandas_msgpack`` extra requires can be used to install those dependencies.
-
 - Support for faster JSON handling.
     - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
     - ``ujson`` extra requires can be used to install those dependencies.

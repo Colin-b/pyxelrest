@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import pytest
@@ -199,12 +200,6 @@ def nested_data_service(responses: RequestsMock):
                 "/dict_with_various_columns": {
                     "get": {
                         "operationId": "get_dict_with_various_columns",
-                        "responses": {200: {"description": "successful operation"}},
-                    }
-                },
-                "/pandas_msgpack_default_encoding": {
-                    "get": {
-                        "operationId": "get_pandas_msgpack_default_encoding",
                         "responses": {200: {"description": "successful operation"}},
                     }
                 },
@@ -1676,92 +1671,4 @@ def test_get_dict_with_list_of_different_size_based_on_definitions(
         [23, 24, "value 1"],
         [23, 24, "value 2"],
         [23, 24, "value 3"],
-    ]
-
-
-def test_pandas_msgpack_default_encoding_with_pandas(
-    nested_data_service, responses, tmpdir
-):
-    pyxelrestgenerator = loader.load2(
-        tmpdir,
-        {
-            "nested_data": {
-                "open_api": {"definition": "http://localhost:8947/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    import pandas
-
-    output = pandas.DataFrame(
-        [
-            [
-                "data11",
-                "data12_é&ç",
-                u"data13_é&ç",
-                datetime(2017, 12, 26, 1, 2, 3),
-                1.1,
-            ],
-            [
-                "data21",
-                "data22_é&ç",
-                u"data23_é&ç",
-                datetime(2017, 12, 27, 1, 2, 3),
-                2.2,
-            ],
-        ],
-        columns=["col1", "col2_é&ç", u"col3_é&ç", "col4", "col5"],
-    ).to_msgpack(compress="zlib")
-
-    responses.add(
-        responses.GET,
-        url="http://localhost:8947/pandas_msgpack_default_encoding",
-        body=output,
-        content_type="application/msgpackpandas",
-        match_querystring=True,
-    )
-
-    assert pyxelrestgenerator.nested_data_get_pandas_msgpack_default_encoding() == [
-        ["col1", "col2_é&ç", u"col3_é&ç", "col4", "col5"],
-        [
-            "data11",
-            "data12_é&ç",
-            u"data13_é&ç",
-            pandas.Timestamp("2017-12-26 01:02:03"),
-            1.1,
-        ],
-        [
-            "data21",
-            "data22_é&ç",
-            u"data23_é&ç",
-            pandas.Timestamp("2017-12-27 01:02:03"),
-            2.2,
-        ],
-    ]
-
-
-def test_pandas_msgpack_default_encoding_without_pandas(
-    nested_data_service, responses, tmpdir
-):
-    pyxelrestgenerator = loader.load2(
-        tmpdir,
-        {
-            "nested_data": {
-                "open_api": {"definition": "http://localhost:8947/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    responses.add(
-        responses.GET,
-        url="http://localhost:8947/pandas_msgpack_default_encoding",
-        body=b"This data cannot be read without pandas",
-        content_type="application/msgpackpandas",
-        match_querystring=True,
-    )
-
-    assert pyxelrestgenerator.nested_data_get_pandas_msgpack_default_encoding() == [
-        "Please install pandas module to be able to decode result."
     ]

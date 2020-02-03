@@ -14,11 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not use a fixed dependency version.
 - Compatibility with Python 3.8
 
-### Changed
-- Rely on pandas 1.* (instead of 0.25.*)
-
 ### Removed
 - Drop support for python < 3.6
+- Drop support for application/msgpackpandas as msgpack support has been dropped from pandas and this is not a standardized content type.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
