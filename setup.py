@@ -122,7 +122,7 @@ setup(
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.17.*",
+        "xlwings==0.18.*",
         # Used to parse configuration files
         "pyyaml==5.*",
         "pyaml==19.*",
@@ -132,8 +132,6 @@ setup(
         "python-dateutil==2.*",
     ],
     extra_requires={
-        # Support for faster JSON serialization / deserialization
-        "ujson": ["ujson==1.*"],
         # Support for NTLM authentication
         "ntlm": ["requests_ntlm==1.*", "requests_negotiate_sspi==0.5.*"],
         # Support for in-memory caching

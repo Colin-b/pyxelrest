@@ -23,19 +23,6 @@ from pyxelrest.pyxelresterrors import *
 from pyxelrest.definition_deserializer import Response
 
 
-def support_ujson():
-    try:
-        import ujson
-
-        return True
-    except:
-        return False
-
-
-if support_ujson():
-    import ujson
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -1661,24 +1648,14 @@ def handle_exception(udf_method, exception_message, exception):
 def json_as_list(response, udf_method):
     if udf_method.service.config.rely_on_definitions:
         definition_deserializer.all_definitions = {}
-        if support_ujson():
-            response_text = response.text
-            logger.debug(
-                "Converting JSON string to corresponding python structure using ujson "
-                "(relying on definitions)..."
-            )
-            json_data = (
-                ujson.loads(response_text) if response_text != "" else response_text
-            )
-        else:
-            logger.debug(
-                "Converting JSON string to corresponding python structure (relying on definitions)..."
-            )
-            json_data = (
-                response.json(object_pairs_hook=OrderedDict)
-                if len(response.content)
-                else ""
-            )
+        logger.debug(
+            "Converting JSON string to corresponding python structure (relying on definitions)..."
+        )
+        json_data = (
+            response.json(object_pairs_hook=OrderedDict)
+            if len(response.content)
+            else ""
+        )
         all_definitions = udf_method.service.open_api_definitions
         return Response(
             udf_method.responses, response.status_code, all_definitions

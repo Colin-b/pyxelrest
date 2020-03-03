@@ -2,10 +2,10 @@
 
 <p align="center">
 <a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>
-<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Build status" src="https://api.travis-ci.org/Colin-b/pyxelrest.svg?branch=master"></a>
-<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Coverage" src="https://img.shields.io/badge/coverage-XXX%25-brightgreen"></a>
+<a href="https://travis-ci.com/Colin-b/pyxelrest"><img alt="Build status" src="https://api.travis-ci.com/Colin-b/pyxelrest.svg?branch=master"></a>
+<a href="https://travis-ci.com/Colin-b/pyxelrest"><img alt="Coverage" src="https://img.shields.io/badge/coverage-XXX%25-brightgreen"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Number of tests" src="https://img.shields.io/badge/tests-XXX passed-blue"></a>
+<a href="https://travis-ci.com/Colin-b/pyxelrest"><img alt="Number of tests" src="https://img.shields.io/badge/tests-XXX passed-blue"></a>
 <a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
 </p>
 
@@ -115,10 +115,6 @@ In order to do so, you need to add a test certificate.
         developer_install.bat
 
 ### Optional Dependencies
-
-- Support for faster JSON handling.
-    - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
-    - ``ujson`` extra requires can be used to install those dependencies.
 
 - Support for NTLM authentication (with user credentials provided),
     - ``requests_ntlm`` module is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
