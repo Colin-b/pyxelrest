@@ -131,7 +131,7 @@ setup(
         # Used to parse all date-time formats in a easy way
         "python-dateutil==2.*",
     ],
-    extra_requires={
+    extras_require={
         # Support for NTLM authentication
         "ntlm": ["requests_ntlm==1.*", "requests_negotiate_sspi==0.5.*"],
         # Support for in-memory caching
