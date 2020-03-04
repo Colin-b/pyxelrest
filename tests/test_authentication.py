@@ -1,10 +1,23 @@
-import time
-
-from requests_auth import authentication
+import requests_auth
+from requests import PreparedRequest
+from requests_auth.testing import token_cache_mock
 import pytest
 from responses import RequestsMock
 
 from tests import loader
+
+
+def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+    for call in responses.calls:
+        if call.request.url == url:
+            # Pop out verified request (to be able to check multiple requests)
+            responses.calls._calls.remove(call)
+            return call.request
+
+
+@pytest.fixture
+def token_mock() -> str:
+    return "2YotnFZFEjr1zCsicMWpAA"
 
 
 @pytest.fixture
@@ -195,7 +208,6 @@ def services(responses: RequestsMock, tmpdir):
         },
         match_querystring=True,
     )
-    # TODO Replace oauth2_authentication_service with a mock from requests_auth
     pyxelrestgenerator = loader.load(
         tmpdir,
         {
@@ -228,238 +240,447 @@ def services(responses: RequestsMock, tmpdir):
             },
         },
     )
-    # TODO Properly clean token cache in mock from requests_auth
-    authentication.OAuth2.token_cache.clear()
 
 
-def test_oauth2_authentication_on_custom_server_port(services):
+def test_oauth2_authentication_on_custom_server_port(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    first_token = (
-        pyxelrestgenerator.oauth_cutom_response_port_get_oauth2_authentication_success()
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success",
+        json=[],
+        match_querystring=True,
     )
-    assert first_token[0] == ["Authorization"]
-    # Wait for 1 second and send a second request from another server to the same auth server
-    # (should not request another token)
-    time.sleep(1)
-    second_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-    assert second_token[0] == ["Authorization"]
-    assert first_token[1] == second_token[1]
+    assert pyxelrestgenerator.oauth_cutom_response_port_get_oauth2_authentication_success() == [
+        [""]
+    ]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+    assert pyxelrestgenerator.authenticated_get_oauth2_authentication_success() == [
+        [""]
+    ]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
 
 
-def test_oauth2_authentication_success(services):
+def test_oauth2_authentication_success(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-    assert token[0] == ["Authorization"]
-    assert token[1]
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.authenticated_get_oauth2_authentication_success() == [
+        [""]
+    ]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
 
 
-def test_pyxelrest_oauth2_authentication_success(services):
+def test_pyxelrest_oauth2_authentication_success(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    token = pyxelrestgenerator.pyxelrest_get_url(
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8946/oauth2/authentication/success",
         auth=["oauth2_implicit"],
         oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
+    ) == [[""]]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
     )
-    assert token[0] == ["Authorization"]
-    assert token[1]
 
 
-def test_oauth2_authentication_success_with_custom_response_type(services):
+def test_oauth2_authentication_success_with_custom_response_type(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    token = (
-        pyxelrestgenerator.oauth_custom_token_name_get_oauth2_authentication_success_with_custom_response_type()
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success/with/custom/response/type",
+        json=[],
+        match_querystring=True,
     )
-    assert token[0] == ["Authorization"]
-    assert token[1]
+    assert pyxelrestgenerator.oauth_custom_token_name_get_oauth2_authentication_success_with_custom_response_type() == [
+        [""]
+    ]
+    assert (
+        _get_request(
+            responses,
+            "http://localhost:8946/oauth2/authentication/success/with/custom/response/type",
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
 
 
-def test_oauth2_authentication_success_without_response_type(services):
+def test_oauth2_authentication_success_without_response_type(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    token = (
-        pyxelrestgenerator.authenticated_get_oauth2_authentication_success_without_response_type()
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success/without/response/type",
+        json=[],
+        match_querystring=True,
     )
-    assert token[0] == ["Authorization"]
-    assert token[1]
+    assert pyxelrestgenerator.authenticated_get_oauth2_authentication_success_without_response_type() == [
+        [""]
+    ]
+    assert (
+        _get_request(
+            responses,
+            "http://localhost:8946/oauth2/authentication/success/without/response/type",
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
 
 
-def test_pyxelrest_oauth2_authentication_success_without_response_type(services):
+def test_pyxelrest_oauth2_authentication_success_without_response_type(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    token = pyxelrestgenerator.pyxelrest_get_url(
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success/without/response/type",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8946/oauth2/authentication/success/without/response/type",
         auth=["oauth2_implicit"],
         oauth2_auth_url="http://localhost:8947/auth_success_without_response_type",
-    )
-    assert token[0] == ["Authorization"]
-    assert token[1]
-
-
-def test_oauth2_authentication_token_reuse(services):
-    from pyxelrest import pyxelrestgenerator
-
-    first_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-    assert first_token[0] == ["Authorization"]
-    # As the token should not be expired, this call should use the same token
-    second_token = pyxelrestgenerator.authenticated_get_oauth2_authentication_success()
-    assert first_token == second_token
-
-
-def test_pyxelrest_oauth2_authentication_token_reuse(services):
-    from pyxelrest import pyxelrestgenerator
-
-    first_token = pyxelrestgenerator.pyxelrest_get_url(
-        "http://localhost:8946/oauth2/authentication/success",
-        auth=["oauth2_implicit"],
-        oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
-    )
-    assert first_token[0] == ["Authorization"]
-    second_token = pyxelrestgenerator.pyxelrest_get_url(
-        "http://localhost:8946/oauth2/authentication/success",
-        auth=["oauth2_implicit"],
-        oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
-    )
-    assert first_token == second_token
-
-
-def test_oauth2_authentication_failure(services):
-    from pyxelrest import pyxelrestgenerator
-
+    ) == [[""]]
     assert (
-        'An error occurred. Please check logs for full details: "id_token not provided within {}."'
-        == pyxelrestgenerator.authenticated_get_oauth2_authentication_failure()
+        _get_request(
+            responses,
+            "http://localhost:8946/oauth2/authentication/success/without/response/type",
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
     )
 
 
-def test_oauth2_authentication_timeout(services):
+def test_oauth2_authentication_token_reuse(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
-    assert (
-        'An error occurred. Please check logs for full details: "User authentication was not received within 10 seconds."'
-        == pyxelrestgenerator.authenticated_get_oauth2_authentication_timeout()
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success",
+        json=[],
+        match_querystring=True,
     )
-
-
-def test_without_authentication(services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert [
-        ["received token"],
-        [False],
-    ] == pyxelrestgenerator.non_authenticated_get_without_auth()
-
-
-def test_oauth2_authentication_expiry(services):
-    from pyxelrest import pyxelrestgenerator
-
-    # This token will expires in 1 seconds
-    first_token = (
-        pyxelrestgenerator.authenticated_get_oauth2_authentication_success_quick_expiry()
-    )
-    assert first_token[0] == ["Authorization"], str(first_token)
-    time.sleep(2)
-    # Token should now be expired, a new one should be requested
-    second_token = (
-        pyxelrestgenerator.authenticated_get_oauth2_authentication_success_quick_expiry()
-    )
-    assert second_token[0] == ["Authorization"]
-    assert first_token[1] != second_token[1]
-
-
-def test_api_key_header_authentication_success(services):
-    from pyxelrest import pyxelrestgenerator
-
-    assert pyxelrestgenerator.authenticated_get_api_key_header_authentication_success() == [
-        ["X-API-HEADER-KEY"],
-        ["my_provided_api_key"],
+    assert pyxelrestgenerator.authenticated_get_oauth2_authentication_success() == [
+        [""]
     ]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+    # As the token should not be expired, this call should use the same token
+    assert pyxelrestgenerator.authenticated_get_oauth2_authentication_success() == [
+        [""]
+    ]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
 
 
-def test_pyxelrest_api_key_header_authentication_success(services):
+def test_pyxelrest_oauth2_authentication_token_reuse(
+    services, token_cache_mock, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/oauth2/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.pyxelrest_get_url(
+        "http://localhost:8946/oauth2/authentication/success",
+        auth=["oauth2_implicit"],
+        oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
+    ) == [[""]]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+    assert pyxelrestgenerator.pyxelrest_get_url(
+        "http://localhost:8946/oauth2/authentication/success",
+        auth=["oauth2_implicit"],
+        oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
+    ) == [[""]]
+    assert (
+        _get_request(
+            responses, "http://localhost:8946/oauth2/authentication/success"
+        ).headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+
+def test_oauth2_authentication_failure(services, monkeypatch):
+    from pyxelrest import pyxelrestgenerator
+
+    class TokenCacheMock:
+        def get_token(self, *args, **kwargs) -> str:
+            raise requests_auth.errors.GrantNotProvided("id_token", {})
+
+    monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
+    assert (
+        pyxelrestgenerator.authenticated_get_oauth2_authentication_failure()
+        == 'An error occurred. Please check logs for full details: "id_token not provided within {}."'
+    )
+
+
+def test_oauth2_authentication_timeout(services, monkeypatch):
+    from pyxelrest import pyxelrestgenerator
+
+    class TokenCacheMock:
+        def get_token(self, *args, **kwargs) -> str:
+            raise requests_auth.errors.TimeoutOccurred(10)
+
+    monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
+    assert (
+        pyxelrestgenerator.authenticated_get_oauth2_authentication_timeout()
+        == 'An error occurred. Please check logs for full details: "User authentication was not received within 10 seconds."'
+    )
+
+
+def test_without_authentication(services, responses: RequestsMock):
+    from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.GET,
+        "http://localhost:8948/without_auth",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.non_authenticated_get_without_auth() == [[""]]
+
+
+def test_api_key_header_authentication_success(services, responses: RequestsMock):
+    from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/api/key/header/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.authenticated_get_api_key_header_authentication_success() == [
+        [""]
+    ]
+    request = _get_request(
+        responses, "http://localhost:8946/api/key/header/authentication/success"
+    )
+    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
+
+
+def test_pyxelrest_api_key_header_authentication_success(
+    services, responses: RequestsMock
+):
+    from pyxelrest import pyxelrestgenerator
+
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/api/key/header/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8946/api/key/header/authentication/success",
         auth=["api_key_header"],
         api_key_name="X-API-HEADER-KEY",
-    ) == [["X-API-HEADER-KEY"], ["my_provided_api_key"]]
+    ) == [[""]]
+    request = _get_request(
+        responses, "http://localhost:8946/api/key/header/authentication/success"
+    )
+    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
 
 
-def test_api_key_query_authentication_success(services):
+def test_api_key_query_authentication_success(services, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/api/key/query/authentication/success?X-API-QUERY-KEY=my_provided_api_key",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.authenticated_get_api_key_query_authentication_success() == [
-        ["X-API-QUERY-KEY"],
-        ["my_provided_api_key"],
+        [""]
     ]
 
 
-def test_pyxelrest_api_key_query_authentication_success(services):
+def test_pyxelrest_api_key_query_authentication_success(
+    services, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/api/key/query/authentication/success?X-API-QUERY-KEY=my_provided_api_key",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8946/api/key/query/authentication/success",
         auth=["api_key_query"],
         api_key_name="X-API-QUERY-KEY",
-    ) == [["X-API-QUERY-KEY"], ["my_provided_api_key"]]
+    ) == [[""]]
 
 
-def test_basic_authentication_success(services):
+def test_basic_authentication_success(services, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
-    assert pyxelrestgenerator.authenticated_get_basic_authentication_success() == [
-        ["Authorization"],
-        ["Basic dGVzdF91c2VyOnRlc3RfcHdk"],
-    ]
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/basic/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
+    assert pyxelrestgenerator.authenticated_get_basic_authentication_success() == [[""]]
+    request = _get_request(
+        responses, "http://localhost:8946/basic/authentication/success"
+    )
+    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
 
 
-def test_pyxelrest_basic_authentication_success(services):
+def test_pyxelrest_basic_authentication_success(services, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/basic/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8946/basic/authentication/success", auth=["basic"]
-    ) == [["Authorization"], ["Basic dGVzdF91c2VyOnRlc3RfcHdk"]]
+    ) == [[""]]
+    request = _get_request(
+        responses, "http://localhost:8946/basic/authentication/success"
+    )
+    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
 
 
-def test_basic_and_api_key_authentication_success(services):
+def test_basic_and_api_key_authentication_success(services, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/basic/and/api/key/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.authenticated_get_basic_and_api_key_authentication_success() == [
-        ["Authorization", "X-API-HEADER-KEY"],
-        ["Basic dGVzdF91c2VyOnRlc3RfcHdk", "my_provided_api_key"],
+        [""]
     ]
+    request = _get_request(
+        responses, "http://localhost:8946/basic/and/api/key/authentication/success"
+    )
+    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
+    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
 
 
-def test_pyxelrest_basic_and_api_key_authentication_success(services):
+def test_pyxelrest_basic_and_api_key_authentication_success(
+    services, responses: RequestsMock
+):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/basic/and/api/key/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.pyxelrest_get_url(
         "http://localhost:8946/basic/and/api/key/authentication/success",
         auth=["basic", "api_key_header"],
         api_key_name="X-API-HEADER-KEY",
-    ) == [
-        ["Authorization", "X-API-HEADER-KEY"],
-        ["Basic dGVzdF91c2VyOnRlc3RfcHdk", "my_provided_api_key"],
-    ]
+    ) == [[""]]
+    request = _get_request(
+        responses, "http://localhost:8946/basic/and/api/key/authentication/success"
+    )
+    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
+    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
 
 
-def test_basic_or_api_key_authentication_success(services):
+def test_basic_or_api_key_authentication_success(services, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/basic/or/api/key/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.authenticated_get_basic_or_api_key_authentication_success() == [
-        ["Authorization", "X-API-HEADER-KEY"],
-        ["Basic dGVzdF91c2VyOnRlc3RfcHdk", ""],
+        [""]
     ]
+    request = _get_request(
+        responses, "http://localhost:8946/basic/or/api/key/authentication/success"
+    )
+    assert "X-API-HEADER-KEY" not in request.headers
+    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
 
 
-def test_api_key_or_basic_authentication_success(services):
+def test_api_key_or_basic_authentication_success(services, responses: RequestsMock):
     from pyxelrest import pyxelrestgenerator
 
+    responses.add(
+        responses.GET,
+        "http://localhost:8946/api/key/or/basic/authentication/success",
+        json=[],
+        match_querystring=True,
+    )
     assert pyxelrestgenerator.authenticated_get_api_key_or_basic_authentication_success() == [
-        ["Authorization", "X-API-HEADER-KEY"],
-        ["", "my_provided_api_key"],
+        [""]
     ]
+    request = _get_request(
+        responses, "http://localhost:8946/api/key/or/basic/authentication/success"
+    )
+    assert "Authorization" not in request.headers
+    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"

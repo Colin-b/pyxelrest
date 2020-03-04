@@ -141,8 +141,6 @@ setup(
             "pytest==5.*",
             # Used to mock responses
             "pytest-responses==0.4.*",
-            # Used to generate a jwt token
-            "pyjwt==1.*",
             # used for testing cache of results
             "cachetools==4.*",
         ],
