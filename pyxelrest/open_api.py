@@ -3,10 +3,10 @@ import datetime
 import logging
 import os
 import re
+from typing import List, Union
+
 import requests
 import requests.exceptions
-import sys
-import threading
 import time
 import xlwings
 import xlwings.conversion
@@ -16,43 +16,10 @@ import yaml
 from urllib.parse import urlsplit
 
 
-from pyxelrest import (
-    authentication,
-    custom_logging,
-    session,
-    fileadapter,
-    definition_deserializer,
-    vba,
-    SERVICES_CONFIGURATION_FILE_PATH,
-)
+from pyxelrest import authentication, session, definition_deserializer, vba
 from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.pyxelresterrors import *
 from pyxelrest.definition_deserializer import Response
-
-
-def support_ujson():
-    try:
-        import ujson
-
-        return True
-    except:
-        return False
-
-
-def support_pandas():
-    try:
-        import pandas
-
-        return True
-    except:
-        return False
-
-
-if support_ujson():
-    import ujson
-
-if support_pandas():
-    import pandas
 
 
 logger = logging.getLogger(__name__)
@@ -778,7 +745,6 @@ class OpenAPI:
         :return: Dictionary representation of the retrieved Open API JSON definition.
         """
         requests_session = session.get(0)
-        requests_session.mount("file://", fileadapter.LocalFileAdapter())
         response = requests_session.get(
             self.config.open_api_definition,
             proxies=self.config.proxies,
@@ -936,9 +902,7 @@ class OpenAPIUDFMethod(UDFMethod):
         )
 
     def return_a_list(self):
-        return ("application/json" in self.open_api_method["produces"]) or (
-            "application/msgpackpandas" in self.open_api_method["produces"]
-        )
+        return "application/json" in self.open_api_method["produces"]
 
     def security(self, request_content):
         return self.open_api_method.get("security")
@@ -963,12 +927,7 @@ class OpenAPIUDFMethod(UDFMethod):
                     "For now PyxelRest only send JSON body so request might fail."
                 )
 
-        if (
-            "application/msgpackpandas" in self.open_api_method["produces"]
-            and support_pandas()
-        ):
-            header["Accept"] = "application/msgpackpandas"
-        elif "application/json" in self.open_api_method["produces"]:
+        if "application/json" in self.open_api_method["produces"]:
             header["Accept"] = "application/json"
 
         header.update(self.service.config.custom_headers)
@@ -982,7 +941,7 @@ class OpenAPIUDFMethod(UDFMethod):
         [description of the url](url)
         :return: URL or None if no URL can be found.
         """
-        urls = re.findall("^.*\[.*\]\((.*)\).*$", text)
+        urls = re.findall(r"^.*\[.*\]\((.*)\).*$", text)
         if urls:
             return urls[0]
 
@@ -1498,23 +1457,25 @@ class RequestContent:
             self.header_parameters[parameter.server_param_name] = value
 
 
-def load_services_from_yaml():
+def load_services_from_yaml(
+    services_configuration_file_path: str,
+) -> List[Union[PyxelRestService, OpenAPI]]:
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
     configuration file
     """
-    if not os.path.isfile(SERVICES_CONFIGURATION_FILE_PATH):
-        raise ConfigurationFileNotFound(SERVICES_CONFIGURATION_FILE_PATH)
+    if not os.path.isfile(services_configuration_file_path):
+        raise ConfigurationFileNotFound(services_configuration_file_path)
 
-    with open(SERVICES_CONFIGURATION_FILE_PATH, "r") as config_file:
+    with open(services_configuration_file_path, "r") as config_file:
         config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    logging.debug(f'Loading services from "{SERVICES_CONFIGURATION_FILE_PATH}"...')
+    logging.debug(f'Loading services from "{services_configuration_file_path}"...')
     return load_services(config)
 
 
-def load_services(config):
+def load_services(config: dict) -> List[Union[PyxelRestService, OpenAPI]]:
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
@@ -1537,7 +1498,7 @@ def load_services(config):
     return loaded_services
 
 
-def load_service(service_name, service_config):
+def load_service(service_name: str, service_config: dict) -> OpenAPI:
     logger.debug(f'Loading "{service_name}" service...')
     try:
         service = OpenAPI(service_name, service_config)
@@ -1548,7 +1509,7 @@ def load_service(service_name, service_config):
         logger.error(f'"{service_name}" service will not be available: {e}')
 
 
-def check_for_duplicates(loaded_services):
+def check_for_duplicates(loaded_services: List[Union[PyxelRestService, OpenAPI]]):
     services_by_prefix = {}
     for service in loaded_services:
         for udf_return_type in service.config.udf_return_types:
@@ -1614,8 +1575,6 @@ def get_result(udf_method, request_content, excel_application):
             result = [["Status URL"], [response.headers["location"]]]
         elif response.headers["content-type"] == "application/json":
             result = json_as_list(response, udf_method)
-        elif response.headers["content-type"] == "application/msgpackpandas":
-            result = msgpackpandas_as_list(response.content)
         else:
             result = convert_to_return_type(response.text[:255], udf_method)
         udf_method.cache_result(request_content, result)
@@ -1687,24 +1646,14 @@ def handle_exception(udf_method, exception_message, exception):
 def json_as_list(response, udf_method):
     if udf_method.service.config.rely_on_definitions:
         definition_deserializer.all_definitions = {}
-        if support_ujson():
-            response_text = response.text
-            logger.debug(
-                "Converting JSON string to corresponding python structure using ujson "
-                "(relying on definitions)..."
-            )
-            json_data = (
-                ujson.loads(response_text) if response_text != "" else response_text
-            )
-        else:
-            logger.debug(
-                "Converting JSON string to corresponding python structure (relying on definitions)..."
-            )
-            json_data = (
-                response.json(object_pairs_hook=OrderedDict)
-                if len(response.content)
-                else ""
-            )
+        logger.debug(
+            "Converting JSON string to corresponding python structure (relying on definitions)..."
+        )
+        json_data = (
+            response.json(object_pairs_hook=OrderedDict)
+            if len(response.content)
+            else ""
+        )
         all_definitions = udf_method.service.open_api_definitions
         return Response(
             udf_method.responses, response.status_code, all_definitions
@@ -1721,26 +1670,6 @@ def json_as_list(response, udf_method):
         ).to_list(json_data)
     else:
         return json_data
-
-
-def msgpackpandas_as_list(msgpack_pandas):
-    if support_pandas():
-        logger.debug("Converting message pack pandas to list...")
-        data = pandas.read_msgpack(msgpack_pandas)
-        logger.debug("Converting dictionary to list...")
-        if sys.version_info[0] < 3:
-            header = [
-                header_name.decode() for header_name in data.columns.values.tolist()
-            ]
-        else:
-            header = data.columns.tolist()
-        values = data.values.tolist()
-        flatten_data = [header] + values if values else [header]
-        logger.debug("Data converted to list.")
-        return flatten_data
-    else:
-        logger.warning("Pandas module is required to decode response.")
-        return ["Please install pandas module to be able to decode result."]
 
 
 def list_as_json(lists, parse_as):

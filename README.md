@@ -2,10 +2,10 @@
 
 <p align="center">
 <a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>
-<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Build status" src="https://api.travis-ci.org/Colin-b/pyxelrest.svg?branch=master"></a>
-<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Coverage" src="https://img.shields.io/badge/coverage-XXX%25-brightgreen"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Build status" src="https://github.com/Colin-b/pyxelrest/workflows/Release/badge.svg"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Coverage" src="https://img.shields.io/badge/coverage-87%25-orange"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href="https://travis-ci.org/Colin-b/pyxelrest"><img alt="Number of tests" src="https://img.shields.io/badge/tests-XXX passed-blue"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Number of tests" src="https://img.shields.io/badge/tests-398 passed-blue"></a>
 <a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
 </p>
 
@@ -47,7 +47,7 @@ The updater make sure that the python module, the Microsoft Excel add-in and the
 ### User installation (using PIP)
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Microsoft Excel must be closed while executing the following command:
 
 ```bash
@@ -106,23 +106,16 @@ The following options are available when launching this script:
 ### Developer Installation (using PIP)
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Build the add-in C# solution:
-In order to do so, you need to add a test certificate.
-> Project > AutoLoadPyxelRestAddIn > Signing
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
+2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
+
+   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
+   > Project > AutoLoadPyxelRestAddIn > Signing
 3. Microsoft Excel must be closed while executing the following script from within pyxelrest root folder:
 
         developer_install.bat
 
 ### Optional Dependencies
-
-- Support for ``application/msgpackpandas`` encoded data.
-    - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
-    - ``pandas_msgpack`` extra requires can be used to install those dependencies.
-
-- Support for faster JSON handling.
-    - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
-    - ``ujson`` extra requires can be used to install those dependencies.
 
 - Support for NTLM authentication (with user credentials provided),
     - ``requests_ntlm`` module is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
@@ -286,7 +279,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </th>
     <tr>
         <td><strong>definition</strong></td>
-        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file://C:/swagger.json</td>
+        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file:///C:\swagger.json</td>
         <td>Mandatory</td>
         <td></td>
     </tr>

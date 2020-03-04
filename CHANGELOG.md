@@ -12,9 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Do not use a fixed dependency version.
+- Compatibility with Python 3.8
+- Ability to change the configuration and impact loaded functions within module without restarting python.
+- file URl are now properly handled, they must start with file:/// instead of file://
 
 ### Removed
 - Drop support for python < 3.6
+- Drop support for application/msgpackpandas as msgpack support has been dropped from pandas and this is not a standardized content type.
+- Drop support for ujson.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
@@ -353,3 +358,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - XlWings module was loaded twice on Microsoft Excel startup in case it was already loaded.
+
+[Unreleased]: https://github.com/Colin-b/pyxelrest/compare/v0.69.0...HEAD
+[0.69.0]: https://github.com/Colin-b/pyxelrest/compare/v0.68.4...v0.69.0

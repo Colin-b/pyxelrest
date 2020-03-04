@@ -71,13 +71,9 @@ setup(
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.dll",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.dll",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.xml",
                 # VB Add-in
@@ -122,7 +118,7 @@ setup(
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.17.*",
+        "xlwings==0.18.*",
         # Used to parse configuration files
         "pyyaml==5.*",
         "pyaml==19.*",
@@ -131,26 +127,18 @@ setup(
         # Used to parse all date-time formats in a easy way
         "python-dateutil==2.*",
     ],
-    extra_requires={
-        # Support for `application/msgpackpandas`
-        "pandas_msgpack": ["pandas==0.25.*", "msgpack-python==0.5.*"],
-        # Support for faster JSON serialization / deserialization
-        "ujson": ["ujson==1.*"],
+    extras_require={
         # Support for NTLM authentication
         "ntlm": ["requests_ntlm==1.*", "requests_negotiate_sspi==0.5.*"],
         # Support for in-memory caching
         "cachetools": ["cachetools==4.*"],
         "testing": [
             # Used to run tests
-            "pytest==5.*",
+            "pytest-cov==2.*",
             # Used to mock responses
             "pytest-responses==0.4.*",
-            # Used to generate a jwt token
-            "pyjwt==1.*",
             # used for testing cache of results
             "cachetools==4.*",
-            # Used to create test services
-            "flask==1.*",
         ],
     },
     python_requires=">=3.6",
