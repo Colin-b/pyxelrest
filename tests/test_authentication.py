@@ -1,6 +1,6 @@
 import requests_auth
 from requests import PreparedRequest
-from requests_auth.testing import token_cache_mock
+from requests_auth.testing import token_cache_mock, token_mock
 import pytest
 from responses import RequestsMock
 
