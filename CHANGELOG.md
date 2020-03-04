@@ -358,3 +358,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - XlWings module was loaded twice on Microsoft Excel startup in case it was already loaded.
+
+[Unreleased]: https://github.com/Colin-b/pyxelrest/compare/v0.69.0...HEAD
+[0.69.0]: https://github.com/Colin-b/pyxelrest/compare/v0.68.4...v0.69.0
