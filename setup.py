@@ -71,13 +71,9 @@ setup(
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.dll",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/log4net.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Common.v4.0.Utilities.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.Excel.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.Office.Tools.v4.0.Framework.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.dll",
-                "addin/AutoLoadPyxelRestAddIn/bin/Release/Microsoft.VisualStudio.Tools.Applications.Runtime.xml",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.dll",
                 "addin/AutoLoadPyxelRestAddIn/bin/Release/YamlDotNet.xml",
                 # VB Add-in
