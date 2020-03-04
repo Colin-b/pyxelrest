@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -9,7 +9,7 @@ using System.Security;
 [assembly: AssemblyTitle("AutoLoadPyxelRestAddIn")]
 [assembly: AssemblyDescription("Auto load PyxelRest within Excel.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Engie")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("AutoLoadPyxelRestAddIn")]
 [assembly: AssemblyCopyright("MIT License")]
 [assembly: AssemblyTrademark("")]
@@ -33,5 +33,5 @@ using System.Security;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.69.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
 
