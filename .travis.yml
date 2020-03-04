@@ -4,7 +4,7 @@ python:
   - "3.7"
   - "3.8"
 install:
-  - pip install .[testing]
+  - export INSTALL_ON_LINUX=1; pip install .[testing]
 script:
   - pytest --cov=pyxelrest --cov-fail-under=70
 deploy:
