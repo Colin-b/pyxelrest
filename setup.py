@@ -134,7 +134,7 @@ setup(
         "cachetools": ["cachetools==4.*"],
         "testing": [
             # Used to run tests
-            "pytest==5.*",
+            "pytest-cov==2.*",
             # Used to mock responses
             "pytest-responses==0.4.*",
             # used for testing cache of results
