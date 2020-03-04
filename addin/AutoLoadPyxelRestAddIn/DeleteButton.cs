@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace AutoLoadPyxelRestAddIn
 {
-    class DeleteButton: PictureBox
+    internal class DeleteButton: PictureBox
     {
         public DeleteButton()
         {

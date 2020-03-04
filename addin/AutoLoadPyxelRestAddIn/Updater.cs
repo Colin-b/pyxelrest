@@ -5,7 +5,7 @@ using System;
 
 namespace AutoLoadPyxelRestAddIn
 {
-    class Updater
+    internal class Updater
     {
         private static readonly ILog Log = LogManager.GetLogger("Updater");
         
