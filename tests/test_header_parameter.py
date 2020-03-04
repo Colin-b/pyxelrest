@@ -199,6 +199,6 @@ def test_get_header_advanced_configuration(
     assert headers["X-Pxl-Other"] == "MyOtherValue"
     assert headers["X-Pxl-Envvar"] == os.environ["USERNAME"]
     assert headers["X-Pxl-Request"]
-    assert headers["User-Agent"] == "PyxelRest v1.0.0.dev1"
+    assert headers["User-Agent"] == "PyxelRest v1.0.0.a1"
     assert headers["X-Pxl-Cell"] == "Python"
     assert headers["X-Pxl-Session"] == "2018-10-11T15:05:05.663979"
