@@ -102,7 +102,7 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
     assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     # Wait for cache to be out of date
-    time.sleep(5)
+    time.sleep(6)
 
     assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache for this request
