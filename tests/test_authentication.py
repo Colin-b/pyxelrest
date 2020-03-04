@@ -16,11 +16,6 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 
 
 @pytest.fixture
-def token_mock() -> str:
-    return "2YotnFZFEjr1zCsicMWpAA"
-
-
-@pytest.fixture
 def services(responses: RequestsMock, tmpdir):
     # authenticated_service
     responses.add(
