@@ -165,6 +165,10 @@ class DateTimeModuleMock:
 def test_get_header_advanced_configuration(
     responses: RequestsMock, header_parameter_service, monkeypatch, tmpdir
 ):
+    import pyxelrest.session
+
+    pyxelrest.session.sessions.clear()
+    monkeypatch.setattr(pyxelrest.session, "datetime", DateTimeModuleMock)
     pyxelrestgenerator = loader.load(
         tmpdir,
         {
@@ -179,9 +183,6 @@ def test_get_header_advanced_configuration(
             }
         },
     )
-    import pyxelrest.session
-
-    monkeypatch.setattr(pyxelrest.session, "datetime", DateTimeModuleMock)
     responses.add(
         responses.GET,
         url="http://localhost:8951/header",
