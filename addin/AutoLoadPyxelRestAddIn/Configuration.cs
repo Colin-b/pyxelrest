@@ -7,7 +7,7 @@ using YamlDotNet.RepresentationModel;
 
 namespace AutoLoadPyxelRestAddIn
 {
-    class Configuration
+    internal class Configuration
     {
         private static readonly ILog Log = LogManager.GetLogger("Configuration");
 

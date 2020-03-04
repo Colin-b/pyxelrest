@@ -19,12 +19,7 @@ except ModuleNotFoundError:  # Occurs since pip > 9
     from pip._internal.commands.install import InstallCommand
     from pip._internal.utils.misc import get_installed_distributions
 
-try:
-    # Python 3
-    import tkinter
-except ImportError:
-    # Python 2
-    import Tkinter as tkinter
+import tkinter
 
 
 CLOSING_EXCEL_STEP = 'Closing Microsoft Excel'
@@ -39,16 +34,16 @@ FAILURE = 'failure'
 
 IMAGE_NAMES = {
     PYTHON_STEP: 'python_logo_greyscale_100.png',
-    '{0}_{1}'.format(PYTHON_STEP, DONE): 'python_logo_100.png',
-    '{0}_{1}'.format(PYTHON_STEP, FAILURE): 'python_logo_error_100.png',
+    f'{PYTHON_STEP}_{DONE}': 'python_logo_100.png',
+    f'{PYTHON_STEP}_{FAILURE}': 'python_logo_error_100.png',
 
     EXCEL_STEP: 'excel_logo_greyscale_100.png',
-    '{0}_{1}'.format(EXCEL_STEP, DONE): 'excel_logo_100.png',
-    '{0}_{1}'.format(EXCEL_STEP, FAILURE): 'excel_logo_error_100.png',
+    f'{EXCEL_STEP}_{DONE}': 'excel_logo_100.png',
+    f'{EXCEL_STEP}_{FAILURE}': 'excel_logo_error_100.png',
 
     SETTINGS_STEP: 'settings_logo_greyscale_100.png',
-    '{0}_{1}'.format(SETTINGS_STEP, DONE): 'settings_logo_100.png',
-    '{0}_{1}'.format(SETTINGS_STEP, FAILURE): 'settings_logo_error_100.png',
+    f'{SETTINGS_STEP}_{DONE}': 'settings_logo_100.png',
+    f'{SETTINGS_STEP}_{FAILURE}': 'settings_logo_error_100.png',
 }
 
 
@@ -71,8 +66,7 @@ def create_logger():
         logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                             handlers=[logging.handlers.TimedRotatingFileHandler(default_log_file_path, when='D')],
                             level=logging.DEBUG)
-        logger.warning('Logging configuration file ({0}) cannot be found. Using default logging configuration.'.format(
-            logging_configuration_file_path))
+        logger.warning(f'Logging configuration file ({logging_configuration_file_path}) cannot be found. Using default logging configuration.')
 
 
 create_logger()
@@ -215,7 +209,7 @@ class PyxelRestUpdater:
     def check_update(self):
         logger.debug('Checking if an update is available...')
         if self._is_update_available():
-            logger.info('Update {0} available (from {1}).'.format(self.pyxelrest_package.latest_version, self.pyxelrest_package.version))
+            logger.info(f'Update {self.pyxelrest_package.latest_version} available (from {self.pyxelrest_package.version}).')
             self.start_update_gui()
         else:
             logger.debug('No update available.')
@@ -304,13 +298,13 @@ class UpdateGUI(tkinter.Frame):
 
         self.new_version = new_version
         if is_breaking_compatibility(current_version, new_version):
-            install_message = "Major PyxelRest release {0} is available. Read change log before updating.".format(new_version)
+            install_message = f"Major PyxelRest release {new_version} is available. Read change log before updating."
         elif is_adding_features(current_version, new_version):
-            install_message = "PyxelRest bug fixes and enhancements are available (version {0})".format(new_version)
+            install_message = f"PyxelRest bug fixes and enhancements are available (version {new_version})"
         elif is_fixing_bugs(current_version, new_version):
-            install_message = "PyxelRest bug fixes are available (version {0})".format(new_version)
-        else: # This case should not happen but if the way versioning is done change it should be handled
-            install_message = "PyxelRest {0} is available".format(new_version)
+            install_message = f"PyxelRest bug fixes are available (version {new_version})"
+        else: # This case should not happen but if the way version handling is done change it should be handled
+            install_message = f"PyxelRest {new_version} is available"
         self.status = tkinter.Label(self, text=install_message)
         self.status.grid(in_=self, row=1, column=0)
 
@@ -353,23 +347,23 @@ class UpdateGUI(tkinter.Frame):
             self.update_button.configure(text='Update failed. Contact support.')
         else:  # Update complete
             self.master.title('PyxelRest updated')
-            self.status.configure(text='PyxelRest is now up to date (version {0})'.format(self.new_version))
+            self.status.configure(text=f'PyxelRest is now up to date (version {self.new_version})')
             self.update_button.configure(command=self.on_close)
             self.update_button.configure(text='OK')
             self.update_button.config(state='normal')
 
     def update_status(self, step, status):
         if DONE == status:
-            self.images[step].image_reference = self.create_image('{0}_{1}'.format(step, status))
+            self.images[step].image_reference = self.create_image(f'{step}_{status}')
             self.images[step]['image'] = self.images[step].image_reference
-            self.status['text'] = '{0} updated'.format(step)
+            self.status['text'] = f'{step} updated'
         elif IN_PROGRESS == status:
-            self.status['text'] = 'Updating {0}'.format(step)
+            self.status['text'] = f'Updating {step}'
         elif FAILURE == status:
             self.update_failed = True
-            self.images[step].image_reference = self.create_image('{0}_{1}'.format(step, status))
+            self.images[step].image_reference = self.create_image(f'{step}_{status}')
             self.images[step]['image'] = self.images[step].image_reference
-            self.status['text'] = '{0} could not be updated'.format(step)
+            self.status['text'] = f'{step} could not be updated'
 
     def check_queue(self):
         try:

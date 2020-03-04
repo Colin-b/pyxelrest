@@ -13,13 +13,10 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
 [Xx]64/
 [Xx]86/
 [Bb]uild/
 bld/
-[Bb]in/
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory
@@ -180,7 +177,6 @@ ClientBin/
 *~
 *.dbmdl
 *.dbproj.schemaview
-*.pfx
 *.publishsettings
 node_modules/
 orleans.codegen.cs
@@ -247,4 +243,3 @@ addin/packages/
 dist/
 pyxelrest.egg-info/
 pyxelrest/user_defined_functions.py
-!/pyxelrest/oauth2_authentication_responses_server.py

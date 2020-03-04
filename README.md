@@ -1,12 +1,23 @@
-# Access REST APIs from Microsoft Excel using User Defined Functions (UDF) #
+<h2 align="center">Access REST APIs from Microsoft Excel using User Defined Functions (UDF)</h2>
+
+<p align="center">
+<a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Build status" src="https://github.com/Colin-b/pyxelrest/workflows/Release/badge.svg"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Coverage" src="https://img.shields.io/badge/coverage-87%25-orange"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Number of tests" src="https://img.shields.io/badge/tests-398 passed-blue"></a>
+<a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
+</p>
 
 PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Microsoft Excel User Defined Functions.
 
-1. [Usage](#Usage)
-2. [Installation](#Installation)
-3. [Configuration](#Configuration)
+## Table of Contents
 
-## Usage ##
+  * [Usage](#Usage)
+  * [Installation](#Installation)
+  * [Configuration](#Configuration)
+
+## Usage
 
 Once installed, open Microsoft Excel and UDFs from configured services will be available.
 
@@ -25,27 +36,27 @@ The updater make sure that the python module, the Microsoft Excel add-in and the
 
 ![Update steps](addin/AutoLoadPyxelRestAddIn/resources/update_gui.gif)
 
-## Installation ##
+## Installation
 
-### Pre requisites ###
+### Pre requisites
 
-* [Python >= 2.7](https://www.python.org/downloads/) must be installed.
-* [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed.
+* [Python >= 3.6](https://www.python.org/downloads/) must be installed (with `pip` and `tkinter`).
+* [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed (Office 365 is supported).
 * [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
 
-### User installation (using PIP) ###
+### User installation (using PIP)
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Microsoft Excel must be closed while executing the following command:
 
 ```bash
-pip install pyxelrest
+python -m pip install pyxelrest
 ```
 
-#### User add-in installation ####
+#### User add-in installation
 
-One python module is installed, a script is available to install the Microsoft Excel add-in.
+Once python module is installed, a script is available to install the Microsoft Excel add-in.
 
 The add-in is not installed at the same time as the module because:
     * It may prompt the user for installation.
@@ -83,35 +94,28 @@ The following options are available when launching this script:
     </tr>
 </table>
 
-### User uninstall (using PIP) ###
+### User uninstall (using PIP)
 
 1. Go to `Control Panel/Programs and Features` and uninstall AutoLoadPyxelRestAddIn.
 2. Execute the following command:
 
-        pip uninstall pyxelrest
+        python -m pip uninstall pyxelrest
 3. Remove `%APPDATA%\pyxelrest` folder.
 4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
 
-### Developer Installation (using PIP) ###
+### Developer Installation (using PIP)
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Build the add-in C# solution:
-In order to do so, you need to add a test certificate.
-> Project > AutoLoadPyxelRestAddIn > Signing
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
+2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
+
+   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
+   > Project > AutoLoadPyxelRestAddIn > Signing
 3. Microsoft Excel must be closed while executing the following script from within pyxelrest root folder:
 
         developer_install.bat
 
-### Optional Dependencies ###
-
-- Support for ``application/msgpackpandas`` encoded data.
-    - Pandas encoded msgpack will be used if ``pandas`` and ``msgpack-python`` modules are available.
-    - ``pandas_msgpack`` extra requires can be used to install those dependencies.
-
-- Support for faster JSON handling.
-    - JSON responses deserialization (when rely_on_definitions is set to True) will rely on ``ujson`` in case ``ujson`` module is available.
-    - ``ujson`` extra requires can be used to install those dependencies.
+### Optional Dependencies
 
 - Support for NTLM authentication (with user credentials provided),
     - ``requests_ntlm`` module is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
@@ -125,9 +129,9 @@ In order to do so, you need to add a test certificate.
     - ``cachetool`` module is required to be able to use in-memory caching.
     - ``cachetool`` extra requires can be used to install those dependencies.
 
-## Configuration ##
+## Configuration
 
-### Services Configuration ###
+### Services Configuration
 
 Services configuration can be done within Microsoft Excel thanks to the `Configure Services` button within `PyxelRest` tab.
 
@@ -265,7 +269,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
 </table>
 
-#### OpenAPI ####
+#### OpenAPI
 
 <table>
     <th>
@@ -275,7 +279,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </th>
     <tr>
         <td><strong>definition</strong></td>
-        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file://C:/swagger.json</td>
+        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file:///C:\swagger.json</td>
         <td>Mandatory</td>
         <td></td>
     </tr>
@@ -341,7 +345,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
 </table>
 
-#### User Defined Function ####
+#### User Defined Function
 
 <table>
     <th>
@@ -363,13 +367,13 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
 </table>
 
-#### OAuth 2 ####
+#### OAuth 2
 
-Depending on the flow, every parameter described in [requests-auth documentation](https://github.com/Colin-b/requests_auth/blob/master/README.md) can be provided.
+Depending on the flow, every parameter described in [requests-auth documentation](https://colin-b.github.io/requests_auth/) can be provided.
 
 Note that token_url and authorization_url are extracted from OpenAPI documentation, thus they do not need to be provided.
 
-#### Basic ####
+#### Basic
 
 <table>
     <th>
@@ -388,7 +392,7 @@ Note that token_url and authorization_url are extracted from OpenAPI documentati
     </tr>
 </table>
 
-#### NTLM ####
+#### NTLM
 
 Requiring requests_ntlm or requests_negotiate_sspi python modules.
 
@@ -409,7 +413,7 @@ Requiring requests_ntlm or requests_negotiate_sspi python modules.
     </tr>
 </table>
 
-#### Caching ####
+#### Caching
 
 Requiring cachetools python module.
 
@@ -430,7 +434,7 @@ Requiring cachetools python module.
     </tr>
 </table>
 
-#### Result ####
+#### Result
 
 <table>
     <th>
@@ -450,7 +454,7 @@ Requiring cachetools python module.
 </table>
 
 
-#### PyxelRest Service Configuration ####
+#### PyxelRest Service Configuration
 
 You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
@@ -462,7 +466,7 @@ You can also use the "pyxelrest" service name to activate [Postman](https://www.
 
 It can be configured the same way than a usual service, except that open_api section is not used anymore.
 
-### Logging Configuration ###
+### Logging Configuration
 
 PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
 
@@ -476,7 +480,7 @@ This folder can easily be accessed thanks to the `Open Logs` button within `Pyxe
 
 ![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
 
-### Microsoft Excel Auto-Load add-in Configuration ###
+### Microsoft Excel Auto-Load add-in Configuration
 
 Auto check for update can be activated/deactivated within Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
 
@@ -530,7 +534,7 @@ The following application settings are available:
     </tr>
 </table>
 
-## Using as a module ##
+## Using as a module
 
 You can use pyxelrest as a python module as well.
 
@@ -545,7 +549,7 @@ import pyxelrest.user_defined_functions as udfs
 # UDFs are available as python functions within user_defined_functions and can be used as such
 ```
 
-### Generating user defined functions ###
+### Generating user defined functions
 
 When `pyxelrest.GENERATE_UDF_ON_IMPORT` is set to `True` (default behavior), 
 UDFs are generated based on a configuration file by loading (e.g. on first import) pyxelrest.pyxelrestgenerator.py.
@@ -554,9 +558,9 @@ You can manually regenerate UDFs by calling `pyxelrest.load()` and providing you
 
 All UDFs can be found within pyxelrest.user_defined_functions.py.
 
-## Frequently Asked Question ##
+## Frequently Asked Question
 
-### Microsoft Excel Wizard does not show any parameter ###
+### Microsoft Excel Wizard does not show any parameter
 
 ![Microsoft Excel Wizard bug](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG)
 
@@ -571,7 +575,7 @@ To overcome this Microsoft Excel limitation you can try the following:
  * Remove some parameters in your service.
  * Reduce the length of your service parameter names.
 
-### Microsoft Excel Wizard only list some functions ###
+### Microsoft Excel Wizard only list some functions
 
 Microsoft Excel function wizard is not able to list more than a certain amount of functions per category.
 
@@ -580,11 +584,11 @@ However all functions can be directly accessed in cells.
 To overcome this Microsoft Excel limitation you can try the following:
  * Exclude some functions in your service (refer to Open API configuration section for more information).
 
-### No command specified in the configuration, cannot autostart server ###
+### No command specified in the configuration, cannot autostart server
 
 This error will happen in case you manually specified in your xlwings.bas file to use debug server but did not uncomment the main function starting the server on pyxelrest module side.
 
-### Microsoft Excel Add-In cannot be installed ###
+### Microsoft Excel Add-In cannot be installed
 
 Check that all requirements are met:
  * [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
@@ -594,14 +598,14 @@ In case you encounter an issue like `Could not load file or assembly 'Microsoft.
 
 In case you encounter an issue like `...An application with the same identity is already installed...`, you then need to manually remove all folders within `%USERPROFILE%\AppData\Local\Apps\2.0` and restart your computer.
 
-### Dates with a year higher than 3000 are not converted to local timezone ###
+### Dates with a year higher than 3000 are not converted to local timezone
 
 Due to timestamp limitation, dates after 3000-12-31 and date time after 3001-01-01T07:59:59+00:00 cannot be converted to local timezone.
 
-### Python process exited before it was possible to create the interface object ###
+### Python process exited before it was possible to create the interface object
 
 You need to check log files to identify the underlying issue.
 
-### pyxelrest.xlam is not available ###
+### pyxelrest.xlam is not available
 
 The add-in might be disabled. Check File/Option/addin/Manage: Disabled Items

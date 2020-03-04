@@ -59,7 +59,7 @@ def {{ udf_method.udf_name }}(
     """{{ udf_method.summary() }}"""
 {% endif %}
     excel_caller_address = get_caller_address(excel_application)
-    logger.info("{0} [status=Calling] [function={{ udf_method.udf_name }}]...".format(excel_caller_address))
+    logger.info(f"{excel_caller_address} [status=Calling] [function={{ udf_method.udf_name }}]...")
     udf_method = udf_methods['{{ udf_method.udf_name }}']
     request_content = RequestContent(udf_method, excel_caller_address)
 {% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}
@@ -76,7 +76,7 @@ def {{ udf_method.udf_name }}(
 {% endfor %}
         request_content.validate()
     except Exception as e:
-        logger.exception('{0} Unable to validate parameters.'.format(excel_caller_address))
+        logger.exception(f'{excel_caller_address} Unable to validate parameters.')
         return handle_exception(udf_method, str(e), e)
 {% endif %}
     return get_result(udf_method, request_content, excel_application)

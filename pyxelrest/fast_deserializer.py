@@ -1,7 +1,6 @@
 import logging
 import dateutil.parser
 import dateutil.tz
-from past.builtins import basestring
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +79,7 @@ class Flattenizer:
         self.__values_per_level[row][level].append({'header': header, 'value': self.convert_simple_type(value, json_definition)})
 
     def convert_simple_type(self, value, json_definition):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             field_format = json_definition.get('format') if json_definition else None
             if not field_format and 'items' in json_definition:  # Sometimes it can happen that array definition is returned as a single element
                 return self.convert_simple_type(value, json_definition.get('items', {}))
@@ -177,11 +176,14 @@ class Flattenizer:
             self.__flatten_header = self.__flatten_header[1:]
             self.__all_flatten_rows = [flatten_row[1:] for flatten_row in self.__all_flatten_rows]
         if not self.__flatten_header or self.__flatten_header == ['']:
-            logger.debug('Response converted to list.')
-            return self.__all_flatten_rows if self.__all_flatten_rows and self.__all_flatten_rows != [[]] else ['']
+            if self.__all_flatten_rows and self.__all_flatten_rows != [[]]:
+                logger.debug(f'Response converted to list of {len(self.__all_flatten_rows)} elements.')
+                return self.__all_flatten_rows
+            logger.debug('Response converted to empty list.')
+            return ['']
         flatten_data = [self.__flatten_header]
         flatten_data.extend(self.__all_flatten_rows)
-        logger.debug('Response converted to list.')
+        logger.debug(f'Response converted to list of {len(flatten_data)} elements.')
         return flatten_data
 
 
