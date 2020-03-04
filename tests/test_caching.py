@@ -84,6 +84,7 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
     )
 
     assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    # Assert a request is issued as there is no cache for this request
     assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     responses.add(
@@ -93,18 +94,22 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
     assert pyxelrestgenerator.caching_get_cached(test1="1", test2="3") == [[""]]
+    # Assert a request is issued as there is no cache for this request
     assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
 
     assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    # Assert no request is issued as there is a cache for this request
     assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     # Wait for cache to be out of date
     time.sleep(5)
 
     assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    # Assert a request is issued as there is no cache for this request
     assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     assert pyxelrestgenerator.caching_get_cached(test1="1", test2="2") == [[""]]
+    # Assert no request is issued as there is a cache for this request
     assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
