@@ -47,7 +47,7 @@ The updater make sure that the python module, the Microsoft Excel add-in and the
 ### User installation (using PIP)
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Microsoft Excel must be closed while executing the following command:
 
 ```bash
@@ -106,10 +106,11 @@ The following options are available when launching this script:
 ### Developer Installation (using PIP)
 
 1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
-> File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Build the add-in C# solution:
-In order to do so, you need to add a test certificate.
-> Project > AutoLoadPyxelRestAddIn > Signing
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
+2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
+
+   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
+   > Project > AutoLoadPyxelRestAddIn > Signing
 3. Microsoft Excel must be closed while executing the following script from within pyxelrest root folder:
 
         developer_install.bat
