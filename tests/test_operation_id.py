@@ -5,38 +5,7 @@ from tests import loader
 
 
 @pytest.fixture
-def open_api_definition_parsing_service(responses: RequestsMock):
-    responses.add(
-        responses.GET,
-        url="http://localhost:8948/swagger_version_not_provided",
-        json={
-            "paths": {
-                "/should_not_be_available": {
-                    "get": {
-                        "operationId": "get_should_not_be_available",
-                        "responses": {200: {"description": "successful operation"}},
-                    }
-                }
-            }
-        },
-        match_querystring=True,
-    )
-    responses.add(
-        responses.GET,
-        url="http://localhost:8948/swagger_version_not_supported",
-        json={
-            "swagger": "1.0",
-            "paths": {
-                "/should_not_be_available": {
-                    "get": {
-                        "operationId": "get_should_not_be_available",
-                        "responses": {200: {"description": "successful operation"}},
-                    }
-                }
-            },
-        },
-        match_querystring=True,
-    )
+def operation_id_services(responses: RequestsMock):
     responses.add(
         responses.GET,
         url="http://localhost:8948/operation_id_not_provided",
@@ -72,9 +41,7 @@ def open_api_definition_parsing_service(responses: RequestsMock):
     )
 
 
-def test_missing_operation_id(
-    responses: RequestsMock, open_api_definition_parsing_service, tmpdir
-):
+def test_missing_operation_id(responses: RequestsMock, operation_id_services, tmpdir):
     pyxelrestgenerator = loader.load(
         tmpdir,
         {
@@ -104,9 +71,7 @@ def test_missing_operation_id(
     ]
 
 
-def test_mixed_operation_id(
-    responses: RequestsMock, open_api_definition_parsing_service, tmpdir
-):
+def test_mixed_operation_id(responses: RequestsMock, operation_id_services, tmpdir):
     pyxelrestgenerator = loader.load(
         tmpdir,
         {
@@ -126,21 +91,21 @@ def test_mixed_operation_id(
     )
     responses.add(
         responses.GET,
-        url="http://localhost:8948/with_operationId",
+        url="http://localhost:8948/without_operationId",
         json=["first"],
         match_querystring=True,
     )
 
     assert pyxelrestgenerator.operation_id_not_always_provided_get_without_operationId() == [
-        "first"
+        ["first"]
     ]
 
     responses.add(
         responses.GET,
-        url="http://localhost:8948/without_operationId",
+        url="http://localhost:8948/with_operationId",
         json=["second"],
         match_querystring=True,
     )
     assert pyxelrestgenerator.operation_id_not_always_provided_duplicated_get_without_operationId() == [
-        "second"
+        ["second"]
     ]
