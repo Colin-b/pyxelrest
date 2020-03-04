@@ -7,7 +7,6 @@ from typing import List, Union
 
 import requests
 import requests.exceptions
-import sys
 import time
 import xlwings
 import xlwings.conversion
@@ -17,7 +16,7 @@ import yaml
 from urllib.parse import urlsplit
 
 
-from pyxelrest import authentication, session, fileadapter, definition_deserializer, vba
+from pyxelrest import authentication, session, definition_deserializer, vba
 from pyxelrest.fast_deserializer import Flattenizer
 from pyxelrest.pyxelresterrors import *
 from pyxelrest.definition_deserializer import Response
@@ -746,7 +745,6 @@ class OpenAPI:
         :return: Dictionary representation of the retrieved Open API JSON definition.
         """
         requests_session = session.get(0)
-        requests_session.mount("file://", fileadapter.LocalFileAdapter())
         response = requests_session.get(
             self.config.open_api_definition,
             proxies=self.config.proxies,
@@ -943,7 +941,7 @@ class OpenAPIUDFMethod(UDFMethod):
         [description of the url](url)
         :return: URL or None if no URL can be found.
         """
-        urls = re.findall("^.*\[.*\]\((.*)\).*$", text)
+        urls = re.findall(r"^.*\[.*\]\((.*)\).*$", text)
         if urls:
             return urls[0]
 

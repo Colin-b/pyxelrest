@@ -5,9 +5,9 @@ import os
 
 class LocalFileAdapter(requests.adapters.BaseAdapter):
     """
-    Protocol Adapter to allow Requests to GET file:// URLs
+    Protocol Adapter to allow Requests to GET file:/// URLs
 
-    Example: file:///C:\path\to\open_api_definition.json
+    Example: file:///C:\\path\\to\\open_api_definition.json
     """
 
     @staticmethod
@@ -22,22 +22,25 @@ class LocalFileAdapter(requests.adapters.BaseAdapter):
         else:
             return 200, "OK"
 
-    def send(self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None):
+    def send(
+        self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
+    ):
         """Return the file specified by the given request"""
-        path = os.path.normcase(os.path.normpath(request.url[7:]))
+        path = os.path.normcase(os.path.normpath(request.url[8:]))
         if not os.path.isabs(path):
             path = os.path.abspath(path)
         response = requests.Response()
         response.status_code, response.reason = self._check_path(request.method, path)
         if response.status_code == 200:
             try:
-                response.raw = open(path, 'rb')
+                response.raw = open(path, "rb")
             except (OSError, IOError) as err:
                 response.status_code = 500
                 response.reason = str(err)
 
+        # TODO Get rid of bytes check if it cannot occurs
         if isinstance(path, bytes):
-            response.url = path.decode('utf-8')
+            response.url = path.decode("utf-8")
         else:
             response.url = path
 

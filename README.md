@@ -278,7 +278,7 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </th>
     <tr>
         <td><strong>definition</strong></td>
-        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file://C:/swagger.json</td>
+        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file:///C:\swagger.json</td>
         <td>Mandatory</td>
         <td></td>
     </tr>

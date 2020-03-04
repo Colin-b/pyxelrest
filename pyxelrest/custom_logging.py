@@ -23,7 +23,7 @@ sys.excepthook = log_uncaught_exception
 def load_logging_configuration():
     """
     Load YAML logging configuration.
-    If file is not found, then logging will be performed as INFO into %APPDATA%\pyxelrest\logs\pyxelrest.log
+    If file is not found, then logging will be performed as INFO into %APPDATA%\\pyxelrest\\logs\\pyxelrest.log
     and file will be rolled every day.
     :return: None
     """
