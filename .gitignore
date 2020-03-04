@@ -13,13 +13,13 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
+release/
 [Rr]eleases/
 [Xx]64/
 [Xx]86/
 [Bb]uild/
 bld/
-[Bb]in/
+Bin/
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory
@@ -247,4 +247,3 @@ addin/packages/
 dist/
 pyxelrest.egg-info/
 pyxelrest/user_defined_functions.py
-!/pyxelrest/oauth2_authentication_responses_server.py
