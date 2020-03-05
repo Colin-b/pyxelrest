@@ -92,6 +92,11 @@ The following options are available when launching this script:
         <td>Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.</td>
         <td>Can be file, folder paths or an URL to a file.</td>
     </tr>
+    <tr>
+        <td><strong>--check_pre_releases</strong></td>
+        <td>Also fetch pre-releases.</td>
+        <td>No value is required, providing the option is enough. No pre-release check by default.</td>
+    </tr>
 </table>
 
 ### User uninstall (using PIP)

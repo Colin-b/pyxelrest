@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop support for application/msgpackpandas as msgpack support has been dropped from pandas and this is not a standardized content type.
 - Drop support for ujson.
 
+### Changed
+- Auto update does not request pre-releases by default anymore. It must be explicitly requested via --check_pre_releases.
+
 ## [0.69.0] - 2018-12-03
 ### Changed
 - OAuth2 parameters should now match the one handled by requests_auth.

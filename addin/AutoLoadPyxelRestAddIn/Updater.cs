@@ -10,8 +10,9 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly ILog Log = LogManager.GetLogger("Updater");
         
         private readonly string pythonPath;
-        private readonly string update_script;
-        private readonly string path_to_up_to_date_configurations;
+        private readonly string pathToUpdateScript;
+        private readonly string pathToUpToDateConfigurations;
+        private readonly bool checkPreReleases;
 
         internal Updater()
         {
@@ -19,18 +20,22 @@ namespace AutoLoadPyxelRestAddIn
             if (!File.Exists(pythonPath))
                 throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
 
-            update_script = ThisAddIn.GetSetting("PathToUpdateScript");
-            if (!File.Exists(update_script))
-                throw new Exception(string.Format("PyxelRest auto update script '{0}' cannot be found.", update_script));
+            pathToUpdateScript = ThisAddIn.GetSetting("PathToUpdateScript");
+            if (!File.Exists(pathToUpdateScript))
+                throw new Exception(string.Format("PyxelRest auto update script '{0}' cannot be found.", pathToUpdateScript));
 
-            path_to_up_to_date_configurations = ThisAddIn.GetSetting("PathToUpToDateConfigurations");
+            pathToUpToDateConfigurations = ThisAddIn.GetSetting("PathToUpToDateConfigurations");
+            if (!Boolean.TryParse(ThisAddIn.GetSetting("CheckPreReleases"), out checkPreReleases))
+                checkPreReleases = false; // Do not check for pre-releases by default
         }
 
         internal void CheckUpdate()
         {
-            string commandLine = update_script;
-            if (!string.IsNullOrEmpty(path_to_up_to_date_configurations))
-                commandLine += string.Format(" --path_to_up_to_date_configurations {0}", path_to_up_to_date_configurations);
+            string commandLine = this.pathToUpdateScript;
+            if (!string.IsNullOrEmpty(pathToUpToDateConfigurations))
+                commandLine += string.Format(" --path_to_up_to_date_configurations {0}", pathToUpToDateConfigurations);
+            if (checkPreReleases)
+                commandLine += " --check_pre_releases";
 
             Log.Debug("Check for PyxelRest update.");
             Process updateScript = new Process();

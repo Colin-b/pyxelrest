@@ -82,12 +82,12 @@ def create_logger():
 create_logger()
 
 
-def _outdated_package(package_name):
+def _outdated_package(package_name: str, check_pre_releases: bool):
     """Faster outdated check when running it for a single package."""
     list_command = ListCommand()
     command_options, _ = list_command.parse_args(
-        ["--pre"]
-    )  # Include development releases
+        ["--pre"] if check_pre_releases else []
+    )
     installed_package = _installed_package(package_name)
     if installed_package:
         packages = list_command.get_outdated([installed_package], command_options)
@@ -145,8 +145,14 @@ def _update_is_finished():
 
 
 class UpdateProcess:
-    def __init__(self, path_to_up_to_date_configurations, updating_queue):
+    def __init__(
+        self,
+        path_to_up_to_date_configurations: str,
+        check_pre_releases: bool,
+        updating_queue,
+    ):
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
+        self.check_pre_releases = check_pre_releases
         self.updating_queue = updating_queue
 
     def start_update(self):
@@ -178,6 +184,7 @@ class UpdateProcess:
 
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
+        upgrade_options = ["--pre"] if self.check_pre_releases else []
         result = InstallCommand().main(
             [
                 "pyxelrest",
@@ -185,7 +192,7 @@ class UpdateProcess:
                 "--disable-pip-version-check",
                 "--log",
                 default_log_file_path,
-                "--pre",
+                *upgrade_options,
             ]
         )
         create_logger()  # PyxelRest logger is lost while trying to update
@@ -238,13 +245,23 @@ class UpdateProcess:
             self.updating_queue.put((SETTINGS_STEP, FAILURE))
 
 
-def _start_update_process(path_to_up_to_date_configurations, updating_queue):
-    UpdateProcess(path_to_up_to_date_configurations, updating_queue).start_update()
+def _start_update_process(
+    path_to_up_to_date_configurations: str, check_pre_releases: bool, updating_queue
+):
+    UpdateProcess(
+        path_to_up_to_date_configurations, check_pre_releases, updating_queue
+    ).start_update()
 
 
 class PyxelRestUpdater:
-    def __init__(self, path_to_up_to_date_configurations=None):
+    def __init__(
+        self,
+        *,
+        path_to_up_to_date_configurations=None,
+        check_pre_releases: bool = False,
+    ):
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
+        self.check_pre_releases = check_pre_releases
 
     def check_update(self):
         logger.debug("Checking if an update is available...")
@@ -265,7 +282,11 @@ class PyxelRestUpdater:
         updating_queue = multiprocessing.JoinableQueue()
         updating_process = multiprocessing.Process(
             target=_start_update_process,
-            args=(self.path_to_up_to_date_configurations, updating_queue),
+            args=(
+                self.path_to_up_to_date_configurations,
+                self.check_pre_releases,
+                updating_queue,
+            ),
         )
         app = UpdateGUI(
             root,
@@ -279,7 +300,7 @@ class PyxelRestUpdater:
         root.mainloop()
 
     def _is_update_available(self):
-        self.pyxelrest_package = _outdated_package("pyxelrest")
+        self.pyxelrest_package = _outdated_package("pyxelrest", self.check_pre_releases)
         return self.pyxelrest_package
 
 
@@ -471,6 +492,9 @@ if __name__ == "__main__":
         default=None,
         type=str,
     )
+    parser.add_argument(
+        "--check_pre_releases", help="Also fetch pre-releases.", action="store_true"
+    )
     options = parser.parse_args(sys.argv[1:])
 
     logger.debug("Starting auto update script...")
@@ -478,7 +502,10 @@ if __name__ == "__main__":
         logger.debug("Skip update check as another update is ongoing.")
     else:
         try:
-            updater = PyxelRestUpdater(options.path_to_up_to_date_configurations)
+            updater = PyxelRestUpdater(
+                path_to_up_to_date_configurations=options.path_to_up_to_date_configurations,
+                check_pre_releases=options.check_pre_releases,
+            )
             updater.check_update()
         except:
             logger.exception("An error occurred while checking for update.")
