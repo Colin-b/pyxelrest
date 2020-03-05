@@ -118,8 +118,8 @@ namespace AutoLoadPyxelRestAddIn
 
             string pythonScriptPath = Path.GetTempFileName();
             File.WriteAllLines(pythonScriptPath, new string[] {
-                "import pyxelrest._version",
-                "print(pyxelrest._version.__version__)"
+                "import pyxelrest",
+                "print(pyxelrest.__version__)"
             });
 
             Process pyxelrestVersion = new Process();
