@@ -1,3 +1,4 @@
+import pytest
 from responses import RequestsMock
 
 from tests import loader
@@ -88,3 +89,240 @@ def test_mixed_operation_id(responses: RequestsMock, tmpdir):
     assert generated_functions.operation_id_not_always_provided_duplicated_get_without_operationId() == [
         ["second"]
     ]
+
+
+@pytest.fixture
+def filtered_operation_id_service(responses: RequestsMock):
+    responses.add(
+        responses.GET,
+        url="http://localhost:8944/",
+        json={
+            "swagger": "2.0",
+            "definitions": {
+                "TestObject": {
+                    "type": "object",
+                    "properties": {"test": {"type": "string", "description": "test"}},
+                    "title": "Test",
+                }
+            },
+            "paths": {
+                "/tags": {
+                    "get": {
+                        "operationId": "get_tags",
+                        "tags": ["tag 0", "tag 1"],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"$ref": "#/definitions/TestObject"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    },
+                    "post": {
+                        "operationId": "post_tags",
+                        "tags": ["tag 1", "tag 2"],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"$ref": "#/definitions/TestObject"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    },
+                    "put": {
+                        "operationId": "put_tags",
+                        "tags": ["tag 2", "tag 3"],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"$ref": "#/definitions/TestObject"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    },
+                    "delete": {
+                        "operationId": "delete_tags",
+                        "tags": ["tag 3", "tag 4"],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"$ref": "#/definitions/TestObject"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    },
+                }
+            },
+        },
+        match_querystring=True,
+    )
+
+
+def test_get_with_selected_operation_ids(
+    responses: RequestsMock, filtered_operation_id_service, tmpdir
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "selected_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+    responses.add(
+        responses.GET, url="http://localhost:8944/tags", json={}, match_querystring=True
+    )
+
+    assert generated_functions.selected_operation_ids_get_tags() == [[""]]
+
+
+def test_post_with_selected_operation_ids(
+    responses: RequestsMock, filtered_operation_id_service, tmpdir
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "selected_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+    responses.add(
+        responses.POST,
+        url="http://localhost:8944/tags",
+        json={},
+        match_querystring=True,
+    )
+
+    assert generated_functions.selected_operation_ids_post_tags() == [[""]]
+
+
+def test_put_with_selected_operation_ids(
+    responses: RequestsMock, filtered_operation_id_service, tmpdir
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "selected_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+    responses.add(
+        responses.PUT, url="http://localhost:8944/tags", json={}, match_querystring=True
+    )
+
+    assert generated_functions.selected_operation_ids_put_tags() == [[""]]
+
+
+def test_delete_with_selected_operation_ids(filtered_operation_id_service, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "selected_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+
+    assert not hasattr(generated_functions, "selected_operation_ids_delete_tags")
+
+
+def test_get_with_excluded_operation_ids(filtered_operation_id_service, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "excluded_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+
+    assert not hasattr(generated_functions, "excluded_operation_ids_get_tags")
+
+
+def test_post_with_excluded_operation_ids(filtered_operation_id_service, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "excluded_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+
+    assert not hasattr(generated_functions, "excluded_operation_ids_post_tags")
+
+
+def test_put_with_excluded_operation_ids(filtered_operation_id_service, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "excluded_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+
+    assert not hasattr(generated_functions, "excluded_operation_ids_put_tags")
+
+
+def test_delete_with_excluded_operation_ids(
+    responses: RequestsMock, filtered_operation_id_service, tmpdir
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "excluded_operation_ids": {
+                "open_api": {
+                    "definition": "http://localhost:8944/",
+                    "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
+                },
+                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            }
+        },
+    )
+    responses.add(
+        responses.DELETE,
+        url="http://localhost:8944/tags",
+        json={},
+        match_querystring=True,
+    )
+
+    assert generated_functions.excluded_operation_ids_delete_tags() == [[""]]
