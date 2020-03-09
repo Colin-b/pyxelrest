@@ -84,6 +84,11 @@ if GENERATE_UDF_ON_IMPORT:
         logger.debug("Expose user defined functions through PyxelRest.")
         load_user_defined_functions(services)
         from pyxelrest.user_defined_functions import *
+        import pyxelrest.user_defined_functions
+
+        logger.debug(
+            f"User defined functions exposed: {[name for name, value in pyxelrest.user_defined_functions.__dict__.items() if hasattr(value, '__xlfunc__')]}"
+        )
     except:
         logger.exception("Error while importing UDFs.")
 

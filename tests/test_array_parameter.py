@@ -225,6 +225,9 @@ def test_string_ssv_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
+    assert hasattr(
+        generated_functions, "array_parameter_get_string_ssv_array_parameter"
+    ), str(generated_functions.__dict__)
     assert generated_functions.array_parameter_get_string_ssv_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
