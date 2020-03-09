@@ -1,8 +1,17 @@
 import datetime
 
+from requests import PreparedRequest
 from responses import RequestsMock
 
 from tests.test_petstore import petstore_service
+
+
+def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+    for call in responses.calls:
+        if call.request.url == url:
+            # Pop out verified request (to be able to check multiple requests)
+            responses.calls._calls.remove(call)
+            return call.request
 
 
 def load_petstore_as_python_module():
@@ -39,6 +48,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service):
     from pyxelrest import user_defined_functions
 
     now = datetime.datetime.utcnow()
+    now_str = now.isoformat().encode()
     assert user_defined_functions.placeOrder(
         id=10, petId=222222, quantity=1, shipDate=now, status="placed", complete=False
     ) == {
@@ -49,7 +59,12 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service):
         "complete": False,
         "shipDate": "2020-12-02",
     }
-    # TODO Assert what is sent to the server
+    assert (
+        _get_request(responses, "https://petstore.swagger.io/v2/store/order").body
+        == b"""{"id": 10, "petId": 222222, "quantity": 1, "shipDate": \""""
+        + now_str
+        + b"""", "status": "placed", "complete": false}"""
+    )
 
     responses.add(
         responses.GET,
@@ -72,7 +87,6 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service):
         "complete": False,
         "shipDate": "2020-12-02",
     }
-    # TODO Assert what is sent to the server
 
 
 def test_get_user_by_name(responses: RequestsMock, petstore_service):
@@ -96,7 +110,10 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service):
         phone="0123456789",
         userStatus=0,
     )
-    # TODO Assert what is sent to the server
+    assert (
+        _get_request(responses, "https://petstore.swagger.io/v2/user").body
+        == b"""{"id": 666666, "username": "JD", "firstName": "John", "lastName": "Doe", "email": "jdoe@petstore.com", "password": "azerty", "phone": "0123456789", "userStatus": 0}"""
+    )
 
     responses.add(
         responses.GET,
@@ -124,4 +141,3 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service):
         "phone": "0123456789",
         "userStatus": 0,
     }
-    # TODO Assert what is sent to the server
