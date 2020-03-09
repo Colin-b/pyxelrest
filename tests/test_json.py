@@ -7058,12 +7058,10 @@ def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMoc
         },
     )
 
-    today_date = datetime.date.today()
-    tomorrow_date = today_date + datetime.timedelta(days=1)
-    today_datetime = datetime.datetime.combine(today_date, datetime.datetime.min.time())
-    tomorrow_datetime = datetime.datetime.combine(
-        tomorrow_date, datetime.datetime.min.time()
-    )
+    first_date = datetime.date(year=2020, month=3, day=4)
+    second_date = datetime.date(year=2020, month=3, day=5)
+    first_datetime = datetime.datetime(year=2020, month=3, day=4)
+    second_datetime = datetime.datetime(year=2020, month=3, day=5)
     responses.add(
         responses.GET,
         url="http://localhost:8954/all_parameters_types?query_integer=1&query_integer32=10&query_integer64=100&query_number=0.1&query_float=1.01&query_double=1.1&query_string=string&query_string_byte=string+bytes&query_string_binary=string+binary&query_boolean=True&query_date=2020-03-04&query_date_time=2020-03-04T00%3A00%3A00&query_password=password&query_array_integer=1&query_array_integer=2&query_array_integer32=10&query_array_integer32=20&query_array_integer64=100&query_array_integer64=200&query_array_number=0.1&query_array_number=0.2&query_array_float=1.01&query_array_float=2.01&query_array_double=1.1&query_array_double=2.1&query_array_string=string+1&query_array_string=string+2&query_array_string_byte=string+bytes+1&query_array_string_byte=string+bytes+2&query_array_string_binary=string+binary+1&query_array_string_binary=string+binary+2&query_array_boolean=True&query_array_boolean=False&query_array_date=2020-03-04&query_array_date=2020-03-05&query_array_date_time=2020-03-04T00%3A00%3A00&query_array_date_time=2020-03-05T00%3A00%3A00&query_array_password=password+1&query_array_password=password+2",
@@ -7081,8 +7079,8 @@ def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMoc
         query_string_byte="string bytes",
         query_string_binary="string binary",
         query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
+        query_date=first_date,
+        query_date_time=first_datetime,
         query_password="password",
         query_array_integer=[1, 2],
         query_array_integer32=[10, 20],
@@ -7094,8 +7092,8 @@ def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMoc
         query_array_string_byte=["string bytes 1", "string bytes 2"],
         query_array_string_binary=["string binary 1", "string binary 2"],
         query_array_boolean=[True, False],
-        query_array_date=[today_date, tomorrow_date],
-        query_array_date_time=[today_datetime, tomorrow_datetime],
+        query_array_date=[first_date, second_date],
+        query_array_date_time=[first_datetime, second_datetime],
         query_array_password=["password 1", "password 2"],
     ) == [[""]]
 
