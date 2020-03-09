@@ -1,9 +1,10 @@
 import os
+from importlib import import_module, reload
+
+import yaml
 
 import pyxelrest
 from responses import RequestsMock
-
-from tests import loader
 
 
 def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
@@ -38,12 +39,15 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
     pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(
         this_dir, "non_existing_configuration.yml"
     )
-    loader.load(
-        tmpdir,
-        {
-            "usual_parameters": {
-                "open_api": {"definition": "http://localhost:8943/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
+    config_file_path = os.path.join(tmpdir, "test_config.yml")
+    config = {
+        "usual_parameters": {
+            "open_api": {"definition": "http://localhost:8943/"},
+            "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+        }
+    }
+    with open(config_file_path, "wt") as file:
+        file.write(yaml.dump(config))
+
+    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    reload(import_module("pyxelrest.pyxelrestgenerator"))

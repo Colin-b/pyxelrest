@@ -220,7 +220,7 @@ def test_string_ssv_array_parameter(responses: RequestsMock, tmpdir):
     )
     responses.add(
         responses.GET,
-        url="http://test/test?string_array=str1 str2",
+        url="http://test/test?string_array=str1%20str2",
         json=[],
         match_querystring=True,
     )
