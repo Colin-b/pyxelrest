@@ -207,7 +207,7 @@ def nested_data_service(responses: RequestsMock):
 
 
 def test_get_dict_with_empty_nested_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -250,7 +250,7 @@ def test_get_dict_with_empty_nested_list(nested_data_service, responses, tmpdir)
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_empty_nested_list() == [
+    assert generated_functions.nested_data_get_dict_with_empty_nested_list() == [
         [
             "Column 1",
             "Column 2",
@@ -291,7 +291,7 @@ def test_get_dict_with_empty_nested_list(nested_data_service, responses, tmpdir)
 def test_get_dict_with_empty_nested_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -337,7 +337,7 @@ def test_get_dict_with_empty_nested_list_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_empty_nested_list() == [
+    assert generated_functions.nested_data_get_dict_with_empty_nested_list() == [
         [
             "Column 1",
             "Column 2 / Column 1",
@@ -367,7 +367,7 @@ def test_get_dict_with_empty_nested_list_based_on_definitions(
 
 
 def test_get_dict_with_three_imbricated_levels(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -421,7 +421,7 @@ def test_get_dict_with_three_imbricated_levels(nested_data_service, responses, t
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_three_imbricated_levels() == [
+    assert generated_functions.nested_data_get_dict_with_three_imbricated_levels() == [
         [
             "Column 1",
             "Column 2",
@@ -483,7 +483,7 @@ def test_get_dict_with_three_imbricated_levels(nested_data_service, responses, t
 def test_get_dict_with_three_imbricated_levels_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -540,7 +540,7 @@ def test_get_dict_with_three_imbricated_levels_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_three_imbricated_levels() == [
+    assert generated_functions.nested_data_get_dict_with_three_imbricated_levels() == [
         [
             "Column 1",
             "Column 2 / Column 1",
@@ -585,7 +585,7 @@ def test_get_dict_with_three_imbricated_levels_based_on_definitions(
 
 
 def test_get_dict_with_four_imbricated_levels(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -650,7 +650,7 @@ def test_get_dict_with_four_imbricated_levels(nested_data_service, responses, tm
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_four_imbricated_levels() == [
+    assert generated_functions.nested_data_get_dict_with_four_imbricated_levels() == [
         [
             "Column 1",
             "Column 2",
@@ -741,7 +741,7 @@ def test_get_dict_with_four_imbricated_levels(nested_data_service, responses, tm
 def test_get_dict_with_four_imbricated_levels_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -809,7 +809,7 @@ def test_get_dict_with_four_imbricated_levels_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_four_imbricated_levels() == [
+    assert generated_functions.nested_data_get_dict_with_four_imbricated_levels() == [
         [
             "Column 1",
             "Column 2 / Column 1",
@@ -876,7 +876,7 @@ def test_get_dict_with_four_imbricated_levels_based_on_definitions(
 def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -941,7 +941,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_multiple_imbricated_levels_and_duplicate_keys() == [
+    assert generated_functions.nested_data_get_dict_with_multiple_imbricated_levels_and_duplicate_keys() == [
         [
             "Column 1",
             "Column 2",
@@ -1032,7 +1032,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys(
 def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1100,7 +1100,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys_based_on_de
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_multiple_imbricated_levels_and_duplicate_keys() == [
+    assert generated_functions.nested_data_get_dict_with_multiple_imbricated_levels_and_duplicate_keys() == [
         [
             "Column 1",
             "Column 2 / Column 1",
@@ -1165,7 +1165,7 @@ def test_get_dict_with_multiple_imbricated_levels_and_duplicate_keys_based_on_de
 
 
 def test_get_empty_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1182,11 +1182,11 @@ def test_get_empty_dict(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_empty_dict() == [[""]]
+    assert generated_functions.nested_data_get_empty_dict() == [[""]]
 
 
 def test_get_empty_dict_based_on_definitions(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1206,11 +1206,11 @@ def test_get_empty_dict_based_on_definitions(nested_data_service, responses, tmp
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_empty_dict() == [""]
+    assert generated_functions.nested_data_get_empty_dict() == [""]
 
 
 def test_get_empty_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1227,11 +1227,11 @@ def test_get_empty_list(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_empty_list() == [[""]]
+    assert generated_functions.nested_data_get_empty_list() == [[""]]
 
 
 def test_get_empty_list_based_on_definitions(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1251,11 +1251,11 @@ def test_get_empty_list_based_on_definitions(nested_data_service, responses, tmp
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_empty_list() == [""]
+    assert generated_functions.nested_data_get_empty_list() == [""]
 
 
 def test_get_one_level_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1272,7 +1272,7 @@ def test_get_one_level_dict(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_level_dict() == [
+    assert generated_functions.nested_data_get_one_level_dict() == [
         ["Column 2", "Column 3"],
         ["value 1", "value 2"],
     ]
@@ -1281,7 +1281,7 @@ def test_get_one_level_dict(nested_data_service, responses, tmpdir):
 def test_get_one_level_dict_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1301,14 +1301,14 @@ def test_get_one_level_dict_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_level_dict() == [
+    assert generated_functions.nested_data_get_one_level_dict() == [
         ["Column 2", "Column 3"],
         ["value 1", "value 2"],
     ]
 
 
 def test_get_one_level_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1325,7 +1325,7 @@ def test_get_one_level_list(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_level_list() == [
+    assert generated_functions.nested_data_get_one_level_list() == [
         ["value 1"],
         ["value 2"],
     ]
@@ -1334,7 +1334,7 @@ def test_get_one_level_list(nested_data_service, responses, tmpdir):
 def test_get_one_level_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1354,14 +1354,14 @@ def test_get_one_level_list_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_level_list() == [
+    assert generated_functions.nested_data_get_one_level_list() == [
         ["value 1"],
         ["value 2"],
     ]
 
 
 def test_get_one_dict_entry_with_a_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1378,7 +1378,7 @@ def test_get_one_dict_entry_with_a_list(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_dict_entry_with_a_list() == [
+    assert generated_functions.nested_data_get_one_dict_entry_with_a_list() == [
         ["Column 1", "Column 1"],
         ["", "value 1"],
         ["", "value 2"],
@@ -1388,7 +1388,7 @@ def test_get_one_dict_entry_with_a_list(nested_data_service, responses, tmpdir):
 def test_get_one_dict_entry_with_a_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1408,7 +1408,7 @@ def test_get_one_dict_entry_with_a_list_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_dict_entry_with_a_list() == [
+    assert generated_functions.nested_data_get_one_dict_entry_with_a_list() == [
         ["Column 1"],
         ["value 1"],
         ["value 2"],
@@ -1416,7 +1416,7 @@ def test_get_one_dict_entry_with_a_list_based_on_definitions(
 
 
 def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1438,7 +1438,7 @@ def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses, 
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_dict_entry_with_a_list_of_dict() == [
+    assert generated_functions.nested_data_get_one_dict_entry_with_a_list_of_dict() == [
         ["Column 1", "Column 2", "Column 3"],
         ["", "value 12", "value 13"],
         ["", "value 22", "value 23"],
@@ -1448,7 +1448,7 @@ def test_get_one_dict_entry_with_a_list_of_dict(nested_data_service, responses, 
 def test_get_one_dict_entry_with_a_list_of_dict_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1473,7 +1473,7 @@ def test_get_one_dict_entry_with_a_list_of_dict_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_one_dict_entry_with_a_list_of_dict() == [
+    assert generated_functions.nested_data_get_one_dict_entry_with_a_list_of_dict() == [
         ["Column 1 / Column 2", "Column 1 / Column 3"],
         ["value 12", "value 13"],
         ["value 22", "value 23"],
@@ -1481,7 +1481,7 @@ def test_get_one_dict_entry_with_a_list_of_dict_based_on_definitions(
 
 
 def test_get_list_of_dict(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1501,7 +1501,7 @@ def test_get_list_of_dict(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_list_of_dict() == [
+    assert generated_functions.nested_data_get_list_of_dict() == [
         ["Column 2", "Column 3"],
         ["value 11", "value 12"],
         ["value 21", "value 22"],
@@ -1509,7 +1509,7 @@ def test_get_list_of_dict(nested_data_service, responses, tmpdir):
 
 
 def test_get_list_of_dict_based_on_definitions(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1532,7 +1532,7 @@ def test_get_list_of_dict_based_on_definitions(nested_data_service, responses, t
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_list_of_dict() == [
+    assert generated_functions.nested_data_get_list_of_dict() == [
         ["Column 2", "Column 3"],
         ["value 11", "value 12"],
         ["value 21", "value 22"],
@@ -1540,7 +1540,7 @@ def test_get_list_of_dict_based_on_definitions(nested_data_service, responses, t
 
 
 def test_get_dict_with_list(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1561,7 +1561,7 @@ def test_get_dict_with_list(nested_data_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_list() == [
+    assert generated_functions.nested_data_get_dict_with_list() == [
         ["Column 1", "Column 2", "Column 3", "Column 3"],
         [23, True, "this", ""],
         [23, True, "is", ""],
@@ -1573,7 +1573,7 @@ def test_get_dict_with_list(nested_data_service, responses, tmpdir):
 def test_get_dict_with_list_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1597,7 +1597,7 @@ def test_get_dict_with_list_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_list() == [
+    assert generated_functions.nested_data_get_dict_with_list() == [
         ["Column 1", "Column 2", "Column 3"],
         [23, True, "this"],
         [23, True, "is"],
@@ -1607,7 +1607,7 @@ def test_get_dict_with_list_based_on_definitions(
 
 
 def test_get_dict_with_list_of_different_size(nested_data_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1628,7 +1628,7 @@ def test_get_dict_with_list_of_different_size(nested_data_service, responses, tm
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_list_of_different_size() == [
+    assert generated_functions.nested_data_get_dict_with_list_of_different_size() == [
         ["Column 1", "Column 2", "Column 1", "Column 2", "Column 3", "Column 3"],
         ["", "", 23, 24, "value 1", ""],
         ["", "", "value 2", ""],
@@ -1639,7 +1639,7 @@ def test_get_dict_with_list_of_different_size(nested_data_service, responses, tm
 def test_get_dict_with_list_of_different_size_based_on_definitions(
     nested_data_service, responses, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "nested_data": {
@@ -1663,7 +1663,7 @@ def test_get_dict_with_list_of_different_size_based_on_definitions(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.nested_data_get_dict_with_list_of_different_size() == [
+    assert generated_functions.nested_data_get_dict_with_list_of_different_size() == [
         ["Column 1", "Column 2", "Column 3"],
         [23, 24, "value 1"],
         [23, 24, "value 2"],

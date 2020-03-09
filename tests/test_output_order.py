@@ -107,7 +107,7 @@ def output_order_service(responses: RequestsMock):
 def test_get_compare_output_order(
     responses: RequestsMock, output_order_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "output_order": {
@@ -132,7 +132,7 @@ def test_get_compare_output_order(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.output_order_get_price_unordered() == [
+    assert generated_functions.output_order_get_price_unordered() == [
         ["ts", "curve", "date", "mat"],
         ["", "PW_FR", datetime.datetime(2017, 4, 5, 0, 0), "H01"],
         ["2017-04-05 12:03:15", "PW_FR", datetime.datetime(2017, 4, 5, 0, 0), "H02"],
@@ -143,7 +143,7 @@ def test_get_compare_output_order(
 def test_get_compare_output_order_based_on_definition(
     responses: RequestsMock, output_order_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "output_order": {
@@ -171,7 +171,7 @@ def test_get_compare_output_order_based_on_definition(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.output_order_get_price_unordered() == [
+    assert generated_functions.output_order_get_price_unordered() == [
         ["ts", "date", "curve", "mat"],
         ["", datetime.datetime(2017, 4, 5, 0, 0), "PW_FR", "H01"],
         ["2017-04-05 12:03:15", datetime.datetime(2017, 4, 5, 0, 0), "PW_FR", "H02"],

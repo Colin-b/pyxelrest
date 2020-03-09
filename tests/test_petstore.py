@@ -705,7 +705,7 @@ def petstore_service(responses: RequestsMock):
 
 
 def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "petstore": {
@@ -732,7 +732,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
     )
 
     now = datetime.datetime.utcnow()
-    assert pyxelrestgenerator.petstore_placeOrder(
+    assert generated_functions.petstore_placeOrder(
         id=10, petId=222222, quantity=1, shipDate=now, status="placed", complete=False
     ) == [
         ["id", "petId", "quantity", "shipDate", "status", "complete"],
@@ -753,7 +753,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
         },
         match_querystring=True,
     )
-    assert pyxelrestgenerator.petstore_getOrderById(10) == [
+    assert generated_functions.petstore_getOrderById(10) == [
         ["id", "petId", "quantity", "shipDate", "status", "complete"],
         [10, 222222, 1, datetime.datetime(2020, 12, 2, 0, 0), "placed", False],
     ]
@@ -761,7 +761,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
 
 
 def test_get_user_by_name(responses: RequestsMock, petstore_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "petstore": {
@@ -779,7 +779,7 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service, tmpdir):
         json={},
         match_querystring=True,
     )
-    pyxelrestgenerator.petstore_createUser(
+    generated_functions.petstore_createUser(
         id=666666,
         username="JD",
         firstName="John",
@@ -806,7 +806,7 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service, tmpdir):
         },
         match_querystring=True,
     )
-    assert pyxelrestgenerator.petstore_getUserByName("JD") == [
+    assert generated_functions.petstore_getUserByName("JD") == [
         [
             "id",
             "username",

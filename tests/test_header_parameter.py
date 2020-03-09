@@ -68,7 +68,7 @@ def header_parameter_service(responses: RequestsMock):
 def test_get_header_parameter(
     responses: RequestsMock, header_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "header_parameter": {
@@ -87,7 +87,7 @@ def test_get_header_parameter(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.header_parameter_get_header("sent header") == [[""]]
+    assert generated_functions.header_parameter_get_header("sent header") == [[""]]
     assert (
         _get_request(responses, "http://localhost:8951/header").headers["header_string"]
         == "sent header"
@@ -97,7 +97,7 @@ def test_get_header_parameter(
 def test_get_header_parameter_sync(
     responses: RequestsMock, header_parameter_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "header_parameter": {
@@ -116,7 +116,7 @@ def test_get_header_parameter_sync(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_header_parameter_get_header("sent header") == [[""]]
+    assert generated_functions.vba_header_parameter_get_header("sent header") == [[""]]
     assert (
         _get_request(responses, "http://localhost:8951/header").headers["header_string"]
         == "sent header"
@@ -124,7 +124,7 @@ def test_get_header_parameter_sync(
 
 
 def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "header_advanced_configuration": {
@@ -140,10 +140,10 @@ def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service, tm
     )
 
     with pytest.raises(AttributeError) as exception_info:
-        pyxelrestgenerator.vba_header_advanced_configuration_get_header("sent header")
+        generated_functions.vba_header_advanced_configuration_get_header("sent header")
     assert (
         str(exception_info.value)
-        == "module 'pyxelrest.pyxelrestgenerator' has no attribute 'vba_header_advanced_configuration_get_header'"
+        == "module 'pyxelrest.generated_functions' has no attribute 'vba_header_advanced_configuration_get_header'"
     )
 
 
@@ -169,7 +169,7 @@ def test_get_header_advanced_configuration(
 
     pyxelrest.session.sessions.clear()
     monkeypatch.setattr(pyxelrest.session, "datetime", DateTimeModuleMock)
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "header_advanced_configuration": {
@@ -190,7 +190,7 @@ def test_get_header_advanced_configuration(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.header_advanced_configuration_get_header(
+    assert generated_functions.header_advanced_configuration_get_header(
         "sent header"
     ) == [[""]]
     headers = _get_request(responses, "http://localhost:8951/header").headers

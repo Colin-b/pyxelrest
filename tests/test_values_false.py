@@ -163,7 +163,7 @@ def values_false_service(responses: RequestsMock):
 def test_get_with_zero_integer(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/integer",
@@ -171,7 +171,7 @@ def test_get_with_zero_integer(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.values_false_get_with_zero_integer() == [
+    assert generated_functions.values_false_get_with_zero_integer() == [
         ["zero_integer"],
         [0],
     ]
@@ -200,7 +200,7 @@ def test_get_with_zero_integer(
 def test_get_with_zero_float(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/float",
@@ -208,7 +208,7 @@ def test_get_with_zero_float(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.values_false_get_with_zero_float() == [
+    assert generated_functions.values_false_get_with_zero_float() == [
         ["zero_float"],
         [0.0],
     ]
@@ -237,7 +237,7 @@ def test_get_with_zero_float(
 def test_get_with_false_boolean(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/false/boolean",
@@ -245,7 +245,7 @@ def test_get_with_false_boolean(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.values_false_get_with_false_boolean() == [
+    assert generated_functions.values_false_get_with_false_boolean() == [
         ["false_boolean"],
         [False],
     ]
@@ -274,7 +274,7 @@ def test_get_with_false_boolean(
 def test_get_with_empty_string(
     responses: RequestsMock, values_false_service, tmpdir, service_config
 ):
-    pyxelrestgenerator = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/string",
@@ -282,14 +282,14 @@ def test_get_with_empty_string(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.values_false_get_with_empty_string() == [
+    assert generated_functions.values_false_get_with_empty_string() == [
         ["empty_string"],
         [""],
     ]
 
 
 def test_get_with_empty_list(responses: RequestsMock, values_false_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "values_false": {
@@ -305,7 +305,7 @@ def test_get_with_empty_list(responses: RequestsMock, values_false_service, tmpd
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.values_false_get_with_empty_list() == [
+    assert generated_functions.values_false_get_with_empty_list() == [
         ["empty_list"],
         [""],
     ]
@@ -314,7 +314,7 @@ def test_get_with_empty_list(responses: RequestsMock, values_false_service, tmpd
 def test_get_with_empty_dictionary(
     responses: RequestsMock, values_false_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "values_false": {
@@ -330,7 +330,7 @@ def test_get_with_empty_dictionary(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.values_false_get_with_empty_dictionary() == [
+    assert generated_functions.values_false_get_with_empty_dictionary() == [
         ["empty_dictionary"],
         [""],
     ]

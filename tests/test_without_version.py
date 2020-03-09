@@ -19,7 +19,7 @@ def test_swagger_version_is_mandatory(responses: RequestsMock, tmpdir):
         },
         match_querystring=True,
     )
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "not_provided": {
@@ -31,4 +31,4 @@ def test_swagger_version_is_mandatory(responses: RequestsMock, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "not_provided_get_should_not_be_available")
+    assert not hasattr(generated_functions, "not_provided_get_should_not_be_available")

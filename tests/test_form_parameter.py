@@ -55,7 +55,7 @@ def form_parameter_service(responses: RequestsMock):
 
 
 def test_post_form_parameter(responses: RequestsMock, form_parameter_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "form_parameter": {
@@ -71,7 +71,7 @@ def test_post_form_parameter(responses: RequestsMock, form_parameter_service, tm
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.form_parameter_post_form("sent string form data") == [
+    assert generated_functions.form_parameter_post_form("sent string form data") == [
         [""]
     ]
     assert (

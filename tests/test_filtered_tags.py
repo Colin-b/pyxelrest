@@ -90,7 +90,7 @@ def filtered_tags_service(responses: RequestsMock):
 
 
 def test_get_with_selected_tags(responses: RequestsMock, filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_tags": {
@@ -107,13 +107,13 @@ def test_get_with_selected_tags(responses: RequestsMock, filtered_tags_service, 
     )
 
     # Second tag is one of the accepted tags
-    assert pyxelrestgenerator.selected_tags_get_tags() == [[""]]
+    assert generated_functions.selected_tags_get_tags() == [[""]]
 
 
 def test_post_with_selected_tags(
     responses: RequestsMock, filtered_tags_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_tags": {
@@ -133,11 +133,11 @@ def test_post_with_selected_tags(
     )
 
     # All tags are accepted
-    assert pyxelrestgenerator.selected_tags_post_tags() == [[""]]
+    assert generated_functions.selected_tags_post_tags() == [[""]]
 
 
 def test_put_with_selected_tags(responses: RequestsMock, filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_tags": {
@@ -154,11 +154,11 @@ def test_put_with_selected_tags(responses: RequestsMock, filtered_tags_service, 
     )
 
     # First tag is one of the accepted tags
-    assert pyxelrestgenerator.selected_tags_put_tags() == [[""]]
+    assert generated_functions.selected_tags_put_tags() == [[""]]
 
 
 def test_delete_with_selected_tags(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_tags": {
@@ -171,11 +171,11 @@ def test_delete_with_selected_tags(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "selected_tags_delete_tags")
+    assert not hasattr(generated_functions, "selected_tags_delete_tags")
 
 
 def test_get_with_excluded_tags(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_tags": {
@@ -188,11 +188,11 @@ def test_get_with_excluded_tags(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "excluded_tags_get_tags")
+    assert not hasattr(generated_functions, "excluded_tags_get_tags")
 
 
 def test_post_with_excluded_tags(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_tags": {
@@ -205,11 +205,11 @@ def test_post_with_excluded_tags(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "excluded_tags_post_tags")
+    assert not hasattr(generated_functions, "excluded_tags_post_tags")
 
 
 def test_put_with_excluded_tags(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_tags": {
@@ -222,13 +222,13 @@ def test_put_with_excluded_tags(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "excluded_tags_put_tags")
+    assert not hasattr(generated_functions, "excluded_tags_put_tags")
 
 
 def test_delete_with_excluded_tags(
     responses: RequestsMock, filtered_tags_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_tags": {
@@ -247,13 +247,13 @@ def test_delete_with_excluded_tags(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.excluded_tags_delete_tags() == [[""]]
+    assert generated_functions.excluded_tags_delete_tags() == [[""]]
 
 
 def test_get_with_selected_operation_ids(
     responses: RequestsMock, filtered_tags_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_operation_ids": {
@@ -269,13 +269,13 @@ def test_get_with_selected_operation_ids(
         responses.GET, url="http://localhost:8944/tags", json={}, match_querystring=True
     )
 
-    assert pyxelrestgenerator.selected_operation_ids_get_tags() == [[""]]
+    assert generated_functions.selected_operation_ids_get_tags() == [[""]]
 
 
 def test_post_with_selected_operation_ids(
     responses: RequestsMock, filtered_tags_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_operation_ids": {
@@ -294,13 +294,13 @@ def test_post_with_selected_operation_ids(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.selected_operation_ids_post_tags() == [[""]]
+    assert generated_functions.selected_operation_ids_post_tags() == [[""]]
 
 
 def test_put_with_selected_operation_ids(
     responses: RequestsMock, filtered_tags_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_operation_ids": {
@@ -316,11 +316,11 @@ def test_put_with_selected_operation_ids(
         responses.PUT, url="http://localhost:8944/tags", json={}, match_querystring=True
     )
 
-    assert pyxelrestgenerator.selected_operation_ids_put_tags() == [[""]]
+    assert generated_functions.selected_operation_ids_put_tags() == [[""]]
 
 
 def test_delete_with_selected_operation_ids(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "selected_operation_ids": {
@@ -333,11 +333,11 @@ def test_delete_with_selected_operation_ids(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "selected_operation_ids_delete_tags")
+    assert not hasattr(generated_functions, "selected_operation_ids_delete_tags")
 
 
 def test_get_with_excluded_operation_ids(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_operation_ids": {
@@ -350,11 +350,11 @@ def test_get_with_excluded_operation_ids(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_get_tags")
+    assert not hasattr(generated_functions, "excluded_operation_ids_get_tags")
 
 
 def test_post_with_excluded_operation_ids(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_operation_ids": {
@@ -367,11 +367,11 @@ def test_post_with_excluded_operation_ids(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_post_tags")
+    assert not hasattr(generated_functions, "excluded_operation_ids_post_tags")
 
 
 def test_put_with_excluded_operation_ids(filtered_tags_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_operation_ids": {
@@ -384,13 +384,13 @@ def test_put_with_excluded_operation_ids(filtered_tags_service, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "excluded_operation_ids_put_tags")
+    assert not hasattr(generated_functions, "excluded_operation_ids_put_tags")
 
 
 def test_delete_with_excluded_operation_ids(
     responses: RequestsMock, filtered_tags_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "excluded_operation_ids": {
@@ -409,4 +409,4 @@ def test_delete_with_excluded_operation_ids(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.excluded_operation_ids_delete_tags() == [[""]]
+    assert generated_functions.excluded_operation_ids_delete_tags() == [[""]]

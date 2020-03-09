@@ -1366,7 +1366,7 @@ def vba_keywords_service(responses: RequestsMock):
 def test_get_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1382,7 +1382,7 @@ def test_get_vba_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_get_vba_restricted_keywords(
+    assert generated_functions.vba_keywords_get_vba_restricted_keywords(
         addhandler_visual_basic="addhandler value",
         addressof_visual_basic="addressof value",
         alias_visual_basic="alias value",
@@ -1542,7 +1542,7 @@ def test_get_vba_restricted_keywords(
 def test_post_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1558,7 +1558,7 @@ def test_post_vba_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_post_vba_restricted_keywords(
+    assert generated_functions.vba_keywords_post_vba_restricted_keywords(
         addhandler_visual_basic="addhandler value",
         addressof_visual_basic="addressof value",
         alias_visual_basic="alias value",
@@ -1718,7 +1718,7 @@ def test_post_vba_restricted_keywords(
 def test_put_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1734,7 +1734,7 @@ def test_put_vba_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_put_vba_restricted_keywords(
+    assert generated_functions.vba_keywords_put_vba_restricted_keywords(
         addhandler_visual_basic="addhandler value",
         addressof_visual_basic="addressof value",
         alias_visual_basic="alias value",
@@ -1894,7 +1894,7 @@ def test_put_vba_restricted_keywords(
 def test_delete_vba_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -1910,7 +1910,7 @@ def test_delete_vba_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_delete_vba_restricted_keywords(
+    assert generated_functions.vba_keywords_delete_vba_restricted_keywords(
         addhandler_visual_basic="addhandler value",
         addressof_visual_basic="addressof value",
         alias_visual_basic="alias value",
@@ -2070,7 +2070,7 @@ def test_delete_vba_restricted_keywords(
 def test_attribute_vba_restricted_keyword_in_uri_parameter(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2086,7 +2086,7 @@ def test_attribute_vba_restricted_keyword_in_uri_parameter(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_get_attribute_vba_restricted_keyword_in_uri_parameter(
+    assert generated_functions.vba_keywords_get_attribute_vba_restricted_keyword_in_uri_parameter(
         attribute_visual_basic="my_attribute_value"
     ) == [
         [""]
@@ -2096,7 +2096,7 @@ def test_attribute_vba_restricted_keyword_in_uri_parameter(
 def test_get_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2112,7 +2112,7 @@ def test_get_python_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_get_python_restricted_keywords(
+    assert generated_functions.vba_keywords_get_python_restricted_keywords(
         with_a_dot="with.a.dot value"
     ) == [[""]]
 
@@ -2120,7 +2120,7 @@ def test_get_python_restricted_keywords(
 def test_post_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2136,7 +2136,7 @@ def test_post_python_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_post_python_restricted_keywords(
+    assert generated_functions.vba_keywords_post_python_restricted_keywords(
         with_a_dot="with.a.dot value"
     ) == [[""]]
 
@@ -2144,7 +2144,7 @@ def test_post_python_restricted_keywords(
 def test_put_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2160,7 +2160,7 @@ def test_put_python_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_put_python_restricted_keywords(
+    assert generated_functions.vba_keywords_put_python_restricted_keywords(
         with_a_dot="with.a.dot value"
     ) == [[""]]
 
@@ -2168,7 +2168,7 @@ def test_put_python_restricted_keywords(
 def test_delete_python_restricted_keywords(
     responses: RequestsMock, vba_keywords_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "vba_keywords": {
@@ -2184,6 +2184,6 @@ def test_delete_python_restricted_keywords(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_keywords_delete_python_restricted_keywords(
+    assert generated_functions.vba_keywords_delete_python_restricted_keywords(
         with_a_dot="with.a.dot value"
     ) == [[""]]

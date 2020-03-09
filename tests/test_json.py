@@ -3079,7 +3079,7 @@ def json_service(responses: RequestsMock, tmpdir):
 
 
 def test_mandatory_integer_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3089,7 +3089,7 @@ def test_mandatory_integer_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=None,
         query_integer32=None,
         query_integer64=None,
@@ -3120,7 +3120,7 @@ def test_mandatory_integer_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_integer_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3130,7 +3130,7 @@ def test_mandatory_integer_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer="str value",
         query_integer32=None,
         query_integer64=None,
@@ -3161,7 +3161,7 @@ def test_mandatory_integer_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_integer_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3171,13 +3171,13 @@ def test_optional_integer_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_integer="str value"
     ) == ["query_integer value \"str value\" (<class 'str'> type) must be an integer."]
 
 
 def test_mandatory_array_integer_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3189,7 +3189,7 @@ def test_mandatory_array_integer_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3222,7 +3222,7 @@ def test_mandatory_array_integer_parameter_not_provided(json_service, tmpdir):
 def test_mandatory_array_integer_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3234,7 +3234,7 @@ def test_mandatory_array_integer_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3267,7 +3267,7 @@ def test_mandatory_array_integer_parameter_provided_as_empty_array(
 def test_mandatory_array_integer_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3279,7 +3279,7 @@ def test_mandatory_array_integer_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3310,7 +3310,7 @@ def test_mandatory_array_integer_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_integer_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3322,7 +3322,7 @@ def test_mandatory_array_integer_parameter_with_wrong_type(json_service, tmpdir)
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3357,7 +3357,7 @@ def test_mandatory_array_integer_parameter_with_wrong_type(json_service, tmpdir)
 def test_mandatory_array_integer_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3369,7 +3369,7 @@ def test_mandatory_array_integer_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3402,7 +3402,7 @@ def test_mandatory_array_integer_parameter_with_wrong_type_in_array(
 
 
 def test_optional_array_integer_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3412,7 +3412,7 @@ def test_optional_array_integer_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_integer="str value"
     ) == [
         "query_array_integer value \"str value\" (<class 'str'> type) must be an integer."
@@ -3422,7 +3422,7 @@ def test_optional_array_integer_parameter_with_wrong_type(json_service, tmpdir):
 def test_optional_array_integer_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3432,7 +3432,7 @@ def test_optional_array_integer_parameter_with_wrong_type_in_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_integer=["str value"]
     ) == [
         "query_array_integer value \"str value\" (<class 'str'> type) must be an integer."
@@ -3440,7 +3440,7 @@ def test_optional_array_integer_parameter_with_wrong_type_in_array(
 
 
 def test_mandatory_integer32_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3450,7 +3450,7 @@ def test_mandatory_integer32_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=None,
         query_integer64=None,
@@ -3481,7 +3481,7 @@ def test_mandatory_integer32_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_integer32_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3491,7 +3491,7 @@ def test_mandatory_integer32_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32="str value",
         query_integer64=None,
@@ -3524,7 +3524,7 @@ def test_mandatory_integer32_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_integer32_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3534,7 +3534,7 @@ def test_optional_integer32_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_integer32="str value"
     ) == [
         "query_integer32 value \"str value\" (<class 'str'> type) must be an integer."
@@ -3542,7 +3542,7 @@ def test_optional_integer32_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_mandatory_array_integer32_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3554,7 +3554,7 @@ def test_mandatory_array_integer32_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3587,7 +3587,7 @@ def test_mandatory_array_integer32_parameter_not_provided(json_service, tmpdir):
 def test_mandatory_array_integer32_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3599,7 +3599,7 @@ def test_mandatory_array_integer32_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3632,7 +3632,7 @@ def test_mandatory_array_integer32_parameter_provided_as_empty_array(
 def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3644,7 +3644,7 @@ def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3675,7 +3675,7 @@ def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_integer32_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3687,7 +3687,7 @@ def test_mandatory_array_integer32_parameter_with_wrong_type(json_service, tmpdi
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3722,7 +3722,7 @@ def test_mandatory_array_integer32_parameter_with_wrong_type(json_service, tmpdi
 def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3734,7 +3734,7 @@ def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3767,7 +3767,7 @@ def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(
 
 
 def test_optional_array_integer32_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3777,7 +3777,7 @@ def test_optional_array_integer32_parameter_with_wrong_type(json_service, tmpdir
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_integer32="str value"
     ) == [
         "query_array_integer32 value \"str value\" (<class 'str'> type) must be an integer."
@@ -3787,7 +3787,7 @@ def test_optional_array_integer32_parameter_with_wrong_type(json_service, tmpdir
 def test_optional_array_integer32_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3797,7 +3797,7 @@ def test_optional_array_integer32_parameter_with_wrong_type_in_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_integer32=["str value"]
     ) == [
         "query_array_integer32 value \"str value\" (<class 'str'> type) must be an integer."
@@ -3805,7 +3805,7 @@ def test_optional_array_integer32_parameter_with_wrong_type_in_array(
 
 
 def test_mandatory_integer64_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3815,7 +3815,7 @@ def test_mandatory_integer64_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=None,
@@ -3846,7 +3846,7 @@ def test_mandatory_integer64_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_integer64_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3856,7 +3856,7 @@ def test_mandatory_integer64_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64="str value",
@@ -3889,7 +3889,7 @@ def test_mandatory_integer64_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_integer64_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3899,7 +3899,7 @@ def test_optional_integer64_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_integer64="str value"
     ) == [
         "query_integer64 value \"str value\" (<class 'str'> type) must be an integer."
@@ -3907,7 +3907,7 @@ def test_optional_integer64_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_mandatory_array_integer64_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3919,7 +3919,7 @@ def test_mandatory_array_integer64_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3952,7 +3952,7 @@ def test_mandatory_array_integer64_parameter_not_provided(json_service, tmpdir):
 def test_mandatory_array_integer64_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -3964,7 +3964,7 @@ def test_mandatory_array_integer64_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -3997,7 +3997,7 @@ def test_mandatory_array_integer64_parameter_provided_as_empty_array(
 def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4009,7 +4009,7 @@ def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4040,7 +4040,7 @@ def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_integer64_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4052,7 +4052,7 @@ def test_mandatory_array_integer64_parameter_with_wrong_type(json_service, tmpdi
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4087,7 +4087,7 @@ def test_mandatory_array_integer64_parameter_with_wrong_type(json_service, tmpdi
 def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4099,7 +4099,7 @@ def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4132,7 +4132,7 @@ def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(
 
 
 def test_optional_array_integer64_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4142,7 +4142,7 @@ def test_optional_array_integer64_parameter_with_wrong_type(json_service, tmpdir
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_integer64="str value"
     ) == [
         "query_array_integer64 value \"str value\" (<class 'str'> type) must be an integer."
@@ -4152,7 +4152,7 @@ def test_optional_array_integer64_parameter_with_wrong_type(json_service, tmpdir
 def test_optional_array_integer64_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4162,7 +4162,7 @@ def test_optional_array_integer64_parameter_with_wrong_type_in_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_integer64=["str value"]
     ) == [
         "query_array_integer64 value \"str value\" (<class 'str'> type) must be an integer."
@@ -4170,7 +4170,7 @@ def test_optional_array_integer64_parameter_with_wrong_type_in_array(
 
 
 def test_mandatory_number_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4180,7 +4180,7 @@ def test_mandatory_number_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4211,7 +4211,7 @@ def test_mandatory_number_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_number_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4221,7 +4221,7 @@ def test_mandatory_number_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4252,7 +4252,7 @@ def test_mandatory_number_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_number_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4262,13 +4262,13 @@ def test_optional_number_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_number="str value"
     ) == ["query_number value \"str value\" (<class 'str'> type) must be a number."]
 
 
 def test_mandatory_array_number_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4280,7 +4280,7 @@ def test_mandatory_array_number_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4311,7 +4311,7 @@ def test_mandatory_array_number_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_array_number_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4323,7 +4323,7 @@ def test_mandatory_array_number_parameter_provided_as_empty_array(json_service, 
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4356,7 +4356,7 @@ def test_mandatory_array_number_parameter_provided_as_empty_array(json_service, 
 def test_mandatory_array_number_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4368,7 +4368,7 @@ def test_mandatory_array_number_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4399,7 +4399,7 @@ def test_mandatory_array_number_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_number_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4411,7 +4411,7 @@ def test_mandatory_array_number_parameter_with_wrong_type(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4446,7 +4446,7 @@ def test_mandatory_array_number_parameter_with_wrong_type(json_service, tmpdir):
 def test_mandatory_array_number_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4458,7 +4458,7 @@ def test_mandatory_array_number_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4491,7 +4491,7 @@ def test_mandatory_array_number_parameter_with_wrong_type_in_array(
 
 
 def test_optional_array_number_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4501,7 +4501,7 @@ def test_optional_array_number_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_number="str value"
     ) == [
         "query_array_number value \"str value\" (<class 'str'> type) must be a number."
@@ -4509,7 +4509,7 @@ def test_optional_array_number_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_array_number_parameter_with_wrong_type_in_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4519,7 +4519,7 @@ def test_optional_array_number_parameter_with_wrong_type_in_array(json_service, 
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_number=["str value"]
     ) == [
         "query_array_number value \"str value\" (<class 'str'> type) must be a number."
@@ -4527,7 +4527,7 @@ def test_optional_array_number_parameter_with_wrong_type_in_array(json_service, 
 
 
 def test_mandatory_float_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4537,7 +4537,7 @@ def test_mandatory_float_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4568,7 +4568,7 @@ def test_mandatory_float_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_float_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4578,7 +4578,7 @@ def test_mandatory_float_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4609,7 +4609,7 @@ def test_mandatory_float_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_float_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4619,13 +4619,13 @@ def test_optional_float_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_float="str value"
     ) == ["query_float value \"str value\" (<class 'str'> type) must be a number."]
 
 
 def test_mandatory_array_float_number_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4637,7 +4637,7 @@ def test_mandatory_array_float_number_parameter_not_provided(json_service, tmpdi
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4668,7 +4668,7 @@ def test_mandatory_array_float_number_parameter_not_provided(json_service, tmpdi
 
 
 def test_mandatory_array_float_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4680,7 +4680,7 @@ def test_mandatory_array_float_parameter_provided_as_empty_array(json_service, t
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4713,7 +4713,7 @@ def test_mandatory_array_float_parameter_provided_as_empty_array(json_service, t
 def test_mandatory_array_float_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4725,7 +4725,7 @@ def test_mandatory_array_float_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4756,7 +4756,7 @@ def test_mandatory_array_float_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_float_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4768,7 +4768,7 @@ def test_mandatory_array_float_parameter_with_wrong_type(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4801,7 +4801,7 @@ def test_mandatory_array_float_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_mandatory_array_float_parameter_with_wrong_type_in_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4813,7 +4813,7 @@ def test_mandatory_array_float_parameter_with_wrong_type_in_array(json_service, 
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4846,7 +4846,7 @@ def test_mandatory_array_float_parameter_with_wrong_type_in_array(json_service, 
 
 
 def test_optional_array_float_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4856,7 +4856,7 @@ def test_optional_array_float_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_float="str value"
     ) == [
         "query_array_float value \"str value\" (<class 'str'> type) must be a number."
@@ -4864,7 +4864,7 @@ def test_optional_array_float_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_array_float_parameter_with_wrong_type_in_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4874,7 +4874,7 @@ def test_optional_array_float_parameter_with_wrong_type_in_array(json_service, t
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_float=["str value"]
     ) == [
         "query_array_float value \"str value\" (<class 'str'> type) must be a number."
@@ -4882,7 +4882,7 @@ def test_optional_array_float_parameter_with_wrong_type_in_array(json_service, t
 
 
 def test_mandatory_double_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4892,7 +4892,7 @@ def test_mandatory_double_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4923,7 +4923,7 @@ def test_mandatory_double_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_double_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4933,7 +4933,7 @@ def test_mandatory_double_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -4964,7 +4964,7 @@ def test_mandatory_double_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_double_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4974,13 +4974,13 @@ def test_optional_double_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_double="str value"
     ) == ["query_double value \"str value\" (<class 'str'> type) must be a number."]
 
 
 def test_mandatory_array_double_number_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -4992,7 +4992,7 @@ def test_mandatory_array_double_number_parameter_not_provided(json_service, tmpd
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5023,7 +5023,7 @@ def test_mandatory_array_double_number_parameter_not_provided(json_service, tmpd
 
 
 def test_mandatory_array_double_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5035,7 +5035,7 @@ def test_mandatory_array_double_parameter_provided_as_empty_array(json_service, 
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5068,7 +5068,7 @@ def test_mandatory_array_double_parameter_provided_as_empty_array(json_service, 
 def test_mandatory_array_double_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5080,7 +5080,7 @@ def test_mandatory_array_double_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5111,7 +5111,7 @@ def test_mandatory_array_double_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_double_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5123,7 +5123,7 @@ def test_mandatory_array_double_parameter_with_wrong_type(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5158,7 +5158,7 @@ def test_mandatory_array_double_parameter_with_wrong_type(json_service, tmpdir):
 def test_mandatory_array_double_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5170,7 +5170,7 @@ def test_mandatory_array_double_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5203,7 +5203,7 @@ def test_mandatory_array_double_parameter_with_wrong_type_in_array(
 
 
 def test_optional_array_double_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5213,7 +5213,7 @@ def test_optional_array_double_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_double="str value"
     ) == [
         "query_array_double value \"str value\" (<class 'str'> type) must be a number."
@@ -5221,7 +5221,7 @@ def test_optional_array_double_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_array_double_parameter_with_wrong_type_in_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5231,7 +5231,7 @@ def test_optional_array_double_parameter_with_wrong_type_in_array(json_service, 
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_double=["str value"]
     ) == [
         "query_array_double value \"str value\" (<class 'str'> type) must be a number."
@@ -5239,7 +5239,7 @@ def test_optional_array_double_parameter_with_wrong_type_in_array(json_service, 
 
 
 def test_mandatory_string_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5249,7 +5249,7 @@ def test_mandatory_string_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5280,7 +5280,7 @@ def test_mandatory_string_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_string_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5290,7 +5290,7 @@ def test_mandatory_string_parameter_provided_as_empty_array(json_service, tmpdir
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5321,7 +5321,7 @@ def test_mandatory_string_parameter_provided_as_empty_array(json_service, tmpdir
 
 
 def test_mandatory_string_parameter_provided_as_none_filled_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5331,7 +5331,7 @@ def test_mandatory_string_parameter_provided_as_none_filled_array(json_service, 
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5362,7 +5362,7 @@ def test_mandatory_string_parameter_provided_as_none_filled_array(json_service, 
 
 
 def test_mandatory_array_string_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5374,7 +5374,7 @@ def test_mandatory_array_string_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5405,7 +5405,7 @@ def test_mandatory_array_string_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_array_string_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5417,7 +5417,7 @@ def test_mandatory_array_string_parameter_provided_as_empty_array(json_service, 
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5450,7 +5450,7 @@ def test_mandatory_array_string_parameter_provided_as_empty_array(json_service, 
 def test_mandatory_array_string_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5462,7 +5462,7 @@ def test_mandatory_array_string_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5493,7 +5493,7 @@ def test_mandatory_array_string_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_string_byte_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5503,7 +5503,7 @@ def test_mandatory_string_byte_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5534,7 +5534,7 @@ def test_mandatory_string_byte_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5544,7 +5544,7 @@ def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service, t
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5577,7 +5577,7 @@ def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service, t
 def test_mandatory_string_byte_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5587,7 +5587,7 @@ def test_mandatory_string_byte_parameter_provided_as_none_filled_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5618,7 +5618,7 @@ def test_mandatory_string_byte_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_string_byte_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5630,7 +5630,7 @@ def test_mandatory_array_string_byte_parameter_not_provided(json_service, tmpdir
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5663,7 +5663,7 @@ def test_mandatory_array_string_byte_parameter_not_provided(json_service, tmpdir
 def test_mandatory_array_string_byte_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5675,7 +5675,7 @@ def test_mandatory_array_string_byte_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5708,7 +5708,7 @@ def test_mandatory_array_string_byte_parameter_provided_as_empty_array(
 def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5720,7 +5720,7 @@ def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5751,7 +5751,7 @@ def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_string_binary_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5761,7 +5761,7 @@ def test_mandatory_string_binary_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5794,7 +5794,7 @@ def test_mandatory_string_binary_parameter_not_provided(json_service, tmpdir):
 def test_mandatory_string_binary_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5804,7 +5804,7 @@ def test_mandatory_string_binary_parameter_provided_as_empty_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5837,7 +5837,7 @@ def test_mandatory_string_binary_parameter_provided_as_empty_array(
 def test_mandatory_string_binary_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5847,7 +5847,7 @@ def test_mandatory_string_binary_parameter_provided_as_none_filled_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5878,7 +5878,7 @@ def test_mandatory_string_binary_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_string_binary_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5890,7 +5890,7 @@ def test_mandatory_array_string_binary_parameter_not_provided(json_service, tmpd
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5923,7 +5923,7 @@ def test_mandatory_array_string_binary_parameter_not_provided(json_service, tmpd
 def test_mandatory_array_string_binary_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5935,7 +5935,7 @@ def test_mandatory_array_string_binary_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -5968,7 +5968,7 @@ def test_mandatory_array_string_binary_parameter_provided_as_empty_array(
 def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -5980,7 +5980,7 @@ def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6011,7 +6011,7 @@ def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_boolean_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6021,7 +6021,7 @@ def test_mandatory_boolean_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6052,7 +6052,7 @@ def test_mandatory_boolean_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_boolean_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6062,7 +6062,7 @@ def test_mandatory_boolean_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6093,7 +6093,7 @@ def test_mandatory_boolean_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_boolean_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6103,13 +6103,13 @@ def test_optional_boolean_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_boolean="non boolean"
     ) == ["query_boolean value \"non boolean\" (<class 'str'> type) must be a boolean."]
 
 
 def test_mandatory_array_boolean_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6121,7 +6121,7 @@ def test_mandatory_array_boolean_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6154,7 +6154,7 @@ def test_mandatory_array_boolean_parameter_not_provided(json_service, tmpdir):
 def test_mandatory_array_boolean_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6166,7 +6166,7 @@ def test_mandatory_array_boolean_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6199,7 +6199,7 @@ def test_mandatory_array_boolean_parameter_provided_as_empty_array(
 def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6211,7 +6211,7 @@ def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6242,7 +6242,7 @@ def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_boolean_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6254,7 +6254,7 @@ def test_mandatory_array_boolean_parameter_with_wrong_type(json_service, tmpdir)
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6289,7 +6289,7 @@ def test_mandatory_array_boolean_parameter_with_wrong_type(json_service, tmpdir)
 def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6301,7 +6301,7 @@ def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6334,7 +6334,7 @@ def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(
 
 
 def test_optional_array_boolean_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6344,7 +6344,7 @@ def test_optional_array_boolean_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_boolean="non boolean"
     ) == [
         "query_array_boolean value \"non boolean\" (<class 'str'> type) must be a boolean."
@@ -6354,7 +6354,7 @@ def test_optional_array_boolean_parameter_with_wrong_type(json_service, tmpdir):
 def test_optional_array_boolean_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6364,7 +6364,7 @@ def test_optional_array_boolean_parameter_with_wrong_type_in_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_boolean=["non boolean"]
     ) == [
         "query_array_boolean value \"non boolean\" (<class 'str'> type) must be a boolean."
@@ -6372,7 +6372,7 @@ def test_optional_array_boolean_parameter_with_wrong_type_in_array(
 
 
 def test_mandatory_date_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6382,7 +6382,7 @@ def test_mandatory_date_parameter_not_provided(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6413,7 +6413,7 @@ def test_mandatory_date_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_date_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6423,7 +6423,7 @@ def test_mandatory_date_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6454,7 +6454,7 @@ def test_mandatory_date_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_date_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6464,13 +6464,13 @@ def test_optional_date_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_date="str value"
     ) == ["query_date value \"str value\" (<class 'str'> type) must be a date."]
 
 
 def test_mandatory_array_date_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6482,7 +6482,7 @@ def test_mandatory_array_date_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6513,7 +6513,7 @@ def test_mandatory_array_date_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_array_date_parameter_provided_as_empty_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6525,7 +6525,7 @@ def test_mandatory_array_date_parameter_provided_as_empty_array(json_service, tm
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6558,7 +6558,7 @@ def test_mandatory_array_date_parameter_provided_as_empty_array(json_service, tm
 def test_mandatory_array_date_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6570,7 +6570,7 @@ def test_mandatory_array_date_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6601,7 +6601,7 @@ def test_mandatory_array_date_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_date_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6613,7 +6613,7 @@ def test_mandatory_array_date_parameter_with_wrong_type(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6644,7 +6644,7 @@ def test_mandatory_array_date_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6656,7 +6656,7 @@ def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service, t
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6687,7 +6687,7 @@ def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service, t
 
 
 def test_optional_array_date_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6697,13 +6697,13 @@ def test_optional_array_date_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_date="str value"
     ) == ["query_array_date value \"str value\" (<class 'str'> type) must be a date."]
 
 
 def test_optional_array_date_parameter_with_wrong_type_in_array(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6713,13 +6713,13 @@ def test_optional_array_date_parameter_with_wrong_type_in_array(json_service, tm
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_date=["str value"]
     ) == ["query_array_date value \"str value\" (<class 'str'> type) must be a date."]
 
 
 def test_mandatory_date_time_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6730,7 +6730,7 @@ def test_mandatory_date_time_parameter_not_provided(json_service, tmpdir):
     )
 
     today_date = datetime.date.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6761,7 +6761,7 @@ def test_mandatory_date_time_parameter_not_provided(json_service, tmpdir):
 
 
 def test_mandatory_date_time_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6772,7 +6772,7 @@ def test_mandatory_date_time_parameter_with_wrong_type(json_service, tmpdir):
     )
 
     today_date = datetime.date.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6805,7 +6805,7 @@ def test_mandatory_date_time_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_optional_date_time_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6815,7 +6815,7 @@ def test_optional_date_time_parameter_with_wrong_type(json_service, tmpdir):
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_date_time="str value"
     ) == [
         "query_date_time value \"str value\" (<class 'str'> type) must be a date time."
@@ -6823,7 +6823,7 @@ def test_optional_date_time_parameter_with_wrong_type(json_service, tmpdir):
 
 
 def test_mandatory_array_date_time_parameter_not_provided(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6835,7 +6835,7 @@ def test_mandatory_array_date_time_parameter_not_provided(json_service, tmpdir):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6868,7 +6868,7 @@ def test_mandatory_array_date_time_parameter_not_provided(json_service, tmpdir):
 def test_mandatory_array_date_time_parameter_provided_as_empty_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6880,7 +6880,7 @@ def test_mandatory_array_date_time_parameter_provided_as_empty_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6913,7 +6913,7 @@ def test_mandatory_array_date_time_parameter_provided_as_empty_array(
 def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6925,7 +6925,7 @@ def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -6956,7 +6956,7 @@ def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
 
 
 def test_mandatory_array_date_time_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -6968,7 +6968,7 @@ def test_mandatory_array_date_time_parameter_with_wrong_type(json_service, tmpdi
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -7003,7 +7003,7 @@ def test_mandatory_array_date_time_parameter_with_wrong_type(json_service, tmpdi
 def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7015,7 +7015,7 @@ def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=0,
         query_integer32=0,
         query_integer64=0,
@@ -7048,7 +7048,7 @@ def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(
 
 
 def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7070,7 +7070,7 @@ def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMoc
         json=[],
         match_querystring=True,
     )
-    assert pyxelrestgenerator.json_get_all_parameters_types(
+    assert generated_functions.json_get_all_parameters_types(
         query_integer=1,
         query_integer32=10,
         query_integer64=100,
@@ -7101,7 +7101,7 @@ def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMoc
 
 
 def test_optional_array_date_time_parameter_with_wrong_type(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7111,7 +7111,7 @@ def test_optional_array_date_time_parameter_with_wrong_type(json_service, tmpdir
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_date_time="str value"
     ) == [
         "query_array_date_time value \"str value\" (<class 'str'> type) must be a date time."
@@ -7121,7 +7121,7 @@ def test_optional_array_date_time_parameter_with_wrong_type(json_service, tmpdir
 def test_optional_array_date_time_parameter_with_wrong_type_in_array(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7131,7 +7131,7 @@ def test_optional_array_date_time_parameter_with_wrong_type_in_array(
         },
     )
 
-    assert pyxelrestgenerator.json_get_all_optional_parameters_types(
+    assert generated_functions.json_get_all_optional_parameters_types(
         query_array_date_time=["str value"]
     ) == [
         "query_array_date_time value \"str value\" (<class 'str'> type) must be a date time."
@@ -7139,7 +7139,7 @@ def test_optional_array_date_time_parameter_with_wrong_type_in_array(
 
 
 def test_list_of_list_form_post(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7155,7 +7155,7 @@ def test_list_of_list_form_post(json_service, tmpdir, responses: RequestsMock):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_list_form(
+    assert generated_functions.json_post_list_of_list_form(
         rules=[
             ["1", "EBE", "SNCF", "rule_1", "output_1"],
             ["1", "EFR,EDE", "ENGIE", "rule_2", "output_2"],
@@ -7174,7 +7174,7 @@ def test_list_of_list_form_post(json_service, tmpdir, responses: RequestsMock):
 
 
 def test_list_of_list_form_post_with_non_str_date_failure(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7185,7 +7185,7 @@ def test_list_of_list_form_post_with_non_str_date_failure(json_service, tmpdir):
     )
 
     assert (
-        pyxelrestgenerator.json_post_list_of_list_form(
+        generated_functions.json_post_list_of_list_form(
             rules=[
                 ["1", "EBE", "SNCF", "rule_1", "output_1"],
                 ["1", "EFR,EDE", "ENGIE", "rule_2", "output_2"],
@@ -7204,7 +7204,7 @@ def test_list_of_list_form_post_with_non_str_date_failure(json_service, tmpdir):
 def test_list_of_list_form_post_with_non_str(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7220,7 +7220,7 @@ def test_list_of_list_form_post_with_non_str(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_list_form(
+    assert generated_functions.json_post_list_of_list_form(
         items=[[1.0, 1.2, "SNCF"]]
     ) == [[""]]
     assert (
@@ -7232,7 +7232,7 @@ def test_list_of_list_form_post_with_non_str(
 def test_list_of_list_form_post_with_single_list(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7248,7 +7248,7 @@ def test_list_of_list_form_post_with_single_list(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_list_form(
+    assert generated_functions.json_post_list_of_list_form(
         rules=[["rule1", "rule2", "rule3"]], items=[["item1", "item2", "item3"]]
     ) == [[""]]
     assert (
@@ -7258,7 +7258,7 @@ def test_list_of_list_form_post_with_single_list(
 
 
 def test_dict_with_dict_json_post(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7274,7 +7274,7 @@ def test_dict_with_dict_json_post(json_service, tmpdir, responses: RequestsMock)
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_with_dict(
+    assert generated_functions.json_post_dict_with_dict(
         inner_dict=[["key1", "key2", "key3"], ["value10", "value20", "value30"]],
         dict_field1="value1",
         dict_field2="value2",
@@ -7288,7 +7288,7 @@ def test_dict_with_dict_json_post(json_service, tmpdir, responses: RequestsMock)
 def test_list_of_dict_with_dict_json_post(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7304,7 +7304,7 @@ def test_list_of_dict_with_dict_json_post(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict(
+    assert generated_functions.json_post_list_of_dict_with_dict(
         inner_dict=[
             ["key1", "key2", "key3"],
             ["value10", "value20", "value30"],
@@ -7321,7 +7321,7 @@ def test_list_of_dict_with_dict_json_post(
 
 
 def test_dict_with_dict_list_json_post(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7337,7 +7337,7 @@ def test_dict_with_dict_list_json_post(json_service, tmpdir, responses: Requests
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_with_dict_list(
+    assert generated_functions.json_post_dict_with_dict_list(
         inner_dict_list=[
             ["key1", "key2", "key3"],
             ["value10", "value20", "value30"],
@@ -7356,7 +7356,7 @@ def test_dict_with_dict_list_json_post(json_service, tmpdir, responses: Requests
 def test_dict_with_list_of_list_json_post(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7372,7 +7372,7 @@ def test_dict_with_list_of_list_json_post(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_with_list_of_list(
+    assert generated_functions.json_post_dict_with_list_of_list(
         inner_list_of_list=[
             ["key1", "key2", "key3"],
             ["value10", "value20", "value30"],
@@ -7391,7 +7391,7 @@ def test_dict_with_list_of_list_json_post(
 def test_dict_with_list_of_list_json_post_a_single_list(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7407,7 +7407,7 @@ def test_dict_with_list_of_list_json_post_a_single_list(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_with_list_of_list(
+    assert generated_functions.json_post_dict_with_list_of_list(
         inner_list_of_list=[["key1", "key2", "key3"]],
         dict_field1="value000",
         dict_field2="value010",
@@ -7419,7 +7419,7 @@ def test_dict_with_list_of_list_json_post_a_single_list(
 
 
 def test_dict_string_json_post(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7435,7 +7435,7 @@ def test_dict_string_json_post(json_service, tmpdir, responses: RequestsMock):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_string(
+    assert generated_functions.json_post_dict_string(
         dict_field1=34, dict_field2=890.32  # Send as integer
     ) == [[""]]
     assert (
@@ -7447,7 +7447,7 @@ def test_dict_string_json_post(json_service, tmpdir, responses: RequestsMock):
 def test_dict_string_json_post_without_non_required(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7463,7 +7463,7 @@ def test_dict_string_json_post_without_non_required(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_string(dict_field1=34) == [[""]]
+    assert generated_functions.json_post_dict_string(dict_field1=34) == [[""]]
     assert (
         _get_request(responses, "http://localhost:8954/dict_string").body
         == b"""{"dict_field1": "34", "dict_field2": null}"""
@@ -7471,7 +7471,7 @@ def test_dict_string_json_post_without_non_required(
 
 
 def test_dict_string_json_post_without_required(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7482,7 +7482,7 @@ def test_dict_string_json_post_without_required(json_service, tmpdir):
     )
 
     with pytest.raises(Exception) as exception_info:
-        pyxelrestgenerator.json_post_dict_string(dict_field2=34.5)
+        generated_functions.json_post_dict_string(dict_field2=34.5)
     assert (
         str(exception_info.value)
         == "json_post_dict_string() missing 1 required positional argument: 'dict_field1'"
@@ -7492,7 +7492,7 @@ def test_dict_string_json_post_without_required(json_service, tmpdir):
 def test_list_of_dict_with_dict_json_post_without_any_required(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7508,7 +7508,7 @@ def test_list_of_dict_with_dict_json_post_without_any_required(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict() == [[""]]
+    assert generated_functions.json_post_list_of_dict_with_dict() == [[""]]
     assert (
         _get_request(responses, "http://localhost:8954/list_of_dict_with_dict").body
         == b"""[]"""
@@ -7518,7 +7518,7 @@ def test_list_of_dict_with_dict_json_post_without_any_required(
 def test_list_of_dict_with_dict_json_post_with_empty_lists(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7534,7 +7534,7 @@ def test_list_of_dict_with_dict_json_post_with_empty_lists(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict(
+    assert generated_functions.json_post_list_of_dict_with_dict(
         dict_field2=["1", None, "4"]
     ) == [[""]]
     assert (
@@ -7546,7 +7546,7 @@ def test_list_of_dict_with_dict_json_post_with_empty_lists(
 def test_list_of_dict_with_dict_json_post_with_different_list_length(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7562,7 +7562,7 @@ def test_list_of_dict_with_dict_json_post_with_different_list_length(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict(
+    assert generated_functions.json_post_list_of_dict_with_dict(
         dict_field1="000", dict_field2=["1", None, "4"]
     ) == [[""]]
     assert (
@@ -7574,7 +7574,7 @@ def test_list_of_dict_with_dict_json_post_with_different_list_length(
 def test_list_of_dict_with_dict_allowing_null_json_post_without_any_required(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7590,7 +7590,9 @@ def test_list_of_dict_with_dict_allowing_null_json_post_without_any_required(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null() == [[""]]
+    assert generated_functions.json_post_list_of_dict_with_dict_allowing_null() == [
+        [""]
+    ]
     assert (
         _get_request(
             responses, "http://localhost:8954/list_of_dict_with_dict_allowing_null"
@@ -7602,7 +7604,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_without_any_required(
 def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7618,7 +7620,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(
+    assert generated_functions.json_post_list_of_dict_with_dict_allowing_null(
         dict_field2=["1", None, "4"]
     ) == [[""]]
     assert (
@@ -7632,7 +7634,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(
 def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_length(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7648,7 +7650,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_leng
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_of_dict_with_dict_allowing_null(
+    assert generated_functions.json_post_list_of_dict_with_dict_allowing_null(
         dict_field1="000", dict_field2=["1", None, "4"]
     ) == [[""]]
     assert (
@@ -7660,7 +7662,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_leng
 
 
 def test_dict_with_read_only_json_post(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7676,7 +7678,7 @@ def test_dict_with_read_only_json_post(json_service, tmpdir, responses: Requests
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_dict_with_read_only(
+    assert generated_functions.json_post_dict_with_read_only(
         dict_field1=34, dict_field3=[False, True, True]
     ) == [[""]]
 
@@ -7689,7 +7691,7 @@ def test_dict_with_read_only_json_post(json_service, tmpdir, responses: Requests
 def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(
     json_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7700,7 +7702,7 @@ def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(
     )
 
     with pytest.raises(Exception) as exception_info:
-        pyxelrestgenerator.json_post_dict_with_read_only(
+        generated_functions.json_post_dict_with_read_only(
             dict_field1=34, read_only_field="test", dict_field3=[False, True, True]
         )
     assert (
@@ -7710,7 +7712,7 @@ def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(
 
 
 def test_get_empty_list_parameter(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7721,13 +7723,13 @@ def test_get_empty_list_parameter(json_service, tmpdir):
     )
 
     assert (
-        pyxelrestgenerator.json_get_list_parameter(list_parameter=[])
+        generated_functions.json_get_list_parameter(list_parameter=[])
         == "list_parameter is required."
     )
 
 
 def test_get_none_filled_list_parameter(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7738,7 +7740,7 @@ def test_get_none_filled_list_parameter(json_service, tmpdir):
     )
 
     assert (
-        pyxelrestgenerator.json_get_list_parameter(list_parameter=[None, None, None])
+        generated_functions.json_get_list_parameter(list_parameter=[None, None, None])
         == "list_parameter is required."
     )
 
@@ -7746,7 +7748,7 @@ def test_get_none_filled_list_parameter(json_service, tmpdir):
 def test_get_none_as_first_list_parameter(
     json_service, tmpdir, responses: RequestsMock
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7762,13 +7764,13 @@ def test_get_none_as_first_list_parameter(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_get_list_parameter(
+    assert generated_functions.json_get_list_parameter(
         list_parameter=[None, "valid"]
     ) == [[""]]
 
 
 def test_get_none_as_last_list_parameter(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7784,13 +7786,13 @@ def test_get_none_as_last_list_parameter(json_service, tmpdir, responses: Reques
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_get_list_parameter(
+    assert generated_functions.json_get_list_parameter(
         list_parameter=["valid", None]
     ) == [[""]]
 
 
 def test_get_none_in_list_parameter(json_service, tmpdir, responses: RequestsMock):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7806,13 +7808,13 @@ def test_get_none_in_list_parameter(json_service, tmpdir, responses: RequestsMoc
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_get_list_parameter(
+    assert generated_functions.json_get_list_parameter(
         list_parameter=["valid1", None, "valid2"]
     ) == [[""]]
 
 
 def test_get_none_as_list_parameter(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7823,13 +7825,13 @@ def test_get_none_as_list_parameter(json_service, tmpdir):
     )
 
     assert (
-        pyxelrestgenerator.json_get_list_parameter(list_parameter=None)
+        generated_functions.json_get_list_parameter(list_parameter=None)
         == "list_parameter is required."
     )
 
 
 def test_different_location_same_name(json_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7846,7 +7848,7 @@ def test_different_location_same_name(json_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_different_location_same_name(
+    assert generated_functions.json_post_different_location_same_name(
         dict_field1=34,
         dict_field2="test",
         header_dict_field1="header value",
@@ -7863,7 +7865,7 @@ def test_different_location_same_name(json_service, responses, tmpdir):
 
 
 def test_post_list_dict_no_ref(json_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7883,7 +7885,7 @@ def test_post_list_dict_no_ref(json_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_list_dict_no_ref(
+    assert generated_functions.json_post_list_dict_no_ref(
         payload=[["header1", "header2"], ["value1", "value2"], ["value10", "value20"]]
     ) == [["header1", "header2"], ["value1", "value2"], ["value10", "value20"]]
 
@@ -7894,7 +7896,7 @@ def test_post_list_dict_no_ref(json_service, responses, tmpdir):
 
 
 def test_post_min_and_max_items(json_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7911,7 +7913,7 @@ def test_post_min_and_max_items(json_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_min_and_max_items(
+    assert generated_functions.json_post_min_and_max_items(
         items=[
             ["value10", "value11", "value12"],
             ["value20", "value21", "value22"],
@@ -7931,7 +7933,7 @@ def test_post_min_and_max_items(json_service, responses, tmpdir):
 
 
 def test_post_body_with_properties(json_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7948,7 +7950,7 @@ def test_post_body_with_properties(json_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_post_body_with_properties(bool_field=True) == [
+    assert generated_functions.json_post_body_with_properties(bool_field=True) == [
         ["bool_field", "int_field", "str_field"],
         [True, "", ""],
     ]
@@ -7960,7 +7962,7 @@ def test_post_body_with_properties(json_service, responses, tmpdir):
 
 
 def test_get_valid_int_choice(json_service, responses, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7977,14 +7979,14 @@ def test_get_valid_int_choice(json_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.json_get_int_choices(int_param=1) == [
+    assert generated_functions.json_get_int_choices(int_param=1) == [
         ["int_param"],
         ["1"],
     ]
 
 
 def test_get_invalid_int_choice(json_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "json": {
@@ -7995,6 +7997,6 @@ def test_get_invalid_int_choice(json_service, tmpdir):
     )
 
     assert (
-        pyxelrestgenerator.json_get_int_choices(int_param=2)
+        generated_functions.json_get_int_choices(int_param=2)
         == 'int_param value "2" should be 1 or 10 or 100.'
     )

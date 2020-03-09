@@ -49,7 +49,7 @@ def http_methods_service(responses: RequestsMock):
 
 
 def test_get_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -66,11 +66,11 @@ def test_get_http_method(responses: RequestsMock, http_methods_service, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_get_http_methods() == [[""]]
+    assert generated_functions.http_methods_get_http_methods() == [[""]]
 
 
 def test_post_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -87,11 +87,11 @@ def test_post_http_method(responses: RequestsMock, http_methods_service, tmpdir)
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_post_http_methods() == [[""]]
+    assert generated_functions.http_methods_post_http_methods() == [[""]]
 
 
 def test_put_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -108,11 +108,11 @@ def test_put_http_method(responses: RequestsMock, http_methods_service, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_put_http_methods() == [[""]]
+    assert generated_functions.http_methods_put_http_methods() == [[""]]
 
 
 def test_delete_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -129,11 +129,11 @@ def test_delete_http_method(responses: RequestsMock, http_methods_service, tmpdi
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_delete_http_methods() == [[""]]
+    assert generated_functions.http_methods_delete_http_methods() == [[""]]
 
 
 def test_patch_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -150,11 +150,11 @@ def test_patch_http_method(responses: RequestsMock, http_methods_service, tmpdir
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_patch_http_methods() == [[""]]
+    assert generated_functions.http_methods_patch_http_methods() == [[""]]
 
 
 def test_options_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -171,11 +171,11 @@ def test_options_http_method(responses: RequestsMock, http_methods_service, tmpd
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_options_http_methods() == [[""]]
+    assert generated_functions.http_methods_options_http_methods() == [[""]]
 
 
 def test_head_http_method(responses: RequestsMock, http_methods_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "http_methods": {
@@ -192,4 +192,4 @@ def test_head_http_method(responses: RequestsMock, http_methods_service, tmpdir)
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.http_methods_head_http_methods() == [[""]]
+    assert generated_functions.http_methods_head_http_methods() == [[""]]

@@ -3067,7 +3067,7 @@ def json_service(responses: RequestsMock, tmpdir):
         },
         match_querystring=True,
     )
-    pyxelrestgenerator = loader.load(
+    loader.load(
         tmpdir,
         {
             "json": {

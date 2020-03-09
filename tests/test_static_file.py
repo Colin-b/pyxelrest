@@ -34,7 +34,7 @@ def test_get_static_open_api_definition(responses: RequestsMock, tmpdir):
 """
         )
 
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "open_api_definition_loaded_from_file": {
@@ -51,6 +51,6 @@ def test_get_static_open_api_definition(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.open_api_definition_loaded_from_file_get_static_file_call() == [
+    assert generated_functions.open_api_definition_loaded_from_file_get_static_file_call() == [
         [""]
     ]

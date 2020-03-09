@@ -52,7 +52,7 @@ def files_service(responses: RequestsMock):
 
 
 def test_files_parameter(files_service, responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "files": {
@@ -72,7 +72,7 @@ def test_files_parameter(files_service, responses: RequestsMock, tmpdir):
             json={},
             match_querystring=True,
         )
-        assert pyxelrestgenerator.files_post_files(
+        assert generated_functions.files_post_files(
             mandatory_file="This is the content of the mandatory file.",
             optional_file=temp_file.name,
         ) == [[""]]

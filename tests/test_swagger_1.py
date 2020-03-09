@@ -20,7 +20,7 @@ def test_swagger_1_is_not_supported(responses: RequestsMock, tmpdir):
         },
         match_querystring=True,
     )
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "not_supported": {
@@ -32,4 +32,4 @@ def test_swagger_1_is_not_supported(responses: RequestsMock, tmpdir):
         },
     )
 
-    assert not hasattr(pyxelrestgenerator, "not_supported_get_should_not_be_available")
+    assert not hasattr(generated_functions, "not_supported_get_should_not_be_available")

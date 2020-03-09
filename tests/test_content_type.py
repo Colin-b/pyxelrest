@@ -35,7 +35,7 @@ def content_type_service(responses: RequestsMock):
 
 
 def test_json_content_type(responses: RequestsMock, content_type_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "content_type": {
@@ -48,7 +48,7 @@ def test_json_content_type(responses: RequestsMock, content_type_service, tmpdir
         responses.GET, url="http://localhost:8956/json", json={}, match_querystring=True
     )
 
-    assert pyxelrestgenerator.content_type_get_json() == [[""]]
+    assert generated_functions.content_type_get_json() == [[""]]
     assert (
         _get_request(responses, "http://localhost:8956/json").headers["Accept"]
         == "application/json"

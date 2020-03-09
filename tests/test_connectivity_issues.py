@@ -138,7 +138,7 @@ def without_parameter_service(responses: RequestsMock):
 
 
 def test_get_plain_text_with_service_down(without_parameter_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "without_parameter": {
@@ -149,6 +149,6 @@ def test_get_plain_text_with_service_down(without_parameter_service, tmpdir):
     )
 
     assert (
-        pyxelrestgenerator.without_parameter_get_plain_text_without_parameter()
+        generated_functions.without_parameter_get_plain_text_without_parameter()
         == "Cannot connect to service. Please retry once connection is re-established."
     )

@@ -30,7 +30,7 @@ def async_service(responses: RequestsMock):
 
 
 def test_get_async_url(responses: RequestsMock, async_service, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "async": {
@@ -48,7 +48,7 @@ def test_get_async_url(responses: RequestsMock, async_service, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.async_get_async() == [
+    assert generated_functions.async_get_async() == [
         ["Status URL"],
         ["http://localhost:8958/async/status"],
     ]

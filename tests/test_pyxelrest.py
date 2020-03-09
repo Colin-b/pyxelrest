@@ -13,7 +13,7 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 
 
 def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -32,7 +32,7 @@ def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_pyxelrest_get_url(
+    assert generated_functions.vba_pyxelrest_get_url(
         "http://localhost:8958/async/status",
         extra_headers=[
             ["X-Custom-Header1", "custom1"],
@@ -45,7 +45,7 @@ def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
 
 
 def test_get_custom_url(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -64,7 +64,7 @@ def test_get_custom_url(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.pyxelrest_get_url(
+    assert generated_functions.pyxelrest_get_url(
         "http://localhost:8958/async/status",
         extra_headers=[
             ["X-Custom-Header1", "custom1"],
@@ -77,7 +77,7 @@ def test_get_custom_url(responses: RequestsMock, tmpdir):
 
 
 def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -96,7 +96,7 @@ def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_pyxelrest_delete_url(
+    assert generated_functions.vba_pyxelrest_delete_url(
         "http://localhost:8958/unlisted",
         extra_headers=[
             ["X-Custom-Header1", "custom1"],
@@ -109,7 +109,7 @@ def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
 
 
 def test_delete_custom_url(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -128,7 +128,7 @@ def test_delete_custom_url(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.pyxelrest_delete_url(
+    assert generated_functions.pyxelrest_delete_url(
         "http://localhost:8958/unlisted",
         extra_headers=[
             ["X-Custom-Header1", "custom1"],
@@ -141,7 +141,7 @@ def test_delete_custom_url(responses: RequestsMock, tmpdir):
 
 
 def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -160,7 +160,7 @@ def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.pyxelrest_post_url(
+    assert generated_functions.pyxelrest_post_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"]],
         extra_headers=[["Content-Type", "application/json"]],
@@ -172,7 +172,7 @@ def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
 
 
 def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -191,7 +191,7 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.vba_pyxelrest_post_url(
+    assert generated_functions.vba_pyxelrest_post_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]],
         extra_headers=[["Content-Type", "application/json"]],
@@ -206,7 +206,7 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
 
 
 def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -225,7 +225,7 @@ def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.pyxelrest_post_url(
+    assert generated_functions.pyxelrest_post_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]],
         extra_headers=[["Content-Type", "application/json"]],
@@ -240,7 +240,7 @@ def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
 
 
 def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -256,7 +256,7 @@ def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
     )
 
-    assert pyxelrestgenerator.pyxelrest_put_url(
+    assert generated_functions.pyxelrest_put_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"], ["other1", 2, "other3"]],
         extra_headers=[["Content-Type", "application/json"]],
@@ -271,7 +271,7 @@ def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
 
 
 def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -287,7 +287,7 @@ def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
     )
 
-    assert pyxelrestgenerator.pyxelrest_put_url(
+    assert generated_functions.pyxelrest_put_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"]],
         extra_headers=[["Content-Type", "application/json"]],
@@ -299,7 +299,7 @@ def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
 
 
 def test_put_custom_url_dict_sync(responses: RequestsMock, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "pyxelrest": {
@@ -315,7 +315,7 @@ def test_put_custom_url_dict_sync(responses: RequestsMock, tmpdir):
         responses.PUT, url="http://localhost:8958/dict", json={}, match_querystring=True
     )
 
-    assert pyxelrestgenerator.vba_pyxelrest_put_url(
+    assert generated_functions.vba_pyxelrest_put_url(
         "http://localhost:8958/dict",
         [["key1", "key2", "key3"], ["value1", 1, "value3"]],
         extra_headers=[["Content-Type", "application/json"]],

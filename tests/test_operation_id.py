@@ -42,7 +42,7 @@ def operation_id_services(responses: RequestsMock):
 
 
 def test_missing_operation_id(responses: RequestsMock, operation_id_services, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "operation_id_not_provided": {
@@ -66,13 +66,13 @@ def test_missing_operation_id(responses: RequestsMock, operation_id_services, tm
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.operation_id_not_provided_get_without_operationId() == [
+    assert generated_functions.operation_id_not_provided_get_without_operationId() == [
         [""]
     ]
 
 
 def test_mixed_operation_id(responses: RequestsMock, operation_id_services, tmpdir):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "operation_id_not_provided": {
@@ -96,7 +96,7 @@ def test_mixed_operation_id(responses: RequestsMock, operation_id_services, tmpd
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.operation_id_not_always_provided_get_without_operationId() == [
+    assert generated_functions.operation_id_not_always_provided_get_without_operationId() == [
         ["first"]
     ]
 
@@ -106,6 +106,6 @@ def test_mixed_operation_id(responses: RequestsMock, operation_id_services, tmpd
         json=["second"],
         match_querystring=True,
     )
-    assert pyxelrestgenerator.operation_id_not_always_provided_duplicated_get_without_operationId() == [
+    assert generated_functions.operation_id_not_always_provided_duplicated_get_without_operationId() == [
         ["second"]
     ]

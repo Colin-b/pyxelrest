@@ -2624,7 +2624,7 @@ def usual_parameters_service(responses: RequestsMock):
 def test_get_date(
     responses: RequestsMock, usual_parameters_service, tmpdir, service_config: dict
 ):
-    pyxelrestgenerator = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8943/date",
@@ -2632,7 +2632,7 @@ def test_get_date(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.usual_parameters_get_date() == [
+    assert generated_functions.usual_parameters_get_date() == [
         [datetime.datetime(2014, 3, 5, 0, 0)],
         [datetime.datetime(9999, 1, 1, 0, 0)],
         [datetime.datetime(3001, 1, 1, 0, 0)],
@@ -2664,7 +2664,7 @@ def test_get_date(
 def test_get_datetime(
     responses: RequestsMock, usual_parameters_service, tmpdir, service_config: dict
 ):
-    pyxelrestgenerator = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(tmpdir, service_config)
     responses.add(
         responses.GET,
         url="http://localhost:8943/datetime",
@@ -2682,7 +2682,7 @@ def test_get_datetime(
         match_querystring=True,
     )
 
-    assert pyxelrestgenerator.usual_parameters_get_date_time() == [
+    assert generated_functions.usual_parameters_get_date_time() == [
         [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
         [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
         [datetime.datetime(2014, 3, 5, 15, 59, 58, 201980, tzinfo=tzutc())],
@@ -2698,7 +2698,7 @@ def test_get_datetime(
 def test_get_datetime_encoding(
     responses: RequestsMock, usual_parameters_service, tmpdir
 ):
-    pyxelrestgenerator = loader.load(
+    generated_functions = loader.load(
         tmpdir,
         {
             "usual_parameters": {
@@ -2715,7 +2715,7 @@ def test_get_datetime_encoding(
     )
 
     date_time = datetime.datetime.strptime("2017-09-13T15:20:35", "%Y-%m-%dT%H:%M:%S")
-    assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
+    assert generated_functions.usual_parameters_get_date_time_encoding(
         encoded_date_time=date_time
     ) == [[""]]
 
@@ -2726,7 +2726,7 @@ def test_get_datetime_encoding(
         match_querystring=True,
     )
     date_time = datetime.datetime.strptime("2017-09-13T15:20", "%Y-%m-%dT%H:%M")
-    assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
+    assert generated_functions.usual_parameters_get_date_time_encoding(
         encoded_date_time=date_time
     ) == [[""]]
 
@@ -2737,6 +2737,6 @@ def test_get_datetime_encoding(
         match_querystring=True,
     )
     date_time = datetime.datetime.strptime("2017-09-13 15", "%Y-%m-%d %H")
-    assert pyxelrestgenerator.usual_parameters_get_date_time_encoding(
+    assert generated_functions.usual_parameters_get_date_time_encoding(
         encoded_date_time=date_time
     ) == [[""]]
