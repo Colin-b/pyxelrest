@@ -15,6 +15,7 @@ from pyxelrest import (
     GENERATE_UDF_ON_IMPORT,
     custom_logging,
     SERVICES_CONFIGURATION_FILE_PATH,
+    LOGGING_CONFIGURATION_FILE_PATH,
 )
 
 
@@ -69,7 +70,7 @@ else:
     logger = logging.getLogger(__name__)
 
 if GENERATE_UDF_ON_IMPORT:
-    custom_logging.load_logging_configuration()
+    custom_logging.load_logging_configuration(LOGGING_CONFIGURATION_FILE_PATH)
     try:
         services = open_api.load_services_from_yaml(SERVICES_CONFIGURATION_FILE_PATH)
         generate_python_file(services)

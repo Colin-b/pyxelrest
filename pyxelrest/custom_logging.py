@@ -3,10 +3,11 @@ import sys
 import platform
 import logging.config
 import logging.handlers
+from distutils import sysconfig
+
 import yaml
 
-from pyxelrest import version, LOGGING_CONFIGURATION_FILE_PATH
-from distutils import sysconfig
+from pyxelrest import version
 
 logger = logging.getLogger(__name__)
 
@@ -20,15 +21,15 @@ def log_uncaught_exception(exec_type, exex_value, traceback, logger=logging):
 sys.excepthook = log_uncaught_exception
 
 
-def load_logging_configuration():
+def load_logging_configuration(logging_configuration_file_path: str):
     """
     Load YAML logging configuration.
     If file is not found, then logging will be performed as INFO into %APPDATA%\\pyxelrest\\logs\\pyxelrest.log
     and file will be rolled every day.
     :return: None
     """
-    if os.path.isfile(LOGGING_CONFIGURATION_FILE_PATH):
-        with open(LOGGING_CONFIGURATION_FILE_PATH, "r") as config_file:
+    if os.path.isfile(logging_configuration_file_path):
+        with open(logging_configuration_file_path, "r") as config_file:
             log_config_dict = yaml.load(config_file, Loader=yaml.FullLoader)
             logging.config.dictConfig(log_config_dict)
             logger.info(
@@ -37,7 +38,7 @@ def load_logging_configuration():
     else:
         set_file_logger("pyxelrest")
         logger.warning(
-            f"Logging configuration file ({LOGGING_CONFIGURATION_FILE_PATH}) cannot be found. Using default logging configuration."
+            f"Logging configuration file ({logging_configuration_file_path}) cannot be found. Using default logging configuration."
         )
 
 
