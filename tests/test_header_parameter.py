@@ -139,11 +139,8 @@ def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service, tm
         },
     )
 
-    with pytest.raises(AttributeError) as exception_info:
-        generated_functions.vba_header_advanced_configuration_get_header("sent header")
-    assert (
-        str(exception_info.value)
-        == "module 'pyxelrest.generated_functions' has no attribute 'vba_header_advanced_configuration_get_header'"
+    assert not hasattr(
+        generated_functions, "vba_header_advanced_configuration_get_header"
     )
 
 
