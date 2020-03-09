@@ -21,7 +21,7 @@ from pyxelrest import (
 
 def _user_defined_functions(
     loaded_services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
-):
+) -> str:
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
     :return: A string containing python code with all xlwings UDFs.
@@ -48,7 +48,9 @@ def generate_python_file(
     with open(
         os.path.join(os.path.dirname(__file__), file_name), "w", encoding="utf-8"
     ) as generated_file:
-        generated_file.write(_user_defined_functions(services))
+        content = _user_defined_functions(services)
+        logging.debug(content)
+        generated_file.write(content)
 
 
 def load_user_defined_functions(
