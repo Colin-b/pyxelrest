@@ -25,7 +25,9 @@ OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
 
 
 def _create_authentication(
-    service_config, open_api_security_definition: dict, request_content
+    service_config: "pyxelrest.open_api.ServiceConfigSection",
+    open_api_security_definition: dict,
+    request_content: "pyxelrest.open_api.RequestContent",
 ):
     if "oauth2" == open_api_security_definition.get("type"):
         flow = open_api_security_definition.get("flow")
@@ -89,7 +91,9 @@ def _create_authentication(
 
 
 def _create_authentication_from_config(
-    service_config, authentication_mode: str, authentication: dict
+    service_config: "pyxelrest.open_api.ServiceConfigSection",
+    authentication_mode: str,
+    authentication: dict,
 ):
     if "oauth2_implicit" == authentication_mode:
         oauth2_config = dict(service_config.oauth2)
@@ -125,7 +129,10 @@ def _create_authentication_from_config(
         logger.error(f"Unexpected security definition type: {authentication_mode}")
 
 
-def get_auth(udf_method, request_content) -> Optional[requests.auth.AuthBase]:
+def get_auth(
+    udf_method: "pyxelrest.open_api.UDFMethod",
+    request_content: "pyxelrest.open_api.RequestContent",
+) -> Optional[requests.auth.AuthBase]:
     if not udf_method.requires_authentication(request_content):
         return None
 
@@ -168,7 +175,9 @@ def get_auth(udf_method, request_content) -> Optional[requests.auth.AuthBase]:
     return authentication
 
 
-def get_definition_retrieval_auth(service_config) -> Optional[requests.auth.AuthBase]:
+def get_definition_retrieval_auth(
+    service_config: "pyxelrest.open_api.ServiceConfigSection",
+) -> Optional[requests.auth.AuthBase]:
     if not service_config.definition_retrieval_auths:
         return None
 
