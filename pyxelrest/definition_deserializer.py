@@ -1,32 +1,35 @@
+import datetime
 from collections import OrderedDict
 import logging
+from typing import Union
+
 import dateutil.tz
 import dateutil.parser
 
 logger = logging.getLogger(__name__)
 
 
-def append_prefix(prefix, values_list):
+def append_prefix(prefix: str, values_list: list) -> list:
     """
     Append the prefix to each item in the values_list.
     This method is used to update header for inner fields.
     """
     if prefix:
-        return [f'{prefix} / {value}' if value else prefix for value in values_list]
+        return [f"{prefix} / {value}" if value else prefix for value in values_list]
     return values_list
 
 
-def to_date_time(value):
+def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
     """
     Convert to date-time or date as described in https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14
     :param value: string representation of the date-time or date
     :return: date or datetime instance or string if None
     """
     if not value:
-        return ''
+        return ""
     # dateutil does not handle lower cased timezone
-    if value[-1:] == 'z':
-        value = value[:-1] + 'Z'
+    if value[-1:] == "z":
+        value = value[:-1] + "Z"
     datetime_with_service_timezone = dateutil.parser.parse(value)
     if datetime_with_service_timezone:
         # Changed in python 3.6: The astimezone() method can now be called on naive instances
@@ -96,29 +99,41 @@ class RowsMerger:
                 self.add_empty_columns(new_merging_data.rows, missing_columns)
                 self.rows.append(new_merging_data.rows)
         else:
-            self.header = append_prefix(list_name, [new_merging_data.header]) if new_merging_data.header else None
+            self.header = (
+                append_prefix(list_name, [new_merging_data.header])
+                if new_merging_data.header
+                else None
+            )
             self.rows.append([new_merging_data.rows])
 
     def merge_header(self, new_header, new_columns, missing_columns):
         if new_columns and missing_columns:
             # TODO Add new columns at the right place instead of the end
-            raise Exception('Addition of new columns to header is not handled properly')
+            raise Exception("Addition of new columns to header is not handled properly")
         elif new_columns or not self.header:
             self.header = new_header
 
     def get_new_columns(self, new_header):
         if self.header:
-            return [column_name for column_name in new_header if column_name not in self.header]
+            return [
+                column_name
+                for column_name in new_header
+                if column_name not in self.header
+            ]
         return []
 
     def get_missing_columns(self, new_header):
         if self.header:
-            return [column_name for column_name in self.header if column_name not in new_header]
+            return [
+                column_name
+                for column_name in self.header
+                if column_name not in new_header
+            ]
         return []
 
     def add_empty_columns(self, row, missing_columns):
         for column_name in missing_columns:
-            row.insert(self.header.index(column_name), '')
+            row.insert(self.header.index(column_name), "")
 
     def merge_list(self, new_header, new_list):
         """
@@ -153,7 +168,9 @@ class RowsMerger:
         self.rows = new_rows
 
     def append_list_to_list(self, new_header, new_list):
-        raise Exception(f'Merging two lists is not handled for now. {new_list} merged to {self.rows}')
+        raise Exception(
+            f"Merging two lists is not handled for now. {new_list} merged to {self.rows}"
+        )
 
     def append_list_of_list_to_list_of_list(self, new_header, new_list_of_list):
         self.header.extend(new_header)
@@ -166,7 +183,9 @@ class RowsMerger:
         self.rows = new_rows
 
     def append_list_to_list_of_list(self, new_header, new_list):
-        raise Exception(f'Merging two lists is not handled for now. {new_list} merged to {self.rows}')
+        raise Exception(
+            f"Merging two lists is not handled for now. {new_list} merged to {self.rows}"
+        )
 
     def append_list_to_value(self, new_header, new_list):
         """
@@ -207,7 +226,9 @@ class RowsMerger:
 
     def header_and_rows(self):
         if self.header:
-            header_and_rows = [self.header] if isinstance(self.header, list) else [[self.header]]
+            header_and_rows = (
+                [self.header] if isinstance(self.header, list) else [[self.header]]
+            )
             if isinstance(self.rows, list):
                 if isinstance(self.rows[0], list):
                     header_and_rows.extend(self.rows)
@@ -217,7 +238,7 @@ class RowsMerger:
                 header_and_rows.append([self.rows])
             return header_and_rows
         if self.rows is None:
-            return ['']
+            return [""]
         if isinstance(self.rows, list):
             return self.rows
         return [self.rows]
@@ -227,12 +248,16 @@ all_definitions = {}
 
 
 class Field:
-    def __init__(self, json_definition, json_definitions):
-        self.description = json_definition.get('description')
-        self.type = json_definition.get('type')
-        self.array_field = Field(json_definition.get('items'), json_definitions) if self.type == 'array' else None
-        self.format = json_definition.get('format')
-        self.ref = json_definition.get('$ref')
+    def __init__(self, json_definition: dict, json_definitions):
+        self.description = json_definition.get("description")
+        self.type = json_definition.get("type")
+        self.array_field = (
+            Field(json_definition.get("items"), json_definitions)
+            if self.type == "array"
+            else None
+        )
+        self.format = json_definition.get("format")
+        self.ref = json_definition.get("$ref")
         if self.ref and self.ref not in all_definitions:
             all_definitions[self.ref] = Definition(self.ref, json_definitions)
             all_definitions[self.ref].init_fields(json_definitions)
@@ -244,7 +269,7 @@ class Field:
         return self.convert_to_type(name, value)
 
     def convert_to_type(self, name, value):
-        if self.type == 'array':
+        if self.type == "array":
             return self.convert_array(name, value)
         return self.convert_simple_type(value)
 
@@ -253,7 +278,7 @@ class Field:
         if value is None or value == []:
             return RowsMerger()
         if isinstance(value, dict):
-            raise Exception(f'{self.description} is supposed to be a list: {value}')
+            raise Exception(f"{self.description} is supposed to be a list: {value}")
 
         merger = RowsMerger()
 
@@ -262,7 +287,9 @@ class Field:
             merger.merge_new_list_item(name, self.array_field.convert(name, value))
         else:
             for array_item in value:
-                merger.merge_new_list_item(name, self.array_field.convert(name, array_item))
+                merger.merge_new_list_item(
+                    name, self.array_field.convert(name, array_item)
+                )
 
         if merger.header is None and name is not None:
             merger.header = [name]
@@ -271,7 +298,7 @@ class Field:
     def convert_simple_type(self, value):
         merger = RowsMerger()
         if isinstance(value, str):
-            if self.format == 'date-time' or self.format == 'date':
+            if self.format == "date-time" or self.format == "date":
                 value = to_date_time(value)
             else:
                 # Return first 255 characters otherwise value will not be valid
@@ -280,10 +307,11 @@ class Field:
         return merger
 
 
-class DefaultField(object):
+class DefaultField:
     """
     Used to perform deserialization of responses without schema.
     """
+
     def convert(self, name, value):
         if isinstance(value, dict):
             return DefaultField.convert_dict(value)
@@ -297,7 +325,10 @@ class DefaultField(object):
 
         for field_name in dictionary.keys():
             field_value = dictionary.get(field_name)
-            merger.merge(field_name if not isinstance(field_value, list) else None, DefaultField().convert(field_name, field_value))
+            merger.merge(
+                field_name if not isinstance(field_value, list) else None,
+                DefaultField().convert(field_name, field_value),
+            )
 
         return merger
 
@@ -334,56 +365,73 @@ def extract_fields(json_properties, json_definitions):
 
 
 class Definition:
-    def __init__(self, definition_reference, json_definitions):
+    def __init__(self, definition_reference: str, json_definitions: dict):
         """
         Creates a new definition (usually an object).
         
         :param definition_reference: Always prefixed by #/definitions/
         :param json_definitions: All definitions (JSON dictionary)
         """
-        definition_reference = definition_reference[len('#/definitions/'):]
+        definition_reference = definition_reference[len("#/definitions/") :]
         if definition_reference not in json_definitions:
-            raise Exception(f'"{definition_reference}" is not within {json_definitions}')
+            raise Exception(
+                f'"{definition_reference}" is not within {json_definitions}'
+            )
         self.json_definition = json_definitions[definition_reference]
-        self.type = self.json_definition.get('type')
-        self.title = self.json_definition.get('title')
+        self.type = self.json_definition.get("type")
+        self.title = self.json_definition.get("title")
         self.fields = {}
 
-    def init_fields(self, json_definitions):
-        self.fields = extract_fields(self.json_definition.get('properties'), json_definitions)
+    def init_fields(self, json_definitions: dict):
+        self.fields = extract_fields(
+            self.json_definition.get("properties"), json_definitions
+        )
 
-    def convert(self, data):
+    def convert(self, data: dict) -> RowsMerger:
         if not isinstance(data, dict):
-            raise Exception(f'{self.title} is supposed to be a dict: {data}')
+            raise Exception(f"{self.title} is supposed to be a dict: {data}")
 
         merger = RowsMerger()
 
         for field_name in self.fields.keys():
             field_value = data.get(field_name)
             field = self.fields[field_name]
-            merger.merge(field_name if not field.array_field else None, field.convert(field_name, field_value))
+            merger.merge(
+                field_name if not field.array_field else None,
+                field.convert(field_name, field_value),
+            )
 
-        undefined_fields = [field_name for field_name in data.keys() if field_name not in self.fields and field_name[:6].lower() != 'x-pxl-']
+        undefined_fields = [
+            field_name
+            for field_name in data.keys()
+            if field_name not in self.fields and field_name[:6].lower() != "x-pxl-"
+        ]
         if undefined_fields:
-            raise Exception(f'The following fields are not part of the definition: {undefined_fields}')
+            raise Exception(
+                f"The following fields are not part of the definition: {undefined_fields}"
+            )
 
         return merger
 
 
 class Response:
-    def __init__(self, all_responses, status_code, json_definitions):
+    def __init__(self, all_responses: dict, status_code: int, json_definitions: dict):
         json_response = response(status_code, all_responses)
-        schema = json_response.get('schema') if json_response else None
-        self.field = Field(schema, json_definitions if json_definitions is not None else {}) if schema else DefaultField()
+        schema = json_response.get("schema") if json_response else None
+        self.field = (
+            Field(schema, json_definitions if json_definitions is not None else {})
+            if schema
+            else DefaultField()
+        )
 
     def rows(self, data):
-        logger.debug('Converting response to list...')
+        logger.debug("Converting response to list...")
         rows = self.field.convert(None, data).header_and_rows()
-        logger.debug(f'Response converted to list of {len(rows)} elements.')
+        logger.debug(f"Response converted to list of {len(rows)} elements.")
         return rows
 
 
-def response(status_code, responses):
+def response(status_code: int, responses: dict):
     if str(status_code) in responses:
         return responses[str(status_code)]
-    return responses.get('default')
+    return responses.get("default")
