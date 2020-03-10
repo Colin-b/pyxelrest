@@ -57,6 +57,7 @@ setup(
             "default_logging_configuration.yml.jinja2",
             "default_services_configuration.yml",
             "user_defined_functions.jinja2",
+            "user_defined_functions_init.jinja2",
         ]
     },
     data_files=[

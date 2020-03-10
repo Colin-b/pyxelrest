@@ -1,0 +1,31 @@
+"""
+This file was generated. DO NOT EDIT manually.
+Source file: {{ self._TemplateReference__context.name }}
+Generation date (UTC): {{ current_utc_time }}
+"""
+from importlib import reload, import_module
+
+{% for service in services %}
+# TODO Reload only when file already exists only
+reload(import_module("pyxelrest.user_defined_functions.{{ service.config.name }}"))
+import pyxelrest.user_defined_functions.{{ service.config.name }} as {{ service.config.name }}
+from pyxelrest.user_defined_functions.{{ service.config.name }} import (
+    {% for udf_name in service.methods %}{{ udf_name }},{% endfor %}
+)
+{% endfor %}
+
+
+def update_services(services):
+    services = {service.config.name: service for service in services}
+{% for service in services %}
+    {{ service.config.name }}.udf_methods = services["{{ service.config.name }}"].methods
+{% endfor %}
+
+
+__all__ = [
+{% for service in services %}
+    {% for udf_name in service.methods %}
+    "{{ udf_name }}",
+    {% endfor %}
+{% endfor %}
+]

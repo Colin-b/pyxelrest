@@ -21,7 +21,7 @@ from pyxelrest import (
 
 
 def _user_defined_functions(
-    loaded_services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
+    service: Union[open_api.PyxelRestService, open_api.OpenAPI]
 ) -> str:
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
@@ -33,22 +33,49 @@ def _user_defined_functions(
         lstrip_blocks=True,
     )
     return renderer.get_template("user_defined_functions.jinja2").render(
-        current_utc_time=datetime.datetime.utcnow().isoformat(),
-        services=loaded_services,
+        current_utc_time=datetime.datetime.utcnow().isoformat(), service=service
+    )
+
+
+def _user_defined_functions_init(
+    services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
+) -> str:
+    """
+    Create xlwings User Defined Functions according to user_defined_functions template.
+    :return: A string containing python code with all xlwings UDFs.
+    """
+    renderer = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__), encoding="utf-8"),
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    return renderer.get_template("user_defined_functions_init.jinja2").render(
+        current_utc_time=datetime.datetime.utcnow().isoformat(), services=services
     )
 
 
 def generate_python_file(
-    services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]],
-    file_name="user_defined_functions.py",
+    services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
 ):
     """
     Create python file containing generated xlwings User Defined Functions.
     """
-    file_path = os.path.join(os.path.dirname(__file__), file_name)
+    for service in services:
+        file_path = os.path.join(
+            os.path.dirname(__file__),
+            "user_defined_functions",
+            f"{service.config.name}.py",
+        )
+        logging.debug(f"Generating {file_path}")
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(_user_defined_functions(service))
+
+    file_path = os.path.join(
+        os.path.dirname(__file__), "user_defined_functions", "__init__.py"
+    )
     logging.debug(f"Generating {file_path}")
     with open(file_path, "w", encoding="utf-8") as file:
-        file.write(_user_defined_functions(services))
+        file.write(_user_defined_functions_init(services))
 
 
 def load_user_defined_functions(
@@ -56,12 +83,7 @@ def load_user_defined_functions(
 ):
     # Ensure that newly generated file is reloaded as user_defined_functions
     user_defined_functions = reload(import_module("pyxelrest.user_defined_functions"))
-
-    user_defined_functions.udf_methods = {
-        udf_name: method
-        for service in services
-        for udf_name, method in service.methods.items()
-    }
+    user_defined_functions.update_services(services)
 
 
 if __name__ == "__main__":

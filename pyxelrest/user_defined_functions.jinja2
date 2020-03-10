@@ -83,24 +83,22 @@ def {{ udf_method.udf_name }}(
 {% endif %}
     return get_result(udf_method, request_content, excel_application)
 {% endmacro %}
-{% for service in services %}
-    {% if service.config.name == 'pyxelrest' %}
-        {% for http_method in ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] %}
-            {%- if service.config.should_provide_method(http_method) -%}
+{% if service.config.name == 'pyxelrest' %}
+    {% for http_method in ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] %}
+        {%- if service.config.should_provide_method(http_method) -%}
+            {% for udf_return_type in service.config.udf_return_types %}
+                {{- add_udf(service.create_method(http_method, udf_return_type)) -}}
+            {% endfor %}
+        {%- endif -%}
+    {%- endfor %}
+{% else %}
+    {% for method_path, open_api_methods in service.open_api_definition['paths'].items() %}
+        {% for http_method, open_api_method in open_api_methods.items() %}
+            {%- if service.config.should_provide_method(http_method, open_api_method) -%}
                 {% for udf_return_type in service.config.udf_return_types %}
-                    {{- add_udf(service.create_method(http_method, udf_return_type)) -}}
+                    {{- add_udf(service.create_method(http_method, open_api_method, method_path, udf_return_type)) -}}
                 {% endfor %}
             {%- endif -%}
-        {%- endfor %}
-    {% else %}
-        {% for method_path, open_api_methods in service.open_api_definition['paths'].items() %}
-            {% for http_method, open_api_method in open_api_methods.items() %}
-                {%- if service.config.should_provide_method(http_method, open_api_method) -%}
-                    {% for udf_return_type in service.config.udf_return_types %}
-                        {{- add_udf(service.create_method(http_method, open_api_method, method_path, udf_return_type)) -}}
-                    {% endfor %}
-                {%- endif -%}
-            {% endfor %}
-        {%- endfor %}
-    {% endif %}
-{% endfor %}
+        {% endfor %}
+    {%- endfor %}
+{% endif %}
