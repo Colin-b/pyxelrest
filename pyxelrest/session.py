@@ -1,6 +1,8 @@
 import datetime
+
 import requests
 from requests.adapters import HTTPAdapter
+
 from pyxelrest.version import __version__
 from pyxelrest.fileadapter import LocalFileAdapter
 

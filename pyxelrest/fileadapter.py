@@ -1,8 +1,8 @@
 from typing import Tuple
+import os
 
 import requests
 import requests.adapters
-import os
 
 
 class LocalFileAdapter(requests.adapters.BaseAdapter):

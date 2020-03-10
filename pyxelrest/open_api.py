@@ -4,16 +4,15 @@ import logging
 import os
 import re
 from typing import List, Union, Optional, Any, Dict
+import time
+from urllib.parse import urlsplit
 
 import requests
 import requests.exceptions
-import time
 import xlwings
 import xlwings.conversion
 import xlwings.server
 import yaml
-
-from urllib.parse import urlsplit
 
 
 from pyxelrest import authentication, session, definition_deserializer, vba
