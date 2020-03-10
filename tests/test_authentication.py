@@ -25,7 +25,7 @@ def test_oauth2_authentication_success(
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_oauth2_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [{"oauth2_auth_success": ["custom_label"]}],
                     }
@@ -60,9 +60,7 @@ def test_oauth2_authentication_success(
             return token_mock
 
     monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
-    assert generated_functions.authenticated_get_oauth2_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
     assert (
         _get_request(responses, "http://test/test").headers["Authorization"]
         == "Bearer 2YotnFZFEjr1zCsicMWpAA"
@@ -109,7 +107,7 @@ def test_oauth2_authentication_failure(tmpdir, monkeypatch, responses: RequestsM
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_oauth2_authentication_failure",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [{"oauth2_auth_failure": ["custom_label"]}],
                     }
@@ -143,7 +141,7 @@ def test_oauth2_authentication_failure(tmpdir, monkeypatch, responses: RequestsM
 
     monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
     assert (
-        generated_functions.authenticated_get_oauth2_authentication_failure()
+        generated_functions.authenticated_get_authenticated()
         == 'An error occurred. Please check logs for full details: "id_token not provided within {}."'
     )
 
@@ -157,7 +155,7 @@ def test_oauth2_authentication_timeout(tmpdir, monkeypatch, responses: RequestsM
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_oauth2_authentication_timeout",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [{"oauth2_auth_timeout": ["custom_label"]}],
                     }
@@ -191,7 +189,7 @@ def test_oauth2_authentication_timeout(tmpdir, monkeypatch, responses: RequestsM
 
     monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
     assert (
-        generated_functions.authenticated_get_oauth2_authentication_timeout()
+        generated_functions.authenticated_get_authenticated()
         == 'An error occurred. Please check logs for full details: "User authentication was not received within 10 seconds."'
     )
 
@@ -236,7 +234,7 @@ def test_api_key_header_authentication_success(tmpdir, responses: RequestsMock):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_api_key_header_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [{"api_key_header_auth_success": []}],
                     }
@@ -264,9 +262,7 @@ def test_api_key_header_authentication_success(tmpdir, responses: RequestsMock):
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert generated_functions.authenticated_get_api_key_header_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
     request = _get_request(responses, "http://test/test")
     assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
 
@@ -301,7 +297,7 @@ def test_api_key_query_authentication_success(tmpdir, responses: RequestsMock):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_api_key_query_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [{"api_key_query_auth_success": []}],
                     }
@@ -334,9 +330,7 @@ def test_api_key_query_authentication_success(tmpdir, responses: RequestsMock):
         json=[],
         match_querystring=True,
     )
-    assert generated_functions.authenticated_get_api_key_query_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
 
 
 def test_pyxelrest_api_key_query_authentication_success(
@@ -372,7 +366,7 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_basic_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [{"basic_auth_success": []}],
                     }
@@ -394,9 +388,7 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert generated_functions.authenticated_get_basic_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
     request = _get_request(responses, "http://test/test")
     assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
 
@@ -429,7 +421,7 @@ def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMoc
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_basic_and_api_key_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [
                             {
@@ -464,9 +456,7 @@ def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMoc
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert generated_functions.authenticated_get_basic_and_api_key_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
     request = _get_request(responses, "http://test/test")
     assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
     assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
@@ -506,7 +496,7 @@ def test_basic_or_api_key_authentication_success(tmpdir, responses: RequestsMock
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_basic_or_api_key_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [
                             {"basic_auth_success": []},
@@ -539,9 +529,7 @@ def test_basic_or_api_key_authentication_success(tmpdir, responses: RequestsMock
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert generated_functions.authenticated_get_basic_or_api_key_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
     request = _get_request(responses, "http://test/test")
     assert "X-API-HEADER-KEY" not in request.headers
     assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
@@ -556,7 +544,7 @@ def test_api_key_or_basic_authentication_success(tmpdir, responses: RequestsMock
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_api_key_or_basic_authentication_success",
+                        "operationId": "get_authenticated",
                         "responses": {"200": {"description": "return value"}},
                         "security": [
                             {"api_key_header_auth_success": []},
@@ -589,9 +577,7 @@ def test_api_key_or_basic_authentication_success(tmpdir, responses: RequestsMock
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert generated_functions.authenticated_get_api_key_or_basic_authentication_success() == [
-        [""]
-    ]
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
     request = _get_request(responses, "http://test/test")
     assert "Authorization" not in request.headers
     assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
