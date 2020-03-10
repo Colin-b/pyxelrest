@@ -12,7 +12,7 @@ def test_string_multi_array_parameter(responses: RequestsMock, tmpdir):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_string_multi_array_parameter",
+                        "operationId": "get_array_parameter",
                         "parameters": [
                             {
                                 "description": "string array parameter",
@@ -55,7 +55,7 @@ def test_string_multi_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert generated_functions.array_parameter_get_string_multi_array_parameter(
+    assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
@@ -69,7 +69,7 @@ def test_string_default_array_parameter(responses: RequestsMock, tmpdir):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_string_default_array_parameter",
+                        "operationId": "get_array_parameter",
                         "parameters": [
                             {
                                 "description": "string array parameter",
@@ -111,7 +111,7 @@ def test_string_default_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert generated_functions.array_parameter_get_string_default_array_parameter(
+    assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
@@ -125,7 +125,7 @@ def test_string_ssv_array_parameter(responses: RequestsMock, tmpdir):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_string_ssv_array_parameter",
+                        "operationId": "get_array_parameter",
                         "parameters": [
                             {
                                 "description": "string array parameter",
@@ -168,10 +168,7 @@ def test_string_ssv_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert hasattr(
-        generated_functions, "array_parameter_get_string_ssv_array_parameter"
-    ), str(generated_functions.__dict__)
-    assert generated_functions.array_parameter_get_string_ssv_array_parameter(
+    assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
@@ -185,7 +182,7 @@ def test_string_tsv_array_parameter(responses: RequestsMock, tmpdir):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_string_tsv_array_parameter",
+                        "operationId": "get_array_parameter",
                         "parameters": [
                             {
                                 "description": "string array parameter",
@@ -228,7 +225,7 @@ def test_string_tsv_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert generated_functions.array_parameter_get_string_tsv_array_parameter(
+    assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
@@ -242,7 +239,7 @@ def test_string_csv_array_parameter(responses: RequestsMock, tmpdir):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_string_csv_array_parameter",
+                        "operationId": "get_array_parameter",
                         "parameters": [
                             {
                                 "description": "string array parameter",
@@ -285,7 +282,7 @@ def test_string_csv_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert generated_functions.array_parameter_get_string_csv_array_parameter(
+    assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
 
@@ -299,7 +296,7 @@ def test_string_pipes_array_parameter(responses: RequestsMock, tmpdir):
             "paths": {
                 "/test": {
                     "get": {
-                        "operationId": "get_string_pipes_array_parameter",
+                        "operationId": "get_array_parameter",
                         "parameters": [
                             {
                                 "description": "string array parameter",
@@ -342,6 +339,6 @@ def test_string_pipes_array_parameter(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert generated_functions.array_parameter_get_string_pipes_array_parameter(
+    assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
