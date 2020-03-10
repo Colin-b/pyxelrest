@@ -716,9 +716,11 @@ class OpenAPI:
 
     def _extract_uri(self):
         # The default scheme to be used is the one used to access the OpenAPI definition itself.
-        scheme = self.open_api_definition.get(
+        schemes = self.open_api_definition.get(
             "schemes", [self.config.open_api_definition_url_parsed.scheme]
-        )[0]
+        )
+        scheme = "https" if "https" in schemes else schemes[0]
+
         # If the host is not included, the host serving the documentation is to be used (including the port).
         # service_host property is here to handle services behind a reverse proxy
         # (otherwise host will be the reverse proxy one)
@@ -728,9 +730,9 @@ class OpenAPI:
         if host_parsed.netloc:
             host = host_parsed.netloc + host_parsed.path
         # If it is not included, the API is served directly under the host.
-        base_path = self.open_api_definition.get("basePath", None)
+        base_path = self.open_api_definition.get("basePath", None) or ""
 
-        return scheme + "://" + host + base_path if base_path else scheme + "://" + host
+        return f"{scheme}://{host}{base_path}"
 
     def create_method(self, http_method, open_api_method, method_path, udf_return_type):
         udf = OpenAPIUDFMethod(
