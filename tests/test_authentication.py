@@ -6,83 +6,12 @@ from responses import RequestsMock
 from tests import loader
 
 
-def token_cache_mock(monkeypatch, token_mock: str):
-    class TokenCacheMock:
-        def get_token(self, *args, **kwargs) -> str:
-            return token_mock
-
-    monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
-
-
 def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
     for call in responses.calls:
         if call.request.url == url:
             # Pop out verified request (to be able to check multiple requests)
             responses.calls._calls.remove(call)
             return call.request
-
-
-def test_oauth2_authentication_on_custom_server_port(
-    tmpdir, monkeypatch, token_mock, responses: RequestsMock
-):
-    responses.add(
-        responses.GET,
-        url="http://test/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/test": {
-                    "get": {
-                        "operationId": "get_oauth2_authentication_success",
-                        "responses": {"200": {"description": "return value"}},
-                        "security": [{"oauth2_auth_success": ["custom_label"]}],
-                    }
-                }
-            },
-            "securityDefinitions": {
-                "oauth2_auth_success": {
-                    "type": "oauth2",
-                    "authorizationUrl": "http://localhost:8947/auth_success?response_type=id_token",
-                    "flow": "implicit",
-                    "scopes": {"custom_label": "custom category"},
-                }
-            },
-        },
-        match_querystring=True,
-    )
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "authenticated": {
-                "open_api": {"definition": "http://test/"},
-                "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            },
-            "oauth_cutom_response_port": {
-                "open_api": {"definition": "http://test/"},
-                "oauth2": {"redirect_uri_port": 5001},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            },
-        },
-    )
-
-    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.oauth_cutom_response_port_get_oauth2_authentication_success() == [
-        [""]
-    ]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
-    assert generated_functions.authenticated_get_oauth2_authentication_success() == [
-        [""]
-    ]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
 
 
 def test_oauth2_authentication_success(
@@ -125,7 +54,12 @@ def test_oauth2_authentication_success(
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
+
+    class TokenCacheMock:
+        def get_token(self, *args, **kwargs) -> str:
+            return token_mock
+
+    monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
     assert generated_functions.authenticated_get_oauth2_authentication_success() == [
         [""]
     ]
@@ -149,240 +83,12 @@ def test_pyxelrest_oauth2_authentication_success(
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.pyxelrest_get_url(
-        "http://test/test",
-        auth=["oauth2_implicit"],
-        oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
-    ) == [[""]]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
 
+    class TokenCacheMock:
+        def get_token(self, *args, **kwargs) -> str:
+            return token_mock
 
-def test_oauth2_authentication_success_with_custom_response_type(
-    tmpdir, monkeypatch, token_mock, responses: RequestsMock
-):
-    responses.add(
-        responses.GET,
-        url="http://test/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/test": {
-                    "get": {
-                        "operationId": "get_oauth2_authentication_success_with_custom_response_type",
-                        "responses": {"200": {"description": "return value"}},
-                        "security": [
-                            {
-                                "oauth2_auth_success_with_custom_response_type": [
-                                    "custom_label"
-                                ]
-                            }
-                        ],
-                    }
-                }
-            },
-            "securityDefinitions": {
-                "oauth2_auth_success_with_custom_response_type": {
-                    "type": "oauth2",
-                    "authorizationUrl": "http://localhost:8947/auth_success_with_custom_token",
-                    "flow": "implicit",
-                    "scopes": {"custom_label": "custom category"},
-                }
-            },
-        },
-        match_querystring=True,
-    )
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "oauth_custom_token_name": {
-                "open_api": {"definition": "http://test/"},
-                "oauth2": {"response_type": "my_custom_token"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.oauth_custom_token_name_get_oauth2_authentication_success_with_custom_response_type() == [
-        [""]
-    ]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
-
-def test_oauth2_authentication_success_without_response_type(
-    tmpdir, monkeypatch, token_mock, responses: RequestsMock
-):
-    responses.add(
-        responses.GET,
-        url="http://test/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/test": {
-                    "get": {
-                        "operationId": "get_oauth2_authentication_success_without_response_type",
-                        "responses": {"200": {"description": "return value"}},
-                        "security": [
-                            {
-                                "oauth2_auth_success_without_response_type": [
-                                    "custom_label"
-                                ]
-                            }
-                        ],
-                    }
-                }
-            },
-            "securityDefinitions": {
-                "oauth2_auth_success_without_response_type": {
-                    "type": "oauth2",
-                    "authorizationUrl": "http://localhost:8947/auth_success_without_response_type",
-                    "flow": "implicit",
-                    "scopes": {"custom_label": "custom category"},
-                }
-            },
-        },
-        match_querystring=True,
-    )
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "authenticated": {
-                "open_api": {"definition": "http://test/"},
-                "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.authenticated_get_oauth2_authentication_success_without_response_type() == [
-        [""]
-    ]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
-
-def test_pyxelrest_oauth2_authentication_success_without_response_type(
-    tmpdir, monkeypatch, token_mock, responses: RequestsMock
-):
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "pyxelrest": {
-                "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.pyxelrest_get_url(
-        "http://test/test",
-        auth=["oauth2_implicit"],
-        oauth2_auth_url="http://localhost:8947/auth_success_without_response_type",
-    ) == [[""]]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
-
-def test_oauth2_authentication_token_reuse(
-    tmpdir, monkeypatch, token_mock, responses: RequestsMock
-):
-    responses.add(
-        responses.GET,
-        url="http://test/",
-        json={
-            "swagger": "2.0",
-            "paths": {
-                "/test": {
-                    "get": {
-                        "operationId": "get_oauth2_authentication_success",
-                        "responses": {"200": {"description": "return value"}},
-                        "security": [{"oauth2_auth_success": ["custom_label"]}],
-                    }
-                }
-            },
-            "securityDefinitions": {
-                "oauth2_auth_success": {
-                    "type": "oauth2",
-                    "authorizationUrl": "http://localhost:8947/auth_success?response_type=id_token",
-                    "flow": "implicit",
-                    "scopes": {"custom_label": "custom category"},
-                }
-            },
-        },
-        match_querystring=True,
-    )
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "authenticated": {
-                "open_api": {"definition": "http://test/"},
-                "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.authenticated_get_oauth2_authentication_success() == [
-        [""]
-    ]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
-    # As the token should not be expired, this call should use the same token
-    assert generated_functions.authenticated_get_oauth2_authentication_success() == [
-        [""]
-    ]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
-
-def test_pyxelrest_oauth2_authentication_token_reuse(
-    tmpdir, monkeypatch, token_mock, responses: RequestsMock
-):
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "pyxelrest": {
-                "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
-            }
-        },
-    )
-
-    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    token_cache_mock(monkeypatch, token_mock)
-    assert generated_functions.pyxelrest_get_url(
-        "http://test/test",
-        auth=["oauth2_implicit"],
-        oauth2_auth_url="http://localhost:8947/auth_success?response_type=id_token",
-    ) == [[""]]
-    assert (
-        _get_request(responses, "http://test/test").headers["Authorization"]
-        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
-    )
-
+    monkeypatch.setattr(requests_auth.OAuth2, "token_cache", TokenCacheMock())
     assert generated_functions.pyxelrest_get_url(
         "http://test/test",
         auth=["oauth2_implicit"],

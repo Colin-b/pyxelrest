@@ -44,16 +44,10 @@ def generate_python_file(
     """
     Create python file containing generated xlwings User Defined Functions.
     """
-    user_defined_functions_file_path = os.path.join(
-        os.path.dirname(__file__), file_name
-    )
-    logging.debug(f"Generating {user_defined_functions_file_path}")
-    with open(
-        user_defined_functions_file_path, "w", encoding="utf-8"
-    ) as generated_file:
-        content = _user_defined_functions(services)
-        logging.debug(content)
-        generated_file.write(content)
+    file_path = os.path.join(os.path.dirname(__file__), file_name)
+    logging.debug(f"Generating {file_path}")
+    with open(file_path, "w", encoding="utf-8") as file:
+        file.write(_user_defined_functions(services))
 
 
 def load_user_defined_functions(
@@ -61,7 +55,6 @@ def load_user_defined_functions(
 ):
     # Ensure that newly generated file is reloaded as user_defined_functions
     user_defined_functions = reload(import_module("pyxelrest.user_defined_functions"))
-    logger.debug(f"User defined functions reloaded: {user_defined_functions.__file__}")
 
     user_defined_functions.udf_methods = {
         udf_name: method
@@ -88,11 +81,6 @@ if GENERATE_UDF_ON_IMPORT:
         logger.debug("Expose user defined functions through PyxelRest.")
         load_user_defined_functions(services)
         from pyxelrest.user_defined_functions import *
-        import pyxelrest.user_defined_functions
-
-        logger.debug(
-            f"User defined functions exposed: {[name for name, value in pyxelrest.user_defined_functions.__dict__.items() if hasattr(value, '__xlfunc__')]}"
-        )
     except:
         logger.exception("Error while importing UDFs.")
 
