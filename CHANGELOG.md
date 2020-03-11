@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - file URl are now properly handled, they must start with file:/// instead of file://
 
 ### Removed
-- Drop support for python < 3.6
+- Drop support for python < 3.7
 - Drop support for application/msgpackpandas as msgpack support has been dropped from pandas and this is not a standardized content type.
 - Drop support for ujson.
 

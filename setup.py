@@ -45,7 +45,6 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Operating System :: Microsoft :: Windows :: Windows 7",
@@ -142,7 +141,7 @@ setup(
             "cachetools==4.*",
         ],
     },
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     scripts=[
         "pyxelrest_auto_update.py",
         "pyxelrest_post_install.py",
