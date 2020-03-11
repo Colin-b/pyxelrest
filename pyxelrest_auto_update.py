@@ -18,8 +18,12 @@ except ModuleNotFoundError:  # Occurs since pip > 9
     from pip._internal.utils.misc import get_installed_distributions
 
 import tkinter
-import yaml
 import win32com.client
+
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 
 CLOSING_EXCEL_STEP = "Closing Microsoft Excel"
@@ -59,7 +63,7 @@ def create_logger():
     default_log_file_path = os.path.join(
         os.getenv("APPDATA"), "pyxelrest", "logs", "pyxelrest_auto_update.log"
     )
-    if os.path.isfile(logging_configuration_file_path):
+    if yaml and os.path.isfile(logging_configuration_file_path):
         with open(logging_configuration_file_path, "r") as config_file:
             log_config_dict = yaml.load(config_file, Loader=yaml.FullLoader)
             logging.config.dictConfig(log_config_dict)
