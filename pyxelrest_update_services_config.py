@@ -1,8 +1,8 @@
 import argparse
 import logging
 import os
+
 import requests
-import sys
 import yaml
 
 if __name__ == "__main__":
@@ -166,7 +166,7 @@ class ServicesConfigUpdater:
             print(service_name)
 
 
-if __name__ == "__main__":
+def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "file_or_directory",
@@ -186,10 +186,13 @@ if __name__ == "__main__":
         type=str,
         nargs="*",
     )
-    options = parser.parse_args(sys.argv[1:])
-
+    options = parser.parse_args(args if args else None)
     try:
         installer = ServicesConfigUpdater(options.action)
         installer.update_configuration(options.file_or_directory, options.services)
     except:
         logger.exception("Unable to perform services configuration update.")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,13 +1,8 @@
 import os
 from setuptools import setup, find_packages
 from distutils.command.install_data import install_data
-import distutils.sysconfig
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-# Corresponds to Lib\site-packages folder
-modules_dir = distutils.sysconfig.get_python_lib()
-data_dir = os.path.join(modules_dir, "..", "..")
-scripts_dir = os.path.join(modules_dir, "..", "..", "Scripts")
 
 
 class CustomInstall(install_data):
@@ -142,6 +137,16 @@ setup(
         ],
     },
     python_requires=">=3.7",
+    entry_points={
+        "console_scripts": [
+            "cross_location_risk=cross_location_risk.main:main",
+            "send_market_risk_pam_mail=cross_location_risk.send_report:main",
+            "pyxelrest_auto_update=pyxelrest_auto_update:main",
+            "pyxelrest_post_install=pyxelrest_post_install:main",
+            "pyxelrest_install_addin=pyxelrest_install_addin:main",
+            "pyxelrest_update_services_config=pyxelrest_update_services_config:main",
+        ]
+    },
     scripts=[
         "pyxelrest_auto_update.py",
         "pyxelrest_post_install.py",

@@ -325,7 +325,7 @@ class Installer:
                         write_addin_configuration_line(line, new_file)
 
 
-if __name__ == "__main__":
+def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--add_in_directory",
@@ -348,8 +348,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--check_pre_releases", help="Also fetch pre-releases.", action="store_true"
     )
-    options = parser.parse_args(sys.argv[1:])
-
+    options = parser.parse_args(args if args else None)
     installer = Installer(
         add_in_folder=options.add_in_directory,
         scripts_folder=options.scripts_directory,
@@ -357,3 +356,7 @@ if __name__ == "__main__":
         check_pre_releases=options.check_pre_releases,
     )
     installer.perform_post_installation_tasks()
+
+
+if __name__ == "__main__":
+    main()

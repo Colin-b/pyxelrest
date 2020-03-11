@@ -1,11 +1,8 @@
 import argparse
-import win32com.client
 import multiprocessing
 import os
 import os.path
 import time
-import sys
-import yaml
 import re
 import logging
 import logging.config
@@ -21,6 +18,8 @@ except ModuleNotFoundError:  # Occurs since pip > 9
     from pip._internal.utils.misc import get_installed_distributions
 
 import tkinter
+import yaml
+import win32com.client
 
 
 CLOSING_EXCEL_STEP = "Closing Microsoft Excel"
@@ -484,7 +483,7 @@ class UpdateGUI(tkinter.Frame):
             self.updating_queue.task_done()
 
 
-if __name__ == "__main__":
+def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--path_to_up_to_date_configurations",
@@ -495,8 +494,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--check_pre_releases", help="Also fetch pre-releases.", action="store_true"
     )
-    options = parser.parse_args(sys.argv[1:])
-
+    options = parser.parse_args(args if args else None)
     logger.debug("Starting auto update script...")
     if _is_already_updating():
         logger.debug("Skip update check as another update is ongoing.")
@@ -512,3 +510,7 @@ if __name__ == "__main__":
             raise
         finally:
             _update_is_finished()
+
+
+if __name__ == "__main__":
+    main()
