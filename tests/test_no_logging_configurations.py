@@ -50,4 +50,4 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
         file.write(yaml.dump(config))
 
     pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
-    reload(import_module("pyxelrest.pyxelrestgenerator"))
+    reload(import_module("pyxelrest._generator"))

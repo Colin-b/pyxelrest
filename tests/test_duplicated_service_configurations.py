@@ -2612,7 +2612,7 @@ usual_parameters:
 """
         )
     pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
-    pyxelrestgenerator = reload(import_module("pyxelrest.pyxelrestgenerator"))
+    generated_functions = reload(import_module("pyxelrest._generator"))
 
     responses.add(
         responses.GET,
@@ -2620,7 +2620,7 @@ usual_parameters:
         json=["2014-03-05", "9999-01-01", "3001-01-01", "1970-01-01", "1900-01-01"],
         match_querystring=True,
     )
-    assert pyxelrestgenerator.usual_parameters_get_date() == [
+    assert generated_functions.usual_parameters_get_date() == [
         [datetime.datetime(2014, 3, 5, 0, 0)],
         [datetime.datetime(9999, 1, 1, 0, 0)],
         [datetime.datetime(3001, 1, 1, 0, 0)],

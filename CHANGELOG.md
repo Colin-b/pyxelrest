@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via --check_pre_releases.
 - Use HTTPS scheme whenever possible.
 - Generate one python file with UDFs per service.
+- Most of the python modules and functions are now private. If you need access to some internals, please open an issue.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

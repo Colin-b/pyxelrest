@@ -34,5 +34,5 @@ def test_service_can_be_loaded_without_hitting_timeout(monkeypatch, tmpdir):
             )
         )
     pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
-    nb_seconds = timeit.timeit("from pyxelrest import pyxelrestgenerator", number=1)
+    nb_seconds = timeit.timeit("from pyxelrest import _generator", number=1)
     assert nb_seconds < 3, "Time to load pyxelrest should be around timeout."

@@ -556,12 +556,9 @@ import pyxelrest.user_defined_functions as udfs
 
 ### Generating user defined functions
 
-When `pyxelrest.GENERATE_UDF_ON_IMPORT` is set to `True` (default behavior), 
-UDFs are generated based on a configuration file by loading (e.g. on first import) pyxelrest.pyxelrestgenerator.py.
+You can manually (re)generate UDFs by calling `pyxelrest.load()` and providing your custom configuration.
 
-You can manually regenerate UDFs by calling `pyxelrest.load()` and providing your custom configuration.
-
-All UDFs can be found within pyxelrest.user_defined_functions.py.
+All UDFs can be found within `pyxelrest.user_defined_functions`.
 
 ## Frequently Asked Question
 

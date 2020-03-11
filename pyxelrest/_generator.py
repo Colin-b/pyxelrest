@@ -12,16 +12,16 @@ import sys
 import jinja2
 
 from pyxelrest import (
-    open_api,
+    _open_api,
     GENERATE_UDF_ON_IMPORT,
-    custom_logging,
+    _custom_logging,
     SERVICES_CONFIGURATION_FILE_PATH,
     LOGGING_CONFIGURATION_FILE_PATH,
 )
 
 
 def _user_defined_functions(
-    service: Union[open_api.PyxelRestService, open_api.OpenAPI]
+    service: Union[_open_api.PyxelRestService, _open_api.OpenAPI]
 ) -> str:
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
@@ -38,7 +38,7 @@ def _user_defined_functions(
 
 
 def _user_defined_functions_init(
-    services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
+    services: List[Union[_open_api.PyxelRestService, _open_api.OpenAPI]]
 ) -> str:
     """
     Create xlwings User Defined Functions according to user_defined_functions template.
@@ -55,7 +55,7 @@ def _user_defined_functions_init(
 
 
 def generate_python_file(
-    services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
+    services: List[Union[_open_api.PyxelRestService, _open_api.OpenAPI]]
 ):
     """
     Create python file containing generated xlwings User Defined Functions.
@@ -81,7 +81,7 @@ def generate_python_file(
 
 
 def load_user_defined_functions(
-    services: List[Union[open_api.PyxelRestService, open_api.OpenAPI]]
+    services: List[Union[_open_api.PyxelRestService, _open_api.OpenAPI]]
 ):
     # Ensure that newly generated file is reloaded as user_defined_functions
     user_defined_functions = reload(import_module("pyxelrest.user_defined_functions"))
@@ -89,14 +89,14 @@ def load_user_defined_functions(
 
 
 if __name__ == "__main__":
-    logger = logging.getLogger("pyxelrest.pyxelrestgenerator")
+    logger = logging.getLogger("pyxelrest._generator")
 else:
     logger = logging.getLogger(__name__)
 
 if GENERATE_UDF_ON_IMPORT:
-    custom_logging.load_logging_configuration(LOGGING_CONFIGURATION_FILE_PATH)
+    _custom_logging.load_logging_configuration(LOGGING_CONFIGURATION_FILE_PATH)
     try:
-        services = open_api.load_services_from_yaml(SERVICES_CONFIGURATION_FILE_PATH)
+        services = _open_api.load_services_from_yaml(SERVICES_CONFIGURATION_FILE_PATH)
         generate_python_file(services)
     except Exception as e:
         logger.exception("Cannot generate user defined functions.")

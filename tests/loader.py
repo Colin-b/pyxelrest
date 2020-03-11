@@ -43,4 +43,4 @@ root:
 
     pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = config_file_path
 
-    return reload(import_module("pyxelrest.pyxelrestgenerator"))
+    return reload(import_module("pyxelrest._generator"))

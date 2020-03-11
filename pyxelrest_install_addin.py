@@ -121,7 +121,7 @@ class XlWingsConfig:
             config_file.writelines(
                 [
                     f'"INTERPRETER", "{pythonw_path}"',
-                    '"UDF MODULES","pyxelrest.pyxelrestgenerator"',
+                    '"UDF MODULES","pyxelrest._generator"',
                 ]
             )
         logger.info("XLWings PyxelRest configuration created.")

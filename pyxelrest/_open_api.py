@@ -15,10 +15,10 @@ import xlwings.server
 import yaml
 
 
-from pyxelrest import authentication, session, definition_deserializer, vba
-from pyxelrest.fast_deserializer import Flattenizer
-from pyxelrest.pyxelresterrors import *
-from pyxelrest.definition_deserializer import Response
+from pyxelrest import _authentication, _session, _definition_deserializer, _vba
+from pyxelrest._fast_deserializer import Flattenizer
+from pyxelrest._exceptions import *
+from pyxelrest._definition_deserializer import Response
 
 
 logger = logging.getLogger(__name__)
@@ -39,8 +39,8 @@ def to_vba_valid_name(open_api_name: str) -> str:
     Return name as non VBA or python restricted keyword
     """
     # replace vba restricted keywords
-    if open_api_name.lower() in vba.vba_restricted_keywords:
-        open_api_name = vba.vba_restricted_keywords[open_api_name.lower()]
+    if open_api_name.lower() in _vba.vba_restricted_keywords:
+        open_api_name = _vba.vba_restricted_keywords[open_api_name.lower()]
     # replace forbidden VBA or Python characters (carets, dots and leading underscores)
     return open_api_name.replace("-", "_").replace(".", "_").lstrip("_")
 
@@ -770,14 +770,14 @@ class OpenAPI:
         Retrieve OpenAPI JSON definition from service.
         :return: Dictionary representation of the retrieved Open API JSON definition.
         """
-        requests_session = session.get(0)
+        requests_session = _session.get(0)
         response = requests_session.get(
             self.config.open_api_definition,
             proxies=self.config.proxies,
             verify=False,
             headers=self.config.custom_headers,
             timeout=(self.config.connect_timeout, self.config.definition_read_timeout),
-            auth=authentication.get_definition_retrieval_auth(self.config),
+            auth=_authentication.get_definition_retrieval_auth(self.config),
         )
         response.raise_for_status()
         # TODO Check if we still need to explicitely use OrderedDict since python 3.6
@@ -1564,7 +1564,7 @@ def get_result(
 
     response = None
     try:
-        response = session.get(udf_method.service.config.max_retries).request(
+        response = _session.get(udf_method.service.config.max_retries).request(
             udf_method.requests_method,
             udf_method.uri.format(**request_content.path_values),
             json=request_content.payload
@@ -1576,7 +1576,7 @@ def get_result(
             files=request_content.files
             if udf_method.contains_file_parameters
             else None,
-            auth=authentication.get_auth(udf_method, request_content),
+            auth=_authentication.get_auth(udf_method, request_content),
             verify=False,
             headers=request_content.header,
             proxies=udf_method.service.config.proxies,
@@ -1685,7 +1685,7 @@ def json_as_list(
     response: requests.Response, udf_method: Union[PyxelRestUDFMethod, OpenAPIUDFMethod]
 ) -> list:
     if udf_method.service.config.rely_on_definitions:
-        definition_deserializer.all_definitions = {}
+        _definition_deserializer.all_definitions = {}
         logger.debug(
             "Converting JSON string to corresponding python structure (relying on definitions)..."
         )

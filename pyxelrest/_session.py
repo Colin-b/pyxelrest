@@ -4,7 +4,7 @@ import requests
 from requests.adapters import HTTPAdapter
 
 from pyxelrest.version import __version__
-from pyxelrest.fileadapter import LocalFileAdapter
+from pyxelrest._fileadapter import LocalFileAdapter
 
 sessions = {}
 nb_requests_sent = 0
