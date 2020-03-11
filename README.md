@@ -56,18 +56,16 @@ python -m pip install pyxelrest
 
 #### User add-in installation
 
-Once python module is installed, a script is available to install the Microsoft Excel add-in.
+Once python module is installed, `pyxelrest_install_addin` script is available to install the Microsoft Excel add-in.
 
 The add-in is not installed at the same time as the module because:
     * It may prompt the user for installation.
     * pyxelrest can be used as a python module without the need for the add-in.
 
-Considering %scripts_dir% as the directory containing python scripts (Scripts folder within your virtual environment).
-
 Install Microsoft Excel add-in by executing the following command:
 
 ```bash
-python %scripts_dir%\pyxelrest_install_addin.py
+pyxelrest_install_addin
 ```
 
 The following options are available when launching this script:
@@ -123,16 +121,16 @@ The following options are available when launching this script:
 ### Optional Dependencies
 
 - Support for NTLM authentication (with user credentials provided),
-    - ``requests_ntlm`` module is required in case auth=ntlm is set in ``security_details`` property and custom credentials are provided.
-    - ``ntlm`` extra requires can be used to install those dependencies.
+    - [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) module is required in case auth=ntlm is set in `security_details` property and custom credentials are provided.
+    - `ntlm` extra requires can be used to install those dependencies.
 
 - Support for automatic NTLM authentication.
-    - ``requests_negotiate_sspi`` module is required in case auth=ntlm is set in ``security_details`` property and logged in user credentials should be used.
-    - ``ntlm`` extra requires can be used to install those dependencies.
+    - [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) module is required in case auth=ntlm is set in `security_details` property and logged in user credentials should be used.
+    - `ntlm` extra requires can be used to install those dependencies.
 
 - Support for in-memory caching.
-    - ``cachetool`` module is required to be able to use in-memory caching.
-    - ``cachetool`` extra requires can be used to install those dependencies.
+    - [`cachetool`](https://pypi.org/project/cachetools/) module is required to be able to use in-memory caching.
+    - `cachetool` extra requires can be used to install those dependencies.
 
 ## Configuration
 
