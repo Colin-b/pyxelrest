@@ -21,20 +21,25 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 
 Once installed, open Microsoft Excel and UDFs from configured services will be available.
 
-![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_category.PNG)
-
-![Filling in UDF parameters](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_category.PNG" alt='Selecting UDF'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG" alt='Filling in UDF parameters'>
+</p>
 
 UDFs are automatically updated on Microsoft Excel start and on Configuration update.
 
 Updating UDFs without restarting Microsoft Excel or updating configuration can be done thanks to the ``Update Functions`` button within ``PyxelRest`` tab.
 
-![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+</p>
 
 PyxelRest itself can automatically stay up to date. 
 The updater make sure that the python module, the Microsoft Excel add-in and the services configuration stays up to date.
 
-![Update steps](addin/AutoLoadPyxelRestAddIn/resources/update_gui.gif)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/update_gui.gif" alt='Update steps'>
+</p>
 
 ## Installation
 
@@ -138,11 +143,11 @@ The following options are available when launching this script:
 
 Services configuration can be done within Microsoft Excel thanks to the `Configure Services` button within `PyxelRest` tab.
 
-![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
-
-![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services.PNG)
-
-![Advanced configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services.PNG" alt='Configuration screen'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service.PNG" alt='Advanced configuration screen'>
+</p>
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\services.yml` file.
 
@@ -461,11 +466,11 @@ Requiring cachetools python module.
 
 You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
-![Configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services_pyxelrest.PNG)
-
-![Advanced configuration screen](addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service_pyxelrest.PNG)
-
-![Selecting UDF](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services_pyxelrest.PNG" alt='Configuration screen'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service_pyxelrest.PNG" alt='Advanced configuration screen'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG" alt='Selecting UDF'>
+</p>
 
 It can be configured the same way than a usual service, except that open_api section is not used anymore.
 
@@ -481,13 +486,17 @@ Default log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
 This folder can easily be accessed thanks to the `Open Logs` button within `PyxelRest` tab.
 
-![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+</p>
 
 ### Microsoft Excel Auto-Load add-in Configuration
 
 Auto check for update can be activated/deactivated within Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
 
-![Microsoft Excel add-in](addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+</p>
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
 
@@ -562,7 +571,9 @@ All UDFs can be found within `pyxelrest.user_defined_functions`.
 
 ### Microsoft Excel Wizard does not show any parameter
 
-![Microsoft Excel Wizard bug](addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG" alt='Microsoft Excel Wizard bug'>
+</p>
 
 Microsoft Excel function wizard is not able to handle functions with a long definition.
 
