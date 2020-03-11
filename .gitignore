@@ -244,3 +244,4 @@ dist/
 pyxelrest.egg-info/
 pyxelrest/user_defined_functions.py
 pyxelrest/user_defined_functions/*.py
+/.pypirc
