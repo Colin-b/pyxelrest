@@ -60,19 +60,21 @@ def generate_python_file(
     """
     Create python file containing generated xlwings User Defined Functions.
     """
+    user_defined_functions_path = os.path.join(
+        os.path.dirname(__file__), "user_defined_functions"
+    )
+    if not os.path.exists(user_defined_functions_path):
+        os.makedirs(user_defined_functions_path)
+
     for service in services:
         file_path = os.path.join(
-            os.path.dirname(__file__),
-            "user_defined_functions",
-            f"{service.config.name}.py",
+            user_defined_functions_path, f"{service.config.name}.py"
         )
         logging.debug(f"Generating {file_path}")
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(_user_defined_functions(service))
 
-    file_path = os.path.join(
-        os.path.dirname(__file__), "user_defined_functions", "__init__.py"
-    )
+    file_path = os.path.join(user_defined_functions_path, "__init__.py")
     logging.debug(f"Generating {file_path}")
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(_user_defined_functions_init(services))
