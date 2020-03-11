@@ -50,7 +50,7 @@ setup(
         "Operating System :: Microsoft :: Windows :: Windows 7",
     ],
     keywords=["excel", "openapi", "swagger", "rest", "udf", "service"],
-    packages=find_packages(exclude=["tests*"]),
+    packages=find_packages(exclude=["tests*", "pyxelrest.user_defined_functions.*"]),
     package_data={
         "pyxelrest": [
             "default_logging_configuration.yml.jinja2",
