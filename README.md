@@ -19,7 +19,7 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 
 ## Usage
 
-Once installed, open Microsoft Excel and UDFs from configured services will be available.
+Once installed, open Microsoft Excel and UDFs from configured services ([petstore](https://petstore.swagger.io/#/) in this example) will be available.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_category.PNG" alt='Selecting UDF'>
