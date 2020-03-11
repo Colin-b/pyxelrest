@@ -1,0 +1,2 @@
+[run]
+omit = pyxelrest/user_defined_functions/*
