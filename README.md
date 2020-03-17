@@ -83,12 +83,7 @@ The following options are available when launching this script:
     <tr>
         <td><strong>--add_in_directory</strong></td>
         <td>Directory containing PyxelRest Microsoft Excel auto load add-in.</td>
-        <td>Default to ..\pyxelrest_addin relatively to the scripts directory.</td>
-    </tr>
-    <tr>
-        <td><strong>--scripts_directory</strong></td>
-        <td>Directory containing installed Python scripts.</td>
-        <td>Default to the folder containing this script.</td>
+        <td>Default to ..\pyxelrest_addin relatively to the python executable directory.</td>
     </tr>
     <tr>
         <td><strong>--path_to_up_to_date_configuration</strong></td>

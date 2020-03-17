@@ -171,7 +171,6 @@ class Installer:
         self,
         *,
         add_in_folder: str = None,
-        scripts_folder: str = None,
         vsto_version: str = "10.0",
         path_to_up_to_date_configuration: str = None,
         check_pre_releases: bool = False,
@@ -181,12 +180,9 @@ class Installer:
                 "Auto Load add-in can only be installed on Microsoft Windows."
             )
 
-        self.scripts_folder = scripts_folder or os.path.abspath(
-            os.path.dirname(sys.executable)
-        )
-
         if not add_in_folder:
-            data_dir = os.path.join(self.scripts_folder, "..")
+            scripts_folder = os.path.abspath(os.path.dirname(sys.executable))
+            data_dir = os.path.join(scripts_folder, "..")
             add_in_folder = os.path.join(data_dir, "pyxelrest_addin")
 
         self.add_in_folder = to_absolute_path(add_in_folder)
@@ -321,12 +317,6 @@ def main(*args):
         type=str,
     )
     parser.add_argument(
-        "--scripts_directory",
-        help="Directory containing installed Python scripts.",
-        default=None,
-        type=str,
-    )
-    parser.add_argument(
         "--path_to_up_to_date_configuration",
         help="Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.",
         default=None,
@@ -338,7 +328,6 @@ def main(*args):
     options = parser.parse_args(args if args else None)
     installer = Installer(
         add_in_folder=options.add_in_directory,
-        scripts_folder=options.scripts_directory,
         path_to_up_to_date_configuration=options.path_to_up_to_date_configuration,
         check_pre_releases=options.check_pre_releases,
     )
