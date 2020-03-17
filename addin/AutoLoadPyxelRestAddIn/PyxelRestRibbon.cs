@@ -19,6 +19,7 @@ namespace AutoLoadPyxelRestAddIn
             developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), Globals.ThisAddIn.GetPyxelRestVersion());
 
             string autoCheckForUpdates = ThisAddIn.GetSetting("AutoCheckForUpdates");
+            // Do not allow to check for update if the parameter is not set in configuration
             autoUpdateButton.Enabled = !string.IsNullOrEmpty(autoCheckForUpdates);
             autoUpdateButton.Checked = "True".Equals(autoCheckForUpdates);
             autoUpdateButton.Click += ActivateOrDeactivateAutoUpdate;

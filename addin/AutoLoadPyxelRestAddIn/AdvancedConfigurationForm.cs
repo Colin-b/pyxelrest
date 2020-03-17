@@ -35,9 +35,11 @@ namespace AutoLoadPyxelRestAddIn
         private TextBox oauth2ParamValue;
         private AddButton addOAuth2Param;
 
-        private RadioButton synchronousAutoExpand;
-        private RadioButton asynchronousAutoExpand;
-        private CheckBox shiftResult;
+        private CheckBox dynamicArrayFormulasLockExcel;
+        private CheckBox shiftDynamicArrayFormulasResult;
+
+        private CheckBox legacyArrayFormulasLockExcel;
+        private CheckBox shiftLegacyArrayFormulasResult;
 
         private TableLayoutPanel pythonModulesPanel;
         private TextBox pythonModuleName;
@@ -201,30 +203,40 @@ namespace AutoLoadPyxelRestAddIn
                 }
                 #endregion
 
-                var autoExpandEnabled = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") || ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("async_auto_expand") : true;
+                var dynamicArrayFormulasEnabled = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("vba_compatible") : false;
+                var legacyArrayFormulasEnabled = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") || ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("async_auto_expand") : true;
+                var vbaCompatibleFormulasEnabled = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("vba_compatible") : false;
 
-                #region Return behavior
+                #region Formulas
                 {
-                    layout.Controls.Add(new Label { Text = "Return types", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
+                    layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
 
                     var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
-                    #region UDF Return types
+                    #region Array formulas
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF can be used in VBA", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var vbaCompatible = new CheckBox { Text = "VBA compatible", Checked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("vba_compatible") : false };
-                        tooltip.SetToolTip(vbaCompatible, "Results will only fill selected cells.");
-                        vbaCompatible.CheckedChanged += VBACompatible_CheckedChanged;
-                        panel.Controls.Add(vbaCompatible, 0, 0);
+                        var dynamicArrayFormulas = new CheckBox { Text = "Dynamic array", Checked = dynamicArrayFormulasEnabled };
+                        tooltip.SetToolTip(dynamicArrayFormulas, "If your version of Microsoft Excel supports dynamic array formulas, results will be spilled.\nOtherwise results will only fill selected cells.\nUse this formula behavior if you want to call it using VBA.");
+                        dynamicArrayFormulas.CheckedChanged += DynamicArrayFormulas_CheckedChanged;
+                        panel.Controls.Add(dynamicArrayFormulas, 0, 0);
                     }
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF cannot be used in VBA", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var autoExpand = new CheckBox { Text = "Auto expand", Checked = autoExpandEnabled, Width = 160 };
-                        tooltip.SetToolTip(autoExpand, "Results will automatically fill cells.");
-                        autoExpand.CheckedChanged += AutoExpand_CheckedChanged;
-                        panel.Controls.Add(autoExpand, 1, 0);
+                        var legacyArrayFormulas = new CheckBox { Text = "Legacy array", Checked = legacyArrayFormulasEnabled };
+                        tooltip.SetToolTip(legacyArrayFormulas, "If your version of Microsoft Excel does not supports dynamic array formulas, use this to spill results.\nDo not use this formula behavior if you want to call it using VBA.");
+                        legacyArrayFormulas.CheckedChanged += LegacyArrayFormulas_CheckedChanged;
+                        panel.Controls.Add(legacyArrayFormulas, 1, 0);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var vbaCompatibleFormulas = new CheckBox { Text = "Visual basic", Checked = vbaCompatibleFormulasEnabled, Width = 160 };
+                        tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using VBA only.");
+                        vbaCompatibleFormulas.CheckedChanged += VBACompatibleFormulas_CheckedChanged;
+                        panel.Controls.Add(vbaCompatibleFormulas, 2, 0);
                     }
                     #endregion
 
@@ -232,43 +244,65 @@ namespace AutoLoadPyxelRestAddIn
                 }
                 #endregion
 
-                #region Auto expand behavior
+                #region Dynamic array formulas behavior
                 {
-                    layout.Controls.Add(new Label { Text = "Auto expand", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
+                    layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
 
                     var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
                     var synchronousChecked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") : false;
 
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        synchronousAutoExpand = new RadioButton { Text = "Synchronous", Checked = synchronousChecked, Width = 160 };
-                        tooltip.SetToolTip(synchronousAutoExpand, "Results will automatically fill cells.");
-                        synchronousAutoExpand.CheckedChanged += SynchronousAutoExpand_CheckedChanged;
-                        synchronousAutoExpand.Enabled = autoExpandEnabled;
-                        panel.Controls.Add(synchronousAutoExpand, 0, 0);
+                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked };
+                        tooltip.SetToolTip(dynamicArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
+                        dynamicArrayFormulasLockExcel.CheckedChanged += DynamicArrayFormulasLockExcel_CheckedChanged;
+                        dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasEnabled;
+                        panel.Controls.Add(dynamicArrayFormulasLockExcel, 0, 0);
                     }
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "UDF will not lock until result is received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift results by one column", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        asynchronousAutoExpand = new RadioButton { Text = "Asynchronous", Checked = !synchronousChecked, Width = 170 };
-                        tooltip.SetToolTip(asynchronousAutoExpand, "Results will automatically fill cells when received.");
-                        asynchronousAutoExpand.CheckedChanged += AsynchronousAutoExpand_CheckedChanged;
-                        asynchronousAutoExpand.Enabled = autoExpandEnabled;
-                        panel.Controls.Add(asynchronousAutoExpand, 1, 0);
-                    }
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift auto expanded results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        shiftResult = new CheckBox { Text = "Shift results", Checked = servicePanel.service.Udf.ContainsKey("shift_result") ? (bool)servicePanel.service.Udf["shift_result"] : true };
-                        tooltip.SetToolTip(shiftResult, "Left column will be empty.");
-                        shiftResult.CheckedChanged += ShiftResult_CheckedChanged;
-                        shiftResult.Enabled = autoExpandEnabled;
-                        panel.Controls.Add(shiftResult, 2, 0);
+                        shiftDynamicArrayFormulasResult = new CheckBox { Text = "Shift results", Checked = servicePanel.service.Udf.ContainsKey("shift_result") ? (bool)servicePanel.service.Udf["shift_result"] : true };
+                        tooltip.SetToolTip(shiftDynamicArrayFormulasResult, "Left column will be empty.");
+                        shiftDynamicArrayFormulasResult.CheckedChanged += ShiftDynamicArrayFormulasResult_CheckedChanged;
+                        shiftDynamicArrayFormulasResult.Enabled = dynamicArrayFormulasEnabled;
+                        panel.Controls.Add(shiftDynamicArrayFormulasResult, 1, 0);
                     }
 
                     layout.Controls.Add(panel, 1, 7);
+                }
+                #endregion
+
+                #region Legacy array formulas behavior
+                {
+                    layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 8);
+
+                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
+
+                    var synchronousChecked = servicePanel.service.Udf.ContainsKey("return_types") ? ((IList<string>)servicePanel.service.Udf["return_types"]).Contains("sync_auto_expand") : false;
+
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked };
+                        tooltip.SetToolTip(legacyArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
+                        legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
+                        legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasEnabled;
+                        panel.Controls.Add(legacyArrayFormulasLockExcel, 0, 0);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift results by one column", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        shiftLegacyArrayFormulasResult = new CheckBox { Text = "Shift results", Checked = servicePanel.service.Udf.ContainsKey("shift_result") ? (bool)servicePanel.service.Udf["shift_result"] : true };
+                        tooltip.SetToolTip(shiftLegacyArrayFormulasResult, "Left column will be empty.");
+                        shiftLegacyArrayFormulasResult.CheckedChanged += ShiftLegacyArrayFormulasResult_CheckedChanged;
+                        shiftLegacyArrayFormulasResult.Enabled = legacyArrayFormulasEnabled;
+                        panel.Controls.Add(shiftLegacyArrayFormulasResult, 1, 0);
+                    }
+
+                    layout.Controls.Add(panel, 1, 8);
                 }
                 #endregion
 
@@ -930,17 +964,15 @@ namespace AutoLoadPyxelRestAddIn
             servicePanel.service.ApiKey = ((TextBox)sender).Text;
         }
 
-        private void AutoExpand_CheckedChanged(object sender, EventArgs e)
+        private void LegacyArrayFormulas_CheckedChanged(object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked)
             {
-                AsynchronousAutoExpand_CheckedChanged();
-                SynchronousAutoExpand_CheckedChanged();
-                ShiftResult_CheckedChanged();
+                LegacyArrayFormulas_CheckedChanged();
+                ShiftLegacyArrayFormulasResult_CheckedChanged();
 
-                asynchronousAutoExpand.Enabled = true;
-                synchronousAutoExpand.Enabled = true;
-                shiftResult.Enabled = true;
+                legacyArrayFormulasLockExcel.Enabled = true;
+                shiftLegacyArrayFormulasResult.Enabled = true;
             }
             else
             {
@@ -948,44 +980,56 @@ namespace AutoLoadPyxelRestAddIn
                 RemoveValueToUdfList("sync_auto_expand", "return_types");
                 servicePanel.service.Udf.Remove("shift_result");
 
-                asynchronousAutoExpand.Enabled = false;
-                synchronousAutoExpand.Enabled = false;
-                shiftResult.Enabled = false;
+                legacyArrayFormulasLockExcel.Enabled = false;
+                shiftLegacyArrayFormulasResult.Enabled = false;
             }
         }
 
-        private void AsynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
+        private void LegacyArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
         {
-            AsynchronousAutoExpand_CheckedChanged();
+            LegacyArrayFormulas_CheckedChanged();
         }
 
-        private void AsynchronousAutoExpand_CheckedChanged()
+        private void LegacyArrayFormulas_CheckedChanged()
         {
-            if (asynchronousAutoExpand.Checked)
-                AddValueToUdfList("async_auto_expand", "return_types");
-            else
-                RemoveValueToUdfList("async_auto_expand", "return_types");
-        }
-
-        private void SynchronousAutoExpand_CheckedChanged(object sender, EventArgs e)
-        {
-            SynchronousAutoExpand_CheckedChanged();
-        }
-
-        private void SynchronousAutoExpand_CheckedChanged()
-        {
-            if (synchronousAutoExpand.Checked)
+            if (legacyArrayFormulasLockExcel.Checked)
+            {
                 AddValueToUdfList("sync_auto_expand", "return_types");
+                RemoveValueToUdfList("async_auto_expand", "return_types");
+            }
             else
+            {
+                AddValueToUdfList("async_auto_expand", "return_types");
                 RemoveValueToUdfList("sync_auto_expand", "return_types");
+            }
         }
 
-        private void VBACompatible_CheckedChanged(object sender, EventArgs e)
+        private void DynamicArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private void DynamicArrayFormulas_CheckedChanged(object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked)
+            {
                 AddValueToUdfList("vba_compatible", "return_types");
+
+                dynamicArrayFormulasLockExcel.Enabled = true;
+                shiftDynamicArrayFormulasResult.Enabled = true;
+            }
             else
+            {
                 RemoveValueToUdfList("vba_compatible", "return_types");
+
+                dynamicArrayFormulasLockExcel.Enabled = false;
+                shiftDynamicArrayFormulasResult.Enabled = false;
+            }
+        }
+
+        private void VBACompatibleFormulas_CheckedChanged(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void AddValueToUdfList(string value, string listName)
@@ -1002,14 +1046,19 @@ namespace AutoLoadPyxelRestAddIn
                 ((IList<string>)servicePanel.service.Udf[listName]).Remove(value);
         }
 
-        private void ShiftResult_CheckedChanged(object sender, EventArgs e)
+        private void ShiftLegacyArrayFormulasResult_CheckedChanged(object sender, EventArgs e)
         {
-            ShiftResult_CheckedChanged();
+            ShiftLegacyArrayFormulasResult_CheckedChanged();
         }
 
-        private void ShiftResult_CheckedChanged()
+        private void ShiftLegacyArrayFormulasResult_CheckedChanged()
         {
-            servicePanel.service.Udf["shift_result"] = shiftResult.Checked;
+            servicePanel.service.Udf["shift_result"] = shiftLegacyArrayFormulasResult.Checked;
+        }
+
+        private void ShiftDynamicArrayFormulasResult_CheckedChanged(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void AddValueToList(string value, string listName)
