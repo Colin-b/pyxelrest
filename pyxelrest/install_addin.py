@@ -286,20 +286,6 @@ class Installer:
                         "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION", python_path
                     )
                     addin_settings_file.write(new_line)
-            elif (
-                "AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION"
-                in addin_settings_line
-            ):
-                auto_update_script_path = os.path.join(
-                    self.scripts_folder, "pyxelrest_auto_update.py"
-                )
-                # As scripts are copied by pip AFTER executing retrieved scripts
-                # There is no way to know if a wrong path is set in this property
-                new_line = addin_settings_line.replace(
-                    "AUTO_UPDATE_SCRIPT_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION",
-                    auto_update_script_path,
-                )
-                addin_settings_file.write(new_line)
             elif "</appSettings>" in addin_settings_line:
                 if self.path_to_up_to_date_configuration:
                     addin_settings_file.write(

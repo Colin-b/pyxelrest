@@ -510,13 +510,7 @@ The following application settings are available:
     </th>
     <tr>
         <td><strong>PathToPython</strong></td>
-        <td>Path to the python.exe (including) executable that should be used to launch the update script.</td>
-        <td>Mandatory</td>
-        <td>Installation script is already setting this value properly.</td>
-    </tr>
-    <tr>
-        <td><strong>PathToUpdateScript</strong></td>
-        <td>Path to the Python script used to update PyxelRest.</td>
+        <td>Path to the python.exe (including) executable where pyxelrest python module was installed.</td>
         <td>Mandatory</td>
         <td>Installation script is already setting this value properly.</td>
     </tr>
@@ -544,11 +538,17 @@ The following application settings are available:
         <td>Optional</td>
         <td>Installation script is already setting this value properly.</td>
     </tr>
+    <tr>
+        <td><strong>CheckPreReleases</strong></td>
+        <td>Should auto update fetch pre-releases.</td>
+        <td>Optional</td>
+        <td>True, False (default).</td>
+    </tr>
 </table>
 
 ## Using as a module
 
-You can use pyxelrest as a python module as well.
+You can use `pyxelrest` as a python module as well.
 
 ```python
 import pyxelrest
