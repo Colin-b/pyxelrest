@@ -7,15 +7,16 @@ import re
 import logging
 import logging.config
 import logging.handlers
+from typing import Tuple, Optional
 
 try:
-    from pip.commands.list import ListCommand
-    from pip.commands.install import InstallCommand
-    from pip.utils import get_installed_distributions
-except ModuleNotFoundError:  # Occurs since pip > 9
     from pip._internal.commands.list import ListCommand
     from pip._internal.commands.install import InstallCommand
     from pip._internal.utils.misc import get_installed_distributions
+except ModuleNotFoundError:  # pip <= 9
+    from pip.commands.list import ListCommand
+    from pip.commands.install import InstallCommand
+    from pip.utils import get_installed_distributions
 
 import tkinter
 import win32com.client
@@ -53,7 +54,7 @@ def create_logger():
     global default_log_file_path
     global logger
     if __name__ == "__main__":
-        logger = logging.getLogger("pyxelrest.pyxelrest_auto_update")
+        logger = logging.getLogger("pyxelrest.auto_update")
     else:
         logger = logging.getLogger(__name__)
 
@@ -97,7 +98,7 @@ def _outdated_package(package_name: str, check_pre_releases: bool):
         return packages[0] if packages else None
 
 
-def _installed_package(package_name):
+def _installed_package(package_name: str):
     # Break from the loop in order to retrieve it faster in huge environments
     for package in get_installed_distributions():
         if package.project_name == package_name:
@@ -109,7 +110,7 @@ def _process_ids():
     return [p.Properties_("ProcessId").Value for p in processes]
 
 
-def _is_already_updating():
+def _is_already_updating() -> bool:
     try:
         update_is_in_progress = os.path.join(
             os.getenv("APPDATA"), "pyxelrest", "update_is_in_progress"
@@ -152,7 +153,7 @@ class UpdateProcess:
         self,
         path_to_up_to_date_configurations: str,
         check_pre_releases: bool,
-        updating_queue,
+        updating_queue: multiprocessing.Queue,
     ):
         self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
         self.check_pre_releases = check_pre_releases
@@ -170,7 +171,7 @@ class UpdateProcess:
         self._update_pyxelrest()
         self.updating_queue.put((END_STEP, DONE))
 
-    def _is_excel_running(self):
+    def _is_excel_running(self) -> bool:
         try:
             processes = win32com.client.GetObject("winmgmts:").InstancesOf(
                 "Win32_Process"
@@ -212,8 +213,7 @@ class UpdateProcess:
     def _update_addin(self):
         self.updating_queue.put((EXCEL_STEP, IN_PROGRESS))
         try:
-            # This script is always in the same folder as the add-in update script
-            from pyxelrest_install_addin import Installer
+            from pyxelrest.install_addin import Installer
 
             addin_installer = Installer(
                 path_to_up_to_date_configuration=self.path_to_up_to_date_configurations
@@ -233,8 +233,7 @@ class UpdateProcess:
 
         self.updating_queue.put((SETTINGS_STEP, IN_PROGRESS))
         try:
-            # This script is always in the same folder as the configuration update script
-            from pyxelrest_update_services_config import (
+            from pyxelrest.update_services_config import (
                 ServicesConfigUpdater,
                 UPDATE_SECTIONS,
             )
@@ -249,7 +248,9 @@ class UpdateProcess:
 
 
 def _start_update_process(
-    path_to_up_to_date_configurations: str, check_pre_releases: bool, updating_queue
+    path_to_up_to_date_configurations: str,
+    check_pre_releases: bool,
+    updating_queue: multiprocessing.Queue,
 ):
     UpdateProcess(
         path_to_up_to_date_configurations, check_pre_releases, updating_queue
@@ -307,7 +308,9 @@ class PyxelRestUpdater:
         return self.pyxelrest_package
 
 
-def _get_versions(current_version, new_version, group_number):
+def _get_versions(
+    current_version, new_version, group_number: int
+) -> Tuple[Optional[int], Optional[int]]:
     current_match = re.search("(\d+).(\d+).(\d+)", str(current_version))
     new_match = re.search("(\d+).(\d+).(\d+)", str(new_version))
     if current_match and new_match:
@@ -318,21 +321,21 @@ def _get_versions(current_version, new_version, group_number):
     return None, None
 
 
-def is_breaking_compatibility(current_version, new_version):
+def is_breaking_compatibility(current_version, new_version) -> bool:
     current_major, new_major = _get_versions(current_version, new_version, 1)
     if current_major is not None and new_major is not None:
         return new_major > current_major
     return False
 
 
-def is_adding_features(current_version, new_version):
+def is_adding_features(current_version, new_version) -> bool:
     current_minor, new_minor = _get_versions(current_version, new_version, 2)
     if current_minor is not None and new_minor is not None:
         return new_minor > current_minor
     return False
 
 
-def is_fixing_bugs(current_version, new_version):
+def is_fixing_bugs(current_version, new_version) -> bool:
     current_patch, new_patch = _get_versions(current_version, new_version, 3)
     if current_patch is not None and new_patch is not None:
         return new_patch > current_patch
@@ -341,7 +344,12 @@ def is_fixing_bugs(current_version, new_version):
 
 class UpdateGUI(tkinter.Frame):
     def __init__(
-        self, master, updating_process, updating_queue, current_version, new_version
+        self,
+        master,
+        updating_process: multiprocessing.Process,
+        updating_queue: multiprocessing.Queue,
+        current_version,
+        new_version,
     ):
         tkinter.Frame.__init__(self, master)
         master.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -410,7 +418,7 @@ class UpdateGUI(tkinter.Frame):
         self.updating_queue = updating_queue
         self.update_failed = False
 
-    def create_image(self, image_name):
+    def create_image(self, image_name: str):
         return tkinter.PhotoImage(
             file=os.path.join(self.resources_path, IMAGE_NAMES[image_name])
         )
@@ -447,7 +455,7 @@ class UpdateGUI(tkinter.Frame):
             self.update_button.configure(text="OK")
             self.update_button.config(state="normal")
 
-    def update_status(self, step, status):
+    def update_status(self, step: str, status: str):
         if DONE == status:
             self.images[step].image_reference = self.create_image(f"{step}_{status}")
             self.images[step]["image"] = self.images[step].image_reference

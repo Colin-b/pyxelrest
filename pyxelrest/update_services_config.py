@@ -1,12 +1,13 @@
 import argparse
 import logging
 import os
+from typing import Optional, List
 
 import requests
 import yaml
 
 if __name__ == "__main__":
-    logger = logging.getLogger("pyxelrest.pyxelrest_update_services_config")
+    logger = logging.getLogger("pyxelrest.update_services_config")
 else:
     logger = logging.getLogger(__name__)
 
@@ -25,13 +26,13 @@ LIST_SECTIONS = (
 )
 
 
-def open_config(file_or_directory):
+def open_config(file_or_directory: str) -> Optional[dict]:
     if os.path.isfile(file_or_directory) or os.path.isdir(file_or_directory):
         return open_file_config(file_or_directory)
     return open_url_config(file_or_directory)
 
 
-def open_file_config(file_or_directory):
+def open_file_config(file_or_directory: str) -> Optional[dict]:
     try:
         loaded_yaml = {}
         config_file_names = to_file_paths(file_or_directory)
@@ -41,10 +42,9 @@ def open_file_config(file_or_directory):
         return loaded_yaml
     except:
         logger.exception(f'Configuration files "{file_or_directory}" cannot be read.')
-        return None
 
 
-def open_url_config(configuration_file_url):
+def open_url_config(configuration_file_url: str) -> Optional[dict]:
     try:
         response = requests.get(configuration_file_url)
         response.raise_for_status()
@@ -53,19 +53,17 @@ def open_url_config(configuration_file_url):
         logger.warning(
             f'Configuration file URL "{configuration_file_url}" cannot be reached: {e}.'
         )
-        return None
     except:
         logger.exception(
             f'Configuration file URL "{configuration_file_url}" cannot be reached.'
         )
-        return None
 
 
-def to_absolute_path(file_path):
+def to_absolute_path(file_path: str) -> str:
     return file_path if os.path.isabs(file_path) else os.path.abspath(file_path)
 
 
-def to_file_paths(file_or_directory):
+def to_file_paths(file_or_directory: str) -> List[str]:
     if os.path.isfile(file_or_directory):
         return [to_absolute_path(file_or_directory)]
 
@@ -83,7 +81,7 @@ def to_file_paths(file_or_directory):
 
 
 class ServicesConfigUpdater:
-    def __init__(self, action):
+    def __init__(self, action: str):
         """
 
         :param action: Valid value amongst ADD_SECTIONS, UPDATE_SECTIONS or REMOVE_SECTIONS
@@ -94,7 +92,7 @@ class ServicesConfigUpdater:
             raise Exception("Services configuration cannot be opened.")
         self._action = action
 
-    def update_configuration(self, file_or_directory, services=None):
+    def update_configuration(self, file_or_directory: str, services: List[str] = None):
         """
 
         :param file_or_directory: Absolute or relative path to a configuration file
@@ -130,11 +128,11 @@ class ServicesConfigUpdater:
         with open(_USER_CONFIG_FILE_PATH, "w") as file:
             yaml.dump(self._user_config, file, default_flow_style=False)
 
-    def _add_service(self, service_name, updated_config):
+    def _add_service(self, service_name: str, updated_config: dict):
         self._user_config[service_name] = updated_config
         logger.info(f'"{service_name}" configuration added.')
 
-    def _update_service(self, service_name, updated_config):
+    def _update_service(self, service_name: str, updated_config: dict):
         if service_name not in self._user_config:
             logger.debug(
                 f"User does not have the {service_name} section in configuration. Nothing to update."
@@ -155,11 +153,11 @@ class ServicesConfigUpdater:
         )
         logger.info(f'"{service_name}" configuration updated.')
 
-    def _remove_service(self, service_name):
+    def _remove_service(self, service_name: str):
         if self._user_config.pop(service_name):
             logger.info(f'"{service_name}" configuration removed.')
 
-    def _print_service(self, service_name, updated_config):
+    def _print_service(self, service_name: str, updated_config: dict):
         if "description" in updated_config:
             print(f"{service_name} - {updated_config.get('description')}")
         else:

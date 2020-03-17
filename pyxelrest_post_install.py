@@ -5,14 +5,14 @@ import shutil
 import sys
 
 
-def create_folder(folder_path):
+def create_folder(folder_path: str):
     if not os.path.exists(folder_path):
         log.info(f"Creating {folder_path} folder")
         os.makedirs(folder_path)
 
 
 class PostInstall:
-    def __init__(self, installation_files_folder=None):
+    def __init__(self, *, installation_files_folder: str = None):
         if not sys.platform.startswith("win"):
             raise Exception("PyxelRest can only be installed on Microsoft Windows.")
 
@@ -61,7 +61,7 @@ class PostInstall:
             "pyxelrest_auto_update.log", "auto_update_logging.yml"
         )
 
-    def _create_logging_configuration(self, log_file_name, config_file_name):
+    def _create_logging_configuration(self, log_file_name: str, config_file_name: str):
         config_file_path = os.path.join(
             self.pyxelrest_appdata_config_folder, config_file_name
         )

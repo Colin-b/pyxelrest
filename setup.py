@@ -139,20 +139,12 @@ setup(
     python_requires=">=3.7",
     entry_points={
         "console_scripts": [
-            "cross_location_risk=cross_location_risk.main:main",
-            "send_market_risk_pam_mail=cross_location_risk.send_report:main",
-            "pyxelrest_auto_update=pyxelrest_auto_update:main",
-            "pyxelrest_post_install=pyxelrest_post_install:main",
-            "pyxelrest_install_addin=pyxelrest_install_addin:main",
-            "pyxelrest_update_services_config=pyxelrest_update_services_config:main",
+            "pyxelrest_auto_update=pyxelrest.auto_update:main",
+            "pyxelrest_install_addin=pyxelrest.install_addin:main",
+            "pyxelrest_update_services_config=pyxelrest.update_services_config:main",
         ]
     },
-    scripts=[
-        "pyxelrest_auto_update.py",
-        "pyxelrest_post_install.py",
-        "pyxelrest_install_addin.py",
-        "pyxelrest_update_services_config.py",
-    ],
+    scripts=["pyxelrest_post_install.py"],
     project_urls={
         "GitHub": "https://github.com/Colin-b/pyxelrest",
         "Changelog": "https://github.com/Colin-b/pyxelrest/blob/master/CHANGELOG.md",

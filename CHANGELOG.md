@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use HTTPS scheme whenever possible.
 - Generate one python file with UDFs per service.
 - Most of the python modules and functions are now private. If you need access to some internals, please open an issue.
+- Most of the scripts are now inside the `pyxelrest` package.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

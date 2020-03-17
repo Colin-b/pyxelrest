@@ -7,23 +7,23 @@ import logging
 import distutils.dir_util as dir_util
 
 if __name__ == "__main__":
-    logger = logging.getLogger("pyxelrest.pyxelrest_install_addin")
+    logger = logging.getLogger("pyxelrest.install_addin")
 else:
     logger = logging.getLogger(__name__)
 
 
-def to_absolute_path(file_path):
+def to_absolute_path(file_path: str) -> str:
     return file_path if os.path.isabs(file_path) else os.path.abspath(file_path)
 
 
-def create_folder(folder_path):
+def create_folder(folder_path: str):
     if not os.path.exists(folder_path):
         logger.info(f"Creating {folder_path} folder")
         os.makedirs(folder_path)
 
 
 class VSTOManager:
-    def __init__(self, version):
+    def __init__(self, version: str):
         # Try 64 bits version first
         self.vsto_installer_path = os.path.join(
             os.getenv("commonprogramfiles"),
@@ -46,7 +46,7 @@ class VSTOManager:
                     f"Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {self.vsto_installer_path}."
                 )
 
-    def install_auto_load_addin(self, add_in_folder):
+    def install_auto_load_addin(self, add_in_folder: str):
         logger.info("Try to install Microsoft Excel add-in...")
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
@@ -66,7 +66,7 @@ class VSTOManager:
             )
         logger.info("Add-in installation completed.")
 
-    def uninstall_auto_load_addin(self, add_in_folder):
+    def uninstall_auto_load_addin(self, add_in_folder: str):
         vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
         if os.path.isfile(vsto_file_path):
             logger.info("Try to uninstall Microsoft Excel add-in...")
@@ -97,12 +97,12 @@ class VSTOManager:
         )
 
     @staticmethod
-    def get_auto_load_vsto_file_path(add_in_folder):
+    def get_auto_load_vsto_file_path(add_in_folder: str) -> str:
         return os.path.join(add_in_folder, "AutoLoadPyxelRestAddIn.vsto")
 
 
 class XlWingsConfig:
-    def __init__(self, xlwings_config_folder):
+    def __init__(self, xlwings_config_folder: str):
         self.xlwings_config_path = os.path.join(xlwings_config_folder, "xlwings.conf")
         self.xlwings_bas_path = os.path.join(xlwings_config_folder, "xlwings.bas")
 
@@ -145,7 +145,7 @@ class XlWingsConfig:
                     add_in_file.write(self._to_add_in_line(line))
         logger.info("XLWings PyxelRest VB add-in created.")
 
-    def _to_add_in_line(self, line):
+    def _to_add_in_line(self, line: str) -> str:
         # Ensure that Xlwings will load PyxelRest configuration
         if '        If SheetExists("xlwings.conf") = True Then\n' == line:
             return (
@@ -169,6 +169,7 @@ class XlWingsConfig:
 class Installer:
     def __init__(
         self,
+        *,
         add_in_folder: str = None,
         scripts_folder: str = None,
         vsto_version: str = "10.0",
@@ -181,7 +182,7 @@ class Installer:
             )
 
         self.scripts_folder = scripts_folder or os.path.abspath(
-            os.path.dirname(__file__)
+            os.path.dirname(sys.executable)
         )
 
         if not add_in_folder:
@@ -229,7 +230,7 @@ class Installer:
         self._install_auto_load_addin()
 
     @staticmethod
-    def _is_excel_running():
+    def _is_excel_running() -> bool:
         import win32com.client
 
         processes = win32com.client.GetObject("winmgmts:").InstancesOf("Win32_Process")
