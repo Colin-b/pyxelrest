@@ -1,8 +1,6 @@
 ﻿using log4net;
 using System.Collections.Generic;
 using YamlDotNet.RepresentationModel;
-using YamlDotNet;
-using YamlDotNet.Serialization;
 
 namespace AutoLoadPyxelRestAddIn
 {
@@ -17,7 +15,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string API_KEY_PROPERTY = "api_key";
         private static readonly string BASIC_PROPERTY = "basic";
         private static readonly string NTLM_PROPERTY = "ntlm";
-        private static readonly string UDF_PROPERTY = "udf";
+        private static readonly string FORMULAS_PROPERTY = "formulas";
         private static readonly string MAX_RETRIES_PROPERTY = "max_retries";
         private static readonly string HEADERS_PROPERTY = "headers";
         private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
@@ -56,7 +54,7 @@ namespace AutoLoadPyxelRestAddIn
         public IDictionary<string, object> Basic;
         public IDictionary<string, object> Ntlm;
 
-        public IDictionary<string, object> Udf;
+        public IDictionary<string, object> Formulas;
 
         public int MaxRetries;
         public IDictionary<string, object> Headers;
@@ -96,6 +94,8 @@ namespace AutoLoadPyxelRestAddIn
                 string key = ((YamlScalarNode)item.Key).Value;
                 if (item.Value.NodeType == YamlNodeType.Sequence)
                     dict.Add(key, ToList((YamlSequenceNode)item.Value));
+                else if (item.Value.NodeType == YamlNodeType.Mapping)
+                    dict.Add(key, ToDict((YamlMappingNode)item.Value));
                 else
                 {
                     string strValue = ((YamlScalarNode)item.Value).Value;
@@ -119,6 +119,12 @@ namespace AutoLoadPyxelRestAddIn
                     if (listValue.Count > 0)
                         nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlSequenceNode(FromList(listValue))));
                 }
+                else if (IsGenericDict(item.Value))
+                {
+                    var dictValue = (IDictionary<string, object>)item.Value;
+                    if (dictValue.Count > 0)
+                        nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlMappingNode(FromDict(dictValue))));
+                }
                 else if (typeof(bool) == item.Value.GetType())
                 {
                     nodes.Add(new KeyValuePair<YamlNode, YamlNode>(new YamlScalarNode(item.Key), new YamlScalarNode((bool)item.Value ? "true" : "false")));
@@ -135,6 +141,12 @@ namespace AutoLoadPyxelRestAddIn
         {
             var objectType = obj.GetType();
             return (objectType.IsGenericType && (objectType.GetGenericTypeDefinition() == typeof(List<>)));
+        }
+
+        private static bool IsGenericDict(object obj)
+        {
+            var objectType = obj.GetType();
+            return objectType.IsGenericType && (objectType.GetGenericTypeDefinition() == typeof(Dictionary<,>));
         }
 
         private IList<string> ToList(YamlSequenceNode node)
@@ -189,8 +201,8 @@ namespace AutoLoadPyxelRestAddIn
             if (!skipUpdateFor.Contains(NTLM_PROPERTY))
                 Ntlm = updated.Ntlm;
 
-            if (!skipUpdateFor.Contains(UDF_PROPERTY))
-                Udf = updated.Udf;
+            if (!skipUpdateFor.Contains(FORMULAS_PROPERTY))
+                Formulas = updated.Formulas;
 
             if (!skipUpdateFor.Contains(MAX_RETRIES_PROPERTY))
                 MaxRetries = updated.MaxRetries;
@@ -247,8 +259,8 @@ namespace AutoLoadPyxelRestAddIn
             var ntlm = (YamlMappingNode)GetProperty(section, NTLM_PROPERTY);
             Ntlm = ntlm == null ? new Dictionary<string, object>() : ToDict(ntlm);
 
-            var udf = (YamlMappingNode)GetProperty(section, UDF_PROPERTY);
-            Udf = udf == null ? new Dictionary<string, object>() : ToDict(udf);
+            var formulas = (YamlMappingNode)GetProperty(section, FORMULAS_PROPERTY);
+            Formulas = formulas == null ? new Dictionary<string, object>() : ToDict(formulas);
 
             var maxRetries = (YamlScalarNode)GetProperty(section, MAX_RETRIES_PROPERTY);
             MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
@@ -301,8 +313,8 @@ namespace AutoLoadPyxelRestAddIn
             if (Ntlm != null && Ntlm.Count > 0)
                 section.Add(new YamlScalarNode(NTLM_PROPERTY), new YamlMappingNode(FromDict(Ntlm)));
 
-            if (Udf != null && Udf.Count > 0)
-                section.Add(new YamlScalarNode(UDF_PROPERTY), new YamlMappingNode(FromDict(Udf)));
+            if (Formulas != null && Formulas.Count > 0)
+                section.Add(new YamlScalarNode(FORMULAS_PROPERTY), new YamlMappingNode(FromDict(Formulas)));
 
             if (MaxRetries != 5)
                 section.Add(new YamlScalarNode(MAX_RETRIES_PROPERTY), new YamlScalarNode(MaxRetries.ToString()));
@@ -345,7 +357,7 @@ namespace AutoLoadPyxelRestAddIn
             Basic = new Dictionary<string, object>();
             Ntlm = new Dictionary<string, object>();
 
-            Udf = new Dictionary<string, object>();
+            Formulas = new Dictionary<string, object>();
 
             MaxRetries = 5;
             Headers = new Dictionary<string, object>();
