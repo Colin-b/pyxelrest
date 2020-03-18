@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compatibility with Python 3.8
 - Ability to change the configuration and impact loaded functions within module without restarting python.
 - file URl are now properly handled, they must start with file:/// instead of file://
+- Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
 
 ### Removed
 - Drop support for python < 3.7

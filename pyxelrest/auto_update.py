@@ -21,11 +21,6 @@ except ModuleNotFoundError:  # pip <= 9
 import tkinter
 import win32com.client
 
-try:
-    import yaml
-except ImportError:
-    yaml = None
-
 
 CLOSING_EXCEL_STEP = "Closing Microsoft Excel"
 PYTHON_STEP = "PyxelRest package"
@@ -58,29 +53,30 @@ def create_logger():
     else:
         logger = logging.getLogger(__name__)
 
-    logging_configuration_file_path = os.path.join(
-        os.getenv("APPDATA"), "pyxelrest", "configuration", "auto_update_logging.yml"
-    )
     default_log_file_path = os.path.join(
         os.getenv("APPDATA"), "pyxelrest", "logs", "pyxelrest_auto_update.log"
     )
-    if yaml and os.path.isfile(logging_configuration_file_path):
-        with open(logging_configuration_file_path, "r") as config_file:
-            log_config_dict = yaml.load(config_file, Loader=yaml.FullLoader)
-            logging.config.dictConfig(log_config_dict)
-    else:
-        logging.basicConfig(
-            format="%(asctime)s [%(levelname)s] %(message)s",
-            handlers=[
-                logging.handlers.TimedRotatingFileHandler(
-                    default_log_file_path, when="D"
-                )
-            ],
-            level=logging.DEBUG,
-        )
-        logger.warning(
-            f"Logging configuration file ({logging_configuration_file_path}) cannot be found. Using default logging configuration."
-        )
+    logging.config.dictConfig(
+        {
+            "version": 1,
+            "formatters": {
+                "clean": {
+                    "format": "%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s"
+                }
+            },
+            "handlers": {
+                "daily_rotating": {
+                    "class": "logging.handlers.TimedRotatingFileHandler",
+                    "formatter": "clean",
+                    "filename": default_log_file_path,
+                    "when": "D",
+                    "backupCount": 10,
+                }
+            },
+            "loggers": {"pyxelrest": {"level": "DEBUG"}},
+            "root": {"level": "INFO", "handlers": ["daily_rotating"]},
+        }
+    )
 
 
 create_logger()

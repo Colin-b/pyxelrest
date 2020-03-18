@@ -16,7 +16,7 @@ def load(config: dict):
     global GENERATE_UDF_ON_IMPORT
 
     GENERATE_UDF_ON_IMPORT = False
-    from pyxelrest import _generator, _open_api
+    from pyxelrest import _generator
 
     GENERATE_UDF_ON_IMPORT = True
 
@@ -29,6 +29,6 @@ def load(config: dict):
         udf = service.setdefault("udf", {})
         udf.setdefault("shift_result", False)
 
-    services = _open_api.load_services(config)
+    services = _generator.load_services(config)
     _generator.generate_python_file(services)
     _generator.load_user_defined_functions(services)
