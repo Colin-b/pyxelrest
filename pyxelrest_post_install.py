@@ -33,7 +33,6 @@ class PostInstall:
         create_folder(self.pyxelrest_appdata_config_folder)
         self._create_services_configuration()
         self._create_pyxelrest_logging_configuration()
-        self._create_auto_update_logging_configuration()
 
     def _create_services_configuration(self):
         default_config_file = os.path.join(
@@ -54,16 +53,8 @@ class PostInstall:
             )
 
     def _create_pyxelrest_logging_configuration(self):
-        self._create_logging_configuration("pyxelrest.log", "logging.yml")
-
-    def _create_auto_update_logging_configuration(self):
-        self._create_logging_configuration(
-            "pyxelrest_auto_update.log", "auto_update_logging.yml"
-        )
-
-    def _create_logging_configuration(self, log_file_name: str, config_file_name: str):
         config_file_path = os.path.join(
-            self.pyxelrest_appdata_config_folder, config_file_name
+            self.pyxelrest_appdata_config_folder, "logging.yml"
         )
         # Always keep default logging configuration up to date as logger name / parsing logic might change
         import jinja2
@@ -73,7 +64,7 @@ class PostInstall:
             loader=jinja2.FileSystemLoader(template_folder), trim_blocks=True
         )
         log_file_path = os.path.join(
-            os.getenv("APPDATA"), "pyxelrest", "logs", log_file_name
+            os.getenv("APPDATA"), "pyxelrest", "logs", "pyxelrest.log"
         )
         with open(config_file_path, "w") as generated_file:
             generated_file.write(
@@ -81,7 +72,7 @@ class PostInstall:
                     "default_logging_configuration.yml.jinja2"
                 ).render(path_to_log_file=log_file_path)
             )
-        log.info(f"{config_file_name} logging configuration file created.")
+        log.info(f"{config_file_path} logging configuration file created.")
 
 
 def main(*args):
