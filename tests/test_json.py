@@ -3084,7 +3084,7 @@ def test_mandatory_integer_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3125,7 +3125,7 @@ def test_mandatory_integer_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3166,7 +3166,7 @@ def test_optional_integer_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3182,7 +3182,7 @@ def test_mandatory_array_integer_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3227,7 +3227,7 @@ def test_mandatory_array_integer_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3272,7 +3272,7 @@ def test_mandatory_array_integer_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3315,7 +3315,7 @@ def test_mandatory_array_integer_parameter_with_wrong_type(json_service, tmpdir)
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3362,7 +3362,7 @@ def test_mandatory_array_integer_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3407,7 +3407,7 @@ def test_optional_array_integer_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3427,7 +3427,7 @@ def test_optional_array_integer_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3445,7 +3445,7 @@ def test_mandatory_integer32_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3486,7 +3486,7 @@ def test_mandatory_integer32_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3529,7 +3529,7 @@ def test_optional_integer32_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3547,7 +3547,7 @@ def test_mandatory_array_integer32_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3592,7 +3592,7 @@ def test_mandatory_array_integer32_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3637,7 +3637,7 @@ def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3680,7 +3680,7 @@ def test_mandatory_array_integer32_parameter_with_wrong_type(json_service, tmpdi
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3727,7 +3727,7 @@ def test_mandatory_array_integer32_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3772,7 +3772,7 @@ def test_optional_array_integer32_parameter_with_wrong_type(json_service, tmpdir
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3792,7 +3792,7 @@ def test_optional_array_integer32_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3810,7 +3810,7 @@ def test_mandatory_integer64_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3851,7 +3851,7 @@ def test_mandatory_integer64_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3894,7 +3894,7 @@ def test_optional_integer64_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3912,7 +3912,7 @@ def test_mandatory_array_integer64_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -3957,7 +3957,7 @@ def test_mandatory_array_integer64_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4002,7 +4002,7 @@ def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4045,7 +4045,7 @@ def test_mandatory_array_integer64_parameter_with_wrong_type(json_service, tmpdi
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4092,7 +4092,7 @@ def test_mandatory_array_integer64_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4137,7 +4137,7 @@ def test_optional_array_integer64_parameter_with_wrong_type(json_service, tmpdir
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4157,7 +4157,7 @@ def test_optional_array_integer64_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4175,7 +4175,7 @@ def test_mandatory_number_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4216,7 +4216,7 @@ def test_mandatory_number_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4257,7 +4257,7 @@ def test_optional_number_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4273,7 +4273,7 @@ def test_mandatory_array_number_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4316,7 +4316,7 @@ def test_mandatory_array_number_parameter_provided_as_empty_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4361,7 +4361,7 @@ def test_mandatory_array_number_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4404,7 +4404,7 @@ def test_mandatory_array_number_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4451,7 +4451,7 @@ def test_mandatory_array_number_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4496,7 +4496,7 @@ def test_optional_array_number_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4514,7 +4514,7 @@ def test_optional_array_number_parameter_with_wrong_type_in_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4532,7 +4532,7 @@ def test_mandatory_float_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4573,7 +4573,7 @@ def test_mandatory_float_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4614,7 +4614,7 @@ def test_optional_float_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4630,7 +4630,7 @@ def test_mandatory_array_float_number_parameter_not_provided(json_service, tmpdi
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4673,7 +4673,7 @@ def test_mandatory_array_float_parameter_provided_as_empty_array(json_service, t
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4718,7 +4718,7 @@ def test_mandatory_array_float_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4761,7 +4761,7 @@ def test_mandatory_array_float_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4806,7 +4806,7 @@ def test_mandatory_array_float_parameter_with_wrong_type_in_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4851,7 +4851,7 @@ def test_optional_array_float_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4869,7 +4869,7 @@ def test_optional_array_float_parameter_with_wrong_type_in_array(json_service, t
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4887,7 +4887,7 @@ def test_mandatory_double_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4928,7 +4928,7 @@ def test_mandatory_double_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4969,7 +4969,7 @@ def test_optional_double_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -4985,7 +4985,7 @@ def test_mandatory_array_double_number_parameter_not_provided(json_service, tmpd
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5028,7 +5028,7 @@ def test_mandatory_array_double_parameter_provided_as_empty_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5073,7 +5073,7 @@ def test_mandatory_array_double_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5116,7 +5116,7 @@ def test_mandatory_array_double_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5163,7 +5163,7 @@ def test_mandatory_array_double_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5208,7 +5208,7 @@ def test_optional_array_double_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5226,7 +5226,7 @@ def test_optional_array_double_parameter_with_wrong_type_in_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5244,7 +5244,7 @@ def test_mandatory_string_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5285,7 +5285,7 @@ def test_mandatory_string_parameter_provided_as_empty_array(json_service, tmpdir
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5326,7 +5326,7 @@ def test_mandatory_string_parameter_provided_as_none_filled_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5367,7 +5367,7 @@ def test_mandatory_array_string_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5410,7 +5410,7 @@ def test_mandatory_array_string_parameter_provided_as_empty_array(json_service, 
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5455,7 +5455,7 @@ def test_mandatory_array_string_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5498,7 +5498,7 @@ def test_mandatory_string_byte_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5539,7 +5539,7 @@ def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service, t
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5582,7 +5582,7 @@ def test_mandatory_string_byte_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5623,7 +5623,7 @@ def test_mandatory_array_string_byte_parameter_not_provided(json_service, tmpdir
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5668,7 +5668,7 @@ def test_mandatory_array_string_byte_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5713,7 +5713,7 @@ def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5756,7 +5756,7 @@ def test_mandatory_string_binary_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5799,7 +5799,7 @@ def test_mandatory_string_binary_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5842,7 +5842,7 @@ def test_mandatory_string_binary_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5883,7 +5883,7 @@ def test_mandatory_array_string_binary_parameter_not_provided(json_service, tmpd
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5928,7 +5928,7 @@ def test_mandatory_array_string_binary_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -5973,7 +5973,7 @@ def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6016,7 +6016,7 @@ def test_mandatory_boolean_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6057,7 +6057,7 @@ def test_mandatory_boolean_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6098,7 +6098,7 @@ def test_optional_boolean_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6114,7 +6114,7 @@ def test_mandatory_array_boolean_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6159,7 +6159,7 @@ def test_mandatory_array_boolean_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6204,7 +6204,7 @@ def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6247,7 +6247,7 @@ def test_mandatory_array_boolean_parameter_with_wrong_type(json_service, tmpdir)
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6294,7 +6294,7 @@ def test_mandatory_array_boolean_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6339,7 +6339,7 @@ def test_optional_array_boolean_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6359,7 +6359,7 @@ def test_optional_array_boolean_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6377,7 +6377,7 @@ def test_mandatory_date_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6418,7 +6418,7 @@ def test_mandatory_date_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6459,7 +6459,7 @@ def test_optional_date_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6475,7 +6475,7 @@ def test_mandatory_array_date_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6518,7 +6518,7 @@ def test_mandatory_array_date_parameter_provided_as_empty_array(json_service, tm
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6563,7 +6563,7 @@ def test_mandatory_array_date_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6606,7 +6606,7 @@ def test_mandatory_array_date_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6649,7 +6649,7 @@ def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service, t
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6692,7 +6692,7 @@ def test_optional_array_date_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6708,7 +6708,7 @@ def test_optional_array_date_parameter_with_wrong_type_in_array(json_service, tm
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6724,7 +6724,7 @@ def test_mandatory_date_time_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6766,7 +6766,7 @@ def test_mandatory_date_time_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6810,7 +6810,7 @@ def test_optional_date_time_parameter_with_wrong_type(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6828,7 +6828,7 @@ def test_mandatory_array_date_time_parameter_not_provided(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6873,7 +6873,7 @@ def test_mandatory_array_date_time_parameter_provided_as_empty_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6918,7 +6918,7 @@ def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -6961,7 +6961,7 @@ def test_mandatory_array_date_time_parameter_with_wrong_type(json_service, tmpdi
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7008,7 +7008,7 @@ def test_mandatory_array_date_time_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7053,7 +7053,7 @@ def test_valid_mandatory_parameters(json_service, tmpdir, responses: RequestsMoc
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7104,7 +7104,7 @@ def test_optional_array_date_time_parameter_with_wrong_type(json_service, tmpdir
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7124,7 +7124,7 @@ def test_optional_array_date_time_parameter_with_wrong_type_in_array(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7142,7 +7142,7 @@ def test_list_of_list_form_post(json_service, tmpdir, responses: RequestsMock):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7177,7 +7177,7 @@ def test_list_of_list_form_post_with_non_str_date_failure(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7207,7 +7207,7 @@ def test_list_of_list_form_post_with_non_str(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7235,7 +7235,7 @@ def test_list_of_list_form_post_with_single_list(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7261,7 +7261,7 @@ def test_dict_with_dict_json_post(json_service, tmpdir, responses: RequestsMock)
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7291,7 +7291,7 @@ def test_list_of_dict_with_dict_json_post(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7324,7 +7324,7 @@ def test_dict_with_dict_list_json_post(json_service, tmpdir, responses: Requests
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7359,7 +7359,7 @@ def test_dict_with_list_of_list_json_post(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7394,7 +7394,7 @@ def test_dict_with_list_of_list_json_post_a_single_list(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7422,7 +7422,7 @@ def test_dict_string_json_post(json_service, tmpdir, responses: RequestsMock):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7450,7 +7450,7 @@ def test_dict_string_json_post_without_non_required(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7474,7 +7474,7 @@ def test_dict_string_json_post_without_required(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7495,7 +7495,7 @@ def test_list_of_dict_with_dict_json_post_without_any_required(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7521,7 +7521,7 @@ def test_list_of_dict_with_dict_json_post_with_empty_lists(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7549,7 +7549,7 @@ def test_list_of_dict_with_dict_json_post_with_different_list_length(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7577,7 +7577,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_without_any_required(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7607,7 +7607,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_empty_lists(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7637,7 +7637,7 @@ def test_list_of_dict_with_dict_allowing_null_json_post_with_different_list_leng
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7665,7 +7665,7 @@ def test_dict_with_read_only_json_post(json_service, tmpdir, responses: Requests
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7694,7 +7694,7 @@ def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7715,7 +7715,7 @@ def test_get_empty_list_parameter(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7732,7 +7732,7 @@ def test_get_none_filled_list_parameter(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7751,7 +7751,7 @@ def test_get_none_as_first_list_parameter(
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7773,7 +7773,7 @@ def test_get_none_as_last_list_parameter(json_service, tmpdir, responses: Reques
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7795,7 +7795,7 @@ def test_get_none_in_list_parameter(json_service, tmpdir, responses: RequestsMoc
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7817,7 +7817,7 @@ def test_get_none_as_list_parameter(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7834,7 +7834,7 @@ def test_different_location_same_name(json_service, responses, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7868,7 +7868,7 @@ def test_post_list_dict_no_ref(json_service, responses, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7899,7 +7899,7 @@ def test_post_min_and_max_items(json_service, responses, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7936,7 +7936,7 @@ def test_post_body_with_properties(json_service, responses, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7965,7 +7965,7 @@ def test_get_valid_int_choice(json_service, responses, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -7989,7 +7989,7 @@ def test_get_invalid_int_choice(json_service, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

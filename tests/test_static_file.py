@@ -39,7 +39,7 @@ def test_get_static_open_api_definition(responses: RequestsMock, tmpdir):
         {
             "open_api_definition_loaded_from_file": {
                 "open_api": {"definition": f"file:///{open_api_definition_file_path}"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

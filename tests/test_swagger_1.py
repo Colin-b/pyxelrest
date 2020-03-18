@@ -27,7 +27,7 @@ def test_swagger_1_is_not_supported(responses: RequestsMock, tmpdir):
                 "open_api": {
                     "definition": "http://localhost:8948/swagger_version_not_supported"
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

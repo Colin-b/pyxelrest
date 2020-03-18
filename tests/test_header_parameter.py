@@ -73,9 +73,9 @@ def test_get_header_parameter(
         {
             "header_parameter": {
                 "open_api": {"definition": "http://localhost:8951/"},
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 },
             }
         },
@@ -102,9 +102,9 @@ def test_get_header_parameter_sync(
         {
             "header_parameter": {
                 "open_api": {"definition": "http://localhost:8951/"},
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 },
             }
         },
@@ -120,27 +120,6 @@ def test_get_header_parameter_sync(
     assert (
         _get_request(responses, "http://localhost:8951/header").headers["header_string"]
         == "sent header"
-    )
-
-
-def test_service_only_sync_does_not_have_vba_prefix(header_parameter_service, tmpdir):
-    generated_functions = loader.load(
-        tmpdir,
-        {
-            "header_advanced_configuration": {
-                "open_api": {"definition": "http://localhost:8951/"},
-                "udf": {"return_types": ["vba_compatible"], "shift_result": False},
-                "headers": {
-                    "X-PXL-CUSTOM": "MyCustomValue",
-                    "X-PXL-OTHER": "MyOtherValue",
-                    "X-PXL-ENVVAR": "%USERNAME%",
-                },
-            }
-        },
-    )
-
-    assert not hasattr(
-        generated_functions, "vba_header_advanced_configuration_get_header"
     )
 
 
@@ -171,7 +150,7 @@ def test_get_header_advanced_configuration(
         {
             "header_advanced_configuration": {
                 "open_api": {"definition": "http://localhost:8951/"},
-                "udf": {"return_types": ["vba_compatible"], "shift_result": False},
+                "formulas": {"vba_compatible": {}},
                 "headers": {
                     "X-PXL-CUSTOM": "MyCustomValue",
                     "X-PXL-OTHER": "MyOtherValue",
@@ -187,7 +166,7 @@ def test_get_header_advanced_configuration(
         match_querystring=True,
     )
 
-    assert generated_functions.header_advanced_configuration_get_header(
+    assert generated_functions.vba_header_advanced_configuration_get_header(
         "sent header"
     ) == [[""]]
     headers = _get_request(responses, "http://localhost:8951/header").headers

@@ -55,7 +55,7 @@ def test_get_http_method(responses: RequestsMock, http_methods_service, tmpdir):
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -76,7 +76,7 @@ def test_post_http_method(responses: RequestsMock, http_methods_service, tmpdir)
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -97,7 +97,7 @@ def test_put_http_method(responses: RequestsMock, http_methods_service, tmpdir):
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -118,7 +118,7 @@ def test_delete_http_method(responses: RequestsMock, http_methods_service, tmpdi
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -139,7 +139,7 @@ def test_patch_http_method(responses: RequestsMock, http_methods_service, tmpdir
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -160,7 +160,7 @@ def test_options_http_method(responses: RequestsMock, http_methods_service, tmpd
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -181,7 +181,7 @@ def test_head_http_method(responses: RequestsMock, http_methods_service, tmpdir)
             "http_methods": {
                 "open_api": {"definition": "http://localhost:8955/"},
                 "methods": ["get", "post", "put", "delete", "patch", "options", "head"],
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

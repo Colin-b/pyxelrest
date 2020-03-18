@@ -30,7 +30,7 @@ def test_get_async_url(responses: RequestsMock, tmpdir):
         {
             "async_test": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

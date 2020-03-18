@@ -48,7 +48,7 @@ def test_oauth2_authentication_success(
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
                 "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -75,7 +75,7 @@ def test_pyxelrest_oauth2_authentication_success(
         {
             "pyxelrest": {
                 "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -130,7 +130,7 @@ def test_oauth2_authentication_failure(tmpdir, monkeypatch, responses: RequestsM
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
                 "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -178,7 +178,7 @@ def test_oauth2_authentication_timeout(tmpdir, monkeypatch, responses: RequestsM
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
                 "oauth2": {"timeout": 10},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -216,7 +216,7 @@ def test_without_authentication(tmpdir, responses: RequestsMock):
         {
             "non_authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -256,7 +256,7 @@ def test_api_key_header_authentication_success(tmpdir, responses: RequestsMock):
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
                 "api_key": "my_provided_api_key",
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -275,7 +275,7 @@ def test_pyxelrest_api_key_header_authentication_success(
         {
             "pyxelrest": {
                 "api_key": "my_provided_api_key",
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -319,7 +319,7 @@ def test_api_key_query_authentication_success(tmpdir, responses: RequestsMock):
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
                 "api_key": "my_provided_api_key",
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -341,7 +341,7 @@ def test_pyxelrest_api_key_query_authentication_success(
         {
             "pyxelrest": {
                 "api_key": "my_provided_api_key",
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -382,7 +382,7 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
                 "basic": {"username": "test_user", "password": "test_pwd"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -399,7 +399,7 @@ def test_pyxelrest_basic_authentication_success(tmpdir, responses: RequestsMock)
         {
             "pyxelrest": {
                 "basic": {"username": "test_user", "password": "test_pwd"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -450,7 +450,7 @@ def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMoc
                 "open_api": {"definition": "http://test/"},
                 "api_key": "my_provided_api_key",
                 "basic": {"username": "test_user", "password": "test_pwd"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -471,7 +471,7 @@ def test_pyxelrest_basic_and_api_key_authentication_success(
             "pyxelrest": {
                 "api_key": "my_provided_api_key",
                 "basic": {"username": "test_user", "password": "test_pwd"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -523,7 +523,7 @@ def test_basic_or_api_key_authentication_success(tmpdir, responses: RequestsMock
                 "open_api": {"definition": "http://test/"},
                 "api_key": "my_provided_api_key",
                 "basic": {"username": "test_user", "password": "test_pwd"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -571,7 +571,7 @@ def test_api_key_or_basic_authentication_success(tmpdir, responses: RequestsMock
                 "open_api": {"definition": "http://test/"},
                 "api_key": "my_provided_api_key",
                 "basic": {"username": "test_user", "password": "test_pwd"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

@@ -60,7 +60,7 @@ def test_post_form_parameter(responses: RequestsMock, form_parameter_service, tm
         {
             "form_parameter": {
                 "open_api": {"definition": "http://localhost:8952/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

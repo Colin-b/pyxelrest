@@ -44,7 +44,7 @@ def test_string_multi_array_parameter(responses: RequestsMock, tmpdir):
         {
             "array_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -100,7 +100,7 @@ def test_string_default_array_parameter(responses: RequestsMock, tmpdir):
         {
             "array_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -157,7 +157,7 @@ def test_string_ssv_array_parameter(responses: RequestsMock, tmpdir):
         {
             "array_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -214,7 +214,7 @@ def test_string_tsv_array_parameter(responses: RequestsMock, tmpdir):
         {
             "array_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -271,7 +271,7 @@ def test_string_csv_array_parameter(responses: RequestsMock, tmpdir):
         {
             "array_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -328,7 +328,7 @@ def test_string_pipes_array_parameter(responses: RequestsMock, tmpdir):
         {
             "array_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

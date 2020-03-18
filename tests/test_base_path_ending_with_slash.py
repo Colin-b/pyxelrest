@@ -31,7 +31,7 @@ def test_get_base_path_ending_with_slash(responses: RequestsMock, tmpdir):
         {
             "base_path_ending_with_slash": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -67,7 +67,7 @@ def test_post_base_path_ending_with_slash(responses: RequestsMock, tmpdir):
         {
             "base_path_ending_with_slash": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -101,7 +101,7 @@ def test_put_base_path_ending_with_slash(responses: RequestsMock, tmpdir):
         {
             "base_path_ending_with_slash": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -137,7 +137,7 @@ def test_delete_base_path_ending_with_slash(responses: RequestsMock, tmpdir):
         {
             "base_path_ending_with_slash": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

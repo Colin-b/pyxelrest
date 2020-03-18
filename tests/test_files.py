@@ -51,7 +51,7 @@ def test_files_parameter(responses: RequestsMock, tmpdir):
         {
             "files": {
                 "open_api": {"definition": "http://localhost:8959/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

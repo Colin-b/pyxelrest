@@ -112,7 +112,7 @@ def test_get_compare_output_order(
         {
             "output_order": {
                 "open_api": {"definition": "http://localhost:8946/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -151,7 +151,7 @@ def test_get_compare_output_order_based_on_definition(
                     "definition": "http://localhost:8946/",
                     "rely_on_definitions": True,
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

@@ -58,10 +58,9 @@ class ConfigSection:
         )
         self.connect_timeout = service_config.get("connect_timeout", 1)
         self.read_timeout = service_config.get("read_timeout")
-        udf = service_config.get("udf", {})
-        # UDFs will be auto expanded by default (if required, ie: result does not fit in a single cell)
-        self.udf_return_types = udf.get("return_types", ["async_auto_expand"])
-        self.shift_result = udf.get("shift_result", True)
+        self.formulas = service_config.get(
+            "formulas", {"dynamic_array": {"lock_excel": False, "shift_result": False}}
+        )
         self.max_retries = service_config.get("max_retries", 5)
         self.custom_headers = {
             key: convert_environment_variable(value)
@@ -120,21 +119,18 @@ class ConfigSection:
                     f"Invalid positive value provided: {value}. Considering as not set."
                 )
 
-    @staticmethod
-    def is_asynchronous(udf_return_type: str) -> bool:
-        return "async_auto_expand" == udf_return_type
-
-    @staticmethod
-    def auto_expand_result(udf_return_type: str) -> bool:
-        return udf_return_type.endswith("_auto_expand")
-
-    def udf_prefix(self, udf_return_type: str) -> str:
+    def udf_prefix(self, formula_type: str) -> str:
         service_name_prefix = to_valid_python_vba(self.name)
-        if (len(self.udf_return_types) == 1) or self.auto_expand_result(
-            udf_return_type
-        ):
+
+        if "vba_compatible" == formula_type:
+            return f"vba_{service_name_prefix}"
+
+        # TODO Drop the behavior where there is no prefix for non dynamic arrays (when there is no more users using it?)
+        if len(self.formulas) == 1 or "dynamic_array" == formula_type:
             return service_name_prefix
-        return f"vba_{service_name_prefix}"
+
+        # Legacy array and there is more than one formula per operation
+        return f"legacy_{service_name_prefix}"
 
     def allow_parameter(self, parameter_name: str) -> bool:
         return True
@@ -187,16 +183,20 @@ class UDFMethod:
         service: "Service",
         http_method: str,
         path: str,
-        udf_return_type: str,
+        formula_type: str,
+        formula_options: dict,
         udf_name: str,
     ):
         self.service = service
+        self.shift_result = formula_options.get("shift_result", False)
         self.requests_method = http_method
         self.uri = f"{service.uri}{path}"
         self.udf_name = udf_name
         self.help_url = ""
-        self.auto_expand_result = service.config.auto_expand_result(udf_return_type)
-        self.is_asynchronous = service.config.is_asynchronous(udf_return_type)
+        self.auto_expand_result = "legacy_array" == formula_type
+        self.is_asynchronous = "vba_compatible" != formula_type and not formula_options.get(
+            "lock_excel", False
+        )
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
@@ -431,9 +431,9 @@ class RequestContent:
 def check_for_duplicates(loaded_services: List[Service]):
     services_by_prefix = {}
     for service in loaded_services:
-        for udf_return_type in service.config.udf_return_types:
+        for formula_type in service.config.formulas:
             services_by_prefix.setdefault(
-                service.config.udf_prefix(udf_return_type), []
+                service.config.udf_prefix(formula_type), []
             ).append(service.config.name)
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]
@@ -570,11 +570,16 @@ def convert_to_return_type(
 
 
 def shift_result(result: list, udf_method: UDFMethod) -> list:
-    # First result cell is stuck to "computing..." in such case
+    """
+    In case Microsoft Excel should not be locked (computation performed in another thread)
+    The first cell is stuck to "computing..." (this is a known xlwings issue)
+
+    This function provides the ability to shift the actual result to make sure it is always displayed.
+    """
     # If result is a single cell, force the shift to make sure client knows the computation is over
     if (
         udf_method.is_asynchronous
-        and not udf_method.service.config.shift_result
+        and not udf_method.shift_result
         and result
         and len(result) == 1
     ):
@@ -583,14 +588,12 @@ def shift_result(result: list, udf_method: UDFMethod) -> list:
         elif isinstance(result, list):
             result = [["Formula", value] for value in result]
 
-    if (
-        udf_method.service.config.shift_result
-        and udf_method.auto_expand_result
-        and result
-    ):
+    # If client explicitly asked for shifted results, update them
+    if udf_method.shift_result and result:
         if isinstance(result[0], list):
             for row in result:
                 row.insert(0, "")
         elif isinstance(result, list):
             result = [["", value] for value in result]
+
     return result

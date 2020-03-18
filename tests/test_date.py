@@ -13,13 +13,13 @@ from tests import loader
         {
             "usual_parameters": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
             "usual_parameters": {
                 "open_api": {"definition": "http://test/", "rely_on_definitions": True},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -72,13 +72,13 @@ def test_get_date(responses: RequestsMock, tmpdir, service_config: dict):
         {
             "usual_parameters": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
             "usual_parameters": {
                 "open_api": {"definition": "http://test/", "rely_on_definitions": True},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -171,7 +171,7 @@ def test_get_datetime_encoding(responses: RequestsMock, tmpdir):
         {
             "usual_parameters": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

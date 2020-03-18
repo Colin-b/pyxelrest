@@ -143,7 +143,7 @@ def test_get_plain_text_with_service_down(without_parameter_service, tmpdir):
         {
             "without_parameter": {
                 "open_api": {"definition": "http://localhost:8950/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

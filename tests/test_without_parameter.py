@@ -10,13 +10,13 @@ from tests import loader
         {
             "without_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
             "without_parameter": {
                 "open_api": {"definition": "http://test/", "rely_on_definitions": True},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -84,7 +84,7 @@ def test_post_without_parameter(responses: RequestsMock, tmpdir):
         {
             "without_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -117,7 +117,7 @@ def test_put_without_parameter(responses: RequestsMock, tmpdir):
         {
             "without_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -152,7 +152,7 @@ def test_delete_without_parameter(responses: RequestsMock, tmpdir):
         {
             "without_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -187,7 +187,7 @@ def test_service_without_sync_does_not_have_sync(responses: RequestsMock, tmpdir
         {
             "without_parameter": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

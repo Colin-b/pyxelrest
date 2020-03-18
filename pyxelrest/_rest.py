@@ -251,15 +251,20 @@ class ApiKeyNameParameter(UDFParameter):
 
 class PyxelRestUDFMethod(UDFMethod):
     def __init__(
-        self, service: "PyxelRestService", http_method: str, udf_return_type: str
+        self,
+        service: "PyxelRestService",
+        http_method: str,
+        formula_type: str,
+        formula_options: dict,
     ):
-        udf_name = f"{service.config.udf_prefix(udf_return_type)}_{http_method}_url"
+        udf_name = f"{service.config.udf_prefix(formula_type)}_{http_method}_url"
         UDFMethod.__init__(
             self,
             service=service,
             http_method=http_method,
             path="{url}",
-            udf_return_type=udf_return_type,
+            formula_type=formula_type,
+            formula_options=formula_options,
             udf_name=udf_name,
         )
 
@@ -305,9 +310,6 @@ class PyxelRestService(Service):
         """
         self.methods = {}
         config = PyxelRestConfigSection(service_name, service_config)
-        self.existing_operation_ids = {
-            udf_return_type: [] for udf_return_type in config.udf_return_types
-        }
         self.open_api_definition = {
             "securityDefinitions": {
                 "oauth2_implicit": {"type": "oauth2", "flow": "implicit"},
@@ -319,8 +321,8 @@ class PyxelRestService(Service):
         Service.__init__(self, config, "")
 
     def create_method(
-        self, http_method: str, udf_return_type: str
+        self, http_method: str, formula_type: str, formula_options: dict
     ) -> PyxelRestUDFMethod:
-        udf = PyxelRestUDFMethod(self, http_method, udf_return_type)
+        udf = PyxelRestUDFMethod(self, http_method, formula_type, formula_options)
         self.methods[udf.udf_name] = udf
         return udf

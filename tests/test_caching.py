@@ -70,7 +70,7 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
                 "caching": {"result_caching_time": 5},
             }
         },
@@ -119,7 +119,7 @@ def test_post_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
                 "caching": {"result_caching_time": 5},
             }
         },
@@ -158,7 +158,7 @@ def test_put_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
                 "caching": {"result_caching_time": 5},
             }
         },
@@ -197,7 +197,7 @@ def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
                 "caching": {"result_caching_time": 5},
             }
         },

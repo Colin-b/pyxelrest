@@ -23,7 +23,7 @@ def test_missing_operation_id(responses: RequestsMock, tmpdir):
         {
             "operation_id_not_provided": {
                 "open_api": {"definition": "http://test"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -65,7 +65,7 @@ def test_mixed_operation_id(responses: RequestsMock, tmpdir):
         {
             "operation_id_not_always_provided": {
                 "open_api": {"definition": "http://test"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -177,7 +177,7 @@ def test_get_with_selected_operation_ids(
                     "definition": "http://localhost:8944/",
                     "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -199,7 +199,7 @@ def test_post_with_selected_operation_ids(
                     "definition": "http://localhost:8944/",
                     "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -224,7 +224,7 @@ def test_put_with_selected_operation_ids(
                     "definition": "http://localhost:8944/",
                     "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -244,7 +244,7 @@ def test_delete_with_selected_operation_ids(filtered_operation_id_service, tmpdi
                     "definition": "http://localhost:8944/",
                     "selected_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -261,7 +261,7 @@ def test_get_with_excluded_operation_ids(filtered_operation_id_service, tmpdir):
                     "definition": "http://localhost:8944/",
                     "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -278,7 +278,7 @@ def test_post_with_excluded_operation_ids(filtered_operation_id_service, tmpdir)
                     "definition": "http://localhost:8944/",
                     "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -295,7 +295,7 @@ def test_put_with_excluded_operation_ids(filtered_operation_id_service, tmpdir):
                     "definition": "http://localhost:8944/",
                     "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -314,7 +314,7 @@ def test_delete_with_excluded_operation_ids(
                     "definition": "http://localhost:8944/",
                     "excluded_operation_ids": ["get_tags", "post_tags", "put_tags"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

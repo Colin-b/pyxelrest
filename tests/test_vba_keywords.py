@@ -1371,7 +1371,7 @@ def test_get_vba_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -1547,7 +1547,7 @@ def test_post_vba_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -1723,7 +1723,7 @@ def test_put_vba_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -1899,7 +1899,7 @@ def test_delete_vba_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -2075,7 +2075,7 @@ def test_attribute_vba_restricted_keyword_in_uri_parameter(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -2101,7 +2101,7 @@ def test_get_python_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -2125,7 +2125,7 @@ def test_post_python_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -2149,7 +2149,7 @@ def test_put_python_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -2173,7 +2173,7 @@ def test_delete_python_restricted_keywords(
         {
             "vba_keywords": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

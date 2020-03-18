@@ -3,7 +3,7 @@
 <p align="center">
 <a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>
 <a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Build status" src="https://github.com/Colin-b/pyxelrest/workflows/Release/badge.svg"></a>
-<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Coverage" src="https://img.shields.io/badge/coverage-64%25-orange"></a>
+<a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Coverage" src="https://img.shields.io/badge/coverage-65%25-orange"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 <a href="https://github.com/Colin-b/pyxelrest/actions"><img alt="Number of tests" src="https://img.shields.io/badge/tests-393 passed-blue"></a>
 <a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
@@ -561,6 +561,36 @@ import pyxelrest.user_defined_functions as udfs
 You can manually (re)generate UDFs by calling `pyxelrest.load()` and providing your custom configuration.
 
 All UDFs can be found within `pyxelrest.user_defined_functions`.
+
+## Migration guide
+
+### 0.69.0 to 1.0.0
+
+#### Configuration changes
+
+`udf` section has been replaced by a `formulas` section.
+
+ * `sync_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `True`
+ * `async_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `False`
+ * `vba_compatible` `return_type` is now `vba_compatible` sub-section with `shift_result` set to `False`
+
+`shift_result` should be set per formulas sub-section instead of within `udf` section.
+
+##### Previous (0.69.0)
+
+```yaml
+udf:
+    return_types:
+        - sync_auto_expand
+```
+
+##### New (1.0.0)
+
+```yaml
+formulas:
+    legacy_array:
+        lock_excel: True
+```
 
 ## Frequently Asked Question
 

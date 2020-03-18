@@ -146,7 +146,7 @@ def values_false_service(responses: RequestsMock):
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
@@ -155,7 +155,7 @@ def values_false_service(responses: RequestsMock):
                     "definition": "http://localhost:8945/",
                     "rely_on_definitions": True,
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -183,7 +183,7 @@ def test_get_with_zero_integer(
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
@@ -192,7 +192,7 @@ def test_get_with_zero_integer(
                     "definition": "http://localhost:8945/",
                     "rely_on_definitions": True,
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -220,7 +220,7 @@ def test_get_with_zero_float(
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
@@ -229,7 +229,7 @@ def test_get_with_zero_float(
                     "definition": "http://localhost:8945/",
                     "rely_on_definitions": True,
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -257,7 +257,7 @@ def test_get_with_false_boolean(
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
         {
@@ -266,7 +266,7 @@ def test_get_with_false_boolean(
                     "definition": "http://localhost:8945/",
                     "rely_on_definitions": True,
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     ],
@@ -294,7 +294,7 @@ def test_get_with_empty_list(responses: RequestsMock, values_false_service, tmpd
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -319,7 +319,7 @@ def test_get_with_empty_dictionary(
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

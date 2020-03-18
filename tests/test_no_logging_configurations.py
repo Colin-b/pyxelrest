@@ -43,7 +43,7 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
     config = {
         "usual_parameters": {
             "open_api": {"definition": "http://localhost:8943/"},
-            "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+            "formulas": {"dynamic_array": {"lock_excel": True}},
         }
     }
     with open(config_file_path, "wt") as file:

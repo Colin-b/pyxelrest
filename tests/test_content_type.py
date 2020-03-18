@@ -40,7 +40,7 @@ def test_json_content_type(responses: RequestsMock, content_type_service, tmpdir
         {
             "content_type": {
                 "open_api": {"definition": "http://localhost:8956/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

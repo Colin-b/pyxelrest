@@ -26,7 +26,7 @@ def test_https_is_used_whenever_possible(responses: RequestsMock, tmpdir):
         {
             "scheme": {
                 "open_api": {"definition": "http://test/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

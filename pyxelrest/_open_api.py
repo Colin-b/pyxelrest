@@ -486,7 +486,8 @@ class OpenAPIUDFMethod(UDFMethod):
         http_method: str,
         open_api_method: dict,
         path: str,
-        udf_return_type: str,
+        formula_type: str,
+        formula_options: dict,
     ):
         # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
         self.help_url = OpenAPIUDFMethod.extract_url(
@@ -497,10 +498,10 @@ class OpenAPIUDFMethod(UDFMethod):
         ) or OpenAPIUDFMethod._compute_operation_id(http_method, path)
         # Ensure that there is no duplicate (in case a computed operationId matches a provided operationId)
         open_api_method["operationId"] = service.get_unique_operation_id(
-            udf_return_type, operation_id
+            formula_type, operation_id
         )
         prefix = service.config.udf_name_prefix.format(
-            service_name=service.config.udf_prefix(udf_return_type)
+            service_name=service.config.udf_prefix(formula_type)
         )
         udf_name = f"{prefix}{open_api_method['operationId']}"
         self.responses = open_api_method.get("responses")
@@ -512,7 +513,8 @@ class OpenAPIUDFMethod(UDFMethod):
             service=service,
             http_method=http_method,
             path=path,
-            udf_return_type=udf_return_type,
+            formula_type=formula_type,
+            formula_options=formula_options,
             udf_name=udf_name,
         )
 
@@ -661,7 +663,7 @@ class OpenAPI(Service):
         self.methods = {}
         config = ServiceConfigSection(service_name, service_config)
         self.existing_operation_ids = {
-            udf_return_type: [] for udf_return_type in config.udf_return_types
+            formula_type: [] for formula_type in config.formulas
         }
         self.open_api_definition = OpenAPI._retrieve_open_api_definition(config)
         self.validate_open_api_version()
@@ -695,10 +697,16 @@ class OpenAPI(Service):
         http_method: str,
         open_api_method: dict,
         method_path: str,
-        udf_return_type: str,
+        formula_type: str,
+        formula_options: dict,
     ) -> OpenAPIUDFMethod:
         udf = OpenAPIUDFMethod(
-            self, http_method, open_api_method, method_path, udf_return_type
+            self,
+            http_method,
+            open_api_method,
+            method_path,
+            formula_type,
+            formula_options,
         )
         self.methods[udf.udf_name] = udf
         return udf
@@ -801,21 +809,21 @@ class OpenAPI(Service):
                 _update_method_consumes()
 
     def get_unique_operation_id(
-        self, udf_return_type: str, potential_duplicated_operation_id: str
+        self, formula_type: str, potential_duplicated_operation_id: str
     ) -> str:
         unique_operation_id = (
             potential_duplicated_operation_id  # At this time, this might not be unique
         )
         if (
             potential_duplicated_operation_id
-            in self.existing_operation_ids[udf_return_type]
+            in self.existing_operation_ids[formula_type]
         ):
             logger.warning(
                 f"Duplicated operationId found: {potential_duplicated_operation_id}."
             )
             unique_operation_id = f"duplicated_{potential_duplicated_operation_id}"
 
-        self.existing_operation_ids[udf_return_type].append(unique_operation_id)
+        self.existing_operation_ids[formula_type].append(unique_operation_id)
         return unique_operation_id
 
     def validate_open_api_version(self):

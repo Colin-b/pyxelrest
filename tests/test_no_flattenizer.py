@@ -3072,7 +3072,7 @@ def json_service(responses: RequestsMock, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
                 "result": {"flatten": False},
             }
         },

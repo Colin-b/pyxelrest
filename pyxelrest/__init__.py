@@ -1,7 +1,7 @@
 import os
 from pyxelrest.version import __version__
 
-# Set to False in order to avoid generating UDFs on loading _generator
+
 GENERATE_UDF_ON_IMPORT = True
 
 SERVICES_CONFIGURATION_FILE_PATH = os.path.join(
@@ -20,14 +20,12 @@ def load(config: dict):
 
     GENERATE_UDF_ON_IMPORT = True
 
-    # Send raw results and propagate exceptions by default
     for service in config.values():
         result = service.setdefault("result", {})
+        # Send raw results if not specified otherwise
         result.setdefault("flatten", False)
+        # Propagate exceptions if not specified otherwise
         result.setdefault("raise_exception", True)
-
-        udf = service.setdefault("udf", {})
-        udf.setdefault("shift_result", False)
 
     services = _generator.load_services(config)
     _generator.generate_python_file(services)

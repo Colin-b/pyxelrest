@@ -17,9 +17,9 @@ def test_get_custom_url_sync(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -49,9 +49,9 @@ def test_get_custom_url(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -81,9 +81,9 @@ def test_delete_custom_url_sync(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -113,9 +113,9 @@ def test_delete_custom_url(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -145,9 +145,9 @@ def test_post_custom_url_dict(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -176,9 +176,9 @@ def test_post_custom_url_dict_list_sync(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -210,9 +210,9 @@ def test_post_custom_url_dict_list(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -244,9 +244,9 @@ def test_put_custom_url_dict_list(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -275,9 +275,9 @@ def test_put_custom_url_dict(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },
@@ -303,9 +303,9 @@ def test_put_custom_url_dict_sync(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "pyxelrest": {
-                "udf": {
-                    "return_types": ["vba_compatible", "sync_auto_expand"],
-                    "shift_result": False,
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
                 }
             }
         },

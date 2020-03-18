@@ -721,7 +721,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service, tmpdir):
                 "open_api": {
                     "definition": "http://petstore.swagger.io/v2/swagger.json"
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -782,7 +782,7 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service, tmpdir):
                 "open_api": {
                     "definition": "http://petstore.swagger.io/v2/swagger.json"
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

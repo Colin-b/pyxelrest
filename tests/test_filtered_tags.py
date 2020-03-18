@@ -89,7 +89,7 @@ def test_get_with_selected_tags(responses: RequestsMock, filtered_tags_service, 
                     "definition": "http://localhost:8944/",
                     "selected_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -112,7 +112,7 @@ def test_post_with_selected_tags(
                     "definition": "http://localhost:8944/",
                     "selected_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -136,7 +136,7 @@ def test_put_with_selected_tags(responses: RequestsMock, filtered_tags_service, 
                     "definition": "http://localhost:8944/",
                     "selected_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -157,7 +157,7 @@ def test_delete_with_selected_tags(filtered_tags_service, tmpdir):
                     "definition": "http://localhost:8944/",
                     "selected_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -174,7 +174,7 @@ def test_get_with_excluded_tags(filtered_tags_service, tmpdir):
                     "definition": "http://localhost:8944/",
                     "excluded_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -191,7 +191,7 @@ def test_post_with_excluded_tags(filtered_tags_service, tmpdir):
                     "definition": "http://localhost:8944/",
                     "excluded_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -208,7 +208,7 @@ def test_put_with_excluded_tags(filtered_tags_service, tmpdir):
                     "definition": "http://localhost:8944/",
                     "excluded_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
@@ -227,7 +227,7 @@ def test_delete_with_excluded_tags(
                     "definition": "http://localhost:8944/",
                     "excluded_tags": ["tag 1", "tag 2"],
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )

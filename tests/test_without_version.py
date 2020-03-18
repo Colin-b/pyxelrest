@@ -26,7 +26,7 @@ def test_swagger_version_is_mandatory(responses: RequestsMock, tmpdir):
                 "open_api": {
                     "definition": "http://localhost:8948/swagger_version_not_provided"
                 },
-                "udf": {"return_types": ["sync_auto_expand"], "shift_result": False},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
     )
