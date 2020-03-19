@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -216,7 +216,7 @@ namespace AutoLoadPyxelRestAddIn
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var dynamicArrayFormulas = new CheckBox { Text = "Dynamic array", Checked = dynamicArrayFormulasOptions.Count > 0 };
-                        tooltip.SetToolTip(dynamicArrayFormulas, "If your version of Microsoft Excel supports dynamic array formulas, results will be spilled.\nOtherwise results will only fill selected cells.\nUse this formula behavior if you want to call it using VBA.");
+                        tooltip.SetToolTip(dynamicArrayFormulas, "If your version of Microsoft Excel supports dynamic array formulas, results will be spilled.\nOtherwise results will only fill selected cells.");
                         dynamicArrayFormulas.CheckedChanged += DynamicArrayFormulas_CheckedChanged;
                         panel.Controls.Add(dynamicArrayFormulas, 0, 0);
                     }
@@ -224,7 +224,7 @@ namespace AutoLoadPyxelRestAddIn
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var legacyArrayFormulas = new CheckBox { Text = "Legacy array", Checked = legacyArrayFormulasOptions.Count > 0 };
-                        tooltip.SetToolTip(legacyArrayFormulas, "If your version of Microsoft Excel does not supports dynamic array formulas, use this to spill results.\nDo not use this formula behavior if you want to call it using VBA.");
+                        tooltip.SetToolTip(legacyArrayFormulas, "If your version of Microsoft Excel does not supports dynamic array formulas, use this to spill results.");
                         legacyArrayFormulas.CheckedChanged += LegacyArrayFormulas_CheckedChanged;
                         panel.Controls.Add(legacyArrayFormulas, 1, 0);
                     }
@@ -232,7 +232,7 @@ namespace AutoLoadPyxelRestAddIn
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var vbaCompatibleFormulas = new CheckBox { Text = "Visual basic", Checked = vbaCompatibleFormulasOptions.Count > 0, Width = 160 };
-                        tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using VBA only.");
+                        tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using Visual Basic for Applications (VBA).");
                         vbaCompatibleFormulas.CheckedChanged += VBACompatibleFormulas_CheckedChanged;
                         panel.Controls.Add(vbaCompatibleFormulas, 2, 0);
                     }

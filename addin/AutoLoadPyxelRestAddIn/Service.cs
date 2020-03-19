@@ -6,8 +6,6 @@ namespace AutoLoadPyxelRestAddIn
 {
     public sealed class Service
     {
-        private static readonly ILog Log = LogManager.GetLogger("Service");
-
         private static readonly string OPEN_API_PROPERTY = "open_api";
         private static readonly string PROXIES_PROPERTY = "proxies";
         private static readonly string METHODS_PROPERTY = "methods";
@@ -80,8 +78,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private YamlNode GetProperty(YamlMappingNode parent, string name)
         {
-            YamlNode value;
-            if (parent.Children.TryGetValue(new YamlScalarNode(name), out value))
+            if (parent.Children.TryGetValue(new YamlScalarNode(name), out YamlNode value))
                 return value;
             return null;
         }
@@ -284,7 +281,6 @@ namespace AutoLoadPyxelRestAddIn
         internal YamlMappingNode ToConfig()
         {
             var section = new YamlMappingNode();
-
             if (OpenAPI != null && OpenAPI.Count > 0)
                 section.Add(new YamlScalarNode(OPEN_API_PROPERTY), new YamlMappingNode(FromDict(OpenAPI)));
 

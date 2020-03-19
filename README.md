@@ -9,11 +9,12 @@
 <a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
 </p>
 
-PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Microsoft Excel User Defined Functions.
+PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Microsoft Excel User Defined Functions (formulas).
 
 ## Table of Contents
 
 * [Usage](#usage)
+* [Features](#features)
 * [Installation](#installation)
 * [Configuration](#configuration)
   * [Services](#services-configuration)
@@ -24,23 +25,32 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 
 ## Usage
 
-Once installed, open Microsoft Excel and UDFs from configured services ([petstore](https://petstore.swagger.io/#/) in this example) will be available.
+Once installed, open Microsoft Excel and functions generated from configured REST APIs ([petstore](https://petstore.swagger.io/#/) in this example) will be available.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_category.PNG" alt='Selecting UDF'>
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG" alt='Filling in UDF parameters'>
 </p>
 
-UDFs are automatically updated on Microsoft Excel start and on Configuration update.
+## Features
 
-Updating UDFs without restarting Microsoft Excel or updating configuration can be done thanks to the ``Update Functions`` button within ``PyxelRest`` tab.
+### Automatic function (re)generation
+
+Functions are automatically re-generated on Microsoft Excel start and on Configuration update.
+
+You can manually update functions without restarting Microsoft Excel or updating configuration by clicking on the ``Update Functions`` button within ``PyxelRest`` tab.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
 </p>
 
+### Automatic update
+
 PyxelRest itself can automatically stay up to date. 
 The updater make sure that the python module, the Microsoft Excel add-in and the services configuration stays up to date.
+Updates are checked when closing Microsoft Excel.
+
+In case an update is available, you will be prompted for approval.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/update_gui.gif" alt='Update steps'>
