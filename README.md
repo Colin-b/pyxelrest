@@ -156,121 +156,33 @@ The following options are available for each section:
 
 Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-        <td><em>Possible values</em></td>
-    </th>
-    <tr>
-        <td><strong>open_api</strong></td>
-        <td>Dictionary describing the OpenAPI definition. Refer to OpenAPI section for more information.</td>
-        <td>Mandatory</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>description</strong></td>
-        <td>A small description of this service. To be displayed within Microsoft Excel add-in services configuration screen.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>proxies</strong></td>
-        <td>Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#proxies</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>methods</strong></td>
-        <td>List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head).</td>
-        <td>Optional</td>
-        <td>get, post, put, delete, patch, options, head</td>
-    </tr>
-    <tr>
-        <td><strong>oauth2</strong></td>
-        <td>Dictionary containing OAuth2 related settings. Refer to OAuth 2 section for more information.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>api_key</strong></td>
-        <td>User API Key.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>basic</strong></td>
-        <td>Dictionary containing Basic authentication related settings. Refer to Basic section for more information.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>ntlm</strong></td>
-        <td>Dictionary containing NTLM related settings. Refer to NTLM section for more information.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>udf</strong></td>
-        <td>Dictionary containing user defined function related settings. Refer to User Defined Function section for more information.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>max_retries</strong></td>
-        <td>Maximum number of time a request should be retried before considered as failed. 5 by default.</td>
-        <td>Optional</td>
-        <td>Any positive integer value</td>
-    </tr>
-    <tr>
-        <td><strong>headers</strong></td>
-        <td>Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>connect_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>Optional</td>
-        <td>any float value</td>
-    </tr>
-    <tr>
-        <td><strong>read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>Optional</td>
-        <td>any float value</td>
-    </tr>
-    <tr>
-        <td><strong>skip_update_for</strong></td>
-        <td>List of section names that should not be auto-updated.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>python_modules</strong></td>
-        <td>List of extra python module names that should be installed.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>caching</strong></td>
-        <td>Dictionary containing caching related settings. Refer to Caching section for more information.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>result</strong></td>
-        <td>Dictionary containing result related settings. Refer to Result section for more information.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>udf_name_prefix</strong></td>
-        <td>Prefix to be used in front of UDf name.</td>
-        <td>Optional</td>
-        <td>{service_name}_</td>
-    </tr>
-</table>
+Mandatory options:
+
+| Name | Description |
+|------|-------------|
+| open_api | Dictionary describing the OpenAPI definition. Refer to [OpenAPI](#openapi) section for more information. |
+
+Other options:
+
+| Name | Description | Possible values |
+|------|-------------|-----------------|
+| description | A small description of this service. To be displayed within Microsoft Excel add-in services configuration screen. | |
+| proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#proxies) | |
+| methods | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head). | get, post, put, delete, patch, options, head |
+| oauth2 | Dictionary containing OAuth2 related settings. Refer to [OAuth 2](#oauth-2) section for more information. | |
+| api_key | User API Key. | |
+| basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. | |
+| ntlm | Dictionary containing NTLM related settings. Refer to [NTLM](#ntlm) section for more information. | |
+| formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. | |
+| max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
+| headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
+| connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#timeouts) | any float value |
+| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#timeouts) | any float value |
+| skip_update_for | List of section names that should not be auto-updated. | |
+| python_modules | List of extra python module names that should be installed. | |
+| caching | Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
+| result | Dictionary containing result related settings. Refer to [Result](#result) section for more information. | |
+| udf_name_prefix | Prefix to be used in front of UDf name. | {service_name}_ |
 
 #### OpenAPI
 
@@ -348,7 +260,11 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
     </tr>
 </table>
 
-#### User Defined Function
+#### Formulas
+
+##### Dynamic array formulas
+
+Identified by the `dynamic_array` key within `formulas` section.
 
 <table>
     <th>
@@ -357,18 +273,34 @@ Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (f
         <td><em>Possible values</em></td>
     </th>
     <tr>
-        <td><strong>return_types</strong></td>
-        <td>List of user defined function return types. vba_compatible if you want your UDF to return the final result immediately. It means that you will have to specify all the cells that will contains the result. Use sync_auto_expand so that UDF call will be a synchronous call auto expanding the result. async_auto_expand (asynchronous call auto expanding the result) by default.</td>
+        <td><strong>lock_excel</strong></td>
+        <td>Should Microsoft Excel be locked (no other action can be performed) until the results are received.</td>
         <td>Optional</td>
-        <td>async_auto_expand, sync_auto_expand or vba_compatible.</td>
-    </tr>
-    <tr>
-        <td><strong>shift_result</strong></td>
-        <td>Shift auto expand result by one column to the right. True by default.</td>
-        <td>Optional</td>
-        <td>true or false.</td>
+        <td>true or false (default).</td>
     </tr>
 </table>
+
+##### Legacy array formulas
+
+Identified by the `legacy_array` key within `formulas` section.
+
+<table>
+    <th>
+        <td><em>Description</em></td>
+        <td><em>Mandatory</em></td>
+        <td><em>Possible values</em></td>
+    </th>
+    <tr>
+        <td><strong>lock_excel</strong></td>
+        <td>Should Microsoft Excel be locked (no other action can be performed) until the results are received.</td>
+        <td>Optional</td>
+        <td>true or false (default).</td>
+    </tr>
+</table>
+
+##### Visual Basic for Applications (VBA) formulas
+
+Identified by the `vba_compatible` key within `formulas` section.
 
 #### OAuth 2
 
@@ -397,7 +329,7 @@ Note that token_url and authorization_url are extracted from OpenAPI documentati
 
 #### NTLM
 
-Requiring requests_ntlm or requests_negotiate_sspi python modules.
+Requiring [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) or [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) python modules.
 
 <table>
     <th>
@@ -418,7 +350,7 @@ Requiring requests_ntlm or requests_negotiate_sspi python modules.
 
 #### Caching
 
-Requiring cachetools python module.
+Requiring [`cachetools`](https://pypi.org/project/cachetools/) python module.
 
 <table>
     <th>
@@ -446,7 +378,7 @@ Requiring cachetools python module.
     </th>
     <tr>
         <td><strong>flatten</strong></td>
-        <td>Flatten received JSON to a 2D array. Default to True.</td>
+        <td>Flatten received JSON to a 2-Dimension array. Default to True.</td>
         <td>Optional</td>
     </tr>
     <tr>
@@ -459,7 +391,7 @@ Requiring cachetools python module.
 
 #### PyxelRest Service Configuration
 
-You can also use the "pyxelrest" service name to activate [Postman](https://www.getpostman.com)-like UDFs.
+You can also use the `pyxelrest` service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services_pyxelrest.PNG" alt='Configuration screen'>
@@ -467,13 +399,11 @@ You can also use the "pyxelrest" service name to activate [Postman](https://www.
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG" alt='Selecting UDF'>
 </p>
 
-It can be configured the same way than a usual service, except that open_api section is not used anymore.
+It can be configured the same way than a usual service, except that `open_api` section is not needed anymore.
 
 ### Logging Configuration
 
 PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
-
-PyxelRest auto-update logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\auto_update_logging.yml` file.
 
 Microsoft Excel Auto-Load add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
 
@@ -570,11 +500,15 @@ All UDFs can be found within `pyxelrest.user_defined_functions`.
 
 `udf` section has been replaced by a `formulas` section.
 
- * `sync_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `true`
- * `async_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `false`
- * `vba_compatible` `return_type` is now `vba_compatible` sub-section with `shift_result` set to `false`
+We __strongly__ advise to check out the new `dynamic_array` formulas if your Microsoft Excel version supports it.
+Otherwise:
 
-`shift_result` should be set per formulas sub-section instead of within `udf` section.
+ * `sync_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `true`
+ * `async_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `false`
+ * `vba_compatible` `return_type` (in case there was another `return_type` as well) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true`
+ * `vba_compatible` `return_type` (in case it was the only `return_type`) corresponds to `legacy_array` sub-section with `lock_excel` set to `true`
+
+`shift_result` is not an option anymore. As a result, formulas results will start from the first cell.
 
 ##### Previous (0.69.0)
 

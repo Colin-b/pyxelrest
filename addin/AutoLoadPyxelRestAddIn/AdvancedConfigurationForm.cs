@@ -36,10 +36,8 @@ namespace AutoLoadPyxelRestAddIn
         private AddButton addOAuth2Param;
 
         private CheckBox dynamicArrayFormulasLockExcel;
-        private CheckBox shiftDynamicArrayFormulasResult;
 
         private CheckBox legacyArrayFormulasLockExcel;
-        private CheckBox shiftLegacyArrayFormulasResult;
 
         private TableLayoutPanel pythonModulesPanel;
         private TextBox pythonModuleName;
@@ -261,16 +259,6 @@ namespace AutoLoadPyxelRestAddIn
                         dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasOptions.Count > 0;
                         panel.Controls.Add(dynamicArrayFormulasLockExcel, 0, 0);
                     }
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift results by one column", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var shiftResultChecked = dynamicArrayFormulasOptions.ContainsKey("shift_result") ? (bool)dynamicArrayFormulasOptions["shift_result"] : false;
-                        shiftDynamicArrayFormulasResult = new CheckBox { Text = "Shift results", Checked = shiftResultChecked };
-                        tooltip.SetToolTip(shiftDynamicArrayFormulasResult, "Left column will be empty.");
-                        shiftDynamicArrayFormulasResult.CheckedChanged += ShiftDynamicArrayFormulasResult_CheckedChanged;
-                        shiftDynamicArrayFormulasResult.Enabled = dynamicArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(shiftDynamicArrayFormulasResult, 1, 0);
-                    }
 
                     layout.Controls.Add(panel, 1, 7);
                 }
@@ -291,16 +279,6 @@ namespace AutoLoadPyxelRestAddIn
                         legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
                         legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasOptions.Count > 0;
                         panel.Controls.Add(legacyArrayFormulasLockExcel, 0, 0);
-                    }
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Shift results by one column", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var shiftResultChecked = legacyArrayFormulasOptions.ContainsKey("shift_result") ? (bool)legacyArrayFormulasOptions["shift_result"] : false;
-                        shiftLegacyArrayFormulasResult = new CheckBox { Text = "Shift results", Checked = shiftResultChecked };
-                        tooltip.SetToolTip(shiftLegacyArrayFormulasResult, "Left column will be empty.");
-                        shiftLegacyArrayFormulasResult.CheckedChanged += ShiftLegacyArrayFormulasResult_CheckedChanged;
-                        shiftLegacyArrayFormulasResult.Enabled = legacyArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(shiftLegacyArrayFormulasResult, 1, 0);
                     }
 
                     layout.Controls.Add(panel, 1, 8);
@@ -972,7 +950,6 @@ namespace AutoLoadPyxelRestAddIn
             {
                 servicePanel.service.Formulas["legacy_array"] = new Dictionary<string, object>();
                 LegacyArrayFormulasLockExcel_CheckedChanged();
-                ShiftLegacyArrayFormulasResult_CheckedChanged();
             }
             else
             {
@@ -980,7 +957,6 @@ namespace AutoLoadPyxelRestAddIn
             }
 
             legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasChecked;
-            shiftLegacyArrayFormulasResult.Enabled = legacyArrayFormulasChecked;
         }
 
         private void LegacyArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
@@ -988,19 +964,9 @@ namespace AutoLoadPyxelRestAddIn
             LegacyArrayFormulasLockExcel_CheckedChanged();
         }
 
-        private void ShiftLegacyArrayFormulasResult_CheckedChanged(object sender, EventArgs e)
-        {
-            ShiftLegacyArrayFormulasResult_CheckedChanged();
-        }
-
         private void LegacyArrayFormulasLockExcel_CheckedChanged()
         {
             AddValueToFormulasSubSection("legacy_array", "lock_excel", legacyArrayFormulasLockExcel.Checked);
-        }
-
-        private void ShiftLegacyArrayFormulasResult_CheckedChanged()
-        {
-            AddValueToFormulasSubSection("legacy_array", "shift_result", shiftLegacyArrayFormulasResult.Checked);
         }
 
         private void DynamicArrayFormulas_CheckedChanged(object sender, EventArgs e)
@@ -1010,7 +976,6 @@ namespace AutoLoadPyxelRestAddIn
             {
                 servicePanel.service.Formulas["dynamic_array"] = new Dictionary<string, object>();
                 DynamicArrayFormulasLockExcel_CheckedChanged();
-                ShiftDynamicArrayFormulasResult_CheckedChanged();
             }
             else
             {
@@ -1018,7 +983,6 @@ namespace AutoLoadPyxelRestAddIn
             }
 
             dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasChecked;
-            shiftDynamicArrayFormulasResult.Enabled = dynamicArrayFormulasChecked;
         }
 
         private void DynamicArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
@@ -1026,19 +990,9 @@ namespace AutoLoadPyxelRestAddIn
             DynamicArrayFormulasLockExcel_CheckedChanged();
         }
 
-        private void ShiftDynamicArrayFormulasResult_CheckedChanged(object sender, EventArgs e)
-        {
-            ShiftDynamicArrayFormulasResult_CheckedChanged();
-        }
-
         private void DynamicArrayFormulasLockExcel_CheckedChanged()
         {
             AddValueToFormulasSubSection("dynamic_array", "lock_excel", dynamicArrayFormulasLockExcel.Checked);
-        }
-
-        private void ShiftDynamicArrayFormulasResult_CheckedChanged()
-        {
-            AddValueToFormulasSubSection("dynamic_array", "shift_result", shiftDynamicArrayFormulasResult.Checked);
         }
 
         private void VBACompatibleFormulas_CheckedChanged(object sender, EventArgs e)
@@ -1047,7 +1001,7 @@ namespace AutoLoadPyxelRestAddIn
             if (vbaCompatibleFormulasChecked)
             {
                 servicePanel.service.Formulas["vba_compatible"] = new Dictionary<string, object>();
-                AddValueToFormulasSubSection("vba_compatible", "shift_result", false);
+                AddValueToFormulasSubSection("vba_compatible", "lock_excel", true);
             }
             else
             {

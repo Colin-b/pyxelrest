@@ -59,7 +59,7 @@ class ConfigSection:
         self.connect_timeout = service_config.get("connect_timeout", 1)
         self.read_timeout = service_config.get("read_timeout")
         self.formulas = service_config.get(
-            "formulas", {"dynamic_array": {"lock_excel": False, "shift_result": False}}
+            "formulas", {"dynamic_array": {"lock_excel": False}}
         )
         self.max_retries = service_config.get("max_retries", 5)
         self.custom_headers = {
@@ -188,7 +188,6 @@ class UDFMethod:
         udf_name: str,
     ):
         self.service = service
-        self.shift_result = formula_options.get("shift_result", False)
         self.requests_method = http_method
         self.uri = f"{service.uri}{path}"
         self.udf_name = udf_name
@@ -449,7 +448,7 @@ def get_result(
 ):
     cached_result = udf_method.get_cached_result(request_content)
     if cached_result is not None:
-        return shift_result(cached_result, udf_method)
+        return cached_result
 
     response = None
     try:
@@ -500,7 +499,7 @@ def get_result(
         else:
             result = convert_to_return_type(response.text[:255], udf_method)
         udf_method.cache_result(request_content, result)
-        return shift_result(result, udf_method)
+        return result
     except requests.ConnectionError as e:
         logger.exception(
             f"{get_caller_address(excel_application)} Connection [status=error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
@@ -558,42 +557,10 @@ def handle_exception(
     if udf_method.service.config.raise_exception:
         raise exception
 
-    return shift_result(
-        convert_to_return_type(exception_message, udf_method), udf_method
-    )
+    return convert_to_return_type(exception_message, udf_method)
 
 
 def convert_to_return_type(
     str_value: str, udf_method: UDFMethod
 ) -> Union[List[str], str]:
     return [str_value] if udf_method.return_a_list() else str_value
-
-
-def shift_result(result: list, udf_method: UDFMethod) -> list:
-    """
-    In case Microsoft Excel should not be locked (computation performed in another thread)
-    The first cell is stuck to "computing..." (this is a known xlwings issue)
-
-    This function provides the ability to shift the actual result to make sure it is always displayed.
-    """
-    # If result is a single cell, force the shift to make sure client knows the computation is over
-    if (
-        udf_method.is_asynchronous
-        and not udf_method.shift_result
-        and result
-        and len(result) == 1
-    ):
-        if isinstance(result[0], list) and len(result[0]) == 1:
-            result[0].insert(0, "Formula")
-        elif isinstance(result, list):
-            result = [["Formula", value] for value in result]
-
-    # If client explicitly asked for shifted results, update them
-    if udf_method.shift_result and result:
-        if isinstance(result[0], list):
-            for row in result:
-                row.insert(0, "")
-        elif isinstance(result, list):
-            result = [["", value] for value in result]
-
-    return result

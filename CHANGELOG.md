@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop support for application/msgpackpandas as msgpack support has been dropped from pandas and this is not a standardized content type.
 - Drop support for ujson.
 - Drop support for ini configuration files.
+- Drop support for shifted results as there is no need for it anymore, first cell is always filled with an up to date value.
 - Python update script path is now guessed by addin, no need to provide the path in configuration anymore.
 
 ### Changed
