@@ -570,9 +570,9 @@ All UDFs can be found within `pyxelrest.user_defined_functions`.
 
 `udf` section has been replaced by a `formulas` section.
 
- * `sync_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `True`
- * `async_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `False`
- * `vba_compatible` `return_type` is now `vba_compatible` sub-section with `shift_result` set to `False`
+ * `sync_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `true`
+ * `async_auto_expand` `return_type` is now `legacy_array` sub-section with `lock_excel` set to `false`
+ * `vba_compatible` `return_type` is now `vba_compatible` sub-section with `shift_result` set to `false`
 
 `shift_result` should be set per formulas sub-section instead of within `udf` section.
 
@@ -589,7 +589,7 @@ udf:
 ```yaml
 formulas:
     legacy_array:
-        lock_excel: True
+        lock_excel: true
 ```
 
 ## Frequently Asked Question

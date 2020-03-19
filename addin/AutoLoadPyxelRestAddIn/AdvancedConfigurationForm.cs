@@ -967,84 +967,25 @@ namespace AutoLoadPyxelRestAddIn
 
         private void LegacyArrayFormulas_CheckedChanged(object sender, EventArgs e)
         {
-            if (((CheckBox)sender).Checked)
+            bool legacyArrayFormulasChecked = ((CheckBox)sender).Checked;
+            if (legacyArrayFormulasChecked)
             {
-                LegacyArrayFormulas_CheckedChanged();
+                servicePanel.service.Formulas["legacy_array"] = new Dictionary<string, object>();
+                LegacyArrayFormulasLockExcel_CheckedChanged();
                 ShiftLegacyArrayFormulasResult_CheckedChanged();
-
-                legacyArrayFormulasLockExcel.Enabled = true;
-                shiftLegacyArrayFormulasResult.Enabled = true;
             }
             else
             {
-                RemoveValueToUdfList("async_auto_expand", "return_types");
-                RemoveValueToUdfList("sync_auto_expand", "return_types");
-                servicePanel.service.Udf.Remove("shift_result");
-
-                legacyArrayFormulasLockExcel.Enabled = false;
-                shiftLegacyArrayFormulasResult.Enabled = false;
+                servicePanel.service.Formulas.Remove("legacy_array");
             }
+
+            legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasChecked;
+            shiftLegacyArrayFormulasResult.Enabled = legacyArrayFormulasChecked;
         }
 
         private void LegacyArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
         {
-            LegacyArrayFormulas_CheckedChanged();
-        }
-
-        private void LegacyArrayFormulas_CheckedChanged()
-        {
-            if (legacyArrayFormulasLockExcel.Checked)
-            {
-                AddValueToUdfList("sync_auto_expand", "return_types");
-                RemoveValueToUdfList("async_auto_expand", "return_types");
-            }
-            else
-            {
-                AddValueToUdfList("async_auto_expand", "return_types");
-                RemoveValueToUdfList("sync_auto_expand", "return_types");
-            }
-        }
-
-        private void DynamicArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
-        private void DynamicArrayFormulas_CheckedChanged(object sender, EventArgs e)
-        {
-            if (((CheckBox)sender).Checked)
-            {
-                AddValueToUdfList("vba_compatible", "return_types");
-
-                dynamicArrayFormulasLockExcel.Enabled = true;
-                shiftDynamicArrayFormulasResult.Enabled = true;
-            }
-            else
-            {
-                RemoveValueToUdfList("vba_compatible", "return_types");
-
-                dynamicArrayFormulasLockExcel.Enabled = false;
-                shiftDynamicArrayFormulasResult.Enabled = false;
-            }
-        }
-
-        private void VBACompatibleFormulas_CheckedChanged(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
-        private void AddValueToUdfList(string value, string listName)
-        {
-            // if (!servicePanel.service.Udf.ContainsKey(listName))
-            //     servicePanel.service.Udf[listName] = new List<string>();
-
-            // ((IList<string>)servicePanel.service.Udf[listName]).Add(value);
-        }
-
-        private void RemoveValueToUdfList(string value, string listName)
-        {
-            // if (servicePanel.service.Udf.ContainsKey(listName))
-            // ((IList<string>)servicePanel.service.Udf[listName]).Remove(value);
+            LegacyArrayFormulasLockExcel_CheckedChanged();
         }
 
         private void ShiftLegacyArrayFormulasResult_CheckedChanged(object sender, EventArgs e)
@@ -1052,14 +993,71 @@ namespace AutoLoadPyxelRestAddIn
             ShiftLegacyArrayFormulasResult_CheckedChanged();
         }
 
+        private void LegacyArrayFormulasLockExcel_CheckedChanged()
+        {
+            AddValueToFormulasSubSection("legacy_array", "lock_excel", legacyArrayFormulasLockExcel.Checked);
+        }
+
         private void ShiftLegacyArrayFormulasResult_CheckedChanged()
         {
-            // servicePanel.service.Udf["shift_result"] = shiftLegacyArrayFormulasResult.Checked;
+            AddValueToFormulasSubSection("legacy_array", "shift_result", shiftLegacyArrayFormulasResult.Checked);
+        }
+
+        private void DynamicArrayFormulas_CheckedChanged(object sender, EventArgs e)
+        {
+            bool dynamicArrayFormulasChecked = ((CheckBox)sender).Checked;
+            if (dynamicArrayFormulasChecked)
+            {
+                servicePanel.service.Formulas["dynamic_array"] = new Dictionary<string, object>();
+                DynamicArrayFormulasLockExcel_CheckedChanged();
+                ShiftDynamicArrayFormulasResult_CheckedChanged();
+            }
+            else
+            {
+                servicePanel.service.Formulas.Remove("dynamic_array");
+            }
+
+            dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasChecked;
+            shiftDynamicArrayFormulasResult.Enabled = dynamicArrayFormulasChecked;
+        }
+
+        private void DynamicArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
+        {
+            DynamicArrayFormulasLockExcel_CheckedChanged();
         }
 
         private void ShiftDynamicArrayFormulasResult_CheckedChanged(object sender, EventArgs e)
         {
-            // TODO
+            ShiftDynamicArrayFormulasResult_CheckedChanged();
+        }
+
+        private void DynamicArrayFormulasLockExcel_CheckedChanged()
+        {
+            AddValueToFormulasSubSection("dynamic_array", "lock_excel", dynamicArrayFormulasLockExcel.Checked);
+        }
+
+        private void ShiftDynamicArrayFormulasResult_CheckedChanged()
+        {
+            AddValueToFormulasSubSection("dynamic_array", "shift_result", shiftDynamicArrayFormulasResult.Checked);
+        }
+
+        private void VBACompatibleFormulas_CheckedChanged(object sender, EventArgs e)
+        {
+            bool vbaCompatibleFormulasChecked = ((CheckBox)sender).Checked;
+            if (vbaCompatibleFormulasChecked)
+            {
+                servicePanel.service.Formulas["vba_compatible"] = new Dictionary<string, object>();
+                AddValueToFormulasSubSection("vba_compatible", "shift_result", false);
+            }
+            else
+            {
+                servicePanel.service.Formulas.Remove("vba_compatible");
+            }
+        }
+
+        private void AddValueToFormulasSubSection(string formulaType, string key, object value)
+        {
+            ((IDictionary<string, object>)servicePanel.service.Formulas[formulaType])[key] = value;
         }
 
         private void AddValueToList(string value, string listName)
