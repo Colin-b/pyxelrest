@@ -1,4 +1,4 @@
-<h2 align="center">Access REST APIs from Microsoft Excel using User Defined Functions (UDF)</h2>
+<h2 align="center">Query REST APIs using functions (Microsoft Excel formulas or python functions)</h2>
 
 <p align="center">
 <a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>
@@ -9,7 +9,12 @@
 <a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
 </p>
 
-PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using Microsoft Excel User Defined Functions (formulas).
+PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using:
+* Microsoft Excel:
+  * Dynamic array formulas
+  * Legacy array formulas
+  * Visual Basic for Applications functions
+* Python functions
 
 ## Table of Contents
 
@@ -19,7 +24,7 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 * [Configuration](#configuration)
   * [Services](#services-configuration)
   * [Logging](#logging-configuration)
-  * [Microsoft Excel add-in](#microsoft-excel-auto-Load-add-in-configuration)
+  * [Microsoft Excel add-in](#microsoft-excel-com-add-in-configuration)
 * [Using as a python module](#using-as-a-module)
 * [Migration guide](#migration-guide)
 
@@ -76,13 +81,13 @@ python -m pip install pyxelrest
 
 #### User add-in installation
 
-Once python module is installed, `pyxelrest_install_addin` script is available to install the Microsoft Excel add-in.
+Once python module is installed, `pyxelrest_install_addin` script is available to install the Microsoft Excel COM add-in.
 
 The add-in is not installed at the same time as the module because:
     * It may prompt the user for installation.
     * pyxelrest can be used as a python module without the need for the add-in.
 
-Install Microsoft Excel add-in by executing the following command:
+Install Microsoft Excel COM add-in by executing the following command:
 
 ```bash
 pyxelrest_install_addin
@@ -114,7 +119,7 @@ The following options are available when launching this script:
 
 ### User uninstall (using PIP)
 
-1. Go to `Control Panel/Programs and Features` and uninstall AutoLoadPyxelRestAddIn.
+1. Go to `Control Panel/Programs and Features` and uninstall `AutoLoadPyxelRestAddIn`.
 2. Execute the following command:
 
         python -m pip uninstall pyxelrest
@@ -129,7 +134,7 @@ The following options are available when launching this script:
 
    In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
    > Project > AutoLoadPyxelRestAddIn > Signing
-3. Microsoft Excel must be closed while executing the following script from within pyxelrest root folder:
+3. Microsoft Excel must be closed while executing the following script from within `pyxelrest` root folder:
 
         developer_install.bat
 
@@ -404,7 +409,7 @@ Requiring [`cachetools`](https://pypi.org/project/cachetools/) python module.
 </table>
 
 
-#### PyxelRest Service Configuration
+#### PyxelRest service configuration
 
 You can also use the `pyxelrest` service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
@@ -416,7 +421,7 @@ You can also use the `pyxelrest` service name to activate [Postman](https://www.
 
 It can be configured the same way than a usual service, except that `open_api` section is not needed anymore.
 
-### Logging Configuration
+### Logging configuration
 
 PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
 
@@ -430,7 +435,7 @@ This folder can easily be accessed thanks to the `Open Logs` button within `Pyxe
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
 </p>
 
-### Microsoft Excel Auto-Load add-in Configuration
+### Microsoft Excel COM add-in configuration
 
 Auto check for update can be activated/deactivated within Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
 
@@ -496,16 +501,16 @@ import pyxelrest
 configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
 pyxelrest.load(configuration)
 
-import pyxelrest.user_defined_functions as udfs
+from pyxelrest.user_defined_functions import petstore
 
-# UDFs are available as python functions within user_defined_functions and can be used as such
+# Functions are available as python functions within petstore (in this case) and can be used as such
 ```
 
-### Generating user defined functions
+### Generating functions
 
-You can manually (re)generate UDFs by calling `pyxelrest.load()` and providing your custom configuration.
+You can manually (re)generate functions by calling `pyxelrest.load()` and providing your own services configuration.
 
-All UDFs can be found within `pyxelrest.user_defined_functions`.
+All functions can be found within `pyxelrest.user_defined_functions`.
 
 ## Migration guide
 
@@ -573,7 +578,7 @@ To overcome this Microsoft Excel limitation you can try the following:
 
 This error will happen in case you manually specified in your xlwings.bas file to use debug server but did not uncomment the main function starting the server on pyxelrest module side.
 
-### Microsoft Excel Add-In cannot be installed
+### Microsoft Excel COM Add-In cannot be installed
 
 Check that all requirements are met:
  * [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
