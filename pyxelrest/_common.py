@@ -537,6 +537,9 @@ def get_caller_address(excel_application) -> str:
         return str(
             xlwings.xlplatform.Range(xl=excel_caller).get_address(True, True, True)
         )
+    except AttributeError:
+        # Handle AttributeError: _Application.Caller occurring in case mode is set to threading.
+        return ""
     except:
         logger.exception("Unable to retrieve caller address.")
         return ""
