@@ -27,6 +27,7 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
   * [Microsoft Excel add-in](#microsoft-excel-com-add-in-configuration)
 * [Using as a python module](#using-as-a-module)
 * [Migration guide](#migration-guide)
+* [FAQ](#frequently-asked-question)
 
 ## Usage
 
