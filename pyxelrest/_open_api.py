@@ -1,4 +1,3 @@
-from collections import OrderedDict
 import datetime
 import logging
 import os
@@ -727,9 +726,7 @@ class OpenAPI(Service):
             auth=_authentication.get_definition_retrieval_auth(config),
         )
         response.raise_for_status()
-        # TODO Check if we still need to explicitly use OrderedDict since python 3.6
-        # Always keep the order provided by server (for definitions)
-        open_api_definition = response.json(object_pairs_hook=OrderedDict)
+        open_api_definition = response.json()
         cls._normalize_methods(open_api_definition)
         return open_api_definition
 

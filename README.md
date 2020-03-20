@@ -27,6 +27,22 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 </p>
 <p align="center"><em>Example using pyxelrest formulas to query any URL (as in Postman).</em></p>
 
+```python
+import pyxelrest
+
+configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
+pyxelrest.load(configuration)
+
+from pyxelrest.user_defined_functions import petstore
+
+# Functions are available as python functions within petstore (in this case) and can be used as such
+user = petstore.petstore_getUserByName("test")
+
+# {'id': 9999, 'username': 'test', 'firstName': 'test', 'lastName': 'test', 'email': 'test@test.com', 'password': 'test', 'userStatus': 0}
+print(user)
+```
+<p align="center"><em>Example with <a href="https://petstore.swagger.io/#/">petstore</a> REST API using functions generated based on the OpenAPI definition.</em></p>
+
 ## Table of Contents
 
 * [Features](#features)
@@ -494,6 +510,10 @@ pyxelrest.load(configuration)
 from pyxelrest.user_defined_functions import petstore
 
 # Functions are available as python functions within petstore (in this case) and can be used as such
+user = petstore.petstore_getUserByName("test")
+
+# {'id': 9999, 'username': 'test', 'firstName': 'test', 'lastName': 'test', 'email': 'test@test.com', 'password': 'test', 'userStatus': 0}
+print(user)
 ```
 
 ### Generating functions

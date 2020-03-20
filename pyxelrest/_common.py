@@ -2,7 +2,6 @@ import logging
 import re
 import os
 import time
-from collections import OrderedDict
 from typing import Optional, Union, List, Any, Dict
 
 
@@ -275,12 +274,7 @@ class UDFMethod:
 
     def json_result(self, response: requests.Response) -> list:
         logger.debug("Converting JSON string to corresponding python structure...")
-        # TODO Check if we still need to use an OrderedDict here
-        json_data = (
-            response.json(object_pairs_hook=OrderedDict)
-            if len(response.content)
-            else ""
-        )
+        json_data = response.json() if len(response.content) else ""
 
         return (
             self.json_to_list(response.status_code, json_data)
