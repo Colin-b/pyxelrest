@@ -10,11 +10,10 @@
 </p>
 
 PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs (and any URL) using:
-* Microsoft Excel:
+* [Microsoft Excel]:
   * Dynamic array formulas
   * Legacy array formulas
   * Visual Basic for Applications functions
-* Python functions
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/dynamic_array_formula.gif" alt='Using dynamic array formulas to query petstore REST API'>
@@ -26,6 +25,8 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/postman_in_excel.gif" alt='Using dynamic array formulas to query a URL'>
 </p>
 <p align="center"><em>Example using pyxelrest formulas to query any URL (as in Postman).</em></p>
+
+* [Python](https://www.python.org) functions
 
 ```python
 import pyxelrest
@@ -59,7 +60,7 @@ print(user)
 
 ### Automatic function (re)generation
 
-Functions are automatically re-generated on Microsoft Excel start and on Configuration update.
+Functions are automatically re-generated on [Microsoft Excel] start and on Configuration update.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_functions_generate_startup.gif" alt='Formula generation'>
@@ -85,9 +86,9 @@ PyxelRest can automatically prompt for update in case an update is available.
 
 ### User installation (using PIP)
 
-1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
+1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
    > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Microsoft Excel must be closed while executing the following command:
+2. [Microsoft Excel] must be closed while executing the following command:
 
 ```bash
 python -m pip install pyxelrest
@@ -95,13 +96,13 @@ python -m pip install pyxelrest
 
 #### User add-in installation
 
-Once python module is installed, `pyxelrest_install_addin` script is available to install the Microsoft Excel COM add-in.
+Once python module is installed, `pyxelrest_install_addin` script is available to install the [Microsoft Excel] COM add-in.
 
 The add-in is not installed at the same time as the module because:
     * It may prompt the user for installation.
     * pyxelrest can be used as a python module without the need for the add-in.
 
-Install Microsoft Excel COM add-in by executing the following command:
+Install [Microsoft Excel] COM add-in by executing the following command:
 
 ```bash
 pyxelrest_install_addin
@@ -142,13 +143,13 @@ The following options are available when launching this script:
 
 ### Developer Installation (using PIP)
 
-1. Within Microsoft Excel, `Trust access to the VBA project object model` should be enabled.
+1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
    > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
 
    In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
    > Project > AutoLoadPyxelRestAddIn > Signing
-3. Microsoft Excel must be closed while executing the following script from within `pyxelrest` root folder:
+3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder:
 
         developer_install.bat
 
@@ -177,7 +178,7 @@ The following options are available when launching this script:
 
 You can also update the [YAML](http://yaml.org/start.html) configuration file (`%APPDATA%\pyxelrest\configuration\services.yml`) yourself.
 
-Each section name will be used as the related formulas category within Microsoft Excel.
+Each section name will be used as the related formulas category within [Microsoft Excel].
 
 Each formula will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
 
@@ -195,7 +196,7 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
-| description | A small description of this service. To be displayed within Microsoft Excel add-in services configuration screen. | |
+| description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
 | proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#proxies) | |
 | methods | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head). | get, post, put, delete, patch, options, head |
 | oauth2 | Dictionary containing OAuth2 related settings. Refer to [OAuth 2](#oauth-2) section for more information. | |
@@ -433,7 +434,7 @@ To do so, you can use the `pyxelrest` service name to activate [Postman](https:/
 
 `pyxelrest` module logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
 
-Microsoft Excel COM add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
+[Microsoft Excel] COM add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
 
 By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
@@ -530,7 +531,7 @@ All functions can be found within `pyxelrest.user_defined_functions`.
 
 `udf` section has been replaced by a `formulas` section.
 
-We __strongly__ advise to check out the new `dynamic_array` formulas if your Microsoft Excel version supports it.
+We __strongly__ advise to check out the new `dynamic_array` formulas if your [Microsoft Excel] version supports it.
 Otherwise:
 
  * `sync_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `true`
@@ -564,24 +565,24 @@ formulas:
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/screenshot_udf_wizard_parameters_limit.PNG" alt='Microsoft Excel Wizard bug'>
 </p>
 
-Microsoft Excel function wizard is not able to handle functions with a long definition.
+[Microsoft Excel] function wizard is not able to handle functions with a long definition.
 
 The total length of parameter names (and commas to separate them) should not exceed 253 characters,
 
-In case it does (your UDF has a lot of parameters or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
+In case it does (your UDF has a lot of parameters or parameters with long names), then [Microsoft Excel] is unable to display them all in the function wizard.
 
-To overcome this Microsoft Excel limitation you can try the following:
+To overcome this [Microsoft Excel] limitation you can try the following:
  * Exclude some parameters (refer to [Open API](#openapi) configuration section for more information).
  * Remove some parameters in your service.
  * Reduce the length of your service parameter names.
 
 ### Microsoft Excel Wizard only list some functions
 
-Microsoft Excel function wizard is not able to list more than a certain amount of functions per category.
+[Microsoft Excel] function wizard is not able to list more than a certain amount of functions per category.
 
 However all functions can be directly accessed in cells.
 
-To overcome this Microsoft Excel limitation you can try the following:
+To overcome this [Microsoft Excel] limitation you can try the following:
  * Exclude some functions in your service (refer to [Open API](#openapi) configuration section for more information).
 
 ### No command specified in the configuration, cannot autostart server
@@ -610,4 +611,6 @@ You need to check [log files](#logging-configuration) to identify the underlying
 
 The add-in might be disabled.
 
-Within Microsoft Excel, go to `File/Option/addin` and check disabled items (`Manage: Disabled Items`)
+Within [Microsoft Excel], go to `File/Option/addin` and check disabled items (`Manage: Disabled Items`)
+
+[Microsoft Excel]: https://products.office.com/en-us/excel
