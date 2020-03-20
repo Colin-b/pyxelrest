@@ -1,5 +1,4 @@
 import datetime
-from collections import OrderedDict
 import logging
 from typing import Union
 
@@ -248,7 +247,7 @@ all_definitions = {}
 
 
 class Field:
-    def __init__(self, json_definition: dict, json_definitions):
+    def __init__(self, json_definition: dict, json_definitions: dict):
         self.description = json_definition.get("description")
         self.type = json_definition.get("type")
         self.array_field = (
@@ -355,8 +354,8 @@ class DefaultField:
         return merger
 
 
-def extract_fields(json_properties, json_definitions):
-    fields = OrderedDict()
+def extract_fields(json_properties: dict, json_definitions: dict) -> dict:
+    fields = {}
     for reference_name in json_properties.keys():
         json_field = json_properties[reference_name]
         if reference_name not in fields:
