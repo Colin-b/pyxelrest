@@ -47,7 +47,7 @@ print(user)
 ## Table of Contents
 
 * [Features](#features)
-* [Installation](#installation)
+* [Installation](#how-to-install)
 * [Configuration](#configuration)
   * [Services](#services-configuration)
   * [Logging](#logging-configuration)
@@ -74,39 +74,53 @@ Functions are automatically re-generated on [Microsoft Excel] startup and on Con
 </p>
 <p align="center"><em>Check for update is performed when closing Microsoft Excel (it can be deactivated) and you will be prompted in case one is available.</em></p>
 
-## Installation
+## How to install
 
-### Pre requisites
-
-* [Python >= 3.7](https://www.python.org/downloads/) must be installed (with `pip` and `tkinter` for auto update to work).
-* [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed (Office 365 is supported).
-* [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
-
-### User installation (using PIP)
-
-1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
-   > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. [Microsoft Excel] must be closed while executing the following command:
-
+1. [Python >= 3.7](https://www.python.org/downloads/) must be installed (with `pip` and `tkinter` for auto update to work).
+2. Use pip to install module:
 ```bash
 python -m pip install pyxelrest
 ```
 
-#### User add-in installation
+### Optional Dependencies
+
+- Support for NTLM authentication (with user credentials provided),
+    - [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) module is required in case auth=ntlm is set in `security_details` property and custom credentials are provided.
+    - `ntlm` extra requires can be used to install those dependencies.
+```bash
+python -m pip install pyxelrest[ntlm]
+```
+
+- Support for automatic NTLM authentication.
+    - [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) module is required in case auth=ntlm is set in `security_details` property and logged in user credentials should be used.
+    - `ntlm` extra requires can be used to install those dependencies.
+```bash
+python -m pip install pyxelrest[ntlm]
+```
+
+- Support for in-memory caching.
+    - [`cachetool`](https://pypi.org/project/cachetools/) module is required to be able to use in-memory caching.
+    - `cachetool` extra requires can be used to install those dependencies.
+```bash
+python -m pip install pyxelrest[cachetool]
+```
+
+### Microsoft Excel add-in installation
 
 Once python module is installed, `pyxelrest_install_addin` script is available to install the [Microsoft Excel] COM add-in.
 
-The add-in is not installed at the same time as the module because:
-    * It may prompt the user for installation.
-    * pyxelrest can be used as a python module without the need for the add-in.
-
-Install [Microsoft Excel] COM add-in by executing the following command:
-
+1. [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed (Office 365 is supported).
+2. [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+3. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
+4. [Microsoft Excel] must be closed while executing the following command:
 ```bash
 pyxelrest_install_addin
 ```
 
-##### Options
+Note: The add-in is not required if you only want to use the `pyxelrest` python module.
+
+#### Microsoft Excel add-in installer options
 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
@@ -114,7 +128,7 @@ pyxelrest_install_addin
 | --check_pre_releases | Also fetch pre-releases when checking for updates. | No value is required, providing the option is enough. No pre-release check by default. |
 | --add_in_directory | Directory containing PyxelRest [Microsoft Excel] COM add-in. | Default to `..\pyxelrest_addin` relatively to the python executable directory. |
 
-### User uninstall (using PIP)
+## How to uninstall
 
 1. Go to `Control Panel/Programs and Features` and uninstall `AutoLoadPyxelRestAddIn`.
 2. Execute the following command:
@@ -122,32 +136,6 @@ pyxelrest_install_addin
         python -m pip uninstall pyxelrest
 3. Remove `%APPDATA%\pyxelrest` folder.
 4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
-
-### Developer Installation (using PIP)
-
-1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
-   > File > Options > Trust Center > Trust Center Settings > Macro Settings
-2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
-
-   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
-   > Project > AutoLoadPyxelRestAddIn > Signing
-3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder:
-
-        developer_install.bat
-
-### Optional Dependencies
-
-- Support for NTLM authentication (with user credentials provided),
-    - [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) module is required in case auth=ntlm is set in `security_details` property and custom credentials are provided.
-    - `ntlm` extra requires can be used to install those dependencies.
-
-- Support for automatic NTLM authentication.
-    - [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) module is required in case auth=ntlm is set in `security_details` property and logged in user credentials should be used.
-    - `ntlm` extra requires can be used to install those dependencies.
-
-- Support for in-memory caching.
-    - [`cachetool`](https://pypi.org/project/cachetools/) module is required to be able to use in-memory caching.
-    - `cachetool` extra requires can be used to install those dependencies.
 
 ## Configuration
 
@@ -542,6 +530,18 @@ formulas:
     legacy_array:
         lock_excel: true
 ```
+
+## Developer Installation
+
+1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
+   > File > Options > Trust Center > Trust Center Settings > Macro Settings
+2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
+
+   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
+   > Project > AutoLoadPyxelRestAddIn > Signing
+3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder:
+
+        developer_install.bat
 
 ## Frequently Asked Question
 
