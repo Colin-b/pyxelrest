@@ -584,8 +584,10 @@ Due to timestamp limitation, dates after `3000-12-31` and date time after `3001-
 
 ### Python process exited before it was possible to create the interface object
 
-You need to check log files to identify the underlying issue.
+You need to check [log files](#logging-configuration) to identify the underlying issue.
 
 ### pyxelrest.xlam is not available
 
-The add-in might be disabled. Check `File/Option/addin/Manage: Disabled Items`
+The add-in might be disabled.
+
+Within Microsoft Excel, go to `File/Option/addin` and check disabled items (`Manage: Disabled Items`)
