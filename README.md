@@ -423,13 +423,13 @@ It can be configured the same way than a usual service, except that `open_api` s
 
 ### Logging configuration
 
-PyxelRest logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
+`pyxelrest` module logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
 
-Microsoft Excel Auto-Load add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
+Microsoft Excel COM add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
 
-Default log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
+By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
-This folder can easily be accessed thanks to the `Open Logs` button within `PyxelRest` tab.
+This folder can be accessed from Microsoft Excel thanks to the `Open Logs` button within `PyxelRest` tab.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
@@ -437,7 +437,7 @@ This folder can easily be accessed thanks to the `Open Logs` button within `Pyxe
 
 ### Microsoft Excel COM add-in configuration
 
-Auto check for update can be activated/deactivated within Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
+Auto update can be (de)activated from Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
@@ -561,7 +561,7 @@ The total length of parameter names (and commas to separate them) should not exc
 In case it does (your UDF has a lot of parameters or parameters with long names), then Microsoft Excel is unable to display them all in the function wizard.
 
 To overcome this Microsoft Excel limitation you can try the following:
- * Exclude some parameters (refer to Open API configuration section for more information).
+ * Exclude some parameters (refer to [Open API](#openapi) configuration section for more information).
  * Remove some parameters in your service.
  * Reduce the length of your service parameter names.
 
@@ -572,11 +572,11 @@ Microsoft Excel function wizard is not able to list more than a certain amount o
 However all functions can be directly accessed in cells.
 
 To overcome this Microsoft Excel limitation you can try the following:
- * Exclude some functions in your service (refer to Open API configuration section for more information).
+ * Exclude some functions in your service (refer to [Open API](#openapi) configuration section for more information).
 
 ### No command specified in the configuration, cannot autostart server
 
-This error will happen in case you manually specified in your xlwings.bas file to use debug server but did not uncomment the main function starting the server on pyxelrest module side.
+This error will happen in case you manually specified in your `xlwings.bas` file to use debug server but did not uncomment the main function starting the server on `pyxelrest` module side.
 
 ### Microsoft Excel COM Add-In cannot be installed
 
@@ -590,7 +590,7 @@ In case you encounter an issue like `...An application with the same identity is
 
 ### Dates with a year higher than 3000 are not converted to local timezone
 
-Due to timestamp limitation, dates after 3000-12-31 and date time after 3001-01-01T07:59:59+00:00 cannot be converted to local timezone.
+Due to timestamp limitation, dates after `3000-12-31` and date time after `3001-01-01T07:59:59+00:00` cannot be converted to local timezone.
 
 ### Python process exited before it was possible to create the interface object
 
@@ -598,4 +598,4 @@ You need to check log files to identify the underlying issue.
 
 ### pyxelrest.xlam is not available
 
-The add-in might be disabled. Check File/Option/addin/Manage: Disabled Items
+The add-in might be disabled. Check `File/Option/addin/Manage: Disabled Items`
