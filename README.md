@@ -44,22 +44,18 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 
 Functions are automatically re-generated on Microsoft Excel start and on Configuration update.
 
-You can manually update functions without restarting Microsoft Excel or updating configuration by clicking on the ``Update Functions`` button within ``PyxelRest`` tab.
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_functions_generate_startup.gif" alt='Formula generation'>
+  You can manually update functions without restarting Microsoft Excel or updating configuration by clicking on the <span style="color: #1382CE">Update Functions</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.
 </p>
 
 ### Automatic update
 
-PyxelRest itself can automatically stay up to date. 
-The updater make sure that the python module, the Microsoft Excel add-in and the services configuration stays up to date.
-Updates are checked when closing Microsoft Excel.
-
-In case an update is available, you will be prompted for approval.
+PyxelRest can automatically prompt for update in case an update is available.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_gui.gif" alt='Update steps'>
+  Updates are checked when closing Microsoft Excel but it can be deactivated.
 </p>
 
 ## Installation
@@ -157,31 +153,28 @@ The following options are available when launching this script:
 
 ### Services Configuration
 
-Services configuration can be done within Microsoft Excel thanks to the `Configure Services` button within `PyxelRest` tab.
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/configure_service.gif" alt='Configuring services'>
+  Services configuration can be done within Microsoft Excel thanks to the <span style="color: #1382CE">Configure Services</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.
 </p>
 
-Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\services.yml` file.
+You can also update the [YAML](http://yaml.org/start.html) configuration file (`%APPDATA%\pyxelrest\configuration\services.yml`) yourself.
 
-File is following [YAML](http://yaml.org/start.html) formatting.
+Each section name will be used as the related formulas category within Microsoft Excel.
 
-Each section name will be used as the UDFs category.
+Each formula will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
 
-Each UDF will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
-
-The following options are available for each section:
-
-Values can be environment variables if provided in the form %MY_ENV_VARIABLE% (for MY_ENV_VARIABLE environment variable).
-
-Mandatory options:
+#### Mandatory settings
 
 | Name | Description |
 |------|-------------|
 | open_api | Dictionary describing the OpenAPI definition. Refer to [OpenAPI](#openapi) section for more information. |
 
-Other options:
+Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
+
+#### Options
+
+Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
@@ -416,9 +409,8 @@ To do so, you can use the `pyxelrest` service name to activate [Postman](https:/
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/configure_pyxelrest_service.gif" alt='Configuring pyxelrest service'>
+  It can be configured the same way than a usual service, except that <i>open_api</i> section is not needed anymore.
 </p>
-
-It can be configured the same way than a usual service, except that `open_api` section is not needed anymore.
 
 ### Logging configuration
 
@@ -428,18 +420,16 @@ Microsoft Excel COM add-in logging configuration can be updated thanks to `%APPD
 
 By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
-This folder can be accessed from Microsoft Excel thanks to the `Open Logs` button within `PyxelRest` tab.
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/open_logs.gif" alt='How to open logs'>
+  This folder can be accessed from Microsoft Excel thanks to the <span style="color: #1382CE">Open Logs</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.
 </p>
 
 ### Microsoft Excel COM add-in configuration
 
-Auto update can be (de)activated from Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/check_for_update_on_close.gif" alt='Managing auto update'>
+  Auto update can be (de)activated from Microsoft Excel thanks to the <span style="color: #1382CE">Check for update on close</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.
 </p>
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
