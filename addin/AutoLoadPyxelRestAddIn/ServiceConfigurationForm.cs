@@ -54,7 +54,7 @@ namespace AutoLoadPyxelRestAddIn
             }
             try
             {
-                upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
+                upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"), false);
                 LoadUpToDateServices();
             }
             catch (Exception e)
@@ -71,7 +71,7 @@ namespace AutoLoadPyxelRestAddIn
                 var configuration = new Configuration(configurationFilePath);
                 List<Service> configuredServices = configuration.Load();
 
-                var upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"));
+                var upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"), false);
                 List<Service> upToDateServices = upToDateConfiguration.Load();
 
                 if (upToDateServices.Count > 0)

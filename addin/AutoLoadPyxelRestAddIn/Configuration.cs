@@ -16,11 +16,12 @@ namespace AutoLoadPyxelRestAddIn
         private readonly List<Service> services = new List<Service>();
         private readonly YamlStream config;
 
-        public Configuration(string path)
+        public Configuration(string path, bool warnIfPathNotProvided=true)
         {
             if (string.IsNullOrEmpty(path))
             {
-                Log.Warn("Configuration cannot be loaded as configuration path was not provided.");
+                if (warnIfPathNotProvided)
+                    Log.Warn("Configuration cannot be loaded as configuration path was not provided.");
                 config = null;
             }
             else
