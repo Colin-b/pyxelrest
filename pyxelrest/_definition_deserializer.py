@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Union, Optional
+from typing import Union, Optional, List
 
 import dateutil.tz
 import dateutil.parser
@@ -48,13 +48,13 @@ def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
 class RowsMerger:
     def __init__(self):
         self.header = None
-        self.rows = None
+        self.rows: Optional[list] = None
 
-    def merge(self, new_header, new_merging_data):
+    def merge(self, new_header: Optional[list], new_merging_data):
         """
         Update rows with this new data.
 
-        :param new_data: Either a value, a list of values or a list of list of values
+        :param new_merging_data: Either a value, a list of values or a list of list of values
         """
         if new_merging_data.rows is None:
             return
@@ -112,7 +112,7 @@ class RowsMerger:
         elif new_columns or not self.header:
             self.header = new_header
 
-    def get_new_columns(self, new_header):
+    def get_new_columns(self, new_header) -> list:
         if self.header:
             return [
                 column_name
@@ -121,7 +121,7 @@ class RowsMerger:
             ]
         return []
 
-    def get_missing_columns(self, new_header):
+    def get_missing_columns(self, new_header) -> list:
         if self.header:
             return [
                 column_name
@@ -130,11 +130,11 @@ class RowsMerger:
             ]
         return []
 
-    def add_empty_columns(self, row, missing_columns):
+    def add_empty_columns(self, row: list, missing_columns: list):
         for column_name in missing_columns:
             row.insert(self.header.index(column_name), "")
 
-    def merge_list(self, new_header, new_list):
+    def merge_list(self, new_header: list, new_list: list):
         """
         Merge this list to the rows.
 
@@ -145,7 +145,7 @@ class RowsMerger:
         else:
             self.append_list_to_value(new_header, new_list)
 
-    def merge_list_to_list(self, new_header, new_list):
+    def merge_list_to_list(self, new_header, new_list: list):
         if not isinstance(self.rows[0], list):
             if isinstance(new_list[0], list):
                 self.append_list_of_list_to_list(new_header, new_list)
@@ -157,7 +157,7 @@ class RowsMerger:
             else:
                 self.append_list_to_list_of_list(new_header, new_list)
 
-    def append_list_of_list_to_list(self, new_header, new_list_of_list):
+    def append_list_of_list_to_list(self, new_header, new_list_of_list: List[list]):
         self.header.extend(new_header)
         new_rows = []
         for new_list in new_list_of_list:
@@ -166,12 +166,14 @@ class RowsMerger:
             new_rows.append(new_row)
         self.rows = new_rows
 
-    def append_list_to_list(self, new_header, new_list):
+    def append_list_to_list(self, new_header, new_list: list):
         raise Exception(
             f"Merging two lists is not handled for now. {new_list} merged to {self.rows}"
         )
 
-    def append_list_of_list_to_list_of_list(self, new_header, new_list_of_list):
+    def append_list_of_list_to_list_of_list(
+        self, new_header, new_list_of_list: List[list]
+    ):
         self.header.extend(new_header)
         new_rows = []
         for row in self.rows:
@@ -181,12 +183,12 @@ class RowsMerger:
                 new_rows.append(new_row)
         self.rows = new_rows
 
-    def append_list_to_list_of_list(self, new_header, new_list):
+    def append_list_to_list_of_list(self, new_header, new_list: list):
         raise Exception(
             f"Merging two lists is not handled for now. {new_list} merged to {self.rows}"
         )
 
-    def append_list_to_value(self, new_header, new_list):
+    def append_list_to_value(self, new_header: list, new_list: list):
         """
         Rows is currently containing a single value.
         Append a list of list or a list to this value.
@@ -319,7 +321,7 @@ class DefaultField:
         return DefaultField.convert_simple_type(value)
 
     @staticmethod
-    def convert_dict(dictionary):
+    def convert_dict(dictionary: dict):
         merger = RowsMerger()
 
         for field_name in dictionary.keys():
@@ -332,7 +334,7 @@ class DefaultField:
         return merger
 
     @staticmethod
-    def convert_list(name, values):
+    def convert_list(name: str, values: list):
         # An empty list should not add any extra information
         if not values:
             return RowsMerger()
@@ -417,11 +419,8 @@ class Response:
     def __init__(self, all_responses: dict, status_code: int, json_definitions: dict):
         json_response = response(status_code, all_responses)
         schema = json_response.get("schema") if json_response else None
-        self.field = (
-            Field(schema, json_definitions if json_definitions is not None else {})
-            if schema
-            else DefaultField()
-        )
+        json_definitions = json_definitions if json_definitions is not None else {}
+        self.field = Field(schema, json_definitions) if schema else DefaultField()
 
     def rows(self, data):
         logger.debug("Converting response to list...")
