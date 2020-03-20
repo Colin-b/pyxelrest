@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Union
+from typing import Union, Optional
 
 import dateutil.tz
 import dateutil.parser
@@ -430,7 +430,7 @@ class Response:
         return rows
 
 
-def response(status_code: int, responses: dict):
+def response(status_code: int, responses: dict) -> Optional[dict]:
     if str(status_code) in responses:
         return responses[str(status_code)]
     return responses.get("default")
