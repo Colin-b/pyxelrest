@@ -9,16 +9,25 @@
 <a href="https://pypi.org/project/pyxelrest/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/pyxelrest"></a>
 </p>
 
-PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs using:
+PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs (and any URL) using:
 * Microsoft Excel:
   * Dynamic array formulas
   * Legacy array formulas
   * Visual Basic for Applications functions
 * Python functions
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/dynamic_array_formula.gif" alt='Using dynamic array formulas to query petstore REST API'>
+  Example with <a href="https://petstore.swagger.io/#/">petstore</a> REST API using formulas generated based on the OpenAPI definition
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/postman_in_excel.gif" alt='Using dynamic array formulas to query a URL'>
+  Example using pyxelrest formulas to query any URL (as in Postman)
+</p>
+
 ## Table of Contents
 
-* [Usage](#usage)
 * [Features](#features)
 * [Installation](#installation)
 * [Configuration](#configuration)
@@ -29,15 +38,6 @@ PyxelRest allow you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RES
 * [Migration guide](#migration-guide)
 * [FAQ](#frequently-asked-question)
 
-## Usage
-
-Once installed, open Microsoft Excel and functions generated from configured REST APIs ([petstore](https://petstore.swagger.io/#/) in this example) will be available.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_category.PNG" alt='Selecting UDF'>
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_arguments.PNG" alt='Filling in UDF parameters'>
-</p>
-
 ## Features
 
 ### Automatic function (re)generation
@@ -47,7 +47,7 @@ Functions are automatically re-generated on Microsoft Excel start and on Configu
 You can manually update functions without restarting Microsoft Excel or updating configuration by clicking on the ``Update Functions`` button within ``PyxelRest`` tab.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_functions_generate_startup.gif" alt='Formula generation'>
 </p>
 
 ### Automatic update
@@ -59,7 +59,7 @@ Updates are checked when closing Microsoft Excel.
 In case an update is available, you will be prompted for approval.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/update_gui.gif" alt='Update steps'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_gui.gif" alt='Update steps'>
 </p>
 
 ## Installation
@@ -160,9 +160,7 @@ The following options are available when launching this script:
 Services configuration can be done within Microsoft Excel thanks to the `Configure Services` button within `PyxelRest` tab.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services.PNG" alt='Configuration screen'>
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service.PNG" alt='Advanced configuration screen'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/configure_service.gif" alt='Configuring services'>
 </p>
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\services.yml` file.
@@ -412,12 +410,12 @@ Requiring [`cachetools`](https://pypi.org/project/cachetools/) python module.
 
 #### PyxelRest service configuration
 
-You can also use the `pyxelrest` service name to activate [Postman](https://www.getpostman.com)-like UDFs.
+You can query any URL, as long as you know everything that is required to perform the query.
+
+To do so, you can use the `pyxelrest` service name to activate [Postman](https://www.getpostman.com)-like UDFs.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_services_pyxelrest.PNG" alt='Configuration screen'>
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_configure_service_pyxelrest.PNG" alt='Advanced configuration screen'>
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udfs_pyxelrest_category.PNG" alt='Selecting UDF'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/configure_pyxelrest_service.gif" alt='Configuring pyxelrest service'>
 </p>
 
 It can be configured the same way than a usual service, except that `open_api` section is not needed anymore.
@@ -433,7 +431,7 @@ By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 This folder can be accessed from Microsoft Excel thanks to the `Open Logs` button within `PyxelRest` tab.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/open_logs.gif" alt='How to open logs'>
 </p>
 
 ### Microsoft Excel COM add-in configuration
@@ -441,7 +439,7 @@ This folder can be accessed from Microsoft Excel thanks to the `Open Logs` butto
 Auto update can be (de)activated from Microsoft Excel thanks to the `Check for update on close` button within `PyxelRest` tab.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_pyxelrest_auto_load_ribbon.PNG" alt='Microsoft Excel add-in'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/check_for_update_on_close.gif" alt='Managing auto update'>
 </p>
 
 Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
@@ -552,7 +550,7 @@ formulas:
 ### Microsoft Excel Wizard does not show any parameter
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/master/addin/AutoLoadPyxelRestAddIn/resources/screenshot_udf_wizard_parameters_limit.PNG" alt='Microsoft Excel Wizard bug'>
+  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/screenshot_udf_wizard_parameters_limit.PNG" alt='Microsoft Excel Wizard bug'>
 </p>
 
 Microsoft Excel function wizard is not able to handle functions with a long definition.
