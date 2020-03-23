@@ -152,7 +152,7 @@ Each section name will be used as the related formulas category within [Microsof
 
 Each formula will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
 
-#### Mandatory settings
+#### Service mandatory settings
 
 | Name | Description |
 |------|-------------|
@@ -160,7 +160,7 @@ Each formula will be prefixed by the section name (only [a-zA-Z0-9_] characters 
 
 Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
-#### Options
+#### Service options
 
 Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
@@ -186,79 +186,19 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 
 #### OpenAPI
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-        <td><em>Possible values</em></td>
-    </th>
-    <tr>
-        <td><strong>definition</strong></td>
-        <td>URL to the OpenAPI definition. http, https and file scheme are supported. For more details on what is a URL, please refer to https://en.wikipedia.org/wiki/URL. If you would like to point to a static file such as C:\swagger.json, the value should be file:///C:\swagger.json</td>
-        <td>Mandatory</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>definition_read_timeout</strong></td>
-        <td>Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to http://docs.python-requests.org/en/master/user/advanced/#timeouts</td>
-        <td>Optional</td>
-        <td>any float value</td>
-    </tr>
-    <tr>
-        <td><strong>definition_retrieval_auths</strong></td>
-        <td>List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default.</td>
-        <td>Optional</td>
-        <td>oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm</td>
-    </tr>
-    <tr>
-        <td><strong>excluded_tags</strong></td>
-        <td>List of tags within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>selected_tags</strong></td>
-        <td>List of tags within OpenAPI definition that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>excluded_operation_ids</strong></td>
-        <td>List of operation_id (or regular expressions) within OpenAPI definition that should not be retrieved. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>selected_operation_ids</strong></td>
-        <td>List of operation_id (or regular expressions) within OpenAPI definition that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>excluded_parameters</strong></td>
-        <td>List of parameter names (or regular expressions) within OpenAPI definition that should not be exposed. If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>selected_parameters</strong></td>
-        <td>List of parameter names (or regular expressions) within OpenAPI definition that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. For more details refer to https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><strong>rely_on_definitions</strong></td>
-        <td>Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default.</td>
-        <td>Optional</td>
-        <td>true or false</td>
-    </tr>
-    <tr>
-        <td><strong>service_host</strong></td>
-        <td>Service host in case your service is behind a reverse proxy.</td>
-        <td>Optional</td>
-        <td></td>
-    </tr>
-</table>
+| Name | Description | Mandatory | Possible values |
+|------|-------------|-----------|-----------------|
+| definition | [URL](https://en.wikipedia.org/wiki/URL) to the OpenAPI definition. `http://`, `https://` and `file:///` (such as `file:///C:\swagger.json`) schemes are supported. | Mandatory | |
+| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#timeouts) | Optional | any float value |
+| definition_retrieval_auths | List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default. | Optional | oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm |
+| excluded_tags | List of tags within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should not be retrieved. If not specified, no filtering is applied. | Optional | |
+| selected_tags | List of tags within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
+| excluded_operation_ids | List of operation_id (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should not be retrieved. If not specified, no filtering is applied. | Optional | |
+| selected_operation_ids | List of operation_id (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
+| excluded_parameters | List of parameter names (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should not be exposed. If not specified, no filtering is applied. | Optional | |
+| selected_parameters | List of parameter names (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
+| rely_on_definitions | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default. | Optional | `true` or `false` |
+| service_host | Service host in case your service is behind a reverse proxy and base_path is not properly set in OpenAPI definition. | Optional | |
 
 #### Formulas
 
