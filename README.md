@@ -10,10 +10,7 @@
 </p>
 
 PyxelRest allows you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) REST APIs (or any HTTP/HTTPS URL) using:
-* [Microsoft Excel]:
-  * Dynamic array formulas
-  * Legacy array formulas
-  * Visual Basic for Applications functions
+* [Microsoft Excel] array formulas ([dynamic](https://support.office.com/en-us/article/dynamic-array-formulas-and-spilled-array-behavior-205c6b06-03ba-4151-89a1-87a7eb36e531?ns=EXCEL&version=90&ui=en-US&rs=en-US&ad=US) and legacy) and Visual Basic for Applications functions:
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/dynamic_array_formula.gif" alt='Using dynamic array formulas to query petstore REST API'>
