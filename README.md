@@ -87,7 +87,7 @@ python -m pip install pyxelrest
 Once `pyxelrest` python module is installed, `pyxelrest_install_addin` executable is available to install the [Microsoft Excel] COM add-in.
 
 1. [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed (Office 365 is supported).
-2. [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
+2. [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed (Chances are that it is already installed).
 3. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
    > File > Options > Trust Center > Trust Center Settings > Macro Settings
 4. [Microsoft Excel] must be closed while executing the following command:
