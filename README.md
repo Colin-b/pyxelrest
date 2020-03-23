@@ -480,4 +480,4 @@ Within [Microsoft Excel], go to `File/Option/addin` and check disabled items (`M
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
-[`requests` timeouts]: http://docs.python-requests.org/en/master/user/advanced/#timeouts
+[`requests` timeouts]: https://2.python-requests.org/en/master/user/advanced/#timeouts
