@@ -79,7 +79,7 @@ Functions are automatically re-generated on [Microsoft Excel] startup and on con
 python -m pip install pyxelrest
 ```
 
-### Microsoft Excel add-in installation
+### Microsoft Excel add-in installation (optional)
 
 Once `pyxelrest` python module is installed, `pyxelrest_install_addin` executable is available to install the [Microsoft Excel] COM add-in.
 
