@@ -124,16 +124,22 @@ Note: The add-in is not required if you only want to use the `pyxelrest` python 
 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
-| --path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the [Microsoft Excel] add-in. | file path, folder path or an URL returning a file content. |
-| --check_pre_releases | Also fetch pre-releases when checking for updates. | No value is required, providing the option is enough. No pre-release check by default. |
-| --add_in_directory | Directory containing PyxelRest [Microsoft Excel] COM add-in. | Default to `..\pyxelrest_addin` relatively to the python executable directory. |
+| path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the [Microsoft Excel] add-in. | file path, folder path or an URL returning a file content. |
+| check_pre_releases | Also fetch pre-releases when checking for updates. | No value is required, providing the option is enough. No pre-release check by default. |
+| add_in_directory | Directory containing PyxelRest [Microsoft Excel] COM add-in. | Default to `..\pyxelrest_addin` relatively to the python executable directory. |
+
+Note: option name must be prefixed with `--` such as:
+```bash
+pyxelrest_install_addin --check_pre_releases
+```
 
 ## How to uninstall
 
 1. Go to `Control Panel/Programs and Features` and uninstall `AutoLoadPyxelRestAddIn`.
 2. Execute the following command:
-
-        python -m pip uninstall pyxelrest
+```bash
+python -m pip uninstall pyxelrest
+```
 3. Remove `%APPDATA%\pyxelrest` folder.
 4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
 
@@ -176,8 +182,8 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. | |
 | max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
-| connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#timeouts) | any float value |
-| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#timeouts) | any float value |
+| connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
+| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to [`requests` timeouts] | any float value |
 | skip_update_for | List of section names that should not be auto-updated. | |
 | python_modules | List of extra python module names that should be installed. | |
 | caching | Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
@@ -189,14 +195,14 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | Name | Description | Mandatory | Possible values |
 |------|-------------|-----------|-----------------|
 | definition | [URL](https://en.wikipedia.org/wiki/URL) to the OpenAPI definition. `http://`, `https://` and `file:///` (such as `file:///C:\swagger.json`) schemes are supported. | Mandatory | |
-| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#timeouts) | Optional | any float value |
+| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | Optional | any float value |
 | definition_retrieval_auths | List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default. | Optional | oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm |
-| excluded_tags | List of tags within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should not be retrieved. If not specified, no filtering is applied. | Optional | |
-| selected_tags | List of tags within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
-| excluded_operation_ids | List of operation_id (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should not be retrieved. If not specified, no filtering is applied. | Optional | |
-| selected_operation_ids | List of operation_id (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
-| excluded_parameters | List of parameter names (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should not be exposed. If not specified, no filtering is applied. | Optional | |
-| selected_parameters | List of parameter names (or regular expressions) within [OpenAPI definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
+| excluded_tags | List of tags within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
+| selected_tags | List of tags within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
+| excluded_operation_ids | List of operation_id (or regular expressions) within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
+| selected_operation_ids | List of operation_id (or regular expressions) within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
+| excluded_parameters | List of parameter names (or regular expressions) within [OpenAPI 2.0 definition] that should not be exposed. If not specified, no filtering is applied. | Optional | |
+| selected_parameters | List of parameter names (or regular expressions) within [OpenAPI 2.0 definition] that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
 | rely_on_definitions | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default. | Optional | `true` or `false` |
 | service_host | Service host in case your service is behind a reverse proxy and base_path is not properly set in OpenAPI definition. | Optional | |
 
@@ -540,3 +546,5 @@ The add-in might be disabled.
 Within [Microsoft Excel], go to `File/Option/addin` and check disabled items (`Manage: Disabled Items`)
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
+[OpenAPI 2.0 definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
+[`requests` timeouts](http://docs.python-requests.org/en/master/user/advanced/#timeouts)
