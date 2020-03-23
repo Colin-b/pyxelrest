@@ -82,29 +82,6 @@ Functions are automatically re-generated on [Microsoft Excel] startup and on Con
 python -m pip install pyxelrest
 ```
 
-### Optional Dependencies
-
-- Support for NTLM authentication (with user credentials provided),
-    - [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) module is required in case auth=ntlm is set in `security_details` property and custom credentials are provided.
-    - `ntlm` extra requires can be used to install those dependencies.
-```bash
-python -m pip install pyxelrest[ntlm]
-```
-
-- Support for automatic NTLM authentication.
-    - [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) module is required in case auth=ntlm is set in `security_details` property and logged in user credentials should be used.
-    - `ntlm` extra requires can be used to install those dependencies.
-```bash
-python -m pip install pyxelrest[ntlm]
-```
-
-- Support for in-memory caching.
-    - [`cachetool`](https://pypi.org/project/cachetools/) module is required to be able to use in-memory caching.
-    - `cachetool` extra requires can be used to install those dependencies.
-```bash
-python -m pip install pyxelrest[cachetool]
-```
-
 ### Microsoft Excel add-in installation
 
 Once python module is installed, `pyxelrest_install_addin` script is available to install the [Microsoft Excel] COM add-in.
@@ -175,10 +152,10 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
 | proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#proxies) | |
 | methods | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head). | get, post, put, delete, patch, options, head |
-| oauth2 | Dictionary containing OAuth2 related settings. Refer to [OAuth 2](#oauth-2) section for more information. | |
+| oauth2 | Dictionary containing OAuth2 authentication related settings. Refer to [OAuth 2](#oauth-2) section for more information. | |
 | api_key | User API Key. | |
 | basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. | |
-| ntlm | Dictionary containing NTLM related settings. Refer to [NTLM](#ntlm) section for more information. | |
+| ntlm | Dictionary containing NTLM authentication related settings. Refer to [NTLM](#ntlm) section for more information. | |
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. | |
 | max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
@@ -186,25 +163,25 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to [`requests` timeouts] | any float value |
 | skip_update_for | List of section names that should not be auto-updated. | |
 | python_modules | List of extra python module names that should be installed. | |
-| caching | Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
+| caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
 | result | Dictionary containing result related settings. Refer to [Result](#result) section for more information. | |
-| udf_name_prefix | Prefix to be used in front of UDf name. | {service_name}_ |
+| udf_name_prefix | Prefix to be used in front of UDf name. `{service_name}` will be replaced by the actual service name. | {service_name}_ |
 
 #### OpenAPI
 
 | Name | Description | Mandatory | Possible values |
 |------|-------------|-----------|-----------------|
 | definition | [URL](https://en.wikipedia.org/wiki/URL) to the OpenAPI definition. `http://`, `https://` and `file:///` (such as `file:///C:\swagger.json`) schemes are supported. | Mandatory | |
-| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an OpenAPI definition. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | Optional | any float value |
-| definition_retrieval_auths | List all authentication that should be used when retrieving the OpenAPI definition. Use no authentication by default. | Optional | oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm |
+| definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an [OpenAPI 2.0 definition]. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | Optional | any float value |
+| definition_retrieval_auths | List all authentication that should be used when retrieving the [OpenAPI 2.0 definition]. Use no authentication by default. | Optional | oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm (see [NTLM](#ntlm) to provide details) |
 | excluded_tags | List of tags within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
 | selected_tags | List of tags within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
 | excluded_operation_ids | List of operation_id (or regular expressions) within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
 | selected_operation_ids | List of operation_id (or regular expressions) within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
 | excluded_parameters | List of parameter names (or regular expressions) within [OpenAPI 2.0 definition] that should not be exposed. If not specified, no filtering is applied. | Optional | |
 | selected_parameters | List of parameter names (or regular expressions) within [OpenAPI 2.0 definition] that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
-| rely_on_definitions | Rely on OpenAPI definitions to re-order fields received in JSON response. Deactivated by default. | Optional | `true` or `false` |
-| service_host | Service host in case your service is behind a reverse proxy and base_path is not properly set in OpenAPI definition. | Optional | |
+| rely_on_definitions | Rely on [OpenAPI 2.0 definitions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#definitionsObject) to re-order fields received in response. Deactivated by default. | Optional | `true` or `false` |
+| service_host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
 
 #### Formulas
 
@@ -243,13 +220,22 @@ Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 de
 
 #### NTLM
 
-Requiring [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) or [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) python modules.
-
-
 | Name | Description |
 |------|-------------|
 | username | User name. Should be of the form `domain\\user`. Default value is the logged in user name. |
 | password | User password. Default value is the logged in user password. |
+
+In case user credentials are provided, [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) module is required.
+`ntlm` extra requires can be used to install this dependency:
+```bash
+python -m pip install pyxelrest[ntlm]
+```
+
+In case user credentials are not provided (using logged in user credentials), [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) module is required.
+`ntlm` extra requires can be used to install this dependency:
+```bash
+python -m pip install pyxelrest[ntlm]
+```
 
 #### Caching
 
@@ -259,6 +245,12 @@ Requiring [`cachetools`](https://pypi.org/project/cachetools/) python module.
 |------|-------------|
 | result_caching_time | Number of seconds during which a GET request will return previous result. Always send a new request by default. |
 | max_nb_results | Maximum number of results to store in cache. 100 by default. |
+
+[`cachetool`](https://pypi.org/project/cachetools/) module is required.
+`cachetool` extra requires can be used to install this dependency:
+```bash
+python -m pip install pyxelrest[cachetool]
+```
 
 #### Result
 
