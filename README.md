@@ -1,4 +1,4 @@
-<h2 align="center">Query REST APIs using functions (Microsoft Excel formulas or python functions)</h2>
+<h2 align="center">Query REST APIs using Microsoft Excel formulas or python functions</h2>
 
 <p align="center">
 <a href="https://pypi.org/project/pyxelrest/"><img alt="pypi version" src="https://img.shields.io/pypi/v/pyxelrest"></a>

@@ -28,7 +28,7 @@ setup(
     maintainer="Colin Bounouar",
     maintainer_email="colin.bounouar.dev@gmail.com",
     url="https://colin-b.github.io/pyxelrest/",
-    description="Access REST APIs from Excel using User Defined Functions (UDF)",
+    description="Query REST APIs using Microsoft Excel formulas or python functions",
     long_description=long_description,
     long_description_content_type="text/markdown",
     download_url="https://pypi.org/project/pyxelrest/",
