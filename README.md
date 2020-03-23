@@ -76,15 +76,15 @@ Functions are automatically re-generated on [Microsoft Excel] startup and on Con
 
 ## How to install
 
-1. [Python >= 3.7](https://www.python.org/downloads/) must be installed (with `pip` and `tkinter` for auto update to work).
-2. Use pip to install module:
+1. [Python >= 3.7](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/) and [`tkinter`](https://docs.python.org/3/library/tkinter.html) for auto update to work).
+2. Use [`pip`](https://pip.pypa.io/en/stable/) to install module:
 ```bash
 python -m pip install pyxelrest
 ```
 
 ### Microsoft Excel add-in installation
 
-Once python module is installed, `pyxelrest_install_addin` script is available to install the [Microsoft Excel] COM add-in.
+Once `pyxelrest` python module is installed, `pyxelrest_install_addin` executable is available to install the [Microsoft Excel] COM add-in.
 
 1. [Microsoft Excel >= 2010](https://products.office.com/en-us/excel) must be installed (Office 365 is supported).
 2. [Microsoft .NET Framework >= 4.5.2](http://go.microsoft.com/fwlink/?linkid=328856) must be installed.
