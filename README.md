@@ -212,37 +212,17 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 
 Identified by the `dynamic_array` key within `formulas` section.
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-        <td><em>Possible values</em></td>
-    </th>
-    <tr>
-        <td><strong>lock_excel</strong></td>
-        <td>Should Microsoft Excel be locked (no other action can be performed) until the results are received.</td>
-        <td>Optional</td>
-        <td>true or false (default).</td>
-    </tr>
-</table>
+| Name | Description | Possible values |
+|------|-------------|-----------------|
+| lock_excel | Should [Microsoft Excel] be locked (no other action can be performed) until the results are received. | `true` or `false` (default) |
 
 ##### Legacy array formulas
 
 Identified by the `legacy_array` key within `formulas` section.
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-        <td><em>Possible values</em></td>
-    </th>
-    <tr>
-        <td><strong>lock_excel</strong></td>
-        <td>Should Microsoft Excel be locked (no other action can be performed) until the results are received.</td>
-        <td>Optional</td>
-        <td>true or false (default).</td>
-    </tr>
-</table>
+| Name | Description | Possible values |
+|------|-------------|-----------------|
+| lock_excel | Should [Microsoft Excel] be locked (no other action can be performed) until the results are received. | `true` or `false` (default) |
 
 ##### Visual Basic for Applications (VBA) formulas
 
@@ -546,5 +526,5 @@ The add-in might be disabled.
 Within [Microsoft Excel], go to `File/Option/addin` and check disabled items (`Manage: Disabled Items`)
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
-[OpenAPI 2.0 definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
-[`requests` timeouts](http://docs.python-requests.org/en/master/user/advanced/#timeouts)
+[OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
+[`requests` timeouts]: http://docs.python-requests.org/en/master/user/advanced/#timeouts
