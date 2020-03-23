@@ -153,7 +153,7 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | api_key | User API Key. | |
 | basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. | |
 | ntlm | Dictionary containing NTLM authentication related settings. Refer to [NTLM](#ntlm) section for more information. | |
-| formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. | |
+| formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
 | max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
 | connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
@@ -181,6 +181,8 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | service_host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
 
 #### Formulas
+
+Specify what kind of [formulas](https://support.office.com/en-us/article/Create-an-array-formula-E43E12E0-AFC6-4A12-BC7F-48361075954D) will be generated for every REST API endpoint.
 
 ##### Dynamic array formulas
 
