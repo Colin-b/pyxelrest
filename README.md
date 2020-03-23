@@ -232,88 +232,40 @@ Identified by the `vba_compatible` key within `formulas` section.
 
 Depending on the flow, every parameter described in [requests-auth documentation](https://colin-b.github.io/requests_auth/) can be provided.
 
-Note that token_url and authorization_url are extracted from OpenAPI documentation, thus they do not need to be provided.
+Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 definition], thus they do not need to be provided.
 
 #### Basic
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-    </th>
-    <tr>
-        <td><strong>username</strong></td>
-        <td>User name.</td>
-        <td>Mandatory</td>
-    </tr>
-    <tr>
-        <td><strong>password</strong></td>
-        <td>User password.</td>
-        <td>Mandatory</td>
-    </tr>
-</table>
+| Name | Description | Mandatory |
+|------|-------------|-----------|
+| username | User name | Mandatory |
+| password | User password | Mandatory |
 
 #### NTLM
 
 Requiring [`requests_ntlm`](https://pypi.org/project/requests_ntlm/) or [`requests_negotiate_sspi`](https://pypi.org/project/requests-negotiate-sspi/) python modules.
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-    </th>
-    <tr>
-        <td><strong>username</strong></td>
-        <td>User name. Should be of the form domain\\user. Default value is the logged in user name.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>password</strong></td>
-        <td>User password. Default value is the logged in user password.</td>
-        <td>Optional</td>
-    </tr>
-</table>
+
+| Name | Description |
+|------|-------------|
+| username | User name. Should be of the form `domain\\user`. Default value is the logged in user name. |
+| password | User password. Default value is the logged in user password. |
 
 #### Caching
 
 Requiring [`cachetools`](https://pypi.org/project/cachetools/) python module.
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-    </th>
-    <tr>
-        <td><strong>result_caching_time</strong></td>
-        <td>Number of seconds during which a GET request will return previous result. Always send a new request by default.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>max_nb_results</strong></td>
-        <td>Maximum number of results to store in cache. 100 by default.</td>
-        <td>Optional</td>
-    </tr>
-</table>
+| Name | Description |
+|------|-------------|
+| result_caching_time | Number of seconds during which a GET request will return previous result. Always send a new request by default. |
+| max_nb_results | Maximum number of results to store in cache. 100 by default. |
 
 #### Result
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-    </th>
-    <tr>
-        <td><strong>flatten</strong></td>
-        <td>Flatten received JSON to a 2-Dimension array. Default to True.</td>
-        <td>Optional</td>
-    </tr>
-    <tr>
-        <td><strong>raise_exception</strong></td>
-        <td>Raise received exceptions to client. False by default.</td>
-        <td>Optional</td>
-    </tr>
-</table>
-
+| Name | Description |
+|------|-------------|
+| flatten | Flatten received JSON to a 2-Dimension array. Default to `true` |
+| raise_exception | Raise received exceptions to client. `false` by default. |
 
 #### PyxelRest service configuration
 
@@ -466,8 +418,9 @@ formulas:
    In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
    > Project > AutoLoadPyxelRestAddIn > Signing
 3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder:
-
-        developer_install.bat
+```batch
+developer_install.bat
+```
 
 ## Frequently Asked Question
 
