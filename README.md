@@ -92,7 +92,7 @@ Once `pyxelrest` python module is installed, `pyxelrest_install_addin` executabl
 pyxelrest_install_addin
 ```
 
-Note: The add-in is not required if you only want to use the `pyxelrest` python module.
+Note: The add-in is not required if you only want to use `pyxelrest` [as a python module](#using-as-a-module).
 
 #### Microsoft Excel add-in installer options
 
