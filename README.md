@@ -204,7 +204,7 @@ Identified by the `vba_compatible` key within `formulas` section.
 
 #### OAuth 2
 
-Depending on the flow, every parameter described in [requests-auth documentation](https://colin-b.github.io/requests_auth/) can be provided.
+Depending on the flow, every parameter supported by [requests-auth](https://colin-b.github.io/requests_auth/) can be provided.
 
 Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 definition], thus they do not need to be provided.
 
