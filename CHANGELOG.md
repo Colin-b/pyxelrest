@@ -13,21 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Do not use a fixed dependency version.
-- Compatibility with Python 3.8
+- Compatibility with `python` 3.8
 - Ability to change the configuration and impact loaded functions within module without restarting python.
-- file URl are now properly handled, they must start with file:/// instead of file://
+- file URl are now properly handled, they must start with `file:///` instead of `file://`
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
 
 ### Removed
-- Drop support for python < 3.7
-- Drop support for application/msgpackpandas as msgpack support has been dropped from pandas and this is not a standardized content type.
-- Drop support for ujson.
-- Drop support for ini configuration files.
+- Drop support for `python` < 3.7
+- Drop support for `application/msgpackpandas` as `msgpack` support has been dropped from `pandas` and this is not a standardized content type.
+- Drop support for `ujson`.
+- Drop support for `ini` configuration files.
 - Drop support for shifted results as there is no need for it anymore, first cell is always filled with an up to date value.
 - Python update script path is now guessed by addin, no need to provide the path in configuration anymore.
 
 ### Changed
-- Auto update does not request pre-releases by default anymore. It must be explicitly requested via --check_pre_releases.
+- Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.
 - Use HTTPS scheme whenever possible.
 - Generate one python file with UDFs per service.
 - Most of the python modules and functions are now private. If you need access to some internals, please open an issue.

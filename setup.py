@@ -113,10 +113,10 @@ setup(
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.18.*",
+        "xlwings==0.20.*",
         # Used to parse configuration files
         "pyyaml==5.*",
-        "pyaml==19.*",
+        "pyaml==20.*",
         # Used to manage authentication
         "requests_auth==5.*",
         # Used to parse all date-time formats in a easy way
