@@ -438,7 +438,7 @@ def check_for_duplicates(loaded_services: List[Service]):
 
 
 def get_result(
-    udf_method: UDFMethod, request_content: RequestContent, excel_application
+    udf_method: UDFMethod, request_content: RequestContent, excel_application=None
 ):
     cached_result = udf_method.get_cached_result(request_content)
     if cached_result is not None:
@@ -521,19 +521,16 @@ def get_result(
             response.close()
 
 
-def get_caller_address(excel_application) -> str:
+def get_caller_address(excel_application=None) -> str:
     try:
         if not excel_application:
-            return "Python"  # TODO Return details on caller of UDF?
+            return ""
         excel_caller = excel_application.Caller
         if not hasattr(excel_caller, "Rows"):
             return f"VBA:{excel_application.VBE.ActiveCodePane.CodeModule}"
         return str(
             xlwings.xlplatform.Range(xl=excel_caller).get_address(True, True, True)
         )
-    except AttributeError:
-        # Handle AttributeError: _Application.Caller occurring in case mode is set to threading.
-        return ""
     except:
         logger.exception("Unable to retrieve caller address.")
         return ""
