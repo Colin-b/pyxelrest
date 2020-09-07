@@ -257,7 +257,7 @@ namespace AutoLoadPyxelRestAddIn
             Ntlm = ntlm == null ? new Dictionary<string, object>() : ToDict(ntlm);
 
             var formulas = (YamlMappingNode)GetProperty(section, FORMULAS_PROPERTY);
-            Formulas = formulas == null ? new Dictionary<string, object>() : ToDict(formulas);
+            Formulas = formulas == null ? DefaultFormulas() : ToDict(formulas);
 
             var maxRetries = (YamlScalarNode)GetProperty(section, MAX_RETRIES_PROPERTY);
             MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
@@ -353,7 +353,7 @@ namespace AutoLoadPyxelRestAddIn
             Basic = new Dictionary<string, object>();
             Ntlm = new Dictionary<string, object>();
 
-            Formulas = new Dictionary<string, object>();
+            Formulas = DefaultFormulas();
 
             MaxRetries = 5;
             Headers = new Dictionary<string, object>();
@@ -361,6 +361,11 @@ namespace AutoLoadPyxelRestAddIn
             ReadTimeout = 0;
             PythonModules = new List<string>();
             Caching = new Dictionary<string, object>();
+        }
+
+        private IDictionary<string, object> DefaultFormulas()
+        {
+            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false } } } };
         }
 
         private IList<string> GetMethods()
