@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to change the configuration and impact loaded functions within module without restarting python.
 - file URl are now properly handled, they must start with `file:///` instead of `file://`
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
+- Do not request VBA caller in threading context (as it cannot be retrieved and result in COM call failure).
 
 ### Removed
 - Drop support for `python` < 3.7
@@ -37,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `read_timeout` now default to `5s` instead of waiting indefinitely.
 - Network related settings (`max_retries`, `connect_timeout`, `read_timeout`, `proxies`) are now supposed to be provided within `network` configuration section.
 - SSL certificate is now verified by default. You can change this by setting `network` `verify` to `false`.
+- Authentication related settings (`oauth2`, `api_key`, `basic`, `ntlm`) are now supposed to be provided within `auth` configuration section.
+- Display default values for OAuth2 settings in configuration UI.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

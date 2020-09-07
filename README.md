@@ -148,12 +148,9 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 |------|-------------|-----------------|
 | description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
 | methods | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head). | get, post, put, delete, patch, options, head |
-| oauth2 | Dictionary containing OAuth2 authentication related settings. Refer to [OAuth 2](#oauth-2) section for more information. | |
-| api_key | User API Key. | |
-| basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. | |
-| ntlm | Dictionary containing NTLM authentication related settings. Refer to [NTLM](#ntlm) section for more information. | |
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
+| auth | Dictionary containing authentication related settings. Refer to [Authentication](#authentication) section for more information. | |
 | network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
 | skip_update_for | List of section names that should not be auto-updated. | |
 | python_modules | List of extra python module names that should be installed. | |
@@ -201,20 +198,31 @@ Identified by the `legacy_array` key within `formulas` section.
 
 Identified by the `vba_compatible` key within `formulas` section.
 
-#### OAuth 2
+#### Authentication
+
+Contains authentication related settings.
+
+| Name | Description | Possible values |
+|------|-------------|-----------------|
+| oauth2 | Dictionary containing OAuth2 authentication related settings. Refer to [OAuth 2](#oauth-2) section for more information. |
+| api_key | User API Key. Can be an environment variable surrounded by `%` as in `%MY_API_KEY_ENV_VAR%`. |
+| basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. |
+| ntlm | Dictionary containing NTLM authentication related settings. Refer to [NTLM](#ntlm) section for more information. |
+
+##### OAuth 2
 
 Depending on the flow, every parameter supported by [requests-auth](https://colin-b.github.io/requests_auth/) can be provided.
 
 Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 definition], thus they do not need to be provided.
 
-#### Basic
+##### Basic
 
 | Name | Description | Mandatory |
 |------|-------------|-----------|
 | username | User name | Mandatory |
 | password | User password | Mandatory |
 
-#### NTLM
+##### NTLM
 
 | Name | Description |
 |------|-------------|

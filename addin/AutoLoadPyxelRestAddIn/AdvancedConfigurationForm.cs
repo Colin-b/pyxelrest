@@ -68,7 +68,7 @@ namespace AutoLoadPyxelRestAddIn
                     AddOperationID(tag, false);
 
             var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
-            foreach (var oauth2Item in servicePanel.service.OAuth2)
+            foreach (var oauth2Item in (IDictionary<string, object>)servicePanel.service.Auth["oauth2"])
             {
                 if (!oauth2NonParam.Contains(oauth2Item.Key))
                     AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
@@ -194,7 +194,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var apiKey = new TextBox { Text = servicePanel.service.ApiKey, Dock = DockStyle.Fill };
+                    var apiKey = new TextBox { Text = (string)servicePanel.service.Auth["api_key"], Dock = DockStyle.Fill };
                     tooltip.SetToolTip(apiKey, "Only used when required.");
                     apiKey.TextChanged += ApiKey_TextChanged;
                     layout.Controls.Add(apiKey, 1, 5);
@@ -540,6 +540,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 var tab = new TabPage("OAuth2");
                 var layout = new TableLayoutPanel { AutoSize = true };
+                var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
 
                 #region Timeout
                 {
@@ -547,7 +548,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OAuth2.ContainsKey("timeout") ? (decimal)servicePanel.service.OAuth2["timeout"] : 60 };
+                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = (decimal)oauth2Options["timeout"] };
                     tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
                     timeout.TextChanged += Oauth2Timeout_TextChanged;
                     layout.Controls.Add(timeout, 1, 2);
@@ -560,7 +561,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field used to send token.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var headerName = new TextBox { Dock = DockStyle.Fill, Text = servicePanel.service.OAuth2.ContainsKey("header_name") ? (string)servicePanel.service.OAuth2["header_name"] : string.Empty };
+                    var headerName = new TextBox { Dock = DockStyle.Fill, Text = (string)oauth2Options["header_name"] };
                     tooltip.SetToolTip(headerName, "Token will be sent in Authorization header field by default.");
                     headerName.TextChanged += Oauth2HeaderName_TextChanged;
                     layout.Controls.Add(headerName, 1, 5);
@@ -573,7 +574,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Format used to send the token value. '{token}' must be present as it will be replaced by the actual token.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var headerValue = new TextBox { Dock = DockStyle.Fill, Text = servicePanel.service.OAuth2.ContainsKey("header_value") ? (string)servicePanel.service.OAuth2["header_value"] : string.Empty };
+                    var headerValue = new TextBox { Dock = DockStyle.Fill, Text = (string)oauth2Options["header_value"] };
                     tooltip.SetToolTip(headerValue, "Token will be sent as 'Bearer {token}' by default.");
                     headerValue.TextChanged += Oauth2HeaderValue_TextChanged;
                     layout.Controls.Add(headerValue, 1, 6);
@@ -619,6 +620,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 var tab = new TabPage("Basic");
                 var layout = new TableLayoutPanel { AutoSize = true };
+                var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
 
                 #region Username
                 {
@@ -626,7 +628,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("username") ? (string)servicePanel.service.Basic["username"] : string.Empty };
+                    var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = (string)basicOptions["username"] };
                     tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
                     userName.TextChanged += BasicUsername_TextChanged;
                     layout.Controls.Add(userName, 1, 1);
@@ -639,7 +641,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Basic.ContainsKey("password") ? (string)servicePanel.service.Basic["password"] : string.Empty };
+                    var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = (string)basicOptions["password"] };
                     tooltip.SetToolTip(password, "Used only if basic authentication is required.");
                     password.TextChanged += BasicPassword_TextChanged;
                     layout.Controls.Add(password, 1, 2);
@@ -655,6 +657,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 var tab = new TabPage("NTLM");
                 var layout = new TableLayoutPanel { AutoSize = true };
+                var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
 
                 #region Username
                 {
@@ -662,7 +665,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Ntlm.ContainsKey("username") ? (string)servicePanel.service.Ntlm["username"] : string.Empty };
+                    var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = (string)ntlmOptions["username"] };
                     tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
                     userName.TextChanged += NtlmUsername_TextChanged;
                     layout.Controls.Add(userName, 1, 1);
@@ -675,7 +678,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Ntlm.ContainsKey("password") ? (string)servicePanel.service.Ntlm["password"] : string.Empty };
+                    var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = (string)ntlmOptions["password"] };
                     tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
                     password.TextChanged += NtlmPassword_TextChanged;
                     layout.Controls.Add(password, 1, 2);
@@ -767,18 +770,20 @@ namespace AutoLoadPyxelRestAddIn
 
         private void NtlmPassword_TextChanged(object sender, EventArgs e)
         {
+            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Ntlm.Remove("password");
+                ntlmOptions.Remove("password");
             else
-                servicePanel.service.Ntlm["password"] = ((TextBox)sender).Text;
+                ntlmOptions["password"] = ((TextBox)sender).Text;
         }
 
         private void NtlmUsername_TextChanged(object sender, EventArgs e)
         {
+            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Ntlm.Remove("username");
+                ntlmOptions.Remove("username");
             else
-                servicePanel.service.Ntlm["username"] = ((TextBox)sender).Text;
+                ntlmOptions["username"] = ((TextBox)sender).Text;
         }
 
         private void CachingResultTime_TextChanged(object sender, EventArgs e)
@@ -806,42 +811,47 @@ namespace AutoLoadPyxelRestAddIn
 
         private void BasicPassword_TextChanged(object sender, EventArgs e)
         {
+            var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Basic.Remove("password");
+                basicOptions.Remove("password");
             else
-                servicePanel.service.Basic["password"] = ((TextBox)sender).Text;
+                basicOptions["password"] = ((TextBox)sender).Text;
         }
 
         private void BasicUsername_TextChanged(object sender, EventArgs e)
         {
+            var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Basic.Remove("username");
+                basicOptions.Remove("username");
             else
-                servicePanel.service.Basic["username"] = ((TextBox)sender).Text;
+                basicOptions["username"] = ((TextBox)sender).Text;
         }
 
         private void Oauth2HeaderValue_TextChanged(object sender, EventArgs e)
         {
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.OAuth2.Remove("header_value");
+                oauth2Options.Remove("header_value");
             else
-                servicePanel.service.OAuth2["header_value"] = ((TextBox)sender).Text;
+                oauth2Options["header_value"] = ((TextBox)sender).Text;
         }
 
         private void Oauth2HeaderName_TextChanged(object sender, EventArgs e)
         {
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.OAuth2.Remove("header_name");
+                oauth2Options.Remove("header_name");
             else
-                servicePanel.service.OAuth2["header_name"] = ((TextBox)sender).Text;
+                oauth2Options["header_name"] = ((TextBox)sender).Text;
         }
 
         private void Oauth2Timeout_TextChanged(object sender, EventArgs e)
         {
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
             if (((NumericUpDown)sender).Value == 0)
-                servicePanel.service.OAuth2.Remove("timeout");
+                oauth2Options.Remove("timeout");
             else
-                servicePanel.service.OAuth2["timeout"] = ((NumericUpDown)sender).Value;
+                oauth2Options["timeout"] = ((NumericUpDown)sender).Value;
         }
 
         private void NoProxy_TextChanged(object sender, EventArgs e)
@@ -944,7 +954,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ApiKey_TextChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ApiKey = ((TextBox)sender).Text;
+            servicePanel.service.Auth["api_key"] = ((TextBox)sender).Text;
         }
 
         private void LegacyArrayFormulas_CheckedChanged(object sender, EventArgs e)
@@ -1082,7 +1092,7 @@ namespace AutoLoadPyxelRestAddIn
             AddValueToList(tagName.Text, "selected_tags");
             // Visual update
             AddTag(tagName.Text, false);
-            tagName.Text = "";
+            tagName.Text = string.Empty;
         }
 
         private void AddTag(string value, bool excluded)
@@ -1412,8 +1422,8 @@ namespace AutoLoadPyxelRestAddIn
 
             AddHeader(headerName.Text, headerValue.Text);
 
-            headerName.Text = "";
-            headerValue.Text = "";
+            headerName.Text = string.Empty;
+            headerValue.Text = string.Empty;
         }
 
         private void AddHeader(string name, string value)
@@ -1471,11 +1481,6 @@ namespace AutoLoadPyxelRestAddIn
             }
         }
 
-        private bool ContainsOAuth2Param(string value)
-        {
-            return servicePanel.service.OAuth2.ContainsKey(value);
-        }
-
         private void Oauth2ParamValue_TextChanged(object sender, EventArgs e)
         {
             addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamName.Text.Length > 0;
@@ -1498,7 +1503,8 @@ namespace AutoLoadPyxelRestAddIn
 
         private void Oauth2ParamName_TextChanged(object sender, EventArgs e)
         {
-            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0 && !ContainsOAuth2Param(((TextBox)sender).Text);
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0 && !oauth2Options.ContainsKey(((TextBox)sender).Text);
         }
 
         private void AddOAuth2Param_Click(object sender, EventArgs e)
@@ -1508,12 +1514,13 @@ namespace AutoLoadPyxelRestAddIn
 
         private void AddOAuth2Param()
         {
-            servicePanel.service.OAuth2.Add(oauth2ParamName.Text, oauth2ParamValue.Text);
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            oauth2Options.Add(oauth2ParamName.Text, oauth2ParamValue.Text);
 
             AddOAuth2Param(oauth2ParamName.Text, oauth2ParamValue.Text);
 
-            oauth2ParamName.Text = "";
-            oauth2ParamValue.Text = "";
+            oauth2ParamName.Text = string.Empty;
+            oauth2ParamValue.Text = string.Empty;
         }
 
         private void AddOAuth2Param(string name, string value)
@@ -1539,7 +1546,8 @@ namespace AutoLoadPyxelRestAddIn
             var valueTextBox = (TextBox)sender;
             Label oauth2ParamNameLabel = (Label)valueTextBox.Parent.Controls.Find("oauth2ParamNameLabel", false)[0];
 
-            servicePanel.service.OAuth2[oauth2ParamNameLabel.Text] = valueTextBox.Text;
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            oauth2Options[oauth2ParamNameLabel.Text] = valueTextBox.Text;
         }
 
         private void RemoveOAuth2Param_Click(object sender, EventArgs e)
@@ -1547,7 +1555,8 @@ namespace AutoLoadPyxelRestAddIn
             var panel = ((DeleteButton)sender).Parent;
             Label oauth2ParamNameLabel = (Label)panel.Controls.Find("oauth2ParamNameLabel", false)[0];
 
-            servicePanel.service.OAuth2.Remove(oauth2ParamNameLabel.Text);
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            oauth2Options.Remove(oauth2ParamNameLabel.Text);
 
             oauth2ParamsPanel.Controls.Remove(panel);
         }

@@ -47,7 +47,7 @@ def test_oauth2_authentication_success(
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "oauth2": {"timeout": 10},
+                "auth": {"oauth2": {"timeout": 10}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -74,7 +74,7 @@ def test_pyxelrest_oauth2_authentication_success(
         tmpdir,
         {
             "pyxelrest": {
-                "oauth2": {"timeout": 10},
+                "auth": {"oauth2": {"timeout": 10}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -129,7 +129,7 @@ def test_oauth2_authentication_failure(tmpdir, monkeypatch, responses: RequestsM
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "oauth2": {"timeout": 10},
+                "auth": {"oauth2": {"timeout": 10}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -177,7 +177,7 @@ def test_oauth2_authentication_timeout(tmpdir, monkeypatch, responses: RequestsM
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "oauth2": {"timeout": 10},
+                "auth": {"oauth2": {"timeout": 10}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -255,7 +255,7 @@ def test_api_key_header_authentication_success(tmpdir, responses: RequestsMock):
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "api_key": "my_provided_api_key",
+                "auth": {"api_key": "my_provided_api_key"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -274,7 +274,7 @@ def test_pyxelrest_api_key_header_authentication_success(
         tmpdir,
         {
             "pyxelrest": {
-                "api_key": "my_provided_api_key",
+                "auth": {"api_key": "my_provided_api_key"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -318,7 +318,7 @@ def test_api_key_query_authentication_success(tmpdir, responses: RequestsMock):
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "api_key": "my_provided_api_key",
+                "auth": {"api_key": "my_provided_api_key"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -340,7 +340,7 @@ def test_pyxelrest_api_key_query_authentication_success(
         tmpdir,
         {
             "pyxelrest": {
-                "api_key": "my_provided_api_key",
+                "auth": {"api_key": "my_provided_api_key"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -381,7 +381,7 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "basic": {"username": "test_user", "password": "test_pwd"},
+                "auth": {"basic": {"username": "test_user", "password": "test_pwd"}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -398,7 +398,7 @@ def test_pyxelrest_basic_authentication_success(tmpdir, responses: RequestsMock)
         tmpdir,
         {
             "pyxelrest": {
-                "basic": {"username": "test_user", "password": "test_pwd"},
+                "auth": {"basic": {"username": "test_user", "password": "test_pwd"}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -448,8 +448,10 @@ def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMoc
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "api_key": "my_provided_api_key",
-                "basic": {"username": "test_user", "password": "test_pwd"},
+                "auth": {
+                    "api_key": "my_provided_api_key",
+                    "basic": {"username": "test_user", "password": "test_pwd"},
+                },
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -469,8 +471,10 @@ def test_pyxelrest_basic_and_api_key_authentication_success(
         tmpdir,
         {
             "pyxelrest": {
-                "api_key": "my_provided_api_key",
-                "basic": {"username": "test_user", "password": "test_pwd"},
+                "auth": {
+                    "api_key": "my_provided_api_key",
+                    "basic": {"username": "test_user", "password": "test_pwd"},
+                },
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -521,8 +525,10 @@ def test_basic_or_api_key_authentication_success(tmpdir, responses: RequestsMock
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "api_key": "my_provided_api_key",
-                "basic": {"username": "test_user", "password": "test_pwd"},
+                "auth": {
+                    "api_key": "my_provided_api_key",
+                    "basic": {"username": "test_user", "password": "test_pwd"},
+                },
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -569,8 +575,10 @@ def test_api_key_or_basic_authentication_success(tmpdir, responses: RequestsMock
         {
             "authenticated": {
                 "open_api": {"definition": "http://test/"},
-                "api_key": "my_provided_api_key",
-                "basic": {"username": "test_user", "password": "test_pwd"},
+                "auth": {
+                    "api_key": "my_provided_api_key",
+                    "basic": {"username": "test_user", "password": "test_pwd"},
+                },
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },

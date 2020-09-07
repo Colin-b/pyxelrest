@@ -25,13 +25,13 @@ OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
 
 
 def _create_authentication(
-    service_config: "pyxelrest.open_api.ServiceConfigSection",
+    service_config: dict,
     open_api_security_definition: dict,
     request_content: "pyxelrest.open_api.RequestContent",
 ):
     if "oauth2" == open_api_security_definition.get("type"):
         flow = open_api_security_definition.get("flow")
-        oauth2_config = dict(service_config.oauth2)
+        oauth2_config = dict(service_config.get("oauth2", {}))
         if flow == "implicit":
             return OAuth2Implicit(
                 authorization_url=open_api_security_definition.get(
@@ -69,20 +69,21 @@ def _create_authentication(
     elif "apiKey" == open_api_security_definition.get("type"):
         if open_api_security_definition["in"] == "query":
             return QueryApiKey(
-                service_config.api_key,
+                service_config.get("api_key"),
                 open_api_security_definition.get(
                     "name", request_content.extra_parameters.get("api_key_name")
                 ),
             )
         return HeaderApiKey(
-            service_config.api_key,
+            service_config.get("api_key"),
             open_api_security_definition.get(
                 "name", request_content.extra_parameters.get("api_key_name")
             ),
         )
     elif "basic" == open_api_security_definition.get("type"):
         return Basic(
-            service_config.basic.get("username"), service_config.basic.get("password")
+            service_config.get("basic", {}).get("username"),
+            service_config.get("basic", {}).get("password"),
         )
     else:
         logger.error(
@@ -91,39 +92,40 @@ def _create_authentication(
 
 
 def _create_authentication_from_config(
-    service_config: "pyxelrest.open_api.ServiceConfigSection",
-    authentication_mode: str,
-    authentication: dict,
+    service_config: dict, authentication_mode: str, authentication: dict
 ):
     if "oauth2_implicit" == authentication_mode:
-        oauth2_config = dict(service_config.oauth2)
+        oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2Implicit(
             authorization_url=authentication.get("oauth2_auth_url"), **oauth2_config
         )
     elif "oauth2_access_code" == authentication_mode:
-        oauth2_config = dict(service_config.oauth2)
+        oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2AuthorizationCode(
             authorization_url=authentication.get("oauth2_auth_url"),
             token_url=authentication.get("oauth2_token_url"),
             **oauth2_config,
         )
     elif "oauth2_password" == authentication_mode:
-        oauth2_config = dict(service_config.oauth2)
+        oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2ResourceOwnerPasswordCredentials(
             token_url=authentication.get("oauth2_token_url"), **oauth2_config
         )
     elif "oauth2_application" == authentication_mode:
-        oauth2_config = dict(service_config.oauth2)
+        oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2ClientCredentials(
             token_url=authentication.get("oauth2_token_url"), **oauth2_config
         )
     elif "api_key" == authentication_mode:
         if authentication.get("in") == "query":
-            return QueryApiKey(service_config.api_key, authentication.get("name"))
-        return HeaderApiKey(service_config.api_key, authentication.get("name"))
+            return QueryApiKey(
+                service_config.get("api_key"), authentication.get("name")
+            )
+        return HeaderApiKey(service_config.get("api_key"), authentication.get("name"))
     elif "basic" == authentication_mode:
         return Basic(
-            service_config.basic.get("username"), service_config.basic.get("password")
+            service_config.get("basic", {}).get("username"),
+            service_config.get("basic", {}).get("password"),
         )
     else:
         logger.error(f"Unexpected security definition type: {authentication_mode}")
@@ -141,7 +143,7 @@ def get_auth(
     )
 
     securities = udf_method.security(request_content)
-    ntlm_config = udf_method.service.config.ntlm_auth
+    ntlm_config = udf_method.service.config.auth.get("ntlm", {})
     authentication = (
         NTLM(ntlm_config.get("username"), ntlm_config.get("password"))
         if ntlm_config
@@ -153,7 +155,7 @@ def get_auth(
         for security_definition_key in security.keys():
             try:
                 auth = _create_authentication(
-                    udf_method.service.config,
+                    udf_method.service.config.auth,
                     security_definitions.get(security_definition_key, {}),
                     request_content,
                 )
@@ -182,7 +184,7 @@ def get_definition_retrieval_auth(
         return None
 
     ntlm_config = (
-        service_config.ntlm_auth
+        service_config.auth.get("ntlm", {})
         if service_config.definition_retrieval_auths.pop("ntlm", None)
         else None
     )
@@ -198,7 +200,7 @@ def get_definition_retrieval_auth(
     ) in service_config.definition_retrieval_auths.items():
         try:
             auth = _create_authentication_from_config(
-                service_config, authentication_mode, authentication_config
+                service_config.auth, authentication_mode, authentication_config
             )
             if auth:
                 if authentication:

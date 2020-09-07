@@ -8,10 +8,7 @@ namespace AutoLoadPyxelRestAddIn
         private static readonly string OPEN_API_PROPERTY = "open_api";
         private static readonly string NETWORK_PROPERTY = "network";
         private static readonly string METHODS_PROPERTY = "methods";
-        private static readonly string OAUTH2_PROPERTY = "oauth2";
-        private static readonly string API_KEY_PROPERTY = "api_key";
-        private static readonly string BASIC_PROPERTY = "basic";
-        private static readonly string NTLM_PROPERTY = "ntlm";
+        private static readonly string AUTH_PROPERTY = "auth";
         private static readonly string FORMULAS_PROPERTY = "formulas";
         private static readonly string HEADERS_PROPERTY = "headers";
         private static readonly string DESCRIPTION_PROPERTY = "description";
@@ -42,13 +39,8 @@ namespace AutoLoadPyxelRestAddIn
         public bool Options;
         public bool Head;
 
-        public IDictionary<string, object> OAuth2;
-        public string ApiKey;
-        public IDictionary<string, object> Basic;
-        public IDictionary<string, object> Ntlm;
-
+        public IDictionary<string, object> Auth;
         public IDictionary<string, object> Formulas;
-
         public IDictionary<string, object> Headers;
         public IDictionary<string, object> Network;
 
@@ -179,17 +171,8 @@ namespace AutoLoadPyxelRestAddIn
                 Head = updated.Head;
             }
 
-            if (!skipUpdateFor.Contains(OAUTH2_PROPERTY))
-                OAuth2 = updated.OAuth2;
-
-            if (!skipUpdateFor.Contains(API_KEY_PROPERTY))
-                ApiKey = updated.ApiKey;
-
-            if (!skipUpdateFor.Contains(BASIC_PROPERTY))
-                Basic = updated.Basic;
-
-            if (!skipUpdateFor.Contains(NTLM_PROPERTY))
-                Ntlm = updated.Ntlm;
+            if (!skipUpdateFor.Contains(AUTH_PROPERTY))
+                Auth = updated.Auth;
 
             if (!skipUpdateFor.Contains(FORMULAS_PROPERTY))
                 Formulas = updated.Formulas;
@@ -217,7 +200,7 @@ namespace AutoLoadPyxelRestAddIn
 
             var network = (YamlMappingNode)GetProperty(section, NETWORK_PROPERTY);
             Network = network == null ? new Dictionary<string, object>() : ToDict(network);
-            Network = AddDefault(Network, DefaultNetwork());
+            AddDefault(Network, DefaultNetwork());
 
             var methodsNode = (YamlSequenceNode)GetProperty(section, METHODS_PROPERTY);
             IList<string> methods = methodsNode == null ? DefaultMethods() : ToList(methodsNode);
@@ -229,17 +212,9 @@ namespace AutoLoadPyxelRestAddIn
             Options = methods.Contains(OPTIONS);
             Head = methods.Contains(HEAD);
 
-            var oauth2 = (YamlMappingNode)GetProperty(section, OAUTH2_PROPERTY);
-            OAuth2 = oauth2 == null ? new Dictionary<string, object>() : ToDict(oauth2);
-
-            var apiKey = (YamlScalarNode)GetProperty(section, API_KEY_PROPERTY);
-            ApiKey = apiKey == null ? string.Empty : apiKey.Value;
-
-            var basic = (YamlMappingNode)GetProperty(section, BASIC_PROPERTY);
-            Basic = basic == null ? new Dictionary<string, object>() : ToDict(basic);
-
-            var ntlm = (YamlMappingNode)GetProperty(section, NTLM_PROPERTY);
-            Ntlm = ntlm == null ? new Dictionary<string, object>() : ToDict(ntlm);
+            var auth = (YamlMappingNode)GetProperty(section, AUTH_PROPERTY);
+            Auth = auth == null ? new Dictionary<string, object>() : ToDict(auth);
+            AddDefault(Auth, DefaultAuth());
 
             var formulas = (YamlMappingNode)GetProperty(section, FORMULAS_PROPERTY);
             Formulas = formulas == null ? DefaultFormulas() : ToDict(formulas);
@@ -266,7 +241,7 @@ namespace AutoLoadPyxelRestAddIn
             if (skipUpdateFor != null && skipUpdateFor.Count > 0)
                 section.Add(new YamlScalarNode(SKIP_UPDATE_FOR_PROPERTY), new YamlSequenceNode(FromList(skipUpdateFor)));
 
-            Network = RemoveDefault(Network, DefaultNetwork());
+            RemoveDefault(Network, DefaultNetwork());
             if (Network != null && Network.Count > 0)
                 section.Add(new YamlScalarNode(NETWORK_PROPERTY), new YamlMappingNode(FromDict(Network)));
 
@@ -274,17 +249,9 @@ namespace AutoLoadPyxelRestAddIn
             if (methods != null && methods.Count > 0)
                 section.Add(new YamlScalarNode(METHODS_PROPERTY), new YamlSequenceNode(FromList(methods)));
 
-            if (OAuth2 != null && OAuth2.Count > 0)
-                section.Add(new YamlScalarNode(OAUTH2_PROPERTY), new YamlMappingNode(FromDict(OAuth2)));
-
-            if (!string.IsNullOrEmpty(ApiKey))
-                section.Add(new YamlScalarNode(API_KEY_PROPERTY), new YamlScalarNode(ApiKey));
-
-            if (Basic != null && Basic.Count > 0)
-                section.Add(new YamlScalarNode(BASIC_PROPERTY), new YamlMappingNode(FromDict(Basic)));
-
-            if (Ntlm != null && Ntlm.Count > 0)
-                section.Add(new YamlScalarNode(NTLM_PROPERTY), new YamlMappingNode(FromDict(Ntlm)));
+            RemoveDefault(Auth, DefaultAuth());
+            if (Auth != null && Auth.Count > 0)
+                section.Add(new YamlScalarNode(AUTH_PROPERTY), new YamlMappingNode(FromDict(Auth)));
 
             if (Formulas != null && Formulas.Count > 0)
                 section.Add(new YamlScalarNode(FORMULAS_PROPERTY), new YamlMappingNode(FromDict(Formulas)));
@@ -316,13 +283,8 @@ namespace AutoLoadPyxelRestAddIn
             Options = true;
             Head = true;
 
-            OAuth2 = new Dictionary<string, object>();
-            ApiKey = "";
-            Basic = new Dictionary<string, object>();
-            Ntlm = new Dictionary<string, object>();
-
+            Auth = DefaultAuth();
             Formulas = DefaultFormulas();
-
             Headers = new Dictionary<string, object>();
             PythonModules = new List<string>();
             Caching = new Dictionary<string, object>();
@@ -338,24 +300,42 @@ namespace AutoLoadPyxelRestAddIn
             return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, { "verify", true }, {"proxies", new Dictionary<string, object>() } };
         }
 
-        private IDictionary<string, object> AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
+        private IDictionary<string, object> DefaultAuth()
+        {
+            return new Dictionary<string, object>() { { "oauth2", new Dictionary<string, object>() { { "timeout", 60 }, { "header_name", "Authorization" }, { "header_value", "Bearer {token}" } } }, { "basic", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "ntlm", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "api_key", string.Empty } };
+        }
+
+        private void AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
         {
             foreach (var defaultItem in defaultConf)
             {
                 if (!fromConf.ContainsKey(defaultItem.Key))
+                {
                     fromConf[defaultItem.Key] = defaultItem.Value;
+                }
+                else if (IsGenericDict(defaultItem.Value))
+                {
+                    AddDefault((IDictionary<string, object>)fromConf[defaultItem.Key], (IDictionary<string, object>)defaultItem.Value);
+                }
             }
-            return fromConf;
         }
 
-        private IDictionary<string, object> RemoveDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
+        private void RemoveDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
         {
             foreach (var defaultItem in defaultConf)
             {
-                if (fromConf.ContainsKey(defaultItem.Key) && fromConf[defaultItem.Key].Equals(defaultItem.Value))
-                    fromConf.Remove(defaultItem.Key);
+                if (fromConf.ContainsKey(defaultItem.Key))
+                {
+                    if (fromConf[defaultItem.Key].Equals(defaultItem.Value))
+                    {
+                        fromConf.Remove(defaultItem.Key);
+                    }
+                    else if (IsGenericDict(defaultItem.Value))
+                    {
+                        RemoveDefault((IDictionary<string, object>)fromConf[defaultItem.Key], (IDictionary<string, object>)defaultItem.Value);
+                    }
+                }
             }
-            return fromConf;
         }
 
         private IList<string> GetMethods()

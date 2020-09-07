@@ -63,12 +63,9 @@ class ConfigSection:
             key: convert_environment_variable(value)
             for key, value in service_config.get("headers", {}).items()
         }
-        self.oauth2 = service_config.get("oauth2", {})
-        self.basic = service_config.get("basic", {})
-        self.api_key = service_config.get("api_key")
-        if self.api_key:
-            self.api_key = convert_environment_variable(self.api_key)
-        self.ntlm_auth = service_config.get("ntlm", {})
+        self.auth = service_config.get("auth", {})
+        if "api_key" in self.auth:
+            self.auth["api_key"] = convert_environment_variable(self.auth["api_key"])
         caching_conf = service_config.get("caching", {})
         max_nb_results = (
             self._to_positive_int(caching_conf.get("max_nb_results")) or 100
