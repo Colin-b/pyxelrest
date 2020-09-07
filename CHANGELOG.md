@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Most of the scripts are now inside the `pyxelrest` package.
 - Update all dependencies to the latest major release.
 - `read_timeout` now default to `5s` instead of waiting indefinitely.
+- Network related settings (`max_retries`, `connect_timeout`, `read_timeout`, `proxies`) are now supposed to be provided within `network` configuration section.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

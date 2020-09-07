@@ -55,17 +55,14 @@ class ConfigSection:
         self.requested_methods = service_config.get(
             "methods", ["get", "post", "put", "delete", "patch", "options", "head"]
         )
-        self.connect_timeout = service_config.get("connect_timeout", 1)
-        self.read_timeout = service_config.get("read_timeout", 5)
+        self.network = service_config.get("network", {})
         self.formulas = service_config.get(
             "formulas", {"dynamic_array": {"lock_excel": False}}
         )
-        self.max_retries = service_config.get("max_retries", 5)
         self.custom_headers = {
             key: convert_environment_variable(value)
             for key, value in service_config.get("headers", {}).items()
         }
-        self.proxies = service_config.get("proxies", {})
         self.oauth2 = service_config.get("oauth2", {})
         self.basic = service_config.get("basic", {})
         self.api_key = service_config.get("api_key")
@@ -447,7 +444,9 @@ def get_result(
     response = None
     try:
         # TODO Use a context manager ?
-        response = _session.get(udf_method.service.config.max_retries).request(
+        response = _session.get(
+            udf_method.service.config.network.get("max_retries", 5)
+        ).request(
             udf_method.requests_method,
             udf_method.uri.format(**request_content.path_values),
             json=request_content.payload
@@ -462,10 +461,10 @@ def get_result(
             auth=_authentication.get_auth(udf_method, request_content),
             verify=False,
             headers=request_content.header,
-            proxies=udf_method.service.config.proxies,
+            proxies=udf_method.service.config.network.get("proxies", {}),
             timeout=(
-                udf_method.service.config.connect_timeout,
-                udf_method.service.config.read_timeout,
+                udf_method.service.config.network.get("connect_timeout", 1),
+                udf_method.service.config.network.get("read_timeout", 5),
             ),
         )
         response.raise_for_status()

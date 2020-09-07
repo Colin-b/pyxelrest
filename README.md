@@ -147,17 +147,14 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
 | description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
-| proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#proxies) | |
 | methods | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head). | get, post, put, delete, patch, options, head |
 | oauth2 | Dictionary containing OAuth2 authentication related settings. Refer to [OAuth 2](#oauth-2) section for more information. | |
 | api_key | User API Key. | |
 | basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. | |
 | ntlm | Dictionary containing NTLM authentication related settings. Refer to [NTLM](#ntlm) section for more information. | |
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
-| max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
-| connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
-| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | any float value |
+| network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
 | skip_update_for | List of section names that should not be auto-updated. | |
 | python_modules | List of extra python module names that should be installed. | |
 | caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
@@ -235,6 +232,17 @@ In case user credentials are not provided (using logged in user credentials), [`
 ```bash
 python -m pip install pyxelrest[ntlm]
 ```
+
+#### Network
+
+Contains network related settings such as HTTP timeouts or proxies configuration.
+
+| Name | Description | Possible values |
+|------|-------------|-----------------|
+| max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
+| connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
+| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | any float value |
+| proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [requests documentation](http://docs.python-requests.org/en/master/user/advanced/#proxies) | |
 
 #### Caching
 

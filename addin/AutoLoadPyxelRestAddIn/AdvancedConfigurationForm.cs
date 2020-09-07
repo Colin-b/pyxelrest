@@ -151,7 +151,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.MaxRetries, Dock = DockStyle.Fill };
+                    var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)servicePanel.service.Network["max_retries"], Dock = DockStyle.Fill };
                     tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
                     maxRetries.ValueChanged += MaxRetries_ValueChanged;
                     layout.Controls.Add(maxRetries, 1, 2);
@@ -166,7 +166,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.ConnectTimeout, Dock = DockStyle.Fill };
+                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = (decimal)servicePanel.service.Network["connect_timeout"], Dock = DockStyle.Fill };
                     tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
                     connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
                     layout.Controls.Add(connectTimeout, 1, 3);
@@ -179,7 +179,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
+                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = (decimal)servicePanel.service.Network["read_timeout"], Dock = DockStyle.Fill };
                     tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
                     readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                     layout.Controls.Add(readTimeout, 1, 4);
@@ -294,6 +294,7 @@ namespace AutoLoadPyxelRestAddIn
             {
                 var tab = new TabPage("Proxies");
                 var layout = new TableLayoutPanel { AutoSize = true };
+                var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
 
                 #region HTTP proxy
                 {
@@ -301,7 +302,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy to be used for HTTP requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    httpProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Proxies.ContainsKey("http") ? (string)servicePanel.service.Proxies["http"] : string.Empty };
+                    httpProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("http") ? (string)proxiesOptions["http"] : string.Empty };
                     tooltip.SetToolTip(httpProxy, "Default system HTTP_PROXY will be used if not set.");
                     httpProxy.TextChanged += HttpProxy_TextChanged;
                     layout.Controls.Add(httpProxy, 1, 1);
@@ -314,7 +315,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy to be used for HTTPS requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    httpsProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Proxies.ContainsKey("https") ? (string)servicePanel.service.Proxies["https"] : string.Empty };
+                    httpsProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("https") ? (string)proxiesOptions["https"] : string.Empty };
                     tooltip.SetToolTip(httpsProxy, "Default system HTTPS_PROXY will be used if not set.");
                     httpsProxy.TextChanged += HttpsProxy_TextChanged;
                     layout.Controls.Add(httpsProxy, 1, 2);
@@ -327,7 +328,7 @@ namespace AutoLoadPyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "URL starting with this will not use any proxy", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    noProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = servicePanel.service.Proxies.ContainsKey("no_proxy") ? (string)servicePanel.service.Proxies["no_proxy"] : string.Empty };
+                    noProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("no_proxy") ? (string)proxiesOptions["no_proxy"] : string.Empty };
                     tooltip.SetToolTip(noProxy, "Default system NO_PROXY will be used if not set.");
                     noProxy.TextChanged += NoProxy_TextChanged;
                     layout.Controls.Add(noProxy, 1, 3);
@@ -846,28 +847,31 @@ namespace AutoLoadPyxelRestAddIn
         private void NoProxy_TextChanged(object sender, EventArgs e)
         {
             servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
+            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Proxies.Remove("no_proxy");
+                proxiesOptions.Remove("no_proxy");
             else
-                servicePanel.service.Proxies["no_proxy"] = ((TextBox)sender).Text;
+                proxiesOptions["no_proxy"] = ((TextBox)sender).Text;
         }
 
         private void HttpsProxy_TextChanged(object sender, EventArgs e)
         {
             servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
+            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Proxies.Remove("https");
+                proxiesOptions.Remove("https");
             else
-                servicePanel.service.Proxies["https"] = ((TextBox)sender).Text;
+                proxiesOptions["https"] = ((TextBox)sender).Text;
         }
 
         private void HttpProxy_TextChanged(object sender, EventArgs e)
         {
             servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
+            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Proxies.Remove("http");
+                proxiesOptions.Remove("http");
             else
-                servicePanel.service.Proxies["http"] = ((TextBox)sender).Text;
+                proxiesOptions["http"] = ((TextBox)sender).Text;
         }
 
         private void OpenAPIDefinitionReadTimeout_ValueChanged(object sender, EventArgs e)
@@ -877,17 +881,17 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ReadTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ReadTimeout = ((NumericUpDown)sender).Value;
+            servicePanel.service.Network["read_timeout"] = ((NumericUpDown)sender).Value;
         }
 
         private void ConnectTimeout_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.ConnectTimeout = ((NumericUpDown)sender).Value;
+            servicePanel.service.Network["connect_timeout"] = ((NumericUpDown)sender).Value;
         }
 
         private void MaxRetries_ValueChanged(object sender, EventArgs e)
         {
-            servicePanel.service.MaxRetries = (int)((NumericUpDown)sender).Value;
+            servicePanel.service.Network["max_retries"] = (int)((NumericUpDown)sender).Value;
         }
 
         private void RelyOnDefinitions_CheckedChanged(object sender, EventArgs e)

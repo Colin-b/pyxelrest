@@ -15,14 +15,14 @@ def get(max_retries: int) -> requests.Session:
     global nb_requests_sent
     session = sessions.get(max_retries)
     if session is None:
-        session = create_session(max_retries)
+        session = _create_session(max_retries)
         sessions[max_retries] = session
     nb_requests_sent += 1
     session.headers["X-PXL-REQUEST"] = str(nb_requests_sent)
     return session
 
 
-def create_session(max_retries: int) -> requests.Session:
+def _create_session(max_retries: int) -> requests.Session:
     session = requests.Session()
     session.mount("http://", HTTPAdapter(max_retries=max_retries))
     session.mount("https://", HTTPAdapter(max_retries=max_retries))

@@ -1,5 +1,4 @@
-﻿using log4net;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using YamlDotNet.RepresentationModel;
 
 namespace AutoLoadPyxelRestAddIn
@@ -7,17 +6,14 @@ namespace AutoLoadPyxelRestAddIn
     public sealed class Service
     {
         private static readonly string OPEN_API_PROPERTY = "open_api";
-        private static readonly string PROXIES_PROPERTY = "proxies";
+        private static readonly string NETWORK_PROPERTY = "network";
         private static readonly string METHODS_PROPERTY = "methods";
         private static readonly string OAUTH2_PROPERTY = "oauth2";
         private static readonly string API_KEY_PROPERTY = "api_key";
         private static readonly string BASIC_PROPERTY = "basic";
         private static readonly string NTLM_PROPERTY = "ntlm";
         private static readonly string FORMULAS_PROPERTY = "formulas";
-        private static readonly string MAX_RETRIES_PROPERTY = "max_retries";
         private static readonly string HEADERS_PROPERTY = "headers";
-        private static readonly string CONNECT_TIMEOUT_PROPERTY = "connect_timeout";
-        private static readonly string READ_TIMEOUT_PROPERTY = "read_timeout";
         private static readonly string DESCRIPTION_PROPERTY = "description";
         private static readonly string SKIP_UPDATE_FOR_PROPERTY = "skip_update_for";
         private static readonly string PYTHON_MODULES_PROPERTY = "python_modules";
@@ -36,7 +32,6 @@ namespace AutoLoadPyxelRestAddIn
         private IList<string> skipUpdateFor;
         public IList<string> PythonModules;
         public IDictionary<string, object> OpenAPI;
-        public IDictionary<string, object> Proxies;
         public IDictionary<string, object> Caching;
 
         public bool Get;
@@ -54,10 +49,8 @@ namespace AutoLoadPyxelRestAddIn
 
         public IDictionary<string, object> Formulas;
 
-        public int MaxRetries;
         public IDictionary<string, object> Headers;
-        public decimal ConnectTimeout;
-        public decimal ReadTimeout;
+        public IDictionary<string, object> Network;
 
         public Service(string name)
         {
@@ -172,8 +165,8 @@ namespace AutoLoadPyxelRestAddIn
             if (!skipUpdateFor.Contains(DESCRIPTION_PROPERTY))
                 description = updated.description;
 
-            if (!skipUpdateFor.Contains(PROXIES_PROPERTY))
-                Proxies = updated.Proxies;
+            if (!skipUpdateFor.Contains(NETWORK_PROPERTY))
+                Network = updated.Network;
 
             if (!skipUpdateFor.Contains(METHODS_PROPERTY))
             {
@@ -201,17 +194,8 @@ namespace AutoLoadPyxelRestAddIn
             if (!skipUpdateFor.Contains(FORMULAS_PROPERTY))
                 Formulas = updated.Formulas;
 
-            if (!skipUpdateFor.Contains(MAX_RETRIES_PROPERTY))
-                MaxRetries = updated.MaxRetries;
-
             if (!skipUpdateFor.Contains(HEADERS_PROPERTY))
                 Headers = updated.Headers;
-
-            if (!skipUpdateFor.Contains(CONNECT_TIMEOUT_PROPERTY))
-                ConnectTimeout = updated.ConnectTimeout;
-
-            if (!skipUpdateFor.Contains(READ_TIMEOUT_PROPERTY))
-                ReadTimeout = updated.ReadTimeout;
 
             if (!skipUpdateFor.Contains(PYTHON_MODULES_PROPERTY))
                 PythonModules = updated.PythonModules;
@@ -231,8 +215,9 @@ namespace AutoLoadPyxelRestAddIn
             var skipUpdateForNode = (YamlSequenceNode)GetProperty(section, SKIP_UPDATE_FOR_PROPERTY);
             skipUpdateFor = skipUpdateForNode == null ? new List<string>() : ToList(skipUpdateForNode);
 
-            var proxies = (YamlMappingNode)GetProperty(section, PROXIES_PROPERTY);
-            Proxies = proxies == null ? new Dictionary<string, object>() : ToDict(proxies);
+            var network = (YamlMappingNode)GetProperty(section, NETWORK_PROPERTY);
+            Network = network == null ? new Dictionary<string, object>() : ToDict(network);
+            Network = AddDefault(Network, DefaultNetwork());
 
             var methodsNode = (YamlSequenceNode)GetProperty(section, METHODS_PROPERTY);
             IList<string> methods = methodsNode == null ? DefaultMethods() : ToList(methodsNode);
@@ -259,17 +244,8 @@ namespace AutoLoadPyxelRestAddIn
             var formulas = (YamlMappingNode)GetProperty(section, FORMULAS_PROPERTY);
             Formulas = formulas == null ? DefaultFormulas() : ToDict(formulas);
 
-            var maxRetries = (YamlScalarNode)GetProperty(section, MAX_RETRIES_PROPERTY);
-            MaxRetries = maxRetries == null ? 5 : int.Parse(maxRetries.Value);
-
             var headers = (YamlMappingNode)GetProperty(section, HEADERS_PROPERTY);
             Headers = headers == null ? new Dictionary<string, object>() : ToDict(headers);
-
-            var connectTimeout = (YamlScalarNode)GetProperty(section, CONNECT_TIMEOUT_PROPERTY);
-            ConnectTimeout = connectTimeout == null ? 1 : decimal.Parse(connectTimeout.Value);
-
-            var readTimeout = (YamlScalarNode)GetProperty(section, READ_TIMEOUT_PROPERTY);
-            ReadTimeout = readTimeout == null ? 5 : decimal.Parse(readTimeout.Value);
 
             var pythonModulesNode = (YamlSequenceNode)GetProperty(section, PYTHON_MODULES_PROPERTY);
             PythonModules = pythonModulesNode == null ? new List<string>() : ToList(pythonModulesNode);
@@ -290,8 +266,9 @@ namespace AutoLoadPyxelRestAddIn
             if (skipUpdateFor != null && skipUpdateFor.Count > 0)
                 section.Add(new YamlScalarNode(SKIP_UPDATE_FOR_PROPERTY), new YamlSequenceNode(FromList(skipUpdateFor)));
 
-            if (Proxies != null && Proxies.Count > 0)
-                section.Add(new YamlScalarNode(PROXIES_PROPERTY), new YamlMappingNode(FromDict(Proxies)));
+            Network = RemoveDefault(Network, DefaultNetwork());
+            if (Network != null && Network.Count > 0)
+                section.Add(new YamlScalarNode(NETWORK_PROPERTY), new YamlMappingNode(FromDict(Network)));
 
             var methods = GetMethods();
             if (methods != null && methods.Count > 0)
@@ -312,17 +289,8 @@ namespace AutoLoadPyxelRestAddIn
             if (Formulas != null && Formulas.Count > 0)
                 section.Add(new YamlScalarNode(FORMULAS_PROPERTY), new YamlMappingNode(FromDict(Formulas)));
 
-            if (MaxRetries != 5)
-                section.Add(new YamlScalarNode(MAX_RETRIES_PROPERTY), new YamlScalarNode(MaxRetries.ToString()));
-
             if (Headers != null && Headers.Count > 0)
                 section.Add(new YamlScalarNode(HEADERS_PROPERTY), new YamlMappingNode(FromDict(Headers)));
-
-            if (ConnectTimeout != 1)
-                section.Add(new YamlScalarNode(CONNECT_TIMEOUT_PROPERTY), new YamlScalarNode(ConnectTimeout.ToString()));
-
-            if (ReadTimeout != 5)
-                section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.ToString()));
 
             if (PythonModules != null && PythonModules.Count > 0)
                 section.Add(new YamlScalarNode(PYTHON_MODULES_PROPERTY), new YamlSequenceNode(FromList(PythonModules)));
@@ -338,7 +306,7 @@ namespace AutoLoadPyxelRestAddIn
             OpenAPI = new Dictionary<string, object>();
             description = "";
             skipUpdateFor = new List<string>();
-            Proxies = new Dictionary<string, object>();
+            Network = DefaultNetwork();
 
             Get = true;
             Post = true;
@@ -355,10 +323,7 @@ namespace AutoLoadPyxelRestAddIn
 
             Formulas = DefaultFormulas();
 
-            MaxRetries = 5;
             Headers = new Dictionary<string, object>();
-            ConnectTimeout = 1;
-            ReadTimeout = 5;
             PythonModules = new List<string>();
             Caching = new Dictionary<string, object>();
         }
@@ -366,6 +331,31 @@ namespace AutoLoadPyxelRestAddIn
         private IDictionary<string, object> DefaultFormulas()
         {
             return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false } } } };
+        }
+
+        private IDictionary<string, object> DefaultNetwork()
+        {
+            return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, {"proxies", new Dictionary<string, object>() } };
+        }
+
+        private IDictionary<string, object> AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
+        {
+            foreach (var defaultItem in defaultConf)
+            {
+                if (!fromConf.ContainsKey(defaultItem.Key))
+                    fromConf[defaultItem.Key] = defaultItem.Value;
+            }
+            return fromConf;
+        }
+
+        private IDictionary<string, object> RemoveDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
+        {
+            foreach (var defaultItem in defaultConf)
+            {
+                if (fromConf.ContainsKey(defaultItem.Key) && fromConf[defaultItem.Key].Equals(defaultItem.Value))
+                    fromConf.Remove(defaultItem.Key);
+            }
+            return fromConf;
         }
 
         private IList<string> GetMethods()

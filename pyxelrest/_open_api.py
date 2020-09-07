@@ -719,10 +719,13 @@ class OpenAPI(Service):
         requests_session = _session.get(0)
         response = requests_session.get(
             config.open_api_definition,
-            proxies=config.proxies,
+            proxies=config.network.get("proxies", {}),
             verify=False,
             headers=config.custom_headers,
-            timeout=(config.connect_timeout, config.definition_read_timeout),
+            timeout=(
+                config.network.get("connect_timeout", 1),
+                config.definition_read_timeout,
+            ),
             auth=_authentication.get_definition_retrieval_auth(config),
         )
         response.raise_for_status()
