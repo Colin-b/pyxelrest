@@ -77,11 +77,13 @@ namespace AutoLoadPyxelRestAddIn
                 ToolTip tooltip = new ToolTip { ToolTipTitle = "URL to the OpenAPI definition of the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                 openAPIDefinition = new TextBox { Text = service.OpenAPI.ContainsKey("definition") ? service.OpenAPI["definition"].ToString() : string.Empty, Dock = DockStyle.Fill, Width = 290 };
-                tooltip.SetToolTip(openAPIDefinition, "It must starts with http, https or file.");
+                tooltip.SetToolTip(openAPIDefinition, "It must starts with http://, https:// or file:///.");
                 openAPIDefinition.TextChanged += OpenAPIDefinition_TextChanged;
                 servicePanel.Controls.Add(openAPIDefinition, 1, 0);
 
+                ToolTip fileTooltip = new ToolTip { ToolTipTitle = "Select an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
                 SelectFileButton selectFile = new SelectFileButton();
+                fileTooltip.SetToolTip(selectFile, "It must be a valid OpenAPI definition JSON file.");
                 selectFile.Click += SelectFile_Click;
                 servicePanel.Controls.Add(selectFile, 2, 0);
                 #endregion
@@ -119,7 +121,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             OpenFileDialog fileSelection = new OpenFileDialog();
             if (DialogResult.OK == fileSelection.ShowDialog())
-                openAPIDefinition.Text = string.Format("file://{0}", fileSelection.FileName.Replace('\\', '/'));
+                openAPIDefinition.Text = string.Format("file:///{0}", fileSelection.FileName.Replace('\\', '/'));
         }
 
         private void OpenAPIDefinition_TextChanged(object sender, EventArgs e)
