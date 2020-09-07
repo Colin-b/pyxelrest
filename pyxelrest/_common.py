@@ -56,7 +56,7 @@ class ConfigSection:
             "methods", ["get", "post", "put", "delete", "patch", "options", "head"]
         )
         self.connect_timeout = service_config.get("connect_timeout", 1)
-        self.read_timeout = service_config.get("read_timeout")
+        self.read_timeout = service_config.get("read_timeout", 5)
         self.formulas = service_config.get(
             "formulas", {"dynamic_array": {"lock_excel": False}}
         )

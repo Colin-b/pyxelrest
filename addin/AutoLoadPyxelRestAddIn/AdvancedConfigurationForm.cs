@@ -180,7 +180,7 @@ namespace AutoLoadPyxelRestAddIn
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                     var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.ReadTimeout, Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(readTimeout, "Infinite wait by default.");
+                    tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
                     readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                     layout.Controls.Add(readTimeout, 1, 4);
                 }

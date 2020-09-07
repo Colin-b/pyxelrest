@@ -157,7 +157,7 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
 | connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
-| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Infinite wait by default. For more details refer to [`requests` timeouts] | any float value |
+| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | any float value |
 | skip_update_for | List of section names that should not be auto-updated. | |
 | python_modules | List of extra python module names that should be installed. | |
 | caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |

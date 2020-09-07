@@ -269,7 +269,7 @@ namespace AutoLoadPyxelRestAddIn
             ConnectTimeout = connectTimeout == null ? 1 : decimal.Parse(connectTimeout.Value);
 
             var readTimeout = (YamlScalarNode)GetProperty(section, READ_TIMEOUT_PROPERTY);
-            ReadTimeout = readTimeout == null ? 0 : decimal.Parse(readTimeout.Value);
+            ReadTimeout = readTimeout == null ? 5 : decimal.Parse(readTimeout.Value);
 
             var pythonModulesNode = (YamlSequenceNode)GetProperty(section, PYTHON_MODULES_PROPERTY);
             PythonModules = pythonModulesNode == null ? new List<string>() : ToList(pythonModulesNode);
@@ -321,7 +321,7 @@ namespace AutoLoadPyxelRestAddIn
             if (ConnectTimeout != 1)
                 section.Add(new YamlScalarNode(CONNECT_TIMEOUT_PROPERTY), new YamlScalarNode(ConnectTimeout.ToString()));
 
-            if (ReadTimeout > 0)
+            if (ReadTimeout != 5)
                 section.Add(new YamlScalarNode(READ_TIMEOUT_PROPERTY), new YamlScalarNode(ReadTimeout.ToString()));
 
             if (PythonModules != null && PythonModules.Count > 0)
@@ -358,7 +358,7 @@ namespace AutoLoadPyxelRestAddIn
             MaxRetries = 5;
             Headers = new Dictionary<string, object>();
             ConnectTimeout = 1;
-            ReadTimeout = 0;
+            ReadTimeout = 5;
             PythonModules = new List<string>();
             Caching = new Dictionary<string, object>();
         }

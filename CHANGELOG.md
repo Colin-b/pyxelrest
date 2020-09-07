@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Most of the python modules and functions are now private. If you need access to some internals, please open an issue.
 - Most of the scripts are now inside the `pyxelrest` package.
 - Update all dependencies to the latest major release.
+- `read_timeout` now default to `5s` instead of waiting indefinitely.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
