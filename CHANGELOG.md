@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log error in case caller cell cannot be retrieved.
 - Add more information on VBA caller.
 - Support for [Dynamic array formulas](https://support.office.com/en-us/article/dynamic-array-formulas-and-spilled-array-behavior-205c6b06-03ba-4151-89a1-87a7eb36e531?ns=EXCEL&version=90&ui=en-US&rs=en-US&ad=US)
+- Allow to `verify` SSL certificate (or not).
 
 ### Fixed
 - Do not use a fixed dependency version.
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update all dependencies to the latest major release.
 - `read_timeout` now default to `5s` instead of waiting indefinitely.
 - Network related settings (`max_retries`, `connect_timeout`, `read_timeout`, `proxies`) are now supposed to be provided within `network` configuration section.
+- SSL certificate is now verified by default. You can change this by setting `network` `verify` to `false`.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

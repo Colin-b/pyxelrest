@@ -720,7 +720,7 @@ class OpenAPI(Service):
         response = requests_session.get(
             config.open_api_definition,
             proxies=config.network.get("proxies", {}),
-            verify=False,
+            verify=config.network.get("verify", True),
             headers=config.custom_headers,
             timeout=(
                 config.network.get("connect_timeout", 1),

@@ -335,7 +335,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private IDictionary<string, object> DefaultNetwork()
         {
-            return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, {"proxies", new Dictionary<string, object>() } };
+            return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, { "verify", true }, {"proxies", new Dictionary<string, object>() } };
         }
 
         private IDictionary<string, object> AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)

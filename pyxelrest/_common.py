@@ -459,7 +459,7 @@ def get_result(
             if udf_method.contains_file_parameters
             else None,
             auth=_authentication.get_auth(udf_method, request_content),
-            verify=False,
+            verify=udf_method.service.config.network.get("verify", True),
             headers=request_content.header,
             proxies=udf_method.service.config.network.get("proxies", {}),
             timeout=(
