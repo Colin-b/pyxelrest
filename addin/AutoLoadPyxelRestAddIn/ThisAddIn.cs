@@ -48,7 +48,7 @@ namespace AutoLoadPyxelRestAddIn
         {
             Config = LoadConfig();
             log4net.Config.XmlConfigurator.Configure(new FileInfo(Config.FilePath));
-            Log.InfoFormat("Starting Auto Load PyxelRest Addin {0}", GetVersion());
+            Log.InfoFormat("Starting PyxelRest Addin {0}", GetVersion());
             Log.DebugFormat("Configuration loaded from {0}", Config.FilePath);
             Application.WorkbookOpen += OnOpenWorkBook;
             Application.WorkbookActivate += OnActivateWorkBook;
@@ -89,7 +89,7 @@ namespace AutoLoadPyxelRestAddIn
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
-            Log.Debug("Stop Auto Load PyxelRest Addin...");
+            Log.Debug("Stopping PyxelRest Addin...");
             try
             {
                 // Do not read configuration to perform the action requested by the user even if saving it in configuration failed.
@@ -200,36 +200,29 @@ namespace AutoLoadPyxelRestAddIn
 
         private bool TrustAccessToTheVBAObjectModel()
         {
-            int? accessVBOM = Registry.GetValue(
-                "HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security",
-                "AccessVBOM", 
-                null) as int?;
-            if(!IsValidAccessVBOM(accessVBOM))
+            var accessVBOMs = new Dictionary<string, string>() {
+                { "HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security", "AccessVBOM" },
+                { "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security", "AccessVBOM" },
+                { "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\excel\\security", "accessvbom" },
+            };
+
+            foreach (var accessVBOMItem in accessVBOMs)
             {
-                accessVBOM = Registry.GetValue(
-                    "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security",
-                    "AccessVBOM",
-                    null) as int?;
-                if (!IsValidAccessVBOM(accessVBOM))
+                int? accessVBOM = Registry.GetValue(accessVBOMItem.Key, accessVBOMItem.Value, null) as int?;
+                if (IsValidAccessVBOM(accessVBOM))
                 {
-                    accessVBOM = Registry.GetValue(
-                        "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\excel\\security",
-                        "accessvbom",
-                        null) as int?;
-                    if (!IsValidAccessVBOM(accessVBOM))
-                    {
-                        Log.Error("'Trust access to the VBA project object model' is not enabled.");
-                        MessageBox.Show(
-                            VBA_OBJ_MODEL_FAILURE_MSG,
-                            "Access to VBA object model is not enabled",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Exclamation);
-                        return false;
-                    }
+                    Log.Debug("'Trust access to the VBA project object model' is enabled.");
+                    return true;
                 }
             }
-            Log.Debug("'Trust access to the VBA project object model' is enabled.");
-            return true;
+
+            Log.Error("'Trust access to the VBA project object model' is not enabled.");
+            MessageBox.Show(
+                VBA_OBJ_MODEL_FAILURE_MSG,
+                "Access to VBA object model is not enabled",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation);
+            return false;
         }
 
         private bool IsValidAccessVBOM(int? accessVBOM)
@@ -376,9 +369,17 @@ namespace AutoLoadPyxelRestAddIn
         {
             foreach (VBProject vb in Application.VBE.VBProjects)
             {
-                // TODO Check the entire file name instead of the end of the path
-                if (vb.FileName.EndsWith(PYXELREST_VB_PROJECT_FILE_NAME))
-                    return vb;
+                try
+                {
+                    // TODO Check the entire file name instead of the end of the path
+                    if (vb.FileName.EndsWith(PYXELREST_VB_PROJECT_FILE_NAME))
+                        return vb;
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    // This exception is sometimes thrown by Microsoft.Vbe.Interop._VBProject.get_FileName()
+                    Log.Warn("Unable to retrieve the file name of a VB project.");
+                }
             }
             Log.ErrorFormat("'{0}' project was not loaded. Installation seems corrupt.", PYXELREST_VB_PROJECT_FILE_NAME);
             return null;

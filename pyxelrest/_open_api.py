@@ -738,7 +738,7 @@ class OpenAPI(Service):
     def _normalize_methods(cls, open_api_definition: dict):
         """
         Normalize method parameters from dict representing the OpenAPI definition to:
-        - rename parameters name that are VBA restricted keywords 
+        - rename parameters name that are VBA restricted keywords
         - rename parameters name that uses '-' (to '_')
         - cascade parameters defined at path level to operation level
 
@@ -833,8 +833,10 @@ class OpenAPI(Service):
             raise UnsupportedOpenAPIVersion(self.open_api_definition["swagger"])
 
     def __str__(self) -> str:
-        if self.config.ntlm_auth:
-            return f"[{self.config.name}] service. {self.uri} ({self.config.ntlm_auth})"
+        if "ntlm" in self.config.auth:
+            return (
+                f"[{self.config.name}] service. {self.uri} ({self.config.auth['ntlm']})"
+            )
         return f"[{self.config.name}] service. {self.uri}"
 
 

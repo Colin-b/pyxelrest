@@ -186,8 +186,9 @@ class UDFMethod:
         self.udf_name = udf_name
         self.help_url = ""
         self.auto_expand_result = "legacy_array" == formula_type
-        self.is_asynchronous = "vba_compatible" != formula_type and not formula_options.get(
-            "lock_excel", False
+        self.is_asynchronous = (
+            "vba_compatible" != formula_type
+            and not formula_options.get("lock_excel", False)
         )
         self.path_parameters = []
         self.required_parameters = []
@@ -264,7 +265,7 @@ class UDFMethod:
     def requires_authentication(
         self, request_content: "RequestContent"
     ) -> Union[List[dict], dict]:
-        return self.security(request_content) or self.service.config.ntlm_auth
+        return self.security(request_content) or self.service.config.auth.get("ntlm")
 
     def json_result(self, response: requests.Response) -> list:
         logger.debug("Converting JSON string to corresponding python structure...")
