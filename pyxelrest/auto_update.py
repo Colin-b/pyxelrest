@@ -8,6 +8,7 @@ import logging
 import logging.config
 import logging.handlers
 from typing import Tuple, Optional
+import sys
 
 from pip._internal.commands.list import ListCommand
 from pip._internal.commands.install import InstallCommand
@@ -85,7 +86,7 @@ except ImportError:
 
 def _outdated_package(package_name: str, check_pre_releases: bool):
     """Faster outdated check when running it for a single package."""
-    list_command = ListCommand(name="", summary="")
+    list_command = ListCommand(name=package_name, summary=f"Search for {package_name}")
     command_options, _ = list_command.parse_args(
         ["--pre"] if check_pre_releases else []
     )
@@ -352,8 +353,8 @@ class UpdateGUI(tkinter.Frame):
         master.protocol("WM_DELETE_WINDOW", self.on_close)
         self.grid(row=0, column=0, rowspan=3, sticky="nsew")
 
-        scripts_dir = os.path.abspath(os.path.dirname(__file__))
-        data_dir = os.path.join(scripts_dir, "..")
+        scripts_folder = os.path.abspath(os.path.dirname(sys.executable))
+        data_dir = os.path.join(scripts_folder, "..")
         self.resources_path = os.path.join(data_dir, "pyxelrest_resources")
 
         images_frame = tkinter.Frame(self)
