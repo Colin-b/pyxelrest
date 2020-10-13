@@ -36,7 +36,7 @@ namespace PyxelRestAddIn
             if (checkPreReleases)
                 commandLine += " --check_pre_releases";
 
-            Log.Debug("Check for PyxelRest update.");
+            Log.DebugFormat("Check for PyxelRest update: {0} {1}", updateScriptPath, commandLine);
             Process updateScript = new Process();
             updateScript.StartInfo.FileName = updateScriptPath;
             updateScript.StartInfo.Arguments = commandLine;

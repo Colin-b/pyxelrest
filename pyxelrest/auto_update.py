@@ -13,7 +13,6 @@ from pip._internal.commands.list import ListCommand
 from pip._internal.commands.install import InstallCommand
 from pip._internal.utils.misc import get_installed_distributions
 
-import tkinter
 import win32com.client
 
 
@@ -75,6 +74,13 @@ def create_logger():
 
 
 create_logger()
+try:
+    import tkinter
+except ImportError:
+    logger.error(
+        "tkinter was not installed during python installation. Please re-install with tkinter for auto-update to work."
+    )
+    raise
 
 
 def _outdated_package(package_name: str, check_pre_releases: bool):
