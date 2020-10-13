@@ -109,7 +109,7 @@ pyxelrest_install_addin --check_pre_releases
 
 ## How to uninstall
 
-1. Go to `Control Panel/Programs and Features` and uninstall `AutoLoadPyxelRestAddIn`.
+1. Go to `Control Panel/Programs and Features` and uninstall `PyxelRestAddIn`.
 2. Execute the following command:
 ```bash
 python -m pip uninstall pyxelrest
@@ -421,8 +421,9 @@ formulas:
    > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
 
-   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed and to add a test certificate.
-   > Project > AutoLoadPyxelRestAddIn > Signing
+   In order to do so, you need [Microsoft Office tools](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed.
+   You also need to create a test certificate.
+   > Project > PyxelRestAddIn > Signing
 3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder:
 ```batch
 developer_install.bat

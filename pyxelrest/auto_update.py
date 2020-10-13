@@ -9,14 +9,9 @@ import logging.config
 import logging.handlers
 from typing import Tuple, Optional
 
-try:
-    from pip._internal.commands.list import ListCommand
-    from pip._internal.commands.install import InstallCommand
-    from pip._internal.utils.misc import get_installed_distributions
-except ModuleNotFoundError:  # pip <= 9
-    from pip.commands.list import ListCommand
-    from pip.commands.install import InstallCommand
-    from pip.utils import get_installed_distributions
+from pip._internal.commands.list import ListCommand
+from pip._internal.commands.install import InstallCommand
+from pip._internal.utils.misc import get_installed_distributions
 
 import tkinter
 import win32com.client
@@ -84,7 +79,7 @@ create_logger()
 
 def _outdated_package(package_name: str, check_pre_releases: bool):
     """Faster outdated check when running it for a single package."""
-    list_command = ListCommand()
+    list_command = ListCommand(name="", summary="")
     command_options, _ = list_command.parse_args(
         ["--pre"] if check_pre_releases else []
     )

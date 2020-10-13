@@ -43,15 +43,15 @@ class VSTOManager:
             )
             if not os.path.isfile(self.vsto_installer_path):
                 raise Exception(
-                    f"Auto Load PyxelRest add-in cannot be installed as VSTO installer cannot be found in {self.vsto_installer_path}."
+                    f"PyxelRest Microsoft Excel add-in cannot be installed as VSTO installer cannot be found in {self.vsto_installer_path}."
                 )
 
-    def install_auto_load_addin(self, add_in_folder: str):
+    def install_addin(self, add_in_folder: str):
         logger.info("Try to install Microsoft Excel add-in...")
-        vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
+        vsto_file_path = VSTOManager.get_vsto_file_path(add_in_folder)
         if not os.path.isfile(vsto_file_path):
             raise Exception(
-                f"Auto Load PyxelRest add-in cannot be found in {vsto_file_path}."
+                f"PyxelRest Microsoft Excel add-in cannot be found in {vsto_file_path}."
             )
         self._clear_click_once_cache()
         failed_silent_install = subprocess.call(
@@ -66,8 +66,8 @@ class VSTOManager:
             )
         logger.info("Add-in installation completed.")
 
-    def uninstall_auto_load_addin(self, add_in_folder: str):
-        vsto_file_path = VSTOManager.get_auto_load_vsto_file_path(add_in_folder)
+    def uninstall_addin(self, add_in_folder: str):
+        vsto_file_path = VSTOManager.get_vsto_file_path(add_in_folder)
         if os.path.isfile(vsto_file_path):
             logger.info("Try to uninstall Microsoft Excel add-in...")
             # Check result of uninstall as failed uninstall should never occurs
@@ -97,8 +97,8 @@ class VSTOManager:
         )
 
     @staticmethod
-    def get_auto_load_vsto_file_path(add_in_folder: str) -> str:
-        return os.path.join(add_in_folder, "AutoLoadPyxelRestAddIn.vsto")
+    def get_vsto_file_path(add_in_folder: str) -> str:
+        return os.path.join(add_in_folder, "PyxelRestAddIn.vsto")
 
 
 class XlWingsConfig:
@@ -177,7 +177,7 @@ class Installer:
     ):
         if not sys.platform.startswith("win"):
             raise Exception(
-                "Auto Load add-in can only be installed on Microsoft Windows."
+                "Microsoft Excel add-in can only be installed on Microsoft Windows."
             )
 
         if not add_in_folder:
@@ -188,7 +188,7 @@ class Installer:
         self.add_in_folder = to_absolute_path(add_in_folder)
         if not os.path.isdir(self.add_in_folder):
             raise Exception(
-                f"PyxelRest Microsoft Excel Auto-Load Add-In cannot be found in {self.add_in_folder}."
+                f"PyxelRest Microsoft Excel add-in cannot be found in {self.add_in_folder}."
             )
 
         self.pyxelrest_appdata_folder = os.path.join(os.getenv("APPDATA"), "pyxelrest")
@@ -223,7 +223,7 @@ class Installer:
         xlwings_config.create_file()
         xlwings_config.create_vb_addin()
 
-        self._install_auto_load_addin()
+        self._install_addin()
 
     @staticmethod
     def _is_excel_running() -> bool:
@@ -250,27 +250,27 @@ class Installer:
         pyxelrest_vb_addin_path = os.path.join(xlstart_folder, "pyxelrest.xlam")
         shutil.copyfile(pyxelrest_vb_file_path, pyxelrest_vb_addin_path)
 
-    def _install_auto_load_addin(self):
+    def _install_addin(self):
         """
         Install Excel addin in a different folder than the python copied one as it must be uninstalled prior to
         installation and python copy is performed before running post installation script.
         """
         vsto = VSTOManager(self.vsto_version)
         if os.path.exists(self.pyxelrest_appdata_addin_folder):
-            vsto.uninstall_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+            vsto.uninstall_addin(self.pyxelrest_appdata_addin_folder)
             dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
 
         os.makedirs(self.pyxelrest_appdata_addin_folder)
         dir_util.copy_tree(self.add_in_folder, self.pyxelrest_appdata_addin_folder)
         try:
-            vsto.install_auto_load_addin(self.pyxelrest_appdata_addin_folder)
+            vsto.install_addin(self.pyxelrest_appdata_addin_folder)
         except:
             # Avoid next install trying to uninstall an addin that was not properly installed
             dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
             raise
-        self._update_auto_load_addin_config()
+        self._update_addin_config()
 
-    def _update_auto_load_addin_config(self):
+    def _update_addin_config(self):
         def write_addin_configuration_line(addin_settings_line, addin_settings_file):
             if "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION" in addin_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
@@ -299,7 +299,7 @@ class Installer:
             self.pyxelrest_appdata_config_folder, "addin.config"
         )
         default_config_file_path = os.path.join(
-            self.pyxelrest_appdata_addin_folder, "AutoLoadPyxelRestAddIn.dll.config"
+            self.pyxelrest_appdata_addin_folder, "PyxelRestAddIn.dll.config"
         )
         if os.path.isfile(default_config_file_path):
             with open(config_file_path, "w") as new_file:
@@ -312,7 +312,7 @@ def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--add_in_directory",
-        help="Directory containing PyxelRest Microsoft Excel auto load add-in.",
+        help="Directory containing PyxelRest Microsoft Excel add-in.",
         default=None,
         type=str,
     )
