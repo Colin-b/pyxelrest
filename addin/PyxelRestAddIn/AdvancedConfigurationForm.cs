@@ -166,7 +166,7 @@ namespace PyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = (decimal)servicePanel.service.Network["connect_timeout"], Dock = DockStyle.Fill };
+                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(servicePanel.service.Network["connect_timeout"]), Dock = DockStyle.Fill };
                     tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
                     connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
                     layout.Controls.Add(connectTimeout, 1, 3);
@@ -179,7 +179,7 @@ namespace PyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = (decimal)servicePanel.service.Network["read_timeout"], Dock = DockStyle.Fill };
+                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(servicePanel.service.Network["read_timeout"]), Dock = DockStyle.Fill };
                     tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
                     readTimeout.ValueChanged += ReadTimeout_ValueChanged;
                     layout.Controls.Add(readTimeout, 1, 4);
@@ -548,7 +548,7 @@ namespace PyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = (decimal)oauth2Options["timeout"] };
+                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
                     tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
                     timeout.TextChanged += Oauth2Timeout_TextChanged;
                     layout.Controls.Add(timeout, 1, 2);
