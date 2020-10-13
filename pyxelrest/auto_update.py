@@ -396,7 +396,8 @@ class UpdateGUI(tkinter.Frame):
             install_message = (
                 f"PyxelRest bug fixes are available (version {new_version})"
             )
-        else:  # This case should not happen but if the way version handling is done change it should be handled
+        else:
+            # Can happen with non stable versions
             install_message = f"PyxelRest {new_version} is available"
         self.status = tkinter.Label(self, text=install_message)
         self.status.grid(in_=self, row=1, column=0)
