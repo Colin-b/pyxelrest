@@ -106,7 +106,7 @@ class XlWingsConfig:
         self.xlwings_config_path = os.path.join(xlwings_config_folder, "xlwings.conf")
         self.xlwings_bas_path = os.path.join(xlwings_config_folder, "xlwings.bas")
 
-    def create_file(self):
+    def create_file(self) -> None:
         """
         Create XLWings specific configuration for PyxelRest.
         """
@@ -126,9 +126,13 @@ class XlWingsConfig:
             )
         logger.info("XLWings PyxelRest configuration created.")
 
-    def create_vb_addin(self):
+    def create_vb_addin(self) -> None:
         """
         Create XLWings specific BAS file for PyxelRest.
+        This BAS file will be loaded into pyxelrest.xlam by the PyxelRestAddIn.
+
+        The GetConfig function will now only load pyxelrest configuration
+        and UDFs will be generated in the pyxelrest XLAM (to allow // run with xlwings and sharing them across books).
         """
         logger.info("Creating XLWings PyxelRest VB add-in...")
         with open(self.xlwings_bas_path, "w") as add_in_file:
@@ -141,29 +145,42 @@ class XlWingsConfig:
                     f"XLWings BAS file cannot be found in {xlwings_bas_path}"
                 )
             with open(xlwings_bas_path) as default_settings:
+                process_get_config = False
                 for line in default_settings:
-                    add_in_file.write(self._to_add_in_line(line))
-        logger.info("XLWings PyxelRest VB add-in created.")
+                    if line.startswith("Function GetConfig("):
+                        add_in_file.write(line)
+                        add_in_file.write(f"""    Dim configValue As String
+    
+    If Application.Name = "Microsoft Excel" Then
+        If GetConfigFromFile("{self.xlwings_config_path}", configKey, configValue) Then
+            GetConfig = configValue
+        End If
+    End If
 
-    def _to_add_in_line(self, line: str) -> str:
-        # Ensure that Xlwings will load PyxelRest configuration
-        if '        If SheetExists("xlwings.conf") = True Then\n' == line:
-            return (
-                '        If GetConfigFromFile("'
-                + self.xlwings_config_path
-                + '", configKey, configValue) Then\n'
-                "            GetConfig = configValue\n"
-                "        End If\n"
-                "\n"
-                '        If SheetExists("xlwings.conf") = True Then\n'
-            )
-        elif "ThisWorkbook" in line:
-            if "GetUdfModules" in line:
-                # Keep refering to ThisWorkbook for pyxelrest
-                return line
-            # Allow users to use xlwings with workbooks
-            return line.replace("ThisWorkbook", "ActiveWorkbook")
-        return line
+    If GetConfig = "" Then
+        GetConfig = default
+    End If
+    
+    GetConfig = ExpandEnvironmentStrings(GetConfig)
+""")
+                        process_get_config = True
+                    elif process_get_config:
+                        if line.startswith("End Function"):
+                            add_in_file.write(line)
+                            process_get_config = False
+                        else:
+                            # Skip the xlwings content of GetConfig function as it is replaced
+                            pass
+                    elif "ThisWorkbook" in line:
+                        if "GetUdfModules" in line:
+                            # Keep refering to ThisWorkbook for pyxelrest
+                            add_in_file.write(line)
+                        else:
+                            # Allow users to use xlwings with workbooks
+                            add_in_file.write(line.replace("ThisWorkbook", "ActiveWorkbook"))
+                    else:
+                        add_in_file.write(line)
+        logger.info("XLWings PyxelRest VB add-in created.")
 
 
 class Installer:

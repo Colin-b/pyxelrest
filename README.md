@@ -485,6 +485,17 @@ The add-in might be disabled.
 
 Within [Microsoft Excel], go to `File/Option/addin` and check disabled items (`Manage: Disabled Items`)
 
+### Can I install xlwings and pyxelrest?
+
+Yes.
+
+We advise to install [`pyxelrest`] in its own virtual environment.
+As [`pyxelrest`] relies on [`xlwings`], if you want to use [`xlwings`] you can, but if you rely on some specific [`xlwings`] configuration, you should use a separate environment.
+
+The [`pyxelrest`] add-in and [`xlwings`] add-in can be installed for the same user as long as [`pyxelrest`] is installed in a separate virtual environment.
+
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
 [`requests` timeouts]: https://2.python-requests.org/en/master/user/advanced/#timeouts
+[`xlwings`]: https://www.xlwings.org
+[`pyxelrest`]: https://pypi.org/project/pyxelrest/
