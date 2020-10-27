@@ -81,7 +81,7 @@ FunctionEnd
 
 Function browsePathToConfiguration
 
-nsDialogs::SelectFileDialog open "C:"
+nsDialogs::SelectFileDialog open "C:" "YAML configuration file | *.yaml"
 Pop $0
 
 FunctionEnd
