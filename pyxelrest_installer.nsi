@@ -1,6 +1,7 @@
 !define VERSION "1.0.0"
 Unicode True
 Name "PyxelRest ${VERSION}"
+BrandingText "Call REST APIs as functions"
 OutFile "pyxelrest_installer-${VERSION}.exe"
 InstallDir "$%APPDATA%\pyxelrest"
 
@@ -18,6 +19,7 @@ Var CertifiCheckBox
 Var InstallAddInCheckBox
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
+Var DefaultConfigurationCheckBox
 
 Function pythonOptionsPageCreate
     nsDialogs::Create 1018
@@ -62,6 +64,10 @@ Function addinOptionsPageCreate
 
     ${NSD_CreateBrowseButton} 320 30u 20% 12u "Browse"
     pop $BrowsePathToConfigurationButton
+
+    ${NSD_CreateCheckbox} 0 65u 100% 10u "Keep default services (petstore and pyxelrest)"
+    Pop $DefaultConfigurationCheckBox
+    ${NSD_Check} $DefaultConfigurationCheckBox
 
     ${NSD_OnClick} $BrowsePathToConfigurationButton browsePathToConfiguration
     nsDialogs::Show
