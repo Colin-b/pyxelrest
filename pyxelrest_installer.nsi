@@ -8,18 +8,32 @@ InstallDir "$%APPDATA%\pyxelrest"
 !include TextFunc.nsh
 !include nsDialogs.nsh
 
-!define DefaultPathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\pythonw.exe"
-
+Var PathToPython
 Var PathToPythonTextBox
 Var BrowsePathToPythonButton
+
 Var NtlmCheckBox
 Var CacheToolsCheckBox
 Var CertifiCheckBox
 
+
+Var InstallAddIn
 Var InstallAddInCheckBox
+
+Var PathToConfiguration
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
-Var DefaultConfigurationCheckBox
+
+Var InstallDefaultConfigurationCheckBox
+
+Function .onInit
+
+	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\pythonw.exe"
+
+	StrCpy $InstallAddIn "${BST_CHECKED}"
+	StrCpy $PathToConfiguration ""
+
+FunctionEnd
 
 Function pythonOptionsPageCreate
     nsDialogs::Create 1018
@@ -27,7 +41,7 @@ Function pythonOptionsPageCreate
     ${NSD_CreateLabel} 0 0u 100% 12u "Python executable"
     Pop $0
 
-    ${NSD_CreateText} 0 15u 80% 12u "${DefaultPathToPython}"
+    ${NSD_CreateText} 0 15u 80% 12u "$PathToPython"
     Pop $PathToPythonTextBox
 
     ${NSD_CreateBrowseButton} 320 15u 20% 12u "Browse"
@@ -46,28 +60,42 @@ Function pythonOptionsPageCreate
     nsDialogs::Show
 FunctionEnd
 
+Function browsePathToPython
+
+    ${NSD_GetText} $PathToPythonTextBox $0
+    nsDialogs::SelectFileDialog open $0 "Python executable | pythonw.exe"
+    Pop $0
+    ${If} $0 != ""
+        ${NSD_SetText} $PathToPythonTextBox $0
+    ${EndIf}
+
+FunctionEnd
+
 Function pythonOptionsPageLeave
+
+    ${NSD_GetText} $PathToPythonTextBox $PathToPython
+
 FunctionEnd
 
 Function addinOptionsPageCreate
     nsDialogs::Create 1018
 
-    ${NSD_CreateCheckbox} 0 0 100% 10u "&Install Microsoft Excel add-in"
+    ${NSD_CreateCheckbox} 0 0 100% 10u "Install Microsoft Excel add-in"
     Pop $InstallAddInCheckBox
-    ${NSD_Check} $InstallAddInCheckBox
+    ${NSD_SetState} $InstallAddInCheckBox $InstallAddIn
 
     ${NSD_CreateLabel} 0 15u 100% 12u "Path to up to date services configurations"
     Pop $0
 
-    ${NSD_CreateText} 0 30u 80% 12u ""
+    ${NSD_CreateText} 0 30u 80% 12u "$PathToConfiguration"
     Pop $PathToConfigurationTextBox
 
     ${NSD_CreateBrowseButton} 320 30u 20% 12u "Browse"
     pop $BrowsePathToConfigurationButton
 
     ${NSD_CreateCheckbox} 0 65u 100% 10u "Keep default services (petstore and pyxelrest)"
-    Pop $DefaultConfigurationCheckBox
-    ${NSD_Check} $DefaultConfigurationCheckBox
+    Pop $InstallDefaultConfigurationCheckBox
+    ${NSD_Check} $InstallDefaultConfigurationCheckBox
 
     ${NSD_OnClick} $BrowsePathToConfigurationButton browsePathToConfiguration
     nsDialogs::Show
@@ -75,26 +103,28 @@ Function addinOptionsPageCreate
     nsDialogs::Show
 FunctionEnd
 
-Function addinOptionsPageLeave
-FunctionEnd
-
-Function browsePathToPython
-
-nsDialogs::SelectFileDialog open "${DefaultPathToPython}" "Python executable | pythonw.exe"
-Pop $0
-
-FunctionEnd
-
 Function browsePathToConfiguration
 
-nsDialogs::SelectFileDialog open "C:" "YAML configuration file | *.yaml"
-Pop $0
+    ${NSD_GetText} $PathToConfigurationTextBox $0
+    nsDialogs::SelectFileDialog open $0 "YAML configuration file | *.y*ml"
+    Pop $0
+    ${If} $0 != ""
+        ${NSD_SetText} $PathToConfigurationTextBox $0
+    ${EndIf}
+
+FunctionEnd
+
+Function addinOptionsPageLeave
+
+    ${NSD_GetText} $PathToConfigurationTextBox $PathToConfiguration
+    ${NSD_GetState} $InstallAddInCheckBox $InstallAddIn
 
 FunctionEnd
 
 Section "Creating python virtual environment" create_venv
 
-ExecWait '"$0" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
+    AddSize 54000
+    ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
 
 SectionEnd
 
