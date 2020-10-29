@@ -94,7 +94,7 @@ SectionGroup /e "Python"
 
 Section "Virtual environment" install_venv
 
-    SectionInstType RO
+    SectionInstType ${IT_FULL}
     # Approximate venv size is 15MB
     AddSize 15360
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
@@ -105,7 +105,7 @@ SectionEnd
 
 Section "Python module" install_module
 
-    SectionInstType ${IT_FULL}
+    SectionInstType RO
     # Approximate modules size is 37MB
     AddSize 37888
     ExecWait '"$PathToPython" "-m" "pip" "install" "pyxelrest==${VERSION}"'
