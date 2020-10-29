@@ -74,7 +74,10 @@ FunctionEnd
 Function pythonOptionsPageLeave
 
     ${NSD_GetText} $PathToPythonTextBox $PathToPython
-
+    ${IfNot} ${FileExists} $PathToPython
+        MessageBox mb_iconstop "The provided path to python does not exists. Please install it or specify an existing path."
+        Abort
+    ${EndIf}
 FunctionEnd
 
 Function addinOptionsPageCreate
