@@ -19,6 +19,8 @@ Var PathToConfiguration
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
 
+Var PathToAddInInstaller
+
 Function .onInit
 
 	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\pythonw.exe"
@@ -81,6 +83,8 @@ Function optionsPageLeave
         MessageBox mb_iconstop "The provided path to python does not exists. Please install it or specify an existing path."
         Abort
     ${EndIf}
+    # TODO Extract the folder from the executable path
+	StrCpy $PathToAddInInstaller "$PathToPythonFolder\pyxelrest_install_addin.exe"
 
     ${NSD_GetText} $PathToConfigurationTextBox $PathToConfiguration
 
@@ -94,15 +98,17 @@ Section "Virtual environment" install_venv
     # Approximate venv size is 15MB
     AddSize 15360
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
+	StrCpy $PathToPython "$INSTDIR\pyxelrest_venv\Scripts\python.exe"
+	StrCpy $PathToAddInInstaller "$INSTDIR\pyxelrest_venv\Scripts\pyxelrest_install_addin.exe"
 
 SectionEnd
 
 Section "Python module" install_module
 
-    SectionInstType RO
+    SectionInstType ${IT_FULL}
     # Approximate modules size is 37MB
     AddSize 37888
-    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"'
+    ExecWait '"$PathToPython" "-m" "pip" "install" "pyxelrest==${VERSION}"'
 
 SectionEnd
 
@@ -113,7 +119,7 @@ Section "Handle custom SSL certificates" handle_custom_ssl
     SectionInstType ${IT_FULL}
     # Approximate modules size is 650KB
     AddSize 650
-    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
+    ExecWait '"$PathToPython" "-m" "pip" "install" "python-certifi-win32==1.*"'
 
 SectionEnd
 
@@ -122,7 +128,7 @@ Section "Handle Microsoft Windows authentication" handle_ms_auth
     SectionInstType ${IT_FULL}
     # Approximate modules size is 7MB
     AddSize 7189
-    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
+    ExecWait '"$PathToPython" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
 
 SectionEnd
 
@@ -131,7 +137,7 @@ Section "Allow to cache requests results" allow_cached_results
     SectionInstType ${IT_FULL}
     # Approximate modules size is 150KB
     AddSize 150
-    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "cachetools==4.*"'
+    ExecWait '"$PathToPython" "-m" "pip" "install" "cachetools==4.*"'
 
 SectionEnd
 
@@ -148,9 +154,9 @@ Section "Microsoft Excel add-in" install_addin
     AddSize 3072
 
     ${If} $PathToConfiguration != ""
-        ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
+        ExecWait '"$PathToAddInInstaller" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
     ${Else}
-        ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\pyxelrest_install_addin.exe"'
+        ExecWait '"$PathToAddInInstaller"'
     ${EndIf}
 
 SectionEnd
