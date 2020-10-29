@@ -86,13 +86,22 @@ Function optionsPageLeave
 
 FunctionEnd
 
-Section "Python module" install_module
+SectionGroup /e "Python"
+
+Section "Virtual environment" install_venv
 
     SectionInstType RO
     # Approximate venv size is 15MB
-    # Approximate modules size is 37MB
-    AddSize 53248
+    AddSize 15360
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
+
+SectionEnd
+
+Section "Python module" install_module
+
+    SectionInstType RO
+    # Approximate modules size is 37MB
+    AddSize 37888
     ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"'
 
 SectionEnd
@@ -102,8 +111,8 @@ SectionGroup "Additional features"
 Section "Handle custom SSL certificates" handle_custom_ssl
 
     SectionInstType ${IT_FULL}
-    # Approximate modules size is ??MB
-    AddSize ??
+    # Approximate modules size is 650KB
+    AddSize 650
     ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
 
 SectionEnd
@@ -111,8 +120,8 @@ SectionEnd
 Section "Handle Microsoft Windows authentication" handle_ms_auth
 
     SectionInstType ${IT_FULL}
-    # Approximate modules size is ??MB
-    AddSize ??
+    # Approximate modules size is 7MB
+    AddSize 7189
     ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
 
 SectionEnd
@@ -120,11 +129,13 @@ SectionEnd
 Section "Allow to cache requests results" allow_cached_results
 
     SectionInstType ${IT_FULL}
-    # Approximate modules size is ??MB
-    AddSize ??
+    # Approximate modules size is 150KB
+    AddSize 150
     ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "cachetools==4.*"'
 
 SectionEnd
+
+SectionGroupEnd
 
 SectionGroupEnd
 
