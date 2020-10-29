@@ -38,13 +38,13 @@ FunctionEnd
 Function pythonOptionsPageCreate
     nsDialogs::Create 1018
 
-    ${NSD_CreateLabel} 0 0u 100% 12u "Python executable"
+    ${NSD_CreateGroupBox} 0 0u 100% 35u "Python executable"
     Pop $0
 
-    ${NSD_CreateText} 0 15u 80% 12u "$PathToPython"
+    ${NSD_CreateText} 5u 15u 72% 12u "$PathToPython"
     Pop $PathToPythonTextBox
 
-    ${NSD_CreateBrowseButton} 320 15u 20% 12u "Browse"
+    ${NSD_CreateBrowseButton} 205u 13u 20% 15u "Browse..."
     pop $BrowsePathToPythonButton
 
     ${NSD_CreateCheckbox} 0 50u 100% 10u "Handle custom SSL certificates"
@@ -87,13 +87,13 @@ Function addinOptionsPageCreate
     Pop $InstallAddInCheckBox
     ${NSD_SetState} $InstallAddInCheckBox $InstallAddIn
 
-    ${NSD_CreateLabel} 0 15u 100% 12u "Path to up to date services configurations"
+    ${NSD_CreateGroupBox} 0 15u 100% 35u "Path to up to date services configurations"
     Pop $0
 
-    ${NSD_CreateText} 0 30u 80% 12u "$PathToConfiguration"
+    ${NSD_CreateText} 5u 30u 72% 12u "$PathToConfiguration"
     Pop $PathToConfigurationTextBox
 
-    ${NSD_CreateBrowseButton} 320 30u 20% 12u "Browse"
+    ${NSD_CreateBrowseButton} 205u 28u 20% 15u "Browse..."
     pop $BrowsePathToConfigurationButton
 
     ${NSD_CreateCheckbox} 0 65u 100% 10u "Keep default services (petstore and pyxelrest)"
