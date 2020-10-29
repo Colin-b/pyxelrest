@@ -230,15 +230,13 @@ Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 de
 | password | User password. Default value is the logged in user password. |
 
 In case user credentials are provided, [`requests_ntlm==1.*`](https://pypi.org/project/requests_ntlm/) module is required.
-`ntlm` extra requires can be used to install this dependency:
 ```bash
-python -m pip install pyxelrest[ntlm]
+python -m pip install requests_ntlm==1.*
 ```
 
 In case user credentials are not provided (using logged in user credentials), [`requests_negotiate_sspi==0.5.*`](https://pypi.org/project/requests-negotiate-sspi/) module is required.
-`ntlm` extra requires can be used to install this dependency:
 ```bash
-python -m pip install pyxelrest[ntlm]
+python -m pip install requests_negotiate_sspi==0.5.*
 ```
 
 #### Network
@@ -260,10 +258,9 @@ Contains network related settings such as HTTP timeouts or proxies configuration
 | result_caching_time | Number of seconds during which a GET request will return previous result. Always send a new request by default. |
 | max_nb_results | Maximum number of results to store in cache. 100 by default. |
 
-[`cachetool==4.*`](https://pypi.org/project/cachetools/) module is required.
-`cachetool` extra requires can be used to install this dependency:
+[`cachetools==4.*`](https://pypi.org/project/cachetools/) module is required.
 ```bash
-python -m pip install pyxelrest[cachetool]
+python -m pip install cachetools==4.*
 ```
 
 #### Result

@@ -123,10 +123,6 @@ setup(
         "python-dateutil==2.*",
     ],
     extras_require={
-        # Support for NTLM authentication
-        "ntlm": ["requests_ntlm==1.*", "requests_negotiate_sspi==0.5.*"],
-        # Support for in-memory caching
-        "cachetools": ["cachetools==4.*"],
         "testing": [
             # Used to run tests
             "pytest-cov==2.*",

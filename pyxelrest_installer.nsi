@@ -5,6 +5,9 @@ BrandingText "Call REST APIs as functions"
 OutFile "pyxelrest_installer-${VERSION}.exe"
 InstallDir "$%APPDATA%\pyxelrest"
 
+InstType "Full" IT_FULL
+InstType "Minimal" IT_MIN
+
 !include TextFunc.nsh
 !include nsDialogs.nsh
 
@@ -12,30 +15,18 @@ Var PathToPython
 Var PathToPythonTextBox
 Var BrowsePathToPythonButton
 
-Var NtlmCheckBox
-Var CacheToolsCheckBox
-Var CertifiCheckBox
-
-
-Var InstallAddIn
-Var InstallAddInCheckBox
-
 Var PathToConfiguration
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
 
-Var InstallDefaultConfigurationCheckBox
-
 Function .onInit
 
 	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\pythonw.exe"
-
-	StrCpy $InstallAddIn "${BST_CHECKED}"
 	StrCpy $PathToConfiguration ""
 
 FunctionEnd
 
-Function pythonOptionsPageCreate
+Function optionsPageCreate
     nsDialogs::Create 1018
 
     ${NSD_CreateGroupBox} 0 0u 100% 35u "Python executable"
@@ -46,17 +37,18 @@ Function pythonOptionsPageCreate
 
     ${NSD_CreateBrowseButton} 205u 13u 20% 15u "Browse..."
     pop $BrowsePathToPythonButton
-
-    ${NSD_CreateCheckbox} 0 50u 100% 10u "Handle custom SSL certificates"
-    Pop $CertifiCheckBox
-
-    ${NSD_CreateCheckbox} 0 65u 100% 10u "Handle Microsoft Windows authentication"
-    Pop $NtlmCheckBox
-
-    ${NSD_CreateCheckbox} 0 80u 100% 10u "Allow to cache requests results"
-    Pop $CacheToolsCheckBox
-
     ${NSD_OnClick} $BrowsePathToPythonButton browsePathToPython
+
+    ${NSD_CreateGroupBox} 0 50u 100% 35u "Path to up to date services configurations"
+    Pop $0
+
+    ${NSD_CreateText} 5u 65u 72% 12u "$PathToConfiguration"
+    Pop $PathToConfigurationTextBox
+
+    ${NSD_CreateBrowseButton} 205u 63u 20% 15u "Browse..."
+    pop $BrowsePathToConfigurationButton
+    ${NSD_OnClick} $BrowsePathToConfigurationButton browsePathToConfiguration
+
     nsDialogs::Show
 FunctionEnd
 
@@ -71,41 +63,6 @@ Function browsePathToPython
 
 FunctionEnd
 
-Function pythonOptionsPageLeave
-
-    ${NSD_GetText} $PathToPythonTextBox $PathToPython
-    ${IfNot} ${FileExists} $PathToPython
-        MessageBox mb_iconstop "The provided path to python does not exists. Please install it or specify an existing path."
-        Abort
-    ${EndIf}
-FunctionEnd
-
-Function addinOptionsPageCreate
-    nsDialogs::Create 1018
-
-    ${NSD_CreateCheckbox} 0 0 100% 10u "Install Microsoft Excel add-in"
-    Pop $InstallAddInCheckBox
-    ${NSD_SetState} $InstallAddInCheckBox $InstallAddIn
-
-    ${NSD_CreateGroupBox} 0 15u 100% 35u "Path to up to date services configurations"
-    Pop $0
-
-    ${NSD_CreateText} 5u 30u 72% 12u "$PathToConfiguration"
-    Pop $PathToConfigurationTextBox
-
-    ${NSD_CreateBrowseButton} 205u 28u 20% 15u "Browse..."
-    pop $BrowsePathToConfigurationButton
-
-    ${NSD_CreateCheckbox} 0 65u 100% 10u "Keep default services (petstore and pyxelrest)"
-    Pop $InstallDefaultConfigurationCheckBox
-    ${NSD_Check} $InstallDefaultConfigurationCheckBox
-
-    ${NSD_OnClick} $BrowsePathToConfigurationButton browsePathToConfiguration
-    nsDialogs::Show
-
-    nsDialogs::Show
-FunctionEnd
-
 Function browsePathToConfiguration
 
     ${NSD_GetText} $PathToConfigurationTextBox $0
@@ -117,21 +74,97 @@ Function browsePathToConfiguration
 
 FunctionEnd
 
-Function addinOptionsPageLeave
+Function optionsPageLeave
+
+    ${NSD_GetText} $PathToPythonTextBox $PathToPython
+    ${IfNot} ${FileExists} $PathToPython
+        MessageBox mb_iconstop "The provided path to python does not exists. Please install it or specify an existing path."
+        Abort
+    ${EndIf}
 
     ${NSD_GetText} $PathToConfigurationTextBox $PathToConfiguration
-    ${NSD_GetState} $InstallAddInCheckBox $InstallAddIn
 
 FunctionEnd
 
-Section "Creating python virtual environment" create_venv
+Section "Python module" install_module
 
-    AddSize 54000
+    SectionInstType RO
+    # Approximate venv size is 15MB
+    # Approximate modules size is 37MB
+    AddSize 53248
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
+    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"'
 
 SectionEnd
 
+SectionGroup "Additional features"
+
+Section "Handle custom SSL certificates" handle_custom_ssl
+
+    SectionInstType ${IT_FULL}
+    # Approximate modules size is ??MB
+    AddSize ??
+    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
+
+SectionEnd
+
+Section "Handle Microsoft Windows authentication" handle_ms_auth
+
+    SectionInstType ${IT_FULL}
+    # Approximate modules size is ??MB
+    AddSize ??
+    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
+
+SectionEnd
+
+Section "Allow to cache requests results" allow_cached_results
+
+    SectionInstType ${IT_FULL}
+    # Approximate modules size is ??MB
+    AddSize ??
+    ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\python.exe" "-m" "pip" "install" "cachetools==4.*"'
+
+SectionEnd
+
+SectionGroupEnd
+
+SectionGroup /e "Microsoft Excel"
+
+Section "Microsoft Excel add-in" install_addin
+
+    SectionInstType RO
+    # Approximate add-in size is 3MB
+    AddSize 3072
+
+    ${If} $PathToConfiguration != ""
+        ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
+    ${Else}
+        ExecWait '"$INSTDIR\pyxelrest_venv\Scripts\pyxelrest_install_addin.exe"'
+    ${EndIf}
+
+SectionEnd
+
+SectionGroup /e "Services configuration"
+
+Section "petstore" add_petstore_configuration
+
+    SectionInstType RO
+#    SectionInstType ${IT_FULL}
+
+SectionEnd
+
+Section "pyxelrest" add_pyxelrest_configuration
+
+    SectionInstType RO
+#    SectionInstType ${IT_FULL}
+
+SectionEnd
+
+SectionGroupEnd
+
+SectionGroupEnd
+
+Page Components
 Page Directory
-Page Custom pythonOptionsPageCreate pythonOptionsPageLeave
-Page Custom addinOptionsPageCreate addinOptionsPageLeave
+Page Custom optionsPageCreate optionsPageLeave
 Page InstFiles
