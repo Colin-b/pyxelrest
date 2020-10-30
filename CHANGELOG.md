@@ -20,8 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - file URl are now properly handled, they must start with `file:///` instead of `file://`
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
 - Do not request VBA caller in threading context (as it cannot be retrieved and result in COM call failure).
-- The `PyxelRestAddIn` does not read default `xlwings` configuration anymore. Allowing to run in addition of the `xlwings` add-in.
+- The `PyxelRestAddIn` does not read default `xlwings` configuration anymore for non provided settings. Allowing to run in addition of the `xlwings` add-in.
 - Allow to call `update_services_config` script without an existing configuration.
+- Allow to provide a custom xlwings bas file path to the add-in.
 
 ### Removed
 - Drop support for `python` < `3.8`.

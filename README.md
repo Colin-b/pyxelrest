@@ -305,49 +305,14 @@ Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\config
 
 The following application settings are available:
 
-<table>
-    <th>
-        <td><em>Description</em></td>
-        <td><em>Mandatory</em></td>
-        <td><em>Possible values</em></td>
-    </th>
-    <tr>
-        <td><strong>PathToPython</strong></td>
-        <td>Path to the python.exe (including) executable where pyxelrest python module was installed.</td>
-        <td>Mandatory</td>
-        <td>Installation script is already setting this value properly.</td>
-    </tr>
-    <tr>
-        <td><strong>AutoCheckForUpdates</strong></td>
-        <td>Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing.</td>
-        <td>Optional</td>
-        <td>True (default), False</td>
-    </tr>
-    <tr>
-        <td><strong>GenerateUDFAtStartup</strong></td>
-        <td>Activate or Deactivate generation of user defined functions at Microsoft Excel startup.</td>
-        <td>Optional</td>
-        <td>True (default), False</td>
-    </tr>
-    <tr>
-        <td><strong>PathToXlWingsConfiguration</strong></td>
-        <td>Path to the XlWings configuration file used to configure XlWings for PyxelRest.</td>
-        <td>Mandatory</td>
-        <td>Installation script is already setting this value properly.</td>
-    </tr>
-    <tr>
-        <td><strong>PathToUpToDateConfigurations</strong></td>
-        <td>Path to the file or directory containing up to date services configuration.</td>
-        <td>Optional</td>
-        <td>Installation script is already setting this value if provided.</td>
-    </tr>
-    <tr>
-        <td><strong>CheckPreReleases</strong></td>
-        <td>Should auto update fetch pre-releases.</td>
-        <td>Optional</td>
-        <td>True, False (default).</td>
-    </tr>
-</table>
+| Name | Description | Mandatory | Possible values |
+|------|-------------|-----------|-----------------|
+| PathToPython | Path to the python.exe (including) executable where pyxelrest python module was installed. | Mandatory | Installation script is already setting this value properly. |
+| AutoCheckForUpdates | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing. | Optional | True (default), False |
+| GenerateUDFAtStartup | Activate or Deactivate generation of user defined functions at Microsoft Excel startup. | Optional | True (default), False |
+| PathToXlWingsBasFile | Path to the XlWings modified BAS file used to configure XlWings for PyxelRest. | Mandatory | Installation script is already setting this value properly. |
+| PathToUpToDateConfigurations | Path to the file or directory containing up to date services configuration. | Optional | Installation script is already setting this value if provided. |
+| CheckPreReleases | Should auto update fetch pre-releases. | Optional | True, False (default). |
 
 ## Using as a module
 

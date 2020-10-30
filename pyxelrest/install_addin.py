@@ -236,9 +236,9 @@ class Installer:
             )
         self._install_pyxelrest_vb_addin()
 
-        xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)
-        xlwings_config.create_file()
-        xlwings_config.create_vb_addin()
+        self.xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)
+        self.xlwings_config.create_file()
+        self.xlwings_config.create_vb_addin()
 
         self._install_addin()
 
@@ -308,6 +308,9 @@ class Installer:
                     addin_settings_file.write(
                         '    <add key="CheckPreReleases" value="true" />\n'
                     )
+                addin_settings_file.write(
+                    f'    <add key="PathToXlWingsBasFile" value="{self.xlwings_config.xlwings_bas_path}" />\n'
+                )
                 addin_settings_file.write(addin_settings_line)
             else:
                 addin_settings_file.write(addin_settings_line)

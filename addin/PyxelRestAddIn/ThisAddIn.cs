@@ -24,7 +24,6 @@ namespace PyxelRestAddIn
             "> File > Options > Trust Center > Trust Center Settings > Macro Settings\n";
 
         private static System.Configuration.Configuration Config = LoadConfig();
-        private static string PathToBasFile;
 
         internal static string GetSetting(string key)
         {
@@ -68,14 +67,6 @@ namespace PyxelRestAddIn
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (appDataFolder != null)
             {
-                PathToBasFile = Path.Combine(appDataFolder, "pyxelrest", "configuration", "xlwings.bas");
-                if (!File.Exists(PathToBasFile))
-                {
-                    Log.WarnFormat("No XLWings module can be found to load in '{0}'.", PathToBasFile);
-                    PathToBasFile = null;
-                }
-
-
                 var configMap = new ExeConfigurationFileMap
                 {
                     ExeConfigFilename = Path.Combine(appDataFolder, "pyxelrest", "configuration", "addin.config")
@@ -351,10 +342,14 @@ namespace PyxelRestAddIn
                     Log.Error("PyxelRest VB Project cannot be found.");
                     return false;
                 }
-                if (PathToBasFile == null)
+                string pathToBasFile = GetSetting("PathToXlWingsBasFile");
+                if (!File.Exists(pathToBasFile))
+                {
+                    Log.WarnFormat("No XLWings module can be found to load in '{0}'.", pathToBasFile);
                     return false;
+                }
 
-                vbProject.VBComponents.Import(PathToBasFile);
+                vbProject.VBComponents.Import(pathToBasFile);
                 Log.Debug("XLWings module imported.");
                 return true;
             }
