@@ -11,7 +11,7 @@ if __name__ == "__main__":
 else:
     logger = logging.getLogger(__name__)
 
-_USER_CONFIG_FILE_PATH = os.path.join(
+DEFAULT_USER_CONFIG_FILE_PATH = os.path.join(
     os.getenv("APPDATA"), "pyxelrest", "configuration", "services.yml"
 )
 
@@ -27,6 +27,12 @@ LIST_SECTIONS = (
 
 
 def open_config(file_or_directory: str) -> Optional[dict]:
+    """
+    Open provided services configuration.
+
+    :param file_or_directory: Can be a file path, a path to a directory or an URL to a file content.
+    :return loaded configuration or None if it was unable to be loaded.
+    """
     if os.path.isfile(file_or_directory) or os.path.isdir(file_or_directory):
         return open_file_config(file_or_directory)
     return open_url_config(file_or_directory)
@@ -53,6 +59,9 @@ def open_url_config(configuration_file_url: str) -> Optional[dict]:
         logger.warning(
             f'Configuration file URL "{configuration_file_url}" cannot be reached: {e}.'
         )
+    except requests.exceptions.InvalidSchema:
+        # Consider that this is a file path that does not exists yet
+        return {}
     except:
         logger.exception(
             f'Configuration file URL "{configuration_file_url}" cannot be reached.'
@@ -81,14 +90,16 @@ def to_file_paths(file_or_directory: str) -> List[str]:
 
 
 class ServicesConfigUpdater:
-    def __init__(self, action: str):
+    def __init__(self, action: str, config_file_path: str):
         """
 
         :param action: Valid value amongst ADD_SECTIONS, UPDATE_SECTIONS or REMOVE_SECTIONS
-        :raise Exception: In case services configuration file located into _USER_CONFIG_FILE_PATH cannot be opened.
+        :param config_file_path: The path to the configuration to update.
+        :raise Exception: In case services configuration file located into config_file_path cannot be opened.
         """
-        self._user_config = open_config(_USER_CONFIG_FILE_PATH)
-        if not self._user_config:
+        self._config_file_path = config_file_path
+        self._user_config = open_config(self._config_file_path)
+        if self._user_config is None:
             raise Exception("Services configuration cannot be opened.")
         self._action = action
 
@@ -103,7 +114,7 @@ class ServicesConfigUpdater:
             logger.info("Updating services configuration...")
 
         updated_config = open_config(file_or_directory)
-        if not updated_config:
+        if updated_config is None:
             logger.error("Services configuration cannot be updated.")
             return
 
@@ -125,7 +136,7 @@ class ServicesConfigUpdater:
             logger.info("Services configuration updated.")
 
     def _save_configuration(self):
-        with open(_USER_CONFIG_FILE_PATH, "w") as file:
+        with open(self._config_file_path, "w") as file:
             yaml.dump(self._user_config, file, default_flow_style=False)
 
     def _add_service(self, service_name: str, updated_config: dict):
@@ -184,9 +195,15 @@ def main(*args):
         type=str,
         nargs="*",
     )
+    parser.add_argument(
+        "--config_to_update",
+        help="File path of the configuration file to update.",
+        default=DEFAULT_USER_CONFIG_FILE_PATH,
+        type=str,
+    )
     options = parser.parse_args(args if args else None)
     try:
-        installer = ServicesConfigUpdater(options.action)
+        installer = ServicesConfigUpdater(action=options.action, config_file_path=options.config_to_update)
         installer.update_configuration(options.file_or_directory, options.services)
     except:
         logger.exception("Unable to perform services configuration update.")

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add more information on VBA caller.
 - Support for [Dynamic array formulas](https://support.office.com/en-us/article/dynamic-array-formulas-and-spilled-array-behavior-205c6b06-03ba-4151-89a1-87a7eb36e531?ns=EXCEL&version=90&ui=en-US&rs=en-US&ad=US)
 - Allow to `verify` SSL certificate (or not).
+- Allow to provide a custom path to a configuration to update.
 
 ### Fixed
 - Do not use a fixed dependency version.
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
 - Do not request VBA caller in threading context (as it cannot be retrieved and result in COM call failure).
 - The `PyxelRestAddIn` does not read default `xlwings` configuration anymore. Allowing to run in addition of the `xlwings` add-in.
+- Allow to call `update_services_config` script without an existing configuration.
 
 ### Removed
 - Drop support for `python` < `3.8`.
