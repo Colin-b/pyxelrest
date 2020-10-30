@@ -19,7 +19,7 @@ Var PathToConfiguration
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
 
-Var PathToAddInInstaller
+Var PathToScriptsFolder
 
 Function .onInit
 
@@ -83,8 +83,15 @@ Function optionsPageLeave
         MessageBox mb_iconstop "The provided path to python does not exists. Please install it or specify an existing path."
         Abort
     ${EndIf}
-    # TODO Extract the folder from the executable path
-	StrCpy $PathToAddInInstaller "$PathToPythonFolder\pyxelrest_install_addin.exe"
+
+    # If python path is in a virtual environment, python executable is in Scripts folder
+    ${GetParent} "$PathToPython" $PathToScriptsFolder
+    ${GetFileName} $PathToScriptsFolder $0
+
+    # If python path is not in a virtual environment, python executable is at the same level of the Scripts folder
+    ${If} $0 != "Scripts"
+    	StrCpy $PathToScriptsFolder "$PathToScriptsFolder\Scripts"
+    ${EndIf}
 
     ${NSD_GetText} $PathToConfigurationTextBox $PathToConfiguration
 
@@ -99,7 +106,7 @@ Section "Virtual environment" install_venv
     AddSize 15360
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
 	StrCpy $PathToPython "$INSTDIR\pyxelrest_venv\Scripts\python.exe"
-	StrCpy $PathToAddInInstaller "$INSTDIR\pyxelrest_venv\Scripts\pyxelrest_install_addin.exe"
+	StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
 
 SectionEnd
 
@@ -153,10 +160,15 @@ Section "Microsoft Excel add-in" install_addin
     # Approximate add-in size is 3MB
     AddSize 3072
 
+    ${IfNot} ${FileExists} "$PathToScriptsFolder\pyxelrest_install_addin.exe"
+        MessageBox mb_iconstop "The add-in installer cannot be located in $PathToScriptsFolder\pyxelrest_install_addin.exe. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+        Abort
+    ${EndIf}
+
     ${If} $PathToConfiguration != ""
-        ExecWait '"$PathToAddInInstaller" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
+        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
     ${Else}
-        ExecWait '"$PathToAddInInstaller"'
+        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe"'
     ${EndIf}
 
 SectionEnd
