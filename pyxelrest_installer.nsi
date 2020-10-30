@@ -2,6 +2,8 @@
 Unicode True
 Name "PyxelRest ${VERSION}"
 BrandingText "Call REST APIs as functions"
+CompletedText "PyxelRest is now available to use within Microsoft Excel"
+RequestExecutionLevel "user"
 OutFile "pyxelrest_installer-${VERSION}.exe"
 InstallDir "$%APPDATA%\pyxelrest"
 
@@ -14,12 +16,15 @@ InstType "Minimal" IT_MIN
 Var PathToPython
 Var PathToPythonTextBox
 Var BrowsePathToPythonButton
+Var PythonWarningLabel
+Var PythonDownloadLink
 
 Var PathToConfiguration
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
 
 Var PathToScriptsFolder
+Var NextButton
 
 Function .onInit
 
@@ -31,27 +36,53 @@ FunctionEnd
 Function optionsPageCreate
     nsDialogs::Create 1018
 
-    ${NSD_CreateGroupBox} 0 0u 100% 35u "Python executable"
+    ${NSD_CreateGroupBox} 0 0u 100% 45u "Python executable"
     Pop $0
 
     ${NSD_CreateText} 5u 15u 72% 12u "$PathToPython"
     Pop $PathToPythonTextBox
+    ${NSD_OnChange} $PathToPythonTextBox changePathToPython
 
     ${NSD_CreateBrowseButton} 205u 13u 20% 15u "Browse..."
     pop $BrowsePathToPythonButton
     ${NSD_OnClick} $BrowsePathToPythonButton browsePathToPython
 
-    ${NSD_CreateGroupBox} 0 50u 100% 35u "Path to up to date services configurations"
+    ${NSD_CreateLabel} 6u 30u 54% 12u ""
+    pop $PythonWarningLabel
+
+    ${NSD_CreateLink} 150u 30u 40% 12u ""
+    pop $PythonDownloadLink
+    ${NSD_OnClick} $PythonDownloadLink downloadPython
+
+    ${NSD_CreateGroupBox} 0 65u 100% 35u "Path to up to date services configurations"
     Pop $0
 
-    ${NSD_CreateText} 5u 65u 72% 12u "$PathToConfiguration"
+    ${NSD_CreateText} 5u 80u 72% 12u "$PathToConfiguration"
     Pop $PathToConfigurationTextBox
 
-    ${NSD_CreateBrowseButton} 205u 63u 20% 15u "Browse..."
+    ${NSD_CreateBrowseButton} 205u 78u 20% 15u "Browse..."
     pop $BrowsePathToConfigurationButton
     ${NSD_OnClick} $BrowsePathToConfigurationButton browsePathToConfiguration
 
+    Call changePathToPython
+
     nsDialogs::Show
+FunctionEnd
+
+Function changePathToPython
+
+    ${NSD_GetText} $PathToPythonTextBox $PathToPython
+    GetDlgItem $NextButton $HWNDPARENT 1
+    ${IfNot} ${FileExists} $PathToPython
+        ${NSD_SetText} $PythonWarningLabel "Python cannot be found. Change location or"
+        ${NSD_SetText} $PythonDownloadLink "install it now"
+        EnableWindow $NextButton 0
+    ${Else}
+        ${NSD_SetText} $PythonWarningLabel "                                          "
+        ${NSD_SetText} $PythonDownloadLink "                                          "
+        EnableWindow $NextButton 1
+    ${EndIf}
+
 FunctionEnd
 
 Function browsePathToPython
@@ -61,6 +92,15 @@ Function browsePathToPython
     Pop $0
     ${If} $0 != ""
         ${NSD_SetText} $PathToPythonTextBox $0
+    ${EndIf}
+
+FunctionEnd
+
+Function downloadPython
+
+    ${NSD_GetText} $PathToPythonTextBox $PathToPython
+    ${IfNot} ${FileExists} $PathToPython
+        ExecShell "open" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe"
     ${EndIf}
 
 FunctionEnd
@@ -77,12 +117,6 @@ Function browsePathToConfiguration
 FunctionEnd
 
 Function optionsPageLeave
-
-    ${NSD_GetText} $PathToPythonTextBox $PathToPython
-    ${IfNot} ${FileExists} $PathToPython
-        MessageBox mb_iconstop "The provided path to python does not exists. Please install it or specify an existing path."
-        Abort
-    ${EndIf}
 
     # If python path is in a virtual environment, python executable is in Scripts folder
     ${GetParent} "$PathToPython" $PathToScriptsFolder
