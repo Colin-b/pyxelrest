@@ -211,15 +211,15 @@ SectionGroup /e "Services configuration"
 
 Section "petstore" add_petstore_configuration
 
-    SectionInstType RO
-#    SectionInstType ${IT_FULL}
+    SectionInstType ${IT_FULL}
+    ExecWait '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/master/samples/petstore.yml" "add" "--services" "petstore"
 
 SectionEnd
 
 Section "pyxelrest" add_pyxelrest_configuration
 
-    SectionInstType RO
-#    SectionInstType ${IT_FULL}
+    SectionInstType ${IT_FULL}
+    ExecWait '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/master/samples/pyxelrest.yml" "add" "--services" "pyxelrest"
 
 SectionEnd
 
