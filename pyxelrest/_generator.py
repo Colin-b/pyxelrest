@@ -3,7 +3,7 @@ Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will gen
 """
 import os
 from importlib import reload, import_module
-from typing import List, Union
+from typing import List
 import logging.config
 import logging.handlers
 import datetime
