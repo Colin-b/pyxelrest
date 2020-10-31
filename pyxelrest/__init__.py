@@ -1,5 +1,6 @@
 import os
 from pyxelrest.version import __version__
+from pyxelrest._exceptions import PyxelRestException
 
 
 GENERATE_UDF_ON_IMPORT = True

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for [Dynamic array formulas](https://support.office.com/en-us/article/dynamic-array-formulas-and-spilled-array-behavior-205c6b06-03ba-4151-89a1-87a7eb36e531?ns=EXCEL&version=90&ui=en-US&rs=en-US&ad=US)
 - Allow to `verify` SSL certificate (or not).
 - Allow to provide a custom path to a configuration to update.
+- Provides a public base class for all pyxelrest issued exceptions: `pyxelrest.PyxelRestException`.
 
 ### Fixed
 - Do not use a fixed dependency version.
