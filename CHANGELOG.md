@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `PyxelRestAddIn` does not read default `xlwings` configuration anymore for non provided settings. Allowing to run in addition of the `xlwings` add-in.
 - Allow to call `update_services_config` script without an existing configuration.
 - Allow to provide a custom xlwings bas file path to the add-in.
+- Allow to load pyxelrest even if no services configuration file can be found.
 
 ### Removed
 - Drop support for `python` < `3.8`.

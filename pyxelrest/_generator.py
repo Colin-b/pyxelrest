@@ -18,7 +18,6 @@ from pyxelrest import (
     LOGGING_CONFIGURATION_FILE_PATH,
 )
 from pyxelrest._common import check_for_duplicates, Service
-from pyxelrest._exceptions import ConfigurationFileNotFound
 from pyxelrest._open_api import load_service
 from pyxelrest._rest import PyxelRestService
 
@@ -30,7 +29,8 @@ def load_services_from_yaml(services_configuration_file_path: str) -> List[Servi
     configuration file
     """
     if not os.path.isfile(services_configuration_file_path):
-        raise ConfigurationFileNotFound(services_configuration_file_path)
+        logging.warning(f'No services will be available as "{services_configuration_file_path}" cannot be found.')
+        return []
 
     with open(services_configuration_file_path, "r") as config_file:
         config = yaml.load(config_file, Loader=yaml.FullLoader)

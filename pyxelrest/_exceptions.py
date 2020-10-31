@@ -28,13 +28,6 @@ class MandatoryPropertyNotProvided(Exception):
         )
 
 
-class ConfigurationFileNotFound(Exception):
-    """ Configuration file not found. """
-
-    def __init__(self, file_path: str, *args, **kwargs):
-        Exception.__init__(self, f'"{file_path}" configuration file cannot be read.')
-
-
 class DuplicatedParameters(Exception):
     """ Method contains duplicated parameters. """
 
