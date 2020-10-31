@@ -132,6 +132,8 @@ Each section name will be used as the related formulas category within [Microsof
 
 Each formula will be prefixed by the section name (only [a-zA-Z0-9_] characters will be kept).
 
+Sample configuration files can be found in the [samples repository](https://github.com/Colin-b/pyxelrest/tree/develop/samples).
+
 #### Service mandatory settings
 
 | Name | Description |

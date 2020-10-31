@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop support for shifted results as there is no need for it anymore, first cell is always filled with an up to date value.
 - Python update script path is now guessed by addin, no need to provide the path in configuration anymore.
 - Drop `ntlm` and `cachetools` extra. As documentation clearly state what is supported and that there is no added value.
+- There is no default services configuration anymore at pyxelrest module installation. However samples can still be found via documentation.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.

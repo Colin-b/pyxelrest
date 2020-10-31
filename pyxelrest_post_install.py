@@ -31,26 +31,7 @@ class PostInstall:
         create_folder(self.pyxelrest_appdata_folder)
         create_folder(self.pyxelrest_appdata_logs_folder)
         create_folder(self.pyxelrest_appdata_config_folder)
-        self._create_services_configuration()
         self._create_pyxelrest_logging_configuration()
-
-    def _create_services_configuration(self):
-        default_config_file = os.path.join(
-            self.installation_files_folder,
-            "pyxelrest",
-            "default_services_configuration.yml",
-        )
-        if os.path.isfile(default_config_file):
-            user_config_file = os.path.join(
-                self.pyxelrest_appdata_config_folder, "services.yml"
-            )
-            if not os.path.isfile(user_config_file):
-                shutil.copyfile(default_config_file, user_config_file)
-                log.info("Services configuration file created.")
-        else:
-            raise Exception(
-                f"Default services configuration file cannot be found in provided PyxelRest directory. {default_config_file}"
-            )
 
     def _create_pyxelrest_logging_configuration(self):
         config_file_path = os.path.join(
