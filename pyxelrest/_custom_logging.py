@@ -44,7 +44,7 @@ def load_logging_configuration(logging_configuration_file_path: str):
 
 def set_file_logger(filename: str, level=logging.INFO):
     default_log_file_path = os.path.join(
-        os.getenv("APPDATA"), "pyxelrest", "logs", filename + ".log"
+        os.getenv("APPDATA"), "pyxelrest", "logs", f"{filename}.log"
     )
     default_log_folder = os.path.dirname(default_log_file_path)
     if not os.path.exists(default_log_folder):
