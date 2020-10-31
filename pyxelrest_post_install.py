@@ -1,7 +1,6 @@
 import argparse
 from distutils import log
 import os
-import shutil
 import sys
 
 
@@ -37,22 +36,35 @@ class PostInstall:
         config_file_path = os.path.join(
             self.pyxelrest_appdata_config_folder, "logging.yml"
         )
-        # Always keep default logging configuration up to date as logger name / parsing logic might change
-        import jinja2
-
-        template_folder = os.path.join(self.installation_files_folder, "pyxelrest")
-        renderer = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(template_folder), trim_blocks=True
-        )
         log_file_path = os.path.join(
-            os.getenv("APPDATA"), "pyxelrest", "logs", "pyxelrest.log"
+            self.pyxelrest_appdata_logs_folder, "pyxelrest.log"
         )
+        # Always override default logging configuration as logger name might change
         with open(config_file_path, "w") as generated_file:
-            generated_file.write(
-                renderer.get_template(
-                    "default_logging_configuration.yml.jinja2"
-                ).render(path_to_log_file=log_file_path)
-            )
+            generated_file.write(f"""version: 1
+formatters:
+  clean:
+    format: '%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s'
+handlers:
+  daily_rotating:
+    class: logging.handlers.TimedRotatingFileHandler
+    formatter: clean
+    filename: {log_file_path}
+    when: 'D'
+    backupCount: 10
+loggers:
+  pyxelrest:
+    level: DEBUG
+  xlwings:
+    level: DEBUG
+  requests_auth:
+    level: DEBUG
+  requests.packages.urllib3:
+    level: DEBUG
+root:
+  level: INFO
+  handlers: [daily_rotating]
+""")
         log.info(f"{config_file_path} logging configuration file created.")
 
 

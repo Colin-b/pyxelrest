@@ -48,7 +48,6 @@ setup(
     packages=find_packages(exclude=["tests*", "pyxelrest.user_defined_functions"]),
     package_data={
         "pyxelrest": [
-            "default_logging_configuration.yml.jinja2",
             "user_defined_functions.jinja2",
             "user_defined_functions_init.jinja2",
         ]
