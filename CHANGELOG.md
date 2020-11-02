@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Authentication related settings (`oauth2`, `api_key`, `basic`, `ntlm`) are now supposed to be provided within `auth` configuration section.
 - Display default values for OAuth2 settings in configuration UI.
 - Renamed Microsoft Excel add-in to `PyxelRestAddIn`.
+- Microsoft Excel add-in configuration is now loaded from `excel_addin\PyxelRestAddIn.dll.config` instead of `configuration\addin.config` so that there is no default unused configuration.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

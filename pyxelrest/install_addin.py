@@ -1,5 +1,6 @@
 import argparse
 import os
+import io
 import shutil
 import subprocess
 import sys
@@ -288,44 +289,43 @@ class Installer:
         self._update_addin_config()
 
     def _update_addin_config(self):
-        def write_addin_configuration_line(addin_settings_line, addin_settings_file):
-            if "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION" in addin_settings_line:
+        def write_addin_configuration_line(default_settings_line: str, new_settings: io.StringIO):
+            if "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION" in default_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
                 python_path = os.path.join(python_executable_folder_path, "python.exe")
                 # Do not set python path to a value that we know wrong, this case should not happen but you never know
                 # Do not raise an exception here as the auto update feature is optional
                 if os.path.isfile(python_path):
-                    new_line = addin_settings_line.replace(
+                    new_line = default_settings_line.replace(
                         "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION", python_path
                     )
-                    addin_settings_file.write(new_line)
-            elif "</appSettings>" in addin_settings_line:
+                    new_settings.write(new_line)
+            elif "</appSettings>" in default_settings_line:
                 if self.path_to_up_to_date_configuration:
-                    addin_settings_file.write(
+                    new_settings.write(
                         f'    <add key="PathToUpToDateConfigurations" value="{self.path_to_up_to_date_configuration}" />\n'
                     )
                 if self.check_pre_releases:
-                    addin_settings_file.write(
+                    new_settings.write(
                         '    <add key="CheckPreReleases" value="true" />\n'
                     )
-                addin_settings_file.write(
+                new_settings.write(
                     f'    <add key="PathToXlWingsBasFile" value="{self.xlwings_config.xlwings_bas_path}" />\n'
                 )
-                addin_settings_file.write(addin_settings_line)
+                new_settings.write(default_settings_line)
             else:
-                addin_settings_file.write(addin_settings_line)
+                new_settings.write(default_settings_line)
 
-        config_file_path = os.path.join(
-            self.pyxelrest_appdata_config_folder, "addin.config"
-        )
         default_config_file_path = os.path.join(
             self.pyxelrest_appdata_addin_folder, "PyxelRestAddIn.dll.config"
         )
         if os.path.isfile(default_config_file_path):
-            with open(config_file_path, "w") as new_file:
-                with open(default_config_file_path) as default_file:
-                    for line in default_file:
-                        write_addin_configuration_line(line, new_file)
+            new_config = io.StringIO()
+            with open(default_config_file_path) as default_file:
+                for line in default_file:
+                    write_addin_configuration_line(line, new_config)
+            with open(default_config_file_path, "w") as default_file:
+                default_file.write(new_config.getvalue())
 
 
 def main(*args):

@@ -287,7 +287,7 @@ To do so, you can use the `pyxelrest` service name to activate [Postman](https:/
 
 `pyxelrest` module logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
 
-[Microsoft Excel] COM add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
+[Microsoft Excel] COM add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.dll.config` file.
 
 By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 
@@ -303,7 +303,7 @@ By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 </p>
 <p align="center"><em>Auto update can be (de)activated from Microsoft Excel thanks to the <span style="color: #1382CE">Check for update on close</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.</em></p>
 
-Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\configuration\addin.config` file.
+Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.dll.config` file.
 
 The following application settings are available:
 

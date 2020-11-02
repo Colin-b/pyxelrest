@@ -69,7 +69,7 @@ namespace PyxelRestAddIn
             {
                 var configMap = new ExeConfigurationFileMap
                 {
-                    ExeConfigFilename = Path.Combine(appDataFolder, "pyxelrest", "configuration", "addin.config")
+                    ExeConfigFilename = Path.Combine(appDataFolder, "pyxelrest", "excel_addin", "PyxelRestAddIn.dll.config")
                 };
 
                 return ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);

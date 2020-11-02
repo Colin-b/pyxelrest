@@ -23,6 +23,7 @@ Var PathToConfiguration
 Var PathToConfigurationTextBox
 Var BrowsePathToConfigurationButton
 
+Var PathToPythonFolder
 Var PathToScriptsFolder
 Var NextButton
 
@@ -47,11 +48,13 @@ Function optionsPageCreate
     pop $BrowsePathToPythonButton
     ${NSD_OnClick} $BrowsePathToPythonButton browsePathToPython
 
-    ${NSD_CreateLabel} 6u 30u 54% 12u ""
+    ${NSD_CreateLabel} 6u 30u 54% 12u "Python cannot be found. Change location or"
     pop $PythonWarningLabel
+    SetCtlColors $PythonWarningLabel "ff0000" "transparent"
 
-    ${NSD_CreateLink} 150u 30u 40% 12u ""
+    ${NSD_CreateLink} 149u 30u 15% 12u "install it now"
     pop $PythonDownloadLink
+    SetCtlColors $PythonDownloadLink "800000" "transparent"
     ${NSD_OnClick} $PythonDownloadLink downloadPython
 
     ${NSD_CreateGroupBox} 0 65u 100% 35u "Path to up to date services configurations"
@@ -74,12 +77,12 @@ Function changePathToPython
     ${NSD_GetText} $PathToPythonTextBox $PathToPython
     GetDlgItem $NextButton $HWNDPARENT 1
     ${IfNot} ${FileExists} $PathToPython
-        ${NSD_SetText} $PythonWarningLabel "Python cannot be found. Change location or"
-        ${NSD_SetText} $PythonDownloadLink "install it now"
+        ShowWindow $PythonWarningLabel ${SW_SHOW}
+        ShowWindow $PythonDownloadLink ${SW_SHOW}
         EnableWindow $NextButton 0
     ${Else}
-        ${NSD_SetText} $PythonWarningLabel "                                          "
-        ${NSD_SetText} $PythonDownloadLink "                                          "
+        ShowWindow $PythonWarningLabel ${SW_HIDE}
+        ShowWindow $PythonDownloadLink ${SW_HIDE}
         EnableWindow $NextButton 1
     ${EndIf}
 
@@ -98,10 +101,7 @@ FunctionEnd
 
 Function downloadPython
 
-    ${NSD_GetText} $PathToPythonTextBox $PathToPython
-    ${IfNot} ${FileExists} $PathToPython
-        ExecShell "open" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe"
-    ${EndIf}
+    ExecShell "open" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe"
 
 FunctionEnd
 
@@ -118,6 +118,7 @@ FunctionEnd
 
 Function optionsPageLeave
 
+    ${GetParent} "$PathToPython" $PathToPythonFolder
     # If python path is in a virtual environment, python executable is in Scripts folder
     ${GetParent} "$PathToPython" $PathToScriptsFolder
     ${GetFileName} $PathToScriptsFolder $0
@@ -138,9 +139,14 @@ Section "Virtual environment" install_venv
     SectionInstType ${IT_FULL}
     # Approximate venv size is 15MB
     AddSize 15360
+    ${If} ${FileExists} "$INSTDIR\pyxelrest_venv"
+        DetailPrint "Removing previous virtual environment"
+        RMDir /r "$INSTDIR\pyxelrest_venv"
+    ${EndIf}
+    DetailPrint "Creating virtual environment"
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
-	StrCpy $PathToPython "$INSTDIR\pyxelrest_venv\Scripts\python.exe"
 	StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
+	StrCpy $PathToPythonFolder "$INSTDIR\pyxelrest_venv\Scripts"
 
 SectionEnd
 
@@ -149,7 +155,11 @@ Section "Python module" install_module
     SectionInstType RO
     # Approximate modules size is 37MB
     AddSize 37888
-    ExecWait '"$PathToPython" "-m" "pip" "install" "pyxelrest==${VERSION}"'
+    DetailPrint "Installing pyxelrest python module"
+    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"' $0
+    ${If} $0 != "0"
+    	Abort "Python module could not be installed (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+    ${EndIf}
 
 SectionEnd
 
@@ -160,7 +170,8 @@ Section "Handle custom SSL certificates" handle_custom_ssl
     SectionInstType ${IT_FULL}
     # Approximate modules size is 650KB
     AddSize 650
-    ExecWait '"$PathToPython" "-m" "pip" "install" "python-certifi-win32==1.*"'
+    DetailPrint "Installing python-certifi-win32 python module"
+    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
 
 SectionEnd
 
@@ -169,7 +180,8 @@ Section "Handle Microsoft Windows authentication" handle_ms_auth
     SectionInstType ${IT_FULL}
     # Approximate modules size is 7MB
     AddSize 7189
-    ExecWait '"$PathToPython" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
+    DetailPrint "Installing requests_ntlm and requests_negotiate_sspi python modules"
+    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
 
 SectionEnd
 
@@ -178,7 +190,8 @@ Section "Allow to cache requests results" allow_cached_results
     SectionInstType ${IT_FULL}
     # Approximate modules size is 150KB
     AddSize 150
-    ExecWait '"$PathToPython" "-m" "pip" "install" "cachetools==4.*"'
+    DetailPrint "Installing cachetools python module"
+    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==4.*"'
 
 SectionEnd
 
@@ -195,14 +208,13 @@ Section "Microsoft Excel add-in" install_addin
     AddSize 3072
 
     ${IfNot} ${FileExists} "$PathToScriptsFolder\pyxelrest_install_addin.exe"
-        MessageBox mb_iconstop "The add-in installer cannot be located in $PathToScriptsFolder\pyxelrest_install_addin.exe. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
-        Abort
+        Abort "The add-in installer cannot be located in $PathToScriptsFolder\pyxelrest_install_addin.exe. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
     ${EndIf}
-
+    DetailPrint "Installing Microsoft Excel add-in"
     ${If} $PathToConfiguration != ""
-        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
+        ExecShellWait "" '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"' "" SW_HIDE
     ${Else}
-        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe"'
+        ExecShellWait "" '"$PathToScriptsFolder\pyxelrest_install_addin.exe"' "" SW_HIDE
     ${EndIf}
 
 SectionEnd
@@ -212,6 +224,7 @@ SectionGroup /e "Services configuration"
 Section "petstore" add_petstore_configuration
 
     SectionInstType ${IT_FULL}
+    DetailPrint "Adding petstore service configuration"
     ExecWait '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/petstore.yml" "add"'
 
 SectionEnd
@@ -219,6 +232,7 @@ SectionEnd
 Section "pyxelrest" add_pyxelrest_configuration
 
     SectionInstType ${IT_FULL}
+    DetailPrint "Adding pyxelrest service configuration"
     ExecWait '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/pyxelrest.yml" "add"'
 
 SectionEnd
