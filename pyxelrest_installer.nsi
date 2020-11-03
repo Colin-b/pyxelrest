@@ -19,6 +19,7 @@ Var PathToPythonTextBox
 Var BrowsePathToPythonButton
 Var PythonWarningLabel
 Var PythonDownloadLink
+Var PythonStatusLabel
 
 Var PathToConfiguration
 Var PathToConfigurationTextBox
@@ -56,7 +57,10 @@ Function optionsPageCreate
     ${NSD_CreateLink} 149u 30u 15% 12u "install it now"
     pop $PythonDownloadLink
     SetCtlColors $PythonDownloadLink "800000" "transparent"
-    ${NSD_OnClick} $PythonDownloadLink downloadPython
+    ${NSD_OnClick} $PythonDownloadLink downloadAndInstallPython
+
+    ${NSD_CreateLabel} 6u 30u 70% 12u ""
+    pop $PythonStatusLabel
 
     ${NSD_CreateGroupBox} 0 65u 100% 35u "Path to up to date services configurations"
     Pop $0
@@ -80,10 +84,12 @@ Function changePathToPython
     ${IfNot} ${FileExists} $PathToPython
         ShowWindow $PythonWarningLabel ${SW_SHOW}
         ShowWindow $PythonDownloadLink ${SW_SHOW}
+        ShowWindow $PythonStatusLabel ${SW_HIDE}
         EnableWindow $NextButton 0
     ${Else}
         ShowWindow $PythonWarningLabel ${SW_HIDE}
         ShowWindow $PythonDownloadLink ${SW_HIDE}
+        ShowWindow $PythonStatusLabel ${SW_HIDE}
         EnableWindow $NextButton 1
     ${EndIf}
 
@@ -100,9 +106,33 @@ Function browsePathToPython
 
 FunctionEnd
 
-Function downloadPython
+Function downloadAndInstallPython
 
-    ExecShell "open" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe"
+    # Hide the button to avoid double installation
+    ShowWindow $PythonWarningLabel ${SW_HIDE}
+    ShowWindow $PythonDownloadLink ${SW_HIDE}
+    ${NSD_SetText} $PythonStatusLabel "Downloading python..."
+    ShowWindow $PythonStatusLabel ${SW_SHOW}
+
+    ${NSD_GetText} $PathToPythonTextBox $0
+    ${GetParent} "$0" $0
+
+    ${If} ${FileExists} "$%USERPROFILE%\python_for_pyxelrest.exe"
+        Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
+    ${Else}
+    # https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-transfer
+    ExecWait '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
+
+    ${IfNot} ${FileExists} "$%USERPROFILE%\python_for_pyxelrest.exe"
+        ${NSD_SetText} $PythonStatusLabel "Python could not be downloaded."
+    ${Else}
+        ${NSD_SetText} $PythonStatusLabel "Installing python..."
+        # Perform basic python (only what is required for pyxelrest), see https://docs.python.org/3/using/windows.html#installing-without-ui
+        ExecWait '"$%USERPROFILE%\python_for_pyxelrest.exe" "/quiet" "TargetDir=$0" "Include_doc=0" "Include_launcher=0" "InstallLauncherAllUsers=0" "Include_test=0"'
+        Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
+        # Update the UI once python is supposed to be installed
+        Call changePathToPython
+    ${EndIf}
 
 FunctionEnd
 
