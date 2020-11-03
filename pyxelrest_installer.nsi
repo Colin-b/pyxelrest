@@ -344,6 +344,8 @@ Section "Uninstall"
         RMDir /r "$INSTDIR"
     ${EndIf}
 
+    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest"
+
 SectionEnd
 
 PageEx un.instfiles
