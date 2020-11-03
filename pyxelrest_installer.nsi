@@ -11,8 +11,10 @@ InstType "Minimal" IT_MIN
 
 # To be able to use GetParent
 !include TextFunc.nsh
-# To be able to use NSD_*
+# To be able to use NSD_*, see nsis.sourceforge.io/Docs/nsDialogs/Readme.html
 !include nsDialogs.nsh
+# To be able to use ExecDos::exec, see https://nsis.sourceforge.io/ExecDos_plug-in
+!addplugindir nsis
 
 Var PathToPython
 Var PathToPythonTextBox
@@ -31,7 +33,7 @@ Var NextButton
 
 Function .onInit
 
-	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\pythonw.exe"
+	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
 	StrCpy $PathToConfiguration ""
 
 FunctionEnd
@@ -98,7 +100,7 @@ FunctionEnd
 Function browsePathToPython
 
     ${NSD_GetText} $PathToPythonTextBox $0
-    nsDialogs::SelectFileDialog open $0 "Python executable | pythonw.exe"
+    nsDialogs::SelectFileDialog open $0 "Python executable | python.exe"
     Pop $0
     ${If} $0 != ""
         ${NSD_SetText} $PathToPythonTextBox $0
@@ -121,14 +123,14 @@ Function downloadAndInstallPython
         Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
     ${EndIf}
     # https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-transfer
-    ExecWait '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
+    ExecDos::exec '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
 
     ${IfNot} ${FileExists} "$%USERPROFILE%\python_for_pyxelrest.exe"
         ${NSD_SetText} $PythonStatusLabel "Python could not be downloaded."
     ${Else}
         ${NSD_SetText} $PythonStatusLabel "Installing python..."
         # Perform basic python (only what is required for pyxelrest), see https://docs.python.org/3/using/windows.html#installing-without-ui
-        ExecWait '"$%USERPROFILE%\python_for_pyxelrest.exe" "/quiet" "TargetDir=$0" "Include_doc=0" "Include_launcher=0" "InstallLauncherAllUsers=0" "Include_test=0"'
+        ExecDos::exec '"$%USERPROFILE%\python_for_pyxelrest.exe" "/quiet" "TargetDir=$0" "Include_doc=0" "Include_launcher=0" "InstallLauncherAllUsers=0" "Include_test=0"'
         Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
         # Update the UI once python is supposed to be installed
         Call changePathToPython
@@ -189,11 +191,13 @@ Section "Virtual environment" install_venv
         RMDir /r "$INSTDIR\pyxelrest_venv"
     ${EndIf}
     DetailPrint "Creating virtual environment"
-    ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
+    ExecDos::exec /DETAILED '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
+    Pop $0
+    ${If} $0 != "0"
+    	Abort "Virtual environment could not be created (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+    ${EndIf}
 	StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
 	StrCpy $PathToPythonFolder "$INSTDIR\pyxelrest_venv\Scripts"
-
-    Call registerUninstaller
 
 SectionEnd
 
@@ -202,8 +206,10 @@ Section "Python module" install_module
     SectionInstType RO
     # Approximate modules size is 37MB
     AddSize 37888
+    Call registerUninstaller
     DetailPrint "Installing pyxelrest python module"
-    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"' $0
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"'
+    Pop $0
     ${If} $0 != "0"
     	Abort "Python module could not be installed (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
     ${EndIf}
@@ -218,7 +224,7 @@ Section "Handle custom SSL certificates" handle_custom_ssl
     # Approximate modules size is 650KB
     AddSize 650
     DetailPrint "Installing python-certifi-win32 python module"
-    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
 
 SectionEnd
 
@@ -228,7 +234,7 @@ Section "Handle Microsoft Windows authentication" handle_ms_auth
     # Approximate modules size is 7MB
     AddSize 7189
     DetailPrint "Installing requests_ntlm and requests_negotiate_sspi python modules"
-    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
 
 SectionEnd
 
@@ -238,7 +244,7 @@ Section "Allow to cache requests results" allow_cached_results
     # Approximate modules size is 150KB
     AddSize 150
     DetailPrint "Installing cachetools python module"
-    ExecWait '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==4.*"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==4.*"'
 
 SectionEnd
 
@@ -260,11 +266,12 @@ Section "Microsoft Excel add-in" install_addin
 
     DetailPrint "Installing Microsoft Excel add-in"
     ${If} $PathToConfiguration != ""
-        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"' $0
+        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
     ${Else}
-        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe"' $0
+        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe"'
     ${EndIf}
 
+    Pop $0
     ${If} $0 != "0"
     	Abort "Microsoft Excel add-in could not be installed (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
     ${EndIf}
@@ -277,7 +284,7 @@ Section "petstore" add_petstore_configuration
 
     SectionInstType ${IT_FULL}
     DetailPrint "Adding petstore service configuration"
-    ExecWait '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/petstore.yml" "add"'
+    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/petstore.yml" "add"'
 
 SectionEnd
 
@@ -285,7 +292,7 @@ Section "pyxelrest" add_pyxelrest_configuration
 
     SectionInstType ${IT_FULL}
     DetailPrint "Adding pyxelrest service configuration"
-    ExecWait '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/pyxelrest.yml" "add"'
+    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/pyxelrest.yml" "add"'
 
 SectionEnd
 
@@ -318,9 +325,12 @@ Section "Uninstall"
 
     ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"
         DetailPrint "Uninstalling Microsoft Excel add-in"
-        ExecWait '"$AddInUninstallerPath" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"'
-        ${If} $0 != ""
-            Abort "Microsoft Excel add-in could not be uninstalled (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+        ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+        ${If} $0 != "0"
+            ExecWait '"$AddInUninstallerPath" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+            ${If} $0 != "0"
+                Abort "Microsoft Excel add-in could not be uninstalled (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+            ${EndIf}
         ${EndIf}
     ${EndIf}
 
