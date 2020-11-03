@@ -119,7 +119,7 @@ Function downloadAndInstallPython
 
     ${If} ${FileExists} "$%USERPROFILE%\python_for_pyxelrest.exe"
         Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
-    ${Else}
+    ${EndIf}
     # https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-transfer
     ExecWait '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
 
@@ -163,6 +163,20 @@ Function optionsPageLeave
 
 FunctionEnd
 
+Function registerUninstaller
+
+	WriteUninstaller "$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "DisplayName" "PyxelRest"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "UninstallString" '"$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"'
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "InstallLocation" '"$INSTDIR"'
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "Publisher" "Bounouar Colin"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "HelpLink" "https://github.com/Colin-b/pyxelrest/"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "URLUpdateInfo" "https://github.com/Colin-b/pyxelrest/"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "URLInfoAbout" "https://github.com/Colin-b/pyxelrest/"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "DisplayVersion" "${VERSION}"
+
+FunctionEnd
+
 SectionGroup /e "Python"
 
 Section "Virtual environment" install_venv
@@ -178,7 +192,8 @@ Section "Virtual environment" install_venv
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
 	StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
 	StrCpy $PathToPythonFolder "$INSTDIR\pyxelrest_venv\Scripts"
-	WriteUninstaller "$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"
+
+    Call registerUninstaller
 
 SectionEnd
 
