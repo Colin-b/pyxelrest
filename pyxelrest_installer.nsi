@@ -9,7 +9,9 @@ InstallDir "$%APPDATA%\pyxelrest"
 InstType "Full" IT_FULL
 InstType "Minimal" IT_MIN
 
+# To be able to use GetParent
 !include TextFunc.nsh
+# To be able to use NSD_*
 !include nsDialogs.nsh
 
 Var PathToPython
