@@ -2,7 +2,6 @@
 Unicode True
 Name "PyxelRest ${VERSION}"
 BrandingText "Call REST APIs as functions"
-CompletedText "PyxelRest is now available to use within Microsoft Excel"
 RequestExecutionLevel "user"
 OutFile "pyxelrest_installer-${VERSION}.exe"
 InstallDir "$%APPDATA%\pyxelrest"
@@ -147,6 +146,7 @@ Section "Virtual environment" install_venv
     ExecWait '"$PathToPython" "-m" "venv" "$INSTDIR\pyxelrest_venv"'
 	StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
 	StrCpy $PathToPythonFolder "$INSTDIR\pyxelrest_venv\Scripts"
+	WriteUninstaller "$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"
 
 SectionEnd
 
@@ -210,11 +210,16 @@ Section "Microsoft Excel add-in" install_addin
     ${IfNot} ${FileExists} "$PathToScriptsFolder\pyxelrest_install_addin.exe"
         Abort "The add-in installer cannot be located in $PathToScriptsFolder\pyxelrest_install_addin.exe. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
     ${EndIf}
+
     DetailPrint "Installing Microsoft Excel add-in"
     ${If} $PathToConfiguration != ""
-        ExecShellWait "" '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"' "" SW_HIDE
+        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"' $0
     ${Else}
-        ExecShellWait "" '"$PathToScriptsFolder\pyxelrest_install_addin.exe"' "" SW_HIDE
+        ExecWait '"$PathToScriptsFolder\pyxelrest_install_addin.exe"' $0
+    ${EndIf}
+
+    ${If} $0 != "0"
+    	Abort "Microsoft Excel add-in could not be installed (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
     ${EndIf}
 
 SectionEnd
@@ -241,7 +246,59 @@ SectionGroupEnd
 
 SectionGroupEnd
 
+
 Page Components
 Page Directory
 Page Custom optionsPageCreate optionsPageLeave
-Page InstFiles
+PageEx instfiles
+    CompletedText "PyxelRest is now available to use within Microsoft Excel"
+PageExEnd
+
+
+Var AddInUninstallerPath
+
+Section "Uninstall"
+
+    SectionInstType RO
+	StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+
+    ${IfNot} ${FileExists} "$AddInUninstallerPath"
+	    StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES(x86)%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+        ${IfNot} ${FileExists} "$AddInUninstallerPath"
+            Abort "The add-in uninstaller cannot be located. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+        ${EndIf}
+    ${EndIf}
+
+    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"
+        DetailPrint "Uninstalling Microsoft Excel add-in"
+        ExecWait '"$AddInUninstallerPath" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"'
+        ${If} $0 != ""
+            Abort "Microsoft Excel add-in could not be uninstalled (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+        ${EndIf}
+    ${EndIf}
+
+    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin"
+        DetailPrint "Removing Microsoft Excel add-in folder"
+        RMDir /r "$%APPDATA%\pyxelrest\excel_addin"
+    ${EndIf}
+
+    ${If} ${FileExists} "$%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam"
+        DetailPrint "Removing VBA add-in"
+        Delete "$%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam"
+    ${EndIf}
+
+    ${If} ${FileExists} "$INSTDIR\pyxelrest_venv"
+        DetailPrint "Removing virtual environment"
+        RMDir /r "$INSTDIR\pyxelrest_venv"
+    ${EndIf}
+
+    ${If} ${FileExists} "$INSTDIR"
+        DetailPrint "Removing installation directory"
+        RMDir /r "$INSTDIR"
+    ${EndIf}
+
+SectionEnd
+
+PageEx un.instfiles
+    CompletedText "PyxelRest is now uninstalled."
+PageExEnd
