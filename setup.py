@@ -12,7 +12,7 @@ class CustomInstall(install_data):
         self.announce("Performing post installation tasks...")
         from pyxelrest_post_install import PostInstall
 
-        post_install = PostInstall(installation_files_folder=this_dir)
+        post_install = PostInstall()
         post_install.perform_post_installation_tasks()
 
 

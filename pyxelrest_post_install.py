@@ -1,4 +1,3 @@
-import argparse
 from distutils import log
 import os
 import sys
@@ -11,13 +10,10 @@ def create_folder(folder_path: str):
 
 
 class PostInstall:
-    def __init__(self, *, installation_files_folder: str = None):
+    def __init__(self):
         if not sys.platform.startswith("win"):
             raise Exception("PyxelRest can only be installed on Microsoft Windows.")
 
-        self.installation_files_folder = installation_files_folder or os.path.abspath(
-            os.path.dirname(__file__)
-        )
         self.pyxelrest_appdata_folder = os.path.join(os.getenv("APPDATA"), "pyxelrest")
         self.pyxelrest_appdata_logs_folder = os.path.join(
             self.pyxelrest_appdata_folder, "logs"
@@ -68,16 +64,8 @@ root:
         log.info(f"{config_file_path} logging configuration file created.")
 
 
-def main(*args):
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--install_directory",
-        help="Directory containing PyxelRest files for installation.",
-        default=None,
-        type=str,
-    )
-    options = parser.parse_args(args if args else None)
-    post_install = PostInstall(installation_files_folder=options.install_directory)
+def main():
+    post_install = PostInstall()
     post_install.perform_post_installation_tasks()
 
 
