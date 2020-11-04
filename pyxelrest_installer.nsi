@@ -13,6 +13,8 @@ InstType "Minimal" IT_MIN
 !include TextFunc.nsh
 # To be able to use NSD_*, see nsis.sourceforge.io/Docs/nsDialogs/Readme.html
 !include nsDialogs.nsh
+# To be able to use ${WordFind}
+!include "WordFunc.nsh"
 # To be able to use ExecDos::exec, see https://nsis.sourceforge.io/ExecDos_plug-in
 !addplugindir nsis
 
@@ -30,11 +32,25 @@ Var BrowsePathToConfigurationButton
 Var PathToPythonFolder
 Var PathToScriptsFolder
 Var NextButton
+Var MicrosoftExcelIsRunning
 
 Function .onInit
 
 	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
 	StrCpy $PathToConfiguration ""
+
+FunctionEnd
+
+Function checkMicrosoftExcelStatus
+
+    Pop $0
+    # see https://nsis.sourceforge.io/Docs/AppendixE.html#wordfind
+    ${WordFind} "$0" "EXCEL.EXE " "E-1" $0
+    ${If} $0 != "1"
+        StrCpy $MicrosoftExcelIsRunning "1"
+    ${Else}
+        StrCpy $MicrosoftExcelIsRunning "0"
+    ${EndIf}
 
 FunctionEnd
 
@@ -179,6 +195,21 @@ Function registerUninstaller
 
 FunctionEnd
 
+Section # Ensure Microsoft Excel is closed
+
+    GetFunctionAddress $R2 checkMicrosoftExcelStatus
+    ExecDos::exec /TOFUNC 'tasklist /FI "IMAGENAME eq EXCEL.EXE"' "" $R2
+    Pop $0
+    ${If} $0 != "0"
+        DetailPrint "Unable to ensure that Microsoft Excel is closed ($0). Continue anyway..."
+    ${ElseIf} $MicrosoftExcelIsRunning != "0"
+        Abort "Microsoft Excel is running. Close it and try again."
+    ${Else}
+        DetailPrint "Microsoft Excel is closed."
+    ${EndIf}
+
+SectionEnd
+
 SectionGroup /e "Python"
 
 Section "Virtual environment" install_venv
@@ -310,6 +341,36 @@ PageExEnd
 
 
 Var AddInUninstallerPath
+
+Function un.checkMicrosoftExcelStatus
+
+    Pop $0
+    # see https://nsis.sourceforge.io/Docs/AppendixE.html#wordfind
+    ${WordFind} "$0" "EXCEL.EXE " "E-1" $0
+    ${If} $0 != "1"
+        StrCpy $MicrosoftExcelIsRunning "1"
+    ${Else}
+        StrCpy $MicrosoftExcelIsRunning "0"
+    ${EndIf}
+
+FunctionEnd
+
+Section "un.ensure_excel_is_closed"
+
+    SectionInstType RO
+
+    GetFunctionAddress $R2 un.checkMicrosoftExcelStatus
+    ExecDos::exec /TOFUNC 'tasklist /FI "IMAGENAME eq EXCEL.EXE"' "" $R2
+    Pop $0
+    ${If} $0 != "0"
+        DetailPrint "Unable to ensure that Microsoft Excel is closed ($0). Continue anyway..."
+    ${ElseIf} $MicrosoftExcelIsRunning != "0"
+        Abort "Microsoft Excel is running. Close it and try again."
+    ${Else}
+        DetailPrint "Microsoft Excel is closed."
+    ${EndIf}
+
+SectionEnd
 
 Section "Uninstall"
 
