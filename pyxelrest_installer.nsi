@@ -34,6 +34,8 @@ Var PathToScriptsFolder
 Var NextButton
 Var MicrosoftExcelIsRunning
 
+Var AddInUninstallerPath
+
 Function .onInit
 
     StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
@@ -239,7 +241,7 @@ Section "Python module" install_module
     AddSize 37888
     Call registerUninstaller
     DetailPrint "Installing pyxelrest python module"
-    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}" "--disable-pip-version-check"'
     Pop $0
     ${If} $0 != "0"
     	Abort "Python module could not be installed (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
@@ -255,7 +257,7 @@ Section "Handle custom SSL certificates" handle_custom_ssl
     # Approximate modules size is 650KB
     AddSize 650
     DetailPrint "Installing python-certifi-win32 python module"
-    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "python-certifi-win32==1.*" "--disable-pip-version-check"'
 
 SectionEnd
 
@@ -265,7 +267,7 @@ Section "Handle Microsoft Windows authentication" handle_ms_auth
     # Approximate modules size is 7MB
     AddSize 7189
     DetailPrint "Installing requests_ntlm and requests_negotiate_sspi python modules"
-    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "requests_ntlm==1.*" "requests_negotiate_sspi==0.5.*" "--disable-pip-version-check"'
 
 SectionEnd
 
@@ -275,7 +277,7 @@ Section "Allow to cache requests results" allow_cached_results
     # Approximate modules size is 150KB
     AddSize 150
     DetailPrint "Installing cachetools python module"
-    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==4.*"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==4.*" "--disable-pip-version-check"'
 
 SectionEnd
 
@@ -331,6 +333,52 @@ SectionGroupEnd
 
 SectionGroupEnd
 
+Function .onInstFailed
+
+    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"
+
+        StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+
+        ${IfNot} ${FileExists} "$AddInUninstallerPath"
+            StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES(x86)%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+        ${EndIf}
+
+        ${If} ${FileExists} "$AddInUninstallerPath"
+            DetailPrint "Uninstalling Microsoft Excel add-in"
+            ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+            ${If} $0 != "0"
+                ExecWait '"$AddInUninstallerPath" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+                ${If} $0 != "0"
+                    DetailPrint "Microsoft Excel add-in could not be uninstalled (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+                ${EndIf}
+            ${EndIf}
+        ${EndIf}
+    ${EndIf}
+
+    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin"
+        DetailPrint "Removing Microsoft Excel add-in folder"
+        RMDir /r "$%APPDATA%\pyxelrest\excel_addin"
+    ${EndIf}
+
+    ${If} ${FileExists} "$%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam"
+        DetailPrint "Removing VBA add-in"
+        Delete "$%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam"
+    ${EndIf}
+
+    ${If} ${FileExists} "$INSTDIR\pyxelrest_venv"
+        DetailPrint "Removing virtual environment"
+        RMDir /r "$INSTDIR\pyxelrest_venv"
+    ${EndIf}
+
+    ${If} ${FileExists} "$INSTDIR"
+        DetailPrint "Removing installation directory"
+        RMDir /r "$INSTDIR"
+    ${EndIf}
+
+    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest"
+
+FunctionEnd
+
 
 Page Components
 Page Directory
@@ -338,9 +386,6 @@ Page Custom optionsPageCreate optionsPageLeave
 PageEx instfiles
     CompletedText "PyxelRest is now available to use within Microsoft Excel"
 PageExEnd
-
-
-Var AddInUninstallerPath
 
 Function un.checkMicrosoftExcelStatus
 
@@ -375,16 +420,18 @@ SectionEnd
 Section "Uninstall"
 
     SectionInstType RO
-    StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
-
-    ${IfNot} ${FileExists} "$AddInUninstallerPath"
-        StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES(x86)%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
-        ${IfNot} ${FileExists} "$AddInUninstallerPath"
-            Abort "The add-in uninstaller cannot be located. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
-        ${EndIf}
-    ${EndIf}
 
     ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"
+
+        StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+
+        ${IfNot} ${FileExists} "$AddInUninstallerPath"
+            StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES(x86)%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+            ${IfNot} ${FileExists} "$AddInUninstallerPath"
+                Abort "The add-in uninstaller cannot be located. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
+            ${EndIf}
+        ${EndIf}
+
         DetailPrint "Uninstalling Microsoft Excel add-in"
         ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
         ${If} $0 != "0"
