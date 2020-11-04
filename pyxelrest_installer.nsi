@@ -36,8 +36,8 @@ Var MicrosoftExcelIsRunning
 
 Function .onInit
 
-	StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
-	StrCpy $PathToConfiguration ""
+    StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
+    StrCpy $PathToConfiguration ""
 
 FunctionEnd
 
@@ -183,7 +183,7 @@ FunctionEnd
 
 Function registerUninstaller
 
-	WriteUninstaller "$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"
+    WriteUninstaller "$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "DisplayName" "PyxelRest"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "UninstallString" '"$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"'
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "InstallLocation" '"$INSTDIR"'
@@ -227,8 +227,8 @@ Section "Virtual environment" install_venv
     ${If} $0 != "0"
     	Abort "Virtual environment could not be created (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
     ${EndIf}
-	StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
-	StrCpy $PathToPythonFolder "$INSTDIR\pyxelrest_venv\Scripts"
+    StrCpy $PathToScriptsFolder "$INSTDIR\pyxelrest_venv\Scripts"
+    StrCpy $PathToPythonFolder "$INSTDIR\pyxelrest_venv\Scripts"
 
 SectionEnd
 
@@ -375,10 +375,10 @@ SectionEnd
 Section "Uninstall"
 
     SectionInstType RO
-	StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+    StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
 
     ${IfNot} ${FileExists} "$AddInUninstallerPath"
-	    StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES(x86)%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
+        StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES(x86)%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
         ${IfNot} ${FileExists} "$AddInUninstallerPath"
             Abort "The add-in uninstaller cannot be located. Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
         ${EndIf}
