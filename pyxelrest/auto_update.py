@@ -354,8 +354,9 @@ class UpdateGUI(tkinter.Frame):
         master.protocol("WM_DELETE_WINDOW", self.on_close)
         self.grid(row=0, column=0, rowspan=3, sticky="nsew")
 
-        scripts_folder = os.path.abspath(os.path.dirname(sys.executable))
-        data_dir = os.path.join(scripts_folder, "..")
+        executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
+        # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
+        data_dir = os.path.join(executable_folder_path, "..") if (os.path.basename(executable_folder_path) == "Scripts") else executable_folder_path
         self.resources_path = os.path.join(data_dir, "pyxelrest_resources")
 
         images_frame = tkinter.Frame(self)

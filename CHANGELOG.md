@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to call `update_services_config` script without an existing configuration.
 - Allow to provide a custom xlwings bas file path to the add-in.
 - Allow to load pyxelrest even if no services configuration file can be found.
+- Allow to install pyxelrest outside of a virtual environment.
 
 ### Removed
 - Drop support for `python` < `3.8`.

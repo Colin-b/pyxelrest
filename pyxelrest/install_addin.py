@@ -199,8 +199,9 @@ class Installer:
             )
 
         if not add_in_folder:
-            scripts_folder = os.path.abspath(os.path.dirname(sys.executable))
-            data_dir = os.path.join(scripts_folder, "..")
+            executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
+            # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
+            data_dir = os.path.join(executable_folder_path, "..") if (os.path.basename(executable_folder_path) == "Scripts") else executable_folder_path
             add_in_folder = os.path.join(data_dir, "pyxelrest_addin")
 
         self.add_in_folder = to_absolute_path(add_in_folder)
