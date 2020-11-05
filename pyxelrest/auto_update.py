@@ -216,7 +216,7 @@ class UpdateProcess:
             addin_installer = Installer(
                 path_to_up_to_date_configuration=self.path_to_up_to_date_configurations
             )
-            addin_installer.perform_post_installation_tasks()
+            addin_installer.install_addin()
             logger.info("Microsoft Excel add-in successfully updated.")
             self.updating_queue.put((EXCEL_STEP, DONE))
             return True

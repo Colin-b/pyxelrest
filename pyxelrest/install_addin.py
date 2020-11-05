@@ -224,7 +224,7 @@ class Installer:
         self.check_pre_releases = check_pre_releases
         self.vsto_version = vsto_version
 
-    def perform_post_installation_tasks(self):
+    def install_addin(self):
         create_folder(self.pyxelrest_appdata_folder)
         # Logs folder is required by default add-in configuration
         create_folder(self.pyxelrest_appdata_logs_folder)
@@ -352,7 +352,7 @@ def main(*args):
         path_to_up_to_date_configuration=options.path_to_up_to_date_configuration,
         check_pre_releases=options.check_pre_releases,
     )
-    installer.perform_post_installation_tasks()
+    installer.install_addin()
 
 
 if __name__ == "__main__":
