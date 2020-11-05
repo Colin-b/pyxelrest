@@ -9,6 +9,7 @@ import logging.config
 import logging.handlers
 from typing import Tuple, Optional
 import sys
+import winreg
 
 from pip._internal.commands.list import ListCommand
 from pip._internal.commands.install import InstallCommand
@@ -146,6 +147,16 @@ def _update_is_finished():
     os.remove(update_is_in_progress)
 
 
+def get_install_location_registry_key() -> Optional[str]:
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
+            value, _ = winreg.QueryValueEx(pyxelrest_registry_key, "InstallLocation")
+        return value
+    except FileNotFoundError:
+        logger.error("Microsoft Excel add-in install location could not be found.")
+        raise
+
+
 class UpdateProcess:
     def __init__(
         self,
@@ -214,6 +225,7 @@ class UpdateProcess:
             from pyxelrest.install_addin import Installer
 
             addin_installer = Installer(
+                destination=get_install_location_registry_key(),
                 path_to_up_to_date_configuration=self.path_to_up_to_date_configurations
             )
             addin_installer.install_addin()

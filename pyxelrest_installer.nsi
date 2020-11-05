@@ -299,9 +299,9 @@ Section "Microsoft Excel add-in" install_addin
 
     DetailPrint "Installing Microsoft Excel add-in"
     ${If} $PathToConfiguration != ""
-        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
+        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--destination" "$INSTDIR" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
     ${Else}
-        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe"'
+        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--destination" "$INSTDIR"'
     ${EndIf}
 
     Pop $0
@@ -335,7 +335,7 @@ SectionGroupEnd
 
 Function .onInstFailed
 
-    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"
+    ${If} ${FileExists} "$INSTDIR\excel_addin\PyxelRestAddIn.vsto"
 
         StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
 
@@ -345,9 +345,9 @@ Function .onInstFailed
 
         ${If} ${FileExists} "$AddInUninstallerPath"
             DetailPrint "Uninstalling Microsoft Excel add-in"
-            ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+            ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$INSTDIR\excel_addin\PyxelRestAddIn.vsto"' $0
             ${If} $0 != "0"
-                ExecWait '"$AddInUninstallerPath" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+                ExecWait '"$AddInUninstallerPath" "/Uninstall" "$INSTDIR\excel_addin\PyxelRestAddIn.vsto"' $0
                 ${If} $0 != "0"
                     DetailPrint "Microsoft Excel add-in could not be uninstalled (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
                 ${EndIf}
@@ -355,9 +355,9 @@ Function .onInstFailed
         ${EndIf}
     ${EndIf}
 
-    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin"
+    ${If} ${FileExists} "$INSTDIR\excel_addin"
         DetailPrint "Removing Microsoft Excel add-in folder"
-        RMDir /r "$%APPDATA%\pyxelrest\excel_addin"
+        RMDir /r "$INSTDIR\excel_addin"
     ${EndIf}
 
     ${If} ${FileExists} "$%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam"
@@ -421,7 +421,7 @@ Section "Uninstall"
 
     SectionInstType RO
 
-    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"
+    ${If} ${FileExists} "$INSTDIR\excel_addin\PyxelRestAddIn.vsto"
 
         StrCpy $AddInUninstallerPath "$%COMMONPROGRAMFILES%\microsoft shared\VSTO\10.0\VSTOInstaller.exe"
 
@@ -433,18 +433,18 @@ Section "Uninstall"
         ${EndIf}
 
         DetailPrint "Uninstalling Microsoft Excel add-in"
-        ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+        ExecWait '"$AddInUninstallerPath" "/Silent" "/Uninstall" "$INSTDIR\excel_addin\PyxelRestAddIn.vsto"' $0
         ${If} $0 != "0"
-            ExecWait '"$AddInUninstallerPath" "/Uninstall" "$%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.vsto"' $0
+            ExecWait '"$AddInUninstallerPath" "/Uninstall" "$INSTDIR\excel_addin\PyxelRestAddIn.vsto"' $0
             ${If} $0 != "0"
                 Abort "Microsoft Excel add-in could not be uninstalled (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
             ${EndIf}
         ${EndIf}
     ${EndIf}
 
-    ${If} ${FileExists} "$%APPDATA%\pyxelrest\excel_addin"
+    ${If} ${FileExists} "$INSTDIR\excel_addin"
         DetailPrint "Removing Microsoft Excel add-in folder"
-        RMDir /r "$%APPDATA%\pyxelrest\excel_addin"
+        RMDir /r "$INSTDIR\excel_addin"
     ${EndIf}
 
     ${If} ${FileExists} "$%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam"

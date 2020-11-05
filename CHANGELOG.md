@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to `verify` SSL certificate (or not).
 - Allow to provide a custom path to a configuration to update.
 - Provides a public base class for all pyxelrest issued exceptions: `pyxelrest.PyxelRestException`.
+- `install_addin` script now has a `destination` parameter allowing to install it anywhere.
 
 ### Fixed
 - Do not use a fixed dependency version.
@@ -54,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Microsoft Excel add-in configuration is now loaded from `excel_addin\PyxelRestAddIn.dll.config` instead of `configuration\addin.config` so that there is no default unused configuration.
 - xlwings related configuration and bas file are now loaded from `excel_addin` folder instead of `configuration` folder as it should not be modified by clients.
 - `install_addin` script `add_in_directory` parameter has been renamed to `source`.
+- `install_addin` script now installs add-in relatively to current location unless specified otherwise.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

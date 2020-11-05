@@ -64,12 +64,12 @@ namespace PyxelRestAddIn
         // Hack to load configuration from external configuration file instead of embedded one.
         private static System.Configuration.Configuration LoadConfig()
         {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (appDataFolder != null)
+            var installLocation = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "InstallLocation", null);
+            if (installLocation != null)
             {
                 var configMap = new ExeConfigurationFileMap
                 {
-                    ExeConfigFilename = Path.Combine(appDataFolder, "pyxelrest", "excel_addin", "PyxelRestAddIn.dll.config")
+                    ExeConfigFilename = Path.Combine((string)installLocation, "excel_addin", "PyxelRestAddIn.dll.config")
                 };
 
                 return ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);

@@ -6,6 +6,7 @@ import subprocess
 import sys
 import logging
 import distutils.dir_util as dir_util
+import winreg
 
 if __name__ == "__main__":
     logger = logging.getLogger("pyxelrest.install_addin")
@@ -174,7 +175,7 @@ class XlWingsConfig:
                             pass
                     elif "ThisWorkbook" in line:
                         if "GetUdfModules" in line:
-                            # Keep refering to ThisWorkbook for pyxelrest
+                            # Keep referring to ThisWorkbook for pyxelrest
                             add_in_file.write(line)
                         else:
                             # Allow users to use xlwings with workbooks
@@ -189,6 +190,7 @@ class Installer:
         self,
         *,
         source: str = None,
+        destination: str = None,
         vsto_version: str = "10.0",
         path_to_up_to_date_configuration: str = None,
         check_pre_releases: bool = False,
@@ -210,16 +212,16 @@ class Installer:
                 f"PyxelRest Microsoft Excel add-in source folder cannot be found in {self.source}."
             )
 
-        self.pyxelrest_appdata_folder = os.path.join(os.getenv("APPDATA"), "pyxelrest")
+        self.destination = destination or os.path.abspath(".")
         self.destination_addin_folder = os.path.join(
-            self.pyxelrest_appdata_folder, "excel_addin"
+            self.destination, "excel_addin"
         )
         self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
         self.vsto_version = vsto_version
 
     def install_addin(self):
-        create_folder(self.pyxelrest_appdata_folder)
+        self._write_install_location_registry_key()
         create_folder(self.destination_addin_folder)
         # Assert that Microsoft Excel is closed
         # otherwise ClickOnce cache will still contains the add-in application manifest
@@ -293,7 +295,7 @@ class Installer:
                     )
                     new_settings.write(new_line)
             elif r'<file value=".\" />' in default_settings_line:
-                logs_folder = os.path.join(self.pyxelrest_appdata_folder, "logs")
+                logs_folder = os.path.join(self.destination, "logs")
                 create_folder(logs_folder)
                 new_line = default_settings_line.replace(".", logs_folder)
                 new_settings.write(new_line)
@@ -324,12 +326,22 @@ class Installer:
             with open(default_config_file_path, "w") as default_file:
                 default_file.write(new_config.getvalue())
 
+    def _write_install_location_registry_key(self):
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
+            winreg.SetValueEx(pyxelrest_registry_key, "InstallLocation", 0, winreg.REG_SZ, self.destination)
+
 
 def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--source",
         help="Directory containing add-in as provided by pyxelrest module installation.",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
+        "--destination",
+        help="Directory where add-in will be installed and add-in logs will be located. Current location by default.",
         default=None,
         type=str,
     )
@@ -344,7 +356,8 @@ def main(*args):
     )
     options = parser.parse_args(args if args else None)
     installer = Installer(
-        add_in_folder=options.source,
+        source=options.source,
+        destination=options.destination,
         path_to_up_to_date_configuration=options.path_to_up_to_date_configuration,
         check_pre_releases=options.check_pre_releases,
     )

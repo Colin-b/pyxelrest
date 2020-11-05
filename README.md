@@ -101,6 +101,7 @@ Note: The add-in is not required if you only want to use `pyxelrest` [as a pytho
 | path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the [Microsoft Excel] add-in. | file path, folder path or an URL returning a file content. |
 | check_pre_releases | Also fetch pre-releases when checking for updates. | No value is required, providing the option is enough. Prompt only for stable releases by default. |
 | source | Directory containing [Microsoft Excel] COM add-in and `pyxelrest.xlam` file. | Default to `pyxelrest_addin` folder in the python executable data directory. |
+| destination | Directory where add-in will be installed and add-in logs will be located. | Default to `.` folder (current location). |
 
 Note: option name must be prefixed with `--` such as:
 ```bash
@@ -287,9 +288,9 @@ To do so, you can use the `pyxelrest` service name to activate [Postman](https:/
 
 `pyxelrest` module logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
 
-[Microsoft Excel] COM add-in logging configuration can be updated thanks to `%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.dll.config` file.
+[Microsoft Excel] COM add-in logging configuration can be updated thanks to `excel_addin\PyxelRestAddIn.dll.config` file located in the folder provided at add-in installation.
 
-By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
+By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder and `logs` folder located in the folder provided at add-in installation.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/open_logs.gif" alt='How to open logs'>
@@ -303,7 +304,7 @@ By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder.
 </p>
 <p align="center"><em>Auto update can be (de)activated from Microsoft Excel thanks to the <span style="color: #1382CE">Check for update on close</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.</em></p>
 
-Configuration can also be manually updated thanks to `%APPDATA%\pyxelrest\excel_addin\PyxelRestAddIn.dll.config` file.
+Configuration can also be manually updated thanks to `excel_addin\PyxelRestAddIn.dll.config` file located in the folder provided at add-in installation.
 
 The following application settings are available:
 
