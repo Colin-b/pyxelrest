@@ -121,7 +121,7 @@ class XlWingsConfig:
         with open(self.xlwings_config_path, "w") as config_file:
             config_file.writelines(
                 [
-                    f'"INTERPRETER", "{pythonw_path}"',
+                    f'"INTERPRETER_WIN", "{pythonw_path}"',
                     '"UDF MODULES","pyxelrest._generator"',
                 ]
             )
