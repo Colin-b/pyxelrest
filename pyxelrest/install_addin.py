@@ -339,12 +339,12 @@ def main(*args):
     )
     parser.add_argument(
         "--path_to_up_to_date_configuration",
-        help="Path to up to date configuration file(s). This path will be used in case of auto update to keep services configuration up to date.",
+        help="Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the Microsoft Excel add-in.",
         default=None,
         type=str,
     )
     parser.add_argument(
-        "--check_pre_releases", help="Also fetch pre-releases.", action="store_true"
+        "--check_pre_releases", help="Also fetch pre-releases when checking for updates.", action="store_true"
     )
     options = parser.parse_args(args if args else None)
     installer = Installer(
