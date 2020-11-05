@@ -188,7 +188,7 @@ class Installer:
     def __init__(
         self,
         *,
-        add_in_folder: str = None,
+        source: str = None,
         vsto_version: str = "10.0",
         path_to_up_to_date_configuration: str = None,
         check_pre_releases: bool = False,
@@ -198,27 +198,24 @@ class Installer:
                 "Microsoft Excel add-in can only be installed on Microsoft Windows."
             )
 
-        if not add_in_folder:
+        if not source:
             executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
             # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
             data_dir = os.path.join(executable_folder_path, "..") if (os.path.basename(executable_folder_path) == "Scripts") else executable_folder_path
-            add_in_folder = os.path.join(data_dir, "pyxelrest_addin")
+            source = os.path.join(data_dir, "pyxelrest_addin")
 
-        self.add_in_folder = to_absolute_path(add_in_folder)
-        if not os.path.isdir(self.add_in_folder):
+        self.source = to_absolute_path(source)
+        if not os.path.isdir(self.source):
             raise Exception(
-                f"PyxelRest Microsoft Excel add-in cannot be found in {self.add_in_folder}."
+                f"PyxelRest Microsoft Excel add-in source folder cannot be found in {self.source}."
             )
 
         self.pyxelrest_appdata_folder = os.path.join(os.getenv("APPDATA"), "pyxelrest")
-        self.pyxelrest_appdata_addin_folder = os.path.join(
+        self.destination_addin_folder = os.path.join(
             self.pyxelrest_appdata_folder, "excel_addin"
         )
         self.pyxelrest_appdata_logs_folder = os.path.join(
             self.pyxelrest_appdata_folder, "logs"
-        )
-        self.pyxelrest_appdata_config_folder = os.path.join(
-            self.pyxelrest_appdata_folder, "configuration"
         )
         self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
@@ -226,9 +223,9 @@ class Installer:
 
     def install_addin(self):
         create_folder(self.pyxelrest_appdata_folder)
+        create_folder(self.destination_addin_folder)
         # Logs folder is required by default add-in configuration
         create_folder(self.pyxelrest_appdata_logs_folder)
-        create_folder(self.pyxelrest_appdata_config_folder)
         # Assert that Microsoft Excel is closed
         # otherwise ClickOnce cache will still contains the add-in application manifest
         # Resulting in failure when installing a new add-in version
@@ -238,7 +235,7 @@ class Installer:
             )
         self._install_pyxelrest_vb_addin()
 
-        self.xlwings_config = XlWingsConfig(self.pyxelrest_appdata_config_folder)
+        self.xlwings_config = XlWingsConfig(self.destination_addin_folder)
         self.xlwings_config.create_file()
         self.xlwings_config.create_vb_addin()
 
@@ -255,19 +252,18 @@ class Installer:
         return False
 
     def _install_pyxelrest_vb_addin(self):
-        pyxelrest_vb_file_path = os.path.join(self.add_in_folder, "pyxelrest.xlam")
-        if not os.path.isfile(pyxelrest_vb_file_path):
+        source_file = os.path.join(self.source, "pyxelrest.xlam")
+        if not os.path.isfile(source_file):
             raise Exception(
-                f"Visual Basic PyxelRest Excel Add-In cannot be found in {pyxelrest_vb_file_path}."
+                f"Visual Basic PyxelRest Excel Add-In cannot be found in {source_file}."
             )
 
-        xlstart_folder = os.path.join(
+        trusted_location = os.path.join(
             os.getenv("APPDATA"), "Microsoft", "Excel", "XLSTART"
         )
-        if not os.path.exists(xlstart_folder):
-            os.makedirs(xlstart_folder)
-        pyxelrest_vb_addin_path = os.path.join(xlstart_folder, "pyxelrest.xlam")
-        shutil.copyfile(pyxelrest_vb_file_path, pyxelrest_vb_addin_path)
+        if not os.path.exists(trusted_location):
+            os.makedirs(trusted_location)
+        shutil.copyfile(source_file, os.path.join(trusted_location, "pyxelrest.xlam"))
 
     def _install_addin(self):
         """
@@ -275,17 +271,17 @@ class Installer:
         installation and python copy is performed before running post installation script.
         """
         vsto = VSTOManager(self.vsto_version)
-        if os.path.exists(self.pyxelrest_appdata_addin_folder):
-            vsto.uninstall_addin(self.pyxelrest_appdata_addin_folder)
-            dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
+        if os.path.exists(self.destination_addin_folder):
+            vsto.uninstall_addin(self.destination_addin_folder)
+            dir_util.remove_tree(self.destination_addin_folder)
 
-        os.makedirs(self.pyxelrest_appdata_addin_folder)
-        dir_util.copy_tree(self.add_in_folder, self.pyxelrest_appdata_addin_folder)
+        os.makedirs(self.destination_addin_folder)
+        dir_util.copy_tree(self.source, self.destination_addin_folder)
         try:
-            vsto.install_addin(self.pyxelrest_appdata_addin_folder)
+            vsto.install_addin(self.destination_addin_folder)
         except:
             # Avoid next install trying to uninstall an addin that was not properly installed
-            dir_util.remove_tree(self.pyxelrest_appdata_addin_folder)
+            dir_util.remove_tree(self.destination_addin_folder)
             raise
         self._update_addin_config()
 
@@ -318,7 +314,7 @@ class Installer:
                 new_settings.write(default_settings_line)
 
         default_config_file_path = os.path.join(
-            self.pyxelrest_appdata_addin_folder, "PyxelRestAddIn.dll.config"
+            self.destination_addin_folder, "PyxelRestAddIn.dll.config"
         )
         if os.path.isfile(default_config_file_path):
             new_config = io.StringIO()
@@ -332,8 +328,8 @@ class Installer:
 def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--add_in_directory",
-        help="Directory containing PyxelRest Microsoft Excel add-in.",
+        "--source",
+        help="Directory containing add-in as provided by pyxelrest module installation.",
         default=None,
         type=str,
     )
@@ -348,7 +344,7 @@ def main(*args):
     )
     options = parser.parse_args(args if args else None)
     installer = Installer(
-        add_in_folder=options.add_in_directory,
+        add_in_folder=options.source,
         path_to_up_to_date_configuration=options.path_to_up_to_date_configuration,
         check_pre_releases=options.check_pre_releases,
     )

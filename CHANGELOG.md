@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Display default values for OAuth2 settings in configuration UI.
 - Renamed Microsoft Excel add-in to `PyxelRestAddIn`.
 - Microsoft Excel add-in configuration is now loaded from `excel_addin\PyxelRestAddIn.dll.config` instead of `configuration\addin.config` so that there is no default unused configuration.
+- xlwings related configuration and bas file are now loaded from `excel_addin` folder instead of `configuration` folder as it should not be modified by clients.
+- `install_addin` script `add_in_directory` parameter has been renamed to `source`.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
