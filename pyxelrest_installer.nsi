@@ -241,7 +241,7 @@ Section "Python module" install_module
     AddSize 37888
     Call registerUninstaller
     DetailPrint "Installing pyxelrest python module"
-    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}" "--disable-pip-version-check"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "pyxelrest==${VERSION}" "--disable-pip-version-check" "--verbose"'
     Pop $0
     ${If} $0 != "0"
     	Abort "Python module could not be installed (returned $0). Open an issue in https://github.com/Colin-b/pyxelrest/issues/new"
