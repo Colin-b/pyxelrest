@@ -16,4 +16,4 @@ def test_xlwings_config(tmpdir):
     conf = pyxelrest.install_addin.XlWingsConfig(tmpdir)
     conf.create_file()
     actual = open(os.path.join(tmpdir, "xlwings.conf")).read()
-    assert actual == f'"INTERPRETER", "{os.path.dirname(sys.executable)}\\pythonw.exe""UDF MODULES","pyxelrest._generator"'
+    assert actual == f'"INTERPRETER_WIN", "{os.path.dirname(sys.executable)}\\pythonw.exe""UDF MODULES","pyxelrest._generator"'
