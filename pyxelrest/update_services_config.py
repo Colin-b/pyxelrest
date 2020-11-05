@@ -26,16 +26,16 @@ LIST_SECTIONS = (
 )
 
 
-def open_config(file_or_directory: str) -> Optional[dict]:
+def open_config(source: str) -> Optional[dict]:
     """
     Open provided services configuration.
 
-    :param file_or_directory: Can be a file path, a path to a directory or an URL to a file content.
+    :param source: Can be a file path, a path to a directory or an URL to a file content.
     :return loaded configuration or None if it was unable to be loaded.
     """
-    if os.path.isfile(file_or_directory) or os.path.isdir(file_or_directory):
-        return open_file_config(file_or_directory)
-    return open_url_config(file_or_directory)
+    if os.path.isfile(source) or os.path.isdir(source):
+        return open_file_config(source)
+    return open_url_config(source)
 
 
 def open_file_config(file_or_directory: str) -> Optional[dict]:
@@ -103,22 +103,22 @@ class ServicesConfigUpdater:
             raise Exception("Services configuration cannot be opened.")
         self._action = action
 
-    def update_configuration(self, file_or_directory: str, services: List[str] = None):
+    def update_configuration(self, source: str, services: List[str] = None):
         """
 
-        :param file_or_directory: Absolute or relative path to a configuration file
+        :param source: Absolute or relative path to a configuration file
         or a directory or an URL to a file containing configuration file(s).
         :param services: List of service names to be affected.
         """
         if LIST_SECTIONS != self._action:
             logger.info("Updating services configuration...")
 
-        updated_config = open_config(file_or_directory)
-        if updated_config is None:
+        source_config = open_config(source)
+        if source_config is None:
             logger.error("Services configuration cannot be updated.")
             return
 
-        for service_name, service_config in updated_config.items():
+        for service_name, service_config in source_config.items():
             if services and service_name not in services:
                 continue
 
@@ -178,7 +178,7 @@ class ServicesConfigUpdater:
 def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "file_or_directory",
+        "source",
         help="File (path or URL) or directory (path) containing services configuration.",
         type=str,
     )
@@ -204,7 +204,7 @@ def main(*args):
     options = parser.parse_args(args if args else None)
     try:
         installer = ServicesConfigUpdater(action=options.action, config_file_path=options.config_to_update)
-        installer.update_configuration(options.file_or_directory, options.services)
+        installer.update_configuration(options.source, options.services)
     except:
         logger.exception("Unable to perform services configuration update.")
 

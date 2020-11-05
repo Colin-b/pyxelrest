@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - xlwings related configuration and bas file are now loaded from `excel_addin` folder instead of `configuration` folder as it should not be modified by clients.
 - `install_addin` script `add_in_directory` parameter has been renamed to `source`.
 - `install_addin` script now installs add-in relatively to current location unless specified otherwise.
+- `update_services_config` script `file_or_directory` parameter has been renamed to `source`.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
