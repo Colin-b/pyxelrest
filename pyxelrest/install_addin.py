@@ -214,9 +214,6 @@ class Installer:
         self.destination_addin_folder = os.path.join(
             self.pyxelrest_appdata_folder, "excel_addin"
         )
-        self.pyxelrest_appdata_logs_folder = os.path.join(
-            self.pyxelrest_appdata_folder, "logs"
-        )
         self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
         self.vsto_version = vsto_version
@@ -224,8 +221,6 @@ class Installer:
     def install_addin(self):
         create_folder(self.pyxelrest_appdata_folder)
         create_folder(self.destination_addin_folder)
-        # Logs folder is required by default add-in configuration
-        create_folder(self.pyxelrest_appdata_logs_folder)
         # Assert that Microsoft Excel is closed
         # otherwise ClickOnce cache will still contains the add-in application manifest
         # Resulting in failure when installing a new add-in version
@@ -287,16 +282,21 @@ class Installer:
 
     def _update_addin_config(self):
         def write_addin_configuration_line(default_settings_line: str, new_settings: io.StringIO):
-            if "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION" in default_settings_line:
+            if "PYTHON_PATH_TO_BE_REPLACED_AT_ADDIN_INSTALLATION" in default_settings_line:
                 python_executable_folder_path = os.path.dirname(sys.executable)
                 python_path = os.path.join(python_executable_folder_path, "python.exe")
                 # Do not set python path to a value that we know wrong, this case should not happen but you never know
                 # Do not raise an exception here as the auto update feature is optional
                 if os.path.isfile(python_path):
                     new_line = default_settings_line.replace(
-                        "PYTHON_PATH_TO_BE_REPLACED_AT_POST_INSTALLATION", python_path
+                        "PYTHON_PATH_TO_BE_REPLACED_AT_ADDIN_INSTALLATION", python_path
                     )
                     new_settings.write(new_line)
+            elif r'<file value=".\" />' in default_settings_line:
+                logs_folder = os.path.join(self.pyxelrest_appdata_folder, "logs")
+                create_folder(logs_folder)
+                new_line = default_settings_line.replace(".", logs_folder)
+                new_settings.write(new_line)
             elif "</appSettings>" in default_settings_line:
                 if self.path_to_up_to_date_configuration:
                     new_settings.write(

@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to provide a custom xlwings bas file path to the add-in.
 - Allow to load pyxelrest even if no services configuration file can be found.
 - Allow to install pyxelrest outside of a virtual environment.
+- Launching add-in as a developer do not mixes logs with the installed add-in anymore. Local development log files are created instead.
 
 ### Removed
 - Drop support for `python` < `3.8`.
