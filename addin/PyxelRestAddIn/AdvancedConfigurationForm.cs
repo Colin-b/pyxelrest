@@ -145,59 +145,16 @@ namespace PyxelRestAddIn
                 }
                 #endregion
 
-                #region Max retries
-                {
-                    layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)servicePanel.service.Network["max_retries"], Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
-                    maxRetries.ValueChanged += MaxRetries_ValueChanged;
-                    layout.Controls.Add(maxRetries, 1, 2);
-                }
-                #endregion
-
-                #region Timeout
-
-                #region Connect timeout
-                {
-                    layout.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(servicePanel.service.Network["connect_timeout"]), Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
-                    connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
-                    layout.Controls.Add(connectTimeout, 1, 3);
-                }
-                #endregion
-
-                #region Read timeout
-                {
-                    layout.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(servicePanel.service.Network["read_timeout"]), Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
-                    readTimeout.ValueChanged += ReadTimeout_ValueChanged;
-                    layout.Controls.Add(readTimeout, 1, 4);
-                }
-                #endregion
-
-                #endregion
-
                 #region API Key
                 {
-                    layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+                    layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                     var apiKey = new TextBox { Text = (string)servicePanel.service.Auth["api_key"], Dock = DockStyle.Fill };
                     tooltip.SetToolTip(apiKey, "Only used when required.");
                     apiKey.TextChanged += ApiKey_TextChanged;
-                    layout.Controls.Add(apiKey, 1, 5);
+                    layout.Controls.Add(apiKey, 1, 2);
                 }
                 #endregion
 
@@ -207,7 +164,7 @@ namespace PyxelRestAddIn
 
                 #region Formulas
                 {
-                    layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
+                    layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
                     var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
@@ -238,13 +195,13 @@ namespace PyxelRestAddIn
                     }
                     #endregion
 
-                    layout.Controls.Add(panel, 1, 6);
+                    layout.Controls.Add(panel, 1, 3);
                 }
                 #endregion
 
                 #region Dynamic array formulas behavior
                 {
-                    layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
+                    layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
                     var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
@@ -260,13 +217,13 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(dynamicArrayFormulasLockExcel, 0, 0);
                     }
 
-                    layout.Controls.Add(panel, 1, 7);
+                    layout.Controls.Add(panel, 1, 4);
                 }
                 #endregion
 
                 #region Legacy array formulas behavior
                 {
-                    layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 8);
+                    layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
                     var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
 
@@ -281,7 +238,7 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(legacyArrayFormulasLockExcel, 0, 0);
                     }
 
-                    layout.Controls.Add(panel, 1, 8);
+                    layout.Controls.Add(panel, 1, 5);
                 }
                 #endregion
 
@@ -290,48 +247,115 @@ namespace PyxelRestAddIn
             }
             #endregion
 
-            #region Proxies settings
+            #region Network settings
             {
-                var tab = new TabPage("Proxies");
+                var tab = new TabPage("Network");
                 var layout = new TableLayoutPanel { AutoSize = true };
-                var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
+
+                var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
+
+                #region Max retries
+                {
+                    layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Dock = DockStyle.Fill };
+                    tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
+                    maxRetries.ValueChanged += MaxRetries_ValueChanged;
+                    layout.Controls.Add(maxRetries, 1, 1);
+                }
+                #endregion
+
+                #region Timeout
+
+                #region Connect timeout
+                {
+                    layout.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Dock = DockStyle.Fill };
+                    tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
+                    connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
+                    layout.Controls.Add(connectTimeout, 1, 2);
+                }
+                #endregion
+
+                #region Read timeout
+                {
+                    layout.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Dock = DockStyle.Fill };
+                    tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
+                    readTimeout.ValueChanged += ReadTimeout_ValueChanged;
+                    layout.Controls.Add(readTimeout, 1, 3);
+                }
+                #endregion
+
+                #endregion
+
+                var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
 
                 #region HTTP proxy
                 {
-                    layout.Controls.Add(new Label { Text = "HTTP URL", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    layout.Controls.Add(new Label { Text = "HTTP proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy to be used for HTTP requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                     httpProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("http") ? (string)proxiesOptions["http"] : string.Empty };
                     tooltip.SetToolTip(httpProxy, "Default system HTTP_PROXY will be used if not set.");
                     httpProxy.TextChanged += HttpProxy_TextChanged;
-                    layout.Controls.Add(httpProxy, 1, 1);
+                    layout.Controls.Add(httpProxy, 1, 4);
                 }
                 #endregion
 
                 #region HTTPS proxy
                 {
-                    layout.Controls.Add(new Label { Text = "HTTPS URL", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    layout.Controls.Add(new Label { Text = "HTTPS proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy to be used for HTTPS requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                     httpsProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("https") ? (string)proxiesOptions["https"] : string.Empty };
                     tooltip.SetToolTip(httpsProxy, "Default system HTTPS_PROXY will be used if not set.");
                     httpsProxy.TextChanged += HttpsProxy_TextChanged;
-                    layout.Controls.Add(httpsProxy, 1, 2);
+                    layout.Controls.Add(httpsProxy, 1, 5);
                 }
                 #endregion
 
                 #region No proxy
                 {
-                    layout.Controls.Add(new Label { Text = "No proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+                    layout.Controls.Add(new Label { Text = "No proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "URL starting with this will not use any proxy", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                     noProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("no_proxy") ? (string)proxiesOptions["no_proxy"] : string.Empty };
                     tooltip.SetToolTip(noProxy, "Default system NO_PROXY will be used if not set.");
                     noProxy.TextChanged += NoProxy_TextChanged;
-                    layout.Controls.Add(noProxy, 1, 3);
+                    layout.Controls.Add(noProxy, 1, 6);
+                }
+                #endregion
+
+                #region SSL certificate verification
+                {
+                    layout.Controls.Add(new Label { Text = "Verify SSL certificate", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
+
+                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
+
+
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Enable SSL certificate verification", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var verifyChecked = networkOptions.ContainsKey("verify") ? Convert.ToBoolean(networkOptions["verify"]) : true;
+                        var verifySSLCertificate = new CheckBox { Text = "Verify SSL certificate for https requests", Checked = verifyChecked };
+                        tooltip.SetToolTip(verifySSLCertificate, "Uncheck to disable SSL certificate validation.");
+                        verifySSLCertificate.CheckedChanged += VerifySSLCertificate_CheckedChanged;
+                        panel.Controls.Add(verifySSLCertificate, 0, 0);
+                    }
+
+                    layout.Controls.Add(panel, 1, 7);
                 }
                 #endregion
 
@@ -902,6 +926,11 @@ namespace PyxelRestAddIn
         private void MaxRetries_ValueChanged(object sender, EventArgs e)
         {
             servicePanel.service.Network["max_retries"] = (int)((NumericUpDown)sender).Value;
+        }
+
+        private void VerifySSLCertificate_CheckedChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Network["verify"] = ((CheckBox)sender).Checked;
         }
 
         private void RelyOnDefinitions_CheckedChanged(object sender, EventArgs e)
