@@ -3,7 +3,7 @@ from importlib import import_module, reload
 
 import yaml
 
-import pyxelrest
+import pyxelrest._generator_config
 from responses import RequestsMock
 
 
@@ -36,7 +36,7 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
     this_dir = os.path.abspath(os.path.dirname(__file__))
-    pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(
+    pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = os.path.join(
         this_dir, "non_existing_configuration.yml"
     )
     config_file_path = os.path.join(tmpdir, "test_config.yml")
@@ -49,5 +49,5 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
     with open(config_file_path, "wt") as file:
         file.write(yaml.dump(config))
 
-    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
     reload(import_module("pyxelrest._generator"))

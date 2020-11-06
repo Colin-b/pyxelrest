@@ -2,7 +2,7 @@ import datetime
 import os
 from importlib import import_module, reload
 
-import pyxelrest
+import pyxelrest._generator_config
 from responses import RequestsMock
 
 
@@ -2611,7 +2611,7 @@ usual_parameters:
     shift_result: false
 """
         )
-    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
     generated_functions = reload(import_module("pyxelrest._generator"))
 
     responses.add(

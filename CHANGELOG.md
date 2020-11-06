@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to load pyxelrest even if no services configuration file can be found.
 - Allow to install pyxelrest outside of a virtual environment.
 - Launching add-in as a developer do not mixes logs with the installed add-in anymore. Local development log files are created instead.
+- Use `SafeLoader` rather than `FullLoader` to load module logging configuration.
 
 ### Removed
 - Drop support for `python` < `3.8`.
@@ -57,6 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `install_addin` script `add_in_directory` parameter has been renamed to `source`.
 - `install_addin` script now installs add-in relatively to current location unless specified otherwise.
 - `update_services_config` script `file_or_directory` parameter has been renamed to `source`.
+- If pyxelrest logging configuration cannot be found, rely on logging module configuration instead of a custom fallback configuration.
+- `update_services_config` script now requires a configuration file to update (no default configuration path anymore).
 
 ## [0.69.0] - 2018-12-03
 ### Changed

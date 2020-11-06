@@ -11,10 +11,6 @@ if __name__ == "__main__":
 else:
     logger = logging.getLogger(__name__)
 
-DEFAULT_USER_CONFIG_FILE_PATH = os.path.join(
-    os.getenv("APPDATA"), "pyxelrest", "configuration", "services.yml"
-)
-
 # Below are the values for the action option
 ADD_SECTIONS = "add"  # Provided configuration(s) will be appended (updated if section is already existing)
 UPDATE_SECTIONS = "update"  # Provided configuration(s) will be updated (if section is already existing)
@@ -178,6 +174,11 @@ class ServicesConfigUpdater:
 def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "config_to_update",
+        help="File path of the configuration file to update.",
+        type=str,
+    )
+    parser.add_argument(
         "source",
         help="File (path or URL) or directory (path) containing services configuration.",
         type=str,
@@ -194,12 +195,6 @@ def main(*args):
         default=None,
         type=str,
         nargs="*",
-    )
-    parser.add_argument(
-        "--config_to_update",
-        help="File path of the configuration file to update.",
-        default=DEFAULT_USER_CONFIG_FILE_PATH,
-        type=str,
     )
     options = parser.parse_args(args if args else None)
     try:

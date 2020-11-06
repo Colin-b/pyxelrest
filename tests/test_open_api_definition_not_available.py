@@ -3,9 +3,9 @@ import timeit
 
 import requests.adapters
 import yaml
-from requests import ReadTimeout
+from requests.exceptions import ReadTimeout
 
-import pyxelrest
+import pyxelrest._generator_config
 
 
 def test_service_can_be_loaded_without_hitting_timeout(monkeypatch, tmpdir):
@@ -33,6 +33,6 @@ def test_service_can_be_loaded_without_hitting_timeout(monkeypatch, tmpdir):
                 }
             )
         )
-    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
     nb_seconds = timeit.timeit("from pyxelrest import _generator", number=1)
     assert nb_seconds < 3, "Time to load pyxelrest should be around timeout."

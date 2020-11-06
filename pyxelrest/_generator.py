@@ -2,41 +2,26 @@
 Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will generate xlwings User Defined Functions.
 """
 import os
+import sys
+import platform
 from importlib import reload, import_module
 from typing import List
 import logging.config
 import logging.handlers
 import datetime
+from distutils import sysconfig
 
 import jinja2
 import yaml
 
 from pyxelrest import (
     GENERATE_UDF_ON_IMPORT,
-    _custom_logging,
-    SERVICES_CONFIGURATION_FILE_PATH,
-    LOGGING_CONFIGURATION_FILE_PATH,
+    version,
 )
+from pyxelrest._generator_config import SERVICES_CONFIGURATION_FILE_PATH, LOGGING_CONFIGURATION_FILE_PATH
 from pyxelrest._common import check_for_duplicates, Service
 from pyxelrest._open_api import load_service
 from pyxelrest._rest import PyxelRestService
-
-
-def load_services_from_yaml(services_configuration_file_path: str) -> List[Service]:
-    """
-    Retrieve OpenAPI JSON definition for each service defined in configuration file.
-    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
-    configuration file
-    """
-    if not os.path.isfile(services_configuration_file_path):
-        logging.warning(f'No services will be available as "{services_configuration_file_path}" cannot be found.')
-        return []
-
-    with open(services_configuration_file_path, "r") as config_file:
-        config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-    logging.debug(f'Loading services from "{services_configuration_file_path}"...')
-    return load_services(config)
 
 
 def load_services(config: dict) -> List[Service]:
@@ -127,10 +112,48 @@ if __name__ == "__main__":
 else:
     logger = logging.getLogger(__name__)
 
+
+def load_logging_configuration():
+    """
+    Load YAML logging configuration if found.
+    :return: None
+    """
+    logging_configuration_file_path = LOGGING_CONFIGURATION_FILE_PATH
+    if os.path.isfile(logging_configuration_file_path):
+        with open(logging_configuration_file_path, "r") as config_file:
+            log_config_dict = yaml.load(config_file, Loader=yaml.SafeLoader)
+            logging.config.dictConfig(log_config_dict)
+    else:
+        logger.warning(
+            f"Logging configuration file ({logging_configuration_file_path}) cannot be found."
+        )
+    logger.info(
+        f"Loading PyxelRest: {version.__version__} Python: {sys.version} OS: {platform.platform()} Lib: {sysconfig.get_python_lib()}"
+    )
+
+
+def load_services_from_yaml() -> List[Service]:
+    """
+    Retrieve OpenAPI JSON definition for each service defined in configuration file.
+    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
+    configuration file
+    """
+    services_configuration_file_path = SERVICES_CONFIGURATION_FILE_PATH
+    if not os.path.isfile(services_configuration_file_path):
+        logging.warning(f'No services will be available as "{services_configuration_file_path}" cannot be found.')
+        return []
+
+    with open(services_configuration_file_path, "r") as config_file:
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+    logging.debug(f'Loading services from "{services_configuration_file_path}"...')
+    return load_services(config)
+
+
 if GENERATE_UDF_ON_IMPORT:
-    _custom_logging.load_logging_configuration(LOGGING_CONFIGURATION_FILE_PATH)
+    load_logging_configuration()
     try:
-        services = load_services_from_yaml(SERVICES_CONFIGURATION_FILE_PATH)
+        services = load_services_from_yaml()
         generate_python_file(services)
     except Exception as e:
         logger.exception("Cannot generate user defined functions.")

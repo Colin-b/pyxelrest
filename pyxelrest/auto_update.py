@@ -245,11 +245,14 @@ class UpdateProcess:
         try:
             from pyxelrest.update_services_config import (
                 ServicesConfigUpdater,
-                UPDATE_SECTIONS,
-                DEFAULT_USER_CONFIG_FILE_PATH
+                UPDATE_SECTIONS
             )
 
-            config_updater = ServicesConfigUpdater(UPDATE_SECTIONS, DEFAULT_USER_CONFIG_FILE_PATH)
+            configuration_file_path = os.path.join(
+                os.getenv("APPDATA"), "pyxelrest", "configuration", "services.yml"
+            )
+
+            config_updater = ServicesConfigUpdater(UPDATE_SECTIONS, configuration_file_path)
             config_updater.update_configuration(self.path_to_up_to_date_configurations)
             logger.info("Services configuration successfully updated.")
             self.updating_queue.put((SETTINGS_STEP, DONE))

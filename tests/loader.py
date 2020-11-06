@@ -3,7 +3,7 @@ import os
 
 import yaml
 
-import pyxelrest
+import pyxelrest._generator_config
 
 
 def load(tmpdir, config: dict):
@@ -12,7 +12,7 @@ def load(tmpdir, config: dict):
     with open(config_file_path, "wt") as file:
         file.write(yaml.dump(config))
 
-    pyxelrest.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
 
     # Create logging configuration
     config_file_path = os.path.join(tmpdir, "test_logging.yml")
@@ -41,6 +41,6 @@ root:
   handlers: [standard_output]"""
         )
 
-    pyxelrest.LOGGING_CONFIGURATION_FILE_PATH = config_file_path
+    pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = config_file_path
 
     return reload(import_module("pyxelrest._generator"))

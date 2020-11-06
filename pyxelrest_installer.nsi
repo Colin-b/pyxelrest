@@ -317,7 +317,7 @@ Section "petstore" add_petstore_configuration
 
     SectionInstType ${IT_FULL}
     DetailPrint "Adding petstore service configuration"
-    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/petstore.yml" "add" "--config_to_update" "$%APPDATA%\pyxelrest\configuration\services.yml"'
+    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "$%APPDATA%\pyxelrest\configuration\services.yml" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/petstore.yml" "add"'
 
 SectionEnd
 
@@ -325,7 +325,7 @@ Section "pyxelrest" add_pyxelrest_configuration
 
     SectionInstType ${IT_FULL}
     DetailPrint "Adding pyxelrest service configuration"
-    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/pyxelrest.yml" "add" "--config_to_update" "$%APPDATA%\pyxelrest\configuration\services.yml"'
+    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_update_services_config.exe" "$%APPDATA%\pyxelrest\configuration\services.yml" "https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/samples/pyxelrest.yml" "add"'
 
 SectionEnd
 
