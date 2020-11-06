@@ -9,6 +9,7 @@ import requests
 import xlwings
 import xlwings.conversion
 import xlwings.server
+from xlwings.udfs import ComRange
 
 from pyxelrest import _session, _authentication
 
@@ -433,7 +434,7 @@ def check_for_duplicates(loaded_services: List[Service]):
 
 
 def get_result(
-    udf_method: UDFMethod, request_content: RequestContent, excel_application=None
+    udf_method: UDFMethod, request_content: RequestContent, caller: ComRange, excel_application=None
 ):
     cached_result = udf_method.get_cached_result(request_content)
     if cached_result is not None:
@@ -478,10 +479,10 @@ def get_result(
                     f"Waiting for {wait_for_status} status. Sending a new request in {check_interval} seconds."
                 )
                 time.sleep(check_interval)
-                return get_result(udf_method, request_content, excel_application)
+                return get_result(udf_method, request_content, caller, excel_application)
 
         logger.info(
-            f"{get_caller_address(excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}]."
+            f"{get_caller_address(caller, excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}]."
         )
         if 202 == response.status_code:
             result = [["Status URL"], [response.headers["location"]]]
@@ -493,7 +494,7 @@ def get_result(
         return result
     except requests.ConnectionError as e:
         logger.exception(
-            f"{get_caller_address(excel_application)} Connection [status=error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
+            f"{get_caller_address(caller, excel_application)} Connection [status=error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
         )
         return handle_exception(
             udf_method,
@@ -504,12 +505,12 @@ def get_result(
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
             logger.exception(
-                f"{get_caller_address(excel_application)} [status=Error] occurred while handling "
+                f"{get_caller_address(caller, excel_application)} [status=Error] occurred while handling "
                 f"[function={udf_method.udf_name}] [url={response.request.url}] response: [response={response.text}]."
             )
         else:
             logger.exception(
-                f"{get_caller_address(excel_application)} [status=Error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
+                f"{get_caller_address(caller, excel_application)} [status=Error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
             )
         return handle_exception(udf_method, describe_error(response, error), error)
     finally:
@@ -518,16 +519,15 @@ def get_result(
             response.close()
 
 
-def get_caller_address(excel_application=None) -> str:
+def get_caller_address(caller: ComRange, excel_application=None) -> str:
     try:
-        if not excel_application:
+        if not caller:
             return ""
-        excel_caller = excel_application.Caller
-        if not hasattr(excel_caller, "Rows"):
+
+        if not hasattr(caller, "Rows"):
             return f"VBA:{excel_application.VBE.ActiveCodePane.CodeModule}"
-        return str(
-            xlwings.xlplatform.Range(xl=excel_caller).get_address(True, True, True)
-        )
+
+        return str(caller.get_address())
     except:
         logger.exception("Unable to retrieve caller address.")
         return ""

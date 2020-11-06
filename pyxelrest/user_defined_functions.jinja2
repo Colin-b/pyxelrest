@@ -57,12 +57,12 @@ udf_methods = None  # Will be set after load
 def {{ udf_method.udf_name }}(
     {%- for udf_parameter in udf_method.path_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
     {%- for udf_parameter in udf_method.required_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None{% if not loop.last %}, {% endif %}{% endfor %}
-    {%- if not udf_method.is_asynchronous %}{% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}excel_application=None{% endif %}):
+    {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None, {% endfor %}
+    caller=None{%- if not udf_method.is_asynchronous %}, excel_application=None{% endif %}):
 {% if udf_method.summary() %}
     """{{ udf_method.summary() }}"""
 {% endif %}
-    excel_caller_address = get_caller_address({% if not udf_method.is_asynchronous %}excel_application{% endif %})
+    excel_caller_address = get_caller_address(caller{% if not udf_method.is_asynchronous %}, excel_application{% endif %})
     logger.info(f"{excel_caller_address} [status=Calling] [function={{ udf_method.udf_name }}]...")
     udf_method = udf_methods['{{ udf_method.udf_name }}']
     request_content = RequestContent(udf_method, excel_caller_address)
@@ -83,7 +83,7 @@ def {{ udf_method.udf_name }}(
         logger.exception(f'{excel_caller_address} Unable to validate parameters.')
         return handle_exception(udf_method, str(e), e)
 {% endif %}
-    return get_result(udf_method, request_content{% if not udf_method.is_asynchronous %}, excel_application{% endif %})
+    return get_result(udf_method, request_content, caller{% if not udf_method.is_asynchronous %}, excel_application{% endif %})
 {% endmacro %}
 {% if service.config.name == 'pyxelrest' %}
     {% for http_method in ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] %}

@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `install_addin` script now has a `destination` parameter allowing to install it anywhere.
 
 ### Fixed
-- Do not use a fixed dependency version.
+- Allow flexible dependencies versions (only requires major component to match).
 - Compatibility with `python` `3.8` and `3.9`.
 - Ability to change the configuration and impact loaded functions within module without restarting python.
 - file URl are now properly handled, they must start with `file:///` instead of `file://`
@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to install pyxelrest outside of a virtual environment.
 - Launching add-in as a developer do not mixes logs with the installed add-in anymore. Local development log files are created instead.
 - Use `SafeLoader` rather than `FullLoader` to load module logging configuration.
+- Allow REST APIs with `excel_application` parameter name.
 
 ### Removed
 - Drop support for `python` < `3.8`.

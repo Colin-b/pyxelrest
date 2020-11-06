@@ -14,6 +14,8 @@ keywords = [
     "byte",
     "byval",
     "call",
+    # xlwings parameter with a specific meaning
+    "caller",
     "case",
     "catch",
     "cbool",
@@ -56,6 +58,8 @@ keywords = [
     "erase",
     "error",
     "event",
+    # pyxelrest parameter with a specific meaning
+    "excel_application",
     "exit",
     "finally",
     "for",
