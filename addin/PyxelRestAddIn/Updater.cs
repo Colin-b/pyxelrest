@@ -18,7 +18,11 @@ namespace PyxelRestAddIn
             if (!File.Exists(pythonPath))
                 throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
 
-            updateScriptPath = Path.Combine(Path.GetDirectoryName(pythonPath), "pyxelrest_auto_update.exe");
+            string scriptsPath = Path.GetDirectoryName(pythonPath);
+            // python executable is in scripts folder in virtual environments, in root folder otherwise.
+            if (!"Scripts".Equals(Path.GetFileName(scriptsPath)))
+                scriptsPath = Path.Combine(scriptsPath, "Scripts");
+            updateScriptPath = Path.Combine(scriptsPath, "pyxelrest_auto_update.exe");
             if (!File.Exists(updateScriptPath))
                 throw new Exception(string.Format("PyxelRest auto update script '{0}' cannot be found.", updateScriptPath));
 
