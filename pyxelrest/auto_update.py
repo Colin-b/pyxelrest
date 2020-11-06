@@ -37,15 +37,24 @@ IMAGE_NAMES = {
 }
 
 
+def get_registry_key(key: str) -> Optional[str]:
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
+            value, _ = winreg.QueryValueEx(pyxelrest_registry_key, key)
+        return value
+    except FileNotFoundError:
+        return
+
+
 def create_logger():
-    global default_log_file_path
+    global log_file_path
     global logger
     if __name__ == "__main__":
         logger = logging.getLogger("pyxelrest.auto_update")
     else:
         logger = logging.getLogger(__name__)
 
-    default_log_file_path = os.path.join(
+    log_file_path = os.path.join(
         os.getenv("APPDATA"), "pyxelrest", "logs", "pyxelrest_auto_update.log"
     )
     logging.config.dictConfig(
@@ -60,7 +69,7 @@ def create_logger():
                 "daily_rotating": {
                     "class": "logging.handlers.TimedRotatingFileHandler",
                     "formatter": "clean",
-                    "filename": default_log_file_path,
+                    "filename": log_file_path,
                     "when": "D",
                     "backupCount": 10,
                 }
@@ -143,15 +152,6 @@ def _update_is_finished():
     os.remove(update_is_in_progress)
 
 
-def get_registry_key(key: str) -> Optional[str]:
-    try:
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
-            value, _ = winreg.QueryValueEx(pyxelrest_registry_key, key)
-        return value
-    except FileNotFoundError:
-        return
-
-
 class UpdateProcess:
     def __init__(
         self,
@@ -191,13 +191,13 @@ class UpdateProcess:
     def _update_pyxelrest(self):
         self.updating_queue.put((PYTHON_STEP, IN_PROGRESS))
         upgrade_options = ["--pre"] if self.check_pre_releases else []
+        if log_file_path:
+            upgrade_options.extend(["--log", log_file_path])
         result = InstallCommand().main(
             [
                 "pyxelrest",
                 "--upgrade",
                 "--disable-pip-version-check",
-                "--log",
-                default_log_file_path,
                 *upgrade_options,
             ]
         )
