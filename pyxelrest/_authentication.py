@@ -16,12 +16,12 @@ from requests_auth import (
 )
 from requests_auth.oauth2_tokens import JsonTokenFileCache
 
-logger = logging.getLogger(__name__)
+from pyxelrest._generator_config import TOKEN_CACHE_FILE_PATH
 
-oauth2_tokens_cache_path = os.path.join(
-    os.getenv("APPDATA"), "pyxelrest", "configuration", "tokens.json"
-)
-OAuth2.token_cache = JsonTokenFileCache(oauth2_tokens_cache_path)
+if TOKEN_CACHE_FILE_PATH:
+    OAuth2.token_cache = JsonTokenFileCache(TOKEN_CACHE_FILE_PATH)
+
+logger = logging.getLogger(__name__)
 
 
 def _create_authentication(
