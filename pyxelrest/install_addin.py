@@ -221,7 +221,9 @@ class Installer:
         self.vsto_version = vsto_version
 
     def install_addin(self):
-        self._write_install_location_registry_key()
+        self._write_registry_key("InstallLocation", self.destination)
+        if self.path_to_up_to_date_configuration:
+            self._write_registry_key("PathToUpToDateConfigurations", self.path_to_up_to_date_configuration)
         create_folder(self.destination_addin_folder)
         # Assert that Microsoft Excel is closed
         # otherwise ClickOnce cache will still contains the add-in application manifest
@@ -300,10 +302,6 @@ class Installer:
                 new_line = default_settings_line.replace(".", logs_folder)
                 new_settings.write(new_line)
             elif "</appSettings>" in default_settings_line:
-                if self.path_to_up_to_date_configuration:
-                    new_settings.write(
-                        f'    <add key="PathToUpToDateConfigurations" value="{self.path_to_up_to_date_configuration}" />\n'
-                    )
                 if self.check_pre_releases:
                     new_settings.write(
                         '    <add key="CheckPreReleases" value="true" />\n'
@@ -326,9 +324,9 @@ class Installer:
             with open(default_config_file_path, "w") as default_file:
                 default_file.write(new_config.getvalue())
 
-    def _write_install_location_registry_key(self):
+    def _write_registry_key(self, key: str, value: str):
         with winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
-            winreg.SetValueEx(pyxelrest_registry_key, "InstallLocation", 0, winreg.REG_SZ, self.destination)
+            winreg.SetValueEx(pyxelrest_registry_key, key, 0, winreg.REG_SZ, value)
 
 
 def main(*args):

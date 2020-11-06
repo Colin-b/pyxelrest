@@ -21,7 +21,6 @@ import win32com.client
 CLOSING_EXCEL_STEP = "Closing Microsoft Excel"
 PYTHON_STEP = "PyxelRest package"
 EXCEL_STEP = "Microsoft Excel add-in"
-SETTINGS_STEP = "Services configuration"
 END_STEP = "End of update"
 
 IN_PROGRESS = "in progress"
@@ -35,9 +34,6 @@ IMAGE_NAMES = {
     EXCEL_STEP: "excel_logo_greyscale_100.png",
     f"{EXCEL_STEP}_{DONE}": "excel_logo_100.png",
     f"{EXCEL_STEP}_{FAILURE}": "excel_logo_error_100.png",
-    SETTINGS_STEP: "settings_logo_greyscale_100.png",
-    f"{SETTINGS_STEP}_{DONE}": "settings_logo_100.png",
-    f"{SETTINGS_STEP}_{FAILURE}": "settings_logo_error_100.png",
 }
 
 
@@ -147,24 +143,21 @@ def _update_is_finished():
     os.remove(update_is_in_progress)
 
 
-def get_install_location_registry_key() -> Optional[str]:
+def get_registry_key(key: str) -> Optional[str]:
     try:
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
-            value, _ = winreg.QueryValueEx(pyxelrest_registry_key, "InstallLocation")
+            value, _ = winreg.QueryValueEx(pyxelrest_registry_key, key)
         return value
     except FileNotFoundError:
-        logger.error("Microsoft Excel add-in install location could not be found.")
-        raise
+        return
 
 
 class UpdateProcess:
     def __init__(
         self,
-        path_to_up_to_date_configurations: str,
         check_pre_releases: bool,
         updating_queue: multiprocessing.Queue,
     ):
-        self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
         self.check_pre_releases = check_pre_releases
         self.updating_queue = updating_queue
 
@@ -212,9 +205,7 @@ class UpdateProcess:
         if result == 0:
             self.updating_queue.put((PYTHON_STEP, DONE))
             logger.info("PyxelRest package updated.")
-            if self._update_addin():
-                # Only perform configuration update when we are sure that latest version is installed
-                self._update_configuration()
+            self._update_addin()
         else:
             logger.warning("PyxelRest package update failed.")
             self.updating_queue.put((PYTHON_STEP, FAILURE))
@@ -224,50 +215,28 @@ class UpdateProcess:
         try:
             from pyxelrest.install_addin import Installer
 
+            install_location = get_registry_key("InstallLocation")
+            if not install_location:
+                raise Exception("Microsoft Excel add-in install location could not be found.")
+
             addin_installer = Installer(
-                destination=get_install_location_registry_key(),
-                path_to_up_to_date_configuration=self.path_to_up_to_date_configurations
+                destination=install_location,
+                path_to_up_to_date_configuration=get_registry_key("PathToUpToDateConfigurations")
             )
             addin_installer.install_addin()
             logger.info("Microsoft Excel add-in successfully updated.")
             self.updating_queue.put((EXCEL_STEP, DONE))
-            return True
         except:
             logger.exception("Unable to update add-in.")
             self.updating_queue.put((EXCEL_STEP, FAILURE))
 
-    def _update_configuration(self):
-        if not self.path_to_up_to_date_configurations:
-            logger.info("Services configuration will not be updated.")
-            return
-
-        self.updating_queue.put((SETTINGS_STEP, IN_PROGRESS))
-        try:
-            from pyxelrest.update_services_config import (
-                ServicesConfigUpdater,
-                UPDATE_SECTIONS
-            )
-
-            configuration_file_path = os.path.join(
-                os.getenv("APPDATA"), "pyxelrest", "configuration", "services.yml"
-            )
-
-            config_updater = ServicesConfigUpdater(UPDATE_SECTIONS, configuration_file_path)
-            config_updater.update_configuration(self.path_to_up_to_date_configurations)
-            logger.info("Services configuration successfully updated.")
-            self.updating_queue.put((SETTINGS_STEP, DONE))
-        except:
-            logger.exception("Unable to update configuration.")
-            self.updating_queue.put((SETTINGS_STEP, FAILURE))
-
 
 def _start_update_process(
-    path_to_up_to_date_configurations: str,
     check_pre_releases: bool,
     updating_queue: multiprocessing.Queue,
 ):
     UpdateProcess(
-        path_to_up_to_date_configurations, check_pre_releases, updating_queue
+        check_pre_releases, updating_queue
     ).start_update()
 
 
@@ -275,10 +244,8 @@ class PyxelRestUpdater:
     def __init__(
         self,
         *,
-        path_to_up_to_date_configurations=None,
         check_pre_releases: bool = False,
     ):
-        self.path_to_up_to_date_configurations = path_to_up_to_date_configurations
         self.check_pre_releases = check_pre_releases
 
     def check_update(self):
@@ -301,7 +268,6 @@ class PyxelRestUpdater:
         updating_process = multiprocessing.Process(
             target=_start_update_process,
             args=(
-                self.path_to_up_to_date_configurations,
                 self.check_pre_releases,
                 updating_queue,
             ),
@@ -391,17 +357,9 @@ class UpdateGUI(tkinter.Frame):
         excel_image.image_reference = image
         excel_image.grid(in_=images_frame, row=0, column=1)
 
-        image = self.create_image(SETTINGS_STEP)
-        settings_image = tkinter.Label(
-            images_frame, width=100, height=100, text="Settings", image=image
-        )
-        settings_image.image_reference = image
-        settings_image.grid(in_=images_frame, row=0, column=2)
-
         self.images = {
             PYTHON_STEP: python_image,
             EXCEL_STEP: excel_image,
-            SETTINGS_STEP: settings_image,
         }
 
         self.new_version = new_version
@@ -514,12 +472,6 @@ class UpdateGUI(tkinter.Frame):
 def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--path_to_up_to_date_configurations",
-        help="File (path or URL) or directory (path) containing up to date services configuration.",
-        default=None,
-        type=str,
-    )
-    parser.add_argument(
         "--check_pre_releases", help="Also fetch pre-releases.", action="store_true"
     )
     options = parser.parse_args(args if args else None)
@@ -529,7 +481,6 @@ def main(*args):
     else:
         try:
             updater = PyxelRestUpdater(
-                path_to_up_to_date_configurations=options.path_to_up_to_date_configurations,
                 check_pre_releases=options.check_pre_releases,
             )
             updater.check_update()

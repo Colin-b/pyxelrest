@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `update_services_config` script `file_or_directory` parameter has been renamed to `source`.
 - If pyxelrest logging configuration cannot be found, rely on logging module configuration instead of a custom fallback configuration.
 - `update_services_config` script now requires a configuration file to update (no default configuration path anymore).
+- `auto_update` script does not update services configuration anymore as this is performed by add-in at startup time anyway.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

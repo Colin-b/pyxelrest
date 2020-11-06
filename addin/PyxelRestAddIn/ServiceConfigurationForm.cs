@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Microsoft.Win32;
 using Opulos.Core.UI;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace PyxelRestAddIn
         private static readonly int CHECK_HOST_INTERVAL_MS = 500;
         internal static readonly int CHECK_HOST_INTERVAL_TICKS = CHECK_HOST_INTERVAL_MS * 10000;
         private static readonly Regex SERVICE_NAME_UNALLOWED_CHARACTERS = new Regex("[^a-zA-Z_]+[^a-zA-Z_0-9]*");
+        private static string PathToUpToDateConfigurations = null;
 
         internal Accordion accordion;
         private ComboBox serviceNameField;
@@ -54,7 +56,7 @@ namespace PyxelRestAddIn
             }
             try
             {
-                upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"), false);
+                upToDateConfiguration = new Configuration(PathToUpToDateConfigurations, false);
                 LoadUpToDateServices();
             }
             catch (Exception e)
@@ -71,7 +73,8 @@ namespace PyxelRestAddIn
                 var configuration = new Configuration(configurationFilePath);
                 List<Service> configuredServices = configuration.Load();
 
-                var upToDateConfiguration = new Configuration(ThisAddIn.GetSetting("PathToUpToDateConfigurations"), false);
+                PathToUpToDateConfigurations = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "PathToUpToDateConfigurations", null);
+                var upToDateConfiguration = new Configuration(PathToUpToDateConfigurations, false);
                 List<Service> upToDateServices = upToDateConfiguration.Load();
 
                 if (upToDateServices.Count > 0)

@@ -192,9 +192,9 @@ namespace PyxelRestAddIn
         private bool TrustAccessToTheVBAObjectModel()
         {
             var accessVBOMs = new Dictionary<string, string>() {
-                { "HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security", "AccessVBOM" },
-                { "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\Excel\\Security", "AccessVBOM" },
-                { "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Office\\" + Application.Version + "\\excel\\security", "accessvbom" },
+                { @"HKEY_CURRENT_USER\Software\Microsoft\Office\" + Application.Version + @"\Excel\Security", "AccessVBOM" },
+                { @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\" + Application.Version + @"\Excel\Security", "AccessVBOM" },
+                { @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\" + Application.Version + @"\excel\security", "accessvbom" },
             };
 
             foreach (var accessVBOMItem in accessVBOMs)
