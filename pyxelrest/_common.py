@@ -6,9 +6,6 @@ from typing import Optional, Union, List, Any, Dict
 
 
 import requests
-import xlwings
-import xlwings.conversion
-import xlwings.server
 from xlwings.udfs import ComRange
 
 from pyxelrest import _session, _authentication
@@ -298,7 +295,7 @@ class RequestContent:
     def __init__(self, udf_method: UDFMethod, excel_caller_address):
         self.udf_method = udf_method
         self.header = udf_method.initial_header()
-        self.header["X-Pxl-Cell"] = excel_caller_address
+        self.header["X-Pxl-Caller"] = excel_caller_address
         self.header_parameters = {}
         self.payload = {}
         self.files = {}

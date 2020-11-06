@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - If pyxelrest logging configuration cannot be found, rely on logging module configuration instead of a custom fallback configuration.
 - `update_services_config` script now requires a configuration file to update (no default configuration path anymore).
 - `auto_update` script does not update services configuration anymore as this is performed by add-in at startup time anyway.
+- `X-Pxl-Cell` header renamed to `X-Pxl-Caller` for clarity.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
