@@ -119,13 +119,10 @@ def _process_ids():
     return [p.Properties_("ProcessId").Value for p in processes]
 
 
-def _is_already_updating() -> bool:
+def _is_already_updating(lock_file: str) -> bool:
     try:
-        update_is_in_progress = os.path.join(
-            os.getenv("APPDATA"), "pyxelrest", "update_is_in_progress"
-        )
-        if os.path.isfile(update_is_in_progress):
-            with open(update_is_in_progress, "r") as update_details:
+        if os.path.isfile(lock_file):
+            with open(lock_file, "r") as update_details:
                 process_id = int(update_details.readline())
                 if process_id in _process_ids():
                     return True
@@ -140,7 +137,7 @@ def _is_already_updating() -> bool:
 
     try:
         # Create file if this is the first update (most cases)
-        with open(update_is_in_progress, "w") as update_details:
+        with open(lock_file, "w") as update_details:
             update_details.write(str(os.getpid()))
     except:
         logger.exception(
@@ -148,13 +145,6 @@ def _is_already_updating() -> bool:
         )
     finally:
         return False
-
-
-def _update_is_finished():
-    update_is_in_progress = os.path.join(
-        os.getenv("APPDATA"), "pyxelrest", "update_is_in_progress"
-    )
-    os.remove(update_is_in_progress)
 
 
 class UpdateProcess:
@@ -481,7 +471,10 @@ def main(*args):
     )
     options = parser.parse_args(args if args else None)
     logger.debug("Starting auto update script...")
-    if _is_already_updating():
+    lock_file = os.path.join(
+        os.getenv("APPDATA"), "pyxelrest", "update_is_in_progress"
+    )
+    if _is_already_updating(lock_file):
         logger.debug("Skip update check as another update is ongoing.")
     else:
         try:
@@ -493,7 +486,7 @@ def main(*args):
             logger.exception("An error occurred while checking for update.")
             raise
         finally:
-            _update_is_finished()
+            os.remove(lock_file)
 
 
 if __name__ == "__main__":
