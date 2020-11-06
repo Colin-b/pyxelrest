@@ -115,8 +115,9 @@ pyxelrest_install_addin --check_pre_releases
 ```bash
 python -m pip uninstall pyxelrest
 ```
-3. Remove `%APPDATA%\pyxelrest` folder.
+3. Remove the folder provided at add-in installation.
 4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
+5. Remove `HKEY_CURRENT_USER` `Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest` registry key.
 
 ## Configuration
 
@@ -127,7 +128,7 @@ python -m pip uninstall pyxelrest
 </p>
 <p align="center"><em>Services configuration can be done within Microsoft Excel thanks to the <span style="color: #1382CE">Configure Services</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.</em></p>
 
-You can also update the [YAML](http://yaml.org/start.html) configuration file (`%APPDATA%\pyxelrest\configuration\services.yml`) yourself.
+You can also update the [YAML](http://yaml.org/start.html) configuration file (`configuration\services.yml` within the installation folder) yourself.
 
 Each section name will be used as the related formulas category within [Microsoft Excel].
 
@@ -286,11 +287,11 @@ To do so, you can use the `pyxelrest` service name to activate [Postman](https:/
 
 ### Logging configuration
 
-`pyxelrest` module logging configuration can be updated thanks to `%APPDATA%\pyxelrest\configuration\logging.yml` file.
+`pyxelrest` module logging configuration can be updated thanks to `configuration\logging.yml` file within the folder provided at add-in installation.
 
 [Microsoft Excel] COM add-in logging configuration can be updated thanks to `excel_addin\PyxelRestAddIn.dll.config` file located in the folder provided at add-in installation.
 
-By default, log files can be found in your `%APPDATA%\pyxelrest\logs` folder and `logs` folder located in the folder provided at add-in installation.
+Log files can be found in your `logs` folder located in the folder provided at add-in installation.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/open_logs.gif" alt='How to open logs'>

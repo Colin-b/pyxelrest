@@ -1,19 +1,7 @@
 import os
 from setuptools import setup, find_packages
-from distutils.command.install_data import install_data
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-
-
-class CustomInstall(install_data):
-    def run(self):
-        install_data.run(self)
-
-        self.announce("Performing post installation tasks...")
-        from pyxelrest_post_install import PostInstall
-
-        post_install = PostInstall()
-        post_install.perform_post_installation_tasks()
 
 
 with open(os.path.join(this_dir, "README.md"), "r") as f:
@@ -43,6 +31,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Operating System :: Microsoft :: Windows :: Windows 7",
+        "Operating System :: Microsoft :: Windows :: Windows 10",
     ],
     keywords=["excel", "openapi", "swagger", "rest", "udf", "service"],
     packages=find_packages(exclude=["tests*", "pyxelrest.user_defined_functions"]),
@@ -82,9 +71,6 @@ setup(
                 "pyxelrest_resources/python_logo_100.png",
                 "pyxelrest_resources/python_logo_error_100.png",
                 "pyxelrest_resources/python_logo_greyscale_100.png",
-                "pyxelrest_resources/settings_logo_100.png",
-                "pyxelrest_resources/settings_logo_error_100.png",
-                "pyxelrest_resources/settings_logo_greyscale_100.png",
             ],
         ),
         (
@@ -138,12 +124,10 @@ setup(
             "pyxelrest_update_services_config=pyxelrest.update_services_config:main",
         ]
     },
-    scripts=["pyxelrest_post_install.py"],
     project_urls={
         "GitHub": "https://github.com/Colin-b/pyxelrest",
         "Changelog": "https://github.com/Colin-b/pyxelrest/blob/master/CHANGELOG.md",
         "Issues": "https://github.com/Colin-b/pyxelrest/issues",
     },
     platforms=["Windows"],
-    cmdclass={"install_data": CustomInstall},
 )

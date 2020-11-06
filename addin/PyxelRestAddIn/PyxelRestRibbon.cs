@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System;
 using System.Configuration;
 using log4net;
+using Microsoft.Win32;
 
 namespace PyxelRestAddIn
 {
@@ -59,10 +60,10 @@ namespace PyxelRestAddIn
 
         private void OpenPyxelRestFolder(object sender, RibbonControlEventArgs e)
         {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (appDataFolder != null)
+            string installLocation = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "InstallLocation", null);
+            if (installLocation != null)
             {
-                string logsFolder = System.IO.Path.Combine(appDataFolder, "pyxelrest", "logs");
+                string logsFolder = System.IO.Path.Combine(installLocation, "logs");
                 if (!System.IO.Directory.Exists(logsFolder))
                 {
                     Log.WarnFormat("{0} logs folder does not exists. Creating it.", logsFolder);

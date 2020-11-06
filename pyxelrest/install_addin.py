@@ -225,6 +225,7 @@ class Installer:
         if self.path_to_up_to_date_configuration:
             self._write_registry_key("PathToUpToDateConfigurations", self.path_to_up_to_date_configuration)
         create_folder(self.destination_addin_folder)
+        self._create_module_logging()
         # Assert that Microsoft Excel is closed
         # otherwise ClickOnce cache will still contains the add-in application manifest
         # Resulting in failure when installing a new add-in version
@@ -327,6 +328,39 @@ class Installer:
     def _write_registry_key(self, key: str, value: str):
         with winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
             winreg.SetValueEx(pyxelrest_registry_key, key, 0, winreg.REG_SZ, value)
+
+    def _create_module_logging(self):
+        logs_folder = os.path.join(self.destination, "logs")
+        create_folder(logs_folder)
+
+        config_folder = os.path.join(self.destination, "configuration")
+        create_folder(config_folder)
+
+        with open(os.path.join(config_folder, "logging.yml"), "w") as generated_file:
+            generated_file.write(f"""version: 1
+formatters:
+  clean:
+    format: '%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s'
+handlers:
+  daily_rotating:
+    class: logging.handlers.TimedRotatingFileHandler
+    formatter: clean
+    filename: {os.path.join(logs_folder, "pyxelrest.log")}
+    when: 'D'
+    backupCount: 10
+loggers:
+  pyxelrest:
+    level: DEBUG
+  xlwings:
+    level: DEBUG
+  requests_auth:
+    level: DEBUG
+  requests.packages.urllib3:
+    level: DEBUG
+root:
+  level: INFO
+  handlers: [daily_rotating]
+""")
 
 
 def main(*args):
