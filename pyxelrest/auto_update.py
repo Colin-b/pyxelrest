@@ -471,8 +471,9 @@ def main(*args):
     )
     options = parser.parse_args(args if args else None)
     logger.debug("Starting auto update script...")
+    install_location = get_registry_key("InstallLocation") or ""
     lock_file = os.path.join(
-        os.getenv("APPDATA"), "pyxelrest", "update_is_in_progress"
+        install_location, "update_is_in_progress"
     )
     if _is_already_updating(lock_file):
         logger.debug("Skip update check as another update is ongoing.")
