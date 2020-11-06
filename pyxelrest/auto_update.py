@@ -54,30 +54,35 @@ def create_logger():
     else:
         logger = logging.getLogger(__name__)
 
-    log_file_path = os.path.join(
-        os.getenv("APPDATA"), "pyxelrest", "logs", "pyxelrest_auto_update.log"
-    )
-    logging.config.dictConfig(
-        {
-            "version": 1,
-            "formatters": {
-                "clean": {
-                    "format": "%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s"
-                }
-            },
-            "handlers": {
-                "daily_rotating": {
-                    "class": "logging.handlers.TimedRotatingFileHandler",
-                    "formatter": "clean",
-                    "filename": log_file_path,
-                    "when": "D",
-                    "backupCount": 10,
-                }
-            },
-            "loggers": {"pyxelrest": {"level": "DEBUG"}},
-            "root": {"level": "INFO", "handlers": ["daily_rotating"]},
-        }
-    )
+    install_location = get_registry_key("InstallLocation")
+    if install_location:
+        logs_folder = os.path.join(install_location, "logs")
+        if not os.path.exists(logs_folder):
+            os.makedirs(logs_folder)
+
+        log_file_path = os.path.join(logs_folder, "auto_update.log")
+
+        logging.config.dictConfig(
+            {
+                "version": 1,
+                "formatters": {
+                    "clean": {
+                        "format": "%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s"
+                    }
+                },
+                "handlers": {
+                    "daily_rotating": {
+                        "class": "logging.handlers.TimedRotatingFileHandler",
+                        "formatter": "clean",
+                        "filename": log_file_path,
+                        "when": "D",
+                        "backupCount": 10,
+                    }
+                },
+                "loggers": {"pyxelrest": {"level": "DEBUG"}},
+                "root": {"level": "INFO", "handlers": ["daily_rotating"]},
+            }
+        )
 
 
 create_logger()
