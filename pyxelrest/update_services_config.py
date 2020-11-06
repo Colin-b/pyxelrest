@@ -132,6 +132,9 @@ class ServicesConfigUpdater:
             logger.info("Services configuration updated.")
 
     def _save_configuration(self):
+        config_folder_path = os.path.dirname(self._config_file_path)
+        if not os.path.exists(config_folder_path):
+            os.makedirs(config_folder_path)
         with open(self._config_file_path, "w") as file:
             yaml.dump(self._user_config, file, default_flow_style=False)
 
