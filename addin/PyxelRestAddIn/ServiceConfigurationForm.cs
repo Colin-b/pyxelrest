@@ -25,6 +25,7 @@ namespace PyxelRestAddIn
         private static readonly int CHECK_HOST_INTERVAL_MS = 500;
         internal static readonly int CHECK_HOST_INTERVAL_TICKS = CHECK_HOST_INTERVAL_MS * 10000;
         private static readonly Regex SERVICE_NAME_UNALLOWED_CHARACTERS = new Regex("[^a-zA-Z_]+[^a-zA-Z_0-9]*");
+        private static string ConfigurationFilePath = null;
         private static string PathToUpToDateConfigurations = null;
 
         internal Accordion accordion;
@@ -35,7 +36,6 @@ namespace PyxelRestAddIn
         private List<Service> upToDateServices = new List<Service>();
         private Button saveButton;
         private readonly Timer hostReachabilityTimer;
-        private readonly string configurationFilePath;
         internal readonly Configuration configuration;
         internal readonly Configuration upToDateConfiguration;
 
@@ -46,8 +46,7 @@ namespace PyxelRestAddIn
             FormClosed += ServiceConfigurationForm_FormClosed;
             try
             {
-                configurationFilePath = Configuration.GetDefaultConfigFilePath();
-                configuration = new Configuration(configurationFilePath);
+                configuration = new Configuration(ConfigurationFilePath);
                 LoadServices();
             }
             catch (Exception e)
@@ -69,8 +68,9 @@ namespace PyxelRestAddIn
         {
             try
             {
-                string configurationFilePath = Configuration.GetDefaultConfigFilePath();
-                var configuration = new Configuration(configurationFilePath);
+                string installLocation = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "InstallLocation", null);
+                ConfigurationFilePath = installLocation == null ? null : Path.Combine(installLocation, "configuration", "services.yml");
+                var configuration = new Configuration(ConfigurationFilePath);
                 List<Service> configuredServices = configuration.Load();
 
                 PathToUpToDateConfigurations = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "PathToUpToDateConfigurations", null);
@@ -93,7 +93,7 @@ namespace PyxelRestAddIn
                     }
 
                     if (updated)
-                        configuration.Save(configurationFilePath);
+                        configuration.Save(ConfigurationFilePath);
                 }
             }
             catch (Exception ex)
@@ -285,7 +285,7 @@ namespace PyxelRestAddIn
             }
 
             if (updated)
-                configuration.Save(configurationFilePath);
+                configuration.Save(ConfigurationFilePath);
         }
 
         private void DisplayService(ServicePanel service, bool expanded)
@@ -325,7 +325,7 @@ namespace PyxelRestAddIn
             {
                 foreach (ServicePanel service in services)
                     InstallPythonModules(service.service.PythonModules);
-                configuration.Save(configurationFilePath);
+                configuration.Save(ConfigurationFilePath);
             }
             catch (Exception ex)
             {

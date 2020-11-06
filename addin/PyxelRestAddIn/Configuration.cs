@@ -30,12 +30,6 @@ namespace PyxelRestAddIn
             }
         }
 
-        public static string GetDefaultConfigFilePath()
-        {
-            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            return appDataFolder == null ? null : Path.Combine(appDataFolder, "pyxelrest", "configuration", "services.yml");
-        }
-
         private YamlStream LoadPath(string path)
         {
             try
