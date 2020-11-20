@@ -55,8 +55,8 @@ udf_methods = None  # Will be set after load
 @xw.ret(expand='table')
 {% endif %}
 def {{ udf_method.udf_name }}(
-    {%- for udf_parameter in udf_method.path_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
-    {%- for udf_parameter in udf_method.required_parameters %}{{ udf_parameter.name }}{% if not loop.last or udf_method.has_optional_parameters() %}, {% endif %}{% endfor %}
+    {%- for udf_parameter in udf_method.path_parameters %}{{ udf_parameter.name }}, {% endfor %}
+    {%- for udf_parameter in udf_method.required_parameters %}{{ udf_parameter.name }}, {% endfor %}
     {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None, {% endfor %}
     caller=None{%- if not udf_method.is_asynchronous %}, excel_application=None{% endif %}):
 {% if udf_method.summary() %}
