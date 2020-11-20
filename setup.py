@@ -80,6 +80,7 @@ setup(
                 "addin/PyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/file-4-16.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/folder-3-128.png",
+                "addin/PyxelRestAddIn/bin/Release/resources/help-128.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/plus-4-16.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/plus-4-16_grey.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/plus-5-16.png",

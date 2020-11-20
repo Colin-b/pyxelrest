@@ -95,5 +95,10 @@ namespace PyxelRestAddIn
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
         }
+
+        private void CreateANewIssue(object sender, RibbonControlEventArgs e)
+        {
+            Process.Start("https://github.com/Colin-b/pyxelrest/issues/new");
+        }
     }
 }
