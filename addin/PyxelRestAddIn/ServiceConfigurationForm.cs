@@ -3,10 +3,10 @@ using Microsoft.Win32;
 using Opulos.Core.UI;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PyxelRestAddIn
@@ -24,7 +24,7 @@ namespace PyxelRestAddIn
         /// </summary>
         private static readonly int CHECK_HOST_INTERVAL_MS = 500;
         internal static readonly int CHECK_HOST_INTERVAL_TICKS = CHECK_HOST_INTERVAL_MS * 10000;
-        private static readonly Regex SERVICE_NAME_UNALLOWED_CHARACTERS = new Regex("[^a-zA-Z_]+[^a-zA-Z_0-9]*");
+        private static readonly RegexStringValidator SERVICE_NAME_VALIDATOR = new RegexStringValidator(@"^[a-zA-Z_]+[a-zA-Z_0-9]*$");
         private static string ConfigurationFilePath = null;
         private static string PathToUpToDateConfigurations = null;
 
@@ -167,7 +167,7 @@ namespace PyxelRestAddIn
             var serviceNameTooltip = new ToolTip { ToolTipTitle = "Enter service name", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
             serviceNameField = new ComboBox { Width=480 };
-            serviceNameTooltip.SetToolTip(serviceNameField, "Value should only contains alpha numeric characters. eg: my_service");
+            serviceNameTooltip.SetToolTip(serviceNameField, "Value should only contains alpha numeric characters, numbers or underscore but cannot start with a number. eg: my_service2");
             serviceNameField.TextChanged += ServiceNameField_TextChanged;
             serviceNameField.KeyDown += ServiceNameField_KeyDown;
             newServicePanel.Controls.Add(serviceNameField, 0, 0);
@@ -225,8 +225,15 @@ namespace PyxelRestAddIn
 
         private bool IsServiceNameValid(string serviceName)
         {
-            string validatedServiceName = SERVICE_NAME_UNALLOWED_CHARACTERS.Replace(serviceName, "");
-            return serviceName.Length > 0 && serviceName.Equals(validatedServiceName) && !services.Exists(s => s.Exists(serviceName));
+            try
+            {
+                SERVICE_NAME_VALIDATOR.Validate(serviceName);
+                return !services.Exists(s => s.Exists(serviceName));
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         private void AddServiceSection(object sender, EventArgs e)

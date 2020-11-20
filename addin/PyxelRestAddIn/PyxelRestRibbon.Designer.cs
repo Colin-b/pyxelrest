@@ -36,9 +36,9 @@
         {
             this.pyxelrestTab = this.Factory.CreateRibbonTab();
             this.udfGroup = this.Factory.CreateRibbonGroup();
-            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.importButton = this.Factory.CreateRibbonButton();
             this.configureButton = this.Factory.CreateRibbonButton();
+            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.autoUpdateButton = this.Factory.CreateRibbonToggleButton();
             this.generateUDFAtStartupButton = this.Factory.CreateRibbonToggleButton();
             this.openFolderButton = this.Factory.CreateRibbonButton();
@@ -61,15 +61,6 @@
             this.udfGroup.Items.Add(this.configureButton);
             this.udfGroup.Label = "User Defined Functions";
             this.udfGroup.Name = "udfGroup";
-            // 
-            // developerGroup
-            // 
-            this.developerGroup.Items.Add(this.autoUpdateButton);
-            this.developerGroup.Items.Add(this.generateUDFAtStartupButton);
-            this.developerGroup.Items.Add(this.openFolderButton);
-            this.developerGroup.Items.Add(this.createIssueButton);
-            this.developerGroup.Label = "Excel X.Y.Z - Python A.B.C";
-            this.developerGroup.Name = "developerGroup";
             // 
             // importButton
             // 
@@ -94,6 +85,15 @@
             this.configureButton.ScreenTip = "Configure Services";
             this.configureButton.ShowImage = true;
             this.configureButton.SuperTip = "Open a window to configure available services.";
+            // 
+            // developerGroup
+            // 
+            this.developerGroup.Items.Add(this.autoUpdateButton);
+            this.developerGroup.Items.Add(this.generateUDFAtStartupButton);
+            this.developerGroup.Items.Add(this.openFolderButton);
+            this.developerGroup.Items.Add(this.createIssueButton);
+            this.developerGroup.Label = "Excel X.Y.Z - Python A.B.C";
+            this.developerGroup.Name = "developerGroup";
             // 
             // autoUpdateButton
             // 
