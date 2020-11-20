@@ -33,38 +33,30 @@ def _create_authentication(
         flow = open_api_security_definition.get("flow")
         oauth2_config = dict(service_config.get("oauth2", {}))
         if flow == "implicit":
-            return OAuth2Implicit(
-                authorization_url=open_api_security_definition.get(
-                    "authorizationUrl",
-                    request_content.extra_parameters.get("oauth2_auth_url"),
-                ),
-                **oauth2_config,
+            authorization_url = open_api_security_definition.get(
+                "authorizationUrl",
+                request_content.extra_parameters.get("oauth2_auth_url"),
             )
+            return OAuth2Implicit(authorization_url, **oauth2_config)
         elif flow == "accessCode":
-            return OAuth2AuthorizationCode(
-                authorization_url=open_api_security_definition.get(
-                    "authorizationUrl",
-                    request_content.extra_parameters.get("oauth2_auth_url"),
-                ),
-                token_url=open_api_security_definition.get(
-                    "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
-                ),
-                **oauth2_config,
+            authorization_url=open_api_security_definition.get(
+                "authorizationUrl",
+                request_content.extra_parameters.get("oauth2_auth_url"),
             )
+            token_url=open_api_security_definition.get(
+                "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
+            )
+            return OAuth2AuthorizationCode(authorization_url, token_url, **oauth2_config)
         elif flow == "password":
-            return OAuth2ResourceOwnerPasswordCredentials(
-                token_url=open_api_security_definition.get(
-                    "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
-                ),
-                **oauth2_config,
+            token_url = open_api_security_definition.get(
+                "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
             )
+            return OAuth2ResourceOwnerPasswordCredentials(token_url, **oauth2_config)
         elif flow == "application":
-            return OAuth2ClientCredentials(
-                token_url=open_api_security_definition.get(
-                    "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
-                ),
-                **oauth2_config,
+            token_url = open_api_security_definition.get(
+                "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
             )
+            return OAuth2ClientCredentials(token_url, **oauth2_config)
         logger.warning(f"Unexpected OAuth2 flow: {open_api_security_definition}")
     elif "apiKey" == open_api_security_definition.get("type"):
         if open_api_security_definition["in"] == "query":
