@@ -25,10 +25,11 @@ logger = logging.getLogger(__name__)
 
 
 def _create_authentication(
-    service_config: dict,
+    service: "pyxelrest._common.Service",
     open_api_security_definition: dict,
     request_content: "pyxelrest.open_api.RequestContent",
 ):
+    service_config = service.config.auth
     if "oauth2" == open_api_security_definition.get("type"):
         flow = open_api_security_definition.get("flow")
         oauth2_config = dict(service_config.get("oauth2", {}))
@@ -37,25 +38,47 @@ def _create_authentication(
                 "authorizationUrl",
                 request_content.extra_parameters.get("oauth2_auth_url"),
             )
+            # Handle relative authentication URI
+            if authorization_url.startswith("/"):
+                authorization_url = f"{service.uri}{authorization_url}"
+
             return OAuth2Implicit(authorization_url, **oauth2_config)
         elif flow == "accessCode":
-            authorization_url=open_api_security_definition.get(
+            authorization_url = open_api_security_definition.get(
                 "authorizationUrl",
                 request_content.extra_parameters.get("oauth2_auth_url"),
             )
-            token_url=open_api_security_definition.get(
+            # Handle relative authentication URI
+            if authorization_url.startswith("/"):
+                authorization_url = f"{service.uri}{authorization_url}"
+
+            token_url = open_api_security_definition.get(
                 "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
             )
-            return OAuth2AuthorizationCode(authorization_url, token_url, **oauth2_config)
+            # Handle relative authentication URI
+            if token_url.startswith("/"):
+                token_url = f"{service.uri}{token_url}"
+
+            return OAuth2AuthorizationCode(
+                authorization_url, token_url, **oauth2_config
+            )
         elif flow == "password":
             token_url = open_api_security_definition.get(
                 "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
             )
+            # Handle relative authentication URI
+            if token_url.startswith("/"):
+                token_url = f"{service.uri}{token_url}"
+
             return OAuth2ResourceOwnerPasswordCredentials(token_url, **oauth2_config)
         elif flow == "application":
             token_url = open_api_security_definition.get(
                 "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
             )
+            # Handle relative authentication URI
+            if token_url.startswith("/"):
+                token_url = f"{service.uri}{token_url}"
+
             return OAuth2ClientCredentials(token_url, **oauth2_config)
         logger.warning(f"Unexpected OAuth2 flow: {open_api_security_definition}")
     elif "apiKey" == open_api_security_definition.get("type"):
@@ -147,7 +170,7 @@ def get_auth(
         for security_definition_key in security.keys():
             try:
                 auth = _create_authentication(
-                    udf_method.service.config.auth,
+                    udf_method.service,
                     security_definitions.get(security_definition_key, {}),
                     request_content,
                 )

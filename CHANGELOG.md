@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use `SafeLoader` rather than `FullLoader` to load module logging configuration.
 - Allow REST APIs with `excel_application` parameter name.
 - Handle Win32Exception occurring if python process cannot be closed due to user rights.
+- Handle relative URI for `authorizationUrl` and `tokenUrl`.
 
 ### Removed
 - Drop support for `python` < `3.8`.
