@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Launching add-in as a developer do not mixes logs with the installed add-in anymore. Local development log files are created instead.
 - Use `SafeLoader` rather than `FullLoader` to load module logging configuration.
 - Allow REST APIs with `excel_application` parameter name.
+- Handle Win32Exception occurring if python process cannot be closed due to user rights.
 
 ### Removed
 - Drop support for `python` < `3.8`.

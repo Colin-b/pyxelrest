@@ -179,10 +179,17 @@ namespace PyxelRestAddIn
                 System.Threading.Thread.Sleep(100);
                 foreach (Process pythonProcess in pythonProcesses)
                 {
-                    if (pythonProcess.HasExited)
+                    try
                     {
-                        Log.DebugFormat("Python process {0} killed.", pythonProcess.Id);
-                        return;
+                        if (pythonProcess.HasExited)
+                        {
+                            Log.DebugFormat("Python process {0} killed.", pythonProcess.Id);
+                            return;
+                        }
+                    }
+                    catch (System.ComponentModel.Win32Exception)
+                    {
+                        Log.Warn("Not authorized to close one python process.");
                     }
                 }
             }
