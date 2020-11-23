@@ -96,6 +96,11 @@ namespace PyxelRestAddIn
             return string.Empty;
         }
 
+        private int PercentWidth(int percent)
+        {
+            return (Size.Width * percent) / 100;
+        }
+        
         private void InitializeComponent()
         {
             Icon = Properties.Resources.settings_8_16;
@@ -119,27 +124,21 @@ namespace PyxelRestAddIn
 
                     var panel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
 
-                    var get = new CheckBox { Text = "get", Checked = servicePanel.service.Get, Width = 50 };
+                    var get = new CheckBox { Text = "get", Checked = servicePanel.service.Get, Width = PercentWidth(11) };
                     get.CheckedChanged += Get_CheckedChanged;
                     panel.Controls.Add(get, 0, 0);
-                    var post = new CheckBox { Text = "post", Checked = servicePanel.service.Post, Width = 55 };
+                    var post = new CheckBox { Text = "post", Checked = servicePanel.service.Post, Width = PercentWidth(11) };
                     post.CheckedChanged += Post_CheckedChanged;
                     panel.Controls.Add(post, 1, 0);
-                    var put = new CheckBox { Text = "put", Checked = servicePanel.service.Put, Width = 50 };
+                    var put = new CheckBox { Text = "put", Checked = servicePanel.service.Put, Width = PercentWidth(11) };
                     put.CheckedChanged += Put_CheckedChanged;
                     panel.Controls.Add(put, 2, 0);
-                    var delete = new CheckBox { Text = "delete", Checked = servicePanel.service.Delete, Width = 65 };
-                    delete.CheckedChanged += Delete_CheckedChanged;
-                    panel.Controls.Add(delete, 3, 0);
-                    var patch = new CheckBox { Text = "patch", Checked = servicePanel.service.Patch, Width = 60 };
+                    var patch = new CheckBox { Text = "patch", Checked = servicePanel.service.Patch, Width = PercentWidth(11) };
                     patch.CheckedChanged += Patch_CheckedChanged;
-                    panel.Controls.Add(patch, 4, 0);
-                    var options = new CheckBox { Text = "options", Checked = servicePanel.service.Options, Width = 70 };
-                    options.CheckedChanged += Options_CheckedChanged;
-                    panel.Controls.Add(options, 5, 0);
-                    var head = new CheckBox { Text = "head", Checked = servicePanel.service.Head, Width = 60 };
-                    head.CheckedChanged += Head_CheckedChanged;
-                    panel.Controls.Add(head, 6, 0);
+                    panel.Controls.Add(patch, 3, 0);
+                    var delete = new CheckBox { Text = "delete", Checked = servicePanel.service.Delete, Width = PercentWidth(11) };
+                    delete.CheckedChanged += Delete_CheckedChanged;
+                    panel.Controls.Add(delete, 4, 0);
 
                     layout.Controls.Add(panel, 1, 1);
                 }
@@ -944,16 +943,6 @@ namespace PyxelRestAddIn
                 servicePanel.service.OpenAPI.Remove("service_host");
             else
                 servicePanel.service.OpenAPI["service_host"] = ((TextBox)sender).Text;
-        }
-
-        private void Head_CheckedChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Head = ((CheckBox)sender).Checked;
-        }
-
-        private void Options_CheckedChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Options = ((CheckBox)sender).Checked;
         }
 
         private void Patch_CheckedChanged(object sender, EventArgs e)
