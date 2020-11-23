@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow REST APIs with `excel_application` parameter name.
 - Handle Win32Exception occurring if python process cannot be closed due to user rights.
 - Handle relative URI for `authorizationUrl` and `tokenUrl`.
+- Microsoft Excel add-in advanced services configuration screen is now handling all resolutions properly.
 
 ### Removed
 - Drop support for `python` < `3.8`.

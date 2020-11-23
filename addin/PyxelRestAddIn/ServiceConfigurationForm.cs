@@ -174,7 +174,7 @@ namespace PyxelRestAddIn
 
             addServiceTooltip = new ToolTip { ToolTipTitle = "Add a new service configuration", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-            addServiceButton = new AddButton();
+            addServiceButton = new AddButton(20);
             addServiceTooltip.SetToolTip(addServiceButton, "Do not forget to save once configured.");
             addServiceButton.Click += AddServiceSection;
             newServicePanel.Controls.Add(addServiceButton, 1, 0);

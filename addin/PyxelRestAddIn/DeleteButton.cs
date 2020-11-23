@@ -5,11 +5,11 @@ namespace PyxelRestAddIn
 {
     internal class DeleteButton: PictureBox
     {
-        public DeleteButton()
+        public DeleteButton(int width)
         {
             Image = Properties.Resources.x_mark_3_16;
             Padding = new Padding(0, 4, 0, 0);
-            Width = 20;
+            Width = width;
             MouseEnter += DeleteButton_MouseEnter;
             MouseLeave += DeleteButton_MouseLeave;
         }

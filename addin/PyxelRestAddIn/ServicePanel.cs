@@ -104,7 +104,7 @@ namespace PyxelRestAddIn
             {
                 ToolTip tooltip = new ToolTip { ToolTipTitle = "Remove this service configuration", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                var deleteButton = new DeleteButton();
+                var deleteButton = new DeleteButton(20);
                 tooltip.SetToolTip(deleteButton, "User defined functions will only be removed when restarting Microsoft Excel.");
                 deleteButton.Click += DeleteButton_Click;
                 buttons.Controls.Add(deleteButton, 2, 1);

@@ -5,11 +5,11 @@ namespace PyxelRestAddIn
 {
     public class AddButton: PictureBox
     {
-        public AddButton()
+        public AddButton(int width)
         {
             Image = Properties.Resources.plus_4_16_grey;
             Padding = new Padding(0, 4, 0, 0);
-            Width = 20;
+            Width = width;
             Enabled = false;
             MouseEnter += AddButton_MouseEnter;
             MouseLeave += AddButton_MouseLeave;

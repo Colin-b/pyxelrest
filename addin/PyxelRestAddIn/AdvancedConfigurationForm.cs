@@ -106,9 +106,11 @@ namespace PyxelRestAddIn
             Icon = Properties.Resources.settings_8_16;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = string.Format("Configure {0} service", servicePanel.service.Name);
-            Size = new Size(600, 400);
-            MaximumSize = new Size(800, 600);
-            AutoScroll = true;
+            Screen screen = Screen.FromControl(this);
+            Rectangle screenSize = screen.WorkingArea;
+
+            Size = new Size(screenSize.Width / 2, screenSize.Height / 2);
+            MaximumSize = Size;
             StartPosition = FormStartPosition.CenterParent;
 
             var tabs = new TabControl { Dock = DockStyle.Fill };
@@ -122,7 +124,7 @@ namespace PyxelRestAddIn
                 {
                     layout.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-                    var panel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
                     var get = new CheckBox { Text = "get", Checked = servicePanel.service.Get, Width = PercentWidth(11) };
                     get.CheckedChanged += Get_CheckedChanged;
@@ -150,7 +152,7 @@ namespace PyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var apiKey = new TextBox { Text = (string)servicePanel.service.Auth["api_key"], Dock = DockStyle.Fill };
+                    var apiKey = new TextBox { Dock = DockStyle.Fill, Text = (string)servicePanel.service.Auth["api_key"] };
                     tooltip.SetToolTip(apiKey, "Only used when required.");
                     apiKey.TextChanged += ApiKey_TextChanged;
                     layout.Controls.Add(apiKey, 1, 2);
@@ -165,13 +167,13 @@ namespace PyxelRestAddIn
                 {
                     layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
-                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
+                    var panel = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
 
                     #region Array formulas
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var dynamicArrayFormulas = new CheckBox { Text = "Dynamic array", Checked = dynamicArrayFormulasOptions.Count > 0 };
+                        var dynamicArrayFormulas = new CheckBox { Text = "Dynamic array", Checked = dynamicArrayFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(dynamicArrayFormulas, "If your version of Microsoft Excel supports dynamic array formulas, results will be spilled.\nOtherwise results will only fill selected cells.");
                         dynamicArrayFormulas.CheckedChanged += DynamicArrayFormulas_CheckedChanged;
                         panel.Controls.Add(dynamicArrayFormulas, 0, 0);
@@ -179,7 +181,7 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var legacyArrayFormulas = new CheckBox { Text = "Legacy array", Checked = legacyArrayFormulasOptions.Count > 0 };
+                        var legacyArrayFormulas = new CheckBox { Text = "Legacy array", Checked = legacyArrayFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(legacyArrayFormulas, "If your version of Microsoft Excel does not supports dynamic array formulas, use this to spill results.");
                         legacyArrayFormulas.CheckedChanged += LegacyArrayFormulas_CheckedChanged;
                         panel.Controls.Add(legacyArrayFormulas, 1, 0);
@@ -187,7 +189,7 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var vbaCompatibleFormulas = new CheckBox { Text = "Visual basic", Checked = vbaCompatibleFormulasOptions.Count > 0, Width = 160 };
+                        var vbaCompatibleFormulas = new CheckBox { Text = "Visual basic", Checked = vbaCompatibleFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using Visual Basic for Applications (VBA).");
                         vbaCompatibleFormulas.CheckedChanged += VBACompatibleFormulas_CheckedChanged;
                         panel.Controls.Add(vbaCompatibleFormulas, 2, 0);
@@ -202,14 +204,14 @@ namespace PyxelRestAddIn
                 {
                     layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
-                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var synchronousChecked = dynamicArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)dynamicArrayFormulasOptions["lock_excel"] : false;
-                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked };
+                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked, Width = PercentWidth(20) };
                         tooltip.SetToolTip(dynamicArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
                         dynamicArrayFormulasLockExcel.CheckedChanged += DynamicArrayFormulasLockExcel_CheckedChanged;
                         dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasOptions.Count > 0;
@@ -224,13 +226,13 @@ namespace PyxelRestAddIn
                 {
                     layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
 
-                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var synchronousChecked = legacyArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)legacyArrayFormulasOptions["lock_excel"] : false;
-                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked };
+                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked, Width = PercentWidth(20) };
                         tooltip.SetToolTip(legacyArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
                         legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
                         legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasOptions.Count > 0;
@@ -253,110 +255,119 @@ namespace PyxelRestAddIn
 
                 var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
 
-                #region Max retries
                 {
-                    layout.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    #region Timeout
 
-                    var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
-                    maxRetries.ValueChanged += MaxRetries_ValueChanged;
-                    layout.Controls.Add(maxRetries, 1, 1);
+                    #region Connect timeout
+                    {
+                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(17) }, 0, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Width = PercentWidth(10) };
+                        tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
+                        connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
+                        panel.Controls.Add(connectTimeout, 1, 1);
+                    }
+                    #endregion
+
+                    #region Read timeout
+                    {
+                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 2, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Width = PercentWidth(10) };
+                        tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
+                        readTimeout.ValueChanged += ReadTimeout_ValueChanged;
+                        panel.Controls.Add(readTimeout, 3, 1);
+                    }
+                    #endregion
+
+                    #endregion
+
+                    #region Max retries
+                    {
+                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 4, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Width = PercentWidth(10) };
+                        tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
+                        maxRetries.ValueChanged += MaxRetries_ValueChanged;
+                        panel.Controls.Add(maxRetries, 5, 1);
+                    }
+                    #endregion
+
+                    layout.Controls.Add(panel, 0, 1);
                 }
-                #endregion
 
-                #region Timeout
-
-                #region Connect timeout
                 {
-                    layout.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
-                    connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
-                    layout.Controls.Add(connectTimeout, 1, 2);
-                }
-                #endregion
-
-                #region Read timeout
-                {
-                    layout.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Dock = DockStyle.Fill };
-                    tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
-                    readTimeout.ValueChanged += ReadTimeout_ValueChanged;
-                    layout.Controls.Add(readTimeout, 1, 3);
-                }
-                #endregion
-
-                #endregion
-
-                var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
-
-                #region HTTP proxy
-                {
-                    layout.Controls.Add(new Label { Text = "HTTP proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy to be used for HTTP requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    httpProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("http") ? (string)proxiesOptions["http"] : string.Empty };
-                    tooltip.SetToolTip(httpProxy, "Default system HTTP_PROXY will be used if not set.");
-                    httpProxy.TextChanged += HttpProxy_TextChanged;
-                    layout.Controls.Add(httpProxy, 1, 4);
-                }
-                #endregion
-
-                #region HTTPS proxy
-                {
-                    layout.Controls.Add(new Label { Text = "HTTPS proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy to be used for HTTPS requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    httpsProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("https") ? (string)proxiesOptions["https"] : string.Empty };
-                    tooltip.SetToolTip(httpsProxy, "Default system HTTPS_PROXY will be used if not set.");
-                    httpsProxy.TextChanged += HttpsProxy_TextChanged;
-                    layout.Controls.Add(httpsProxy, 1, 5);
-                }
-                #endregion
-
-                #region No proxy
-                {
-                    layout.Controls.Add(new Label { Text = "No proxy URL", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "URL starting with this will not use any proxy", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    noProxy = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = proxiesOptions.ContainsKey("no_proxy") ? (string)proxiesOptions["no_proxy"] : string.Empty };
-                    tooltip.SetToolTip(noProxy, "Default system NO_PROXY will be used if not set.");
-                    noProxy.TextChanged += NoProxy_TextChanged;
-                    layout.Controls.Add(noProxy, 1, 6);
-                }
-                #endregion
-
-                #region SSL certificate verification
-                {
-                    layout.Controls.Add(new Label { Text = "Verify SSL certificate", TextAlign = ContentAlignment.BottomLeft }, 0, 7);
-
-                    var panel = new TableLayoutPanel { Height = 30, Dock = DockStyle.Fill };
-
-
+                    #region SSL certificate verification
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Enable SSL certificate verification", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var verifyChecked = networkOptions.ContainsKey("verify") ? Convert.ToBoolean(networkOptions["verify"]) : true;
-                        var verifySSLCertificate = new CheckBox { Text = "Verify SSL certificate for https requests", Checked = verifyChecked };
+                        var verifyChecked = !networkOptions.ContainsKey("verify") || Convert.ToBoolean(networkOptions["verify"]);
+                        var verifySSLCertificate = new CheckBox { Text = "Verify SSL certificate for https requests", Checked = verifyChecked, Width = PercentWidth(60) };
                         tooltip.SetToolTip(verifySSLCertificate, "Uncheck to disable SSL certificate validation.");
                         verifySSLCertificate.CheckedChanged += VerifySSLCertificate_CheckedChanged;
-                        panel.Controls.Add(verifySSLCertificate, 0, 0);
+                        panel.Controls.Add(verifySSLCertificate, 0, 1);
                     }
+                    #endregion
 
-                    layout.Controls.Add(panel, 1, 7);
+                    layout.Controls.Add(panel, 0, 2);
                 }
-                #endregion
+
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
+
+                    #region HTTP proxy
+                    {
+                        panel.Controls.Add(new Label { Text = "HTTP proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy URL to be used for HTTP requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        httpProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("http") ? (string)proxiesOptions["http"] : string.Empty };
+                        tooltip.SetToolTip(httpProxy, "Default system HTTP_PROXY will be used if not set.");
+                        httpProxy.TextChanged += HttpProxy_TextChanged;
+                        panel.Controls.Add(httpProxy, 1, 1);
+                    }
+                    #endregion
+
+                    #region HTTPS proxy
+                    {
+                        panel.Controls.Add(new Label { Text = "HTTPS proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 2);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy URL to be used for HTTPS requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        httpsProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("https") ? (string)proxiesOptions["https"] : string.Empty };
+                        tooltip.SetToolTip(httpsProxy, "Default system HTTPS_PROXY will be used if not set.");
+                        httpsProxy.TextChanged += HttpsProxy_TextChanged;
+                        panel.Controls.Add(httpsProxy, 1, 2);
+                    }
+                    #endregion
+
+                    #region No proxy
+                    {
+                        panel.Controls.Add(new Label { Text = "No proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 3);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "URL starting with this will not use any proxy", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        noProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("no_proxy") ? (string)proxiesOptions["no_proxy"] : string.Empty };
+                        tooltip.SetToolTip(noProxy, "Default system NO_PROXY will be used if not set.");
+                        noProxy.TextChanged += NoProxy_TextChanged;
+                        panel.Controls.Add(noProxy, 1, 3);
+                    }
+                    #endregion
+
+                    layout.Controls.Add(panel, 0, 3);
+                }
 
                 tab.Controls.Add(layout);
                 tabs.TabPages.Add(tab);
@@ -365,25 +376,25 @@ namespace PyxelRestAddIn
 
             #region Headers settings
             {
-                var tab = new TabPage("Headers");
+                var tab = new TabPage { Text = "Headers", AutoScroll = true };
                 var layout = new TableLayoutPanel { AutoSize = true };
 
                 #region Add items
 
-                var nameLabel = new Label { Text="Name", Dock = DockStyle.Fill, Width=200 };
+                var nameLabel = new Label { Text = "Name", Width = PercentWidth(20) };
                 layout.Controls.Add(nameLabel, 0, 1);
 
-                var valueLabel = new Label { Text = "Value", Dock = DockStyle.Fill, Width=330 };
+                var valueLabel = new Label { Text = "Value", Width = PercentWidth(65) };
                 layout.Controls.Add(valueLabel, 1, 1);
 
-                headersPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                headersPanel = new TableLayoutPanel { AutoSize = true };
                 layout.Controls.Add(headersPanel, 0, 2);
                 layout.SetColumnSpan(headersPanel, 3);
 
                 {
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    headerName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                    headerName = new TextBox { Text = string.Empty, Width = PercentWidth(20) };
                     tooltip.SetToolTip(headerName, "Sent in every request on this service.");
                     headerName.TextChanged += HeaderName_TextChanged;
                     headerName.KeyDown += HeaderName_KeyDown;
@@ -392,13 +403,13 @@ namespace PyxelRestAddIn
                 {
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    headerValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                    headerValue = new TextBox { Text = string.Empty, Width = PercentWidth(65) };
                     tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
                     headerValue.TextChanged += HeaderValue_TextChanged;
                     headerValue.KeyDown += HeaderValue_KeyDown;
                     layout.Controls.Add(headerValue, 1, 3);
                 }
-                addHeader = new AddButton();
+                addHeader = new AddButton(PercentWidth(5));
                 addHeader.Click += AddHeader_Click;
                 layout.Controls.Add(addHeader, 2, 3);
 
@@ -413,19 +424,19 @@ namespace PyxelRestAddIn
             {
                 #region OpenAPI settings
                 {
-                    var tab = new TabPage("OpenAPI");
+                    var tab = new TabPage { Text = "OpenAPI", AutoScroll = true };
                     var layout = new TableLayoutPanel { AutoSize = true };
 
                     #region Service Host
                     {
-                        var hostPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Width = 530, Height=30 };
+                        var hostPanel = new TableLayoutPanel { AutoSize = true };
 
-                        hostPanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft, Width = 130 }, 0, 1);
+                        hostPanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
 
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var serviceHost = new TextBox { Text = servicePanel.service.OpenAPI.ContainsKey("service_host") ? servicePanel.service.OpenAPI["service_host"].ToString() : string.Empty, Width = 400 };
-                        tooltip.SetToolTip(serviceHost, "Usefull when service is behind a reverse proxy.");
+                        var serviceHost = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.OpenAPI.ContainsKey("service_host") ? servicePanel.service.OpenAPI["service_host"].ToString() : string.Empty };
+                        tooltip.SetToolTip(serviceHost, "Usefull when host is not provided in the OpenAPI definition and service is behind a reverse proxy.");
                         serviceHost.TextChanged += ServiceHost_TextChanged;
                         hostPanel.Controls.Add(serviceHost, 1, 1);
 
@@ -434,15 +445,15 @@ namespace PyxelRestAddIn
                     #endregion
 
                     {
-                        var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Width = 530, Height = 30 };
+                        var panel = new TableLayoutPanel { AutoSize = true };
 
                         #region OpenAPI Definition read timeout
                         {
-                            panel.Controls.Add(new Label { Text = "Definition read timeout", TextAlign = ContentAlignment.BottomLeft, Width = 130 }, 0, 1);
+                            panel.Controls.Add(new Label { Text = "Definition read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(25) }, 0, 1);
 
                             ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            var openAPIDefinitionReadTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5, Width = 200 };
+                            var openAPIDefinitionReadTimeout = new NumericUpDown { Width = PercentWidth(10), Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5 };
                             tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
                             openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
                             panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 1);
@@ -453,7 +464,7 @@ namespace PyxelRestAddIn
                         {
                             ToolTip tooltip = new ToolTip { ToolTipTitle = "Rely on OpenAPI definitions to re-order fields received in response", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            var relyOnDefinitions = new CheckBox { Text = "Rely on definitions", Checked = servicePanel.service.OpenAPI.ContainsKey("rely_on_definitions") ? bool.Parse(servicePanel.service.OpenAPI["rely_on_definitions"].ToString()) : false, Width = 200 };
+                            var relyOnDefinitions = new CheckBox { Width = PercentWidth(40), Text = "Rely on definitions", Checked = servicePanel.service.OpenAPI.ContainsKey("rely_on_definitions") ? bool.Parse(servicePanel.service.OpenAPI["rely_on_definitions"].ToString()) : false };
                             tooltip.SetToolTip(relyOnDefinitions, "Deactivated by default as it impact performances.");
                             relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
                             panel.Controls.Add(relyOnDefinitions, 2, 1);
@@ -464,57 +475,57 @@ namespace PyxelRestAddIn
                     }
 
                     #region Tags
-
-                    var tagsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Tags" };
-                    layout.Controls.Add(tagsLabel);
-
-                    tagsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
-                    layout.Controls.Add(tagsPanel);
-
                     {
-                        var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+                        var tagsLabel = new Label { Text = "Tags" };
+                        layout.Controls.Add(tagsLabel);
+
+                        tagsPanel = new TableLayoutPanel { AutoSize = true };
+                        layout.Controls.Add(tagsPanel);
 
                         {
-                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI tag to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                            var addPanel = new TableLayoutPanel { AutoSize = true };
 
-                            tagName = new TextBox { Text = string.Empty, Width = 530 };
-                            tooltip.SetToolTip(tagName, "You will be able to filter in/out this tag.");
-                            tagName.TextChanged += TagName_TextChanged;
-                            tagName.KeyDown += TagName_KeyDown;
-                            addPanel.Controls.Add(tagName, 0, 1);
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI tag to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                tagName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                                tooltip.SetToolTip(tagName, "You will be able to filter in/out this tag.");
+                                tagName.TextChanged += TagName_TextChanged;
+                                tagName.KeyDown += TagName_KeyDown;
+                                addPanel.Controls.Add(tagName, 0, 1);
+                            }
+
+                            addTag = new AddButton(PercentWidth(5));
+                            addTag.Click += AddTag_Click;
+                            addPanel.Controls.Add(addTag, 1, 1);
+
+                            layout.Controls.Add(addPanel);
                         }
-
-                        addTag = new AddButton();
-                        addTag.Click += AddTag_Click;
-                        addPanel.Controls.Add(addTag, 1, 1);
-
-                        layout.Controls.Add(addPanel);
                     }
-
                     #endregion
 
                     #region Operation IDs
                     {
-                        var operationIdsLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Operation IDs" };
+                        var operationIdsLabel = new Label { Text = "Operation IDs" };
                         layout.Controls.Add(operationIdsLabel);
 
-                        operationIDsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                        operationIDsPanel = new TableLayoutPanel { AutoSize = true };
                         layout.Controls.Add(operationIDsPanel);
 
                         {
-                            var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+                            var addPanel = new TableLayoutPanel { AutoSize = true };
 
                             {
                                 ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                                operationIDName = new TextBox { Text = string.Empty, Width = 530 };
+                                operationIDName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
                                 tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
                                 operationIDName.TextChanged += OperationIDName_TextChanged;
                                 operationIDName.KeyDown += OperationIDName_KeyDown;
                                 addPanel.Controls.Add(operationIDName, 0, 1);
                             }
 
-                            addOperationID = new AddButton();
+                            addOperationID = new AddButton(PercentWidth(5));
                             addOperationID.Click += AddOperationID_Click;
                             addPanel.Controls.Add(addOperationID, 1, 1);
 
@@ -525,26 +536,26 @@ namespace PyxelRestAddIn
 
                     #region Parameters
                     {
-                        var parametersLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Parameters" };
+                        var parametersLabel = new Label { Text = "Parameters" };
                         layout.Controls.Add(parametersLabel);
 
-                        parametersPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                        parametersPanel = new TableLayoutPanel { AutoSize = true };
                         layout.Controls.Add(parametersPanel);
 
                         {
-                            var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+                            var addPanel = new TableLayoutPanel { AutoSize = true };
 
                             {
                                 ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI parameter to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                                parameterName = new TextBox { Text = string.Empty, Width = 530 };
+                                parameterName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
                                 tooltip.SetToolTip(parameterName, "You will be able to filter in/out this parameter.");
                                 parameterName.TextChanged += ParameterName_TextChanged;
                                 parameterName.KeyDown += ParameterName_KeyDown;
                                 addPanel.Controls.Add(parameterName, 0, 1);
                             }
 
-                            addParameter = new AddButton();
+                            addParameter = new AddButton(PercentWidth(5));
                             addParameter.Click += AddParameter_Click;
                             addPanel.Controls.Add(addParameter, 1, 1);
 
@@ -561,59 +572,33 @@ namespace PyxelRestAddIn
 
             #region OAuth2 settings
             {
-                var tab = new TabPage("OAuth2");
+                var tab = new TabPage { Text = "OAuth2", AutoScroll = true };
                 var layout = new TableLayoutPanel { AutoSize = true };
                 var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
 
                 #region Timeout
                 {
-                    layout.Controls.Add(new Label { Width = 150, Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    layout.Controls.Add(new Label { Width = PercentWidth(25), Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var timeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
+                    var timeout = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
                     tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
                     timeout.TextChanged += Oauth2Timeout_TextChanged;
                     layout.Controls.Add(timeout, 1, 2);
                 }
                 #endregion
-                
-                #region Header name
-                {
-                    layout.Controls.Add(new Label { Width = 150, Text = "Header name", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field used to send token.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var headerName = new TextBox { Dock = DockStyle.Fill, Text = (string)oauth2Options["header_name"] };
-                    tooltip.SetToolTip(headerName, "Token will be sent in Authorization header field by default.");
-                    headerName.TextChanged += Oauth2HeaderName_TextChanged;
-                    layout.Controls.Add(headerName, 1, 5);
-                }
-                #endregion
-
-                #region Header value
-                {
-                    layout.Controls.Add(new Label { Width = 150, Text = "Header value", TextAlign = ContentAlignment.BottomLeft }, 0, 6);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Format used to send the token value. '{token}' must be present as it will be replaced by the actual token.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var headerValue = new TextBox { Dock = DockStyle.Fill, Text = (string)oauth2Options["header_value"] };
-                    tooltip.SetToolTip(headerValue, "Token will be sent as 'Bearer {token}' by default.");
-                    headerValue.TextChanged += Oauth2HeaderValue_TextChanged;
-                    layout.Controls.Add(headerValue, 1, 6);
-                }
-                #endregion
 
                 #region Add items
 
-                oauth2ParamsPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
                 layout.Controls.Add(oauth2ParamsPanel, 0, 7);
                 layout.SetColumnSpan(oauth2ParamsPanel, 3);
 
                 {
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    oauth2ParamName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                    oauth2ParamName = new TextBox { Width = PercentWidth(25), Text = string.Empty };
                     tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
                     oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
                     oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
@@ -622,13 +607,13 @@ namespace PyxelRestAddIn
                 {
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    oauth2ParamValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                    oauth2ParamValue = new TextBox { Width = PercentWidth(60), Text = string.Empty };
                     tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
                     oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
                     oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
                     layout.Controls.Add(oauth2ParamValue, 1, 8);
                 }
-                addOAuth2Param = new AddButton();
+                addOAuth2Param = new AddButton(PercentWidth(5));
                 addOAuth2Param.Click += AddOAuth2Param_Click;
                 layout.Controls.Add(addOAuth2Param, 2, 8);
 
@@ -647,11 +632,11 @@ namespace PyxelRestAddIn
 
                 #region Username
                 {
-                    layout.Controls.Add(new Label { Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = (string)basicOptions["username"] };
+                    var userName = new TextBox { Width = PercentWidth(75), Text = (string)basicOptions["username"] };
                     tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
                     userName.TextChanged += BasicUsername_TextChanged;
                     layout.Controls.Add(userName, 1, 1);
@@ -660,11 +645,11 @@ namespace PyxelRestAddIn
 
                 #region Password
                 {
-                    layout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = (string)basicOptions["password"] };
+                    var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)basicOptions["password"] };
                     tooltip.SetToolTip(password, "Used only if basic authentication is required.");
                     password.TextChanged += BasicPassword_TextChanged;
                     layout.Controls.Add(password, 1, 2);
@@ -684,11 +669,11 @@ namespace PyxelRestAddIn
 
                 #region Username
                 {
-                    layout.Controls.Add(new Label { Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var userName = new TextBox { Width = 450, Dock = DockStyle.Fill, Text = (string)ntlmOptions["username"] };
+                    var userName = new TextBox { Width = PercentWidth(75), Text = (string)ntlmOptions["username"] };
                     tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
                     userName.TextChanged += NtlmUsername_TextChanged;
                     layout.Controls.Add(userName, 1, 1);
@@ -697,11 +682,11 @@ namespace PyxelRestAddIn
 
                 #region Password
                 {
-                    layout.Controls.Add(new Label { Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var password = new TextBox { UseSystemPasswordChar = true, Width = 450, Dock = DockStyle.Fill, Text = (string)ntlmOptions["password"] };
+                    var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)ntlmOptions["password"] };
                     tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
                     password.TextChanged += NtlmPassword_TextChanged;
                     layout.Controls.Add(password, 1, 2);
@@ -715,29 +700,29 @@ namespace PyxelRestAddIn
 
             #region Python modules settings
             {
-                var tab = new TabPage("Extra modules");
+                var tab = new TabPage { Text = "Extra modules", AutoScroll = true };
                 var layout = new TableLayoutPanel { AutoSize = true };
 
-                var pythonModulesLabel = new Label { Dock = DockStyle.Fill, Width = 580, Text = "Extra python modules" };
+                var pythonModulesLabel = new Label { Text = "Extra python modules", Dock = DockStyle.Fill };
                 layout.Controls.Add(pythonModulesLabel);
 
-                pythonModulesPanel = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true };
+                pythonModulesPanel = new TableLayoutPanel { AutoSize = true };
                 layout.Controls.Add(pythonModulesPanel);
 
                 {
-                    var addPanel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 30 };
+                    var addPanel = new TableLayoutPanel { AutoSize = true };
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an extra python module", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        pythonModuleName = new TextBox { Text = string.Empty, Width = 530 };
+                        pythonModuleName = new TextBox { Text = string.Empty, Width = PercentWidth(85) };
                         tooltip.SetToolTip(pythonModuleName, "Module will be installed at UDF loading.");
                         pythonModuleName.TextChanged += PythonModuleName_TextChanged;
                         pythonModuleName.KeyDown += PythonModuleName_KeyDown;
                         addPanel.Controls.Add(pythonModuleName, 0, 1);
                     }
 
-                    addPythonModule = new AddButton();
+                    addPythonModule = new AddButton(PercentWidth(5));
                     addPythonModule.Click += AddPythonModule_Click;
                     addPanel.Controls.Add(addPythonModule, 1, 1);
 
@@ -757,11 +742,11 @@ namespace PyxelRestAddIn
 
                 #region Result caching time
                 {
-                    layout.Controls.Add(new Label { Text = "Result caching time", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    layout.Controls.Add(new Label { Width = PercentWidth(35), Text = "Result caching time", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = 450, Dock = DockStyle.Fill, Value = servicePanel.service.Caching.ContainsKey("result_caching_time") ? int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) : 0 };
+                    var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = servicePanel.service.Caching.ContainsKey("result_caching_time") ? int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) : 0 };
                     tooltip.SetToolTip(resultCachingTime, "Always send a new request by default.");
                     resultCachingTime.TextChanged += CachingResultTime_TextChanged;
                     layout.Controls.Add(resultCachingTime, 1, 1);
@@ -770,11 +755,11 @@ namespace PyxelRestAddIn
 
                 #region Maximum number of results
                 {
-                    layout.Controls.Add(new Label { Text = "Maximum number of results", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    layout.Controls.Add(new Label { Width = PercentWidth(35), Text = "Maximum number of results", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = 450, Dock = DockStyle.Fill, Value = servicePanel.service.Caching.ContainsKey("max_nb_results") ? int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) : 100 };
+                    var maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = servicePanel.service.Caching.ContainsKey("max_nb_results") ? int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) : 100 };
                     tooltip.SetToolTip(maxNbresults, "100 by default.");
                     maxNbresults.TextChanged += CachingMaxNumber_TextChanged;
                     layout.Controls.Add(maxNbresults, 1, 2);
@@ -848,24 +833,6 @@ namespace PyxelRestAddIn
                 basicOptions.Remove("username");
             else
                 basicOptions["username"] = ((TextBox)sender).Text;
-        }
-
-        private void Oauth2HeaderValue_TextChanged(object sender, EventArgs e)
-        {
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                oauth2Options.Remove("header_value");
-            else
-                oauth2Options["header_value"] = ((TextBox)sender).Text;
-        }
-
-        private void Oauth2HeaderName_TextChanged(object sender, EventArgs e)
-        {
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                oauth2Options.Remove("header_name");
-            else
-                oauth2Options["header_name"] = ((TextBox)sender).Text;
         }
 
         private void Oauth2Timeout_TextChanged(object sender, EventArgs e)
@@ -1115,17 +1082,17 @@ namespace PyxelRestAddIn
 
         private void AddTag(string value, bool excluded)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+            var panel = new TableLayoutPanel { AutoSize = true };
 
-            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Width = 335, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "tagLabel", Text = value, Width = PercentWidth(50) }, 0, 1);
 
-            panel.Controls.Add(new RadioButton { Text = "excluded", Width = 90, Checked = excluded }, 1, 1);
+            panel.Controls.Add(new RadioButton { Text = "excluded", Width = PercentWidth(15), Checked = excluded }, 1, 1);
 
-            var tagSelected = new RadioButton { Name = "tagSelected", Text = "selected", Width = 90, Checked = !excluded };
+            var tagSelected = new RadioButton { Name = "tagSelected", Text = "selected", Width = PercentWidth(15), Checked = !excluded };
             tagSelected.CheckedChanged += TagSelected_CheckedChanged;
             panel.Controls.Add(tagSelected, 2, 1);
 
-            var remove = new DeleteButton();
+            var remove = new DeleteButton(PercentWidth(5));
             remove.Click += RemoveTag_Click;
             panel.Controls.Add(remove, 3, 1);
 
@@ -1196,11 +1163,11 @@ namespace PyxelRestAddIn
 
         private void AddPythonModule(string value)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+            var panel = new TableLayoutPanel { AutoSize = true };
 
-            panel.Controls.Add(new Label { Name = "pythonModuleLabel", Text = value, Width = 515, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "pythonModuleLabel", Text = value, Width = PercentWidth(85) }, 0, 1);
 
-            var remove = new DeleteButton();
+            var remove = new DeleteButton(PercentWidth(5));
             remove.Click += RemovePythonModule_Click;
             panel.Controls.Add(remove, 1, 1);
 
@@ -1259,17 +1226,17 @@ namespace PyxelRestAddIn
 
         private void AddOperationID(string value, bool excluded)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+            var panel = new TableLayoutPanel { AutoSize = true };
 
-            panel.Controls.Add(new Label { Name = "operationIDLabel", Text = value, Width = 335, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "operationIDLabel", Text = value, Width = PercentWidth(50) }, 0, 1);
 
-            panel.Controls.Add(new RadioButton { Text = "excluded", Width = 90, Checked = excluded }, 1, 1);
+            panel.Controls.Add(new RadioButton { Text = "excluded", Width = PercentWidth(15), Checked = excluded }, 1, 1);
 
-            var operationIDSelected = new RadioButton { Name = "operationIDSelected", Text = "selected", Width = 90, Checked = !excluded };
+            var operationIDSelected = new RadioButton { Name = "operationIDSelected", Text = "selected", Width = PercentWidth(15), Checked = !excluded };
             operationIDSelected.CheckedChanged += OperationIDSelected_CheckedChanged;
             panel.Controls.Add(operationIDSelected, 2, 1);
 
-            var remove = new DeleteButton();
+            var remove = new DeleteButton(PercentWidth(5));
             remove.Click += RemoveOperationID_Click;
             panel.Controls.Add(remove, 3, 1);
 
@@ -1340,17 +1307,17 @@ namespace PyxelRestAddIn
 
         private void AddParameter(string value, bool excluded)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+            var panel = new TableLayoutPanel { AutoSize = true };
 
-            panel.Controls.Add(new Label { Name = "parameterLabel", Text = value, Width = 335, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "parameterLabel", Text = value, Width = PercentWidth(50) }, 0, 1);
 
-            panel.Controls.Add(new RadioButton { Text = "excluded", Width = 90, Checked = excluded }, 1, 1);
+            panel.Controls.Add(new RadioButton { Text = "excluded", Width = PercentWidth(15), Checked = excluded }, 1, 1);
 
-            var parameterSelected = new RadioButton { Name = "parameterSelected", Text = "selected", Width = 90, Checked = !excluded };
+            var parameterSelected = new RadioButton { Name = "parameterSelected", Text = "selected", Width = PercentWidth(15), Checked = !excluded };
             parameterSelected.CheckedChanged += ParameterSelected_CheckedChanged;
             panel.Controls.Add(parameterSelected, 2, 1);
 
-            var remove = new DeleteButton();
+            var remove = new DeleteButton(PercentWidth(5));
             remove.Click += RemoveParameter_Click;
             panel.Controls.Add(remove, 3, 1);
 
@@ -1446,15 +1413,15 @@ namespace PyxelRestAddIn
 
         private void AddHeader(string name, string value)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+            var panel = new TableLayoutPanel { AutoSize = true };
 
-            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = name, Width = 195, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "headerNameLabel", Text = name, Width = PercentWidth(20) }, 0, 1);
 
-            var valueTextBox = new TextBox { Text = value, Width = 330, Dock = DockStyle.Fill };
+            var valueTextBox = new TextBox { Text = value, Width = PercentWidth(65) };
             valueTextBox.TextChanged += ExistingHeaderValue_TextChanged;
             panel.Controls.Add(valueTextBox, 1, 1);
 
-            var remove = new DeleteButton();
+            var remove = new DeleteButton(PercentWidth(5));
             remove.Click += RemoveHeader_Click;
             panel.Controls.Add(remove, 2, 1);
 
@@ -1543,15 +1510,15 @@ namespace PyxelRestAddIn
 
         private void AddOAuth2Param(string name, string value)
         {
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Height = 25 };
+            var panel = new TableLayoutPanel { AutoSize = true };
 
-            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Width = 145, Dock = DockStyle.Fill }, 0, 1);
+            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Width = PercentWidth(25) }, 0, 1);
 
-            var valueTextBox = new TextBox { Text = value, Width = 380, Dock = DockStyle.Fill };
+            var valueTextBox = new TextBox { Text = value, Width = PercentWidth(60) };
             valueTextBox.TextChanged += OAuth2ParamValue_TextChanged;
             panel.Controls.Add(valueTextBox, 1, 1);
 
-            var remove = new DeleteButton();
+            var remove = new DeleteButton(PercentWidth(5));
             remove.Click += RemoveOAuth2Param_Click;
             panel.Controls.Add(remove, 2, 1);
 
