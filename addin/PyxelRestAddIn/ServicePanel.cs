@@ -134,13 +134,14 @@ namespace PyxelRestAddIn
         private void AdvancedConfigButton_Click(object sender, EventArgs e)
         {
             advancedConfigurationForm.ShowDialog();
+            configurationForm.ServiceUpdated();
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             checkbox.Visible = false;
             configurationForm.configuration.Remove(service);
-            configurationForm.Removed(this);
+            configurationForm.ServiceRemoved(this);
         }
     }
 }

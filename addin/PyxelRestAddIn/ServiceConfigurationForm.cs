@@ -34,7 +34,6 @@ namespace PyxelRestAddIn
         private PictureBox addServiceButton;
         private List<ServicePanel> services = new List<ServicePanel>();
         private List<Service> upToDateServices = new List<Service>();
-        private Button saveButton;
         private readonly Timer hostReachabilityTimer;
         internal readonly Configuration configuration;
         internal readonly Configuration upToDateConfiguration;
@@ -93,8 +92,8 @@ namespace PyxelRestAddIn
 
                     if (updated)
                     {
-                        var pythonModules = configuration.Save(ConfigurationFilePath);
-                        InstallPythonModules(pythonModules);
+                        configuration.Save(ConfigurationFilePath);
+                        InstallPythonModules(configuration.pythonModules);
                     }
                 }
             }
@@ -139,6 +138,12 @@ namespace PyxelRestAddIn
         private void ServiceConfigurationForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             hostReachabilityTimer.Stop();
+            if (configuration.modified)
+            {
+                configuration.modified = false;
+                InstallPythonModules(configuration.pythonModules);
+                DialogResult = DialogResult.Yes;
+            }
         }
 
         private void HostReachabilityTimer_Tick(object sender, EventArgs e)
@@ -183,17 +188,6 @@ namespace PyxelRestAddIn
             newServicePanel.Controls.Add(addServiceButton, 1, 0);
 
             layout.Controls.Add(newServicePanel);
-            #endregion
-
-            #region Save
-            {
-                ToolTip tooltip = new ToolTip { ToolTipTitle = "Save modifications", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                saveButton = new Button { Enabled = false, DialogResult = DialogResult.Yes, Dock = DockStyle.Fill, Text = "Save Configuration" };
-                tooltip.SetToolTip(saveButton, "User defined functions will be automatically reloaded.");
-                saveButton.Click += Save;
-                layout.Controls.Add(saveButton);
-            }
             #endregion
 
             Controls.Add(layout);
@@ -271,6 +265,7 @@ namespace PyxelRestAddIn
             serviceNameField.Text = "";
             addServiceButton.Enabled = false;
             DisplayService(new ServicePanel(this, selectedService), true);
+            Save();
         }
 
         private void LoadServices()
@@ -304,30 +299,13 @@ namespace PyxelRestAddIn
             }
 
             if (updated)
-                configuration.Save(ConfigurationFilePath);
+                Save();
         }
 
         private void DisplayService(ServicePanel service, bool expanded)
         {
             service.Display(expanded);
             services.Add(service);
-            UpdateSaveButtonState();
-        }
-
-        private void UpdateSaveButtonState()
-        {
-            if (IsValid())
-            {
-                saveButton.Enabled = true;
-                saveButton.ForeColor = Color.DarkGreen;
-                saveButton.BackColor = Color.LightGreen;
-            }
-            else
-            {
-                saveButton.Enabled = false;
-                saveButton.ForeColor = Color.Black;
-                saveButton.BackColor = Color.FromArgb(255, 240, 240, 240);
-            }
         }
 
         private bool IsValid()
@@ -338,31 +316,33 @@ namespace PyxelRestAddIn
             return true;
         }
 
-        private void Save(object sender, EventArgs e)
+        private void Save()
         {
-            try
+            if (IsValid())
             {
-                var pythonModules = configuration.Save(ConfigurationFilePath);
-                InstallPythonModules(pythonModules);
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Unable to save services.", ex);
+                try
+                {
+                    configuration.Save(ConfigurationFilePath);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unable to save services.", ex);
+                }
             }
         }
 
-        internal void Removed(ServicePanel service)
+        internal void ServiceRemoved(ServicePanel service)
         {
             services.Remove(service);
             Service removedService = upToDateServices.Find(s => service.Exists(s.Name));
             if (removedService != null)
                 serviceNameField.Items.Add(removedService);
-            UpdateSaveButtonState();
+            Save();
         }
 
         internal void ServiceUpdated()
         {
-            UpdateSaveButtonState();
+            Save();
         }
     }
 }

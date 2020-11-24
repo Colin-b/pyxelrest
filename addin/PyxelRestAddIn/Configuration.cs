@@ -16,6 +16,9 @@ namespace PyxelRestAddIn
         private readonly List<Service> services = new List<Service>();
         private readonly YamlStream config;
 
+        internal ISet<string> pythonModules = new HashSet<string>();
+        internal bool modified = false;
+
         public Configuration(string path, bool warnIfPathNotProvided=true)
         {
             if (string.IsNullOrEmpty(path))
@@ -106,17 +109,12 @@ namespace PyxelRestAddIn
             return services;
         }
 
-        /// <summary>
-        /// Save services to disk and return a list of python modules that needs to be installed for the configuration to work fine.
-        /// </summary>
-        /// <param name="configurationFilePath"></param>
-        /// <returns>Set of python modules to be installed.</returns>
-        public ISet<string> Save(string configurationFilePath)
+        public void Save(string configurationFilePath)
         {
             if (configurationFilePath == null)
             {
                 Log.Error("Configuration cannot be saved as configuration file path was not provided.");
-                return new HashSet<string>();
+                return;
             }
             if (!File.Exists(configurationFilePath))
             {
@@ -128,19 +126,19 @@ namespace PyxelRestAddIn
             var parser = new YamlStream();
             var mapping = new YamlMappingNode();
 
-            var pythonModules = new List<string>();
+            pythonModules.Clear();
             foreach (Service service in services)
             {
                 mapping.Add(new YamlScalarNode(service.Name), service.ToConfig());
-                pythonModules.AddRange(service.GetPythonModules());
+                pythonModules.UnionWith(service.GetPythonModules());
             }
 
             parser.Add(new YamlDocument(mapping));
             var writer = new StreamWriter(configurationFilePath);
             parser.Save(writer);
             writer.Close();
+            modified = true;
             Log.Info("Services configuration updated.");
-            return new HashSet<string>(pythonModules);
         }
 
         internal Service AddDefaultService(string name)
