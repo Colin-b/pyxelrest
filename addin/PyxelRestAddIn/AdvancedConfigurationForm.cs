@@ -146,26 +146,13 @@ namespace PyxelRestAddIn
                 }
                 #endregion
 
-                #region API Key
-                {
-                    layout.Controls.Add(new Label { Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var apiKey = new TextBox { Dock = DockStyle.Fill, Text = (string)servicePanel.service.Auth["api_key"] };
-                    tooltip.SetToolTip(apiKey, "Only used when required.");
-                    apiKey.TextChanged += ApiKey_TextChanged;
-                    layout.Controls.Add(apiKey, 1, 2);
-                }
-                #endregion
-
                 Dictionary<string, object> dynamicArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("dynamic_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["dynamic_array"] : new Dictionary<string, object>();
                 Dictionary<string, object> legacyArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("legacy_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["legacy_array"] : new Dictionary<string, object>();
                 Dictionary<string, object> vbaCompatibleFormulasOptions = servicePanel.service.Formulas.ContainsKey("vba_compatible") ? (Dictionary<string, object>)servicePanel.service.Formulas["vba_compatible"] : new Dictionary<string, object>();
 
                 #region Formulas
                 {
-                    layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+                    layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
                     var panel = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
 
@@ -196,13 +183,13 @@ namespace PyxelRestAddIn
                     }
                     #endregion
 
-                    layout.Controls.Add(panel, 1, 3);
+                    layout.Controls.Add(panel, 1, 2);
                 }
                 #endregion
 
                 #region Dynamic array formulas behavior
                 {
-                    layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
+                    layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
 
                     var panel = new TableLayoutPanel { AutoSize = true };
 
@@ -218,13 +205,13 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(dynamicArrayFormulasLockExcel, 0, 0);
                     }
 
-                    layout.Controls.Add(panel, 1, 4);
+                    layout.Controls.Add(panel, 1, 3);
                 }
                 #endregion
 
                 #region Legacy array formulas behavior
                 {
-                    layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 5);
+                    layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
 
                     var panel = new TableLayoutPanel { AutoSize = true };
 
@@ -239,7 +226,7 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(legacyArrayFormulasLockExcel, 0, 0);
                     }
 
-                    layout.Controls.Add(panel, 1, 5);
+                    layout.Controls.Add(panel, 1, 4);
                 }
                 #endregion
 
@@ -570,131 +557,164 @@ namespace PyxelRestAddIn
                 #endregion
             }
 
-            #region OAuth2 settings
+            #region Authentication settings
             {
-                var tab = new TabPage { Text = "OAuth2", AutoScroll = true };
-                var layout = new TableLayoutPanel { AutoSize = true };
-                var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+                var authTab = new TabPage { Text = "Authentication" };
+                var authTabs = new TabControl { Dock = DockStyle.Fill };
 
-                #region Timeout
+                #region API Key settings
                 {
-                    layout.Controls.Add(new Label { Width = PercentWidth(25), Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    var tab = new TabPage { Text = "API key", AutoScroll = true };
+                    var layout = new TableLayoutPanel { AutoSize = true };
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    #region API Key
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-                    var timeout = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
-                    tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
-                    timeout.TextChanged += Oauth2Timeout_TextChanged;
-                    layout.Controls.Add(timeout, 1, 2);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var apiKey = new TextBox { Width = PercentWidth(75), Text = (string)servicePanel.service.Auth["api_key"] };
+                        tooltip.SetToolTip(apiKey, "Only used when required.");
+                        apiKey.TextChanged += ApiKey_TextChanged;
+                        layout.Controls.Add(apiKey, 1, 1);
+                    }
+                    #endregion
+
+                    tab.Controls.Add(layout);
+                    authTabs.TabPages.Add(tab);
                 }
                 #endregion
 
-                #region Add items
-
-                oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
-                layout.Controls.Add(oauth2ParamsPanel, 0, 7);
-                layout.SetColumnSpan(oauth2ParamsPanel, 3);
-
+                #region OAuth2 settings
                 {
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    var tab = new TabPage { Text = "OAuth2", AutoScroll = true };
+                    var layout = new TableLayoutPanel { AutoSize = true };
+                    var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
 
-                    oauth2ParamName = new TextBox { Width = PercentWidth(25), Text = string.Empty };
-                    tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
-                    oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
-                    oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
-                    layout.Controls.Add(oauth2ParamName, 0, 8);
-                }
-                {
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    #region Timeout
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(25), Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
 
-                    oauth2ParamValue = new TextBox { Width = PercentWidth(60), Text = string.Empty };
-                    tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
-                    oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
-                    oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
-                    layout.Controls.Add(oauth2ParamValue, 1, 8);
-                }
-                addOAuth2Param = new AddButton(PercentWidth(5));
-                addOAuth2Param.Click += AddOAuth2Param_Click;
-                layout.Controls.Add(addOAuth2Param, 2, 8);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                #endregion
+                        var timeout = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
+                        tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
+                        timeout.TextChanged += Oauth2Timeout_TextChanged;
+                        layout.Controls.Add(timeout, 1, 2);
+                    }
+                    #endregion
 
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
+                    #region Add items
 
-            #region Basic Authentication settings
-            {
-                var tab = new TabPage("Basic");
-                var layout = new TableLayoutPanel { AutoSize = true };
-                var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
+                    oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
+                    layout.Controls.Add(oauth2ParamsPanel, 0, 7);
+                    layout.SetColumnSpan(oauth2ParamsPanel, 3);
 
-                #region Username
-                {
-                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        oauth2ParamName = new TextBox { Width = PercentWidth(25), Text = string.Empty };
+                        tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
+                        oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
+                        oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
+                        layout.Controls.Add(oauth2ParamName, 0, 8);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var userName = new TextBox { Width = PercentWidth(75), Text = (string)basicOptions["username"] };
-                    tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
-                    userName.TextChanged += BasicUsername_TextChanged;
-                    layout.Controls.Add(userName, 1, 1);
-                }
-                #endregion
+                        oauth2ParamValue = new TextBox { Width = PercentWidth(60), Text = string.Empty };
+                        tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
+                        oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
+                        oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
+                        layout.Controls.Add(oauth2ParamValue, 1, 8);
+                    }
+                    addOAuth2Param = new AddButton(PercentWidth(5));
+                    addOAuth2Param.Click += AddOAuth2Param_Click;
+                    layout.Controls.Add(addOAuth2Param, 2, 8);
 
-                #region Password
-                {
-                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    #endregion
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)basicOptions["password"] };
-                    tooltip.SetToolTip(password, "Used only if basic authentication is required.");
-                    password.TextChanged += BasicPassword_TextChanged;
-                    layout.Controls.Add(password, 1, 2);
+                    tab.Controls.Add(layout);
+                    authTabs.TabPages.Add(tab);
                 }
                 #endregion
 
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
-
-            #region NTLM Authentication settings
-            {
-                var tab = new TabPage("NTLM");
-                var layout = new TableLayoutPanel { AutoSize = true };
-                var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
-
-                #region Username
+                #region Basic Authentication settings
                 {
-                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                    var tab = new TabPage("Basic");
+                    var layout = new TableLayoutPanel { AutoSize = true };
+                    var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    #region Username
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-                    var userName = new TextBox { Width = PercentWidth(75), Text = (string)ntlmOptions["username"] };
-                    tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
-                    userName.TextChanged += NtlmUsername_TextChanged;
-                    layout.Controls.Add(userName, 1, 1);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var userName = new TextBox { Width = PercentWidth(75), Text = (string)basicOptions["username"] };
+                        tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
+                        userName.TextChanged += BasicUsername_TextChanged;
+                        layout.Controls.Add(userName, 1, 1);
+                    }
+                    #endregion
+
+                    #region Password
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)basicOptions["password"] };
+                        tooltip.SetToolTip(password, "Used only if basic authentication is required.");
+                        password.TextChanged += BasicPassword_TextChanged;
+                        layout.Controls.Add(password, 1, 2);
+                    }
+                    #endregion
+
+                    tab.Controls.Add(layout);
+                    authTabs.TabPages.Add(tab);
                 }
                 #endregion
 
-                #region Password
+                #region NTLM Authentication settings
                 {
-                    layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    var tab = new TabPage("NTLM");
+                    var layout = new TableLayoutPanel { AutoSize = true };
+                    var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
 
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    #region Username
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
 
-                    var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)ntlmOptions["password"] };
-                    tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
-                    password.TextChanged += NtlmPassword_TextChanged;
-                    layout.Controls.Add(password, 1, 2);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var userName = new TextBox { Width = PercentWidth(75), Text = (string)ntlmOptions["username"] };
+                        tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
+                        userName.TextChanged += NtlmUsername_TextChanged;
+                        layout.Controls.Add(userName, 1, 1);
+                    }
+                    #endregion
+
+                    #region Password
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)ntlmOptions["password"] };
+                        tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
+                        password.TextChanged += NtlmPassword_TextChanged;
+                        layout.Controls.Add(password, 1, 2);
+                    }
+                    #endregion
+
+                    tab.Controls.Add(layout);
+                    authTabs.TabPages.Add(tab);
                 }
                 #endregion
 
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
+                authTab.Controls.Add(authTabs);
+                tabs.TabPages.Add(authTab);
             }
             #endregion
 
