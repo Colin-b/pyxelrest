@@ -43,11 +43,8 @@ print(user)
 
 ## Table of Contents
 
-* [Features](#features)
-* Installation
-  * [Using the installer](/docs/installation/installer.md)
-  * [Custom](/docs/installation/custom.md)
-  * [Developer](/docs/installation/developer.md)
+* [Features](/docs/features.md)
+* [Installation](/docs/installation/installer.md)
 * Configuration
   * [Services](/docs/configuration/services.md)
   * [Logging](/docs/configuration/logging.md)
@@ -56,24 +53,5 @@ print(user)
 * [Migration guide](/docs/migration_guide.md)
 * [Changelog](CHANGELOG.md)
 * [FAQ](/docs/faq.md)
-
-## Features
-
-### Automatic function (re)generation
-
-Functions are automatically re-generated on [Microsoft Excel] startup and on configuration update.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_functions_generate_startup.gif" alt='Formula generation'>
-</p>
-<p align="center"><em>Even if you should not need it, you can manually update functions by clicking on the <span style="color: #1382CE">Update Functions</span> button within <span style="color: #1E1E1F">PyxelRest</span> tab.</em></p>
-
-### Automatic update
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_gui.gif" alt='Update steps'>
-</p>
-<p align="center"><em>Check for update is performed when closing Microsoft Excel (it can be deactivated), you will be prompted in case one is available.</em></p>
-
 
 [Microsoft Excel]: https://products.office.com/en-us/excel

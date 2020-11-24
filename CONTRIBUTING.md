@@ -53,6 +53,8 @@ Before creating an issue please make sure that it was not already reported.
     * Each line of code should be covered by the test cases.
 7) Add related [changelog entry](https://keepachangelog.com/en/1.1.0/) in the Unreleased section.
     * Unless it is a documentation update.
+    
+In addition, you can also refer to the [developer installation documentation](/docs/installation/developer.md)
 
 #### Enter pull request
 
