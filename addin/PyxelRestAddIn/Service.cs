@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using YamlDotNet.RepresentationModel;
 
 namespace PyxelRestAddIn
@@ -285,7 +286,18 @@ namespace PyxelRestAddIn
             {
                 if (fromConf.ContainsKey(defaultItem.Key))
                 {
-                    if (fromConf[defaultItem.Key].Equals(defaultItem.Value))
+                    if (IsGenericList(defaultItem.Value))
+                    {
+                        IList<object> confList = (IList<object>)fromConf[defaultItem.Key];
+                        IList<object> defaultList = (IList<object>)defaultItem.Value;
+                        
+                        // Order of elements does not matter in our case for list equality
+                        if (confList.All(defaultList.Contains) && confList.Count == defaultList.Count)
+                        {
+                            fromConf.Remove(defaultItem.Key);
+                        }
+                    }
+                    else if (fromConf[defaultItem.Key].Equals(defaultItem.Value))
                     {
                         fromConf.Remove(defaultItem.Key);
                     }
