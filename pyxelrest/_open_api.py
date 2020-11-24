@@ -58,19 +58,16 @@ class ServiceConfigSection(ConfigSection):
         :param service_config: Dictionary containing service details.
         """
         ConfigSection.__init__(self, service_name, service_config)
-        open_api = service_config.get("open_api", None)
+        open_api = service_config.get("open_api")
         if not open_api:
             raise MandatoryPropertyNotProvided(service_name, "open_api")
 
-        self.open_api_definition = open_api.get("definition", None)
+        self.open_api_definition = open_api.get("definition")
         if not self.open_api_definition:
             raise MandatoryPropertyNotProvided(service_name, "open_api/definition")
 
-        self.open_api_definition_url_parsed = urlsplit(self.open_api_definition)
         self.definition_read_timeout = open_api.get("definition_read_timeout", 5)
-        self.service_host = open_api.get(
-            "service_host", self.open_api_definition_url_parsed.netloc
-        )
+        self.service_host = open_api.get("service_host")
         self.rely_on_definitions = open_api.get("rely_on_definitions")
         self.selected_methods = open_api.get(
             "selected_methods",
@@ -676,16 +673,19 @@ class OpenAPI(Service):
         Service.__init__(self, config, uri)
 
     def _extract_uri(self, config: ServiceConfigSection) -> str:
+        open_api_definition_url = urlsplit(config.open_api_definition)
         # The default scheme to be used is the one used to access the OpenAPI definition itself.
         schemes = self.open_api_definition.get(
-            "schemes", [config.open_api_definition_url_parsed.scheme]
+            "schemes", [open_api_definition_url.scheme]
         )
         scheme = "https" if "https" in schemes else schemes[0]
 
         # If the host is not included, the host serving the documentation is to be used (including the port).
         # service_host property is here to handle services behind a reverse proxy
         # (otherwise host will be the reverse proxy one)
-        host = self.open_api_definition.get("host", config.service_host)
+        host = self.open_api_definition.get(
+            "host", config.service_host or open_api_definition_url.netloc
+        )
         # Allow user to provide service_host starting with scheme (removing it)
         host_parsed = urlsplit(host)
         if host_parsed.netloc:
