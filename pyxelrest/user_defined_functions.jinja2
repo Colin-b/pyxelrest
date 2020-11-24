@@ -87,11 +87,9 @@ def {{ udf_method.udf_name }}(
 {% endmacro %}
 {% if service.config.name == 'pyxelrest' %}
     {% for http_method in ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] %}
-        {%- if service.config.should_provide_method(http_method) -%}
-            {% for formula_type, formula_options in service.config.formulas.items() %}
-                {{- add_udf(service.create_method(http_method, formula_type, formula_options)) -}}
-            {% endfor %}
-        {%- endif -%}
+        {% for formula_type, formula_options in service.config.formulas.items() %}
+            {{- add_udf(service.create_method(http_method, formula_type, formula_options)) -}}
+        {% endfor %}
     {%- endfor %}
 {% else %}
     {% for method_path, open_api_methods in service.open_api_definition['paths'].items() %}

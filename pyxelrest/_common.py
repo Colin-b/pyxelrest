@@ -50,9 +50,6 @@ class ConfigSection:
         :param service_config: Dictionary containing service details.
         """
         self.name = service_name
-        self.requested_methods = service_config.get(
-            "methods", ["get", "post", "put", "delete", "patch", "options", "head"]
-        )
         self.network = service_config.get("network", {})
         self.formulas = service_config.get(
             "formulas", {"dynamic_array": {"lock_excel": False}}
@@ -431,7 +428,10 @@ def check_for_duplicates(loaded_services: List[Service]):
 
 
 def get_result(
-    udf_method: UDFMethod, request_content: RequestContent, caller: ComRange, excel_application=None
+    udf_method: UDFMethod,
+    request_content: RequestContent,
+    caller: ComRange,
+    excel_application=None,
 ):
     cached_result = udf_method.get_cached_result(request_content)
     if cached_result is not None:
@@ -476,7 +476,9 @@ def get_result(
                     f"Waiting for {wait_for_status} status. Sending a new request in {check_interval} seconds."
                 )
                 time.sleep(check_interval)
-                return get_result(udf_method, request_content, caller, excel_application)
+                return get_result(
+                    udf_method, request_content, caller, excel_application
+                )
 
         logger.info(
             f"{get_caller_address(caller, excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}]."

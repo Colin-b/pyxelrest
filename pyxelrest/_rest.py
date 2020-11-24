@@ -24,9 +24,6 @@ class PyxelRestConfigSection(ConfigSection):
         ConfigSection.__init__(self, service_name, service_config)
         self.rely_on_definitions = False
 
-    def should_provide_method(self, http_verb: str) -> bool:
-        return http_verb in self.requested_methods
-
 
 class ParseBodyAsParameter(UDFParameter):
     def __init__(self):

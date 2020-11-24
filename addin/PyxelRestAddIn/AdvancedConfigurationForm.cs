@@ -115,48 +115,19 @@ namespace PyxelRestAddIn
 
             var tabs = new TabControl { Dock = DockStyle.Fill };
 
-            #region Standard settings
+            #region Formulas settings
             {
-                var tab = new TabPage("Standard");
+                var tab = new TabPage("Formulas");
                 var layout = new TableLayoutPanel { AutoSize = true };
-
-                #region Methods
-                {
-                    layout.Controls.Add(new Label { Text = "Methods", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    var get = new CheckBox { Text = "get", Checked = servicePanel.service.Get, Width = PercentWidth(11) };
-                    get.CheckedChanged += Get_CheckedChanged;
-                    panel.Controls.Add(get, 0, 0);
-                    var post = new CheckBox { Text = "post", Checked = servicePanel.service.Post, Width = PercentWidth(11) };
-                    post.CheckedChanged += Post_CheckedChanged;
-                    panel.Controls.Add(post, 1, 0);
-                    var put = new CheckBox { Text = "put", Checked = servicePanel.service.Put, Width = PercentWidth(11) };
-                    put.CheckedChanged += Put_CheckedChanged;
-                    panel.Controls.Add(put, 2, 0);
-                    var patch = new CheckBox { Text = "patch", Checked = servicePanel.service.Patch, Width = PercentWidth(11) };
-                    patch.CheckedChanged += Patch_CheckedChanged;
-                    panel.Controls.Add(patch, 3, 0);
-                    var delete = new CheckBox { Text = "delete", Checked = servicePanel.service.Delete, Width = PercentWidth(11) };
-                    delete.CheckedChanged += Delete_CheckedChanged;
-                    panel.Controls.Add(delete, 4, 0);
-
-                    layout.Controls.Add(panel, 1, 1);
-                }
-                #endregion
 
                 Dictionary<string, object> dynamicArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("dynamic_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["dynamic_array"] : new Dictionary<string, object>();
                 Dictionary<string, object> legacyArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("legacy_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["legacy_array"] : new Dictionary<string, object>();
                 Dictionary<string, object> vbaCompatibleFormulasOptions = servicePanel.service.Formulas.ContainsKey("vba_compatible") ? (Dictionary<string, object>)servicePanel.service.Formulas["vba_compatible"] : new Dictionary<string, object>();
 
-                #region Formulas
+                #region Dynamic array formulas
                 {
-                    layout.Controls.Add(new Label { Text = "Formulas", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
-                    var panel = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill };
-
-                    #region Array formulas
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
@@ -166,67 +137,61 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(dynamicArrayFormulas, 0, 0);
                     }
                     {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var synchronousChecked = dynamicArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)dynamicArrayFormulasOptions["lock_excel"] : false;
+                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for dynamic array result", Checked = synchronousChecked, Width = PercentWidth(50) };
+                        tooltip.SetToolTip(dynamicArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
+                        dynamicArrayFormulasLockExcel.CheckedChanged += DynamicArrayFormulasLockExcel_CheckedChanged;
+                        dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasOptions.Count > 0;
+                        panel.Controls.Add(dynamicArrayFormulasLockExcel, 1, 0);
+                    }
+
+                    layout.Controls.Add(panel);
+                }
+                #endregion
+
+                #region Legacy array formulas
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var legacyArrayFormulas = new CheckBox { Text = "Legacy array", Checked = legacyArrayFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(legacyArrayFormulas, "If your version of Microsoft Excel does not supports dynamic array formulas, use this to spill results.");
                         legacyArrayFormulas.CheckedChanged += LegacyArrayFormulas_CheckedChanged;
-                        panel.Controls.Add(legacyArrayFormulas, 1, 0);
+                        panel.Controls.Add(legacyArrayFormulas, 0, 0);
                     }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var synchronousChecked = legacyArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)legacyArrayFormulasOptions["lock_excel"] : false;
+                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for legacy array result", Checked = synchronousChecked, Width = PercentWidth(50) };
+                        tooltip.SetToolTip(legacyArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
+                        legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
+                        legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasOptions.Count > 0;
+                        panel.Controls.Add(legacyArrayFormulasLockExcel, 1, 0);
+                    }
+
+                    layout.Controls.Add(panel);
+                }
+                #endregion
+
+                #region Visual Basic compatible formulas
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var vbaCompatibleFormulas = new CheckBox { Text = "Visual basic", Checked = vbaCompatibleFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using Visual Basic for Applications (VBA).");
                         vbaCompatibleFormulas.CheckedChanged += VBACompatibleFormulas_CheckedChanged;
-                        panel.Controls.Add(vbaCompatibleFormulas, 2, 0);
-                    }
-                    #endregion
-
-                    layout.Controls.Add(panel, 1, 2);
-                }
-                #endregion
-
-                #region Dynamic array formulas behavior
-                {
-                    layout.Controls.Add(new Label { Text = "Dynamic array", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
-
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var synchronousChecked = dynamicArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)dynamicArrayFormulasOptions["lock_excel"] : false;
-                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(dynamicArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
-                        dynamicArrayFormulasLockExcel.CheckedChanged += DynamicArrayFormulasLockExcel_CheckedChanged;
-                        dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(dynamicArrayFormulasLockExcel, 0, 0);
+                        panel.Controls.Add(vbaCompatibleFormulas, 0, 0);
                     }
 
-                    layout.Controls.Add(panel, 1, 3);
-                }
-                #endregion
-
-                #region Legacy array formulas behavior
-                {
-                    layout.Controls.Add(new Label { Text = "Legacy array", TextAlign = ContentAlignment.BottomLeft }, 0, 4);
-
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var synchronousChecked = legacyArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)legacyArrayFormulasOptions["lock_excel"] : false;
-                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for result", Checked = synchronousChecked, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(legacyArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
-                        legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
-                        legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(legacyArrayFormulasLockExcel, 0, 0);
-                    }
-
-                    layout.Controls.Add(panel, 1, 4);
+                    layout.Controls.Add(panel);
                 }
                 #endregion
 
@@ -460,6 +425,33 @@ namespace PyxelRestAddIn
 
                         layout.Controls.Add(panel);
                     }
+
+                    #region Methods
+                    {
+                        layout.Controls.Add(new Label { Text = "Methods" });
+
+                        var panel = new TableLayoutPanel { AutoSize = true };
+                        List<string> selectedMethods = (List<string>)servicePanel.service.OpenAPI["selected_methods"];
+
+                        var get = new CheckBox { Text = "get", Checked = selectedMethods.Contains("get"), Width = PercentWidth(11) };
+                        get.CheckedChanged += Get_CheckedChanged;
+                        panel.Controls.Add(get, 0, 0);
+                        var post = new CheckBox { Text = "post", Checked = selectedMethods.Contains("post"), Width = PercentWidth(11) };
+                        post.CheckedChanged += Post_CheckedChanged;
+                        panel.Controls.Add(post, 1, 0);
+                        var put = new CheckBox { Text = "put", Checked = selectedMethods.Contains("put"), Width = PercentWidth(11) };
+                        put.CheckedChanged += Put_CheckedChanged;
+                        panel.Controls.Add(put, 2, 0);
+                        var patch = new CheckBox { Text = "patch", Checked = selectedMethods.Contains("patch"), Width = PercentWidth(11) };
+                        patch.CheckedChanged += Patch_CheckedChanged;
+                        panel.Controls.Add(patch, 3, 0);
+                        var delete = new CheckBox { Text = "delete", Checked = selectedMethods.Contains("delete"), Width = PercentWidth(11) };
+                        delete.CheckedChanged += Delete_CheckedChanged;
+                        panel.Controls.Add(delete, 4, 0);
+
+                        layout.Controls.Add(panel);
+                    }
+                    #endregion
 
                     #region Tags
                     {
@@ -934,27 +926,42 @@ namespace PyxelRestAddIn
 
         private void Patch_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Patch = ((CheckBox)sender).Checked;
+            SelectedMethodsChanged("patch", ((CheckBox)sender).Checked);
         }
 
         private void Delete_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Delete = ((CheckBox)sender).Checked;
+            SelectedMethodsChanged("delete", ((CheckBox)sender).Checked);
         }
 
         private void Put_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Put = ((CheckBox)sender).Checked;
+            SelectedMethodsChanged("put", ((CheckBox)sender).Checked);
         }
 
         private void Post_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Post = ((CheckBox)sender).Checked;
+            SelectedMethodsChanged("post", ((CheckBox)sender).Checked);
         }
 
         private void Get_CheckedChanged(object sender, EventArgs e)
         {
-            servicePanel.service.Get = ((CheckBox)sender).Checked;
+            SelectedMethodsChanged("get", ((CheckBox)sender).Checked);
+        }
+
+        private void SelectedMethodsChanged(string method, bool selected)
+        {
+            List<string> selectedMethods = (List<string>)servicePanel.service.OpenAPI["selected_methods"];
+            if (selected)
+            {
+                if (!selectedMethods.Contains(method))
+                    selectedMethods.Add(method);
+            }
+            else
+            {
+                if (selectedMethods.Contains(method))
+                    selectedMethods.Remove(method);
+            }
         }
 
         private void ApiKey_TextChanged(object sender, EventArgs e)

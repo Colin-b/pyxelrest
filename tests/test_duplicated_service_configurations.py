@@ -2593,8 +2593,8 @@ def test_duplicated_key_in_configuration(responses: RequestsMock, tmpdir):
             """usual_parameters:
   open_api:
     definition: "http://localhost:8943/"
-  methods:
-    - "get"
+    selected_methods:
+      - "get"
   udf:
     return_types:
       - "sync_auto_expand"
@@ -2603,8 +2603,8 @@ def test_duplicated_key_in_configuration(responses: RequestsMock, tmpdir):
 usual_parameters:
   open_api:
     definition: "http://localhost:8943/"
-  methods:
-    - "get"
+    selected_methods:
+      - "get"
   udf:
     return_types:
       - "sync_auto_expand"

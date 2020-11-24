@@ -151,7 +151,6 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
 | description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
-| methods | List of services methods to be exposed as UDFs. Retrieve all standards HTTP methods by default (get, post, put, delete, patch, options, head). | get, post, put, delete, patch, options, head |
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
 | headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
 | auth | Dictionary containing authentication related settings. Refer to [Authentication](#authentication) section for more information. | |
@@ -169,12 +168,13 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | definition | [URL](https://en.wikipedia.org/wiki/URL) to the OpenAPI definition. `http://`, `https://` and `file:///` (such as `file:///C:\swagger.json`) schemes are supported. | Mandatory | |
 | definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an [OpenAPI 2.0 definition]. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | Optional | any float value |
 | definition_retrieval_auths | List all authentication that should be used when retrieving the [OpenAPI 2.0 definition]. Use no authentication by default. | Optional | oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm (see [NTLM](#ntlm) to provide details) |
-| excluded_tags | List of tags within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
-| selected_tags | List of tags within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
-| excluded_operation_ids | List of operation_id (or regular expressions) within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
-| selected_operation_ids | List of operation_id (or regular expressions) within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
-| excluded_parameters | List of parameter names (or regular expressions) within [OpenAPI 2.0 definition] that should not be exposed. If not specified, no filtering is applied. | Optional | |
-| selected_parameters | List of parameter names (or regular expressions) within [OpenAPI 2.0 definition] that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
+| selected_methods | List of `methods` within [OpenAPI 2.0 definition] that should be retrieved. If not specified, retrieve all standards HTTP methods (get, post, put, delete, patch, options, head). | Optional | get, post, put, delete, patch, options, head |
+| excluded_tags | List of `tags` within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
+| selected_tags | List of `tags` within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
+| excluded_operation_ids | List of `operation_id` (or regular expressions) within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
+| selected_operation_ids | List of `operation_id` (or regular expressions) within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
+| excluded_parameters | List of `parameter` names (or regular expressions) within [OpenAPI 2.0 definition] that should not be exposed. If not specified, no filtering is applied. | Optional | |
+| selected_parameters | List of `parameter` names (or regular expressions) within [OpenAPI 2.0 definition] that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
 | rely_on_definitions | Rely on [OpenAPI 2.0 definitions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#definitionsObject) to re-order fields received in response. Deactivated by default. | Optional | `true` or `false` |
 | service_host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
 
@@ -365,6 +365,8 @@ Otherwise:
  * `vba_compatible` `return_type` (in case it was the only `return_type`) corresponds to `legacy_array` sub-section with `lock_excel` set to `true`
 
 `shift_result` is not an option anymore. As a result, formulas results will start from the first cell.
+
+`methods` option is now `selected_methods` option within `open_api` section.
 
 ##### Previous (0.69.0)
 

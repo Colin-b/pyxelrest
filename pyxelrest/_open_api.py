@@ -72,6 +72,10 @@ class ServiceConfigSection(ConfigSection):
             "service_host", self.open_api_definition_url_parsed.netloc
         )
         self.rely_on_definitions = open_api.get("rely_on_definitions")
+        self.selected_methods = open_api.get(
+            "selected_methods",
+            ["get", "post", "put", "delete", "patch", "options", "head"],
+        )
         self.selected_tags = open_api.get("selected_tags", [])
         self.excluded_tags = open_api.get("excluded_tags", [])
         self.excluded_operation_ids = open_api.get("excluded_operation_ids", [])
@@ -146,7 +150,7 @@ class ServiceConfigSection(ConfigSection):
         return True
 
     def should_provide_method(self, http_verb: str, open_api_method: dict) -> bool:
-        if http_verb not in self.requested_methods:
+        if http_verb not in self.selected_methods:
             return False
         return (
             self._allow_tags(open_api_method.get("tags"))

@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop `ntlm` and `cachetools` extra. As documentation clearly state what is supported and that there is no added value.
 - There is no default services configuration anymore at pyxelrest module installation. However samples can still be found via documentation.
 - Remove the ability to select `options` and `head` http method from Microsoft Excel add-in configuration as they are most likely not used.
+- It is not possible to filter out HTTP methods from `pyxelrest` service anymore.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.
@@ -68,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `update_services_config` script now requires a configuration file to update (no default configuration path anymore).
 - `auto_update` script does not update services configuration anymore as this is performed by add-in at startup time anyway.
 - `X-Pxl-Cell` header renamed to `X-Pxl-Caller` for clarity.
+- Selected HTTP methods are now supposed to be provided in `open_api.selected_methods` instead of `methods`.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
