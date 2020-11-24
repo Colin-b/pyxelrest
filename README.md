@@ -43,6 +43,7 @@ print(user)
 
 ## Table of Contents
 
+* [Test link](/docs/test.md)
 * [Features](#features)
 * [Installation](#how-to-install)
 * [Configuration](#configuration)
