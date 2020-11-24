@@ -200,178 +200,6 @@ namespace PyxelRestAddIn
             }
             #endregion
 
-            #region Network settings
-            {
-                var tab = new TabPage("Network");
-                var layout = new TableLayoutPanel { AutoSize = true };
-
-                var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
-
-                {
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    #region Timeout
-
-                    #region Connect timeout
-                    {
-                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(17) }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Width = PercentWidth(10) };
-                        tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
-                        connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
-                        panel.Controls.Add(connectTimeout, 1, 1);
-                    }
-                    #endregion
-
-                    #region Read timeout
-                    {
-                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 2, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Width = PercentWidth(10) };
-                        tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
-                        readTimeout.ValueChanged += ReadTimeout_ValueChanged;
-                        panel.Controls.Add(readTimeout, 3, 1);
-                    }
-                    #endregion
-
-                    #endregion
-
-                    #region Max retries
-                    {
-                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 4, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Width = PercentWidth(10) };
-                        tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
-                        maxRetries.ValueChanged += MaxRetries_ValueChanged;
-                        panel.Controls.Add(maxRetries, 5, 1);
-                    }
-                    #endregion
-
-                    layout.Controls.Add(panel, 0, 1);
-                }
-
-                {
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    #region SSL certificate verification
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Enable SSL certificate verification", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var verifyChecked = !networkOptions.ContainsKey("verify") || Convert.ToBoolean(networkOptions["verify"]);
-                        var verifySSLCertificate = new CheckBox { Text = "Verify SSL certificate for https requests", Checked = verifyChecked, Width = PercentWidth(60) };
-                        tooltip.SetToolTip(verifySSLCertificate, "Uncheck to disable SSL certificate validation.");
-                        verifySSLCertificate.CheckedChanged += VerifySSLCertificate_CheckedChanged;
-                        panel.Controls.Add(verifySSLCertificate, 0, 1);
-                    }
-                    #endregion
-
-                    layout.Controls.Add(panel, 0, 2);
-                }
-
-                {
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
-
-                    #region HTTP proxy
-                    {
-                        panel.Controls.Add(new Label { Text = "HTTP proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy URL to be used for HTTP requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        httpProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("http") ? (string)proxiesOptions["http"] : string.Empty };
-                        tooltip.SetToolTip(httpProxy, "Default system HTTP_PROXY will be used if not set.");
-                        httpProxy.TextChanged += HttpProxy_TextChanged;
-                        panel.Controls.Add(httpProxy, 1, 1);
-                    }
-                    #endregion
-
-                    #region HTTPS proxy
-                    {
-                        panel.Controls.Add(new Label { Text = "HTTPS proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 2);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy URL to be used for HTTPS requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        httpsProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("https") ? (string)proxiesOptions["https"] : string.Empty };
-                        tooltip.SetToolTip(httpsProxy, "Default system HTTPS_PROXY will be used if not set.");
-                        httpsProxy.TextChanged += HttpsProxy_TextChanged;
-                        panel.Controls.Add(httpsProxy, 1, 2);
-                    }
-                    #endregion
-
-                    #region No proxy
-                    {
-                        panel.Controls.Add(new Label { Text = "No proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 3);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "URL starting with this will not use any proxy", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        noProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("no_proxy") ? (string)proxiesOptions["no_proxy"] : string.Empty };
-                        tooltip.SetToolTip(noProxy, "Default system NO_PROXY will be used if not set.");
-                        noProxy.TextChanged += NoProxy_TextChanged;
-                        panel.Controls.Add(noProxy, 1, 3);
-                    }
-                    #endregion
-
-                    layout.Controls.Add(panel, 0, 3);
-                }
-
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
-
-            #region Headers settings
-            {
-                var tab = new TabPage { Text = "Headers", AutoScroll = true };
-                var layout = new TableLayoutPanel { AutoSize = true };
-
-                #region Add items
-
-                var nameLabel = new Label { Text = "Name", Width = PercentWidth(20) };
-                layout.Controls.Add(nameLabel, 0, 1);
-
-                var valueLabel = new Label { Text = "Value", Width = PercentWidth(65) };
-                layout.Controls.Add(valueLabel, 1, 1);
-
-                headersPanel = new TableLayoutPanel { AutoSize = true };
-                layout.Controls.Add(headersPanel, 0, 2);
-                layout.SetColumnSpan(headersPanel, 3);
-
-                {
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    headerName = new TextBox { Text = string.Empty, Width = PercentWidth(20) };
-                    tooltip.SetToolTip(headerName, "Sent in every request on this service.");
-                    headerName.TextChanged += HeaderName_TextChanged;
-                    headerName.KeyDown += HeaderName_KeyDown;
-                    layout.Controls.Add(headerName, 0, 3);
-                }
-                {
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    headerValue = new TextBox { Text = string.Empty, Width = PercentWidth(65) };
-                    tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
-                    headerValue.TextChanged += HeaderValue_TextChanged;
-                    headerValue.KeyDown += HeaderValue_KeyDown;
-                    layout.Controls.Add(headerValue, 1, 3);
-                }
-                addHeader = new AddButton(PercentWidth(5));
-                addHeader.Click += AddHeader_Click;
-                layout.Controls.Add(addHeader, 2, 3);
-
-                #endregion
-
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
-
             if (!"pyxelrest".Equals(servicePanel.service.Name))
             {
                 #region OpenAPI settings
@@ -707,6 +535,178 @@ namespace PyxelRestAddIn
 
                 authTab.Controls.Add(authTabs);
                 tabs.TabPages.Add(authTab);
+            }
+            #endregion
+
+            #region Network settings
+            {
+                var tab = new TabPage("Network");
+                var layout = new TableLayoutPanel { AutoSize = true };
+
+                var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
+
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    #region Timeout
+
+                    #region Connect timeout
+                    {
+                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(17) }, 0, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Width = PercentWidth(10) };
+                        tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
+                        connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
+                        panel.Controls.Add(connectTimeout, 1, 1);
+                    }
+                    #endregion
+
+                    #region Read timeout
+                    {
+                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 2, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Width = PercentWidth(10) };
+                        tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
+                        readTimeout.ValueChanged += ReadTimeout_ValueChanged;
+                        panel.Controls.Add(readTimeout, 3, 1);
+                    }
+                    #endregion
+
+                    #endregion
+
+                    #region Max retries
+                    {
+                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 4, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Width = PercentWidth(10) };
+                        tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
+                        maxRetries.ValueChanged += MaxRetries_ValueChanged;
+                        panel.Controls.Add(maxRetries, 5, 1);
+                    }
+                    #endregion
+
+                    layout.Controls.Add(panel, 0, 1);
+                }
+
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    #region SSL certificate verification
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Enable SSL certificate verification", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var verifyChecked = !networkOptions.ContainsKey("verify") || Convert.ToBoolean(networkOptions["verify"]);
+                        var verifySSLCertificate = new CheckBox { Text = "Verify SSL certificate for https requests", Checked = verifyChecked, Width = PercentWidth(60) };
+                        tooltip.SetToolTip(verifySSLCertificate, "Uncheck to disable SSL certificate validation.");
+                        verifySSLCertificate.CheckedChanged += VerifySSLCertificate_CheckedChanged;
+                        panel.Controls.Add(verifySSLCertificate, 0, 1);
+                    }
+                    #endregion
+
+                    layout.Controls.Add(panel, 0, 2);
+                }
+
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
+
+                    #region HTTP proxy
+                    {
+                        panel.Controls.Add(new Label { Text = "HTTP proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy URL to be used for HTTP requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        httpProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("http") ? (string)proxiesOptions["http"] : string.Empty };
+                        tooltip.SetToolTip(httpProxy, "Default system HTTP_PROXY will be used if not set.");
+                        httpProxy.TextChanged += HttpProxy_TextChanged;
+                        panel.Controls.Add(httpProxy, 1, 1);
+                    }
+                    #endregion
+
+                    #region HTTPS proxy
+                    {
+                        panel.Controls.Add(new Label { Text = "HTTPS proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 2);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Proxy URL to be used for HTTPS requests", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        httpsProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("https") ? (string)proxiesOptions["https"] : string.Empty };
+                        tooltip.SetToolTip(httpsProxy, "Default system HTTPS_PROXY will be used if not set.");
+                        httpsProxy.TextChanged += HttpsProxy_TextChanged;
+                        panel.Controls.Add(httpsProxy, 1, 2);
+                    }
+                    #endregion
+
+                    #region No proxy
+                    {
+                        panel.Controls.Add(new Label { Text = "No proxy", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 3);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "URL starting with this will not use any proxy", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        noProxy = new TextBox { Width = PercentWidth(75), Text = proxiesOptions.ContainsKey("no_proxy") ? (string)proxiesOptions["no_proxy"] : string.Empty };
+                        tooltip.SetToolTip(noProxy, "Default system NO_PROXY will be used if not set.");
+                        noProxy.TextChanged += NoProxy_TextChanged;
+                        panel.Controls.Add(noProxy, 1, 3);
+                    }
+                    #endregion
+
+                    layout.Controls.Add(panel, 0, 3);
+                }
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
+            }
+            #endregion
+
+            #region Headers settings
+            {
+                var tab = new TabPage { Text = "Headers", AutoScroll = true };
+                var layout = new TableLayoutPanel { AutoSize = true };
+
+                #region Add items
+
+                var nameLabel = new Label { Text = "Name", Width = PercentWidth(20) };
+                layout.Controls.Add(nameLabel, 0, 1);
+
+                var valueLabel = new Label { Text = "Value", Width = PercentWidth(65) };
+                layout.Controls.Add(valueLabel, 1, 1);
+
+                headersPanel = new TableLayoutPanel { AutoSize = true };
+                layout.Controls.Add(headersPanel, 0, 2);
+                layout.SetColumnSpan(headersPanel, 3);
+
+                {
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    headerName = new TextBox { Text = string.Empty, Width = PercentWidth(20) };
+                    tooltip.SetToolTip(headerName, "Sent in every request on this service.");
+                    headerName.TextChanged += HeaderName_TextChanged;
+                    headerName.KeyDown += HeaderName_KeyDown;
+                    layout.Controls.Add(headerName, 0, 3);
+                }
+                {
+                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                    headerValue = new TextBox { Text = string.Empty, Width = PercentWidth(65) };
+                    tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
+                    headerValue.TextChanged += HeaderValue_TextChanged;
+                    headerValue.KeyDown += HeaderValue_KeyDown;
+                    layout.Controls.Add(headerValue, 1, 3);
+                }
+                addHeader = new AddButton(PercentWidth(5));
+                addHeader.Click += AddHeader_Click;
+                layout.Controls.Add(addHeader, 2, 3);
+
+                #endregion
+
+                tab.Controls.Add(layout);
+                tabs.TabPages.Add(tab);
             }
             #endregion
 
