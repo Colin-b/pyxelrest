@@ -163,7 +163,7 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 
 | Name | Description | Mandatory | Possible values |
 |------|-------------|-----------|-----------------|
-| definition | [URL](https://en.wikipedia.org/wiki/URL) to the OpenAPI definition. `http://`, `https://` and `file:///` (such as `file:///C:\swagger.json`) schemes are supported. | Mandatory | |
+| definition | [URL](https://en.wikipedia.org/wiki/URL) to the OpenAPI definition. `http://`, `https://` and `file:///` (such as `file:///C:\swagger.json`) schemes are supported. It can even be a YAML representation of the definition. | Mandatory | |
 | definition_read_timeout | Maximum amount of time, in seconds, to wait when requesting an [OpenAPI 2.0 definition]. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | Optional | any float value |
 | definition_retrieval_auths | List all authentication that should be used when retrieving the [OpenAPI 2.0 definition]. Use no authentication by default. | Optional | oauth2_implicit, oauth2_access_code, oauth2_password, oauth2_application, api_key, basic, ntlm (see [NTLM](#ntlm) to provide details) |
 | selected_methods | List of `methods` within [OpenAPI 2.0 definition] that should be retrieved. If not specified, retrieve all standards HTTP methods (get, post, put, delete, patch, options, head). | Optional | get, post, put, delete, patch, options, head |

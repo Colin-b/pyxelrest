@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Provides a public base class for all pyxelrest issued exceptions: `pyxelrest.PyxelRestException`.
 - `install_addin` script now has a `destination` parameter allowing to install it anywhere.
 - Allow to report an issue from the PyxelRest tab within Microsoft Excel.
+- Allow to provide an OpenAPI definition within the configuration.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).

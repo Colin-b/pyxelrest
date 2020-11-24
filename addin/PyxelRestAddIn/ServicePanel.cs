@@ -76,15 +76,19 @@ namespace PyxelRestAddIn
 
                 ToolTip tooltip = new ToolTip { ToolTipTitle = "URL to the OpenAPI definition of the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                openAPIDefinition = new TextBox { Text = service.OpenAPI.ContainsKey("definition") ? service.OpenAPI["definition"].ToString() : string.Empty, Dock = DockStyle.Fill, Width = 290 };
+                var definition = service.OpenAPI.ContainsKey("definition") ? service.OpenAPI["definition"] : string.Empty;
+                bool isDefinitionURI = typeof(string) == definition.GetType();
+                openAPIDefinition = new TextBox { Text = definition.ToString(), Dock = DockStyle.Fill, Width = 290 };
                 tooltip.SetToolTip(openAPIDefinition, "It must starts with http://, https:// or file:///.");
                 openAPIDefinition.TextChanged += OpenAPIDefinition_TextChanged;
+                openAPIDefinition.Enabled = isDefinitionURI;
                 servicePanel.Controls.Add(openAPIDefinition, 1, 0);
 
                 ToolTip fileTooltip = new ToolTip { ToolTipTitle = "Select an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
                 SelectFileButton selectFile = new SelectFileButton();
                 fileTooltip.SetToolTip(selectFile, "It must be a valid OpenAPI definition JSON file.");
                 selectFile.Click += SelectFile_Click;
+                selectFile.Enabled = isDefinitionURI;
                 servicePanel.Controls.Add(selectFile, 2, 0);
                 #endregion
             }

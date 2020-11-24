@@ -22,6 +22,7 @@ from pyxelrest._exceptions import (
     OpenAPIVersionNotProvided,
     UnsupportedOpenAPIVersion,
     EmptyResponses,
+    InvalidOpenAPIDefinition,
 )
 from pyxelrest._fast_deserializer import Flattenizer
 
@@ -673,19 +674,32 @@ class OpenAPI(Service):
         Service.__init__(self, config, uri)
 
     def _extract_uri(self, config: ServiceConfigSection) -> str:
-        open_api_definition_url = urlsplit(config.open_api_definition)
-        # The default scheme to be used is the one used to access the OpenAPI definition itself.
-        schemes = self.open_api_definition.get(
-            "schemes", [open_api_definition_url.scheme]
+        open_api_definition_url = (
+            urlsplit(config.open_api_definition)
+            if isinstance(config.open_api_definition, str)
+            else None
         )
+
+        schemes = self.open_api_definition.get("schemes")
+        if not schemes:
+            # The default scheme to be used is the one used to access the OpenAPI definition itself.
+            if open_api_definition_url:
+                schemes = [open_api_definition_url.scheme]
+            else:
+                raise InvalidOpenAPIDefinition("At least one scheme must be provided.")
+
         scheme = "https" if "https" in schemes else schemes[0]
 
-        # If the host is not included, the host serving the documentation is to be used (including the port).
         # service_host property is here to handle services behind a reverse proxy
-        # (otherwise host will be the reverse proxy one)
-        host = self.open_api_definition.get(
-            "host", config.service_host or open_api_definition_url.netloc
-        )
+        # (otherwise host will be the reverse proxy one when retrieving it from the URL)
+        host = self.open_api_definition.get("host", config.service_host)
+        if not host:
+            # The default host to be used is the host serving the documentation (including the port).
+            if open_api_definition_url:
+                host = open_api_definition_url.netloc
+            else:
+                raise InvalidOpenAPIDefinition("host or service_host must be provided.")
+
         # Allow user to provide service_host starting with scheme (removing it)
         host_parsed = urlsplit(host)
         if host_parsed.netloc:
@@ -720,20 +734,23 @@ class OpenAPI(Service):
         Retrieve OpenAPI JSON definition from service.
         :return: Dictionary representation of the retrieved Open API JSON definition.
         """
-        requests_session = _session.get(0)
-        response = requests_session.get(
-            config.open_api_definition,
-            proxies=config.network.get("proxies", {}),
-            verify=config.network.get("verify", True),
-            headers=config.custom_headers,
-            timeout=(
-                config.network.get("connect_timeout", 1),
-                config.definition_read_timeout,
-            ),
-            auth=_authentication.get_definition_retrieval_auth(config),
-        )
-        response.raise_for_status()
-        open_api_definition = response.json()
+        if isinstance(config.open_api_definition, str):
+            requests_session = _session.get(0)
+            response = requests_session.get(
+                config.open_api_definition,
+                proxies=config.network.get("proxies", {}),
+                verify=config.network.get("verify", True),
+                headers=config.custom_headers,
+                timeout=(
+                    config.network.get("connect_timeout", 1),
+                    config.definition_read_timeout,
+                ),
+                auth=_authentication.get_definition_retrieval_auth(config),
+            )
+            response.raise_for_status()
+            open_api_definition = response.json()
+        else:
+            open_api_definition = config.open_api_definition
         cls._normalize_methods(open_api_definition)
         return open_api_definition
 
