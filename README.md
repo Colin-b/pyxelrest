@@ -54,6 +54,7 @@ print(user)
   * [Microsoft Excel add-in](/docs/configuration/addin.md)
 * [Using as a python module](/docs/python_module.md)
 * [Migration guide](/docs/migration_guide.md)
+* [Changelog](CHANGELOG.md)
 * [FAQ](/docs/faq.md)
 
 ## Features
