@@ -152,7 +152,6 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 |------|-------------|-----------------|
 | description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
-| headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
 | auth | Dictionary containing authentication related settings. Refer to [Authentication](#authentication) section for more information. | |
 | network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
 | skip_update_for | List of section names that should not be auto-updated. | |
@@ -253,6 +252,7 @@ Contains network related settings such as HTTP timeouts or proxies configuration
 | read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | any float value |
 | proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [`requests` documentation](https://requests.readthedocs.io/en/master/user/advanced/#proxies) | |
 | verify | Verify SSL certificate for HTTPS requests. Default to `true`. For more details refer to [`requests` documentation](https://2.python-requests.org/en/master/user/advanced/#ssl-cert-verification). If you are using an internal certificate store (company certificates), you will most likely need to install `python-certifi-win32` | |
+| headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
 
 #### Caching
 
@@ -366,6 +366,8 @@ Otherwise:
 `shift_result` is not an option anymore. As a result, formulas results will start from the first cell.
 
 `methods` option is now `selected_methods` option within `open_api` section.
+
+`headers` section is now expected as a sub-section within `network` section.
 
 ##### Previous (0.69.0)
 

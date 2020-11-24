@@ -56,7 +56,7 @@ class ConfigSection:
         )
         self.custom_headers = {
             key: convert_environment_variable(value)
-            for key, value in service_config.get("headers", {}).items()
+            for key, value in self.network.get("headers", {}).items()
         }
         self.auth = service_config.get("auth", {})
         if "api_key" in self.auth:

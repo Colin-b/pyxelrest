@@ -152,10 +152,12 @@ def test_get_header_advanced_configuration(
             "header_advanced_configuration": {
                 "open_api": {"definition": "http://localhost:8951/"},
                 "formulas": {"vba_compatible": {}},
-                "headers": {
-                    "X-PXL-CUSTOM": "MyCustomValue",
-                    "X-PXL-OTHER": "MyOtherValue",
-                    "X-PXL-ENVVAR": "%USERNAME%",
+                "network": {
+                    "headers": {
+                        "X-PXL-CUSTOM": "MyCustomValue",
+                        "X-PXL-OTHER": "MyOtherValue",
+                        "X-PXL-ENVVAR": "%USERNAME%",
+                    },
                 },
             }
         },

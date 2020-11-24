@@ -45,7 +45,7 @@ namespace PyxelRestAddIn
             this.servicePanel = servicePanel;
             InitializeComponent();
 
-            foreach (var header in servicePanel.service.Headers)
+            foreach (var header in (IDictionary<string, object>)servicePanel.service.Network["headers"])
                 AddHeader(header.Key, header.Value.ToString());
 
             if (servicePanel.service.OpenAPI.ContainsKey("excluded_tags"))
@@ -1291,7 +1291,8 @@ namespace PyxelRestAddIn
 
         private bool ContainsHeader(string value)
         {
-            return servicePanel.service.Headers.ContainsKey(value);
+            var headers = (IDictionary<string, object>)servicePanel.service.Network["headers"];
+            return headers.ContainsKey(value);
         }
 
         private void HeaderName_TextChanged(object sender, EventArgs e)
@@ -1306,7 +1307,8 @@ namespace PyxelRestAddIn
 
         private void AddHeader()
         {
-            servicePanel.service.Headers.Add(headerName.Text, headerValue.Text);
+            var headers = (IDictionary<string, object>)servicePanel.service.Network["headers"];
+            headers.Add(headerName.Text, headerValue.Text);
 
             AddHeader(headerName.Text, headerValue.Text);
 
@@ -1337,7 +1339,8 @@ namespace PyxelRestAddIn
             var valueTextBox = (TextBox)sender;
             Label headerNameLabel = (Label)valueTextBox.Parent.Controls.Find("headerNameLabel", false)[0];
 
-            servicePanel.service.Headers[headerNameLabel.Text] = valueTextBox.Text;
+            var headers = (IDictionary<string, object>)servicePanel.service.Network["headers"];
+            headers[headerNameLabel.Text] = valueTextBox.Text;
         }
 
         private void RemoveHeader_Click(object sender, EventArgs e)
@@ -1345,7 +1348,8 @@ namespace PyxelRestAddIn
             var panel = ((DeleteButton)sender).Parent;
             Label headerNameLabel = (Label)panel.Controls.Find("headerNameLabel", false)[0];
 
-            servicePanel.service.Headers.Remove(headerNameLabel.Text);
+            var headers = (IDictionary<string, object>)servicePanel.service.Network["headers"];
+            headers.Remove(headerNameLabel.Text);
 
             headersPanel.Controls.Remove(panel);
         }

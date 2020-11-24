@@ -11,7 +11,6 @@ namespace PyxelRestAddIn
         private static readonly string NETWORK_PROPERTY = "network";
         private static readonly string AUTH_PROPERTY = "auth";
         private static readonly string FORMULAS_PROPERTY = "formulas";
-        private static readonly string HEADERS_PROPERTY = "headers";
         private static readonly string CACHING_PROPERTY = "caching";
 
         internal readonly string Name;
@@ -21,7 +20,6 @@ namespace PyxelRestAddIn
         public IDictionary<string, object> Network;
         public IDictionary<string, object> Auth;
         public IDictionary<string, object> Formulas;
-        public IDictionary<string, object> Headers;
         public IDictionary<string, object> Caching;
 
         public Service(string name)
@@ -166,9 +164,6 @@ namespace PyxelRestAddIn
             if (!skipUpdateFor.Contains(FORMULAS_PROPERTY))
                 Formulas = updated.Formulas;
 
-            if (!skipUpdateFor.Contains(HEADERS_PROPERTY))
-                Headers = updated.Headers;
-
             if (!skipUpdateFor.Contains(CACHING_PROPERTY))
                 Caching = updated.Caching;
         }
@@ -195,9 +190,6 @@ namespace PyxelRestAddIn
 
             var formulas = (YamlMappingNode)GetProperty(section, FORMULAS_PROPERTY);
             Formulas = formulas == null ? DefaultFormulas() : ToDict(formulas);
-
-            var headers = (YamlMappingNode)GetProperty(section, HEADERS_PROPERTY);
-            Headers = headers == null ? new Dictionary<string, object>() : ToDict(headers);
 
             var caching = (YamlMappingNode)GetProperty(section, CACHING_PROPERTY);
             Caching = caching == null ? new Dictionary<string, object>() : ToDict(caching);
@@ -229,9 +221,6 @@ namespace PyxelRestAddIn
             if (Formulas != null && Formulas.Count > 0)
                 section.Add(new YamlScalarNode(FORMULAS_PROPERTY), new YamlMappingNode(FromDict(Formulas)));
 
-            if (Headers != null && Headers.Count > 0)
-                section.Add(new YamlScalarNode(HEADERS_PROPERTY), new YamlMappingNode(FromDict(Headers)));
-
             RemoveDefault(Caching, DefaultCaching());
             if (Caching != null && Caching.Count > 0)
                 section.Add(new YamlScalarNode(CACHING_PROPERTY), new YamlMappingNode(FromDict(Caching)));
@@ -247,7 +236,6 @@ namespace PyxelRestAddIn
             Network = DefaultNetwork();
             Auth = DefaultAuth();
             Formulas = DefaultFormulas();
-            Headers = new Dictionary<string, object>();
             Caching = DefaultCaching();
         }
 
@@ -263,7 +251,7 @@ namespace PyxelRestAddIn
 
         private IDictionary<string, object> DefaultNetwork()
         {
-            return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, { "verify", true }, {"proxies", new Dictionary<string, object>() } };
+            return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, { "verify", true }, {"proxies", new Dictionary<string, object>() }, { "headers", new Dictionary<string, object>() } };
         }
 
         private IDictionary<string, object> DefaultAuth()

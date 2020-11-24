@@ -72,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `auto_update` script does not update services configuration anymore as this is performed by add-in at startup time anyway.
 - `X-Pxl-Cell` header renamed to `X-Pxl-Caller` for clarity.
 - Selected HTTP methods are now supposed to be provided in `open_api.selected_methods` instead of `methods`.
+- `headers` are now expected within `network` section.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
