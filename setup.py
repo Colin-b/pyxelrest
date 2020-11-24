@@ -98,7 +98,7 @@ setup(
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.20.*",
+        "xlwings==0.21.*",
         # Used to parse configuration files
         "pyyaml==5.*",
         "pyaml==20.*",
@@ -113,7 +113,7 @@ setup(
             "pytest-cov==2.*",
             # Used to mock responses
             "pytest-responses==0.4.*",
-            # used for testing cache of results
+            # Optional dependency: Used to test results caching
             "cachetools==4.*",
         ],
     },

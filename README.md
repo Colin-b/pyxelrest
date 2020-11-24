@@ -156,7 +156,6 @@ Values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form 
 | auth | Dictionary containing authentication related settings. Refer to [Authentication](#authentication) section for more information. | |
 | network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
 | skip_update_for | List of section names that should not be auto-updated. | |
-| python_modules | List of extra python module names that should be installed. | |
 | caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
 | result | Dictionary containing result related settings. Refer to [Result](#result) section for more information. | |
 | udf_name_prefix | Prefix to be used in front of UDf name. `{service_name}` will be replaced by the actual service name. | {service_name}_ |
@@ -253,14 +252,14 @@ Contains network related settings such as HTTP timeouts or proxies configuration
 | connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
 | read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | any float value |
 | proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [`requests` documentation](https://requests.readthedocs.io/en/master/user/advanced/#proxies) | |
-| verify | Verify SSL certificate for HTTPS requests. Default to `true`. For more details refer to [`requests` documentation](https://2.python-requests.org/en/master/user/advanced/#ssl-cert-verification) | |
+| verify | Verify SSL certificate for HTTPS requests. Default to `true`. For more details refer to [`requests` documentation](https://2.python-requests.org/en/master/user/advanced/#ssl-cert-verification). If you are using an internal certificate store (company certificates), you will most likely need to install `python-certifi-win32` | |
 
 #### Caching
 
 | Name | Description |
 |------|-------------|
-| result_caching_time | Number of seconds during which a GET request will return previous result. Always send a new request by default. |
-| max_nb_results | Maximum number of results to store in cache. 100 by default. |
+| result_caching_time | Number of seconds during which a GET request will return previous result. 0 seconds (always send a new request) by default. |
+| max_nb_results | Maximum number of results to store in cache. The last 100 results will be stored in cache by default. |
 
 [`cachetools==4.*`](https://pypi.org/project/cachetools/) module is required.
 ```bash

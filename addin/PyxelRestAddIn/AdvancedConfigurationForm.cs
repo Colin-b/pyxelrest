@@ -39,10 +39,6 @@ namespace PyxelRestAddIn
 
         private CheckBox legacyArrayFormulasLockExcel;
 
-        private TableLayoutPanel pythonModulesPanel;
-        private TextBox pythonModuleName;
-        private AddButton addPythonModule;
-
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
             this.servicePanel = servicePanel;
@@ -73,9 +69,6 @@ namespace PyxelRestAddIn
                 if (!oauth2NonParam.Contains(oauth2Item.Key))
                     AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
             }
-
-            foreach (var pythonModule in servicePanel.service.PythonModules)
-                AddPythonModule(pythonModule);
         }
 
         /**
@@ -710,43 +703,6 @@ namespace PyxelRestAddIn
             }
             #endregion
 
-            #region Python modules settings
-            {
-                var tab = new TabPage { Text = "Extra modules", AutoScroll = true };
-                var layout = new TableLayoutPanel { AutoSize = true };
-
-                var pythonModulesLabel = new Label { Text = "Extra python modules", Dock = DockStyle.Fill };
-                layout.Controls.Add(pythonModulesLabel);
-
-                pythonModulesPanel = new TableLayoutPanel { AutoSize = true };
-                layout.Controls.Add(pythonModulesPanel);
-
-                {
-                    var addPanel = new TableLayoutPanel { AutoSize = true };
-
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an extra python module", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        pythonModuleName = new TextBox { Text = string.Empty, Width = PercentWidth(85) };
-                        tooltip.SetToolTip(pythonModuleName, "Module will be installed at UDF loading.");
-                        pythonModuleName.TextChanged += PythonModuleName_TextChanged;
-                        pythonModuleName.KeyDown += PythonModuleName_KeyDown;
-                        addPanel.Controls.Add(pythonModuleName, 0, 1);
-                    }
-
-                    addPythonModule = new AddButton(PercentWidth(5));
-                    addPythonModule.Click += AddPythonModule_Click;
-                    addPanel.Controls.Add(addPythonModule, 1, 1);
-
-                    layout.Controls.Add(addPanel);
-                }
-
-
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
-
             #region Caching settings
             {
                 var tab = new TabPage("Caching");
@@ -758,8 +714,8 @@ namespace PyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = servicePanel.service.Caching.ContainsKey("result_caching_time") ? int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) : 0 };
-                    tooltip.SetToolTip(resultCachingTime, "Always send a new request by default.");
+                    var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) };
+                    tooltip.SetToolTip(resultCachingTime, "Always send a new request by default (0 seconds means that caching is disabled).");
                     resultCachingTime.TextChanged += CachingResultTime_TextChanged;
                     layout.Controls.Add(resultCachingTime, 1, 1);
                 }
@@ -771,8 +727,8 @@ namespace PyxelRestAddIn
 
                     ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                    var maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = servicePanel.service.Caching.ContainsKey("max_nb_results") ? int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) : 100 };
-                    tooltip.SetToolTip(maxNbresults, "100 by default.");
+                    var maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) };
+                    tooltip.SetToolTip(maxNbresults, "Store the last 100 results by default (if caching is enabled).");
                     maxNbresults.TextChanged += CachingMaxNumber_TextChanged;
                     layout.Controls.Add(maxNbresults, 1, 2);
                 }
@@ -808,25 +764,12 @@ namespace PyxelRestAddIn
 
         private void CachingResultTime_TextChanged(object sender, EventArgs e)
         {
-            if (((NumericUpDown)sender).Value == 0)
-            {
-                servicePanel.service.Caching.Remove("result_caching_time");
-                servicePanel.service.PythonModules.Remove("cachetools==3.0.0");
-            }
-            else
-            {
-                servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
-                if (!servicePanel.service.PythonModules.Contains("cachetools==3.0.0"))
-                    servicePanel.service.PythonModules.Add("cachetools==3.0.0");
-            }
+            servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
         }
 
         private void CachingMaxNumber_TextChanged(object sender, EventArgs e)
         {
-            if (((NumericUpDown)sender).Value == 0)
-                servicePanel.service.Caching.Remove("max_nb_results");
-            else
-                servicePanel.service.Caching["max_nb_results"] = ((NumericUpDown)sender).Value;
+            servicePanel.service.Caching["max_nb_results"] = ((NumericUpDown)sender).Value;
         }
 
         private void BasicPassword_TextChanged(object sender, EventArgs e)
@@ -1147,69 +1090,6 @@ namespace PyxelRestAddIn
             RemoveValueFromList(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
 
             tagsPanel.Controls.Remove(panel);
-        }
-
-        #endregion
-
-        #region Python Modules
-
-        private void PythonModuleName_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    if (addPythonModule.Enabled)
-                        AddPythonModule();
-                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
-                    break;
-                default:
-                    // Allow all other characters
-                    break;
-            }
-        }
-
-        private void PythonModuleName_TextChanged(object sender, EventArgs e)
-        {
-            var pythonModuleValue = ((TextBox)sender).Text;
-            addPythonModule.Enabled = pythonModuleValue.Length > 0 && !servicePanel.service.PythonModules.Contains(pythonModuleValue);
-        }
-
-        private void AddPythonModule_Click(object sender, EventArgs e)
-        {
-            AddPythonModule();
-        }
-
-        private void AddPythonModule()
-        {
-            // Service update
-            servicePanel.service.PythonModules.Add(pythonModuleName.Text);
-            // Visual update
-            AddPythonModule(pythonModuleName.Text);
-            pythonModuleName.Text = "";
-        }
-
-        private void AddPythonModule(string value)
-        {
-            var panel = new TableLayoutPanel { AutoSize = true };
-
-            panel.Controls.Add(new Label { Name = "pythonModuleLabel", Text = value, Width = PercentWidth(85) }, 0, 1);
-
-            var remove = new DeleteButton(PercentWidth(5));
-            remove.Click += RemovePythonModule_Click;
-            panel.Controls.Add(remove, 1, 1);
-
-            pythonModulesPanel.Controls.Add(panel);
-            pythonModulesPanel.SetColumnSpan(panel, 2);
-        }
-
-        private void RemovePythonModule_Click(object sender, EventArgs e)
-        {
-            var panel = ((DeleteButton)sender).Parent;
-            var pythonModuleLabel = (Label)panel.Controls.Find("pythonModuleLabel", false)[0];
-
-            servicePanel.service.PythonModules.Remove(pythonModuleLabel.Text);
-
-            pythonModulesPanel.Controls.Remove(panel);
         }
 
         #endregion

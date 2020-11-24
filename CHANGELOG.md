@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle Win32Exception occurring if python process cannot be closed due to user rights.
 - Handle relative URI for `authorizationUrl` and `tokenUrl`.
 - Microsoft Excel add-in advanced services configuration screen is now handling all resolutions properly.
+- Microsoft Excel add-in now ensure required `extra` python modules are installed if required.
 
 ### Removed
 - Drop support for `python` < `3.8`.
@@ -46,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - There is no default services configuration anymore at pyxelrest module installation. However samples can still be found via documentation.
 - Remove the ability to select `options` and `head` http method from Microsoft Excel add-in configuration as they are most likely not used.
 - It is not possible to filter out HTTP methods from `pyxelrest` service anymore.
+- It is not possible to specify custom python modules to be installed by the Microsoft Excel add-in. Instead, required modules will be automatically installed by the add-in.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.

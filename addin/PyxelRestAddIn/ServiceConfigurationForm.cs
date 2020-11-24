@@ -87,13 +87,15 @@ namespace PyxelRestAddIn
                         if (upToDateService != null)
                         {
                             service.UpdateFrom(upToDateService);
-                            InstallPythonModules(service.PythonModules);
                             updated = true;
                         }
                     }
 
                     if (updated)
-                        configuration.Save(ConfigurationFilePath);
+                    {
+                        var pythonModules = configuration.Save(ConfigurationFilePath);
+                        InstallPythonModules(pythonModules);
+                    }
                 }
             }
             catch (Exception ex)
@@ -102,14 +104,14 @@ namespace PyxelRestAddIn
             }
         }
 
-        private static void InstallPythonModules(IList<string> pythonModules)
+        private static void InstallPythonModules(ISet<string> pythonModules)
         {
-            if (pythonModules == null || pythonModules.Count == 0)
+            if (pythonModules.Count == 0)
                 return;
 
             string pythonPath = ThisAddIn.GetSetting("PathToPython");
             if (!File.Exists(pythonPath))
-                throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
+                throw new Exception(string.Format("Extra python modules cannot be installed as python cannot be found in '{0}'.", pythonPath));
 
             string commandLine = "-m pip install ";
             foreach (string pythonModule in pythonModules)
@@ -117,6 +119,7 @@ namespace PyxelRestAddIn
             commandLine += "--upgrade";
 
             Log.Debug("Install python modules...");
+            Log.Debug(pythonPath);
             Process installModules = new Process();
             installModules.StartInfo.FileName = pythonPath;
             installModules.StartInfo.Arguments = commandLine;
@@ -330,9 +333,8 @@ namespace PyxelRestAddIn
         {
             try
             {
-                foreach (ServicePanel service in services)
-                    InstallPythonModules(service.service.PythonModules);
-                configuration.Save(ConfigurationFilePath);
+                var pythonModules = configuration.Save(ConfigurationFilePath);
+                InstallPythonModules(pythonModules);
             }
             catch (Exception ex)
             {

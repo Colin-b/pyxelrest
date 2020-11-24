@@ -93,7 +93,7 @@ class ConfigSection:
             return cachetools.TTLCache(max_nb_results, ttl)
         except ImportError:
             logger.warning(
-                "cachetools module is required to initialize a memory cache."
+                "cachetools module is required to initialize a memory cache. Results will not be cached."
             )
 
     @staticmethod

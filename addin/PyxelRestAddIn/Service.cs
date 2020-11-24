@@ -13,7 +13,6 @@ namespace PyxelRestAddIn
         private static readonly string FORMULAS_PROPERTY = "formulas";
         private static readonly string HEADERS_PROPERTY = "headers";
         private static readonly string CACHING_PROPERTY = "caching";
-        private static readonly string PYTHON_MODULES_PROPERTY = "python_modules";
 
         internal readonly string Name;
         private IList<string> skipUpdateFor;
@@ -24,7 +23,6 @@ namespace PyxelRestAddIn
         public IDictionary<string, object> Formulas;
         public IDictionary<string, object> Headers;
         public IDictionary<string, object> Caching;
-        public IList<string> PythonModules;
 
         public Service(string name)
         {
@@ -129,6 +127,26 @@ namespace PyxelRestAddIn
             return nodes;
         }
 
+        internal IEnumerable<string> GetPythonModules()
+        {
+            var pythonModules = new List<string>();
+
+            if (Network != null && Network.ContainsKey("verify"))
+                pythonModules.Add("python-certifi-win32==1.*");
+
+            if (Caching != null && Caching.ContainsKey("result_caching_time"))
+                pythonModules.Add("cachetools==4.*");
+
+            if (Auth != null && Auth.ContainsKey("ntlm"))
+            {
+                IDictionary<string, object> ntlm = (IDictionary<string, object>)Auth["ntlm"];
+                if (ntlm != null && ntlm.Count > 0)
+                    pythonModules.Add("requests_ntlm==1.*");
+            }
+
+            return pythonModules;
+        }
+
         internal void UpdateFrom(Service updated)
         {
             skipUpdateFor = updated.skipUpdateFor;
@@ -153,9 +171,6 @@ namespace PyxelRestAddIn
 
             if (!skipUpdateFor.Contains(CACHING_PROPERTY))
                 Caching = updated.Caching;
-
-            if (!skipUpdateFor.Contains(PYTHON_MODULES_PROPERTY))
-                PythonModules = updated.PythonModules;
         }
 
         internal void FromConfig(YamlMappingNode section)
@@ -186,9 +201,7 @@ namespace PyxelRestAddIn
 
             var caching = (YamlMappingNode)GetProperty(section, CACHING_PROPERTY);
             Caching = caching == null ? new Dictionary<string, object>() : ToDict(caching);
-
-            var pythonModulesNode = (YamlSequenceNode)GetProperty(section, PYTHON_MODULES_PROPERTY);
-            PythonModules = pythonModulesNode == null ? new List<string>() : ToList(pythonModulesNode);
+            AddDefault(Caching, DefaultCaching());
         }
 
         internal YamlMappingNode ToConfig()
@@ -219,11 +232,9 @@ namespace PyxelRestAddIn
             if (Headers != null && Headers.Count > 0)
                 section.Add(new YamlScalarNode(HEADERS_PROPERTY), new YamlMappingNode(FromDict(Headers)));
 
+            RemoveDefault(Caching, DefaultCaching());
             if (Caching != null && Caching.Count > 0)
                 section.Add(new YamlScalarNode(CACHING_PROPERTY), new YamlMappingNode(FromDict(Caching)));
-
-            if (PythonModules != null && PythonModules.Count > 0)
-                section.Add(new YamlScalarNode(PYTHON_MODULES_PROPERTY), new YamlSequenceNode(FromList(PythonModules)));
 
             return section;
         }
@@ -237,8 +248,7 @@ namespace PyxelRestAddIn
             Auth = DefaultAuth();
             Formulas = DefaultFormulas();
             Headers = new Dictionary<string, object>();
-            Caching = new Dictionary<string, object>();
-            PythonModules = new List<string>();
+            Caching = DefaultCaching();
         }
 
         private IDictionary<string, object> DefaultOpenAPI()
@@ -259,6 +269,11 @@ namespace PyxelRestAddIn
         private IDictionary<string, object> DefaultAuth()
         {
             return new Dictionary<string, object>() { { "oauth2", new Dictionary<string, object>() { { "timeout", 60 }, { "header_name", "Authorization" }, { "header_value", "Bearer {token}" } } }, { "basic", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "ntlm", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "api_key", string.Empty } };
+        }
+
+        private IDictionary<string, object> DefaultCaching()
+        {
+            return new Dictionary<string, object>() { { "result_caching_time", 0 }, { "max_nb_results", 100 } };
         }
 
         private void AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)
