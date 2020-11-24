@@ -38,6 +38,7 @@ namespace PyxelRestAddIn
         private CheckBox dynamicArrayFormulasLockExcel;
 
         private CheckBox legacyArrayFormulasLockExcel;
+        private NumericUpDown maxNbresults;
 
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
@@ -113,13 +114,10 @@ namespace PyxelRestAddIn
                 var tab = new TabPage("Formulas");
                 var layout = new TableLayoutPanel { AutoSize = true };
 
-                Dictionary<string, object> dynamicArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("dynamic_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["dynamic_array"] : new Dictionary<string, object>();
-                Dictionary<string, object> legacyArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("legacy_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["legacy_array"] : new Dictionary<string, object>();
-                Dictionary<string, object> vbaCompatibleFormulasOptions = servicePanel.service.Formulas.ContainsKey("vba_compatible") ? (Dictionary<string, object>)servicePanel.service.Formulas["vba_compatible"] : new Dictionary<string, object>();
-
                 #region Dynamic array formulas
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
+                    Dictionary<string, object> dynamicArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("dynamic_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["dynamic_array"] : new Dictionary<string, object>();
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -147,6 +145,7 @@ namespace PyxelRestAddIn
                 #region Legacy array formulas
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
+                    Dictionary<string, object> legacyArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("legacy_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["legacy_array"] : new Dictionary<string, object>();
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -174,6 +173,7 @@ namespace PyxelRestAddIn
                 #region Visual Basic compatible formulas
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
+                    Dictionary<string, object> vbaCompatibleFormulasOptions = servicePanel.service.Formulas.ContainsKey("vba_compatible") ? (Dictionary<string, object>)servicePanel.service.Formulas["vba_compatible"] : new Dictionary<string, object>();
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -188,6 +188,40 @@ namespace PyxelRestAddIn
                 }
                 #endregion
 
+                #region Caching settings
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    #region Result caching time
+                    {
+                        panel.Controls.Add(new Label { Width = PercentWidth(20), Text = "Result caching time", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(10), Value = int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) };
+                        tooltip.SetToolTip(resultCachingTime, "Always send a new request by default (0 seconds means that caching is disabled).");
+                        resultCachingTime.TextChanged += CachingResultTime_TextChanged;
+                        panel.Controls.Add(resultCachingTime, 1, 1);
+                    }
+                    #endregion
+
+                    #region Maximum number of results
+                    {
+                        panel.Controls.Add(new Label { Width = PercentWidth(20), Text = "Maximum number of results", TextAlign = ContentAlignment.BottomLeft }, 2, 1);
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(10), Value = int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) };
+                        tooltip.SetToolTip(maxNbresults, "Store the last 100 results by default (if caching is enabled).");
+                        maxNbresults.TextChanged += CachingMaxNumber_TextChanged;
+                        maxNbresults.Enabled = int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) > 0;
+                        panel.Controls.Add(maxNbresults, 3, 1);
+                    }
+                    #endregion
+
+                    layout.Controls.Add(panel);
+                }
+                #endregion
                 tab.Controls.Add(layout);
                 tabs.TabPages.Add(tab);
             }
@@ -703,42 +737,6 @@ namespace PyxelRestAddIn
             }
             #endregion
 
-            #region Caching settings
-            {
-                var tab = new TabPage("Caching");
-                var layout = new TableLayoutPanel { AutoSize = true };
-
-                #region Result caching time
-                {
-                    layout.Controls.Add(new Label { Width = PercentWidth(35), Text = "Result caching time", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) };
-                    tooltip.SetToolTip(resultCachingTime, "Always send a new request by default (0 seconds means that caching is disabled).");
-                    resultCachingTime.TextChanged += CachingResultTime_TextChanged;
-                    layout.Controls.Add(resultCachingTime, 1, 1);
-                }
-                #endregion
-
-                #region Maximum number of results
-                {
-                    layout.Controls.Add(new Label { Width = PercentWidth(35), Text = "Maximum number of results", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    var maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(20), Value = int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) };
-                    tooltip.SetToolTip(maxNbresults, "Store the last 100 results by default (if caching is enabled).");
-                    maxNbresults.TextChanged += CachingMaxNumber_TextChanged;
-                    layout.Controls.Add(maxNbresults, 1, 2);
-                }
-                #endregion
-
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
-
             Controls.Add(tabs);
         }
 
@@ -765,6 +763,7 @@ namespace PyxelRestAddIn
         private void CachingResultTime_TextChanged(object sender, EventArgs e)
         {
             servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
+            maxNbresults.Enabled = ((NumericUpDown)sender).Value > 0;
         }
 
         private void CachingMaxNumber_TextChanged(object sender, EventArgs e)
