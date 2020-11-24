@@ -222,6 +222,7 @@ namespace PyxelRestAddIn
                     layout.Controls.Add(panel);
                 }
                 #endregion
+
                 tab.Controls.Add(layout);
                 tabs.TabPages.Add(tab);
             }
@@ -567,7 +568,7 @@ namespace PyxelRestAddIn
 
             #region Network settings
             {
-                var tab = new TabPage("Network");
+                var tab = new TabPage { Text = "Network", AutoScroll = true };
                 var layout = new TableLayoutPanel { AutoSize = true };
 
                 var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
@@ -686,51 +687,47 @@ namespace PyxelRestAddIn
                     layout.Controls.Add(panel, 0, 3);
                 }
 
-                tab.Controls.Add(layout);
-                tabs.TabPages.Add(tab);
-            }
-            #endregion
-
-            #region Headers settings
-            {
-                var tab = new TabPage { Text = "Headers", AutoScroll = true };
-                var layout = new TableLayoutPanel { AutoSize = true };
-
-                #region Add items
-
-                var nameLabel = new Label { Text = "Name", Width = PercentWidth(20) };
-                layout.Controls.Add(nameLabel, 0, 1);
-
-                var valueLabel = new Label { Text = "Value", Width = PercentWidth(65) };
-                layout.Controls.Add(valueLabel, 1, 1);
-
-                headersPanel = new TableLayoutPanel { AutoSize = true };
-                layout.Controls.Add(headersPanel, 0, 2);
-                layout.SetColumnSpan(headersPanel, 3);
-
                 {
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                    var panel = new TableLayoutPanel { AutoSize = true };
 
-                    headerName = new TextBox { Text = string.Empty, Width = PercentWidth(20) };
-                    tooltip.SetToolTip(headerName, "Sent in every request on this service.");
-                    headerName.TextChanged += HeaderName_TextChanged;
-                    headerName.KeyDown += HeaderName_KeyDown;
-                    layout.Controls.Add(headerName, 0, 3);
+                    #region Headers
+
+                    var nameLabel = new Label { Text = "Header name", Width = PercentWidth(20) };
+                    panel.Controls.Add(nameLabel, 0, 1);
+
+                    var valueLabel = new Label { Text = "Header value", Width = PercentWidth(65) };
+                    panel.Controls.Add(valueLabel, 1, 1);
+
+                    headersPanel = new TableLayoutPanel { AutoSize = true };
+                    panel.Controls.Add(headersPanel, 0, 2);
+                    panel.SetColumnSpan(headersPanel, 3);
+
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        headerName = new TextBox { Text = string.Empty, Width = PercentWidth(20) };
+                        tooltip.SetToolTip(headerName, "Sent in every request on this service.");
+                        headerName.TextChanged += HeaderName_TextChanged;
+                        headerName.KeyDown += HeaderName_KeyDown;
+                        panel.Controls.Add(headerName, 0, 3);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        headerValue = new TextBox { Text = string.Empty, Width = PercentWidth(65) };
+                        tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
+                        headerValue.TextChanged += HeaderValue_TextChanged;
+                        headerValue.KeyDown += HeaderValue_KeyDown;
+                        panel.Controls.Add(headerValue, 1, 3);
+                    }
+                    addHeader = new AddButton(PercentWidth(5));
+                    addHeader.Click += AddHeader_Click;
+                    panel.Controls.Add(addHeader, 2, 3);
+
+                    #endregion
+
+                    layout.Controls.Add(panel, 0, 4);
                 }
-                {
-                    ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                    headerValue = new TextBox { Text = string.Empty, Width = PercentWidth(65) };
-                    tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
-                    headerValue.TextChanged += HeaderValue_TextChanged;
-                    headerValue.KeyDown += HeaderValue_KeyDown;
-                    layout.Controls.Add(headerValue, 1, 3);
-                }
-                addHeader = new AddButton(PercentWidth(5));
-                addHeader.Click += AddHeader_Click;
-                layout.Controls.Add(addHeader, 2, 3);
-
-                #endregion
 
                 tab.Controls.Add(layout);
                 tabs.TabPages.Add(tab);
