@@ -217,12 +217,21 @@ namespace PyxelRestAddIn
         private void ServiceNameField_TextChanged(object sender, EventArgs e)
         {
             var selectedService = (Service)serviceNameField.SelectedItem;
-            var serviceName = selectedService == null ? serviceNameField.Text : selectedService.Name;
-
-            addServiceButton.Enabled = IsServiceNameValid(serviceName);
-            if (addServiceButton.Enabled)
+            // Add selected drop down item instantly
+            if (selectedService != null)
             {
-                addServiceTooltip.ToolTipTitle = string.Format("Add {0} service configuration", serviceName);
+                AddServiceSection();
+            }
+            // Otherwise requires a user action to make sure service name is definitive
+            else
+            {
+                var serviceName = serviceNameField.Text;
+
+                addServiceButton.Enabled = IsServiceNameValid(serviceName);
+                if (addServiceButton.Enabled)
+                {
+                    addServiceTooltip.ToolTipTitle = string.Format("Add {0} service configuration", serviceName);
+                }
             }
         }
 
