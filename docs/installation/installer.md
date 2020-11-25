@@ -2,20 +2,11 @@
 
 The preferred way to install `PyxelRest` is to use the provided [executable installer](#download).
 
-It will allow to:
- * Chose the installation directory.
- * Download and install python if required.
- * Provide a path to up to date services configuration (optional).
- * Install optional dependencies.
- * Add sample services.
-
-This installer will also list `PyxelRest` as installed, so that you can uninstall it the same way you usually uninstall your other applications.
-
 ## Download
 
 ### Download the latest version
 
-[Download PyxelRest 1.0.0](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer-1.0.0.exe)
+[Download PyxelRest 1.0.0](https://raw.githubusercontent.com/Colin-b/pyxelrest/master/pyxelrest_installer.exe)
 
 ### Looking for a specific release?
 
@@ -23,7 +14,21 @@ This installer will also list `PyxelRest` as installed, so that you can uninstal
 
 | Version | Release date | | Click for more |
 |------|-------------|-------------|-------------|
-| [1.0.0](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer-1.0.0.exe) | YYYY-MM-DD | [Download](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer-1.0.0.exe) | [Changelog](../../CHANGELOG.md#100---YYYY-MM-DD) |
+| [1.0.0](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer.exe) | YYYY-MM-DD | [Download](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer.exe) | [Changelog](../../CHANGELOG.md#100---YYYY-MM-DD) |
+
+Want to help test development versions of `PyxelRest`?
+[Download the latest development version](https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/pyxelrest_installer.exe).
+
+## Features
+
+The installer allows you to:
+ * Chose the installation directory.
+ * Download and install python if required.
+ * Provide a path to up to date services configuration (optional).
+ * Install optional dependencies.
+ * Add sample services.
+
+This installer will also list `PyxelRest` as installed, so that you can uninstall it the same way you usually uninstall your other applications.
 
 ## Using a custom installer
 

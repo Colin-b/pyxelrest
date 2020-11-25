@@ -3,7 +3,7 @@ Unicode True
 Name "PyxelRest ${VERSION}"
 BrandingText "Call REST APIs as functions"
 RequestExecutionLevel "user"
-OutFile "pyxelrest_installer-${VERSION}.exe"
+OutFile "pyxelrest_installer.exe"
 InstallDir "$%APPDATA%\pyxelrest"
 
 InstType "Full" IT_FULL
