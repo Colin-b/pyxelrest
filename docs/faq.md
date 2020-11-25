@@ -1,5 +1,14 @@
 # Frequently Asked Question
 
+* [Microsoft Excel Wizard does not show any parameter](#microsoft-excel-wizard-does-not-show-any-parameter)
+* [Microsoft Excel Wizard only list some functions](#microsoft-excel-wizard-only-list-some-functions)
+* [No command specified in the configuration, cannot autostart server](#no-command-specified-in-the-configuration-cannot-autostart-server)
+* [Microsoft Excel COM Add-In cannot be installed](#microsoft-excel-com-add-in-cannot-be-installed)
+* [Dates with a year higher than 3000 are not converted to local timezone](#dates-with-a-year-higher-than-3000-are-not-converted-to-local-timezone)
+* [Python process exited before it was possible to create the interface object](#python-process-exited-before-it-was-possible-to-create-the-interface-object)
+* [pyxelrest.xlam is not available](#pyxelrestxlam-is-not-available)
+* [Can I install xlwings and pyxelrest?](#can-i-install-xlwings-and-pyxelrest)
+
 ## Microsoft Excel Wizard does not show any parameter
 
 <p align="center">
@@ -46,7 +55,7 @@ Due to timestamp limitation, dates after `3000-12-31` and date time after `3001-
 
 ## Python process exited before it was possible to create the interface object
 
-You need to check [log files](#logging-configuration) to identify the underlying issue.
+You need to check [log files](/docs/configuration/advanced.md#logging-configuration) to identify the underlying issue.
 
 ## pyxelrest.xlam is not available
 
