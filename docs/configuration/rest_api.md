@@ -1,4 +1,6 @@
-# Services Configuration
+# REST API Configuration
+
+You can configure access to as many REST API as you want.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/configure_service.gif" alt='Configuring services'>
@@ -149,17 +151,6 @@ python -m pip install cachetools==4.*
 |------|-------------|
 | flatten | Flatten received JSON to a 2-Dimension array. Default to `true` |
 | raise_exception | Raise received exceptions to client. `false` by default. |
-
-## PyxelRest service configuration
-
-You can query any URL, as long as you know everything that is required to perform the query.
-
-To do so, you can use the `pyxelrest` service name to activate [Postman](https://www.getpostman.com)-like UDFs.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/configure_pyxelrest_service.gif" alt='Configuring pyxelrest service'>
-</p>
-<p align="center"><em>It can be configured the same way than a usual service, except that <i>open_api</i> section is not needed anymore.</em></p>
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
