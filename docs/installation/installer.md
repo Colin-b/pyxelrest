@@ -30,6 +30,10 @@ The installer allows you to:
 
 This installer will also list `PyxelRest` as installed, so that you can uninstall it the same way you usually uninstall your other applications.
 
+## Fine-tuning configuration
+
+You can [tweak logging and Microsoft Excel add-in configuration](../configuration/advanced.md) after installation.
+
 ## Using a custom installer
 
 If you don't trust the provided executable, you can re-build it yourself by downloading [NSIS](https://nsis.sourceforge.io/Main_Page) and using the [`pyxelrest_installer.nsi`](https://raw.githubusercontent.com/Colin-b/pyxelrest/master/pyxelrest_installer.nsi) file.

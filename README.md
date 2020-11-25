@@ -48,8 +48,6 @@ print(user)
 * Configuration
   * [REST API](/docs/configuration/rest_api.md)
   * [pyxelrest service](/docs/configuration/pyxelrest_service.md) (Postman like)
-  * [Logging](/docs/configuration/logging.md)
-  * [Microsoft Excel add-in](/docs/configuration/addin.md)
 * [Using as a python module](/docs/python_module.md)
 * [Migration guide](/docs/migration_guide.md)
 * [Changelog](CHANGELOG.md)
