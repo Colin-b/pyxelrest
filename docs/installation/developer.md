@@ -3,10 +3,11 @@
 1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
    > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
+    1. [Office Developer Tools for Visual Studio](https://visualstudio.microsoft.com/vs/features/office-tools/) needs to be installed.
+    2. Open `addin`/`PyxelRestAddIn.sln` within `pyxelrest` root folder.
+    3. Create a test certificate
+       > Project > PyxelRestAddIn > Signing
 
-   In order to do so, you need [Office Developer Tools for Visual Studio](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed.
-   You also need to create a test certificate.
-   > Project > PyxelRestAddIn > Signing
 3. Install all `pyxelrest` python module dependencies:
     ```batch
     python -m pip install .[testing]
