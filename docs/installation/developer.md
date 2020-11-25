@@ -7,7 +7,7 @@
    In order to do so, you need [Office Developer Tools for Visual Studio](https://visualstudio.microsoft.com/vs/features/office-tools/) to be installed.
    You also need to create a test certificate.
    > Project > PyxelRestAddIn > Signing
-3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder:
+3. [Microsoft Excel] must be closed while executing the following script from within `pyxelrest` root folder (make sure your virtual environment is activated beforehand if needed):
 ```batch
 developer_install.bat
 ```
