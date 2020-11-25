@@ -32,6 +32,8 @@ This installer will also list `PyxelRest` as installed, so that you can uninstal
 
 ## Using a custom installer
 
-If you don't want to trust the provided executable, you can re-build it yourself by downloading [NSIS](https://nsis.sourceforge.io/Main_Page) and using the [`pyxelrest_installer.nsi`](https://raw.githubusercontent.com/Colin-b/pyxelrest/master/pyxelrest_installer.nsi) file.
+If you don't trust the provided executable, you can re-build it yourself by downloading [NSIS](https://nsis.sourceforge.io/Main_Page) and using the [`pyxelrest_installer.nsi`](https://raw.githubusercontent.com/Colin-b/pyxelrest/master/pyxelrest_installer.nsi) file.
 
-If you want more control on what is installed and how, you can still [perform a manual installation yourself](/docs/installation/custom.md).
+Note that the [NSIS](https://nsis.sourceforge.io/Main_Page) script expect the [ExecDos plugin](https://nsis.sourceforge.io/ExecDos_plug-in) to be available in nsis folder.
+
+If you want even more control on what is installed and how, you can still [perform a manual installation yourself](/docs/installation/custom.md).
