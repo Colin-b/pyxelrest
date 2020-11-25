@@ -1,6 +1,6 @@
 # Installing pyxelrest
 
-The preferred way to install `pyxelrest` `1.0.0` is to use the provided [executable installer](https://raw.githubusercontent.com/Colin-b/pyxelrest/master/pyxelrest_installer-1.0.0.exe).
+The preferred way to install `PyxelRest` is to use the provided [executable installer](#download).
 
 It will allow to:
  * Chose the installation directory.
@@ -9,8 +9,24 @@ It will allow to:
  * Install optional dependencies.
  * Add sample services.
 
-This installer will also list pyxelrest as installed, so that you can uninstall it the same way you usually uninstall your other applications.
+This installer will also list `PyxelRest` as installed, so that you can uninstall it the same way you usually uninstall your other applications.
 
-If you don't want to trust the provided executable, you can re-build it yourself by downloading NSIS and using the `pyxelrest_installer.nsi` file.
+## Download
+
+### Download the latest version
+
+[Download PyxelRest 1.0.0](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer-1.0.0.exe)
+
+### Looking for a specific release?
+
+`PyxelRest` releases by version number:
+
+| Version | Release date | | Click for more |
+|------|-------------|-------------|-------------|
+| [1.0.0](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer-1.0.0.exe) | YYYY-MM-DD | [Download](https://raw.githubusercontent.com/Colin-b/pyxelrest/v1.0.0/pyxelrest_installer-1.0.0.exe) | [Changelog](../../CHANGELOG.md#100---YYYY-MM-DD) |
+
+## Using a custom installer
+
+If you don't want to trust the provided executable, you can re-build it yourself by downloading [NSIS](https://nsis.sourceforge.io/Main_Page) and using the [`pyxelrest_installer.nsi`](https://raw.githubusercontent.com/Colin-b/pyxelrest/master/pyxelrest_installer.nsi) file.
 
 If you want more control on what is installed and how, you can still [perform a manual installation yourself](/docs/installation/custom.md).
