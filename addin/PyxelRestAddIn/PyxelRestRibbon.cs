@@ -6,6 +6,8 @@ using log4net;
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace PyxelRestAddIn
 {
@@ -20,20 +22,28 @@ namespace PyxelRestAddIn
         {
             generateUDFAtStartupButton.Checked = ThisAddIn.GenerateUDFAtStartup();
             generateUDFAtStartupButton.Label = string.Format("Functions are {0}generated at startup", generateUDFAtStartupButton.Checked ? "": "NOT ");
-            
+            generateUDFAtStartupButton.Image = generateUDFAtStartupButton.Checked ? Properties.Resources.refresh_128 : Properties.Resources.refresh_128_orange;
+
             string autoCheckForUpdates = ThisAddIn.GetSetting("AutoCheckForUpdates");
             // Do not allow to check for update if the parameter is not set in configuration
             autoUpdateButton.Enabled = !string.IsNullOrEmpty(autoCheckForUpdates);
             autoUpdateButton.Checked = "True".Equals(autoCheckForUpdates);
             autoUpdateButton.Label = string.Format("Automatic update is {0}", autoUpdateButton.Checked ? "enabled" : "disabled");
+            autoUpdateButton.Image = autoUpdateButton.Checked ? Properties.Resources.data_transfer_download_128 : Properties.Resources.data_transfer_download_128_grey;
 
             string checkPreReleases = ThisAddIn.GetSetting("CheckPreReleases");
             installDevelopmentReleasesButton.Enabled = autoUpdateButton.Checked;
             installDevelopmentReleasesButton.Checked = "True".Equals(checkPreReleases);
             if (installDevelopmentReleasesButton.Checked)
+            {
                 installDevelopmentReleasesButton.Label = "Update include unstable releases";
+                installDevelopmentReleasesButton.Image = Properties.Resources.data_transfer_download_128_orange;
+            }
             else
+            {
                 installDevelopmentReleasesButton.Label = "Update include stable releases only";
+                installDevelopmentReleasesButton.Image = Properties.Resources.data_transfer_download_128;
+            }
 
             pathToUpToDateConfEditBox.Text = ThisAddIn.GetPathToUpToDateConfiguration();
 
@@ -58,6 +68,7 @@ namespace PyxelRestAddIn
             {
                 ((RibbonToggleButton)sender).Label = string.Format("Automatic update is {0}", ((RibbonToggleButton)sender).Checked ? "enabled" : "disabled");
                 installDevelopmentReleasesButton.Enabled = ((RibbonToggleButton)sender).Checked;
+                ((RibbonToggleButton)sender).Image = ((RibbonToggleButton)sender).Checked ? Properties.Resources.data_transfer_download_128 : Properties.Resources.data_transfer_download_128_grey;
                 ThisAddIn.SetSetting("AutoCheckForUpdates", "" + ((RibbonToggleButton)sender).Checked);
                 Log.DebugFormat("Auto check for update set to {0}", ((RibbonToggleButton)sender).Checked);
             }
@@ -72,6 +83,7 @@ namespace PyxelRestAddIn
             try
             {
                 ((RibbonToggleButton)sender).Label = string.Format("Functions are {0}generated at startup", ((RibbonToggleButton)sender).Checked ? "" : "NOT ");
+                ((RibbonToggleButton)sender).Image = ((RibbonToggleButton)sender).Checked ? Properties.Resources.refresh_128 : Properties.Resources.refresh_128_orange;
                 ThisAddIn.SetSetting("GenerateUDFAtStartup", "" + ((RibbonToggleButton)sender).Checked);
                 Log.DebugFormat("User defined functions generation at startup set to {0}", ((RibbonToggleButton)sender).Checked);
             }
@@ -129,9 +141,15 @@ namespace PyxelRestAddIn
             try
             {
                 if (((RibbonToggleButton)sender).Checked)
+                {
                     ((RibbonToggleButton)sender).Label = "Update include unstable releases";
+                    ((RibbonToggleButton)sender).Image = Properties.Resources.data_transfer_download_128_orange;
+                }
                 else
+                {
                     ((RibbonToggleButton)sender).Label = "Update include stable releases only";
+                    ((RibbonToggleButton)sender).Image = Properties.Resources.data_transfer_download_128;
+                }
                 ThisAddIn.SetSetting("CheckPreReleases", "" + ((RibbonToggleButton)sender).Checked);
                 Log.DebugFormat("Check pre-releases during update set to {0}", ((RibbonToggleButton)sender).Checked);
             }
@@ -168,6 +186,35 @@ namespace PyxelRestAddIn
             catch (ConfigurationErrorsException ex)
             {
                 Log.Error("Unable to update PathToPython configuration.", ex);
+            }
+        }
+
+        private Image SetImageOpacity(Image image, float opacity)
+        {
+            try
+            {
+                Bitmap bmp = new Bitmap(image.Width, image.Height);
+
+                using (Graphics gfx = Graphics.FromImage(bmp))
+                {
+                    ColorMatrix matrix = new ColorMatrix
+                    {
+                        Matrix33 = opacity
+                    };
+
+                    ImageAttributes attributes = new ImageAttributes();
+
+                    //set the color(opacity) of the image  
+                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                    //now draw the image  
+                    gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+                }
+                return bmp;
+            }
+            catch
+            {
+                return image;
             }
         }
     }

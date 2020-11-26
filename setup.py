@@ -78,6 +78,8 @@ setup(
             [
                 "addin/PyxelRestAddIn/bin/Release/resources/add-file-16.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/data-transfer-download-128.png",
+                "addin/PyxelRestAddIn/bin/Release/resources/data-transfer-download-128_grey.png",
+                "addin/PyxelRestAddIn/bin/Release/resources/data-transfer-download-128_orange.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/file-4-16.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/folder-3-128.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/help-128.png",
@@ -85,6 +87,7 @@ setup(
                 "addin/PyxelRestAddIn/bin/Release/resources/plus-4-16_grey.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/plus-5-16.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/refresh-128.png",
+                "addin/PyxelRestAddIn/bin/Release/resources/refresh-128_orange.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/settings-8-16.ico",
                 "addin/PyxelRestAddIn/bin/Release/resources/settings-8-128.png",
                 "addin/PyxelRestAddIn/bin/Release/resources/x-mark-3-16.png",

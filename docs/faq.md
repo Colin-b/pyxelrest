@@ -72,6 +72,12 @@ As [`pyxelrest`] relies on [`xlwings`], if you want to use [`xlwings`] you can, 
 
 The [`pyxelrest`] add-in and [`xlwings`] add-in can be installed for the same user as long as [`pyxelrest`] is installed in a separate virtual environment.
 
+## Where are the icons from the Microsoft Excel add-in coming from?
+
+Those icons come from [iconsdb](https://www.iconsdb.com).
+
+The blue color set is `#00AAFF`, the grey color set is `#CDCACD` and the orange one is the orange set from iconsdb.
+
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [`xlwings`]: https://www.xlwings.org
 [`pyxelrest`]: https://pypi.org/project/pyxelrest/

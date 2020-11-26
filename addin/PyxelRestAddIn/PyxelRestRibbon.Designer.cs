@@ -36,18 +36,18 @@
         {
             this.pyxelrestTab = this.Factory.CreateRibbonTab();
             this.udfGroup = this.Factory.CreateRibbonGroup();
-            this.developerGroup = this.Factory.CreateRibbonGroup();
-            this.developerOptionsGroup = this.Factory.CreateRibbonGroup();
-            this.pathToUpToDateConfEditBox = this.Factory.CreateRibbonEditBox();
-            this.pathToPythonEditBox = this.Factory.CreateRibbonEditBox();
-            this.customXlwingsPathEditBox = this.Factory.CreateRibbonEditBox();
             this.importButton = this.Factory.CreateRibbonButton();
             this.configureButton = this.Factory.CreateRibbonButton();
+            this.developerGroup = this.Factory.CreateRibbonGroup();
             this.generateUDFAtStartupButton = this.Factory.CreateRibbonToggleButton();
             this.autoUpdateButton = this.Factory.CreateRibbonToggleButton();
             this.installDevelopmentReleasesButton = this.Factory.CreateRibbonToggleButton();
             this.openFolderButton = this.Factory.CreateRibbonButton();
             this.createIssueButton = this.Factory.CreateRibbonButton();
+            this.developerOptionsGroup = this.Factory.CreateRibbonGroup();
+            this.pathToUpToDateConfEditBox = this.Factory.CreateRibbonEditBox();
+            this.pathToPythonEditBox = this.Factory.CreateRibbonEditBox();
+            this.customXlwingsPathEditBox = this.Factory.CreateRibbonEditBox();
             this.pyxelrestTab.SuspendLayout();
             this.udfGroup.SuspendLayout();
             this.developerGroup.SuspendLayout();
@@ -68,59 +68,6 @@
             this.udfGroup.Items.Add(this.configureButton);
             this.udfGroup.Label = "User Defined Functions";
             this.udfGroup.Name = "udfGroup";
-            // 
-            // developerGroup
-            // 
-            this.developerGroup.Items.Add(this.generateUDFAtStartupButton);
-            this.developerGroup.Items.Add(this.autoUpdateButton);
-            this.developerGroup.Items.Add(this.installDevelopmentReleasesButton);
-            this.developerGroup.Items.Add(this.openFolderButton);
-            this.developerGroup.Items.Add(this.createIssueButton);
-            this.developerGroup.Label = "Excel X.Y.Z - Python A.B.C";
-            this.developerGroup.Name = "developerGroup";
-            // 
-            // developerOptionsGroup
-            // 
-            this.developerOptionsGroup.Items.Add(this.pathToUpToDateConfEditBox);
-            this.developerOptionsGroup.Items.Add(this.pathToPythonEditBox);
-            this.developerOptionsGroup.Items.Add(this.customXlwingsPathEditBox);
-            this.developerOptionsGroup.Label = "Developer options";
-            this.developerOptionsGroup.Name = "developerOptionsGroup";
-            // 
-            // pathToUpToDateConfEditBox
-            // 
-            this.pathToUpToDateConfEditBox.Label = "Predefined configurations";
-            this.pathToUpToDateConfEditBox.Name = "pathToUpToDateConfEditBox";
-            this.pathToUpToDateConfEditBox.ScreenTip = "Path to up-to-date configurations";
-            this.pathToUpToDateConfEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
-    "ythonw.exe";
-            this.pathToUpToDateConfEditBox.SuperTip = "Path (or URL) to a a file or a folder containing up-to-date REST API configuratio" +
-    "ns. Used to propose a list of already configured services and to maintain config" +
-    "ured services up to date.";
-            this.pathToUpToDateConfEditBox.Text = null;
-            this.pathToUpToDateConfEditBox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangeKnownConfigurations);
-            // 
-            // pathToPythonEditBox
-            // 
-            this.pathToPythonEditBox.Label = "Python path";
-            this.pathToPythonEditBox.Name = "pathToPythonEditBox";
-            this.pathToPythonEditBox.ScreenTip = "Path to python executable";
-            this.pathToPythonEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
-    "ythonw.exe";
-            this.pathToPythonEditBox.SuperTip = "Path to python executable (python.exe) where pyxelrest was installed";
-            this.pathToPythonEditBox.Text = null;
-            this.pathToPythonEditBox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangePythonPath);
-            // 
-            // customXlwingsPathEditBox
-            // 
-            this.customXlwingsPathEditBox.Enabled = false;
-            this.customXlwingsPathEditBox.Label = "Custom xlwings path";
-            this.customXlwingsPathEditBox.Name = "customXlwingsPathEditBox";
-            this.customXlwingsPathEditBox.ScreenTip = "Path to xlwings BAS file";
-            this.customXlwingsPathEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
-    "ythonw.exe";
-            this.customXlwingsPathEditBox.SuperTip = "Path to custom xlwings BAS file modified for pyxelrest";
-            this.customXlwingsPathEditBox.Text = null;
             // 
             // importButton
             // 
@@ -147,6 +94,16 @@
             this.configureButton.ShowImage = true;
             this.configureButton.SuperTip = "Open a window to configure available services.";
             this.configureButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ConfigureServices);
+            // 
+            // developerGroup
+            // 
+            this.developerGroup.Items.Add(this.generateUDFAtStartupButton);
+            this.developerGroup.Items.Add(this.autoUpdateButton);
+            this.developerGroup.Items.Add(this.installDevelopmentReleasesButton);
+            this.developerGroup.Items.Add(this.openFolderButton);
+            this.developerGroup.Items.Add(this.createIssueButton);
+            this.developerGroup.Label = "Excel X.Y.Z - Python A.B.C";
+            this.developerGroup.Name = "developerGroup";
             // 
             // generateUDFAtStartupButton
             // 
@@ -208,6 +165,49 @@
             this.createIssueButton.ShowImage = true;
             this.createIssueButton.SuperTip = "Report an issue to PyxelRest developers";
             this.createIssueButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.CreateANewIssue);
+            // 
+            // developerOptionsGroup
+            // 
+            this.developerOptionsGroup.Items.Add(this.pathToUpToDateConfEditBox);
+            this.developerOptionsGroup.Items.Add(this.pathToPythonEditBox);
+            this.developerOptionsGroup.Items.Add(this.customXlwingsPathEditBox);
+            this.developerOptionsGroup.Label = "Developer options";
+            this.developerOptionsGroup.Name = "developerOptionsGroup";
+            // 
+            // pathToUpToDateConfEditBox
+            // 
+            this.pathToUpToDateConfEditBox.Label = "Predefined configurations";
+            this.pathToUpToDateConfEditBox.Name = "pathToUpToDateConfEditBox";
+            this.pathToUpToDateConfEditBox.ScreenTip = "Path to up-to-date configurations";
+            this.pathToUpToDateConfEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
+    "ythonw.exe";
+            this.pathToUpToDateConfEditBox.SuperTip = "Path (or URL) to a a file or a folder containing up-to-date REST API configuratio" +
+    "ns. Used to propose a list of already configured services and to maintain config" +
+    "ured services up to date.";
+            this.pathToUpToDateConfEditBox.Text = null;
+            this.pathToUpToDateConfEditBox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangeKnownConfigurations);
+            // 
+            // pathToPythonEditBox
+            // 
+            this.pathToPythonEditBox.Label = "Python path";
+            this.pathToPythonEditBox.Name = "pathToPythonEditBox";
+            this.pathToPythonEditBox.ScreenTip = "Path to python executable";
+            this.pathToPythonEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
+    "ythonw.exe";
+            this.pathToPythonEditBox.SuperTip = "Path to python executable (python.exe) where pyxelrest was installed";
+            this.pathToPythonEditBox.Text = null;
+            this.pathToPythonEditBox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangePythonPath);
+            // 
+            // customXlwingsPathEditBox
+            // 
+            this.customXlwingsPathEditBox.Enabled = false;
+            this.customXlwingsPathEditBox.Label = "Custom xlwings path";
+            this.customXlwingsPathEditBox.Name = "customXlwingsPathEditBox";
+            this.customXlwingsPathEditBox.ScreenTip = "Path to xlwings BAS file";
+            this.customXlwingsPathEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
+    "ythonw.exe";
+            this.customXlwingsPathEditBox.SuperTip = "Path to custom xlwings BAS file modified for pyxelrest";
+            this.customXlwingsPathEditBox.Text = null;
             // 
             // PyxelRestRibbon
             // 

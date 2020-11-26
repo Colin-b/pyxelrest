@@ -83,6 +83,26 @@ namespace PyxelRestAddIn.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap data_transfer_download_128_grey {
+            get {
+                object obj = ResourceManager.GetObject("data-transfer-download-128_grey", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap data_transfer_download_128_orange {
+            get {
+                object obj = ResourceManager.GetObject("data-transfer-download-128_orange", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap file_4_16 {
             get {
                 object obj = ResourceManager.GetObject("file_4_16", resourceCulture);
@@ -146,6 +166,16 @@ namespace PyxelRestAddIn.Properties {
         internal static System.Drawing.Bitmap refresh_128 {
             get {
                 object obj = ResourceManager.GetObject("refresh_128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap refresh_128_orange {
+            get {
+                object obj = ResourceManager.GetObject("refresh-128_orange", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
