@@ -5,6 +5,7 @@ using System.Configuration;
 using log4net;
 using Microsoft.Win32;
 using System;
+using System.IO;
 
 namespace PyxelRestAddIn
 {
@@ -40,6 +41,15 @@ namespace PyxelRestAddIn
             customXlwingsPathEditBox.Text = ThisAddIn.GetSetting("PathToXlWingsBasFile");
 
             developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), Globals.ThisAddIn.GetPyxelRestVersion(pathToPythonEditBox.Text));
+
+            if (!File.Exists(pathToPythonEditBox.Text))
+            {
+                developerOptionsGroup.Label = "Python path does not exists";
+            }
+            else
+            {
+                developerOptionsGroup.Label = "Advanced options seems to be valid";
+            }
         }
 
         private void ActivateOrDeactivateAutoUpdate(object sender, RibbonControlEventArgs e)
@@ -147,6 +157,12 @@ namespace PyxelRestAddIn
         {
             try
             {
+                if (!File.Exists(((RibbonEditBox)sender).Text))
+                {
+                    developerOptionsGroup.Label = "Python path does not exists";
+                    return;
+                }
+                developerOptionsGroup.Label = "Advanced options seems to be valid";
                 ThisAddIn.SetSetting("PathToPython", ((RibbonEditBox)sender).Text);
             }
             catch (ConfigurationErrorsException ex)
