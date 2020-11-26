@@ -18,15 +18,21 @@ namespace PyxelRestAddIn
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             generateUDFAtStartupButton.Checked = ThisAddIn.GenerateUDFAtStartup();
-
+            generateUDFAtStartupButton.Label = string.Format("Functions are {0}generated at startup", generateUDFAtStartupButton.Checked ? "": "NOT ");
+            
             string autoCheckForUpdates = ThisAddIn.GetSetting("AutoCheckForUpdates");
             // Do not allow to check for update if the parameter is not set in configuration
             autoUpdateButton.Enabled = !string.IsNullOrEmpty(autoCheckForUpdates);
             autoUpdateButton.Checked = "True".Equals(autoCheckForUpdates);
+            autoUpdateButton.Label = string.Format("Automatic update is {0}", autoUpdateButton.Checked ? "enabled" : "disabled");
 
             string checkPreReleases = ThisAddIn.GetSetting("CheckPreReleases");
-            installDevelopmentReleasesButton.Enabled = autoUpdateButton.Enabled;
+            installDevelopmentReleasesButton.Enabled = autoUpdateButton.Checked;
             installDevelopmentReleasesButton.Checked = "True".Equals(checkPreReleases);
+            if (installDevelopmentReleasesButton.Checked)
+                installDevelopmentReleasesButton.Label = "Update include unstable releases";
+            else
+                installDevelopmentReleasesButton.Label = "Update include stable releases only";
 
             pathToUpToDateConfEditBox.Text = ThisAddIn.GetPathToUpToDateConfiguration();
 
@@ -40,6 +46,8 @@ namespace PyxelRestAddIn
         {
             try
             {
+                ((RibbonToggleButton)sender).Label = string.Format("Automatic update is {0}", ((RibbonToggleButton)sender).Checked ? "enabled" : "disabled");
+                installDevelopmentReleasesButton.Enabled = ((RibbonToggleButton)sender).Checked;
                 ThisAddIn.SetSetting("AutoCheckForUpdates", "" + ((RibbonToggleButton)sender).Checked);
                 Log.DebugFormat("Auto check for update set to {0}", ((RibbonToggleButton)sender).Checked);
             }
@@ -53,6 +61,7 @@ namespace PyxelRestAddIn
         {
             try
             {
+                ((RibbonToggleButton)sender).Label = string.Format("Functions are {0}generated at startup", ((RibbonToggleButton)sender).Checked ? "" : "NOT ");
                 ThisAddIn.SetSetting("GenerateUDFAtStartup", "" + ((RibbonToggleButton)sender).Checked);
                 Log.DebugFormat("User defined functions generation at startup set to {0}", ((RibbonToggleButton)sender).Checked);
             }
@@ -109,6 +118,10 @@ namespace PyxelRestAddIn
         {
             try
             {
+                if (((RibbonToggleButton)sender).Checked)
+                    ((RibbonToggleButton)sender).Label = "Update include unstable releases";
+                else
+                    ((RibbonToggleButton)sender).Label = "Update include stable releases only";
                 ThisAddIn.SetSetting("CheckPreReleases", "" + ((RibbonToggleButton)sender).Checked);
                 Log.DebugFormat("Check pre-releases during update set to {0}", ((RibbonToggleButton)sender).Checked);
             }

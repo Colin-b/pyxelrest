@@ -176,7 +176,7 @@
             // 
             // pathToUpToDateConfEditBox
             // 
-            this.pathToUpToDateConfEditBox.Label = "Known configurations";
+            this.pathToUpToDateConfEditBox.Label = "Predefined configurations";
             this.pathToUpToDateConfEditBox.Name = "pathToUpToDateConfEditBox";
             this.pathToUpToDateConfEditBox.ScreenTip = "Path to up-to-date configurations";
             this.pathToUpToDateConfEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
