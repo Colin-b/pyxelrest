@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `install_addin` script now has a `destination` parameter allowing to install it anywhere.
 - Allow to report an issue from the PyxelRest tab within Microsoft Excel.
 - Allow to provide an OpenAPI definition within the configuration.
+- Allow to change path to up to date configurations while add-in is running.
+- Display path to python in Microsoft Excel add-in.
+- Display path to xlwings BAS file in Microsoft Excel add-in.
+- Allow to toggle pre-releases check in Microsoft Excel add-in.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).

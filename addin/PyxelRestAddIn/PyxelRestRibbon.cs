@@ -1,10 +1,10 @@
 ﻿using Microsoft.Office.Tools.Ribbon;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System;
 using System.Configuration;
 using log4net;
 using Microsoft.Win32;
+using System;
 
 namespace PyxelRestAddIn
 {
@@ -17,27 +17,31 @@ namespace PyxelRestAddIn
 
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
-            developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), Globals.ThisAddIn.GetPyxelRestVersion());
+            generateUDFAtStartupButton.Checked = ThisAddIn.GenerateUDFAtStartup();
 
             string autoCheckForUpdates = ThisAddIn.GetSetting("AutoCheckForUpdates");
             // Do not allow to check for update if the parameter is not set in configuration
             autoUpdateButton.Enabled = !string.IsNullOrEmpty(autoCheckForUpdates);
             autoUpdateButton.Checked = "True".Equals(autoCheckForUpdates);
-            autoUpdateButton.Click += ActivateOrDeactivateAutoUpdate;
 
-            generateUDFAtStartupButton.Checked = ThisAddIn.GenerateUDFAtStartup();
+            string checkPreReleases = ThisAddIn.GetSetting("CheckPreReleases");
+            installDevelopmentReleasesButton.Enabled = autoUpdateButton.Enabled;
+            installDevelopmentReleasesButton.Checked = "True".Equals(checkPreReleases);
 
-            importButton.Click += ImportUserDefinedFunctions;
-            configureButton.Click += ConfigureServices;
-            openFolderButton.Click += OpenPyxelRestFolder;
+            pathToUpToDateConfEditBox.Text = ThisAddIn.GetPathToUpToDateConfiguration();
+
+            pathToPythonEditBox.Text = ThisAddIn.GetSetting("PathToPython");
+            customXlwingsPathEditBox.Text = ThisAddIn.GetSetting("PathToXlWingsBasFile");
+
+            developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), Globals.ThisAddIn.GetPyxelRestVersion(pathToPythonEditBox.Text));
         }
 
         private void ActivateOrDeactivateAutoUpdate(object sender, RibbonControlEventArgs e)
         {
             try
             {
-                ThisAddIn.SetSetting("AutoCheckForUpdates", "" + autoUpdateButton.Checked);
-                Log.DebugFormat("Auto check for update set to {0}", autoUpdateButton.Checked);
+                ThisAddIn.SetSetting("AutoCheckForUpdates", "" + ((RibbonToggleButton)sender).Checked);
+                Log.DebugFormat("Auto check for update set to {0}", ((RibbonToggleButton)sender).Checked);
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -49,8 +53,8 @@ namespace PyxelRestAddIn
         {
             try
             {
-                ThisAddIn.SetSetting("GenerateUDFAtStartup", "" + generateUDFAtStartupButton.Checked);
-                Log.DebugFormat("User defined functions generation at startup set to {0}", generateUDFAtStartupButton.Checked);
+                ThisAddIn.SetSetting("GenerateUDFAtStartup", "" + ((RibbonToggleButton)sender).Checked);
+                Log.DebugFormat("User defined functions generation at startup set to {0}", ((RibbonToggleButton)sender).Checked);
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -75,7 +79,7 @@ namespace PyxelRestAddIn
 
         private void ConfigureServices(object sender, RibbonControlEventArgs e)
         {
-            if (DialogResult.Yes == new ServiceConfigurationForm().ShowDialog())
+            if (DialogResult.Yes == new ServiceConfigurationForm(ThisAddIn.GetPathToUpToDateConfiguration()).ShowDialog())
             {
                 if (!Globals.ThisAddIn.ImportUserDefinedFunctions(reload:true))
                     MessageBox.Show(
@@ -99,6 +103,43 @@ namespace PyxelRestAddIn
         private void CreateANewIssue(object sender, RibbonControlEventArgs e)
         {
             Process.Start("https://github.com/Colin-b/pyxelrest/issues/new");
+        }
+
+        private void ActivateOrDeactivatePreReleaseCheck(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                ThisAddIn.SetSetting("CheckPreReleases", "" + ((RibbonToggleButton)sender).Checked);
+                Log.DebugFormat("Check pre-releases during update set to {0}", ((RibbonToggleButton)sender).Checked);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                Log.Error("Unable to update CheckPreReleases configuration.", ex);
+            }
+        }
+
+        private void ChangeKnownConfigurations(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "PathToUpToDateConfigurations", ((RibbonEditBox)sender).Text);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("An error occurred while updating path to up to date configurations.", ex);
+            }
+        }
+
+        private void ChangePythonPath(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                ThisAddIn.SetSetting("PathToPython", ((RibbonEditBox)sender).Text);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                Log.Error("Unable to update PathToPython configuration.", ex);
+            }
         }
     }
 }

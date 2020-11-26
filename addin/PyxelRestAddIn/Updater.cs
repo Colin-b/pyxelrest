@@ -10,11 +10,9 @@ namespace PyxelRestAddIn
         private static readonly ILog Log = LogManager.GetLogger("Updater");
         
         private readonly string updateScriptPath;
-        private readonly bool checkPreReleases;
 
-        internal Updater()
+        internal Updater(string pythonPath)
         {
-            string pythonPath = ThisAddIn.GetSetting("PathToPython");
             if (!File.Exists(pythonPath))
                 throw new Exception(string.Format("Path to Python '{0}' cannot be found.", pythonPath));
 
@@ -25,12 +23,9 @@ namespace PyxelRestAddIn
             updateScriptPath = Path.Combine(scriptsPath, "pyxelrest_auto_update.exe");
             if (!File.Exists(updateScriptPath))
                 throw new Exception(string.Format("PyxelRest auto update script '{0}' cannot be found.", updateScriptPath));
-
-            if (!bool.TryParse(ThisAddIn.GetSetting("CheckPreReleases"), out checkPreReleases))
-                checkPreReleases = false; // Do not check for pre-releases by default
         }
 
-        internal void CheckUpdate()
+        internal void CheckUpdate(bool checkPreReleases)
         {
             string commandLine = string.Empty;
             if (checkPreReleases)

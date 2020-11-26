@@ -43,6 +43,19 @@ namespace PyxelRestAddIn
             ConfigurationManager.RefreshSection(Config.AppSettings.SectionInformation.Name);
         }
 
+        internal static string GetPathToUpToDateConfiguration()
+        {
+            try
+            {
+                return (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "PathToUpToDateConfigurations", null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("An error occurred while retrieving path to up to date configurations.", ex);
+                return null;
+            }
+        }
+
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             Config = LoadConfig();
@@ -86,7 +99,11 @@ namespace PyxelRestAddIn
                 // Do not read configuration to perform the action requested by the user even if saving it in configuration failed.
                 var autoUpdateButton = Globals.Ribbons.PyxelRestRibbon.autoUpdateButton;
                 if (autoUpdateButton.Enabled && autoUpdateButton.Checked)
-                    new Updater().CheckUpdate();
+                {
+                    var installDevelopmentReleasesButton = Globals.Ribbons.PyxelRestRibbon.installDevelopmentReleasesButton;
+                    var pathToPythonEditBox = Globals.Ribbons.PyxelRestRibbon.pathToPythonEditBox;
+                    new Updater(pathToPythonEditBox.Text).CheckUpdate(installDevelopmentReleasesButton.Checked);
+                }
             }
             catch (Exception ex)
             {
@@ -101,9 +118,8 @@ namespace PyxelRestAddIn
             return string.Format("{0}.{1}.{2}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart);
         }
 
-        internal string GetPyxelRestVersion()
+        internal string GetPyxelRestVersion(string pythonPath)
         {
-            string pythonPath = GetSetting("PathToPython");
             if (!File.Exists(pythonPath))
                 return string.Empty;
 
@@ -243,7 +259,7 @@ namespace PyxelRestAddIn
                 else
                 {
                     Log.DebugFormat("Activating '{0}' workbook. Generating user defined functions...", Wb.Name);
-                    ServiceConfigurationForm.UpdateServices();
+                    ServiceConfigurationForm.UpdateServices(GetPathToUpToDateConfiguration());
                     LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
@@ -273,7 +289,7 @@ namespace PyxelRestAddIn
                 else
                 {
                     Log.DebugFormat("Opening '{0}' workbook. Generating user defined functions...", Wb.Name);
-                    ServiceConfigurationForm.UpdateServices();
+                    ServiceConfigurationForm.UpdateServices(GetPathToUpToDateConfiguration());
                     LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
@@ -297,7 +313,7 @@ namespace PyxelRestAddIn
             else
             {
                 Log.Debug("Microsoft Excel started with a blank document. Generating user defined functions...");
-                ServiceConfigurationForm.UpdateServices();
+                ServiceConfigurationForm.UpdateServices(GetPathToUpToDateConfiguration());
                 LoadXlWings();
                 ImportUserDefinedFunctions();
             }

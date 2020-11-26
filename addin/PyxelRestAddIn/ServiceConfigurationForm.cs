@@ -26,7 +26,6 @@ namespace PyxelRestAddIn
         internal static readonly int CHECK_HOST_INTERVAL_TICKS = CHECK_HOST_INTERVAL_MS * 10000;
         private static readonly RegexStringValidator SERVICE_NAME_VALIDATOR = new RegexStringValidator(@"^[a-zA-Z_]+[a-zA-Z_0-9]*$");
         private static string ConfigurationFilePath = null;
-        private static string PathToUpToDateConfigurations = null;
 
         internal Accordion accordion;
         private ComboBox serviceNameField;
@@ -38,7 +37,7 @@ namespace PyxelRestAddIn
         internal readonly Configuration configuration;
         internal readonly Configuration upToDateConfiguration;
 
-        public ServiceConfigurationForm()
+        public ServiceConfigurationForm(string pathToUpToDateConfigurations)
         {
             hostReachabilityTimer = StartHostReachabilityTimer();
             InitializeComponent();
@@ -54,7 +53,7 @@ namespace PyxelRestAddIn
             }
             try
             {
-                upToDateConfiguration = new Configuration(PathToUpToDateConfigurations, false);
+                upToDateConfiguration = new Configuration(pathToUpToDateConfigurations, false);
                 LoadUpToDateServices();
             }
             catch (Exception e)
@@ -63,7 +62,7 @@ namespace PyxelRestAddIn
             }
         }
 
-        internal static void UpdateServices()
+        internal static void UpdateServices(string pathToUpToDateConfigurations)
         {
             try
             {
@@ -72,8 +71,7 @@ namespace PyxelRestAddIn
                 var configuration = new Configuration(ConfigurationFilePath);
                 List<Service> configuredServices = configuration.Load();
 
-                PathToUpToDateConfigurations = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest", "PathToUpToDateConfigurations", null);
-                var upToDateConfiguration = new Configuration(PathToUpToDateConfigurations, false);
+                var upToDateConfiguration = new Configuration(pathToUpToDateConfigurations, false);
                 List<Service> upToDateServices = upToDateConfiguration.Load();
 
                 if (upToDateServices.Count > 0)

@@ -39,19 +39,26 @@
             this.importButton = this.Factory.CreateRibbonButton();
             this.configureButton = this.Factory.CreateRibbonButton();
             this.developerGroup = this.Factory.CreateRibbonGroup();
-            this.autoUpdateButton = this.Factory.CreateRibbonToggleButton();
             this.generateUDFAtStartupButton = this.Factory.CreateRibbonToggleButton();
+            this.autoUpdateButton = this.Factory.CreateRibbonToggleButton();
+            this.installDevelopmentReleasesButton = this.Factory.CreateRibbonToggleButton();
             this.openFolderButton = this.Factory.CreateRibbonButton();
             this.createIssueButton = this.Factory.CreateRibbonButton();
+            this.developerOptionsGroup = this.Factory.CreateRibbonGroup();
+            this.pathToUpToDateConfEditBox = this.Factory.CreateRibbonEditBox();
+            this.pathToPythonEditBox = this.Factory.CreateRibbonEditBox();
+            this.customXlwingsPathEditBox = this.Factory.CreateRibbonEditBox();
             this.pyxelrestTab.SuspendLayout();
             this.udfGroup.SuspendLayout();
             this.developerGroup.SuspendLayout();
+            this.developerOptionsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // pyxelrestTab
             // 
             this.pyxelrestTab.Groups.Add(this.udfGroup);
             this.pyxelrestTab.Groups.Add(this.developerGroup);
+            this.pyxelrestTab.Groups.Add(this.developerOptionsGroup);
             this.pyxelrestTab.Label = "PyxelRest";
             this.pyxelrestTab.Name = "pyxelrestTab";
             // 
@@ -73,6 +80,7 @@
             this.importButton.ScreenTip = "Update Functions";
             this.importButton.ShowImage = true;
             this.importButton.SuperTip = "Reload the list of available UDFs.";
+            this.importButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ImportUserDefinedFunctions);
             // 
             // configureButton
             // 
@@ -85,27 +93,17 @@
             this.configureButton.ScreenTip = "Configure Services";
             this.configureButton.ShowImage = true;
             this.configureButton.SuperTip = "Open a window to configure available services.";
+            this.configureButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ConfigureServices);
             // 
             // developerGroup
             // 
-            this.developerGroup.Items.Add(this.autoUpdateButton);
             this.developerGroup.Items.Add(this.generateUDFAtStartupButton);
+            this.developerGroup.Items.Add(this.autoUpdateButton);
+            this.developerGroup.Items.Add(this.installDevelopmentReleasesButton);
             this.developerGroup.Items.Add(this.openFolderButton);
             this.developerGroup.Items.Add(this.createIssueButton);
             this.developerGroup.Label = "Excel X.Y.Z - Python A.B.C";
             this.developerGroup.Name = "developerGroup";
-            // 
-            // autoUpdateButton
-            // 
-            this.autoUpdateButton.Checked = true;
-            this.autoUpdateButton.Image = global::PyxelRestAddIn.Properties.Resources.data_transfer_download_128;
-            this.autoUpdateButton.ImageName = "Automatic check for update";
-            this.autoUpdateButton.Label = "Check for update on close";
-            this.autoUpdateButton.Name = "autoUpdateButton";
-            this.autoUpdateButton.ScreenTip = "Check for update on close";
-            this.autoUpdateButton.ShowImage = true;
-            this.autoUpdateButton.SuperTip = "Check for update once Microsoft Excel is closed.";
-            this.autoUpdateButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivateAutoUpdate);
             // 
             // generateUDFAtStartupButton
             // 
@@ -119,6 +117,29 @@
             this.generateUDFAtStartupButton.SuperTip = "Generate user defined functions at Microsoft Excel startup";
             this.generateUDFAtStartupButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivateUDFGeneration);
             // 
+            // autoUpdateButton
+            // 
+            this.autoUpdateButton.Checked = true;
+            this.autoUpdateButton.Image = global::PyxelRestAddIn.Properties.Resources.data_transfer_download_128;
+            this.autoUpdateButton.ImageName = "Automatic check for update";
+            this.autoUpdateButton.Label = "Check for update on close";
+            this.autoUpdateButton.Name = "autoUpdateButton";
+            this.autoUpdateButton.ScreenTip = "Check for update on close";
+            this.autoUpdateButton.ShowImage = true;
+            this.autoUpdateButton.SuperTip = "Check for update once Microsoft Excel is closed.";
+            this.autoUpdateButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivateAutoUpdate);
+            // 
+            // installDevelopmentReleasesButton
+            // 
+            this.installDevelopmentReleasesButton.Image = global::PyxelRestAddIn.Properties.Resources.data_transfer_download_128;
+            this.installDevelopmentReleasesButton.ImageName = "Check for pre-releases";
+            this.installDevelopmentReleasesButton.Label = "Install development releases";
+            this.installDevelopmentReleasesButton.Name = "installDevelopmentReleasesButton";
+            this.installDevelopmentReleasesButton.ScreenTip = "Install development releases";
+            this.installDevelopmentReleasesButton.ShowImage = true;
+            this.installDevelopmentReleasesButton.SuperTip = "Include pre-releases when checking for updates";
+            this.installDevelopmentReleasesButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivatePreReleaseCheck);
+            // 
             // openFolderButton
             // 
             this.openFolderButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -130,6 +151,7 @@
             this.openFolderButton.ScreenTip = "Open Logs";
             this.openFolderButton.ShowImage = true;
             this.openFolderButton.SuperTip = "Open the folder containing PyxelRest logs.";
+            this.openFolderButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OpenPyxelRestFolder);
             // 
             // createIssueButton
             // 
@@ -144,6 +166,49 @@
             this.createIssueButton.SuperTip = "Report an issue to PyxelRest developers";
             this.createIssueButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.CreateANewIssue);
             // 
+            // developerOptionsGroup
+            // 
+            this.developerOptionsGroup.Items.Add(this.pathToUpToDateConfEditBox);
+            this.developerOptionsGroup.Items.Add(this.pathToPythonEditBox);
+            this.developerOptionsGroup.Items.Add(this.customXlwingsPathEditBox);
+            this.developerOptionsGroup.Label = "Developer options";
+            this.developerOptionsGroup.Name = "developerOptionsGroup";
+            // 
+            // pathToUpToDateConfEditBox
+            // 
+            this.pathToUpToDateConfEditBox.Label = "Known configurations";
+            this.pathToUpToDateConfEditBox.Name = "pathToUpToDateConfEditBox";
+            this.pathToUpToDateConfEditBox.ScreenTip = "Path to up-to-date configurations";
+            this.pathToUpToDateConfEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
+    "ythonw.exe";
+            this.pathToUpToDateConfEditBox.SuperTip = "Path (or URL) to a a file or a folder containing up-to-date REST API configuratio" +
+    "ns. Used to propose a list of already configured services and to maintain config" +
+    "ured services up to date.";
+            this.pathToUpToDateConfEditBox.Text = null;
+            this.pathToUpToDateConfEditBox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangeKnownConfigurations);
+            // 
+            // pathToPythonEditBox
+            // 
+            this.pathToPythonEditBox.Label = "Python path";
+            this.pathToPythonEditBox.Name = "pathToPythonEditBox";
+            this.pathToPythonEditBox.ScreenTip = "Path to python executable";
+            this.pathToPythonEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
+    "ythonw.exe";
+            this.pathToPythonEditBox.SuperTip = "Path to python executable where pyxelrest was installed";
+            this.pathToPythonEditBox.Text = null;
+            this.pathToPythonEditBox.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangePythonPath);
+            // 
+            // customXlwingsPathEditBox
+            // 
+            this.customXlwingsPathEditBox.Enabled = false;
+            this.customXlwingsPathEditBox.Label = "Custom xlwings path";
+            this.customXlwingsPathEditBox.Name = "customXlwingsPathEditBox";
+            this.customXlwingsPathEditBox.ScreenTip = "Path to xlwings BAS file";
+            this.customXlwingsPathEditBox.SizeString = "C:\\Users\\ThisIsAnExtraLongUserIdentifier\\AppData\\Local\\Programs\\Python\\Python39\\p" +
+    "ythonw.exe";
+            this.customXlwingsPathEditBox.SuperTip = "Path to custom xlwings BAS file modified for pyxelrest";
+            this.customXlwingsPathEditBox.Text = null;
+            // 
             // PyxelRestRibbon
             // 
             this.Name = "PyxelRestRibbon";
@@ -156,6 +221,8 @@
             this.udfGroup.PerformLayout();
             this.developerGroup.ResumeLayout(false);
             this.developerGroup.PerformLayout();
+            this.developerOptionsGroup.ResumeLayout(false);
+            this.developerOptionsGroup.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -171,6 +238,11 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton openFolderButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton generateUDFAtStartupButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton createIssueButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup developerOptionsGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton installDevelopmentReleasesButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox pathToPythonEditBox;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox customXlwingsPathEditBox;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox pathToUpToDateConfEditBox;
     }
 
     partial class ThisRibbonCollection
