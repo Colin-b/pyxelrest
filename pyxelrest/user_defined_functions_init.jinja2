@@ -6,12 +6,14 @@ Generation date (UTC): {{ current_utc_time }}
 from importlib import reload, import_module
 
 {% for service in services %}
-# TODO Reload only when file already exists only
+# TODO Reload only when file was already existing
 reload(import_module("pyxelrest.user_defined_functions.{{ service.config.name }}"))
+{%- if service.config.udf_name_prefix -%}
 import pyxelrest.user_defined_functions.{{ service.config.name }} as {{ service.config.name }}
 from pyxelrest.user_defined_functions.{{ service.config.name }} import (
     {% for udf_name in service.methods %}{{ udf_name }},{% endfor %}
 )
+{%- endif -%}
 {% endfor %}
 
 
@@ -21,7 +23,7 @@ def update_services(services):
     {{ service.config.name }}.udf_methods = services["{{ service.config.name }}"].methods
 {% endfor %}
 
-
+{%- if service.config.udf_name_prefix -%}
 __all__ = [
 {% for service in services %}
     {% for udf_name in service.methods %}
@@ -29,3 +31,4 @@ __all__ = [
     {% endfor %}
 {% endfor %}
 ]
+{%- endif -%}

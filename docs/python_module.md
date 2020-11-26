@@ -12,7 +12,7 @@ pyxelrest.load(configuration)
 from pyxelrest.user_defined_functions import petstore
 
 # Functions are available as python functions within petstore (in this case) and can be used as such
-user = petstore.petstore_getUserByName("test")
+user = petstore.getUserByName("test")
 
 # {'id': 9999, 'username': 'test', 'firstName': 'test', 'lastName': 'test', 'email': 'test@test.com', 'password': 'test', 'userStatus': 0}
 print(user)

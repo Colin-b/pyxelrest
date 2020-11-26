@@ -6,6 +6,35 @@ For a list of enhancements and bugfixes, refer to [changelog](../CHANGELOG.md).
 
 ### Breaking changes
 
+If you were using `pyxelrest` as a python module, you will now have to import your functions via the submodule corresponding to your REST API configuration.
+The name of the function is not prefixed by the REST API configuration name anymore, requiring to remove the prefix from your function calls in your code.
+
+Previous (0.69.0)
+
+```python
+import pyxelrest
+
+configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
+pyxelrest.load(configuration)
+
+import pyxelrest.user_defined_functions
+
+user = pyxelrest.user_defined_functions.petstore_getUserByName("test")
+```
+
+New (1.0.0)
+
+```python
+import pyxelrest
+
+configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
+pyxelrest.load(configuration)
+
+from pyxelrest.user_defined_functions import petstore
+
+user = petstore.getUserByName("test")
+```
+
 If you were expecting your formulas to shift results from one column to the right, 
 then you will have to update your Microsoft Excel workbooks due to [this change](#shift_result) as this will not be the case anymore.
 

@@ -14,6 +14,8 @@ def load(config: dict):
     GENERATE_UDF_ON_IMPORT = True
 
     for service in config.values():
+        # Do not prefix functions with service name
+        service.setdefault("udf_name_prefix", "")
         result = service.setdefault("result", {})
         # Send raw results if not specified otherwise
         result.setdefault("flatten", False)
