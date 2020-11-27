@@ -27,7 +27,7 @@ PyxelRest allows you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RE
 * [Features](/docs/features.md)
 * [Installation](/docs/installation/installer.md)
 * Configuration
-  * [REST API](/docs/configuration/rest_api.md)
+  * [REST API](/docs/configuration/rest_api_using_addin.md)
   * [pyxelrest service](/docs/configuration/pyxelrest_service.md) (Postman like)
 * [Using as a python module](/docs/python_module.md)
 * [Migration guide](/docs/migration_guide.md)
