@@ -254,7 +254,7 @@ class PyxelRestUDFMethod(UDFMethod):
         formula_type: str,
         formula_options: dict,
     ):
-        udf_name = f"{service.config.udf_prefix(formula_options)}_{http_method}_url"
+        udf_name = f"{service.config.udf_prefix(formula_options)}{http_method}_url"
         UDFMethod.__init__(
             self,
             service=service,
