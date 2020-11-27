@@ -24,5 +24,4 @@ Refer to [configuration](#services-configuration) section for more details on th
 
 You can manually (re)generate functions by calling `pyxelrest.load()` and providing your own services configuration.
 
-All functions can be found within `pyxelrest.user_defined_functions` module. 
-But you can also access the functions available for a single REST API by using the specific `pyxelrest.user_defined_functions.{my_api}` module where `{my_api}` is the name of the configuration section as shown in the example.
+You can access the functions available for each REST API by using the specific `pyxelrest.user_defined_functions.{my_api}` module where `{my_api}` is the name of the configuration section as shown in the example.

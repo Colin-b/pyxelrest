@@ -23,7 +23,6 @@ def load_petstore_as_python_module():
                 "open_api": {
                     "definition": "http://petstore.swagger.io/v2/swagger.json"
                 },
-                "udf_name_prefix": "",
             }
         }
     )
@@ -45,11 +44,11 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service):
         match_querystring=True,
     )
 
-    from pyxelrest import user_defined_functions
+    from pyxelrest.user_defined_functions import petstore
 
     now = datetime.datetime.utcnow()
     now_str = now.isoformat().encode()
-    assert user_defined_functions.placeOrder(
+    assert petstore.placeOrder(
         id=10, petId=222222, quantity=1, shipDate=now, status="placed", complete=False
     ) == {
         "id": 10,
@@ -79,7 +78,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service):
         },
         match_querystring=True,
     )
-    assert user_defined_functions.getOrderById(10) == {
+    assert petstore.getOrderById(10) == {
         "id": 10,
         "petId": 222222,
         "quantity": 1,
@@ -98,9 +97,9 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service):
         match_querystring=True,
     )
 
-    from pyxelrest import user_defined_functions
+    from pyxelrest.user_defined_functions import petstore
 
-    user_defined_functions.createUser(
+    petstore.createUser(
         id=666666,
         username="JD",
         firstName="John",
@@ -131,7 +130,7 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service):
         match_querystring=True,
     )
 
-    assert user_defined_functions.getUserByName("JD") == {
+    assert petstore.getUserByName("JD") == {
         "id": 666666,
         "username": "JD",
         "firstName": "John",

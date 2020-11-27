@@ -18,7 +18,10 @@ from pyxelrest import (
     GENERATE_UDF_ON_IMPORT,
     version,
 )
-from pyxelrest._generator_config import SERVICES_CONFIGURATION_FILE_PATH, LOGGING_CONFIGURATION_FILE_PATH
+from pyxelrest._generator_config import (
+    SERVICES_CONFIGURATION_FILE_PATH,
+    LOGGING_CONFIGURATION_FILE_PATH,
+)
 from pyxelrest._common import check_for_duplicates, Service
 from pyxelrest._open_api import load_service
 from pyxelrest._rest import PyxelRestService
@@ -69,6 +72,7 @@ def _user_defined_functions_init(services: List[Service]) -> str:
     """
     renderer = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__), encoding="utf-8"),
+        # https://jinja.palletsprojects.com/en/2.11.x/templates/?highlight=spaces#whitespace-control
         trim_blocks=True,
         lstrip_blocks=True,
     )
@@ -140,7 +144,9 @@ def load_services_from_yaml() -> List[Service]:
     """
     services_configuration_file_path = SERVICES_CONFIGURATION_FILE_PATH
     if not os.path.isfile(services_configuration_file_path):
-        logging.warning(f'No services will be available as "{services_configuration_file_path}" cannot be found.')
+        logging.warning(
+            f'No services will be available as "{services_configuration_file_path}" cannot be found.'
+        )
         return []
 
     with open(services_configuration_file_path, "r") as config_file:
