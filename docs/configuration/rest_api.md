@@ -257,25 +257,26 @@ Note that Python regular expression can be provided as value. But you can also w
 
 Note that if a `parameter` is provided in both `excluded_parameters` and `selected_parameters`. It will be considered as excluded.
 
+## Microsoft Excel add-in specific settings
+
+### Add a description to the service in the configuration screen
+
+| description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
+
+### Keep client specific configuration when updating the configuration
+
+| skip_update_for | List of section names that should not be auto-updated. | |
+
 ## Service options
 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
-| description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
 | formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
 | auth | Dictionary containing authentication related settings. Refer to [Authentication](#authentication) section for more information. | |
 | network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
-| skip_update_for | List of section names that should not be auto-updated. | |
 | caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
 | result | Dictionary containing result related settings. Refer to [Result](#result) section for more information. | |
 | udf_name_prefix | Prefix to be used in front of UDf name. `{service_name}` will be replaced by the actual service name. | {service_name}_ |
-
-## OpenAPI
-
-| Name | Description | Mandatory | Possible values |
-|------|-------------|-----------|-----------------|
-| rely_on_definitions | Rely on [OpenAPI 2.0 definitions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#definitionsObject) to re-order fields received in response. Deactivated by default. | Optional | `true` or `false` |
-| host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
 
 ## Formulas
 
@@ -359,6 +360,9 @@ Contains network related settings such as HTTP timeouts or proxies configuration
 
 Header values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
+OpenAPI
+| host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
+
 ## Caching
 
 | Name | Description |
@@ -377,6 +381,13 @@ python -m pip install cachetools==4.*
 |------|-------------|
 | flatten | Flatten received JSON to a 2-Dimension array. Default to `true` |
 | raise_exception | Raise received exceptions to client. `false` by default. |
+
+## OpenAPI
+
+| Name | Description | Mandatory | Possible values |
+|------|-------------|-----------|-----------------|
+| rely_on_definitions | Rely on [OpenAPI 2.0 definitions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#definitionsObject) to re-order fields received in response. Deactivated by default. | Optional | `true` or `false` |
+
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
