@@ -6,6 +6,11 @@ Considering you already fetched the source code and you are located inside the r
    > File > Options > Trust Center > Trust Center Settings > Macro Settings
 2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
     1. [Office Developer Tools for Visual Studio](https://visualstudio.microsoft.com/vs/features/office-tools/) needs to be installed.
+        <p align="center">
+            <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/visual_studio_office_option.png" alt='Select office development additional package'>  
+            <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/visual_studio_office_option_vsto.png" alt='VSTO must be checked'>  
+        </p>
+    
     2. Open `addin`/`PyxelRestAddIn.sln`.
     3. Create a test certificate
        > Project > PyxelRestAddIn > Signing
