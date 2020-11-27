@@ -501,9 +501,7 @@ class OpenAPIUDFMethod(UDFMethod):
         open_api_method["operationId"] = service.get_unique_operation_id(
             formula_type, operation_id
         )
-        prefix = service.config.udf_name_prefix.format(
-            service_name=service.config.udf_prefix(formula_type)
-        )
+        prefix = service.config.udf_prefix(formula_options)
         udf_name = f"{prefix}{open_api_method['operationId']}"
         self.responses = open_api_method.get("responses")
         if not self.responses:

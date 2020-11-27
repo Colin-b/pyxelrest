@@ -15,7 +15,10 @@ def load(config: dict):
 
     for service in config.values():
         # Do not prefix functions with service name
-        service.setdefault("udf_name_prefix", "")
+        service.setdefault(
+            "formulas", {"dynamic_array": {"lock_excel": False, "prefix": ""}}
+        )
+
         result = service.setdefault("result", {})
         # Send raw results if not specified otherwise
         result.setdefault("flatten", False)

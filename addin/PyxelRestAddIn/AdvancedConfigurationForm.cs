@@ -36,8 +36,13 @@ namespace PyxelRestAddIn
         private AddButton addOAuth2Param;
 
         private CheckBox dynamicArrayFormulasLockExcel;
+        private TextBox dynamicArrayFormulasPrefix;
 
         private CheckBox legacyArrayFormulasLockExcel;
+        private TextBox legacyArrayFormulasPrefix;
+
+        private TextBox vbaCompatibleFormulasPrefix;
+
         private NumericUpDown maxNbresults;
 
         public AdvancedConfigurationForm(ServicePanel servicePanel)
@@ -128,14 +133,25 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(dynamicArrayFormulas, 0, 0);
                     }
                     {
+                        panel.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var prefix = dynamicArrayFormulasOptions.ContainsKey("prefix") ? (string)dynamicArrayFormulasOptions["prefix"] : "{service_name}_";
+                        dynamicArrayFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
+                        tooltip.SetToolTip(dynamicArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        dynamicArrayFormulasPrefix.TextChanged += DynamicArrayFormulasPrefix_TextChanged;
+                        dynamicArrayFormulasPrefix.Enabled = dynamicArrayFormulasOptions.Count > 0;
+                        panel.Controls.Add(dynamicArrayFormulasPrefix, 2, 0);
+                    }
+                    {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var synchronousChecked = dynamicArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)dynamicArrayFormulasOptions["lock_excel"] : false;
-                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for dynamic array result", Checked = synchronousChecked, Width = PercentWidth(50) };
+                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for dynamic array result", Checked = synchronousChecked, Width = PercentWidth(30) };
                         tooltip.SetToolTip(dynamicArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
                         dynamicArrayFormulasLockExcel.CheckedChanged += DynamicArrayFormulasLockExcel_CheckedChanged;
                         dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(dynamicArrayFormulasLockExcel, 1, 0);
+                        panel.Controls.Add(dynamicArrayFormulasLockExcel, 3, 0);
                     }
 
                     layout.Controls.Add(panel);
@@ -156,14 +172,25 @@ namespace PyxelRestAddIn
                         panel.Controls.Add(legacyArrayFormulas, 0, 0);
                     }
                     {
+                        panel.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var prefix = legacyArrayFormulasOptions.ContainsKey("prefix") ? (string)legacyArrayFormulasOptions["prefix"] : "legacy_{service_name}_";
+                        legacyArrayFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
+                        tooltip.SetToolTip(legacyArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        legacyArrayFormulasPrefix.TextChanged += LegacyArrayFormulasPrefix_TextChanged;
+                        legacyArrayFormulasPrefix.Enabled = legacyArrayFormulasOptions.Count > 0;
+                        panel.Controls.Add(legacyArrayFormulasPrefix, 2, 0);
+                    }
+                    {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var synchronousChecked = legacyArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)legacyArrayFormulasOptions["lock_excel"] : false;
-                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for legacy array result", Checked = synchronousChecked, Width = PercentWidth(50) };
+                        legacyArrayFormulasLockExcel = new CheckBox { Text = "Wait for legacy array result", Checked = synchronousChecked, Width = PercentWidth(30) };
                         tooltip.SetToolTip(legacyArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
                         legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
                         legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(legacyArrayFormulasLockExcel, 1, 0);
+                        panel.Controls.Add(legacyArrayFormulasLockExcel, 3, 0);
                     }
 
                     layout.Controls.Add(panel);
@@ -182,6 +209,17 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using Visual Basic for Applications (VBA).");
                         vbaCompatibleFormulas.CheckedChanged += VBACompatibleFormulas_CheckedChanged;
                         panel.Controls.Add(vbaCompatibleFormulas, 0, 0);
+                    }
+                    {
+                        panel.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var prefix = vbaCompatibleFormulasOptions.ContainsKey("prefix") ? (string)vbaCompatibleFormulasOptions["prefix"] : "vba_{service_name}_";
+                        vbaCompatibleFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
+                        tooltip.SetToolTip(vbaCompatibleFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        vbaCompatibleFormulasPrefix.TextChanged += VBACompatibleFormulasPrefix_TextChanged;
+                        vbaCompatibleFormulasPrefix.Enabled = vbaCompatibleFormulasOptions.Count > 0;
+                        panel.Controls.Add(vbaCompatibleFormulasPrefix, 2, 0);
                     }
 
                     layout.Controls.Add(panel);
@@ -580,7 +618,7 @@ namespace PyxelRestAddIn
 
                     #region Connect timeout
                     {
-                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(17) }, 0, 1);
+                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(17) }, 0, 1);
 
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
@@ -593,7 +631,7 @@ namespace PyxelRestAddIn
 
                     #region Read timeout
                     {
-                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 2, 1);
+                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(15) }, 2, 1);
 
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
@@ -608,7 +646,7 @@ namespace PyxelRestAddIn
 
                     #region Max retries
                     {
-                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 4, 1);
+                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(15) }, 4, 1);
 
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
@@ -915,6 +953,7 @@ namespace PyxelRestAddIn
             {
                 servicePanel.service.Formulas["legacy_array"] = new Dictionary<string, object>();
                 LegacyArrayFormulasLockExcel_CheckedChanged();
+                LegacyArrayFormulasPrefix_TextChanged();
             }
             else
             {
@@ -922,6 +961,7 @@ namespace PyxelRestAddIn
             }
 
             legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasChecked;
+            legacyArrayFormulasPrefix.Enabled = legacyArrayFormulasChecked;
         }
 
         private void LegacyArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
@@ -929,9 +969,19 @@ namespace PyxelRestAddIn
             LegacyArrayFormulasLockExcel_CheckedChanged();
         }
 
+        private void LegacyArrayFormulasPrefix_TextChanged(object sender, EventArgs e)
+        {
+            LegacyArrayFormulasPrefix_TextChanged();
+        }
+
         private void LegacyArrayFormulasLockExcel_CheckedChanged()
         {
             AddValueToFormulasSubSection("legacy_array", "lock_excel", legacyArrayFormulasLockExcel.Checked);
+        }
+
+        private void LegacyArrayFormulasPrefix_TextChanged()
+        {
+            AddValueToFormulasSubSection("legacy_array", "prefix", legacyArrayFormulasPrefix.Text);
         }
 
         private void DynamicArrayFormulas_CheckedChanged(object sender, EventArgs e)
@@ -941,6 +991,7 @@ namespace PyxelRestAddIn
             {
                 servicePanel.service.Formulas["dynamic_array"] = new Dictionary<string, object>();
                 DynamicArrayFormulasLockExcel_CheckedChanged();
+                DynamicArrayFormulasPrefix_TextChanged();
             }
             else
             {
@@ -948,6 +999,7 @@ namespace PyxelRestAddIn
             }
 
             dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasChecked;
+            dynamicArrayFormulasPrefix.Enabled = dynamicArrayFormulasChecked;
         }
 
         private void DynamicArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
@@ -955,9 +1007,19 @@ namespace PyxelRestAddIn
             DynamicArrayFormulasLockExcel_CheckedChanged();
         }
 
+        private void DynamicArrayFormulasPrefix_TextChanged(object sender, EventArgs e)
+        {
+            DynamicArrayFormulasPrefix_TextChanged();
+        }
+
         private void DynamicArrayFormulasLockExcel_CheckedChanged()
         {
             AddValueToFormulasSubSection("dynamic_array", "lock_excel", dynamicArrayFormulasLockExcel.Checked);
+        }
+
+        private void DynamicArrayFormulasPrefix_TextChanged()
+        {
+            AddValueToFormulasSubSection("dynamic_array", "prefix", dynamicArrayFormulasPrefix.Text);
         }
 
         private void VBACompatibleFormulas_CheckedChanged(object sender, EventArgs e)
@@ -967,11 +1029,23 @@ namespace PyxelRestAddIn
             {
                 servicePanel.service.Formulas["vba_compatible"] = new Dictionary<string, object>();
                 AddValueToFormulasSubSection("vba_compatible", "lock_excel", true);
+                VBACompatibleFormulasPrefix_TextChanged();
             }
             else
             {
                 servicePanel.service.Formulas.Remove("vba_compatible");
             }
+            vbaCompatibleFormulasPrefix.Enabled = vbaCompatibleFormulasChecked;
+        }
+
+        private void VBACompatibleFormulasPrefix_TextChanged(object sender, EventArgs e)
+        {
+            VBACompatibleFormulasPrefix_TextChanged();
+        }
+
+        private void VBACompatibleFormulasPrefix_TextChanged()
+        {
+            AddValueToFormulasSubSection("vba_compatible", "prefix", vbaCompatibleFormulasPrefix.Text);
         }
 
         private void AddValueToFormulasSubSection(string formulaType, string key, object value)

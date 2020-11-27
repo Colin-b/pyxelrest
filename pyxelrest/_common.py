@@ -54,6 +54,15 @@ class ConfigSection:
         self.formulas = service_config.get(
             "formulas", {"dynamic_array": {"lock_excel": False}}
         )
+        # Set default prefixes
+        for formula_type, formula_options in self.formulas.items():
+            if formula_type == "vba_compatible":
+                formula_options.setdefault("prefix", "vba_{service_name}_")
+            elif formula_type == "dynamic_array":
+                formula_options.setdefault("prefix", "{service_name}_")
+            else:  # Legacy array
+                formula_options.setdefault("prefix", "legacy_{service_name}_")
+
         self.custom_headers = {
             key: convert_environment_variable(value)
             for key, value in self.network.get("headers", {}).items()
@@ -76,7 +85,12 @@ class ConfigSection:
         results = service_config.get("result", {})
         self.flatten_results = bool(results.get("flatten", True))
         self.raise_exception = bool(results.get("raise_exception", False))
-        self.udf_name_prefix = service_config.get("udf_name_prefix", "{service_name}_")
+
+    def ensure_unique_function_names(self) -> bool:
+        for formula_options in self.formulas.values():
+            if "{service_name}" not in formula_options["prefix"]:
+                return False
+        return True
 
     @staticmethod
     def _create_cache(max_nb_results: int, ttl: int) -> Optional["cachetools.TTLCache"]:
@@ -107,18 +121,10 @@ class ConfigSection:
                     f"Invalid positive value provided: {value}. Considering as not set."
                 )
 
-    def udf_prefix(self, formula_type: str) -> str:
-        service_name_prefix = to_valid_python_vba(self.name)
-
-        if "vba_compatible" == formula_type:
-            return f"vba_{service_name_prefix}"
-
-        # TODO Drop the behavior where there is no prefix for non dynamic arrays (when there is no more users using it?)
-        if len(self.formulas) == 1 or "dynamic_array" == formula_type:
-            return service_name_prefix
-
-        # Legacy array and there is more than one formula per operation
-        return f"legacy_{service_name_prefix}"
+    def udf_prefix(self, formula_options: dict) -> str:
+        return formula_options["prefix"].format(
+            service_name=to_valid_python_vba(self.name)
+        )
 
     def allow_parameter(self, parameter_name: str) -> bool:
         return True
@@ -414,9 +420,9 @@ class RequestContent:
 def check_for_duplicates(loaded_services: List[Service]):
     services_by_prefix = {}
     for service in loaded_services:
-        for formula_type in service.config.formulas:
+        for formula_options in service.config.formulas.values():
             services_by_prefix.setdefault(
-                service.config.udf_prefix(formula_type), []
+                service.config.udf_prefix(formula_options), []
             ).append(service.config.name)
     for udf_prefix in services_by_prefix:
         service_names = services_by_prefix[udf_prefix]

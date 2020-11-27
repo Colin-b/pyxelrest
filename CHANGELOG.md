@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Display path to python in Microsoft Excel add-in.
 - Display path to xlwings BAS file in Microsoft Excel add-in.
 - Allow to toggle pre-releases check in Microsoft Excel add-in.
+- `prefix` option per formula type.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
@@ -53,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove the ability to select `options` and `head` http method from Microsoft Excel add-in configuration as they are most likely not used.
 - It is not possible to filter out HTTP methods from `pyxelrest` service anymore.
 - It is not possible to specify custom python modules to be installed by the Microsoft Excel add-in. Instead, required modules will be automatically installed by the add-in.
+- `udf_name_prefix` option does not exists anymore, instead it should be provided per formula type thanks to `prefix` option.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.

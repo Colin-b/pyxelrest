@@ -9,7 +9,7 @@ from importlib import reload, import_module
 # TODO Reload only when file was already existing
 reload(import_module("pyxelrest.user_defined_functions.{{ service.config.name }}"))
 import pyxelrest.user_defined_functions.{{ service.config.name }} as {{ service.config.name }}
-{% if service.config.udf_name_prefix %}
+{% if service.config.ensure_unique_function_names() %}
 from pyxelrest.user_defined_functions.{{ service.config.name }} import (
     {%+ for udf_name in service.methods %}{{ udf_name }},{% endfor %}
 )
@@ -26,7 +26,7 @@ def update_services(services):
 
 __all__ = [
 {% for service in services %}
-{% if service.config.udf_name_prefix %}
+{% if service.config.ensure_unique_function_names() %}
     {% for udf_name in service.methods %}
     "{{ udf_name }}",
     {% endfor %}

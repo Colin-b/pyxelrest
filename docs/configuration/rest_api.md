@@ -276,7 +276,6 @@ Note that if a `parameter` is provided in both `excluded_parameters` and `select
 | network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
 | caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
 | result | Dictionary containing result related settings. Refer to [Result](#result) section for more information. | |
-| udf_name_prefix | Prefix to be used in front of UDf name. `{service_name}` will be replaced by the actual service name. | {service_name}_ |
 
 ## Formulas
 
@@ -289,6 +288,7 @@ Identified by the `dynamic_array` key within `formulas` section.
 | Name | Description | Possible values |
 |------|-------------|-----------------|
 | lock_excel | Should [Microsoft Excel] be locked (no other action can be performed) until the results are received. | `true` or `false` (default) |
+| prefix | Prefix to be used in front of formula name. `{service_name}` will be replaced by the actual service name. | {service_name}_ |
 
 ### Legacy array formulas
 
@@ -297,10 +297,15 @@ Identified by the `legacy_array` key within `formulas` section.
 | Name | Description | Possible values |
 |------|-------------|-----------------|
 | lock_excel | Should [Microsoft Excel] be locked (no other action can be performed) until the results are received. | `true` or `false` (default) |
+| prefix | Prefix to be used in front of formula name. `{service_name}` will be replaced by the actual service name. | legacy_{service_name}_ |
 
 ### Visual Basic for Applications (VBA) formulas
 
 Identified by the `vba_compatible` key within `formulas` section.
+
+| Name | Description | Possible values |
+|------|-------------|-----------------|
+| prefix | Prefix to be used in front of formula name. `{service_name}` will be replaced by the actual service name. | vba_{service_name}_ |
 
 ## Authentication
 
