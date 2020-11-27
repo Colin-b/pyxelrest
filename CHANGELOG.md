@@ -80,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `headers` are now expected within `network` section.
 - Microsoft Excel add-in now auto-save services configuration as long as the modification are valid.
 - Functions generated when using the python module are not prefixed anymore and must be imported from the module corresponding to the REST API.
+- `service_host` option is now `host`.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

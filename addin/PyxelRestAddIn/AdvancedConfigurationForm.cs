@@ -235,20 +235,20 @@ namespace PyxelRestAddIn
                     var tab = new TabPage { Text = "OpenAPI", AutoScroll = true };
                     var layout = new TableLayoutPanel { AutoSize = true };
 
-                    #region Service Host
+                    #region Host
                     {
-                        var hostPanel = new TableLayoutPanel { AutoSize = true };
+                        var panel = new TableLayoutPanel { AutoSize = true };
 
-                        hostPanel.Controls.Add(new Label { Text = "Service Host", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
+                        panel.Controls.Add(new Label { Text = "Host", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
 
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var serviceHost = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.OpenAPI.ContainsKey("service_host") ? servicePanel.service.OpenAPI["service_host"].ToString() : string.Empty };
-                        tooltip.SetToolTip(serviceHost, "Usefull when host is not provided in the OpenAPI definition and service is behind a reverse proxy.");
-                        serviceHost.TextChanged += ServiceHost_TextChanged;
-                        hostPanel.Controls.Add(serviceHost, 1, 1);
+                        var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.OpenAPI.ContainsKey("host") ? servicePanel.service.OpenAPI["host"].ToString() : string.Empty };
+                        tooltip.SetToolTip(host, "Usefull when host is not provided in the OpenAPI definition and API is behind a reverse proxy.");
+                        host.TextChanged += Host_TextChanged;
+                        panel.Controls.Add(host, 1, 1);
 
-                        layout.Controls.Add(hostPanel);
+                        layout.Controls.Add(panel);
                     }
                     #endregion
 
@@ -855,12 +855,12 @@ namespace PyxelRestAddIn
             servicePanel.service.OpenAPI["rely_on_definitions"] = ((CheckBox)sender).Checked;
         }
 
-        private void ServiceHost_TextChanged(object sender, EventArgs e)
+        private void Host_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.OpenAPI.Remove("service_host");
+                servicePanel.service.OpenAPI.Remove("host");
             else
-                servicePanel.service.OpenAPI["service_host"] = ((TextBox)sender).Text;
+                servicePanel.service.OpenAPI["host"] = ((TextBox)sender).Text;
         }
 
         private void Patch_CheckedChanged(object sender, EventArgs e)

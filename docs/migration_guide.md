@@ -166,4 +166,22 @@ network:
         X-Custom: "This is a value"
 ```
 
+#### service_host
+
+`service_host` option within `open_api` section is now `host` option within `open_api` section.
+
+Previous (0.69.0)
+
+```yaml
+open_api:
+    service_host: "my_reverse_proxy/api"
+```
+
+New (1.0.0)
+
+```yaml
+open_api:
+    host: "my_reverse_proxy/api"
+```
+
 [Microsoft Excel]: https://products.office.com/en-us/excel

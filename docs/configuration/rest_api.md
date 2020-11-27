@@ -120,7 +120,7 @@ my_rest_api:
 
 The default behavior is to expose every endpoint as defined in the OpenAPI definition.
 
-You can however tweak this behavior by:
+You can change this behavior by:
 * [Selecting HTTP methods to expose](#selecting-http-methods-to-expose)
 * [Selecting tags to include or exclude](#selecting-tags-to-include-or-exclude)
 * [Selecting operation_id to include or exclude](#selecting-operation_id-to-include-or-exclude)
@@ -275,7 +275,7 @@ Note that if a `parameter` is provided in both `excluded_parameters` and `select
 | Name | Description | Mandatory | Possible values |
 |------|-------------|-----------|-----------------|
 | rely_on_definitions | Rely on [OpenAPI 2.0 definitions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#definitionsObject) to re-order fields received in response. Deactivated by default. | Optional | `true` or `false` |
-| service_host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
+| host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
 
 ## Formulas
 
