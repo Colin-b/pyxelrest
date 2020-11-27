@@ -16,7 +16,13 @@ PyxelRest allows you to query [Swagger 2.0/OpenAPI](https://www.openapis.org) RE
 </p>
 <p align="center"><em>Example with <a href="https://petstore.swagger.io/#/">petstore</a> REST API using formulas generated based on the OpenAPI definition.</em></p>
 
-## Table of Contents
+## I want to access a REST API
+
+* [Using Microsoft Excel formulas in workbooks](/docs/use_cases/access_via_excel_workbook.md)
+* [Using Microsoft Excel VBA functions](/docs/use_cases/access_via_excel_vba.md)
+* [Using Python functions](/docs/use_cases/access_via_python.md)
+
+## Quick access
 
 * [Features](/docs/features.md)
 * [Installation](/docs/installation/installer.md)
