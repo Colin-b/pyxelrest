@@ -1,7 +1,7 @@
 # Accessing a REST API via formulas in a Microsoft Excel workbook
 
-## Definition of the REST API
-1. I have a REST API with an OpenAPI definition available.
-  a. The definition is accessible via an URL.
-  b. The definition is a JSON file.
-2. I have a REST API without an OpenAPI definition.
+Once [PyxelRest installed](../installation/installer.md) and your [REST API configured](../configuration/rest_api.md), you will have access to formulas within Microsoft Excel.
+
+Formulas are grouped by categories, each REST API that you configured will expose endpoints into a specific category (the configured name of the REST API).
+
+Each formula will be prefixed by the configured name of the REST API.
