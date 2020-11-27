@@ -158,18 +158,104 @@ Note that if an endpoint is defined with both (methods that should be exposed, a
 
 ### Selecting tags to include or exclude
 
-| excluded_tags | List of `tags` within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
-| selected_tags | List of `tags` within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded tags already). If not specified, no filtering is applied. | Optional | |
+OpenAPI definition endpoints are often grouped by `tags`.
+
+You can filter (in or out) endpoints by filtering on related `tags`.
+
+Filtered-out `tags` can be provided as `excluded_tags` under the `open_api` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    excluded_tags:
+      - "sample tag"
+```
+
+The default value is an empty list, meaning that no filtering is performed.
+
+Filtered-in `tags` can be provided as `selected_tags` under the `open_api` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    selected_tags:
+      - "sample tag"
+```
+
+The default value is an empty list, meaning that no filtering is performed.
+
+Note that if a tag is provided in both `excluded_tags` and `selected_tags`. It will be considered as excluded.
 
 ### Selecting operation_id to include or exclude
 
-| excluded_operation_ids | List of `operation_id` (or regular expressions) within [OpenAPI 2.0 definition] that should not be retrieved. If not specified, no filtering is applied. | Optional | |
-| selected_operation_ids | List of `operation_id` (or regular expressions) within [OpenAPI 2.0 definition] that should be retrieved (if not within excluded operation_ids already). If not specified, no filtering is applied. | Optional | |
+OpenAPI definition endpoints are uniquely identified by an `operation_id`.
+
+If an operation_id is not provided in the OpenAPI definition, pyxelrest will create one based on the following logic:
+`{http_method}{underscored_endpoint}`. 
+
+Meaning an HTTP `GET` method on `/path/resource` will have the `get_path_resource` `operation_id`.
+
+You can filter (in or out) endpoints by filtering on related `operation_id`.
+
+Filtered-out `operation_id` can be provided as `excluded_operation_ids` under the `open_api` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    excluded_operation_ids:
+      - "get_endpoint"
+```
+
+The default value is an empty list, meaning that no filtering is performed.
+
+Note that Python regular expression can be provided as value. But you can also write *simple* regular expression by only using the `*` character to match anything.
+
+Filtered-in `operation_id` can be provided as `selected_operation_ids` under the `open_api` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    selected_operation_ids:
+      - "get_endpoint"
+```
+
+The default value is an empty list, meaning that no filtering is performed.
+
+Note that Python regular expression can be provided as value. But you can also write *simple* regular expression by only using the `*` character to match anything.
+
+Note that if an `operation_id` is provided in both `excluded_operation_ids` and `selected_operation_ids`. It will be considered as excluded.
 
 ### Selecting parameters to include or exclude
 
-| excluded_parameters | List of `parameter` names (or regular expressions) within [OpenAPI 2.0 definition] that should not be exposed. If not specified, no filtering is applied. | Optional | |
-| selected_parameters | List of `parameter` names (or regular expressions) within [OpenAPI 2.0 definition] that should be exposed (if not within excluded parameters already). If not specified, no filtering is applied. | Optional | |
+Even if an endpoint is supposed to be exposed, you might not need every parameter in your resulting formula.
+
+Filtered-out `parameters` can be provided as `excluded_parameters` under the `open_api` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    excluded_parameters:
+      - "secret"
+```
+
+The default value is an empty list, meaning that no filtering is performed.
+
+Note that Python regular expression can be provided as value. But you can also write *simple* regular expression by only using the `*` character to match anything.
+
+Filtered-in `parameters` can be provided as `selected_parameters` under the `open_api` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    selected_parameters:
+      - "secret"
+```
+
+The default value is an empty list, meaning that no filtering is performed.
+
+Note that Python regular expression can be provided as value. But you can also write *simple* regular expression by only using the `*` character to match anything.
+
+Note that if a `parameter` is provided in both `excluded_parameters` and `selected_parameters`. It will be considered as excluded.
 
 ## Service options
 
