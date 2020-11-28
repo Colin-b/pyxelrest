@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Display path to xlwings BAS file in Microsoft Excel add-in.
 - Allow to toggle pre-releases check in Microsoft Excel add-in.
 - `prefix` option per formula type.
+- Allow to provide the description of the service in the Microsoft Excel add-in.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).

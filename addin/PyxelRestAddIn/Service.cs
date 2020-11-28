@@ -16,7 +16,7 @@ namespace PyxelRestAddIn
 
         internal readonly string Name;
         private IList<string> skipUpdateFor;
-        private string description;
+        public string description;
         public IDictionary<string, object> OpenAPI;
         public IDictionary<string, object> Network;
         public IDictionary<string, object> Auth;

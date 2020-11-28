@@ -119,6 +119,24 @@ namespace PyxelRestAddIn
                 var tab = new TabPage("Formulas");
                 var layout = new TableLayoutPanel { AutoSize = true };
 
+                #region Description
+                {
+                    var panel = new TableLayoutPanel { AutoSize = true };
+
+                    {
+                        panel.Controls.Add(new Label { Width = PercentWidth(15), Text = "Description", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = string.Format("Short description of {0}", servicePanel.service.Name), UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var description = new TextBox { Text = servicePanel.service.description, Width = PercentWidth(80) };
+                        tooltip.SetToolTip(description, "Used only in the add-in configure screen for information.");
+                        description.TextChanged += Description_TextChanged;
+                        panel.Controls.Add(description, 2, 0);
+                    }
+
+                    layout.Controls.Add(panel);
+                }
+                #endregion
+
                 #region Dynamic array formulas
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
@@ -776,6 +794,11 @@ namespace PyxelRestAddIn
         }
 
         #region Events
+
+        private void Description_TextChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.description = ((TextBox)sender).Text;
+        }
 
         private void NtlmPassword_TextChanged(object sender, EventArgs e)
         {
