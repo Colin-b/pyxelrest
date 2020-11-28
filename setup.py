@@ -125,7 +125,7 @@ setup(
         "console_scripts": [
             "pyxelrest_auto_update=pyxelrest.auto_update:main",
             "pyxelrest_install_addin=pyxelrest.install_addin:main",
-            "pyxelrest_update_services_config=pyxelrest.update_services_config:main",
+            "pyxelrest_add_config=pyxelrest.add_config:main",
         ]
     },
     project_urls={

@@ -56,6 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - It is not possible to filter out HTTP methods from `pyxelrest` service anymore.
 - It is not possible to specify custom python modules to be installed by the Microsoft Excel add-in. Instead, required modules will be automatically installed by the add-in.
 - `udf_name_prefix` option does not exists anymore, instead it should be provided per formula type thanks to `prefix` option.
+- `update_services_config` script does not allow to list services anymore.
+- `update_services_config` script does not allow to remove services anymore.
+- `update_services_config` script does not allow to update services anymore.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.
@@ -84,6 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Microsoft Excel add-in now auto-save services configuration as long as the modification are valid.
 - Functions generated when using the python module are not prefixed anymore and must be imported from the module corresponding to the REST API.
 - `service_host` option is now `host`.
+- `update_services_config` script now only allows to add services configuration and was renamed to `add_config`.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
