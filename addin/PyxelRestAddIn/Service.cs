@@ -146,27 +146,60 @@ namespace PyxelRestAddIn
             return pythonModules;
         }
 
+
+        private IDictionary<string, object> UpdateOption(IDictionary<string, object> optionsNotToUpdate, IDictionary<string, object> actual, IDictionary<string, object> update)
+        {
+            // If the whole content must not be updated, return the actual content
+            if (optionsNotToUpdate == null || optionsNotToUpdate.Count() == 0)
+                return actual;
+
+            var merged = update;
+
+            foreach (var optionNotToUpdate in optionsNotToUpdate)
+            {
+                if (actual.ContainsKey(optionNotToUpdate.Key))
+                {
+                    // If the update does not contains the options, use the actual content
+                    if (!merged.ContainsKey(optionNotToUpdate.Key))
+                    {
+                        merged[optionNotToUpdate.Key] = actual[optionNotToUpdate.Key];
+                    }
+                    // Otherwise perform a partial update
+                    else
+                    {
+                        merged[optionNotToUpdate.Key] = UpdateOption((IDictionary<string, object>)optionNotToUpdate.Value, (IDictionary<string, object>)actual[optionNotToUpdate.Key], (IDictionary<string, object>)merged[optionNotToUpdate.Key]);
+                    }
+                }
+            }
+
+            return merged;
+        }
+
+        private void ToDict(IDictionary<string, IDictionary<string, object>> result, IEnumerable<string> sections)
+        {
+            string section = sections.ElementAt(0);
+            if (!result.ContainsKey(section))
+                result[section] = new Dictionary<string, object>();
+
+            ToDict((IDictionary<string, IDictionary<string, object>>)result[section], sections.Skip(1));
+        }
+
         internal void UpdateFrom(Service updated)
         {
             skipUpdateFor = updated.skipUpdateFor;
 
-            if (!skipUpdateFor.Contains(DESCRIPTION_PROPERTY))
+            var optionsNotToUpdate = new Dictionary<string, IDictionary<string, object>>();
+            foreach (string sections in skipUpdateFor)
+                ToDict(optionsNotToUpdate, sections.Split('.'));
+
+            if (!optionsNotToUpdate.ContainsKey(DESCRIPTION_PROPERTY))
                 description = updated.description;
 
-            if (!skipUpdateFor.Contains(OPEN_API_PROPERTY))
-                OpenAPI = updated.OpenAPI;
-
-            if (!skipUpdateFor.Contains(NETWORK_PROPERTY))
-                Network = updated.Network;
-
-            if (!skipUpdateFor.Contains(AUTH_PROPERTY))
-                Auth = updated.Auth;
-
-            if (!skipUpdateFor.Contains(FORMULAS_PROPERTY))
-                Formulas = updated.Formulas;
-
-            if (!skipUpdateFor.Contains(CACHING_PROPERTY))
-                Caching = updated.Caching;
+            OpenAPI = UpdateOption(optionsNotToUpdate.ContainsKey(OPEN_API_PROPERTY) ? optionsNotToUpdate[OPEN_API_PROPERTY] : null, OpenAPI, updated.OpenAPI);
+            Network = UpdateOption(optionsNotToUpdate.ContainsKey(NETWORK_PROPERTY) ? optionsNotToUpdate[NETWORK_PROPERTY] : null, Network, updated.Network);
+            Auth = UpdateOption(optionsNotToUpdate.ContainsKey(AUTH_PROPERTY) ? optionsNotToUpdate[AUTH_PROPERTY] : null, Auth, updated.Auth);
+            Formulas = UpdateOption(optionsNotToUpdate.ContainsKey(FORMULAS_PROPERTY) ? optionsNotToUpdate[FORMULAS_PROPERTY] : null, Formulas, updated.Formulas);
+            Caching = UpdateOption(optionsNotToUpdate.ContainsKey(CACHING_PROPERTY) ? optionsNotToUpdate[CACHING_PROPERTY] : null, Caching, updated.Caching);
         }
 
         internal void FromConfig(YamlMappingNode section)

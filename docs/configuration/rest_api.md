@@ -265,7 +265,21 @@ Note that if a `parameter` is provided in both `excluded_parameters` and `select
 
 ### Keep client specific configuration when updating the configuration
 
-| skip_update_for | List of section names that should not be auto-updated. | |
+The Microsoft Excel add-in will ensure that every configured REST API stays up to date.
+
+You might however want to avoid update to overwrite some client custom configuration (such as a custom API key or a client specific formulas configuration).
+
+The configuration options to skip when updating can be provided as `skip_update_for` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  skip_update_for:
+    - "formulas"
+    - "auth.api_key"
+```
+
+You can use dot notation to specify a specific option within a section.
 
 ## Service options
 

@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to toggle pre-releases check in Microsoft Excel add-in.
 - `prefix` option per formula type.
 - Allow to provide the description of the service in the Microsoft Excel add-in.
+- `skip_update_for` option is now allowing dot notation.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
@@ -42,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle relative URI for `authorizationUrl` and `tokenUrl`.
 - Microsoft Excel add-in advanced services configuration screen is now handling all resolutions properly.
 - Microsoft Excel add-in now ensure required `extra` python modules are installed if required.
+- Allow to add new configuration sections via auto-update that will not be updated afterwards.
 
 ### Removed
 - Drop support for `python` < `3.8`.
