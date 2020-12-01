@@ -449,18 +449,15 @@ You can use dot notation to specify a specific option within a section.
 
 ## Authentication
 
-Contains authentication related settings.
+### API Key
 
-| Name | Description | Possible values |
-|------|-------------|-----------------|
-| oauth2 | Dictionary containing OAuth2 authentication related settings. Refer to [OAuth 2](#oauth-2) section for more information. |
-| api_key | User API Key. Can be an environment variable surrounded by `%` as in `%MY_API_KEY_ENV_VAR%`. |
-| basic | Dictionary containing Basic authentication related settings. Refer to [Basic](#basic) section for more information. |
-| ntlm | Dictionary containing NTLM authentication related settings. Refer to [NTLM](#ntlm) section for more information. |
+User API Key.
 
-api_key value can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
+api_key value can contains environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
 ### OAuth 2
+
+| oauth2 | Dictionary containing OAuth2 authentication related settings.
 
 Depending on the flow, every parameter supported by [requests-auth](https://colin-b.github.io/requests_auth/) can be provided.
 
@@ -468,12 +465,16 @@ Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 de
 
 ### Basic
 
+| basic | Dictionary containing Basic authentication related settings.
+
 | Name | Description | Mandatory |
 |------|-------------|-----------|
 | username | User name | Mandatory |
 | password | User password | Mandatory |
 
 ### NTLM
+
+| ntlm | Dictionary containing NTLM authentication related settings.
 
 | Name | Description |
 |------|-------------|
