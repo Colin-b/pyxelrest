@@ -449,11 +449,39 @@ You can use dot notation to specify a specific option within a section.
 
 ## Authentication
 
-### API Key
+Access to REST API may require authentication.
 
-User API Key.
+In such case, the required authentication will be selected according to the OpenAPI definition.
 
-api_key value can contains environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
+However additional information will be required to be able to perform authentication properly.
+
+The following authentication mechanisms are supported:
+* [API key](#api-key)
+* [OAuth2](#oauth-2)
+* [Basic](#basic)
+* [NTLM](#ntlm)
+
+### API key
+
+If accessing the REST API requires to authenticate using an API key, the value can be provided as `api_key` under the `auth` section, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    api_key: "value"
+```
+
+The value can contains environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
+
+The following sample will use the value of `REST_API_KEY` environment variable as the API key:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    api_key: "%REST_API_KEY%"
+```
 
 ### OAuth 2
 
