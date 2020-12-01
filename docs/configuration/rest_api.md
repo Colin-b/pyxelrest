@@ -116,6 +116,162 @@ my_rest_api:
                 "description": "OK"
 ```
 
+## Formulas
+
+Specify what kind of [formulas](https://support.office.com/en-us/article/Create-an-array-formula-E43E12E0-AFC6-4A12-BC7F-48361075954D) will be generated for every REST API endpoint.
+
+Generate [dynamic array formulas](#dynamic-array-formulas) by default.
+
+You can generate up to 3 kind of formulas per REST API:
+* [Dynamic array](#dynamic-array-formulas)
+* [Legacy array](#legacy-array-formulas)
+* [VBA](#visual-basic-for-applications-vba-formulas)
+
+### Dynamic array formulas
+
+You can generate dynamic array formulas, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    dynamic_array:
+      lock_excel: false
+```
+
+#### Lock Microsoft Excel while formula is being called
+
+By default, dynamic array formulas will allow you to continue using Microsoft Excel during computation.
+
+But, if, for some reason, you want to ensure that nothing is performed during the formula computation, you can set `lock_excel` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    dynamic_array:
+      lock_excel: true
+```
+
+#### Change the prefix in front on formulas
+
+By default, dynamic array formulas will be prefixed by the REST API name.
+
+If you want to change this prefix (or even remove it), you can use `prefix` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    dynamic_array:
+      prefix: "{service_name}_"
+```
+
+Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `my_rest_api_` prefix.
+
+To disable the prefix, you can use a blank value as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    dynamic_array:
+      prefix: ""
+```
+
+### Legacy array formulas
+
+You can generate legacy array formulas, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    legacy_array:
+      lock_excel: false
+```
+
+#### Lock Microsoft Excel while formula is being called
+
+By default, legacy array formulas will allow you to continue using Microsoft Excel during computation.
+
+But, if, for some reason, you want to ensure that nothing is performed during the formula computation, you can set `lock_excel` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    legacy_array:
+      lock_excel: true
+```
+
+#### Change the prefix in front on formulas
+
+By default, legacy array formulas will be prefixed by `legacy_` followed by the REST API name.
+
+If you want to change this prefix (or even remove it), you can use `prefix` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    legacy_array:
+      prefix: "legacy_{service_name}_"
+```
+
+Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `legacy_my_rest_api_` prefix.
+
+To disable the prefix, you can use a blank value as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    legacy_array:
+      prefix: ""
+```
+
+### Visual Basic for Applications (VBA) formulas
+
+You can generate formulas that can be called in VBA, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    vba_compatible:
+      prefix: "vba_{service_name}_"
+```
+
+#### Change the prefix in front on formulas
+
+By default, VBA formulas will be prefixed by `vba_` followed by the REST API name.
+
+If you want to change this prefix (or even remove it), you can use `prefix` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    vba_compatible:
+      prefix: "vba_{service_name}_"
+```
+
+Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `vba_my_rest_api_` prefix.
+
+To disable the prefix, you can use a blank value as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    vba_compatible:
+      prefix: ""
+```
+
 ## Do not expose everything the REST API offers
 
 The default behavior is to expose every endpoint as defined in the OpenAPI definition.
@@ -261,7 +417,17 @@ Note that if a `parameter` is provided in both `excluded_parameters` and `select
 
 ### Add a description to the service in the configuration screen
 
-| description | A small description of this service. To be displayed within [Microsoft Excel] add-in services configuration screen. | |
+You can provide a description of the REST API, to be displayed within [Microsoft Excel] add-in services configuration screen.
+
+The description can be provided as `description` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  description: "This is the purpose of the REST API"
+```
+
+It will default to blank, meaning no description will be provided by default.
 
 ### Keep client specific configuration when updating the configuration
 
@@ -280,46 +446,6 @@ my_rest_api:
 ```
 
 You can use dot notation to specify a specific option within a section.
-
-## Service options
-
-| Name | Description | Possible values |
-|------|-------------|-----------------|
-| formulas | Dictionary containing user defined function (formulas) related settings. Refer to [Formulas](#formulas) section for more information. Generate dynamic array formulas by default. | |
-| auth | Dictionary containing authentication related settings. Refer to [Authentication](#authentication) section for more information. | |
-| network | Dictionary containing network related settings. Refer to [Network](#network) section for more information. | |
-| caching | Caching results in-memory to avoid sending the same queries too often. Dictionary containing caching related settings. Refer to [Caching](#caching) section for more information. | |
-| result | Dictionary containing result related settings. Refer to [Result](#result) section for more information. | |
-
-## Formulas
-
-Specify what kind of [formulas](https://support.office.com/en-us/article/Create-an-array-formula-E43E12E0-AFC6-4A12-BC7F-48361075954D) will be generated for every REST API endpoint.
-
-### Dynamic array formulas
-
-Identified by the `dynamic_array` key within `formulas` section.
-
-| Name | Description | Possible values |
-|------|-------------|-----------------|
-| lock_excel | Should [Microsoft Excel] be locked (no other action can be performed) until the results are received. | `true` or `false` (default) |
-| prefix | Prefix to be used in front of formula name. `{service_name}` will be replaced by the actual service name. | {service_name}_ |
-
-### Legacy array formulas
-
-Identified by the `legacy_array` key within `formulas` section.
-
-| Name | Description | Possible values |
-|------|-------------|-----------------|
-| lock_excel | Should [Microsoft Excel] be locked (no other action can be performed) until the results are received. | `true` or `false` (default) |
-| prefix | Prefix to be used in front of formula name. `{service_name}` will be replaced by the actual service name. | legacy_{service_name}_ |
-
-### Visual Basic for Applications (VBA) formulas
-
-Identified by the `vba_compatible` key within `formulas` section.
-
-| Name | Description | Possible values |
-|------|-------------|-----------------|
-| prefix | Prefix to be used in front of formula name. `{service_name}` will be replaced by the actual service name. | vba_{service_name}_ |
 
 ## Authentication
 
@@ -384,6 +510,8 @@ OpenAPI
 
 ## Caching
 
+Caching results in-memory to avoid sending the same queries too often.
+
 | Name | Description |
 |------|-------------|
 | result_caching_time | Number of seconds during which a GET request will return previous result. 0 seconds (always send a new request) by default. |
@@ -396,12 +524,16 @@ python -m pip install cachetools==4.*
 
 ## Result
 
+Result related settings.
+
 | Name | Description |
 |------|-------------|
 | flatten | Flatten received JSON to a 2-Dimension array. Default to `true` |
 | raise_exception | Raise received exceptions to client. `false` by default. |
 
 ## OpenAPI
+
+TODO Move this setting to Result
 
 | Name | Description | Mandatory | Possible values |
 |------|-------------|-----------|-----------------|
