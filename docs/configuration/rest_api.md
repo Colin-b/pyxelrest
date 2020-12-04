@@ -123,9 +123,10 @@ Specify what kind of [formulas](https://support.office.com/en-us/article/Create-
 Generate [dynamic array formulas](#dynamic-array-formulas) by default.
 
 You can generate up to 3 kind of formulas per REST API:
-* [Dynamic array](#dynamic-array-formulas)
-* [Legacy array](#legacy-array-formulas)
-* [VBA](#visual-basic-for-applications-vba-formulas)
+
+ * [Dynamic array](#dynamic-array-formulas)
+ * [Legacy array](#legacy-array-formulas)
+ * [VBA](#visual-basic-for-applications-vba-formulas)
 
 ### Dynamic array formulas
 
@@ -272,15 +273,115 @@ my_rest_api:
       prefix: ""
 ```
 
+## Authentication
+
+Access to REST API may require authentication.
+
+In such case, the required authentication will be selected according to the OpenAPI definition.
+
+However additional information will be required to be able to perform authentication properly.
+
+The following authentication mechanisms are supported:
+ * [API key](#api-key)
+ * [OAuth2](#oauth-2)
+ * [Basic (name and password)](#basic-name-and-password)
+ * [NTLM (Microsoft Windows)](#ntlm-microsoft-windows)
+
+### API key
+
+If accessing the REST API requires to authenticate using an API key, the value can be provided as `api_key` under the `auth` section, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    api_key: "value"
+```
+
+The value can contains environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
+
+The following sample will use the value of `REST_API_KEY` environment variable as the API key:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    api_key: "%REST_API_KEY%"
+```
+
+### OAuth 2
+
+If accessing the REST API requires to authenticate using an OAuth2 grant flow, the authentication will be performed using [requests-auth](https://colin-b.github.io/requests_auth/).
+
+Every supported parameter can be provided, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    oauth2:
+      client_id: "A-B-C-D-E"
+```
+
+Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 definition], thus they do not need to be provided.
+
+### Basic (name and password)
+
+If accessing the REST API requires to authenticate using a username and a password, the values can be provided, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    basic:
+      username: "user"
+      password: "pwd"
+```
+
+### NTLM (Microsoft Windows)
+
+If accessing the REST API requires to authenticate using Microsoft Windows, the values can be provided, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    ntlm:
+      username: "domain\\user"
+      password: "pwd"
+```
+
+Note that [`requests_ntlm==1.*`](https://pypi.org/project/requests_ntlm/) module MUST be installed for this to work.
+```bash
+python -m pip install requests_ntlm==1.*
+```
+
+You can also authenticate using the currently logged in Microsoft Windows user, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    ntlm:
+      username: ""
+      password: ""
+```
+
+Note that [`requests_negotiate_sspi==0.5.*`](https://pypi.org/project/requests-negotiate-sspi/) module MUST be installed for this to work.
+```bash
+python -m pip install requests_negotiate_sspi==0.5.*
+```
+
 ## Do not expose everything the REST API offers
 
 The default behavior is to expose every endpoint as defined in the OpenAPI definition.
 
 You can change this behavior by:
-* [Selecting HTTP methods to expose](#selecting-http-methods-to-expose)
-* [Selecting tags to include or exclude](#selecting-tags-to-include-or-exclude)
-* [Selecting operation_id to include or exclude](#selecting-operation_id-to-include-or-exclude)
-* [Selecting parameters to include or exclude](#selecting-parameters-to-include-or-exclude)
+
+ * [Selecting HTTP methods to expose](#selecting-http-methods-to-expose)
+ * [Selecting tags to include or exclude](#selecting-tags-to-include-or-exclude)
+ * [Selecting operation_id to include or exclude](#selecting-operation_id-to-include-or-exclude)
+ * [Selecting parameters to include or exclude](#selecting-parameters-to-include-or-exclude)
 
 ### Selecting HTTP methods to expose
 
@@ -446,105 +547,6 @@ my_rest_api:
 ```
 
 You can use dot notation to specify a specific option within a section.
-
-## Authentication
-
-Access to REST API may require authentication.
-
-In such case, the required authentication will be selected according to the OpenAPI definition.
-
-However additional information will be required to be able to perform authentication properly.
-
-The following authentication mechanisms are supported:
-* [API key](#api-key)
-* [OAuth2](#oauth-2)
-* [Basic (name and password)](#basic-name-and-password)
-* [NTLM (Microsoft Windows)](#ntlm-microsoft-windows)
-
-### API key
-
-If accessing the REST API requires to authenticate using an API key, the value can be provided as `api_key` under the `auth` section, as in the following sample:
-```yaml
-my_rest_api:
-  open_api:
-    definition: "https://my_rest_api.com/swagger.json"
-  auth:
-    api_key: "value"
-```
-
-The value can contains environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
-
-The following sample will use the value of `REST_API_KEY` environment variable as the API key:
-```yaml
-my_rest_api:
-  open_api:
-    definition: "https://my_rest_api.com/swagger.json"
-  auth:
-    api_key: "%REST_API_KEY%"
-```
-
-### OAuth 2
-
-If accessing the REST API requires to authenticate using an OAuth2 grant flow, the authentication will be performed using [requests-auth](https://colin-b.github.io/requests_auth/).
-
-Every supported parameter can be provided, as in the following sample:
-```yaml
-my_rest_api:
-  open_api:
-    definition: "https://my_rest_api.com/swagger.json"
-  auth:
-    oauth2:
-      client_id: "A-B-C-D-E"
-```
-
-Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 definition], thus they do not need to be provided.
-
-### Basic (name and password)
-
-If accessing the REST API requires to authenticate using a username and a password, the values can be provided, as in the following sample:
-```yaml
-my_rest_api:
-  open_api:
-    definition: "https://my_rest_api.com/swagger.json"
-  auth:
-    basic:
-      username: "user"
-      password: "pwd"
-```
-
-### NTLM (Microsoft Windows)
-
-If accessing the REST API requires to authenticate using Microsoft Windows, the values can be provided, as in the following sample:
-```yaml
-my_rest_api:
-  open_api:
-    definition: "https://my_rest_api.com/swagger.json"
-  auth:
-    ntlm:
-      username: "domain\\user"
-      password: "pwd"
-```
-
-Note that [`requests_ntlm==1.*`](https://pypi.org/project/requests_ntlm/) module MUST be installed for this to work.
-```bash
-python -m pip install requests_ntlm==1.*
-```
-
-You can also authenticate using the currently logged in Microsoft Windows user, as in the following sample:
-```yaml
-my_rest_api:
-  open_api:
-    definition: "https://my_rest_api.com/swagger.json"
-  auth:
-    ntlm:
-      username: ""
-      password: ""
-```
-
-Note that [`requests_negotiate_sspi==0.5.*`](https://pypi.org/project/requests-negotiate-sspi/) module MUST be installed for this to work.
-```bash
-python -m pip install requests_negotiate_sspi==0.5.*
-```
 
 ## Network
 
