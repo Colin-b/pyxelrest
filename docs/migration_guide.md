@@ -205,4 +205,27 @@ formulas:
         prefix: "my_prefix"
 ```
 
+#### caching
+
+`caching` option was replaced by `cache` option per formula type.
+`max_nb_results` has been renamed to `size` and `result_caching_time` to `duration`.
+
+Previous (0.69.0)
+
+```yaml
+caching:
+    max_nb_results: 100
+    result_caching_time: 1
+```
+
+New (1.0.0)
+
+```yaml
+formulas:
+    dynamic_array:
+        cache:
+            size: 100
+            duration: 1
+```
+
 [Microsoft Excel]: https://products.office.com/en-us/excel

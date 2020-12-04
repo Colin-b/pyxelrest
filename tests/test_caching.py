@@ -70,8 +70,12 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-                "caching": {"result_caching_time": 5},
+                "formulas": {
+                    "dynamic_array": {
+                        "lock_excel": True,
+                        "cache": {"duration": 5},
+                    }
+                },
             }
         },
     )
@@ -119,8 +123,12 @@ def test_post_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-                "caching": {"result_caching_time": 5},
+                "formulas": {
+                    "dynamic_array": {
+                        "lock_excel": True,
+                        "cache": {"duration": 5},
+                    }
+                },
             }
         },
     )
@@ -158,8 +166,12 @@ def test_put_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-                "caching": {"result_caching_time": 5},
+                "formulas": {
+                    "dynamic_array": {
+                        "lock_excel": True,
+                        "cache": {"duration": 5},
+                    }
+                },
             }
         },
     )
@@ -197,8 +209,12 @@ def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
         {
             "caching": {
                 "open_api": {"definition": "http://localhost:8949/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-                "caching": {"result_caching_time": 5},
+                "formulas": {
+                    "dynamic_array": {
+                        "lock_excel": True,
+                        "cache": {"duration": 5},
+                    }
+                },
             }
         },
     )

@@ -181,6 +181,33 @@ my_rest_api:
       prefix: ""
 ```
 
+#### Cache results
+
+To avoid sending queries too often and retrieve results faster, you can cache results in memory.
+
+The default behavior is to always send a new query, even if the exact same one was send a few milliseconds ago.
+
+To cache results, you can use `cache` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  formulas:
+    dynamic_array:
+      cache:
+        duration: 1
+        size: 100
+```
+
+The `duration` is the number of seconds during which a GET request will return previous result for the same query.
+
+The `size` is the maximum number of results to store in cache. The last 100 results will be stored in cache by default.
+
+[`cachetools==4.*`](https://pypi.org/project/cachetools/) module is required for cache to be created.
+```bash
+python -m pip install cachetools==4.*
+```
+
 ### Legacy array formulas
 
 You can generate legacy array formulas, as in the following sample:
@@ -662,20 +689,6 @@ my_rest_api:
 ```
 
 Note: This setting does not apply to `pyxelrest` configuration section, as it is not a REST API.
-
-## Caching
-
-Caching results in-memory to avoid sending the same queries too often.
-
-| Name | Description |
-|------|-------------|
-| result_caching_time | Number of seconds during which a GET request will return previous result. 0 seconds (always send a new request) by default. |
-| max_nb_results | Maximum number of results to store in cache. The last 100 results will be stored in cache by default. |
-
-[`cachetools==4.*`](https://pypi.org/project/cachetools/) module is required.
-```bash
-python -m pip install cachetools==4.*
-```
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md

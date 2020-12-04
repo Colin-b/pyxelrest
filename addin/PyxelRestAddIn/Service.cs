@@ -12,7 +12,6 @@ namespace PyxelRestAddIn
         private static readonly string NETWORK_PROPERTY = "network";
         private static readonly string AUTH_PROPERTY = "auth";
         private static readonly string FORMULAS_PROPERTY = "formulas";
-        private static readonly string CACHING_PROPERTY = "caching";
 
         internal readonly string Name;
         private IList<string> skipUpdateFor;
@@ -21,7 +20,6 @@ namespace PyxelRestAddIn
         public IDictionary<string, object> Network;
         public IDictionary<string, object> Auth;
         public IDictionary<string, object> Formulas;
-        public IDictionary<string, object> Caching;
 
         public Service(string name)
         {
@@ -133,8 +131,23 @@ namespace PyxelRestAddIn
             if (Network != null && Network.ContainsKey("verify"))
                 pythonModules.Add("python-certifi-win32==1.*");
 
-            if (Caching != null && Caching.ContainsKey("result_caching_time"))
-                pythonModules.Add("cachetools==4.*");
+            if (Formulas != null)
+            {
+                foreach (var formula in Formulas)
+                {
+                    IDictionary<string, object> formulaOptions = (IDictionary<string, object>)formula.Value;
+                    if (formulaOptions.ContainsKey("cache"))
+                    {
+                        IDictionary<string, object> formulaCache = (IDictionary<string, object>)formulaOptions["cache"];
+                        if (formulaCache.ContainsKey("result_caching_time"))
+                        {
+                            pythonModules.Add("cachetools==4.*");
+                            break;
+                        }
+                    }
+                }
+                
+            }
 
             if (Auth != null && Auth.ContainsKey("ntlm"))
             {
@@ -199,7 +212,6 @@ namespace PyxelRestAddIn
             Network = UpdateOption(optionsNotToUpdate.ContainsKey(NETWORK_PROPERTY) ? optionsNotToUpdate[NETWORK_PROPERTY] : null, Network, updated.Network);
             Auth = UpdateOption(optionsNotToUpdate.ContainsKey(AUTH_PROPERTY) ? optionsNotToUpdate[AUTH_PROPERTY] : null, Auth, updated.Auth);
             Formulas = UpdateOption(optionsNotToUpdate.ContainsKey(FORMULAS_PROPERTY) ? optionsNotToUpdate[FORMULAS_PROPERTY] : null, Formulas, updated.Formulas);
-            Caching = UpdateOption(optionsNotToUpdate.ContainsKey(CACHING_PROPERTY) ? optionsNotToUpdate[CACHING_PROPERTY] : null, Caching, updated.Caching);
         }
 
         internal void FromConfig(YamlMappingNode section)
@@ -224,10 +236,6 @@ namespace PyxelRestAddIn
 
             var formulas = (YamlMappingNode)GetProperty(section, FORMULAS_PROPERTY);
             Formulas = formulas == null ? DefaultFormulas() : ToDict(formulas);
-
-            var caching = (YamlMappingNode)GetProperty(section, CACHING_PROPERTY);
-            Caching = caching == null ? new Dictionary<string, object>() : ToDict(caching);
-            AddDefault(Caching, DefaultCaching());
         }
 
         internal YamlMappingNode ToConfig()
@@ -255,10 +263,6 @@ namespace PyxelRestAddIn
             if (Formulas != null && Formulas.Count > 0)
                 section.Add(new YamlScalarNode(FORMULAS_PROPERTY), new YamlMappingNode(FromDict(Formulas)));
 
-            RemoveDefault(Caching, DefaultCaching());
-            if (Caching != null && Caching.Count > 0)
-                section.Add(new YamlScalarNode(CACHING_PROPERTY), new YamlMappingNode(FromDict(Caching)));
-
             return section;
         }
 
@@ -270,7 +274,6 @@ namespace PyxelRestAddIn
             Network = DefaultNetwork();
             Auth = DefaultAuth();
             Formulas = DefaultFormulas();
-            Caching = DefaultCaching();
         }
 
         private IDictionary<string, object> DefaultOpenAPI()
@@ -280,7 +283,7 @@ namespace PyxelRestAddIn
 
         private IDictionary<string, object> DefaultFormulas()
         {
-            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{service_name}_" } } } };
+            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{service_name}_" }, { "cache", new Dictionary<string, object>() { { "duration", 0 }, { "size", 100 } } } } } };
         }
 
         private IDictionary<string, object> DefaultNetwork()
@@ -291,11 +294,6 @@ namespace PyxelRestAddIn
         private IDictionary<string, object> DefaultAuth()
         {
             return new Dictionary<string, object>() { { "oauth2", new Dictionary<string, object>() { { "timeout", 60 }, { "header_name", "Authorization" }, { "header_value", "Bearer {token}" } } }, { "basic", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "ntlm", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "api_key", string.Empty } };
-        }
-
-        private IDictionary<string, object> DefaultCaching()
-        {
-            return new Dictionary<string, object>() { { "result_caching_time", 0 }, { "max_nb_results", 100 } };
         }
 
         private void AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)

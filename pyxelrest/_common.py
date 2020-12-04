@@ -70,53 +70,12 @@ class ConfigSection:
         self.auth = service_config.get("auth", {})
         if "api_key" in self.auth:
             self.auth["api_key"] = convert_environment_variable(self.auth["api_key"])
-        caching_conf = service_config.get("caching", {})
-        max_nb_results = (
-            self._to_positive_int(caching_conf.get("max_nb_results")) or 100
-        )
-        result_caching_time = self._to_positive_int(
-            caching_conf.get("result_caching_time")
-        )
-        self.cache = (
-            self._create_cache(max_nb_results, result_caching_time)
-            if result_caching_time
-            else None
-        )
 
     def ensure_unique_function_names(self) -> bool:
         for formula_options in self.formulas.values():
             if "{service_name}" not in formula_options["prefix"]:
                 return False
         return True
-
-    @staticmethod
-    def _create_cache(max_nb_results: int, ttl: int) -> Optional["cachetools.TTLCache"]:
-        """
-        Create a new in-memory cache.
-
-        :param max_nb_results: Maximum number of results that can be stored.
-        :param ttl: max time to live for items in seconds
-        :return The newly created memory cache or None if not created.
-        """
-        try:
-            import cachetools
-
-            return cachetools.TTLCache(max_nb_results, ttl)
-        except ImportError:
-            logger.warning(
-                "cachetools module is required to initialize a memory cache. Results will not be cached."
-            )
-
-    @staticmethod
-    def _to_positive_int(value: Union[str, int]) -> Optional[int]:
-        if value:
-            try:
-                value = int(value)
-                return value if value else None
-            except ValueError:
-                logger.warning(
-                    f"Invalid positive value provided: {value}. Considering as not set."
-                )
 
     def udf_prefix(self, formula_options: dict) -> str:
         return formula_options["prefix"].format(
@@ -217,27 +176,63 @@ class UDFMethod:
 
             self.parameters[udf_parameter.name] = udf_parameter
 
+        cache_options = formula_options.get("cache", {})
+        cache_size = self._to_positive_int(cache_options.get("size")) or 100
+        cache_duration = self._to_positive_int(cache_options.get("duration"))
+        self.cache = (
+            self._create_cache(cache_size, cache_duration) if cache_duration else None
+        )
+
+    @staticmethod
+    def _to_positive_int(value: Union[str, int]) -> Optional[int]:
+        if value:
+            try:
+                value = int(value)
+                return value if value else None
+            except ValueError:
+                logger.warning(
+                    f"Invalid positive value provided: {value}. Considering as not set."
+                )
+
+    @staticmethod
+    def _create_cache(max_nb_results: int, ttl: int) -> Optional["cachetools.TTLCache"]:
+        """
+        Create a new in-memory cache.
+
+        :param max_nb_results: Maximum number of results that can be stored.
+        :param ttl: max time to live for items in seconds
+        :return The newly created memory cache or None if not created.
+        """
+        try:
+            import cachetools
+
+            return cachetools.TTLCache(max_nb_results, ttl)
+        except ImportError:
+            logger.warning(
+                "cachetools module is required to initialize a memory cache. Results will not be cached."
+            )
+
     def get_cached_result(self, request_content: "RequestContent") -> Optional[Any]:
-        if self.service.config.cache is None:
+        if self.cache is None:
             return
-        # Caching is only effective on GET requests
+        # Results are only cached on GET requests
         if "get" != self.requests_method:
             return
 
         request_id = request_content.unique_id()
-        if request_id in self.service.config.cache:
+        if request_id in self.cache:
             logger.debug(f"Retrieving cached result for {request_id}")
-            return self.service.config.cache[request_id]
+            return self.cache[request_id]
         else:
             logger.debug(f"No result yet cached for {request_id}")
 
     def cache_result(self, request_content: "RequestContent", result: Any):
-        if self.service.config.cache is None:
+        if self.cache is None:
             return
 
         request_id = request_content.unique_id()
         logger.debug(f"Cache result for {request_id}")
-        self.service.config.cache[request_id] = result
+        self.cache[request_id] = result
 
     def update_information_on_parameter_type(self, parameter: UDFParameter):
         if parameter.location == "body":
