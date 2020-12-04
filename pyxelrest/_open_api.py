@@ -5,7 +5,7 @@ import re
 from typing import List, Union, Optional, Any, Dict
 from urllib.parse import urlsplit
 
-from pyxelrest import _authentication, _session, _vba, _definition_deserializer
+from pyxelrest import _authentication, _session, _vba
 from pyxelrest._common import (
     ConfigSection,
     UDFMethod,
@@ -15,7 +15,6 @@ from pyxelrest._common import (
     list_to_dict_list,
     Service,
 )
-from pyxelrest._definition_deserializer import Response
 from pyxelrest._exceptions import (
     MandatoryPropertyNotProvided,
     DuplicatedParameters,
