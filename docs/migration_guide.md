@@ -14,7 +14,7 @@ Previous (0.69.0)
 ```python
 import pyxelrest
 
-configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
+configuration = {'petstore': {'open_api': {'definition': 'https://petstore.swagger.io/v2/swagger.json'}}}
 pyxelrest.load(configuration)
 
 import pyxelrest.user_defined_functions
@@ -27,7 +27,7 @@ New (1.0.0)
 ```python
 import pyxelrest
 
-configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
+configuration = {'petstore': {'open_api': {'definition': 'https://petstore.swagger.io/v2/swagger.json'}}}
 pyxelrest.load(configuration)
 
 from pyxelrest.user_defined_functions import petstore

@@ -1,4 +1,4 @@
 petstore:
   open_api:
-    definition: "http://petstore.swagger.io/v2/swagger.json"
+    definition: "https://petstore.swagger.io/v2/swagger.json"
   description: "OpenAPI sample"

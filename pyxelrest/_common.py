@@ -82,8 +82,6 @@ class ConfigSection:
             if result_caching_time
             else None
         )
-        results = service_config.get("result", {})
-        self.flatten_results = bool(results.get("flatten", True))
 
     def ensure_unique_function_names(self) -> bool:
         for formula_options in self.formulas.values():
@@ -191,6 +189,11 @@ class UDFMethod:
             and not formula_options.get("lock_excel", False)
         )
         self.raise_exception = bool(formula_options.get("raise_exception", False))
+        # Keep this value as a string as we might want to consider providing converters in the future
+        self.convert_response = formula_options.get("convert_response", "")
+        if isinstance(self.convert_response, str):
+            self.convert_response = self.to_list
+
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
@@ -268,15 +271,14 @@ class UDFMethod:
     ) -> Union[List[dict], dict]:
         return self.security(request_content) or self.service.config.auth.get("ntlm")
 
-    def json_result(self, response: requests.Response) -> list:
-        logger.debug("Converting JSON string to corresponding python structure...")
-        json_data = response.json() if len(response.content) else ""
+    def to_list(self, response: requests.Response) -> list:
+        if 202 == response.status_code:
+            return [["Status URL"], [response.headers["location"]]]
+        elif response.headers["content-type"] == "application/json":
+            json_data = response.json() if len(response.content) else ""
+            return self.json_to_list(response.status_code, json_data)
 
-        return (
-            self.json_to_list(response.status_code, json_data)
-            if self.service.config.flatten_results
-            else json_data
-        )
+        return convert_to_return_type(response.text[:255], self)
 
     def _create_udf_parameters(self) -> List[UDFParameter]:
         raise NotImplementedError  # pragma: no cover
@@ -489,12 +491,7 @@ def get_result(
         logger.info(
             f"{get_caller_address(caller, excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}]."
         )
-        if 202 == response.status_code:
-            result = [["Status URL"], [response.headers["location"]]]
-        elif response.headers["content-type"] == "application/json":
-            result = udf_method.json_result(response)
-        else:
-            result = convert_to_return_type(response.text[:255], udf_method)
+        result = udf_method.convert_response(response)
         udf_method.cache_result(request_content, result)
         return result
     except requests.ConnectionError as e:

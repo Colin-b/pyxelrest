@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `prefix` option per formula type.
 - Allow to provide the description of the service in the Microsoft Excel add-in.
 - `skip_update_for` option is now allowing dot notation.
+- Allow to provide a custom response converter when using as a python module.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
@@ -44,6 +45,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Microsoft Excel add-in advanced services configuration screen is now handling all resolutions properly.
 - Microsoft Excel add-in now ensure required `extra` python modules are installed if required.
 - Allow to add new configuration sections via auto-update that will not be updated afterwards.
+- Do not attempt to generate user defined functions if xlwings cannot be imported.
+- Do not import xlwings twice if it is already imported (in case user save pyxelrest.xlam file manually while xlwings was imported).
+- Avoid checking trust access to the VBA project object model twice on function generation.
+- Return raw result when using as a python module even if HTTP 202 is received.
+- Return the full response as text when using as a python module, and not only the first 255 characters.
 
 ### Removed
 - Drop support for `python` < `3.8`.
@@ -94,6 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `update_services_config` script now only allows to add services configuration and was renamed to `add_config`.
 - `User-Agent` is now `pyxelrest/X.Y.Z` instead of `PyxelRest vX.Y.Z`. to allow for conventional name and version parsing.
 - `raise_exception` is now specified per formula and is not documented anymore as it makes not sense to change it.
+- `flatten` has been renamed to `convert_response` and is now specified per formula and is not documented anymore as it makes not sense to change it.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

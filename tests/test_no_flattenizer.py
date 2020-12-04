@@ -3072,8 +3072,12 @@ def json_service(responses: RequestsMock, tmpdir):
         {
             "json": {
                 "open_api": {"definition": "http://localhost:8954/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-                "result": {"flatten": False},
+                "formulas": {
+                    "dynamic_array": {
+                        "lock_excel": True,
+                        "convert_response": lambda response: response.json(),
+                    }
+                },
             }
         },
     )
@@ -3082,67 +3086,75 @@ def json_service(responses: RequestsMock, tmpdir):
 def test_mandatory_integer_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=None,
-        query_integer32=None,
-        query_integer64=None,
-        query_number=None,
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_integer is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=None,
+            query_integer32=None,
+            query_integer64=None,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_integer is required."]
+    )
 
 
 def test_mandatory_integer_parameter_with_wrong_type(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer="str value",
-        query_integer32=None,
-        query_integer64=None,
-        query_number=None,
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_integer value \"str value\" (<class 'str'> type) must be an integer."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer="str value",
+            query_integer32=None,
+            query_integer64=None,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == [
+            "query_integer value \"str value\" (<class 'str'> type) must be an integer."
+        ]
+    )
 
 
 def test_optional_integer_parameter_with_wrong_type(json_service):
@@ -3158,34 +3170,37 @@ def test_mandatory_array_integer_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer is required."]
+    )
 
 
 def test_mandatory_array_integer_parameter_provided_as_empty_array(json_service):
@@ -3193,34 +3208,37 @@ def test_mandatory_array_integer_parameter_provided_as_empty_array(json_service)
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[],
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[],
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer is required."]
+    )
 
 
 def test_mandatory_array_integer_parameter_provided_as_none_filled_array(json_service):
@@ -3228,34 +3246,37 @@ def test_mandatory_array_integer_parameter_provided_as_none_filled_array(json_se
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[None],
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[None],
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer is required."]
+    )
 
 
 def test_mandatory_array_integer_parameter_with_wrong_type(json_service):
@@ -3355,34 +3376,37 @@ def test_optional_array_integer_parameter_with_wrong_type_in_array(json_service)
 def test_mandatory_integer32_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=None,
-        query_integer64=None,
-        query_number=None,
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_integer32 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=None,
+            query_integer64=None,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_integer32 is required."]
+    )
 
 
 def test_mandatory_integer32_parameter_with_wrong_type(json_service):
@@ -3435,34 +3459,37 @@ def test_mandatory_array_integer32_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer32 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer32 is required."]
+    )
 
 
 def test_mandatory_array_integer32_parameter_provided_as_empty_array(json_service):
@@ -3470,34 +3497,37 @@ def test_mandatory_array_integer32_parameter_provided_as_empty_array(json_servic
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[],
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer32 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[],
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer32 is required."]
+    )
 
 
 def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
@@ -3507,34 +3537,37 @@ def test_mandatory_array_integer32_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[None],
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer32 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[None],
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer32 is required."]
+    )
 
 
 def test_mandatory_array_integer32_parameter_with_wrong_type(json_service):
@@ -3634,34 +3667,37 @@ def test_optional_array_integer32_parameter_with_wrong_type_in_array(json_servic
 def test_mandatory_integer64_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=None,
-        query_number=None,
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_integer64 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=None,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_integer64 is required."]
+    )
 
 
 def test_mandatory_integer64_parameter_with_wrong_type(json_service):
@@ -3714,34 +3750,37 @@ def test_mandatory_array_integer64_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer64 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer64 is required."]
+    )
 
 
 def test_mandatory_array_integer64_parameter_provided_as_empty_array(json_service):
@@ -3749,34 +3788,37 @@ def test_mandatory_array_integer64_parameter_provided_as_empty_array(json_servic
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[],
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer64 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer64 is required."]
+    )
 
 
 def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
@@ -3786,34 +3828,37 @@ def test_mandatory_array_integer64_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[None],
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_integer64 is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[None],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_integer64 is required."]
+    )
 
 
 def test_mandatory_array_integer64_parameter_with_wrong_type(json_service):
@@ -3913,67 +3958,73 @@ def test_optional_array_integer64_parameter_with_wrong_type_in_array(json_servic
 def test_mandatory_number_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=None,
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_number is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=None,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_number is required."]
+    )
 
 
 def test_mandatory_number_parameter_with_wrong_type(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number="str value",
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_number value \"str value\" (<class 'str'> type) must be a number."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number="str value",
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_number value \"str value\" (<class 'str'> type) must be a number."]
+    )
 
 
 def test_optional_number_parameter_with_wrong_type(json_service):
@@ -3989,34 +4040,37 @@ def test_mandatory_array_number_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_number is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_number is required."]
+    )
 
 
 def test_mandatory_array_number_parameter_provided_as_empty_array(json_service):
@@ -4024,34 +4078,37 @@ def test_mandatory_array_number_parameter_provided_as_empty_array(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[],
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_number is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_number is required."]
+    )
 
 
 def test_mandatory_array_number_parameter_provided_as_none_filled_array(json_service):
@@ -4059,34 +4116,37 @@ def test_mandatory_array_number_parameter_provided_as_none_filled_array(json_ser
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[None],
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_number is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[None],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_number is required."]
+    )
 
 
 def test_mandatory_array_number_parameter_with_wrong_type(json_service):
@@ -4186,67 +4246,73 @@ def test_optional_array_number_parameter_with_wrong_type_in_array(json_service):
 def test_mandatory_float_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=None,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_float is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=None,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_float is required."]
+    )
 
 
 def test_mandatory_float_parameter_with_wrong_type(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float="str value",
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_float value \"str value\" (<class 'str'> type) must be a number."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float="str value",
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_float value \"str value\" (<class 'str'> type) must be a number."]
+    )
 
 
 def test_optional_float_parameter_with_wrong_type(json_service):
@@ -4262,34 +4328,37 @@ def test_mandatory_array_float_number_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_float is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_float is required."]
+    )
 
 
 def test_mandatory_array_float_parameter_provided_as_empty_array(json_service):
@@ -4297,34 +4366,37 @@ def test_mandatory_array_float_parameter_provided_as_empty_array(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[],
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_float is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_float is required."]
+    )
 
 
 def test_mandatory_array_float_parameter_provided_as_none_filled_array(json_service):
@@ -4332,34 +4404,37 @@ def test_mandatory_array_float_parameter_provided_as_none_filled_array(json_serv
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[None],
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_float is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[None],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_float is required."]
+    )
 
 
 def test_mandatory_array_float_parameter_with_wrong_type(json_service):
@@ -4459,67 +4534,73 @@ def test_optional_array_float_parameter_with_wrong_type_in_array(json_service):
 def test_mandatory_double_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=None,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_double is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=None,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_double is required."]
+    )
 
 
 def test_mandatory_double_parameter_with_wrong_type(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double="str value",
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_double value \"str value\" (<class 'str'> type) must be a number."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double="str value",
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_double value \"str value\" (<class 'str'> type) must be a number."]
+    )
 
 
 def test_optional_double_parameter_with_wrong_type(json_service):
@@ -4535,34 +4616,37 @@ def test_mandatory_array_double_number_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_double is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_double is required."]
+    )
 
 
 def test_mandatory_array_double_parameter_provided_as_empty_array(json_service):
@@ -4570,34 +4654,37 @@ def test_mandatory_array_double_parameter_provided_as_empty_array(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[],
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_double is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[],
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_double is required."]
+    )
 
 
 def test_mandatory_array_double_parameter_provided_as_none_filled_array(json_service):
@@ -4605,34 +4692,37 @@ def test_mandatory_array_double_parameter_provided_as_none_filled_array(json_ser
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[None],
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_double is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[None],
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_double is required."]
+    )
 
 
 def test_mandatory_array_double_parameter_with_wrong_type(json_service):
@@ -4732,100 +4822,109 @@ def test_optional_array_double_parameter_with_wrong_type_in_array(json_service):
 def test_mandatory_string_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string=None,
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string=None,
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string is required."]
+    )
 
 
 def test_mandatory_string_parameter_provided_as_empty_array(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string=[],
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string=[],
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string is required."]
+    )
 
 
 def test_mandatory_string_parameter_provided_as_none_filled_array(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string=[None],
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string=[None],
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string is required."]
+    )
 
 
 def test_mandatory_array_string_parameter_not_provided(json_service):
@@ -4833,34 +4932,37 @@ def test_mandatory_array_string_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string is required."]
+    )
 
 
 def test_mandatory_array_string_parameter_provided_as_empty_array(json_service):
@@ -4868,34 +4970,37 @@ def test_mandatory_array_string_parameter_provided_as_empty_array(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=[],
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=[],
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string is required."]
+    )
 
 
 def test_mandatory_array_string_parameter_provided_as_none_filled_array(json_service):
@@ -4903,133 +5008,145 @@ def test_mandatory_array_string_parameter_provided_as_none_filled_array(json_ser
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=[None],
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=[None],
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string is required."]
+    )
 
 
 def test_mandatory_string_byte_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte=None,
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string_byte is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte=None,
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string_byte is required."]
+    )
 
 
 def test_mandatory_string_byte_parameter_provided_as_empty_array(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte=[],
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string_byte is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte=[],
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string_byte is required."]
+    )
 
 
 def test_mandatory_string_byte_parameter_provided_as_none_filled_array(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte=[None],
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string_byte is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte=[None],
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string_byte is required."]
+    )
 
 
 def test_mandatory_array_string_byte_parameter_not_provided(json_service):
@@ -5037,34 +5154,37 @@ def test_mandatory_array_string_byte_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string_byte is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string_byte is required."]
+    )
 
 
 def test_mandatory_array_string_byte_parameter_provided_as_empty_array(json_service):
@@ -5072,34 +5192,37 @@ def test_mandatory_array_string_byte_parameter_provided_as_empty_array(json_serv
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=[],
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string_byte is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=[],
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string_byte is required."]
+    )
 
 
 def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
@@ -5109,133 +5232,145 @@ def test_mandatory_array_string_byte_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=[None],
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string_byte is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=[None],
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string_byte is required."]
+    )
 
 
 def test_mandatory_string_binary_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary=None,
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string_binary is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary=None,
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string_binary is required."]
+    )
 
 
 def test_mandatory_string_binary_parameter_provided_as_empty_array(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary=[],
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string_binary is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary=[],
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string_binary is required."]
+    )
 
 
 def test_mandatory_string_binary_parameter_provided_as_none_filled_array(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary=[None],
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_string_binary is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary=[None],
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_string_binary is required."]
+    )
 
 
 def test_mandatory_array_string_binary_parameter_not_provided(json_service):
@@ -5243,34 +5378,37 @@ def test_mandatory_array_string_binary_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string_binary is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string_binary is required."]
+    )
 
 
 def test_mandatory_array_string_binary_parameter_provided_as_empty_array(json_service):
@@ -5278,34 +5416,37 @@ def test_mandatory_array_string_binary_parameter_provided_as_empty_array(json_se
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=[],
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string_binary is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=[],
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string_binary is required."]
+    )
 
 
 def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
@@ -5315,100 +5456,111 @@ def test_mandatory_array_string_binary_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=[None],
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_string_binary is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=[None],
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_string_binary is required."]
+    )
 
 
 def test_mandatory_boolean_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=None,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_boolean is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=None,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_boolean is required."]
+    )
 
 
 def test_mandatory_boolean_parameter_with_wrong_type(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean="non boolean",
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_boolean value \"non boolean\" (<class 'str'> type) must be a boolean."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean="non boolean",
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == [
+            "query_boolean value \"non boolean\" (<class 'str'> type) must be a boolean."
+        ]
+    )
 
 
 def test_optional_boolean_parameter_with_wrong_type(json_service):
@@ -5424,34 +5576,37 @@ def test_mandatory_array_boolean_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_boolean is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_boolean is required."]
+    )
 
 
 def test_mandatory_array_boolean_parameter_provided_as_empty_array(json_service):
@@ -5459,34 +5614,37 @@ def test_mandatory_array_boolean_parameter_provided_as_empty_array(json_service)
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[],
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_boolean is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[],
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_boolean is required."]
+    )
 
 
 def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(json_service):
@@ -5494,34 +5652,37 @@ def test_mandatory_array_boolean_parameter_provided_as_none_filled_array(json_se
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[None],
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_boolean is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[None],
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_boolean is required."]
+    )
 
 
 def test_mandatory_array_boolean_parameter_with_wrong_type(json_service):
@@ -5621,67 +5782,73 @@ def test_optional_array_boolean_parameter_with_wrong_type_in_array(json_service)
 def test_mandatory_date_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=None,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_date is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=None,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_date is required."]
+    )
 
 
 def test_mandatory_date_parameter_with_wrong_type(json_service):
     from pyxelrest import user_defined_functions
 
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date="str value",
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_date value \"str value\" (<class 'str'> type) must be a date."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date="str value",
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_date value \"str value\" (<class 'str'> type) must be a date."]
+    )
 
 
 def test_optional_date_parameter_with_wrong_type(json_service):
@@ -5697,34 +5864,37 @@ def test_mandatory_array_date_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_date is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_date is required."]
+    )
 
 
 def test_mandatory_array_date_parameter_provided_as_empty_array(json_service):
@@ -5732,34 +5902,37 @@ def test_mandatory_array_date_parameter_provided_as_empty_array(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=[],
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_date is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=[],
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_date is required."]
+    )
 
 
 def test_mandatory_array_date_parameter_provided_as_none_filled_array(json_service):
@@ -5767,34 +5940,37 @@ def test_mandatory_array_date_parameter_provided_as_none_filled_array(json_servi
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=[None],
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_date is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=[None],
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_date is required."]
+    )
 
 
 def test_mandatory_array_date_parameter_with_wrong_type(json_service):
@@ -5802,34 +5978,37 @@ def test_mandatory_array_date_parameter_with_wrong_type(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date="str value",
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_date value \"str value\" (<class 'str'> type) must be a date."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date="str value",
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_date value \"str value\" (<class 'str'> type) must be a date."]
+    )
 
 
 def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service):
@@ -5837,34 +6016,37 @@ def test_mandatory_array_date_parameter_with_wrong_type_in_array(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=["str value"],
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_date value \"str value\" (<class 'str'> type) must be a date."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=["str value"],
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_date value \"str value\" (<class 'str'> type) must be a date."]
+    )
 
 
 def test_optional_array_date_parameter_with_wrong_type(json_service):
@@ -5887,34 +6069,37 @@ def test_mandatory_date_time_parameter_not_provided(json_service):
     from pyxelrest import user_defined_functions
 
     today_date = datetime.date.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=None,
-        query_password=None,
-        query_array_integer=None,
-        query_array_integer32=None,
-        query_array_integer64=None,
-        query_array_number=None,
-        query_array_float=None,
-        query_array_double=None,
-        query_array_string=None,
-        query_array_string_byte=None,
-        query_array_string_binary=None,
-        query_array_boolean=None,
-        query_array_date=None,
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_date_time is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=None,
+            query_password=None,
+            query_array_integer=None,
+            query_array_integer32=None,
+            query_array_integer64=None,
+            query_array_number=None,
+            query_array_float=None,
+            query_array_double=None,
+            query_array_string=None,
+            query_array_string_byte=None,
+            query_array_string_binary=None,
+            query_array_boolean=None,
+            query_array_date=None,
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_date_time is required."]
+    )
 
 
 def test_mandatory_date_time_parameter_with_wrong_type(json_service):
@@ -5968,34 +6153,37 @@ def test_mandatory_array_date_time_parameter_not_provided(json_service):
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=[today_date],
-        query_array_date_time=None,
-        query_array_password=None,
-    ) == ["query_array_date_time is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=[today_date],
+            query_array_date_time=None,
+            query_array_password=None,
+        )
+        == ["query_array_date_time is required."]
+    )
 
 
 def test_mandatory_array_date_time_parameter_provided_as_empty_array(json_service):
@@ -6003,34 +6191,37 @@ def test_mandatory_array_date_time_parameter_provided_as_empty_array(json_servic
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=[today_date],
-        query_array_date_time=[],
-        query_array_password=None,
-    ) == ["query_array_date_time is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=[today_date],
+            query_array_date_time=[],
+            query_array_password=None,
+        )
+        == ["query_array_date_time is required."]
+    )
 
 
 def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
@@ -6040,34 +6231,37 @@ def test_mandatory_array_date_time_parameter_provided_as_none_filled_array(
 
     today_date = datetime.date.today()
     today_datetime = datetime.datetime.today()
-    assert user_defined_functions.json_get_all_parameters_types(
-        query_integer=0,
-        query_integer32=0,
-        query_integer64=0,
-        query_number=0.0,
-        query_float=0.0,
-        query_double=0.0,
-        query_string="str value",
-        query_string_byte="str value",
-        query_string_binary="str value",
-        query_boolean=True,
-        query_date=today_date,
-        query_date_time=today_datetime,
-        query_password="str value",
-        query_array_integer=[0],
-        query_array_integer32=[0],
-        query_array_integer64=[0],
-        query_array_number=[0.0],
-        query_array_float=[0.0],
-        query_array_double=[0.0],
-        query_array_string=["str value"],
-        query_array_string_byte=["str value"],
-        query_array_string_binary=["str value"],
-        query_array_boolean=[True],
-        query_array_date=[today_date],
-        query_array_date_time=[None],
-        query_array_password=None,
-    ) == ["query_array_date_time is required."]
+    assert (
+        user_defined_functions.json_get_all_parameters_types(
+            query_integer=0,
+            query_integer32=0,
+            query_integer64=0,
+            query_number=0.0,
+            query_float=0.0,
+            query_double=0.0,
+            query_string="str value",
+            query_string_byte="str value",
+            query_string_binary="str value",
+            query_boolean=True,
+            query_date=today_date,
+            query_date_time=today_datetime,
+            query_password="str value",
+            query_array_integer=[0],
+            query_array_integer32=[0],
+            query_array_integer64=[0],
+            query_array_number=[0.0],
+            query_array_float=[0.0],
+            query_array_double=[0.0],
+            query_array_string=["str value"],
+            query_array_string_byte=["str value"],
+            query_array_string_binary=["str value"],
+            query_array_boolean=[True],
+            query_array_date=[today_date],
+            query_array_date_time=[None],
+            query_array_password=None,
+        )
+        == ["query_array_date_time is required."]
+    )
 
 
 def test_mandatory_array_date_time_parameter_with_wrong_type(json_service):

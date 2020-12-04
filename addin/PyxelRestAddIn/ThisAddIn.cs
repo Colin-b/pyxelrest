@@ -153,8 +153,8 @@ namespace PyxelRestAddIn
                 VBProject vbProject = GetPyxelRestVBProject();
                 if (vbProject == null)
                     return false;  // This should never happen but still user can manually remove/update the xlam file
-                if (XlWingsIsNotLoaded(vbProject))
-                    LoadXlWings(pyxelRest:vbProject);  // It can happen if UDFs were not supposed to be loaded at startup
+                if (!LoadXlWings(vbProject))
+                    return false;
                 if (reload)
                 {
                     KillPython();
@@ -260,7 +260,6 @@ namespace PyxelRestAddIn
                 {
                     Log.DebugFormat("Activating '{0}' workbook. Generating user defined functions...", Wb.Name);
                     ServiceConfigurationForm.UpdateServices(GetPathToUpToDateConfiguration());
-                    LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
             }
@@ -290,7 +289,6 @@ namespace PyxelRestAddIn
                 {
                     Log.DebugFormat("Opening '{0}' workbook. Generating user defined functions...", Wb.Name);
                     ServiceConfigurationForm.UpdateServices(GetPathToUpToDateConfiguration());
-                    LoadXlWings();
                     ImportUserDefinedFunctions();
                 }
             }
@@ -314,7 +312,6 @@ namespace PyxelRestAddIn
             {
                 Log.Debug("Microsoft Excel started with a blank document. Generating user defined functions...");
                 ServiceConfigurationForm.UpdateServices(GetPathToUpToDateConfiguration());
-                LoadXlWings();
                 ImportUserDefinedFunctions();
             }
         }
@@ -353,27 +350,25 @@ namespace PyxelRestAddIn
             return true;
         }
 
-        private bool LoadXlWings(VBProject pyxelRest=null)
+        private bool LoadXlWings(VBProject vbProject)
         {
             try
             {
-                if (!TrustAccessToTheVBAObjectModel())
-                    return false;
-                VBProject vbProject = pyxelRest == null ? GetPyxelRestVBProject() : pyxelRest;
-                if (vbProject == null)
+                if (XlWingsIsNotLoaded(vbProject))
                 {
-                    Log.Error("PyxelRest VB Project cannot be found.");
-                    return false;
+                    string pathToBasFile = GetSetting("PathToXlWingsBasFile");
+                    if (!File.Exists(pathToBasFile))
+                    {
+                        Log.WarnFormat("No XLWings module can be found to load in '{0}'.", pathToBasFile);
+                        return false;
+                    }
+                    vbProject.VBComponents.Import(pathToBasFile);
+                    Log.Debug("XLWings module imported.");
                 }
-                string pathToBasFile = GetSetting("PathToXlWingsBasFile");
-                if (!File.Exists(pathToBasFile))
+                else
                 {
-                    Log.WarnFormat("No XLWings module can be found to load in '{0}'.", pathToBasFile);
-                    return false;
+                    Log.Debug("XLWings module is already imported. Do not import it again.");
                 }
-
-                vbProject.VBComponents.Import(pathToBasFile);
-                Log.Debug("XLWings module imported.");
                 return true;
             }
             catch (Exception ex)

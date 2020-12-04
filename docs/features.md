@@ -50,7 +50,7 @@ Once at least one REST API has been configured, you will have access to function
 ```python
 import pyxelrest
 
-configuration = {'petstore': {'open_api': {'definition': 'http://petstore.swagger.io/v2/swagger.json'}}}
+configuration = {'petstore': {'open_api': {'definition': 'https://petstore.swagger.io/v2/swagger.json'}}}
 pyxelrest.load(configuration)
 
 from pyxelrest.user_defined_functions import petstore

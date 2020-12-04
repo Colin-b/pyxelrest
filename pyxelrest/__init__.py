@@ -5,7 +5,18 @@ from pyxelrest._exceptions import PyxelRestException
 GENERATE_UDF_ON_IMPORT = True
 
 
-def load(config: dict):
+def _raw(response):
+    if response.headers["content-type"] == "application/json":
+        return response.json()
+
+    return response.text
+
+
+def load(config: dict, to_response: callable = _raw):
+    """
+    :param config: Configuration of all the REST API.
+    :param to_response: Callable converting a requests.Response into the actual response returned by the functions.
+    """
     global GENERATE_UDF_ON_IMPORT
 
     GENERATE_UDF_ON_IMPORT = False
@@ -23,13 +34,10 @@ def load(config: dict):
                     "prefix": "",
                     # Raise HTTP exception
                     "raise_exception": True,
+                    "convert_response": to_response,
                 }
             },
         )
-
-        result = service.setdefault("result", {})
-        # Send raw results if not specified otherwise
-        result.setdefault("flatten", False)
 
     services = _generator.load_services(config)
     _generator.generate_python_file(services)

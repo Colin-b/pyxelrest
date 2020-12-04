@@ -681,12 +681,6 @@ python -m pip install cachetools==4.*
 
 Result related settings.
 
-| Name | Description |
-|------|-------------|
-| flatten | Flatten received JSON to a 2-Dimension array. Default to `true` |
-
-## OpenAPI
-
 TODO Move this setting to Result
 
 | Name | Description | Mandatory | Possible values |
