@@ -84,7 +84,6 @@ class ConfigSection:
         )
         results = service_config.get("result", {})
         self.flatten_results = bool(results.get("flatten", True))
-        self.raise_exception = bool(results.get("raise_exception", False))
 
     def ensure_unique_function_names(self) -> bool:
         for formula_options in self.formulas.values():
@@ -191,6 +190,7 @@ class UDFMethod:
             "vba_compatible" != formula_type
             and not formula_options.get("lock_excel", False)
         )
+        self.raise_exception = bool(formula_options.get("raise_exception", False))
         self.path_parameters = []
         self.required_parameters = []
         self.optional_parameters = []
@@ -550,7 +550,7 @@ def describe_error(response: requests.Response, error: Exception) -> str:
 def handle_exception(
     udf_method: UDFMethod, exception_message: str, exception: Exception
 ):
-    if udf_method.service.config.raise_exception:
+    if udf_method.raise_exception:
         raise exception
 
     return convert_to_return_type(exception_message, udf_method)

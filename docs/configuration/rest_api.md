@@ -684,7 +684,6 @@ Result related settings.
 | Name | Description |
 |------|-------------|
 | flatten | Flatten received JSON to a 2-Dimension array. Default to `true` |
-| raise_exception | Raise received exceptions to client. `false` by default. |
 
 ## OpenAPI
 

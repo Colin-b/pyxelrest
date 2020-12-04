@@ -93,6 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `service_host` option is now `host` within `network` section.
 - `update_services_config` script now only allows to add services configuration and was renamed to `add_config`.
 - `User-Agent` is now `pyxelrest/X.Y.Z` instead of `PyxelRest vX.Y.Z`. to allow for conventional name and version parsing.
+- `raise_exception` is now specified per formula and is not documented anymore as it makes not sense to change it.
 
 ## [0.69.0] - 2018-12-03
 ### Changed
