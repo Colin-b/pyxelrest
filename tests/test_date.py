@@ -1,30 +1,12 @@
 import datetime
 
 from dateutil.tz import tzutc
-import pytest
 from responses import RequestsMock
 
 from tests import loader
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
-        {
-            "usual_parameters": {
-                "open_api": {"definition": "http://test/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-        {
-            "usual_parameters": {
-                "open_api": {"definition": "http://test/", "rely_on_definitions": True},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_get_date(responses: RequestsMock, tmpdir, service_config: dict):
+def test_get_date(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://test/",
@@ -49,7 +31,15 @@ def test_get_date(responses: RequestsMock, tmpdir, service_config: dict):
         },
         match_querystring=True,
     )
-    generated_functions = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://test/date",
@@ -66,24 +56,7 @@ def test_get_date(responses: RequestsMock, tmpdir, service_config: dict):
     ]
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
-        {
-            "usual_parameters": {
-                "open_api": {"definition": "http://test/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-        {
-            "usual_parameters": {
-                "open_api": {"definition": "http://test/", "rely_on_definitions": True},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_get_datetime(responses: RequestsMock, tmpdir, service_config: dict):
+def test_get_datetime(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://test/",
@@ -108,7 +81,15 @@ def test_get_datetime(responses: RequestsMock, tmpdir, service_config: dict):
         },
         match_querystring=True,
     )
-    generated_functions = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://test/datetime",

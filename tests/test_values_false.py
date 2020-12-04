@@ -140,30 +140,20 @@ def values_false_service(responses: RequestsMock):
     )
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
+def test_get_with_zero_integer(
+    responses: RequestsMock,
+    values_false_service,
+    tmpdir,
+):
+    generated_functions = loader.load(
+        tmpdir,
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
-        {
-            "values_false": {
-                "open_api": {
-                    "definition": "http://localhost:8945/",
-                    "rely_on_definitions": True,
-                },
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_get_with_zero_integer(
-    responses: RequestsMock, values_false_service, tmpdir, service_config
-):
-    generated_functions = loader.load(tmpdir, service_config)
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/integer",
@@ -177,30 +167,20 @@ def test_get_with_zero_integer(
     ]
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
+def test_get_with_zero_float(
+    responses: RequestsMock,
+    values_false_service,
+    tmpdir,
+):
+    generated_functions = loader.load(
+        tmpdir,
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
-        {
-            "values_false": {
-                "open_api": {
-                    "definition": "http://localhost:8945/",
-                    "rely_on_definitions": True,
-                },
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_get_with_zero_float(
-    responses: RequestsMock, values_false_service, tmpdir, service_config
-):
-    generated_functions = loader.load(tmpdir, service_config)
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/zero/float",
@@ -214,30 +194,20 @@ def test_get_with_zero_float(
     ]
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
+def test_get_with_false_boolean(
+    responses: RequestsMock,
+    values_false_service,
+    tmpdir,
+):
+    generated_functions = loader.load(
+        tmpdir,
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
-        {
-            "values_false": {
-                "open_api": {
-                    "definition": "http://localhost:8945/",
-                    "rely_on_definitions": True,
-                },
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_get_with_false_boolean(
-    responses: RequestsMock, values_false_service, tmpdir, service_config
-):
-    generated_functions = loader.load(tmpdir, service_config)
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/false/boolean",
@@ -251,30 +221,20 @@ def test_get_with_false_boolean(
     ]
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
+def test_get_with_empty_string(
+    responses: RequestsMock,
+    values_false_service,
+    tmpdir,
+):
+    generated_functions = loader.load(
+        tmpdir,
         {
             "values_false": {
                 "open_api": {"definition": "http://localhost:8945/"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
-        {
-            "values_false": {
-                "open_api": {
-                    "definition": "http://localhost:8945/",
-                    "rely_on_definitions": True,
-                },
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_get_with_empty_string(
-    responses: RequestsMock, values_false_service, tmpdir, service_config
-):
-    generated_functions = loader.load(tmpdir, service_config)
+    )
     responses.add(
         responses.GET,
         url="http://localhost:8945/with/empty/string",

@@ -22,7 +22,6 @@ class PyxelRestConfigSection(ConfigSection):
         :param service_config: Dictionary containing service details.
         """
         ConfigSection.__init__(self, service_name, service_config)
-        self.rely_on_definitions = False
 
 
 class ParseBodyAsParameter(UDFParameter):

@@ -68,7 +68,6 @@ class ServiceConfigSection(ConfigSection):
             raise MandatoryPropertyNotProvided(service_name, "open_api/definition")
 
         self.definition_read_timeout = open_api.get("definition_read_timeout", 5)
-        self.rely_on_definitions = open_api.get("rely_on_definitions")
         self.selected_methods = open_api.get(
             "selected_methods",
             ["get", "post", "put", "delete", "patch", "options", "head"],
@@ -636,18 +635,9 @@ class OpenAPIUDFMethod(UDFMethod):
             self._avoid_duplicated_names(udf_parameters)
 
     def json_to_list(self, status_code: int, json_data: Any) -> list:
-        all_definitions = self.service.open_api_definitions
-
-        if self.service.config.rely_on_definitions:
-            # TODO This is buggy, we need to allow concurrent deserialization
-            _definition_deserializer.all_definitions = {}
-            return Response(self.responses, status_code, all_definitions).rows(
-                json_data
-            )
-
-        return Flattenizer(self.responses, status_code, all_definitions).to_list(
-            json_data
-        )
+        return Flattenizer(
+            self.responses, status_code, self.service.open_api_definitions
+        ).to_list(json_data)
 
 
 class OpenAPI(Service):

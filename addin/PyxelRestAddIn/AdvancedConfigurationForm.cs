@@ -324,17 +324,6 @@ namespace PyxelRestAddIn
                         }
                         #endregion
 
-                        #region Rely on definitions
-                        {
-                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Rely on OpenAPI definitions to re-order fields received in response", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                            var relyOnDefinitions = new CheckBox { Width = PercentWidth(40), Text = "Rely on definitions", Checked = servicePanel.service.OpenAPI.ContainsKey("rely_on_definitions") ? bool.Parse(servicePanel.service.OpenAPI["rely_on_definitions"].ToString()) : false };
-                            tooltip.SetToolTip(relyOnDefinitions, "Deactivated by default as it impact performances.");
-                            relyOnDefinitions.CheckedChanged += RelyOnDefinitions_CheckedChanged;
-                            panel.Controls.Add(relyOnDefinitions, 2, 1);
-                        }
-                        #endregion
-
                         layout.Controls.Add(panel);
                     }
 
@@ -909,11 +898,6 @@ namespace PyxelRestAddIn
         private void VerifySSLCertificate_CheckedChanged(object sender, EventArgs e)
         {
             servicePanel.service.Network["verify"] = ((CheckBox)sender).Checked;
-        }
-
-        private void RelyOnDefinitions_CheckedChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.OpenAPI["rely_on_definitions"] = ((CheckBox)sender).Checked;
         }
 
         private void Host_TextChanged(object sender, EventArgs e)

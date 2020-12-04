@@ -4,24 +4,7 @@ from responses import RequestsMock
 from tests import loader
 
 
-@pytest.mark.parametrize(
-    "service_config",
-    [
-        {
-            "without_parameter": {
-                "open_api": {"definition": "http://test/"},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-        {
-            "without_parameter": {
-                "open_api": {"definition": "http://test/", "rely_on_definitions": True},
-                "formulas": {"dynamic_array": {"lock_excel": True}},
-            }
-        },
-    ],
-)
-def test_plain_without_parameter(responses: RequestsMock, tmpdir, service_config: dict):
+def test_plain_without_parameter(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://test/",
@@ -44,7 +27,15 @@ def test_plain_without_parameter(responses: RequestsMock, tmpdir, service_config
         },
         match_querystring=True,
     )
-    generated_functions = loader.load(tmpdir, service_config)
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "without_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
     responses.add(
         responses.GET,
         url="http://test/test",

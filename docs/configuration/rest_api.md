@@ -677,17 +677,6 @@ Caching results in-memory to avoid sending the same queries too often.
 python -m pip install cachetools==4.*
 ```
 
-## Result
-
-Result related settings.
-
-TODO Move this setting to Result
-
-| Name | Description | Mandatory | Possible values |
-|------|-------------|-----------|-----------------|
-| rely_on_definitions | Rely on [OpenAPI 2.0 definitions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#definitionsObject) to re-order fields received in response. Deactivated by default. | Optional | `true` or `false` |
-
-
 [Microsoft Excel]: https://products.office.com/en-us/excel
 [OpenAPI 2.0 definition]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
 [`requests` timeouts]: https://2.python-requests.org/en/master/user/advanced/#timeouts
