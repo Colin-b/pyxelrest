@@ -61,6 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `update_services_config` script does not allow to list services anymore.
 - `update_services_config` script does not allow to remove services anymore.
 - `update_services_config` script does not allow to update services anymore.
+- `X-PXL-REQUEST` header is not sent anymore to avoid computation and respect a bit more user privacy.
+- `X-PXL-SESSION` header is not sent anymore to respect a bit more user privacy.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.
@@ -88,8 +90,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `headers` are now expected within `network` section.
 - Microsoft Excel add-in now auto-save services configuration as long as the modification are valid.
 - Functions generated when using the python module are not prefixed anymore and must be imported from the module corresponding to the REST API.
-- `service_host` option is now `host`.
+- `service_host` option is now `host` within `network` section.
 - `update_services_config` script now only allows to add services configuration and was renamed to `add_config`.
+- `User-Agent` is now `pyxelrest/X.Y.Z` instead of `PyxelRest vX.Y.Z`. to allow for conventional name and version parsing.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

@@ -299,7 +299,7 @@ namespace PyxelRestAddIn
 
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.OpenAPI.ContainsKey("host") ? servicePanel.service.OpenAPI["host"].ToString() : string.Empty };
+                        var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.Network.ContainsKey("host") ? servicePanel.service.Network["host"].ToString() : string.Empty };
                         tooltip.SetToolTip(host, "Usefull when host is not provided in the OpenAPI definition and API is behind a reverse proxy.");
                         host.TextChanged += Host_TextChanged;
                         panel.Controls.Add(host, 1, 1);
@@ -919,9 +919,9 @@ namespace PyxelRestAddIn
         private void Host_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.OpenAPI.Remove("host");
+                servicePanel.service.Network.Remove("host");
             else
-                servicePanel.service.OpenAPI["host"] = ((TextBox)sender).Text;
+                servicePanel.service.Network["host"] = ((TextBox)sender).Text;
         }
 
         private void Patch_CheckedChanged(object sender, EventArgs e)

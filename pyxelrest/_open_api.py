@@ -68,7 +68,6 @@ class ServiceConfigSection(ConfigSection):
             raise MandatoryPropertyNotProvided(service_name, "open_api/definition")
 
         self.definition_read_timeout = open_api.get("definition_read_timeout", 5)
-        self.host = open_api.get("host")
         self.rely_on_definitions = open_api.get("rely_on_definitions")
         self.selected_methods = open_api.get(
             "selected_methods",
@@ -690,7 +689,7 @@ class OpenAPI(Service):
 
         # host property is here to handle REST API behind a reverse proxy
         # (otherwise host will be the reverse proxy one when retrieving it from the URL)
-        host = self.open_api_definition.get("host", config.host)
+        host = self.open_api_definition.get("host", config.network.get("host"))
         if not host:
             # The default host to be used is the host serving the documentation (including the port).
             if open_api_definition_url:

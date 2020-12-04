@@ -550,21 +550,118 @@ You can use dot notation to specify a specific option within a section.
 
 ## Network
 
-Contains network related settings such as HTTP timeouts or proxies configuration.
+### Automatic retry in case of network failure or timeout
 
-| Name | Description | Possible values |
-|------|-------------|-----------------|
-| max_retries | Maximum number of time a request should be retried before considered as failed. 5 by default. | Any positive integer value |
-| connect_timeout | Maximum amount of time, in seconds, to wait when trying to reach the service. Wait for 1 second by default. For more details refer to [`requests` timeouts] | any float value |
-| read_timeout | Maximum amount of time, in seconds, to wait when requesting a service. Wait for 5 seconds by default. For more details refer to [`requests` timeouts] | any float value |
-| proxies | Proxies that should be used to reach service. This is a dictionary where keys are the scheme (http or https) and/or no_proxy. If the key is a scheme then the value should be the proxy URL. Otherwise the value should be the URL for which proxies should be ignored. For more details refer to [`requests` documentation](https://requests.readthedocs.io/en/master/user/advanced/#proxies) | |
-| verify | Verify SSL certificate for HTTPS requests. Default to `true`. For more details refer to [`requests` documentation](https://2.python-requests.org/en/master/user/advanced/#ssl-cert-verification). If you are using an internal certificate store (company certificates), you will most likely need to install `python-certifi-win32` | |
-| headers | Dictionary containing headers were key is the name of the header that should be sent with every request sent to this service. | |
+By default, pyxelrest will resend a HTTP query 5 times until reporting a failure.
+
+To change this behavior, you can set `max_retries` within `network` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  network:
+    max_retries: 0
+```
+
+### Establishing an HTTP connection on slow network
+
+By default, pyxelrest will wait for 1 second for a connection to be established.
+
+To change this behavior, you can set `connect_timeout` within `network` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  network:
+    connect_timeout: 5
+```
+
+This will be the maximum amount of time, in seconds, to wait when trying to reach the REST API.
+For more details refer to [`requests` timeouts].
+
+### Performing long HTTP queries
+
+By default, pyxelrest will wait for 5 seconds for a response to be received.
+
+To change this behavior, you can set `read_timeout` within `network` section as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  network:
+    read_timeout: 60
+```
+
+This will be the maximum amount of time, in seconds, to wait when requesting the REST API.
+For more details refer to [`requests` timeouts].
+
+### Trusting HTTPS certificate
+
+By default, pyxelrest will verify SSL certificate for HTTPS requests.
+
+If you are using an internal certificate store (company certificates), you will most likely need to install `python-certifi-win32`
+
+For more details refer to [`requests` documentation](https://2.python-requests.org/en/master/user/advanced/#ssl-cert-verification). 
+
+To disable this check (not advised), you can set `verify` within `network` section to `false` as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  network:
+    verify: false
+```
+
+### Providing custom proxying rules
+
+By default, pyxelrest will use the proxies defined on `HTTP_PROXY` (for `http://` REST API) and `HTTPS_PROXY` (for `https://` REST API) environment variables.
+
+To change this behavior, you can set `proxies` within `network` section to a dictionary as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "http://my_rest_api.com/swagger.json"
+  network:
+    proxies:
+      http://my_rest_api.com: "http://custom_proxy"
+      https://my_rest_api.com: "http://custom_proxy"
+      no_proxy: "http://my_other_rest_api.com"
+```
+
+For more details refer to [`requests` documentation](https://requests.readthedocs.io/en/master/user/advanced/#proxies)
+
+### Sending headers with every request
+
+The only header pyxelrest will send is `User-Agent` with value set to `pyxelrest/` followed by the version number.
+eg. `pyxelrest/1.0.0` for pyxelrest version `1.0.0`.
+
+You can add more headers to outgoing requests by setting `headers` within `network` section to a dictionary as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "http://my_rest_api.com/swagger.json"
+  network:
+    headers:
+      X-PXL-USERNAME: "%USERNAME%"
+      X-PXL-CUSTOM: "a custom value"
+```
 
 Header values can be environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
-OpenAPI
-| host | Service host in case your service is behind a reverse proxy and `basePath` is not properly set in [OpenAPI 2.0 definition]. | Optional | |
+### Overriding host for REST API behind a reverse proxy
+
+In case your REST API definition is behind a reverse proxy, and `basePath` is not properly set in the [OpenAPI 2.0 definition].
+
+You can overcome this by setting `host` within `network` section to the path of the service as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "http://my_rest_api.com/swagger.json"
+  network:
+    host: "my_reverse_proxy_host/my_api"
+```
+
+Note: This setting does not apply to `pyxelrest` configuration section, as it is not a REST API.
 
 ## Caching
 

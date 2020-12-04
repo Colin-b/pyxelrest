@@ -171,7 +171,7 @@ network:
 
 #### service_host
 
-`service_host` option within `open_api` section is now `host` option within `open_api` section.
+`service_host` option within `open_api` section is now `host` option within `network` section.
 
 Previous (0.69.0)
 
@@ -183,7 +183,7 @@ open_api:
 New (1.0.0)
 
 ```yaml
-open_api:
+network:
     host: "my_reverse_proxy/api"
 ```
 

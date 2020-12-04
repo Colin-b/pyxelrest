@@ -123,29 +123,13 @@ def test_get_header_parameter_sync(
     )
 
 
-class DateTimeMock:
-    @staticmethod
-    def today():
-        class UTCDateTimeMock:
-            @staticmethod
-            def isoformat():
-                return "2018-10-11T15:05:05.663979"
-
-        return UTCDateTimeMock
-
-
-class DateTimeModuleMock:
-    datetime = DateTimeMock
-
-
 def test_get_header_advanced_configuration(
-    responses: RequestsMock, header_parameter_service, monkeypatch, tmpdir
+    responses: RequestsMock, header_parameter_service, tmpdir
 ):
     import pyxelrest._session
     from pyxelrest import __version__
 
-    pyxelrest._session.sessions.clear()
-    monkeypatch.setattr(pyxelrest._session, "datetime", DateTimeModuleMock)
+    pyxelrest._session._sessions.clear()
     generated_functions = loader.load(
         tmpdir,
         {
@@ -177,7 +161,5 @@ def test_get_header_advanced_configuration(
     assert headers["X-Pxl-Custom"] == "MyCustomValue"
     assert headers["X-Pxl-Other"] == "MyOtherValue"
     assert headers["X-Pxl-Envvar"] == os.environ["USERNAME"]
-    assert headers["X-Pxl-Request"]
-    assert headers["User-Agent"] == f"PyxelRest v{__version__}"
+    assert headers["User-Agent"] == f"pyxelrest/{__version__}"
     assert headers["X-Pxl-Caller"] == ""
-    assert headers["X-Pxl-Session"] == "2018-10-11T15:05:05.663979"
