@@ -458,8 +458,8 @@ However additional information will be required to be able to perform authentica
 The following authentication mechanisms are supported:
 * [API key](#api-key)
 * [OAuth2](#oauth-2)
-* [Basic](#basic)
-* [NTLM](#ntlm)
+* [Basic (name and password)](#basic-name-and-password)
+* [NTLM (Microsoft Windows)](#ntlm-microsoft-windows)
 
 ### API key
 
@@ -485,36 +485,63 @@ my_rest_api:
 
 ### OAuth 2
 
-| oauth2 | Dictionary containing OAuth2 authentication related settings.
+If accessing the REST API requires to authenticate using an OAuth2 grant flow, the authentication will be performed using [requests-auth](https://colin-b.github.io/requests_auth/).
 
-Depending on the flow, every parameter supported by [requests-auth](https://colin-b.github.io/requests_auth/) can be provided.
+Every supported parameter can be provided, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    oauth2:
+      client_id: "A-B-C-D-E"
+```
 
 Note that `token_url` and `authorization_url` are extracted from [OpenAPI 2.0 definition], thus they do not need to be provided.
 
-### Basic
+### Basic (name and password)
 
-| basic | Dictionary containing Basic authentication related settings.
+If accessing the REST API requires to authenticate using a username and a password, the values can be provided, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    basic:
+      username: "user"
+      password: "pwd"
+```
 
-| Name | Description | Mandatory |
-|------|-------------|-----------|
-| username | User name | Mandatory |
-| password | User password | Mandatory |
+### NTLM (Microsoft Windows)
 
-### NTLM
+If accessing the REST API requires to authenticate using Microsoft Windows, the values can be provided, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    ntlm:
+      username: "domain\\user"
+      password: "pwd"
+```
 
-| ntlm | Dictionary containing NTLM authentication related settings.
-
-| Name | Description |
-|------|-------------|
-| username | User name. Should be of the form `domain\\user`. Default value is the logged in user name. |
-| password | User password. Default value is the logged in user password. |
-
-In case user credentials are provided, [`requests_ntlm==1.*`](https://pypi.org/project/requests_ntlm/) module is required.
+Note that [`requests_ntlm==1.*`](https://pypi.org/project/requests_ntlm/) module MUST be installed for this to work.
 ```bash
 python -m pip install requests_ntlm==1.*
 ```
 
-In case user credentials are not provided (using logged in user credentials), [`requests_negotiate_sspi==0.5.*`](https://pypi.org/project/requests-negotiate-sspi/) module is required.
+You can also authenticate using the currently logged in Microsoft Windows user, as in the following sample:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+  auth:
+    ntlm:
+      username: ""
+      password: ""
+```
+
+Note that [`requests_negotiate_sspi==0.5.*`](https://pypi.org/project/requests-negotiate-sspi/) module MUST be installed for this to work.
 ```bash
 python -m pip install requests_negotiate_sspi==0.5.*
 ```
