@@ -37,13 +37,17 @@ namespace PyxelRestAddIn
 
         private CheckBox dynamicArrayFormulasLockExcel;
         private TextBox dynamicArrayFormulasPrefix;
+        private NumericUpDown dynamicArrayFormulasCacheDuration;
+        private NumericUpDown dynamicArrayFormulasCacheSize;
 
         private CheckBox legacyArrayFormulasLockExcel;
         private TextBox legacyArrayFormulasPrefix;
+        private NumericUpDown legacyArrayFormulasCacheDuration;
+        private NumericUpDown legacyArrayFormulasCacheSize;
 
         private TextBox vbaCompatibleFormulasPrefix;
-
-        private NumericUpDown maxNbresults;
+        private NumericUpDown vbaCompatibleFormulasCacheDuration;
+        private NumericUpDown vbaCompatibleFormulasCacheSize;
 
         public AdvancedConfigurationForm(ServicePanel servicePanel)
         {
@@ -134,24 +138,33 @@ namespace PyxelRestAddIn
                     }
 
                     layout.Controls.Add(panel);
+                    layout.SetColumnSpan(panel, 5);
+                }
+                #endregion
+
+                #region Formulas headers
+                {
+
+                    layout.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 1);
+                    layout.Controls.Add(new Label { Width = PercentWidth(10), Text = "Cache duration", TextAlign = ContentAlignment.BottomLeft }, 2, 1);
+                    layout.Controls.Add(new Label { Width = PercentWidth(8), Text = "Cache Size", TextAlign = ContentAlignment.BottomLeft }, 3, 1);
                 }
                 #endregion
 
                 #region Dynamic array formulas
                 {
-                    var panel = new TableLayoutPanel { AutoSize = true };
                     Dictionary<string, object> dynamicArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("dynamic_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["dynamic_array"] : new Dictionary<string, object>();
+                    IDictionary<string, object> dynamicArrayFormulasCacheOptions = dynamicArrayFormulasOptions.ContainsKey("cache") ? (Dictionary<string, object>)dynamicArrayFormulasOptions["cache"] : new Dictionary<string, object>();
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var dynamicArrayFormulas = new CheckBox { Text = "Dynamic array", Checked = dynamicArrayFormulasOptions.Count > 0, Width = PercentWidth(20) };
+                        var dynamicArrayFormulas = new CheckBox { Text = "Dynamic array", Checked = dynamicArrayFormulasOptions.Count > 0, Width = PercentWidth(15) };
                         tooltip.SetToolTip(dynamicArrayFormulas, "If your version of Microsoft Excel supports dynamic array formulas, results will be spilled.\nOtherwise results will only fill selected cells.");
                         dynamicArrayFormulas.CheckedChanged += DynamicArrayFormulas_CheckedChanged;
-                        panel.Controls.Add(dynamicArrayFormulas, 0, 0);
+                        layout.Controls.Add(dynamicArrayFormulas, 0, 2);
                     }
                     {
-                        panel.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var prefix = dynamicArrayFormulasOptions.ContainsKey("prefix") ? (string)dynamicArrayFormulasOptions["prefix"] : "{service_name}_";
@@ -159,27 +172,45 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(dynamicArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
                         dynamicArrayFormulasPrefix.TextChanged += DynamicArrayFormulasPrefix_TextChanged;
                         dynamicArrayFormulasPrefix.Enabled = dynamicArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(dynamicArrayFormulasPrefix, 2, 0);
+                        layout.Controls.Add(dynamicArrayFormulasPrefix, 1, 2);
+                    }
+                    int cacheDuration = dynamicArrayFormulasCacheOptions.ContainsKey("duration") ? int.Parse(dynamicArrayFormulasCacheOptions["duration"].ToString()) : (int)Service.DefaultFormulasCache["duration"];
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        dynamicArrayFormulasCacheDuration = new NumericUpDown { Maximum = int.MaxValue, Value = cacheDuration };
+                        tooltip.SetToolTip(dynamicArrayFormulasCacheDuration, "Always send a new request by default (0 seconds means that caching is disabled).");
+                        dynamicArrayFormulasCacheDuration.TextChanged += DynamicArrayFormulasCacheDuration_TextChanged;
+                        dynamicArrayFormulasCacheDuration.Enabled = dynamicArrayFormulasOptions.Count > 0;
+                        layout.Controls.Add(dynamicArrayFormulasCacheDuration, 2, 2);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        int cacheSize = dynamicArrayFormulasCacheOptions.ContainsKey("size") ? int.Parse(dynamicArrayFormulasCacheOptions["size"].ToString()) : (int)Service.DefaultFormulasCache["size"];
+                        dynamicArrayFormulasCacheSize = new NumericUpDown { Maximum = int.MaxValue, Value = cacheSize };
+                        tooltip.SetToolTip(dynamicArrayFormulasCacheSize, "Store the last 100 results by default (if caching is enabled).");
+                        dynamicArrayFormulasCacheSize.TextChanged += DynamicArrayFormulasCacheSize_TextChanged;
+                        dynamicArrayFormulasCacheSize.Enabled = dynamicArrayFormulasOptions.Count > 0 && cacheDuration > 0;
+                        layout.Controls.Add(dynamicArrayFormulasCacheSize, 3, 2);
                     }
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var synchronousChecked = dynamicArrayFormulasOptions.ContainsKey("lock_excel") ? (bool)dynamicArrayFormulasOptions["lock_excel"] : false;
-                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for dynamic array result", Checked = synchronousChecked, Width = PercentWidth(30) };
+                        dynamicArrayFormulasLockExcel = new CheckBox { Text = "Wait for dynamic array result", Checked = synchronousChecked, Width = PercentWidth(22) };
                         tooltip.SetToolTip(dynamicArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
                         dynamicArrayFormulasLockExcel.CheckedChanged += DynamicArrayFormulasLockExcel_CheckedChanged;
                         dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(dynamicArrayFormulasLockExcel, 3, 0);
+                        layout.Controls.Add(dynamicArrayFormulasLockExcel, 4, 2);
                     }
-
-                    layout.Controls.Add(panel);
                 }
                 #endregion
 
                 #region Legacy array formulas
                 {
-                    var panel = new TableLayoutPanel { AutoSize = true };
                     Dictionary<string, object> legacyArrayFormulasOptions = servicePanel.service.Formulas.ContainsKey("legacy_array") ? (Dictionary<string, object>)servicePanel.service.Formulas["legacy_array"] : new Dictionary<string, object>();
+                    IDictionary<string, object> legacyArrayFormulasCacheOptions = legacyArrayFormulasOptions.ContainsKey("cache") ? (Dictionary<string, object>)legacyArrayFormulasOptions["cache"] : new Dictionary<string, object>();
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -187,10 +218,9 @@ namespace PyxelRestAddIn
                         var legacyArrayFormulas = new CheckBox { Text = "Legacy array", Checked = legacyArrayFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(legacyArrayFormulas, "If your version of Microsoft Excel does not supports dynamic array formulas, use this to spill results.");
                         legacyArrayFormulas.CheckedChanged += LegacyArrayFormulas_CheckedChanged;
-                        panel.Controls.Add(legacyArrayFormulas, 0, 0);
+                        layout.Controls.Add(legacyArrayFormulas, 0, 3);
                     }
                     {
-                        panel.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var prefix = legacyArrayFormulasOptions.ContainsKey("prefix") ? (string)legacyArrayFormulasOptions["prefix"] : "legacy_{service_name}_";
@@ -198,7 +228,27 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(legacyArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
                         legacyArrayFormulasPrefix.TextChanged += LegacyArrayFormulasPrefix_TextChanged;
                         legacyArrayFormulasPrefix.Enabled = legacyArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(legacyArrayFormulasPrefix, 2, 0);
+                        layout.Controls.Add(legacyArrayFormulasPrefix, 1, 3);
+                    }
+                    int cacheDuration = legacyArrayFormulasOptions.ContainsKey("duration") ? int.Parse(legacyArrayFormulasOptions["duration"].ToString()) : (int)Service.DefaultFormulasCache["duration"];
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        legacyArrayFormulasCacheDuration = new NumericUpDown { Maximum = int.MaxValue, Value = cacheDuration };
+                        tooltip.SetToolTip(legacyArrayFormulasCacheDuration, "Always send a new request by default (0 seconds means that caching is disabled).");
+                        legacyArrayFormulasCacheDuration.TextChanged += LegacyArrayFormulasCacheDuration_TextChanged;
+                        legacyArrayFormulasCacheDuration.Enabled = legacyArrayFormulasOptions.Count > 0;
+                        layout.Controls.Add(legacyArrayFormulasCacheDuration, 2, 3);
+                    }
+                    {
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        int cacheSize = legacyArrayFormulasOptions.ContainsKey("size") ? int.Parse(legacyArrayFormulasOptions["size"].ToString()) : (int)Service.DefaultFormulasCache["size"];
+                        legacyArrayFormulasCacheSize = new NumericUpDown { Maximum = int.MaxValue, Value = cacheSize };
+                        tooltip.SetToolTip(legacyArrayFormulasCacheSize, "Store the last 100 results by default (if caching is enabled).");
+                        legacyArrayFormulasCacheSize.TextChanged += LegacyArrayFormulasCacheSize_TextChanged;
+                        legacyArrayFormulasCacheSize.Enabled = legacyArrayFormulasOptions.Count > 0 && cacheDuration > 0;
+                        layout.Controls.Add(legacyArrayFormulasCacheSize, 3, 3);
                     }
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Lock Microsoft Excel while waiting for results", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -208,17 +258,15 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(legacyArrayFormulasLockExcel, "Uncheck to still be able to use Microsoft Excel while waiting for results.");
                         legacyArrayFormulasLockExcel.CheckedChanged += LegacyArrayFormulasLockExcel_CheckedChanged;
                         legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasOptions.Count > 0;
-                        panel.Controls.Add(legacyArrayFormulasLockExcel, 3, 0);
+                        layout.Controls.Add(legacyArrayFormulasLockExcel, 4, 3);
                     }
-
-                    layout.Controls.Add(panel);
                 }
                 #endregion
 
                 #region Visual Basic compatible formulas
                 {
-                    var panel = new TableLayoutPanel { AutoSize = true };
                     Dictionary<string, object> vbaCompatibleFormulasOptions = servicePanel.service.Formulas.ContainsKey("vba_compatible") ? (Dictionary<string, object>)servicePanel.service.Formulas["vba_compatible"] : new Dictionary<string, object>();
+                    IDictionary<string, object> vbaCompatibleFormulasCacheOptions = vbaCompatibleFormulasOptions.ContainsKey("cache") ? (Dictionary<string, object>)vbaCompatibleFormulasOptions["cache"] : new Dictionary<string, object>();
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Generate VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -226,10 +274,9 @@ namespace PyxelRestAddIn
                         var vbaCompatibleFormulas = new CheckBox { Text = "Visual basic", Checked = vbaCompatibleFormulasOptions.Count > 0, Width = PercentWidth(20) };
                         tooltip.SetToolTip(vbaCompatibleFormulas, "Use this formula behavior if you want to call it using Visual Basic for Applications (VBA).");
                         vbaCompatibleFormulas.CheckedChanged += VBACompatibleFormulas_CheckedChanged;
-                        panel.Controls.Add(vbaCompatibleFormulas, 0, 0);
+                        layout.Controls.Add(vbaCompatibleFormulas, 0, 4);
                     }
                     {
-                        panel.Controls.Add(new Label { Width = PercentWidth(5), Text = "Prefix", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var prefix = vbaCompatibleFormulasOptions.ContainsKey("prefix") ? (string)vbaCompatibleFormulasOptions["prefix"] : "vba_{service_name}_";
@@ -237,45 +284,28 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(vbaCompatibleFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
                         vbaCompatibleFormulasPrefix.TextChanged += VBACompatibleFormulasPrefix_TextChanged;
                         vbaCompatibleFormulasPrefix.Enabled = vbaCompatibleFormulasOptions.Count > 0;
-                        panel.Controls.Add(vbaCompatibleFormulasPrefix, 2, 0);
+                        layout.Controls.Add(vbaCompatibleFormulasPrefix, 1, 4);
                     }
-
-                    layout.Controls.Add(panel);
-                }
-                #endregion
-
-                #region Caching settings
-                {
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    #region Result caching time
+                    int cacheDuration = vbaCompatibleFormulasCacheOptions.ContainsKey("duration") ? int.Parse(vbaCompatibleFormulasCacheOptions["duration"].ToString()) : (int)Service.DefaultFormulasCache["duration"];
                     {
-                        panel.Controls.Add(new Label { Width = PercentWidth(20), Text = "Result caching time", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Number of seconds during which a GET request will return previous result.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var resultCachingTime = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(10), Value = int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) };
-                        tooltip.SetToolTip(resultCachingTime, "Always send a new request by default (0 seconds means that caching is disabled).");
-                        resultCachingTime.TextChanged += CachingResultTime_TextChanged;
-                        panel.Controls.Add(resultCachingTime, 1, 1);
+                        vbaCompatibleFormulasCacheDuration = new NumericUpDown { Maximum = int.MaxValue, Value = cacheDuration };
+                        tooltip.SetToolTip(vbaCompatibleFormulasCacheDuration, "Always send a new request by default (0 seconds means that caching is disabled).");
+                        vbaCompatibleFormulasCacheDuration.TextChanged += VBACompatibleFormulasCacheDuration_TextChanged;
+                        vbaCompatibleFormulasCacheDuration.Enabled = vbaCompatibleFormulasOptions.Count > 0;
+                        layout.Controls.Add(vbaCompatibleFormulasCacheDuration, 2, 4);
                     }
-                    #endregion
-
-                    #region Maximum number of results
                     {
-                        panel.Controls.Add(new Label { Width = PercentWidth(20), Text = "Maximum number of results", TextAlign = ContentAlignment.BottomLeft }, 2, 1);
-
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of results to store in cache.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        maxNbresults = new NumericUpDown { Maximum = int.MaxValue, Width = PercentWidth(10), Value = int.Parse(servicePanel.service.Caching["max_nb_results"].ToString()) };
-                        tooltip.SetToolTip(maxNbresults, "Store the last 100 results by default (if caching is enabled).");
-                        maxNbresults.TextChanged += CachingMaxNumber_TextChanged;
-                        maxNbresults.Enabled = int.Parse(servicePanel.service.Caching["result_caching_time"].ToString()) > 0;
-                        panel.Controls.Add(maxNbresults, 3, 1);
+                        int cacheSize = vbaCompatibleFormulasCacheOptions.ContainsKey("size") ? int.Parse(vbaCompatibleFormulasCacheOptions["size"].ToString()) : (int)Service.DefaultFormulasCache["size"];
+                        vbaCompatibleFormulasCacheSize = new NumericUpDown { Maximum = int.MaxValue, Value = cacheSize };
+                        tooltip.SetToolTip(vbaCompatibleFormulasCacheSize, "Store the last 100 results by default (if caching is enabled).");
+                        vbaCompatibleFormulasCacheSize.TextChanged += VBACompatibleFormulasCacheSize_TextChanged;
+                        vbaCompatibleFormulasCacheSize.Enabled = vbaCompatibleFormulasOptions.Count > 0 && cacheDuration > 0;
+                        layout.Controls.Add(vbaCompatibleFormulasCacheSize, 3, 4);
                     }
-                    #endregion
-
-                    layout.Controls.Add(panel);
                 }
                 #endregion
 
@@ -807,17 +837,6 @@ namespace PyxelRestAddIn
                 ntlmOptions["username"] = ((TextBox)sender).Text;
         }
 
-        private void CachingResultTime_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Caching["result_caching_time"] = ((NumericUpDown)sender).Value;
-            maxNbresults.Enabled = ((NumericUpDown)sender).Value > 0;
-        }
-
-        private void CachingMaxNumber_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Caching["max_nb_results"] = ((NumericUpDown)sender).Value;
-        }
-
         private void BasicPassword_TextChanged(object sender, EventArgs e)
         {
             var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
@@ -961,6 +980,8 @@ namespace PyxelRestAddIn
                 servicePanel.service.Formulas["legacy_array"] = new Dictionary<string, object>();
                 LegacyArrayFormulasLockExcel_CheckedChanged();
                 LegacyArrayFormulasPrefix_TextChanged();
+                LegacyArrayFormulasCacheDuration_TextChanged();
+                LegacyArrayFormulasCacheSize_TextChanged();
             }
             else
             {
@@ -969,6 +990,8 @@ namespace PyxelRestAddIn
 
             legacyArrayFormulasLockExcel.Enabled = legacyArrayFormulasChecked;
             legacyArrayFormulasPrefix.Enabled = legacyArrayFormulasChecked;
+            legacyArrayFormulasCacheDuration.Enabled = legacyArrayFormulasChecked;
+            legacyArrayFormulasCacheSize.Enabled = legacyArrayFormulasChecked && legacyArrayFormulasCacheDuration.Value > 0;
         }
 
         private void LegacyArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
@@ -991,6 +1014,27 @@ namespace PyxelRestAddIn
             AddValueToFormulasSubSection("legacy_array", "prefix", legacyArrayFormulasPrefix.Text);
         }
 
+        private void LegacyArrayFormulasCacheDuration_TextChanged(object sender, EventArgs e)
+        {
+            legacyArrayFormulasCacheSize.Enabled = ((NumericUpDown)sender).Value > 0;
+            LegacyArrayFormulasCacheDuration_TextChanged();
+        }
+
+        private void LegacyArrayFormulasCacheDuration_TextChanged()
+        {
+            AddValueToFormulasCache("legacy_array", "duration", legacyArrayFormulasCacheDuration.Value);
+        }
+
+        private void LegacyArrayFormulasCacheSize_TextChanged(object sender, EventArgs e)
+        {
+            LegacyArrayFormulasCacheSize_TextChanged();
+        }
+
+        private void LegacyArrayFormulasCacheSize_TextChanged()
+        {
+            AddValueToFormulasCache("legacy_array", "size", legacyArrayFormulasCacheSize.Value);
+        }
+
         private void DynamicArrayFormulas_CheckedChanged(object sender, EventArgs e)
         {
             bool dynamicArrayFormulasChecked = ((CheckBox)sender).Checked;
@@ -999,6 +1043,8 @@ namespace PyxelRestAddIn
                 servicePanel.service.Formulas["dynamic_array"] = new Dictionary<string, object>();
                 DynamicArrayFormulasLockExcel_CheckedChanged();
                 DynamicArrayFormulasPrefix_TextChanged();
+                DynamicArrayFormulasCacheDuration_TextChanged();
+                DynamicArrayFormulasCacheSize_TextChanged();
             }
             else
             {
@@ -1007,6 +1053,8 @@ namespace PyxelRestAddIn
 
             dynamicArrayFormulasLockExcel.Enabled = dynamicArrayFormulasChecked;
             dynamicArrayFormulasPrefix.Enabled = dynamicArrayFormulasChecked;
+            dynamicArrayFormulasCacheDuration.Enabled = dynamicArrayFormulasChecked;
+            dynamicArrayFormulasCacheSize.Enabled = dynamicArrayFormulasChecked && dynamicArrayFormulasCacheDuration.Value > 0;
         }
 
         private void DynamicArrayFormulasLockExcel_CheckedChanged(object sender, EventArgs e)
@@ -1029,6 +1077,27 @@ namespace PyxelRestAddIn
             AddValueToFormulasSubSection("dynamic_array", "prefix", dynamicArrayFormulasPrefix.Text);
         }
 
+        private void DynamicArrayFormulasCacheDuration_TextChanged(object sender, EventArgs e)
+        {
+            dynamicArrayFormulasCacheSize.Enabled = ((NumericUpDown)sender).Value > 0;
+            DynamicArrayFormulasCacheDuration_TextChanged();
+        }
+
+        private void DynamicArrayFormulasCacheDuration_TextChanged()
+        {
+            AddValueToFormulasCache("dynamic_array", "duration", dynamicArrayFormulasCacheDuration.Value);
+        }
+
+        private void DynamicArrayFormulasCacheSize_TextChanged(object sender, EventArgs e)
+        {
+            DynamicArrayFormulasCacheSize_TextChanged();
+        }
+
+        private void DynamicArrayFormulasCacheSize_TextChanged()
+        {
+            AddValueToFormulasCache("dynamic_array", "size", dynamicArrayFormulasCacheSize.Value);
+        }
+
         private void VBACompatibleFormulas_CheckedChanged(object sender, EventArgs e)
         {
             bool vbaCompatibleFormulasChecked = ((CheckBox)sender).Checked;
@@ -1037,12 +1106,16 @@ namespace PyxelRestAddIn
                 servicePanel.service.Formulas["vba_compatible"] = new Dictionary<string, object>();
                 AddValueToFormulasSubSection("vba_compatible", "lock_excel", true);
                 VBACompatibleFormulasPrefix_TextChanged();
+                VBACompatibleFormulasCacheDuration_TextChanged();
+                VBACompatibleFormulasCacheSize_TextChanged();
             }
             else
             {
                 servicePanel.service.Formulas.Remove("vba_compatible");
             }
             vbaCompatibleFormulasPrefix.Enabled = vbaCompatibleFormulasChecked;
+            vbaCompatibleFormulasCacheDuration.Enabled = vbaCompatibleFormulasChecked;
+            vbaCompatibleFormulasCacheSize.Enabled = vbaCompatibleFormulasChecked && vbaCompatibleFormulasCacheDuration.Value > 0;
         }
 
         private void VBACompatibleFormulasPrefix_TextChanged(object sender, EventArgs e)
@@ -1055,9 +1128,39 @@ namespace PyxelRestAddIn
             AddValueToFormulasSubSection("vba_compatible", "prefix", vbaCompatibleFormulasPrefix.Text);
         }
 
+        private void VBACompatibleFormulasCacheDuration_TextChanged(object sender, EventArgs e)
+        {
+            vbaCompatibleFormulasCacheSize.Enabled = ((NumericUpDown)sender).Value > 0;
+            VBACompatibleFormulasCacheDuration_TextChanged();
+        }
+
+        private void VBACompatibleFormulasCacheDuration_TextChanged()
+        {
+            AddValueToFormulasCache("vba_compatible", "duration", vbaCompatibleFormulasCacheDuration.Value);
+        }
+
+        private void VBACompatibleFormulasCacheSize_TextChanged(object sender, EventArgs e)
+        {
+            VBACompatibleFormulasCacheSize_TextChanged();
+        }
+
+        private void VBACompatibleFormulasCacheSize_TextChanged()
+        {
+            AddValueToFormulasCache("vba_compatible", "size", vbaCompatibleFormulasCacheSize.Value);
+        }
+
         private void AddValueToFormulasSubSection(string formulaType, string key, object value)
         {
             ((IDictionary<string, object>)servicePanel.service.Formulas[formulaType])[key] = value;
+        }
+
+        private void AddValueToFormulasCache(string formulaType, string key, object value)
+        {
+            var formulaOptions = (IDictionary<string, object>)servicePanel.service.Formulas[formulaType];
+            if (!formulaOptions.ContainsKey("cache"))
+                formulaOptions["cache"] = new Dictionary<string, object>();
+
+            ((IDictionary<string, object>)formulaOptions["cache"])[key] = value;
         }
 
         private void AddValueToList(string value, string listName)

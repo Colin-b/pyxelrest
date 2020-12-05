@@ -260,6 +260,7 @@ namespace PyxelRestAddIn
             if (Auth != null && Auth.Count > 0)
                 section.Add(new YamlScalarNode(AUTH_PROPERTY), new YamlMappingNode(FromDict(Auth)));
 
+            RemoveDefaultForEach(Formulas, new Dictionary<string, object> { { "cache", DefaultFormulasCache } });
             if (Formulas != null && Formulas.Count > 0)
                 section.Add(new YamlScalarNode(FORMULAS_PROPERTY), new YamlMappingNode(FromDict(Formulas)));
 
@@ -283,8 +284,10 @@ namespace PyxelRestAddIn
 
         private IDictionary<string, object> DefaultFormulas()
         {
-            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{service_name}_" }, { "cache", new Dictionary<string, object>() { { "duration", 0 }, { "size", 100 } } } } } };
+            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{service_name}_" } } } };
         }
+
+        public static readonly IDictionary<string, object> DefaultFormulasCache = new Dictionary<string, object>() { { "duration", 0 }, { "size", 100 } };
 
         private IDictionary<string, object> DefaultNetwork()
         {
@@ -307,6 +310,17 @@ namespace PyxelRestAddIn
                 else if (IsGenericDict(defaultItem.Value))
                 {
                     AddDefault((IDictionary<string, object>)fromConf[defaultItem.Key], (IDictionary<string, object>)defaultItem.Value);
+                }
+            }
+        }
+
+        private void RemoveDefaultForEach(IDictionary<string, object> fromConfs, IDictionary<string, object> defaultConf)
+        {
+            if (fromConfs != null)
+            {
+                foreach (var fromConf in fromConfs)
+                {
+                    RemoveDefault((IDictionary<string, object>)fromConf.Value, defaultConf);
                 }
             }
         }
