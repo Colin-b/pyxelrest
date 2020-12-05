@@ -125,16 +125,15 @@ namespace PyxelRestAddIn
 
                 #region Description
                 {
-                    var panel = new TableLayoutPanel { AutoSize = true };
+                    var panel = new GroupBox { Text = "Description", AutoSize = true };
 
                     {
-                        panel.Controls.Add(new Label { Width = PercentWidth(15), Text = "Description", TextAlign = ContentAlignment.BottomLeft }, 1, 0);
                         ToolTip tooltip = new ToolTip { ToolTipTitle = string.Format("Short description of {0}", servicePanel.service.Name), UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var description = new TextBox { Text = servicePanel.service.description, Width = PercentWidth(80) };
+                        var description = new TextBox { Location = new Point(PercentWidth(2), PercentWidth(2)), Text = servicePanel.service.description, Width = PercentWidth(80) };
                         tooltip.SetToolTip(description, "Used only in the add-in configure screen for information.");
                         description.TextChanged += Description_TextChanged;
-                        panel.Controls.Add(description, 2, 0);
+                        panel.Controls.Add(description);
                     }
 
                     layout.Controls.Add(panel);
