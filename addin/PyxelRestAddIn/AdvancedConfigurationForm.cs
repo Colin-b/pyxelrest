@@ -130,7 +130,7 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = string.Format("Short description of {0}", servicePanel.service.Name), UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var description = new TextBox { Location = new Point(PercentWidth(2), PercentWidth(2)), Text = servicePanel.service.description, Width = PercentWidth(80) };
+                        var description = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Text = servicePanel.service.description, Width = PercentWidth(80) };
                         tooltip.SetToolTip(description, "Used only in the add-in configure screen for information.");
                         description.TextChanged += Description_TextChanged;
                         panel.Controls.Add(description);
@@ -320,156 +320,151 @@ namespace PyxelRestAddIn
                     var tab = new TabPage { Text = "OpenAPI", AutoScroll = true };
                     var layout = new TableLayoutPanel { AutoSize = true };
 
-                    #region Host
-                    {
-                        var panel = new TableLayoutPanel { AutoSize = true };
-
-                        panel.Controls.Add(new Label { Text = "Host", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.Network.ContainsKey("host") ? servicePanel.service.Network["host"].ToString() : string.Empty };
-                        tooltip.SetToolTip(host, "Usefull when host is not provided in the OpenAPI definition and API is behind a reverse proxy.");
-                        host.TextChanged += Host_TextChanged;
-                        panel.Controls.Add(host, 1, 1);
-
-                        layout.Controls.Add(panel);
-                    }
-                    #endregion
-
-                    {
-                        var panel = new TableLayoutPanel { AutoSize = true };
-
-                        #region OpenAPI Definition read timeout
-                        {
-                            panel.Controls.Add(new Label { Text = "Definition read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(25) }, 0, 1);
-
-                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                            var openAPIDefinitionReadTimeout = new NumericUpDown { Width = PercentWidth(10), Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5 };
-                            tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
-                            openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
-                            panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 1);
-                        }
-                        #endregion
-
-                        layout.Controls.Add(panel);
-                    }
 
                     #region Methods
                     {
-                        layout.Controls.Add(new Label { Text = "Methods" });
-
-                        var panel = new TableLayoutPanel { AutoSize = true };
+                        var panel = new GroupBox { AutoSize = true, Text = "Methods" };
                         List<string> selectedMethods = (List<string>)servicePanel.service.OpenAPI["selected_methods"];
 
-                        var get = new CheckBox { Text = "get", Checked = selectedMethods.Contains("get"), Width = PercentWidth(11) };
+                        var get = new CheckBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Text = "get", Checked = selectedMethods.Contains("get"), Width = PercentWidth(11) };
                         get.CheckedChanged += Get_CheckedChanged;
-                        panel.Controls.Add(get, 0, 0);
-                        var post = new CheckBox { Text = "post", Checked = selectedMethods.Contains("post"), Width = PercentWidth(11) };
+                        panel.Controls.Add(get);
+                        var post = new CheckBox { Location = new Point(get.Location.X + get.Width, get.Location.Y), Text = "post", Checked = selectedMethods.Contains("post"), Width = PercentWidth(11) };
                         post.CheckedChanged += Post_CheckedChanged;
-                        panel.Controls.Add(post, 1, 0);
-                        var put = new CheckBox { Text = "put", Checked = selectedMethods.Contains("put"), Width = PercentWidth(11) };
+                        panel.Controls.Add(post);
+                        var put = new CheckBox { Location = new Point(post.Location.X + post.Width, get.Location.Y), Text = "put", Checked = selectedMethods.Contains("put"), Width = PercentWidth(11) };
                         put.CheckedChanged += Put_CheckedChanged;
-                        panel.Controls.Add(put, 2, 0);
-                        var patch = new CheckBox { Text = "patch", Checked = selectedMethods.Contains("patch"), Width = PercentWidth(11) };
+                        panel.Controls.Add(put);
+                        var patch = new CheckBox { Location = new Point(put.Location.X + put.Width, get.Location.Y), Text = "patch", Checked = selectedMethods.Contains("patch"), Width = PercentWidth(11) };
                         patch.CheckedChanged += Patch_CheckedChanged;
-                        panel.Controls.Add(patch, 3, 0);
-                        var delete = new CheckBox { Text = "delete", Checked = selectedMethods.Contains("delete"), Width = PercentWidth(11) };
+                        panel.Controls.Add(patch);
+                        var delete = new CheckBox { Location = new Point(patch.Location.X + patch.Width, get.Location.Y), Text = "delete", Checked = selectedMethods.Contains("delete"), Width = PercentWidth(11) };
                         delete.CheckedChanged += Delete_CheckedChanged;
-                        panel.Controls.Add(delete, 4, 0);
+                        panel.Controls.Add(delete);
 
                         layout.Controls.Add(panel);
                     }
                     #endregion
 
-                    #region Tags
                     {
-                        var tagsLabel = new Label { Text = "Tags" };
-                        layout.Controls.Add(tagsLabel);
-
-                        tagsPanel = new TableLayoutPanel { AutoSize = true };
-                        layout.Controls.Add(tagsPanel);
+                        var panel = new TableLayoutPanel { AutoSize = true };
 
                         {
-                            var addPanel = new TableLayoutPanel { AutoSize = true };
-
-                            {
-                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI tag to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                                tagName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
-                                tooltip.SetToolTip(tagName, "You will be able to filter in/out this tag.");
-                                tagName.TextChanged += TagName_TextChanged;
-                                tagName.KeyDown += TagName_KeyDown;
-                                addPanel.Controls.Add(tagName, 0, 1);
-                            }
-
-                            addTag = new AddButton(PercentWidth(5));
-                            addTag.Click += AddTag_Click;
-                            addPanel.Controls.Add(addTag, 1, 1);
-
-                            layout.Controls.Add(addPanel);
+                            panel.Controls.Add(new Label { Text = "Host" }, 0, 1);
+                            panel.Controls.Add(new Label { Text = "Definition read timeout", Width = PercentWidth(15) }, 1, 1);
                         }
+
+                        {
+                            #region Host
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.Network.ContainsKey("host") ? servicePanel.service.Network["host"].ToString() : string.Empty };
+                                tooltip.SetToolTip(host, "Usefull when host is not provided in the OpenAPI definition and API is behind a reverse proxy.");
+                                host.TextChanged += Host_TextChanged;
+                                panel.Controls.Add(host, 0, 2);
+                            }
+                            #endregion
+
+                            #region OpenAPI Definition read timeout
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                var openAPIDefinitionReadTimeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5 };
+                                tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
+                                openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
+                                panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 2);
+                            }
+                            #endregion
+                        }
+
+                        layout.Controls.Add(panel);
+                    }
+
+                    #region Tags
+                    {
+                        GroupBox groupBox = new GroupBox { AutoSize = true, Text = "Tags" };
+
+                        var addPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)), Height = PercentWidth(5) };
+
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI tag to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            tagName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                            tooltip.SetToolTip(tagName, "You will be able to filter in/out this tag.");
+                            tagName.TextChanged += TagName_TextChanged;
+                            tagName.KeyDown += TagName_KeyDown;
+                            addPanel.Controls.Add(tagName, 0, 1);
+                        }
+
+                        addTag = new AddButton(PercentWidth(5));
+                        addTag.Click += AddTag_Click;
+                        addPanel.Controls.Add(addTag, 1, 1);
+
+                        groupBox.Controls.Add(addPanel);
+                        
+                        tagsPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(addPanel.Location.X, addPanel.Location.Y + addPanel.Height), Height = 0 };
+                        groupBox.Controls.Add(tagsPanel);
+
+                        layout.Controls.Add(groupBox);
                     }
                     #endregion
 
                     #region Operation IDs
                     {
-                        var operationIdsLabel = new Label { Text = "Operation IDs" };
-                        layout.Controls.Add(operationIdsLabel);
+                        GroupBox groupBox = new GroupBox { AutoSize = true, Text = "Operation IDs" };
 
-                        operationIDsPanel = new TableLayoutPanel { AutoSize = true };
-                        layout.Controls.Add(operationIDsPanel);
+                        var addPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)), Height = PercentWidth(5) };
 
                         {
-                            var addPanel = new TableLayoutPanel { AutoSize = true };
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            {
-                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                                operationIDName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
-                                tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
-                                operationIDName.TextChanged += OperationIDName_TextChanged;
-                                operationIDName.KeyDown += OperationIDName_KeyDown;
-                                addPanel.Controls.Add(operationIDName, 0, 1);
-                            }
-
-                            addOperationID = new AddButton(PercentWidth(5));
-                            addOperationID.Click += AddOperationID_Click;
-                            addPanel.Controls.Add(addOperationID, 1, 1);
-
-                            layout.Controls.Add(addPanel);
+                            operationIDName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                            tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
+                            operationIDName.TextChanged += OperationIDName_TextChanged;
+                            operationIDName.KeyDown += OperationIDName_KeyDown;
+                            addPanel.Controls.Add(operationIDName, 0, 1);
                         }
+
+                        addOperationID = new AddButton(PercentWidth(5));
+                        addOperationID.Click += AddOperationID_Click;
+                        addPanel.Controls.Add(addOperationID, 1, 1);
+
+                        groupBox.Controls.Add(addPanel);
+
+                        operationIDsPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(addPanel.Location.X, addPanel.Location.Y + addPanel.Height), Height = 0 };
+                        groupBox.Controls.Add(operationIDsPanel);
+
+                        layout.Controls.Add(groupBox);
                     }
                     #endregion
 
                     #region Parameters
                     {
-                        var parametersLabel = new Label { Text = "Parameters" };
-                        layout.Controls.Add(parametersLabel);
+                        GroupBox groupBox = new GroupBox { AutoSize = true, Text = "Parameters" };
 
-                        parametersPanel = new TableLayoutPanel { AutoSize = true };
-                        layout.Controls.Add(parametersPanel);
+                        var addPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)), Height = PercentWidth(5) };
 
                         {
-                            var addPanel = new TableLayoutPanel { AutoSize = true };
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI parameter to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            {
-                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI parameter to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                                parameterName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
-                                tooltip.SetToolTip(parameterName, "You will be able to filter in/out this parameter.");
-                                parameterName.TextChanged += ParameterName_TextChanged;
-                                parameterName.KeyDown += ParameterName_KeyDown;
-                                addPanel.Controls.Add(parameterName, 0, 1);
-                            }
-
-                            addParameter = new AddButton(PercentWidth(5));
-                            addParameter.Click += AddParameter_Click;
-                            addPanel.Controls.Add(addParameter, 1, 1);
-
-                            layout.Controls.Add(addPanel);
+                            parameterName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                            tooltip.SetToolTip(parameterName, "You will be able to filter in/out this parameter.");
+                            parameterName.TextChanged += ParameterName_TextChanged;
+                            parameterName.KeyDown += ParameterName_KeyDown;
+                            addPanel.Controls.Add(parameterName, 0, 1);
                         }
+
+                        addParameter = new AddButton(PercentWidth(5));
+                        addParameter.Click += AddParameter_Click;
+                        addPanel.Controls.Add(addParameter, 1, 1);
+
+                        groupBox.Controls.Add(addPanel);
+
+                        parametersPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(addPanel.Location.X, addPanel.Location.Y + addPanel.Height), Height = 0 };
+                        groupBox.Controls.Add(parametersPanel);
+
+                        layout.Controls.Add(groupBox);
                     }
                     #endregion
 
@@ -1246,7 +1241,6 @@ namespace PyxelRestAddIn
             panel.Controls.Add(remove, 3, 1);
 
             tagsPanel.Controls.Add(panel);
-            tagsPanel.SetColumnSpan(panel, 2);
         }
 
         private void TagSelected_CheckedChanged(object sender, EventArgs e)
@@ -1327,7 +1321,6 @@ namespace PyxelRestAddIn
             panel.Controls.Add(remove, 3, 1);
 
             operationIDsPanel.Controls.Add(panel);
-            operationIDsPanel.SetColumnSpan(panel, 2);
         }
 
         private void OperationIDSelected_CheckedChanged(object sender, EventArgs e)
@@ -1408,7 +1401,6 @@ namespace PyxelRestAddIn
             panel.Controls.Add(remove, 3, 1);
 
             parametersPanel.Controls.Add(panel);
-            parametersPanel.SetColumnSpan(panel, 2);
         }
 
         private void ParameterSelected_CheckedChanged(object sender, EventArgs e)
