@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -34,6 +35,13 @@ namespace PyxelRestAddIn
         private TextBox oauth2ParamName;
         private TextBox oauth2ParamValue;
         private AddButton addOAuth2Param;
+
+        private Dictionary<string, string[]> oauth2ToolTips = new Dictionary<string, string[]>
+        {
+            {"timeout", new string[] { "Maximum number of seconds to wait for the authentication response to be received", "Wait for 1 minute (60 seconds) by default." } },
+            {"header_name", new string[] { "Name of the header in which the OAuth2 token will be sent", "Use 'Authorization' header by default." } },
+            {"header_value", new string[] { "Format in which the OAuth2 token will be sent", "'{token}' will be replaced by the actual token. 'Bearer {token}' by default." } },
+        };
 
         private CheckBox dynamicArrayFormulasLockExcel;
         private TextBox dynamicArrayFormulasPrefix;
@@ -73,12 +81,8 @@ namespace PyxelRestAddIn
                 foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["selected_operation_ids"])
                     AddOperationID(tag, false);
 
-            var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
             foreach (var oauth2Item in (IDictionary<string, object>)servicePanel.service.Auth["oauth2"])
-            {
-                if (!oauth2NonParam.Contains(oauth2Item.Key))
-                    AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
-            }
+                AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
         }
 
         /**
@@ -130,7 +134,7 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = string.Format("Short description of {0}", servicePanel.service.Name), UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var description = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Text = servicePanel.service.description, Width = PercentWidth(80) };
+                        var description = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Text = servicePanel.service.description, Width = PercentWidth(75) };
                         tooltip.SetToolTip(description, "Used only in the add-in configure screen for information.");
                         description.TextChanged += Description_TextChanged;
                         panel.Controls.Add(description);
@@ -482,18 +486,16 @@ namespace PyxelRestAddIn
                 #region API Key settings
                 {
                     var tab = new TabPage { Text = "API key", AutoScroll = true };
-                    var layout = new TableLayoutPanel { AutoSize = true };
+                    var layout = new GroupBox { AutoSize = true, Text = "API key" };
 
                     #region API Key
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var apiKey = new TextBox { Width = PercentWidth(75), Text = (string)servicePanel.service.Auth["api_key"] };
+                        var apiKey = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Width = PercentWidth(75), Text = (string)servicePanel.service.Auth["api_key"] };
                         tooltip.SetToolTip(apiKey, "Only used when required.");
                         apiKey.TextChanged += ApiKey_TextChanged;
-                        layout.Controls.Add(apiKey, 1, 1);
+                        layout.Controls.Add(apiKey);
                     }
                     #endregion
 
@@ -505,53 +507,50 @@ namespace PyxelRestAddIn
                 #region OAuth2 settings
                 {
                     var tab = new TabPage { Text = "OAuth2", AutoScroll = true };
-                    var layout = new TableLayoutPanel { AutoSize = true };
+                    oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
                     var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
 
-                    #region Timeout
+                    #region Table header
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(25), Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var timeout = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
-                        tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
-                        timeout.TextChanged += Oauth2Timeout_TextChanged;
-                        layout.Controls.Add(timeout, 1, 2);
+                        var nameLabel = new LinkLabel { Width = PercentWidth(25), Text = "requests_auth parameter name" };
+                        nameLabel.Links.Add(0, 13, "https://colin-b.github.io/requests_auth/#oauth-2");
+                        nameLabel.LinkClicked += Label_LinkClicked;
+                        oauth2ParamsPanel.Controls.Add(nameLabel, 0, 1);
+                        var valueLabel = new LinkLabel { Width = PercentWidth(60), Text = "requests_auth parameter value" };
+                        valueLabel.Links.Add(0, 13, "https://colin-b.github.io/requests_auth/#oauth-2");
+                        valueLabel.LinkClicked += Label_LinkClicked;
+                        oauth2ParamsPanel.Controls.Add(valueLabel, 1, 1);
                     }
                     #endregion
 
-                    #region Add items
-
-                    oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
-                    layout.Controls.Add(oauth2ParamsPanel, 0, 7);
-                    layout.SetColumnSpan(oauth2ParamsPanel, 3);
-
+                    #region Add row to table
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        oauth2ParamName = new TextBox { Width = PercentWidth(25), Text = string.Empty };
-                        tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
-                        oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
-                        oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
-                        layout.Controls.Add(oauth2ParamName, 0, 8);
+                            oauth2ParamName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
+                            oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
+                            oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
+                            oauth2ParamsPanel.Controls.Add(oauth2ParamName, 0, 2);
+                        }
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            oauth2ParamValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
+                            oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
+                            oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
+                            oauth2ParamsPanel.Controls.Add(oauth2ParamValue, 1, 2);
+                        }
+                        addOAuth2Param = new AddButton(PercentWidth(5));
+                        addOAuth2Param.Click += AddOAuth2Param_Click;
+                        oauth2ParamsPanel.Controls.Add(addOAuth2Param, 2, 2);
                     }
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        oauth2ParamValue = new TextBox { Width = PercentWidth(60), Text = string.Empty };
-                        tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
-                        oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
-                        oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
-                        layout.Controls.Add(oauth2ParamValue, 1, 8);
-                    }
-                    addOAuth2Param = new AddButton(PercentWidth(5));
-                    addOAuth2Param.Click += AddOAuth2Param_Click;
-                    layout.Controls.Add(addOAuth2Param, 2, 8);
-
                     #endregion
+                    oauth2ParamsPanel.RowCount += 2;
 
-                    tab.Controls.Add(layout);
+                    tab.Controls.Add(oauth2ParamsPanel);
                     authTabs.TabPages.Add(tab);
                 }
                 #endregion
@@ -562,31 +561,35 @@ namespace PyxelRestAddIn
                     var layout = new TableLayoutPanel { AutoSize = true };
                     var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
 
-                    #region Username
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var userName = new TextBox { Width = PercentWidth(75), Text = (string)basicOptions["username"] };
-                        tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
-                        userName.TextChanged += BasicUsername_TextChanged;
-                        layout.Controls.Add(userName, 1, 1);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 1, 1);
                     }
-                    #endregion
 
-                    #region Password
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        #region Username
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                            var userName = new TextBox { Text = (string)basicOptions["username"], Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
+                            userName.TextChanged += BasicUsername_TextChanged;
+                            layout.Controls.Add(userName, 0, 2);
+                        }
+                        #endregion
 
-                        var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)basicOptions["password"] };
-                        tooltip.SetToolTip(password, "Used only if basic authentication is required.");
-                        password.TextChanged += BasicPassword_TextChanged;
-                        layout.Controls.Add(password, 1, 2);
+                        #region Password
+                        {
+
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var password = new TextBox { UseSystemPasswordChar = true, Text = (string)basicOptions["password"], Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(password, "Used only if basic authentication is required.");
+                            password.TextChanged += BasicPassword_TextChanged;
+                            layout.Controls.Add(password, 1, 2);
+                        }
+                        #endregion
                     }
-                    #endregion
 
                     tab.Controls.Add(layout);
                     authTabs.TabPages.Add(tab);
@@ -595,35 +598,38 @@ namespace PyxelRestAddIn
 
                 #region NTLM Authentication settings
                 {
-                    var tab = new TabPage("NTLM");
+                    var tab = new TabPage("Microsoft Windows");
                     var layout = new TableLayoutPanel { AutoSize = true };
                     var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
 
-                    #region Username
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var userName = new TextBox { Width = PercentWidth(75), Text = (string)ntlmOptions["username"] };
-                        tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
-                        userName.TextChanged += NtlmUsername_TextChanged;
-                        layout.Controls.Add(userName, 1, 1);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 1, 1);
                     }
-                    #endregion
 
-                    #region Password
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        #region Username
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                            var userName = new TextBox { Text = (string)ntlmOptions["username"], Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
+                            userName.TextChanged += NtlmUsername_TextChanged;
+                            layout.Controls.Add(userName, 0, 2);
+                        }
+                        #endregion
 
-                        var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)ntlmOptions["password"] };
-                        tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
-                        password.TextChanged += NtlmPassword_TextChanged;
-                        layout.Controls.Add(password, 1, 2);
+                        #region Password
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var password = new TextBox { UseSystemPasswordChar = true, Text = (string)ntlmOptions["password"], Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
+                            password.TextChanged += NtlmPassword_TextChanged;
+                            layout.Controls.Add(password, 1, 2);
+                        }
+                        #endregion
                     }
-                    #endregion
 
                     tab.Controls.Add(layout);
                     authTabs.TabPages.Add(tab);
@@ -642,59 +648,10 @@ namespace PyxelRestAddIn
 
                 var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
 
+                #region SSL certificate verification
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
 
-                    #region Timeout
-
-                    #region Connect timeout
-                    {
-                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(17) }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Width = PercentWidth(10) };
-                        tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
-                        connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
-                        panel.Controls.Add(connectTimeout, 1, 1);
-                    }
-                    #endregion
-
-                    #region Read timeout
-                    {
-                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(15) }, 2, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Width = PercentWidth(10) };
-                        tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
-                        readTimeout.ValueChanged += ReadTimeout_ValueChanged;
-                        panel.Controls.Add(readTimeout, 3, 1);
-                    }
-                    #endregion
-
-                    #endregion
-
-                    #region Max retries
-                    {
-                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(15) }, 4, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Width = PercentWidth(10) };
-                        tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
-                        maxRetries.ValueChanged += MaxRetries_ValueChanged;
-                        panel.Controls.Add(maxRetries, 5, 1);
-                    }
-                    #endregion
-
-                    layout.Controls.Add(panel, 0, 1);
-                }
-
-                {
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    #region SSL certificate verification
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Enable SSL certificate verification", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
@@ -704,13 +661,62 @@ namespace PyxelRestAddIn
                         verifySSLCertificate.CheckedChanged += VerifySSLCertificate_CheckedChanged;
                         panel.Controls.Add(verifySSLCertificate, 0, 1);
                     }
-                    #endregion
 
-                    layout.Controls.Add(panel, 0, 2);
+                    layout.Controls.Add(panel);
                 }
+                #endregion
 
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
+
+                    {
+                        panel.Controls.Add(new Label { Text = "Max retries", Width = PercentWidth(15) }, 0, 1);
+                        panel.Controls.Add(new Label { Text = "Connect timeout", Width = PercentWidth(17) }, 1, 1);
+                        panel.Controls.Add(new Label { Text = "Read timeout", Width = PercentWidth(15) }, 2, 1);
+                    }
+
+                    {
+                        #region Max retries
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
+                            maxRetries.ValueChanged += MaxRetries_ValueChanged;
+                            panel.Controls.Add(maxRetries, 0, 2);
+                        }
+                        #endregion
+
+                        #region Connect timeout
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
+                            connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
+                            panel.Controls.Add(connectTimeout, 1, 2);
+                        }
+                        #endregion
+
+                        #region Read timeout
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
+                            readTimeout.ValueChanged += ReadTimeout_ValueChanged;
+                            panel.Controls.Add(readTimeout, 2, 2);
+                        }
+                        #endregion
+                    }
+
+                    layout.Controls.Add(panel);
+                }
+
+                #region Proxies
+                {
+                    var groupBox = new GroupBox { AutoSize = true, Text = "Proxy" };
+                    var panel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
 
                     var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
 
@@ -753,23 +759,22 @@ namespace PyxelRestAddIn
                     }
                     #endregion
 
-                    layout.Controls.Add(panel, 0, 3);
+                    groupBox.Controls.Add(panel);
+                    layout.Controls.Add(groupBox);
                 }
+                #endregion
 
+                #region Headers
                 {
-                    var panel = new TableLayoutPanel { AutoSize = true };
+                    var groupBox = new GroupBox { AutoSize = true, Text = "Headers" };
+                    var panel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
 
-                    #region Headers
 
                     var nameLabel = new Label { Text = "Header name", Width = PercentWidth(20) };
                     panel.Controls.Add(nameLabel, 0, 1);
 
                     var valueLabel = new Label { Text = "Header value", Width = PercentWidth(65) };
                     panel.Controls.Add(valueLabel, 1, 1);
-
-                    headersPanel = new TableLayoutPanel { AutoSize = true };
-                    panel.Controls.Add(headersPanel, 0, 2);
-                    panel.SetColumnSpan(headersPanel, 3);
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -778,7 +783,7 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(headerName, "Sent in every request on this service.");
                         headerName.TextChanged += HeaderName_TextChanged;
                         headerName.KeyDown += HeaderName_KeyDown;
-                        panel.Controls.Add(headerName, 0, 3);
+                        panel.Controls.Add(headerName, 0, 2);
                     }
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -787,16 +792,20 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
                         headerValue.TextChanged += HeaderValue_TextChanged;
                         headerValue.KeyDown += HeaderValue_KeyDown;
-                        panel.Controls.Add(headerValue, 1, 3);
+                        panel.Controls.Add(headerValue, 1, 2);
                     }
                     addHeader = new AddButton(PercentWidth(5));
                     addHeader.Click += AddHeader_Click;
-                    panel.Controls.Add(addHeader, 2, 3);
+                    panel.Controls.Add(addHeader, 2, 2);
 
-                    #endregion
+                    headersPanel = new TableLayoutPanel { AutoSize = true, Height=0 };
+                    panel.Controls.Add(headersPanel, 0, 3);
+                    panel.SetColumnSpan(headersPanel, 3);
 
-                    layout.Controls.Add(panel, 0, 4);
+                    groupBox.Controls.Add(panel);
+                    layout.Controls.Add(groupBox);
                 }
+                #endregion
 
                 tab.Controls.Add(layout);
                 tabs.TabPages.Add(tab);
@@ -804,6 +813,11 @@ namespace PyxelRestAddIn
             #endregion
 
             Controls.Add(tabs);
+        }
+
+        private void Label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start((string)e.Link.LinkData);
         }
 
         #region Events
@@ -847,15 +861,6 @@ namespace PyxelRestAddIn
                 basicOptions.Remove("username");
             else
                 basicOptions["username"] = ((TextBox)sender).Text;
-        }
-
-        private void Oauth2Timeout_TextChanged(object sender, EventArgs e)
-        {
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            if (((NumericUpDown)sender).Value == 0)
-                oauth2Options.Remove("timeout");
-            else
-                oauth2Options["timeout"] = ((NumericUpDown)sender).Value;
         }
 
         private void NoProxy_TextChanged(object sender, EventArgs e)
@@ -1592,40 +1597,66 @@ namespace PyxelRestAddIn
 
         private void AddOAuth2Param(string name, string value)
         {
-            var panel = new TableLayoutPanel { AutoSize = true };
+            var row = oauth2ParamsPanel.RowCount + 1;
+            oauth2ParamsPanel.Controls.Add(new Label { Text = name, Dock = DockStyle.Fill }, 0, row);
 
-            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Width = PercentWidth(25) }, 0, 1);
+            Control valueTextBox;
+            try
+            {
+                valueTextBox = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(value), Name = name };
+            }
+            catch (Exception)
+            {
+                valueTextBox = new TextBox { Width = PercentWidth(60), Text = value, Name = name  };
+            }
 
-            var valueTextBox = new TextBox { Text = value, Width = PercentWidth(60) };
             valueTextBox.TextChanged += OAuth2ParamValue_TextChanged;
-            panel.Controls.Add(valueTextBox, 1, 1);
+
+            ToolTip tooltip = new ToolTip { UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+            if (oauth2ToolTips.ContainsKey(name))
+            {
+                tooltip.ToolTipTitle = oauth2ToolTips[name][0];
+                tooltip.SetToolTip(valueTextBox, oauth2ToolTips[name][1]);
+            }
+            else
+            {
+                tooltip.ToolTipTitle = string.Format("Value of {0} requests_auth parameter", name);
+                tooltip.SetToolTip(valueTextBox, "Check requests_auth documentation for more details.");
+            }
+
+            oauth2ParamsPanel.Controls.Add(valueTextBox, 1, row);
 
             var remove = new DeleteButton(PercentWidth(5));
+            remove.Name = row.ToString();
             remove.Click += RemoveOAuth2Param_Click;
-            panel.Controls.Add(remove, 2, 1);
-
-            oauth2ParamsPanel.Controls.Add(panel);
-            oauth2ParamsPanel.SetColumnSpan(panel, 3);
+            oauth2ParamsPanel.Controls.Add(remove, 2, row);
+            oauth2ParamsPanel.RowCount += 1;
         }
 
         private void OAuth2ParamValue_TextChanged(object sender, EventArgs e)
         {
-            var valueTextBox = (TextBox)sender;
-            Label oauth2ParamNameLabel = (Label)valueTextBox.Parent.Controls.Find("oauth2ParamNameLabel", false)[0];
+            var valueTextBox = (Control)sender;
+            var paramName = valueTextBox.Name;
 
             var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            oauth2Options[oauth2ParamNameLabel.Text] = valueTextBox.Text;
+
+            if (valueTextBox is NumericUpDown valueNumericUpDown)
+                oauth2Options[paramName] = valueNumericUpDown.Value;
+            else
+                oauth2Options[paramName] = valueTextBox.Text;
         }
 
         private void RemoveOAuth2Param_Click(object sender, EventArgs e)
         {
-            var panel = ((DeleteButton)sender).Parent;
-            Label oauth2ParamNameLabel = (Label)panel.Controls.Find("oauth2ParamNameLabel", false)[0];
+            int row = Convert.ToInt32(((Control)sender).Name);
+            var paramName = oauth2ParamsPanel.GetControlFromPosition(1, row).Name;
 
             var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            oauth2Options.Remove(oauth2ParamNameLabel.Text);
+            oauth2Options.Remove(paramName);
 
-            oauth2ParamsPanel.Controls.Remove(panel);
+            oauth2ParamsPanel.Controls.Remove(oauth2ParamsPanel.GetControlFromPosition(0, row));
+            oauth2ParamsPanel.Controls.Remove(oauth2ParamsPanel.GetControlFromPosition(1, row));
+            oauth2ParamsPanel.Controls.Remove((Control)sender);
         }
 
         #endregion

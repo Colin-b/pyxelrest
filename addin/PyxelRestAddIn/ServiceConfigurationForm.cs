@@ -189,6 +189,13 @@ namespace PyxelRestAddIn
             #endregion
 
             Controls.Add(layout);
+
+            Activated += ServiceConfigurationForm_Activated;
+        }
+
+        private void ServiceConfigurationForm_Activated(object sender, EventArgs e)
+        {
+            serviceNameField.Focus();
         }
 
         private void ServiceNameField_KeyDown(object sender, KeyEventArgs e)
