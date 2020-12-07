@@ -232,10 +232,11 @@ class Flattenizer:
                 return self.__all_flatten_rows
             logger.debug("Response converted to empty list.")
             return [""]
-        flatten_data = [self.__flatten_header]
-        flatten_data.extend(self.__all_flatten_rows)
-        logger.debug(f"Response converted to list of {len(flatten_data)} elements.")
-        return flatten_data
+        self.__all_flatten_rows.insert(0, self.__flatten_header)
+        logger.debug(
+            f"Response converted to list of {len(self.__all_flatten_rows)} elements."
+        )
+        return self.__all_flatten_rows
 
 
 def response(status_code: int, responses: dict):
