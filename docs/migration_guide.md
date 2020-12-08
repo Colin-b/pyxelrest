@@ -228,4 +228,131 @@ formulas:
             duration: 1
 ```
 
+#### definition_retrieval_auths
+
+ * `oauth2_implicit` `oauth2_auth_url` is now `authorization_url`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_implicit:
+                oauth2_auth_url: "https://authorization_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_implicit:
+                authorization_url: "https://authorization_url"
+    ```
+
+ * `oauth2_access_code` `oauth2_auth_url` is now `authorization_url` and `oauth2_token_url` is now `token_url`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_access_code:
+                oauth2_auth_url: "https://authorization_url"
+                oauth2_token_url: "https://token_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_access_code:
+                authorization_url: "https://authorization_url"
+                token_url: "https://token_url"
+    ```
+
+ * `oauth2_password` `oauth2_token_url` is now `token_url`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_password:
+                oauth2_token_url: "https://token_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_password:
+                token_url: "https://token_url"
+    ```
+
+ * `oauth2_application` `oauth2_token_url` is now `token_url`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_application:
+                oauth2_token_url: "https://token_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_application:
+                token_url: "https://token_url"
+    ```
+
+ * `api_key` `name` is now `query_parameter_name` if `in` was `query`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                in: "query"
+                name: "param_name"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                query_parameter_name: "param_name"
+    ```
+
+ * `api_key` `name` is now `header_name` if `in` was `header`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                in: "header"
+                name: "x-api-key"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                header_name: "x-api-key"
+    ```
+
+
 [Microsoft Excel]: https://products.office.com/en-us/excel

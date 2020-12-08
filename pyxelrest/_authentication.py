@@ -112,31 +112,33 @@ def _create_authentication_from_config(
     if "oauth2_implicit" == authentication_mode:
         oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2Implicit(
-            authorization_url=authentication.get("oauth2_auth_url"), **oauth2_config
+            authorization_url=authentication.get("authorization_url"), **oauth2_config
         )
     elif "oauth2_access_code" == authentication_mode:
         oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2AuthorizationCode(
-            authorization_url=authentication.get("oauth2_auth_url"),
-            token_url=authentication.get("oauth2_token_url"),
+            authorization_url=authentication.get("authorization_url"),
+            token_url=authentication.get("token_url"),
             **oauth2_config,
         )
     elif "oauth2_password" == authentication_mode:
         oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2ResourceOwnerPasswordCredentials(
-            token_url=authentication.get("oauth2_token_url"), **oauth2_config
+            token_url=authentication.get("token_url"), **oauth2_config
         )
     elif "oauth2_application" == authentication_mode:
         oauth2_config = dict(service_config.get("oauth2", {}))
         return OAuth2ClientCredentials(
-            token_url=authentication.get("oauth2_token_url"), **oauth2_config
+            token_url=authentication.get("token_url"), **oauth2_config
         )
     elif "api_key" == authentication_mode:
-        if authentication.get("in") == "query":
+        if "query_parameter_name" in authentication:
             return QueryApiKey(
-                service_config.get("api_key"), authentication.get("name")
+                service_config.get("api_key"), authentication["query_parameter_name"]
             )
-        return HeaderApiKey(service_config.get("api_key"), authentication.get("name"))
+        return HeaderApiKey(
+            service_config.get("api_key"), authentication.get("header_name")
+        )
     elif "basic" == authentication_mode:
         return Basic(
             service_config.get("basic", {}).get("username"),
