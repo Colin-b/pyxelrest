@@ -484,14 +484,14 @@ def get_result(
                 )
 
         logger.info(
-            f"{get_caller_address(caller, excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}]."
+            f"{get_caller_address(caller, excel_application)} Valid response received from {response.request.url} for {udf_method.udf_name}."
         )
         result = udf_method.convert_response(response)
         udf_method.cache_result(request_content, result)
         return result
     except requests.ConnectionError as e:
         logger.exception(
-            f"{get_caller_address(caller, excel_application)} Connection [status=error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
+            f"{get_caller_address(caller, excel_application)} Connection error occurred while calling {udf_method.uri} for {udf_method.udf_name}."
         )
         return handle_exception(
             udf_method,
@@ -502,12 +502,12 @@ def get_result(
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
             logger.exception(
-                f"{get_caller_address(caller, excel_application)} [status=Error] occurred while handling "
-                f"[function={udf_method.udf_name}] [url={response.request.url}] response: [response={response.text}]."
+                f"{get_caller_address(caller, excel_application)} Error occurred while handling "
+                f"{response.request.url} response for {udf_method.udf_name}: {response.text}."
             )
         else:
             logger.exception(
-                f"{get_caller_address(caller, excel_application)} [status=Error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
+                f"{get_caller_address(caller, excel_application)} Error occurred while calling {udf_method.uri} for {udf_method.udf_name}."
             )
         return handle_exception(udf_method, describe_error(response, error), error)
     finally:

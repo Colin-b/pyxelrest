@@ -223,9 +223,7 @@ def get_definition_retrieval_auth(
                 else:
                     authentication = auth
         except:
-            logger.exception(
-                "{0} authentication cannot be handled.".format(authentication_mode)
-            )
+            logger.exception(f"{authentication_mode} authentication cannot be handled.")
         # If a supported authentication is found, return it
         if authentication:
             return authentication
