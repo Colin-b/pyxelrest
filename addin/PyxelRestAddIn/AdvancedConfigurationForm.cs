@@ -170,9 +170,9 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var prefix = dynamicArrayFormulasOptions.ContainsKey("prefix") ? (string)dynamicArrayFormulasOptions["prefix"] : "{service_name}_";
+                        var prefix = dynamicArrayFormulasOptions.ContainsKey("prefix") ? (string)dynamicArrayFormulasOptions["prefix"] : "{name}_";
                         dynamicArrayFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(dynamicArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        tooltip.SetToolTip(dynamicArrayFormulasPrefix, string.Format("{{name}} will be replaced by {0}", servicePanel.service.Name));
                         dynamicArrayFormulasPrefix.TextChanged += DynamicArrayFormulasPrefix_TextChanged;
                         dynamicArrayFormulasPrefix.Enabled = dynamicArrayFormulasOptions.Count > 0;
                         layout.Controls.Add(dynamicArrayFormulasPrefix, 1, 2);
@@ -226,9 +226,9 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var prefix = legacyArrayFormulasOptions.ContainsKey("prefix") ? (string)legacyArrayFormulasOptions["prefix"] : "legacy_{service_name}_";
+                        var prefix = legacyArrayFormulasOptions.ContainsKey("prefix") ? (string)legacyArrayFormulasOptions["prefix"] : "legacy_{name}_";
                         legacyArrayFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(legacyArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        tooltip.SetToolTip(legacyArrayFormulasPrefix, string.Format("{{name}} will be replaced by {0}", servicePanel.service.Name));
                         legacyArrayFormulasPrefix.TextChanged += LegacyArrayFormulasPrefix_TextChanged;
                         legacyArrayFormulasPrefix.Enabled = legacyArrayFormulasOptions.Count > 0;
                         layout.Controls.Add(legacyArrayFormulasPrefix, 1, 3);
@@ -282,9 +282,9 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var prefix = vbaCompatibleFormulasOptions.ContainsKey("prefix") ? (string)vbaCompatibleFormulasOptions["prefix"] : "vba_{service_name}_";
+                        var prefix = vbaCompatibleFormulasOptions.ContainsKey("prefix") ? (string)vbaCompatibleFormulasOptions["prefix"] : "vba_{name}_";
                         vbaCompatibleFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(vbaCompatibleFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        tooltip.SetToolTip(vbaCompatibleFormulasPrefix, string.Format("{{name}} will be replaced by {0}", servicePanel.service.Name));
                         vbaCompatibleFormulasPrefix.TextChanged += VBACompatibleFormulasPrefix_TextChanged;
                         vbaCompatibleFormulasPrefix.Enabled = vbaCompatibleFormulasOptions.Count > 0;
                         layout.Controls.Add(vbaCompatibleFormulasPrefix, 1, 4);

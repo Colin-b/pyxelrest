@@ -24,25 +24,25 @@ from pyxelrest._generator_config import (
 )
 from pyxelrest._common import check_for_duplicates, Service
 from pyxelrest._open_api import load_service
-from pyxelrest._rest import PyxelRestService
+from pyxelrest._rest import PyxelRest
 
 
 def load_services(config: dict) -> List[Service]:
     """
-    Retrieve OpenAPI JSON definition for each service defined in configuration.
-    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
+    Retrieve OpenAPI definition for each service defined in configuration.
+    :return: List of OpenAPI and PyxelRest instances, size should be the same one as the number of sections within
     configuration.
     """
     if not isinstance(config, dict):
         raise Exception("Configuration must be a dictionary.")
 
     loaded_services = []
-    for service_name, service_config in config.items():
-        if "pyxelrest" == service_name:
-            pyxelrest_service = PyxelRestService(service_name, service_config)
+    for name, settings in config.items():
+        if "pyxelrest" == name:
+            pyxelrest_service = PyxelRest(settings)
             loaded_services.append(pyxelrest_service)
         else:
-            service = load_service(service_name, service_config)
+            service = load_service(name, settings)
             if service:
                 loaded_services.append(service)
 

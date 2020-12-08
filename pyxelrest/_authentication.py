@@ -193,7 +193,7 @@ def get_auth(
 
 
 def get_definition_retrieval_auth(
-    service_config: "pyxelrest.open_api.ServiceConfigSection",
+    service_config: "pyxelrest.open_api.RESTAPIConfigSection",
 ) -> Optional[requests.auth.AuthBase]:
     if not service_config.definition_retrieval_auths:
         return None

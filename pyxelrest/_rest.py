@@ -13,17 +13,6 @@ from pyxelrest._common import (
 from pyxelrest._fast_deserializer import Flattenizer
 
 
-class PyxelRestConfigSection(ConfigSection):
-    def __init__(self, service_name: str, service_config: dict):
-        """
-        Load service information from configuration.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
-        """
-        ConfigSection.__init__(self, service_name, service_config)
-
-
 class ParseBodyAsParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
@@ -248,7 +237,7 @@ class ApiKeyNameParameter(UDFParameter):
 class PyxelRestUDFMethod(UDFMethod):
     def __init__(
         self,
-        service: "PyxelRestService",
+        service: "PyxelRest",
         http_method: str,
         formula_type: str,
         formula_options: dict,
@@ -296,16 +285,14 @@ class PyxelRestUDFMethod(UDFMethod):
         return Flattenizer({}, status_code, {}).to_list(json_data)
 
 
-class PyxelRestService(Service):
-    def __init__(self, service_name: str, service_config: dict):
+class PyxelRest(Service):
+    def __init__(self, settings: dict):
         """
         Load service information from configuration.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        :param settings: Section configuration settings.
         """
         self.methods = {}
-        config = PyxelRestConfigSection(service_name, service_config)
+        config = ConfigSection("pyxelrest", settings)
         self.open_api_definition = {
             "securityDefinitions": {
                 "oauth2_implicit": {"type": "oauth2", "flow": "implicit"},

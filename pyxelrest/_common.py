@@ -42,45 +42,42 @@ def convert_environment_variable(value: str) -> str:
 
 
 class ConfigSection:
-    def __init__(self, service_name: str, service_config: dict):
+    def __init__(self, name: str, settings: dict):
         """
         Load service information from configuration.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        :param name: Section name in configuration.
+        :param settings: Section configuration settings.
         """
-        self.name = service_name
-        self.network = service_config.get("network", {})
-        self.formulas = service_config.get(
+        self.name = name
+        self.network = settings.get("network", {})
+        self.formulas = settings.get(
             "formulas", {"dynamic_array": {"lock_excel": False}}
         )
         # Set default prefixes
         for formula_type, formula_options in self.formulas.items():
             if formula_type == "vba_compatible":
-                formula_options.setdefault("prefix", "vba_{service_name}_")
+                formula_options.setdefault("prefix", "vba_{name}_")
             elif formula_type == "dynamic_array":
-                formula_options.setdefault("prefix", "{service_name}_")
+                formula_options.setdefault("prefix", "{name}_")
             else:  # Legacy array
-                formula_options.setdefault("prefix", "legacy_{service_name}_")
+                formula_options.setdefault("prefix", "legacy_{name}_")
 
         self.custom_headers = {
             key: convert_environment_variable(value)
             for key, value in self.network.get("headers", {}).items()
         }
-        self.auth = service_config.get("auth", {})
+        self.auth = settings.get("auth", {})
         if "api_key" in self.auth:
             self.auth["api_key"] = convert_environment_variable(self.auth["api_key"])
 
     def ensure_unique_function_names(self) -> bool:
         for formula_options in self.formulas.values():
-            if "{service_name}" not in formula_options["prefix"]:
+            if "{name}" not in formula_options["prefix"]:
                 return False
         return True
 
     def udf_prefix(self, formula_options: dict) -> str:
-        return formula_options["prefix"].format(
-            service_name=to_valid_python_vba(self.name)
-        )
+        return formula_options["prefix"].format(name=to_valid_python_vba(self.name))
 
     def allow_parameter(self, parameter_name: str) -> bool:
         return True
@@ -415,17 +412,17 @@ class RequestContent:
 
 
 def check_for_duplicates(loaded_services: List[Service]):
-    services_by_prefix = {}
+    sections_by_prefix = {}
     for service in loaded_services:
         for formula_options in service.config.formulas.values():
-            services_by_prefix.setdefault(
+            sections_by_prefix.setdefault(
                 service.config.udf_prefix(formula_options), []
             ).append(service.config.name)
-    for udf_prefix in services_by_prefix:
-        service_names = services_by_prefix[udf_prefix]
-        if len(service_names) > 1:
+    for prefix in sections_by_prefix:
+        section_names = sections_by_prefix[prefix]
+        if len(section_names) > 1:
             logger.warning(
-                f'{service_names} services will use the same "{udf_prefix}" prefix, in case there is the same call available, '
+                f'{section_names} services will use the same "{prefix}" prefix. In case there is the same call available, '
                 "only the last declared one will be available."
             )
 

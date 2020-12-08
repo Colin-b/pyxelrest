@@ -20,7 +20,9 @@ def open_file_config(configuration_file_path: str) -> Optional[dict]:
         with open(configuration_file_path, "r") as config_file:
             return yaml.load(config_file, Loader=yaml.FullLoader)
     except:
-        logger.exception(f'Configuration file "{configuration_file_path}" cannot be read.')
+        logger.exception(
+            f'Configuration file "{configuration_file_path}" cannot be read.'
+        )
 
 
 def open_url_config(configuration_file_url: str) -> Optional[dict]:
@@ -62,9 +64,9 @@ class ServicesConfigUpdater:
             logger.error("Services configuration cannot be updated.")
             return
 
-        for service_name, service_config in source_config.items():
-            self._user_config[service_name] = service_config
-            logger.info(f'"{service_name}" configuration added.')
+        for name, settings in source_config.items():
+            self._user_config[name] = settings
+            logger.info(f'"{name}" configuration added.')
 
         self._save_configuration()
         logger.info("Services configuration updated.")

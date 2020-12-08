@@ -47,7 +47,7 @@ REST API configuration will most likely not be compatible anymore due to the cha
 We __strongly__ advise to check out the new `dynamic_array` formulas if your [Microsoft Excel] version supports it.
 Otherwise:
 
- * `sync_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `true` and prefix set to `{service_name}_`
+ * `sync_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `true` and prefix set to `{name}_`
  
     Previous (0.69.0)
     
@@ -63,10 +63,10 @@ Otherwise:
     formulas:
         legacy_array:
             lock_excel: true
-            prefix: "{service_name}_"
+            prefix: "{name}_"
     ```
 
- * `async_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `false` and prefix set to `{service_name}_`
+ * `async_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `false` and prefix set to `{name}_`
  
     Previous (0.69.0)
     
@@ -82,7 +82,7 @@ Otherwise:
     formulas:
         legacy_array:
             lock_excel: false
-            prefix: "{service_name}_"
+            prefix: "{name}_"
     ```
 
  * `vba_compatible` `return_type` (in case there was another `return_type` as well) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true`
@@ -104,7 +104,7 @@ Otherwise:
             lock_excel: true
     ```
 
- * `vba_compatible` `return_type` (in case it was the only `return_type`) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true` and prefix set to `{service_name}_`
+ * `vba_compatible` `return_type` (in case it was the only `return_type`) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true` and prefix set to `{name}_`
  
     Previous (0.69.0)
     
@@ -120,7 +120,7 @@ Otherwise:
     formulas:
         vba_compatible:
             lock_excel: true
-            prefix: "{service_name}_"
+            prefix: "{name}_"
     ```
 
 #### shift_result

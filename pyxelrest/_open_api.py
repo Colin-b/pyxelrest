@@ -49,22 +49,21 @@ def return_type_can_be_handled(method_produces: List[str]) -> bool:
     return "application/octet-stream" not in method_produces
 
 
-class ServiceConfigSection(ConfigSection):
-    def __init__(self, service_name: str, service_config: dict):
+class RESTAPIConfigSection(ConfigSection):
+    def __init__(self, name: str, settings: dict):
         """
-        Load service information from configuration.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        Load REST API settings from configuration.
+        :param name: Section name in configuration.
+        :param settings: Section configuration settings.
         """
-        ConfigSection.__init__(self, service_name, service_config)
-        open_api = service_config.get("open_api")
+        ConfigSection.__init__(self, name, settings)
+        open_api = settings.get("open_api")
         if not open_api:
-            raise MandatoryPropertyNotProvided(service_name, "open_api")
+            raise MandatoryPropertyNotProvided(name, "open_api")
 
         self.open_api_definition = open_api.get("definition")
         if not self.open_api_definition:
-            raise MandatoryPropertyNotProvided(service_name, "open_api/definition")
+            raise MandatoryPropertyNotProvided(name, "open_api/definition")
 
         self.definition_read_timeout = open_api.get("definition_read_timeout", 5)
         self.selected_methods = open_api.get(
@@ -640,15 +639,14 @@ class OpenAPIUDFMethod(UDFMethod):
 
 
 class OpenAPI(Service):
-    def __init__(self, service_name: str, service_config: dict):
+    def __init__(self, name: str, settings: dict):
         """
-        Load service information from configuration and OpenAPI definition.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        Load REST API information from configuration and OpenAPI definition.
+        :param name: Section name in configuration.
+        :param settings: Section configuration settings.
         """
         self.methods = {}
-        config = ServiceConfigSection(service_name, service_config)
+        config = RESTAPIConfigSection(name, settings)
         self.existing_operation_ids = {
             formula_type: [] for formula_type in config.formulas
         }
@@ -659,7 +657,7 @@ class OpenAPI(Service):
         uri = self._extract_uri(config).rstrip("/")
         Service.__init__(self, config, uri)
 
-    def _extract_uri(self, config: ServiceConfigSection) -> str:
+    def _extract_uri(self, config: RESTAPIConfigSection) -> str:
         open_api_definition_url = (
             urlsplit(config.open_api_definition)
             if isinstance(config.open_api_definition, str)
@@ -715,7 +713,7 @@ class OpenAPI(Service):
         return udf
 
     @classmethod
-    def _retrieve_open_api_definition(cls, config: ServiceConfigSection) -> dict:
+    def _retrieve_open_api_definition(cls, config: RESTAPIConfigSection) -> dict:
         """
         Retrieve OpenAPI JSON definition from service.
         :return: Dictionary representation of the retrieved Open API JSON definition.
@@ -847,12 +845,12 @@ class OpenAPI(Service):
         return f"[{self.config.name}] service. {self.uri}"
 
 
-def load_service(service_name: str, service_config: dict) -> OpenAPI:
-    logger.debug(f'Loading "{service_name}" service...')
+def load_service(name: str, settings: dict) -> OpenAPI:
+    logger.debug(f'Loading "{name}" ...')
     try:
-        service = OpenAPI(service_name, service_config)
-        logger.info(f'"{service_name}" service will be available.')
+        service = OpenAPI(name, settings)
+        logger.info(f'"{name}" will be available.')
         logger.debug(str(service))
         return service
     except Exception as e:
-        logger.error(f'"{service_name}" service will not be available: {e}')
+        logger.error(f'"{name}" will not be available: {e}')

@@ -284,7 +284,7 @@ namespace PyxelRestAddIn
 
         private IDictionary<string, object> DefaultFormulas()
         {
-            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{service_name}_" } } } };
+            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{name}_" } } } };
         }
 
         public static readonly IDictionary<string, object> DefaultFormulasCache = new Dictionary<string, object>() { { "duration", 0 }, { "size", 100 } };

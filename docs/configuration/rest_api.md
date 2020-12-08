@@ -165,11 +165,11 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     dynamic_array:
-      prefix: "{service_name}_"
+      prefix: "{name}_"
 ```
 
-Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
-In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `my_rest_api_` prefix.
+Note that `{name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{name}` value, resulting in `my_rest_api_` prefix.
 
 To disable the prefix, you can use a blank value as in the following sample:
 ```yaml
@@ -245,11 +245,11 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     legacy_array:
-      prefix: "legacy_{service_name}_"
+      prefix: "legacy_{name}_"
 ```
 
-Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
-In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `legacy_my_rest_api_` prefix.
+Note that `{name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{name}` value, resulting in `legacy_my_rest_api_` prefix.
 
 To disable the prefix, you can use a blank value as in the following sample:
 ```yaml
@@ -270,7 +270,7 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     vba_compatible:
-      prefix: "vba_{service_name}_"
+      prefix: "vba_{name}_"
 ```
 
 #### Change the prefix in front on formulas
@@ -284,11 +284,11 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     vba_compatible:
-      prefix: "vba_{service_name}_"
+      prefix: "vba_{name}_"
 ```
 
-Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
-In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `vba_my_rest_api_` prefix.
+Note that `{name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{name}` value, resulting in `vba_my_rest_api_` prefix.
 
 To disable the prefix, you can use a blank value as in the following sample:
 ```yaml
