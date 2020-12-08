@@ -43,6 +43,9 @@ namespace PyxelRestAddIn
             {"header_value", new string[] { "Format in which the OAuth2 token will be sent", "'{token}' will be replaced by the actual token. 'Bearer {token}' by default." } },
         };
 
+        private TextBox ntlmUsername;
+        private TextBox ntlmPassword;
+
         private CheckBox dynamicArrayFormulasLockExcel;
         private TextBox dynamicArrayFormulasPrefix;
         private NumericUpDown dynamicArrayFormulasCacheDuration;
@@ -601,10 +604,22 @@ namespace PyxelRestAddIn
                     var tab = new TabPage("Microsoft Windows");
                     var layout = new TableLayoutPanel { AutoSize = true };
                     var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
+                    var userName = ntlmOptions.ContainsKey("username") ? (string)ntlmOptions["username"] : string.Empty;
+                    var password = ntlmOptions.ContainsKey("password") ? (string)ntlmOptions["password"] : string.Empty;
 
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 1, 1);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Use current credentials.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var useLoggedInCredentials = new CheckBox { Width = PercentWidth(40), Text = "Login as current user", Checked = (ntlmOptions.Count > 0 && password.Length == 0 && userName.Length == 0) };
+                        tooltip.SetToolTip(useLoggedInCredentials, "Use current Microsoft Windows credentials.");
+                        useLoggedInCredentials.CheckedChanged += UseLoggedInCredentials_CheckedChanged;
+                        layout.Controls.Add(useLoggedInCredentials, 0, 1);
+                        layout.SetColumnSpan(useLoggedInCredentials, 2);
+                    }
+
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 1, 2);
                     }
 
                     {
@@ -612,10 +627,10 @@ namespace PyxelRestAddIn
                         {
                             ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            var userName = new TextBox { Text = (string)ntlmOptions["username"], Dock = DockStyle.Fill };
-                            tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
-                            userName.TextChanged += NtlmUsername_TextChanged;
-                            layout.Controls.Add(userName, 0, 2);
+                            ntlmUsername = new TextBox { Text = userName, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(ntlmUsername, "To be set if service requires NTLM authentication.");
+                            ntlmUsername.TextChanged += NtlmUsername_TextChanged;
+                            layout.Controls.Add(ntlmUsername, 0, 3);
                         }
                         #endregion
 
@@ -623,10 +638,10 @@ namespace PyxelRestAddIn
                         {
                             ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            var password = new TextBox { UseSystemPasswordChar = true, Text = (string)ntlmOptions["password"], Dock = DockStyle.Fill };
-                            tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
-                            password.TextChanged += NtlmPassword_TextChanged;
-                            layout.Controls.Add(password, 1, 2);
+                            ntlmPassword = new TextBox { UseSystemPasswordChar = true, Text = password, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(ntlmPassword, "To be set if service requires NTLM authentication.");
+                            ntlmPassword.TextChanged += NtlmPassword_TextChanged;
+                            layout.Controls.Add(ntlmPassword, 1, 3);
                         }
                         #endregion
                     }
@@ -843,6 +858,41 @@ namespace PyxelRestAddIn
                 ntlmOptions.Remove("username");
             else
                 ntlmOptions["username"] = ((TextBox)sender).Text;
+        }
+
+        private void UseLoggedInCredentials_CheckedChanged(object sender, EventArgs e)
+        {
+            var useLoggedInCredentials = ((CheckBox)sender).Checked;
+            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
+            // Use NTLM authentication with logged in user credentials
+            if (useLoggedInCredentials)
+            {
+                ntlmOptions["username"] = string.Empty;
+                ntlmOptions["password"] = string.Empty;
+                ntlmUsername.Text = string.Empty;
+                ntlmPassword.Text = string.Empty;
+                ntlmUsername.Enabled = false;
+                ntlmPassword.Enabled = false;
+            }
+            else
+            {
+                ntlmUsername.Enabled = true;
+                ntlmPassword.Enabled = true;
+                var userName = ntlmUsername.Text;
+                var password = ntlmPassword.Text;
+
+                // Disable NTLM authentication
+                if (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password))
+                {
+                    ntlmOptions.Clear();
+                }
+                // Use NTLM authentication with custom credentials
+                else
+                {
+                    ntlmOptions["username"] = userName;
+                    ntlmOptions["password"] = password;
+                }
+            }
         }
 
         private void BasicPassword_TextChanged(object sender, EventArgs e)
