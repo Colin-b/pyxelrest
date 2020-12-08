@@ -103,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `raise_exception` is now specified per formula and is not documented anymore as it makes not sense to change it.
 - `flatten` has been renamed to `convert_response` and is now specified per formula and is not documented anymore as it makes not sense to change it.
 - `caching` options are now per formula instead of per REST API and have been renamed. See [migration guide](docs/migration_guide.md) for more details.
+- xlwings configuration is now retrieved faster (not retrieved from a file and do not look for environment variable).
 
 ## [0.69.0] - 2018-12-03
 ### Changed
