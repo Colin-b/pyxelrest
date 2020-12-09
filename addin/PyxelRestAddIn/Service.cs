@@ -279,7 +279,7 @@ namespace PyxelRestAddIn
 
         private IDictionary<string, object> DefaultOpenAPI()
         {
-            return new Dictionary<string, object>() { { "selected_methods", new List<string> { "get", "post", "put", "delete", "patch", "options", "head" } } };
+            return new Dictionary<string, object>() { { "selected_methods", new List<string> { "get", "post", "put", "delete", "patch", "options", "head" } }, { "definition_retrieval_auths", new Dictionary<string, object>() } };
         }
 
         private IDictionary<string, object> DefaultFormulas()

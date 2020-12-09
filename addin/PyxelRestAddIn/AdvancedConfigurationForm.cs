@@ -31,6 +31,10 @@ namespace PyxelRestAddIn
         private TextBox headerValue;
         private AddButton addHeader;
 
+        private GroupBox apiKeyDefinitionAuthGroup;
+        private ComboBox apiKeyDefinitionAuthLocation;
+        private TextBox apiKeyDefinitionAuthName;
+
         private TableLayoutPanel oauth2ParamsPanel;
         private TextBox oauth2ParamName;
         private TextBox oauth2ParamValue;
@@ -489,16 +493,72 @@ namespace PyxelRestAddIn
                 #region API Key settings
                 {
                     var tab = new TabPage { Text = "API key", AutoScroll = true };
-                    var layout = new GroupBox { AutoSize = true, Text = "API key" };
+                    var layout = new TableLayoutPanel { AutoSize = true };
+
+                    #region OpenAPI definition authentication settings
+                    {
+                        var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                        IDictionary<string, object> definitionApiKeyAuth = definitionAuths.ContainsKey("api_key") ? (Dictionary<string, object>)definitionAuths["api_key"] : new Dictionary<string, object>();
+
+                        var panel = new TableLayoutPanel { AutoSize = true };
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Authenticate to retrieve OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var useAuthForDefinition = new CheckBox { Width = PercentWidth(75), Text = "Use API key to retrieve the OpenAPI definition", Checked = definitionApiKeyAuth.Count > 0 };
+                        tooltip.SetToolTip(useAuthForDefinition, "Check to use this API key when retrieving the OpenAPI definition.");
+                        useAuthForDefinition.CheckedChanged += UseApiKeyAuthForDefinition_CheckedChanged;
+                        panel.Controls.Add(useAuthForDefinition);
+
+                        {
+                            apiKeyDefinitionAuthGroup = new GroupBox { AutoSize = true, Text = "OpenAPI definition retrieval" };
+                            var apiKeyDefinitionAuthPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
+
+                            bool inQuery = definitionApiKeyAuth.ContainsKey("query_parameter_name");
+
+                            {
+                                apiKeyDefinitionAuthPanel.Controls.Add(new Label { Text = "Location", Width = PercentWidth(20) }, 0, 1);
+                                apiKeyDefinitionAuthPanel.Controls.Add(new Label { Text = "Name", Width = PercentWidth(40) }, 1, 1);
+                            }
+                            {
+                                ToolTip apiKeyTooltip = new ToolTip { ToolTipTitle = "API key location", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                apiKeyDefinitionAuthLocation = new ComboBox { Dock = DockStyle.Fill, AutoCompleteMode = AutoCompleteMode.SuggestAppend, DropDownStyle = ComboBoxStyle.DropDownList, AutoCompleteSource = AutoCompleteSource.ListItems };
+                                apiKeyDefinitionAuthLocation.Items.AddRange(new string[] { "Header", "Query" });
+                                apiKeyDefinitionAuthLocation.SelectedItem = inQuery ? "Query" : "Header";
+                                apiKeyTooltip.SetToolTip(apiKeyDefinitionAuthLocation, "Location to use to send this API key when retrieving the OpenAPI definition.");
+                                apiKeyDefinitionAuthLocation.TextChanged += ApiKeyLocation_TextChanged;
+                                apiKeyDefinitionAuthPanel.Controls.Add(apiKeyDefinitionAuthLocation, 0, 2);
+                            }
+                            {
+                                var name = useAuthForDefinition.Checked ? (string)definitionApiKeyAuth[inQuery ? "query_parameter_name" : "header_name"] : string.Empty;
+                                ToolTip apiKeyTooltip = new ToolTip { ToolTipTitle = "API key name", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                apiKeyDefinitionAuthName = new TextBox { Text = name, Dock = DockStyle.Fill };
+                                apiKeyTooltip.SetToolTip(apiKeyDefinitionAuthName, "Name of the header or query parameter used to store API key when retrieving the OpenAPI definition.");
+                                apiKeyDefinitionAuthName.TextChanged += ApiKeyName_TextChanged;
+                                apiKeyDefinitionAuthPanel.Controls.Add(apiKeyDefinitionAuthName, 1, 2);
+                            }
+                            apiKeyDefinitionAuthGroup.Visible = useAuthForDefinition.Checked;
+                            apiKeyDefinitionAuthGroup.Enabled = useAuthForDefinition.Checked;
+
+                            apiKeyDefinitionAuthGroup.Controls.Add(apiKeyDefinitionAuthPanel);
+                            panel.Controls.Add(apiKeyDefinitionAuthGroup);
+                        }
+
+                        layout.Controls.Add(panel);
+                    }
+                    #endregion
 
                     #region API Key
                     {
+                        var panel = new GroupBox { AutoSize = true, Text = "API key" };
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
                         var apiKey = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Width = PercentWidth(75), Text = (string)servicePanel.service.Auth["api_key"] };
                         tooltip.SetToolTip(apiKey, "Only used when required.");
                         apiKey.TextChanged += ApiKey_TextChanged;
-                        layout.Controls.Add(apiKey);
+                        panel.Controls.Add(apiKey);
+                        layout.Controls.Add(panel);
                     }
                     #endregion
 
@@ -1016,10 +1076,55 @@ namespace PyxelRestAddIn
             }
         }
 
+        #region API key authentication
+        private void UseApiKeyAuthForDefinition_CheckedChanged(object sender, EventArgs e)
+        {
+            var useApiKeyAuth = ((CheckBox)sender).Checked;
+            apiKeyDefinitionAuthGroup.Visible = useApiKeyAuth;
+            apiKeyDefinitionAuthGroup.Enabled = useApiKeyAuth;
+
+            if (useApiKeyAuth)
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                bool inQuery = (string)apiKeyDefinitionAuthLocation.SelectedItem == "Query";
+                definitionAuths["api_key"] = new Dictionary<string, object> { { inQuery ? "query_parameter_name" : "header_name", apiKeyDefinitionAuthName.Text } };
+            }
+            else
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths.Remove("api_key");
+            }
+        }
+
+        private void ApiKeyName_TextChanged(object sender, EventArgs e)
+        {
+            var apiKeyDefinitionAuth = (IDictionary<string, object>)((IDictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"])["api_key"];
+            if (apiKeyDefinitionAuth.ContainsKey("query_parameter_name"))
+                apiKeyDefinitionAuth["query_parameter_name"] = ((TextBox)sender).Text;
+            else
+                apiKeyDefinitionAuth["header_name"] = ((TextBox)sender).Text;
+        }
+
+        private void ApiKeyLocation_TextChanged(object sender, EventArgs e)
+        {
+            var apiKeyDefinitionAuth = (IDictionary<string, object>)((IDictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"])["api_key"];
+            if (apiKeyDefinitionAuth.ContainsKey("query_parameter_name"))
+            {
+                apiKeyDefinitionAuth["header_name"] = apiKeyDefinitionAuth["query_parameter_name"];
+                apiKeyDefinitionAuth.Remove("query_parameter_name");
+            }
+            else
+            {
+                apiKeyDefinitionAuth["query_parameter_name"] = apiKeyDefinitionAuth["header_name"];
+                apiKeyDefinitionAuth.Remove("header_name");
+            }
+        }
+
         private void ApiKey_TextChanged(object sender, EventArgs e)
         {
             servicePanel.service.Auth["api_key"] = ((TextBox)sender).Text;
         }
+        #endregion
 
         private void LegacyArrayFormulas_CheckedChanged(object sender, EventArgs e)
         {
