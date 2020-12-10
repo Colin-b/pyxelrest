@@ -279,24 +279,48 @@ namespace PyxelRestAddIn
 
         private IDictionary<string, object> DefaultOpenAPI()
         {
-            return new Dictionary<string, object>() { { "selected_methods", new List<string> { "get", "post", "put", "delete", "patch", "options", "head" } }, { "definition_retrieval_auths", new Dictionary<string, object>() } };
+            return new Dictionary<string, object>() { 
+                { "selected_methods", new List<string> { "get", "post", "put", "delete", "patch", "options", "head" } }, 
+                { "definition_retrieval_auths", new Dictionary<string, object>() } 
+            };
         }
 
         private IDictionary<string, object> DefaultFormulas()
         {
-            return new Dictionary<string, object>() { { "dynamic_array", new Dictionary<string, object>() { { "lock_excel", false }, { "prefix", "{name}_" } } } };
+            return new Dictionary<string, object>() { 
+                { "dynamic_array", new Dictionary<string, object>() { 
+                    { "lock_excel", false }, 
+                    { "prefix", "{name}_" } 
+                } } 
+            };
         }
 
         public static readonly IDictionary<string, object> DefaultFormulasCache = new Dictionary<string, object>() { { "duration", 0 }, { "size", 100 } };
 
         private IDictionary<string, object> DefaultNetwork()
         {
-            return new Dictionary<string, object>() { { "max_retries", 5 }, { "connect_timeout", 1 }, { "read_timeout", 5 }, { "verify", true }, {"proxies", new Dictionary<string, object>() }, { "headers", new Dictionary<string, object>() } };
+            return new Dictionary<string, object>() { 
+                { "max_retries", 5 }, 
+                { "connect_timeout", 1 }, 
+                { "read_timeout", 5 }, 
+                { "verify", true }, 
+                {"proxies", new Dictionary<string, object>() }, 
+                { "headers", new Dictionary<string, object>() } 
+            };
         }
 
         private IDictionary<string, object> DefaultAuth()
         {
-            return new Dictionary<string, object>() { { "oauth2", new Dictionary<string, object>() { { "timeout", 60 }, { "header_name", "Authorization" }, { "header_value", "Bearer {token}" } } }, { "basic", new Dictionary<string, object>() { { "username", string.Empty }, { "password", string.Empty } } }, { "ntlm", new Dictionary<string, object>() { } }, { "api_key", string.Empty } };
+            return new Dictionary<string, object>() { 
+                { "oauth2", new Dictionary<string, object>() { 
+                    { "timeout", 60 }, 
+                    { "header_name", "Authorization" }, 
+                    { "header_value", "Bearer {token}" } 
+                } }, 
+                { "basic", new Dictionary<string, object>() { } }, 
+                { "ntlm", new Dictionary<string, object>() { } }, 
+                { "api_key", string.Empty } 
+            };
         }
 
         private void AddDefault(IDictionary<string, object> fromConf, IDictionary<string, object> defaultConf)

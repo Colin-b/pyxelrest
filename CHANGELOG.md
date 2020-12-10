@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `skip_update_for` option is now allowing dot notation.
 - Allow to provide a custom response converter when using as a python module.
 - Allow to set NTLM authentication with current credentials in the Microsoft Excel add-in.
+- Allow to provide the authentication mechanism to use when retrieving the OpenAPI definition in the Microsoft Excel add-in.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).

@@ -109,28 +109,28 @@ def _create_authentication(
 def _create_authentication_from_config(
     service_config: dict, authentication_mode: str, authentication: dict
 ):
-    if "oauth2_implicit" == authentication_mode:
+    if "oauth2" == authentication_mode:
         oauth2_config = dict(service_config.get("oauth2", {}))
-        return OAuth2Implicit(
-            authorization_url=authentication.get("authorization_url"), **oauth2_config
-        )
-    elif "oauth2_access_code" == authentication_mode:
-        oauth2_config = dict(service_config.get("oauth2", {}))
-        return OAuth2AuthorizationCode(
-            authorization_url=authentication.get("authorization_url"),
-            token_url=authentication.get("token_url"),
-            **oauth2_config,
-        )
-    elif "oauth2_password" == authentication_mode:
-        oauth2_config = dict(service_config.get("oauth2", {}))
-        return OAuth2ResourceOwnerPasswordCredentials(
-            token_url=authentication.get("token_url"), **oauth2_config
-        )
-    elif "oauth2_application" == authentication_mode:
-        oauth2_config = dict(service_config.get("oauth2", {}))
-        return OAuth2ClientCredentials(
-            token_url=authentication.get("token_url"), **oauth2_config
-        )
+        for authentication_mode, authentication in authentication.items():
+            if "implicit" == authentication_mode:
+                return OAuth2Implicit(
+                    authorization_url=authentication.get("authorization_url"),
+                    **oauth2_config,
+                )
+            elif "access_code" == authentication_mode:
+                return OAuth2AuthorizationCode(
+                    authorization_url=authentication.get("authorization_url"),
+                    token_url=authentication.get("token_url"),
+                    **oauth2_config,
+                )
+            elif "password" == authentication_mode:
+                return OAuth2ResourceOwnerPasswordCredentials(
+                    token_url=authentication.get("token_url"), **oauth2_config
+                )
+            elif "application" == authentication_mode:
+                return OAuth2ClientCredentials(
+                    token_url=authentication.get("token_url"), **oauth2_config
+                )
     elif "api_key" == authentication_mode:
         if "query_parameter_name" in authentication:
             return QueryApiKey(
@@ -144,8 +144,8 @@ def _create_authentication_from_config(
             service_config.get("basic", {}).get("username"),
             service_config.get("basic", {}).get("password"),
         )
-    else:
-        logger.error(f"Unexpected security definition type: {authentication_mode}")
+
+    logger.error(f"Unexpected security definition type: {authentication_mode}")
 
 
 def get_auth(

@@ -230,7 +230,7 @@ formulas:
 
 #### definition_retrieval_auths
 
- * `oauth2_implicit` `oauth2_auth_url` is now `authorization_url`
+ * `oauth2_implicit` `oauth2_auth_url` is now `authorization_url` within `oauth2` `implicit` section
  
     Previous (0.69.0)
     
@@ -246,11 +246,12 @@ formulas:
     ```yaml
     open_api:
         definition_retrieval_auths:
-            oauth2_implicit:
-                authorization_url: "https://authorization_url"
+            oauth2:
+                implicit:
+                    authorization_url: "https://authorization_url"
     ```
 
- * `oauth2_access_code` `oauth2_auth_url` is now `authorization_url` and `oauth2_token_url` is now `token_url`
+ * `oauth2_access_code` `oauth2_auth_url` is now `authorization_url` and `oauth2_token_url` is now `token_url` within `oauth2` `access_code` section
  
     Previous (0.69.0)
     
@@ -267,12 +268,13 @@ formulas:
     ```yaml
     open_api:
         definition_retrieval_auths:
-            oauth2_access_code:
-                authorization_url: "https://authorization_url"
-                token_url: "https://token_url"
+            oauth2:
+                access_code:
+                    authorization_url: "https://authorization_url"
+                    token_url: "https://token_url"
     ```
 
- * `oauth2_password` `oauth2_token_url` is now `token_url`
+ * `oauth2_password` `oauth2_token_url` is now `token_url` within `oauth2` `password` section
  
     Previous (0.69.0)
     
@@ -288,11 +290,12 @@ formulas:
     ```yaml
     open_api:
         definition_retrieval_auths:
-            oauth2_password:
-                token_url: "https://token_url"
+            oauth2:
+                password:
+                    token_url: "https://token_url"
     ```
 
- * `oauth2_application` `oauth2_token_url` is now `token_url`
+ * `oauth2_application` `oauth2_token_url` is now `token_url` within `oauth2` `application` section
  
     Previous (0.69.0)
     
@@ -308,8 +311,9 @@ formulas:
     ```yaml
     open_api:
         definition_retrieval_auths:
-            oauth2_application:
-                token_url: "https://token_url"
+            oauth2:
+                application:
+                    token_url: "https://token_url"
     ```
 
  * `api_key` `name` is now `query_parameter_name` if `in` was `query`
