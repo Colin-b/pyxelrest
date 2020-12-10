@@ -1,5 +1,3 @@
-from importlib import reload, import_module
-
 from pyxelrest.version import __version__
 from pyxelrest._exceptions import PyxelRestException
 
@@ -22,7 +20,7 @@ def load(config: dict, to_response: callable = _raw):
     global GENERATE_UDF_ON_IMPORT
 
     GENERATE_UDF_ON_IMPORT = False
-    _generator = reload(import_module("pyxelrest._generator"))
+    from pyxelrest import _generator
 
     GENERATE_UDF_ON_IMPORT = True
 
