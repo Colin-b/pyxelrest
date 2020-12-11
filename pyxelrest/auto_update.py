@@ -39,7 +39,10 @@ IMAGE_NAMES = {
 
 def get_registry_key(key: str) -> Optional[str]:
     try:
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest",
+        ) as pyxelrest_registry_key:
             value, _ = winreg.QueryValueEx(pyxelrest_registry_key, key)
         return value
     except FileNotFoundError:
@@ -212,11 +215,18 @@ class UpdateProcess:
 
             install_location = get_registry_key("InstallLocation")
             if not install_location:
-                raise Exception("Microsoft Excel add-in install location could not be found.")
+                raise Exception(
+                    "Microsoft Excel add-in install location could not be found."
+                )
 
             addin_installer = Installer(
+                trusted_location=os.path.join(
+                    os.getenv("APPDATA"), "Microsoft", "Excel", "XLSTART"
+                ),
                 destination=install_location,
-                path_to_up_to_date_configuration=get_registry_key("PathToUpToDateConfigurations")
+                path_to_up_to_date_configuration=get_registry_key(
+                    "PathToUpToDateConfigurations"
+                ),
             )
             addin_installer.install_addin()
             logger.info("Microsoft Excel add-in successfully updated.")
@@ -230,9 +240,7 @@ def _start_update_process(
     check_pre_releases: bool,
     updating_queue: multiprocessing.Queue,
 ):
-    UpdateProcess(
-        check_pre_releases, updating_queue
-    ).start_update()
+    UpdateProcess(check_pre_releases, updating_queue).start_update()
 
 
 class PyxelRestUpdater:
@@ -332,7 +340,11 @@ class UpdateGUI(tkinter.Frame):
 
         executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
         # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
-        data_dir = os.path.join(executable_folder_path, "..") if (os.path.basename(executable_folder_path) == "Scripts") else executable_folder_path
+        data_dir = (
+            os.path.dirname(executable_folder_path)
+            if (os.path.basename(executable_folder_path) == "Scripts")
+            else executable_folder_path
+        )
         self.resources_path = os.path.join(data_dir, "pyxelrest_resources")
 
         images_frame = tkinter.Frame(self)
@@ -472,9 +484,7 @@ def main(*args):
     options = parser.parse_args(args if args else None)
     logger.debug("Starting auto update script...")
     install_location = get_registry_key("InstallLocation") or ""
-    lock_file = os.path.join(
-        install_location, "update_is_in_progress"
-    )
+    lock_file = os.path.join(install_location, "update_is_in_progress")
     if _is_already_updating(lock_file):
         logger.debug("Skip update check as another update is ongoing.")
     else:

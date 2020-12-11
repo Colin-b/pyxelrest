@@ -61,7 +61,7 @@ Before creating an issue please make sure that it was not already reported.
 
    3. [Microsoft Excel] must be closed while executing the following script:
        ```batch
-       python pyxelrest/install_addin.py --source addin/PyxelRestAddIn/bin/Release
+       python pyxelrest/install_addin.py --source addin/PyxelRestAddIn/bin/Release --vb_addin addin/pyxelrest.xlam
        ```
 6) Add your changes.
     * The commit should only contain small changes and should be atomic.

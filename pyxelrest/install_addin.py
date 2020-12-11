@@ -87,7 +87,8 @@ class VSTOManager:
 
     def _clear_click_once_cache(self):
         """
-        Clear ClickOnce cache as it might be inconsistent if Microsoft Excel was running
+        Clear ClickOnce cache as it might be inconsistent (still contains the application manifest)
+        if Microsoft Excel was running during installation.
         """
         logger.info("Clearing ClickOnce application cache...")
         # Do not check result of cache clearing as it might not be required.
@@ -176,7 +177,9 @@ class Installer:
     def __init__(
         self,
         *,
+        trusted_location: str,
         source: str = None,
+        vb_addin: str = None,
         destination: str = None,
         vsto_version: str = "10.0",
         path_to_up_to_date_configuration: str = None,
@@ -191,7 +194,7 @@ class Installer:
             executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
             # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
             data_dir = (
-                os.path.join(executable_folder_path, "..")
+                os.path.dirname(executable_folder_path)
                 if (os.path.basename(executable_folder_path) == "Scripts")
                 else executable_folder_path
             )
@@ -203,11 +206,18 @@ class Installer:
                 f"PyxelRest Microsoft Excel add-in source folder cannot be found in {self.source}."
             )
 
+        self.vb_addin = vb_addin or os.path.join(self.source, "pyxelrest.xlam")
+        if not os.path.isfile(self.vb_addin):
+            raise Exception(
+                f"Visual Basic PyxelRest Excel Add-In cannot be found in {self.vb_addin}."
+            )
+
         self.destination = destination or os.path.abspath(".")
         self.destination_addin_folder = os.path.join(self.destination, "excel_addin")
         self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
         self.vsto_version = vsto_version
+        self.trusted_location = trusted_location
 
     def install_addin(self):
         self._write_registry_key("InstallLocation", self.destination)
@@ -217,42 +227,14 @@ class Installer:
             )
         create_folder(self.destination_addin_folder)
         self._create_module_logging()
-        # Assert that Microsoft Excel is closed
-        # otherwise ClickOnce cache will still contains the add-in application manifest
-        # Resulting in failure when installing a new add-in version
-        if self._is_excel_running():
-            logger.warning(
-                "Microsoft Excel should be closed otherwise add-in update might fail."
-            )
-        self._install_pyxelrest_vb_addin()
-
-        self.xlwings_bas_path = create_xlwings_config(self.destination_addin_folder)
-
+        self._install_vb_addin()
         self._install_addin()
 
-    @staticmethod
-    def _is_excel_running() -> bool:
-        import win32com.client
-
-        processes = win32com.client.GetObject("winmgmts:").InstancesOf("Win32_Process")
-        for process in processes:
-            if process.Properties_("Name").Value == "EXCEL.EXE":
-                return True
-        return False
-
-    def _install_pyxelrest_vb_addin(self):
-        source_file = os.path.join(self.source, "pyxelrest.xlam")
-        if not os.path.isfile(source_file):
-            raise Exception(
-                f"Visual Basic PyxelRest Excel Add-In cannot be found in {source_file}."
-            )
-
-        trusted_location = os.path.join(
-            os.getenv("APPDATA"), "Microsoft", "Excel", "XLSTART"
+    def _install_vb_addin(self):
+        create_folder(self.trusted_location)
+        shutil.copyfile(
+            self.vb_addin, os.path.join(self.trusted_location, "pyxelrest.xlam")
         )
-        if not os.path.exists(trusted_location):
-            os.makedirs(trusted_location)
-        shutil.copyfile(source_file, os.path.join(trusted_location, "pyxelrest.xlam"))
 
     def _install_addin(self):
         """
@@ -302,7 +284,7 @@ class Installer:
                         '    <add key="CheckPreReleases" value="true" />\n'
                     )
                 new_settings.write(
-                    f'    <add key="PathToXlWingsBasFile" value="{self.xlwings_bas_path}" />\n'
+                    f'    <add key="PathToXlWingsBasFile" value="{create_xlwings_config(self.destination_addin_folder)}" />\n'
                 )
                 new_settings.write(default_settings_line)
             else:
@@ -365,8 +347,20 @@ root:
 def main(*args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "--trusted_location",
+        help="Trusted Microsoft Excel location where visual basic add-in will be located.",
+        default=os.path.join(os.getenv("APPDATA"), "Microsoft", "Excel", "XLSTART"),
+        type=str,
+    )
+    parser.add_argument(
         "--source",
-        help="Directory containing add-in as provided by pyxelrest module installation.",
+        help="Directory containing Microsoft Excel add-in as provided by pyxelrest module installation.",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
+        "--vb_addin",
+        help="Directory containing Microsoft Excel Visual Basic add-in as provided by pyxelrest module installation.",
         default=None,
         type=str,
     )
@@ -389,7 +383,9 @@ def main(*args):
     )
     options = parser.parse_args(args if args else None)
     installer = Installer(
+        trusted_location=options.trusted_location,
         source=options.source,
+        vb_addin=options.vb_addin,
         destination=options.destination,
         path_to_up_to_date_configuration=options.path_to_up_to_date_configuration,
         check_pre_releases=options.check_pre_releases,
