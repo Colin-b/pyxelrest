@@ -22,4 +22,4 @@ jobs:
         python -m pip install .[testing]
     - name: Test with pytest
       run: |
-        pytest --cov=pyxelrest --cov-fail-under=68 --cov-config=.coveragerc
+        pytest --cov=pyxelrest --cov-fail-under=74 --cov-config=.coveragerc
