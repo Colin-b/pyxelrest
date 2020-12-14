@@ -25,7 +25,8 @@ def create_folder(folder_path: str):
 
 
 class VSTOManager:
-    def __init__(self, version: str):
+    def __init__(self):
+        version = "10.0"
         # Try 64 bits version first
         self.vsto_installer_path = os.path.join(
             os.getenv("commonprogramfiles"),
@@ -181,15 +182,9 @@ class Installer:
         source: str = None,
         vb_addin: str = None,
         destination: str = None,
-        vsto_version: str = "10.0",
         path_to_up_to_date_configuration: str = None,
         check_pre_releases: bool = False,
     ):
-        if not sys.platform.startswith("win"):
-            raise Exception(
-                "Microsoft Excel add-in can only be installed on Microsoft Windows."
-            )
-
         if not source:
             executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
             # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
@@ -216,7 +211,6 @@ class Installer:
         self.destination_addin_folder = os.path.join(self.destination, "excel_addin")
         self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
-        self.vsto_version = vsto_version
         self.trusted_location = trusted_location
 
     def install_addin(self):
@@ -241,7 +235,7 @@ class Installer:
         Install Excel addin in a different folder than the python copied one as it must be uninstalled prior to
         installation and python copy is performed before running post installation script.
         """
-        vsto = VSTOManager(self.vsto_version)
+        vsto = VSTOManager()
         if os.path.exists(self.destination_addin_folder):
             vsto.uninstall_addin(self.destination_addin_folder)
             dir_util.remove_tree(self.destination_addin_folder)
