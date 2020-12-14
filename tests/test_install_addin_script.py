@@ -49,7 +49,8 @@ def fake_registry(monkeypatch):
 def test_success(fake_registry, monkeypatch, tmpdir):
     fake_sub_processes(
         monkeypatch,
-        addin_installation(
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
             installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
@@ -86,7 +87,8 @@ def test_success(fake_registry, monkeypatch, tmpdir):
 def test_success_with_pre_release(fake_registry, monkeypatch, tmpdir):
     fake_sub_processes(
         monkeypatch,
-        addin_installation(
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
             installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
@@ -121,14 +123,287 @@ def test_success_with_pre_release(fake_registry, monkeypatch, tmpdir):
     assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
 
 
-def fake_sub_processes(monkeypatch, *calls: Tuple[List[str], int]):
+def test_success_with_uptodate_configuration(fake_registry, monkeypatch, tmpdir):
+    fake_sub_processes(
+        monkeypatch,
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    pyxelrest.install_addin.main(
+        "--trusted_location",
+        os.path.join(tmpdir, "trusted"),
+        "--source",
+        os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        "--vb_addin",
+        os.path.join(root, "addin", "pyxelrest.xlam"),
+        "--destination",
+        os.path.join(tmpdir, "destination"),
+        "--path_to_up_to_date_configuration",
+        "https://location_of_configurations",
+    )
+    assert_registry(
+        fake_registry,
+        install_location=os.path.join(tmpdir, "destination"),
+        path_to_up_to_date_configurations="https://location_of_configurations",
+    )
+    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
+    assert_vb_addin(
+        vb_source=os.path.join(root, "addin"),
+        trusted_location=os.path.join(tmpdir, "trusted"),
+    )
+    assert_addin(
+        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_addin_config(
+        "expected_PyxelRestAddIn.dll.config",
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
+
+
+def test_success_default_source(fake_registry, monkeypatch, tmpdir):
+    fake_sub_processes(
+        monkeypatch,
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    pyxelrest.install_addin.main(
+        "--trusted_location",
+        os.path.join(tmpdir, "trusted"),
+        "--destination",
+        os.path.join(tmpdir, "destination"),
+    )
+    assert_registry(fake_registry, install_location=os.path.join(tmpdir, "destination"))
+    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
+    assert_vb_addin(
+        vb_source=os.path.join(root, "addin"),
+        trusted_location=os.path.join(tmpdir, "trusted"),
+    )
+    assert_addin(
+        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_addin_config(
+        "expected_PyxelRestAddIn.dll.config",
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
+
+
+def test_non_silent_installation(fake_registry, monkeypatch, tmpdir):
+    fake_sub_processes(
+        monkeypatch,
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=-1,
+        ),
+        addin_installation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    pyxelrest.install_addin.main(
+        "--trusted_location",
+        os.path.join(tmpdir, "trusted"),
+        "--source",
+        os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        "--vb_addin",
+        os.path.join(root, "addin", "pyxelrest.xlam"),
+        "--destination",
+        os.path.join(tmpdir, "destination"),
+    )
+    assert_registry(fake_registry, install_location=os.path.join(tmpdir, "destination"))
+    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
+    assert_vb_addin(
+        vb_source=os.path.join(root, "addin"),
+        trusted_location=os.path.join(tmpdir, "trusted"),
+    )
+    assert_addin(
+        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_addin_config(
+        "expected_PyxelRestAddIn.dll.config",
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
+
+
+def test_update(fake_registry, monkeypatch, tmpdir):
+    fake_sub_processes(
+        monkeypatch,
+        silent_addin_uninstallation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    # Create a fake add-in to simulate that it was already installed
+    os.makedirs(os.path.join(tmpdir, "destination", "excel_addin"))
+    with open(
+        os.path.join(tmpdir, "destination", "excel_addin", "PyxelRestAddIn.vsto"), "wb"
+    ) as file:
+        file.write(b"")
+
+    root = os.path.dirname(os.path.dirname(__file__))
+    pyxelrest.install_addin.main(
+        "--trusted_location",
+        os.path.join(tmpdir, "trusted"),
+        "--source",
+        os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        "--vb_addin",
+        os.path.join(root, "addin", "pyxelrest.xlam"),
+        "--destination",
+        os.path.join(tmpdir, "destination"),
+    )
+    assert_registry(fake_registry, install_location=os.path.join(tmpdir, "destination"))
+    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
+    assert_vb_addin(
+        vb_source=os.path.join(root, "addin"),
+        trusted_location=os.path.join(tmpdir, "trusted"),
+    )
+    assert_addin(
+        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_addin_config(
+        "expected_PyxelRestAddIn.dll.config",
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
+
+
+def test_non_silent_uninstallation(fake_registry, monkeypatch, tmpdir):
+    fake_sub_processes(
+        monkeypatch,
+        silent_addin_uninstallation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=-1,
+        ),
+        addin_uninstallation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    # Create a fake add-in to simulate that it was already installed
+    os.makedirs(os.path.join(tmpdir, "destination", "excel_addin"))
+    with open(
+        os.path.join(tmpdir, "destination", "excel_addin", "PyxelRestAddIn.vsto"), "wb"
+    ) as file:
+        file.write(b"")
+
+    root = os.path.dirname(os.path.dirname(__file__))
+    pyxelrest.install_addin.main(
+        "--trusted_location",
+        os.path.join(tmpdir, "trusted"),
+        "--source",
+        os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        "--vb_addin",
+        os.path.join(root, "addin", "pyxelrest.xlam"),
+        "--destination",
+        os.path.join(tmpdir, "destination"),
+    )
+    assert_registry(fake_registry, install_location=os.path.join(tmpdir, "destination"))
+    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
+    assert_vb_addin(
+        vb_source=os.path.join(root, "addin"),
+        trusted_location=os.path.join(tmpdir, "trusted"),
+    )
+    assert_addin(
+        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_addin_config(
+        "expected_PyxelRestAddIn.dll.config",
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
+
+
+def test_source_not_existing(fake_registry, monkeypatch, tmpdir):
+    with pytest.raises(Exception) as exception_info:
+        pyxelrest.install_addin.main(
+            "--source",
+            os.path.join(tmpdir, "non_existing"),
+        )
+    assert (
+        str(exception_info.value)
+        == f"PyxelRest Microsoft Excel add-in source folder cannot be found in {os.path.join(tmpdir, 'non_existing')}."
+    )
+
+
+def test_vb_addin_source_not_existing(fake_registry, monkeypatch, tmpdir):
+    os.makedirs(os.path.join(tmpdir, "empty"))
+    with pytest.raises(Exception) as exception_info:
+        pyxelrest.install_addin.main(
+            "--source",
+            os.path.join(tmpdir, "empty"),
+        )
+    assert (
+        str(exception_info.value)
+        == f"Visual Basic PyxelRest Excel Add-In cannot be found in {os.path.join(tmpdir, 'empty', 'pyxelrest.xlam')}."
+    )
+
+
+def fake_sub_processes(monkeypatch, *calls: Tuple[List[str], int]) -> list:
+    remaining_calls = list(calls)
+
     def result_for_call(received: List[str]) -> int:
         for call, result in calls:
             if call == received:
+                remaining_calls.remove((call, result))
                 return result
-        return -1
+        raise Exception(f"Missing mock for {received}")
 
     monkeypatch.setattr(subprocess, "call", result_for_call)
+    return remaining_calls
+
+
+def clear_clickonce_cache(return_code: int):
+    return (["rundll32", "dfshim", "CleanOnlineAppCache"], return_code)
+
+
+def silent_addin_installation(
+    installer_path: str, install_location: str, return_code: int
+) -> Tuple[List[str], int]:
+    return (
+        [
+            installer_path,
+            "/Silent",
+            "/Install",
+            os.path.join(install_location, "excel_addin", "PyxelRestAddIn.vsto"),
+        ],
+        return_code,
+    )
 
 
 def addin_installation(
@@ -138,6 +413,33 @@ def addin_installation(
         [
             installer_path,
             "/Install",
+            os.path.join(install_location, "excel_addin", "PyxelRestAddIn.vsto"),
+        ],
+        return_code,
+    )
+
+
+def silent_addin_uninstallation(
+    installer_path: str, install_location: str, return_code: int
+) -> Tuple[List[str], int]:
+    return (
+        [
+            installer_path,
+            "/Silent",
+            "/Uninstall",
+            os.path.join(install_location, "excel_addin", "PyxelRestAddIn.vsto"),
+        ],
+        return_code,
+    )
+
+
+def addin_uninstallation(
+    installer_path: str, install_location: str, return_code: int
+) -> Tuple[List[str], int]:
+    return (
+        [
+            installer_path,
+            "/Uninstall",
             os.path.join(install_location, "excel_addin", "PyxelRestAddIn.vsto"),
         ],
         return_code,
@@ -177,14 +479,23 @@ def assert_addin_config(expected: str, install_location: str):
     )
 
 
-def assert_registry(fake_registry, install_location: str):
+def assert_registry(
+    fake_registry, install_location: str, path_to_up_to_date_configurations: str = None
+):
+    entries = {
+        "InstallLocation": (0, winreg.REG_SZ, install_location),
+    }
+    if path_to_up_to_date_configurations:
+        entries["PathToUpToDateConfigurations"] = (
+            0,
+            winreg.REG_SZ,
+            path_to_up_to_date_configurations,
+        )
     assert fake_registry == {
         (
             winreg.HKEY_CURRENT_USER,
             r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest",
-        ): {
-            "InstallLocation": (0, winreg.REG_SZ, install_location),
-        }
+        ): entries
     }
 
 

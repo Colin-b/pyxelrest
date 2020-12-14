@@ -182,7 +182,6 @@ class Installer:
         source: str = None,
         vb_addin: str = None,
         destination: str = None,
-        path_to_up_to_date_configuration: str = None,
         check_pre_releases: bool = False,
     ):
         if not source:
@@ -208,18 +207,16 @@ class Installer:
             )
 
         self.destination = destination or os.path.abspath(".")
-        self.destination_addin_folder = os.path.join(self.destination, "excel_addin")
-        self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
         self.trusted_location = trusted_location
 
-    def install_addin(self):
+    def install_addin(self, path_to_up_to_date_configuration: str = None):
+        create_folder(self.destination)
         self._write_registry_key("InstallLocation", self.destination)
-        if self.path_to_up_to_date_configuration:
+        if path_to_up_to_date_configuration:
             self._write_registry_key(
-                "PathToUpToDateConfigurations", self.path_to_up_to_date_configuration
+                "PathToUpToDateConfigurations", path_to_up_to_date_configuration
             )
-        create_folder(self.destination_addin_folder)
         self._create_module_logging()
         self._install_vb_addin()
         self._install_addin()
@@ -232,25 +229,26 @@ class Installer:
 
     def _install_addin(self):
         """
-        Install Excel addin in a different folder than the python copied one as it must be uninstalled prior to
-        installation and python copy is performed before running post installation script.
+        Install Excel addin in a different folder than the python copied one
+        as previous version must be uninstalled prior to re-installation.
         """
         vsto = VSTOManager()
-        if os.path.exists(self.destination_addin_folder):
-            vsto.uninstall_addin(self.destination_addin_folder)
-            dir_util.remove_tree(self.destination_addin_folder)
+        destination_addin_folder = os.path.join(self.destination, "excel_addin")
+        if os.path.exists(destination_addin_folder):
+            vsto.uninstall_addin(destination_addin_folder)
+            dir_util.remove_tree(destination_addin_folder)
 
-        os.makedirs(self.destination_addin_folder)
-        dir_util.copy_tree(self.source, self.destination_addin_folder)
+        os.makedirs(destination_addin_folder)
+        dir_util.copy_tree(self.source, destination_addin_folder)
         try:
-            vsto.install_addin(self.destination_addin_folder)
+            vsto.install_addin(destination_addin_folder)
         except:
             # Avoid next install trying to uninstall an addin that was not properly installed
-            dir_util.remove_tree(self.destination_addin_folder)
+            dir_util.remove_tree(destination_addin_folder)
             raise
-        self._update_addin_config()
+        self._update_addin_config(destination_addin_folder)
 
-    def _update_addin_config(self):
+    def _update_addin_config(self, destination_addin_folder: str):
         def write_addin_configuration_line(
             default_settings_line: str, new_settings: io.StringIO
         ):
@@ -278,14 +276,14 @@ class Installer:
                         '    <add key="CheckPreReleases" value="true" />\n'
                     )
                 new_settings.write(
-                    f'    <add key="PathToXlWingsBasFile" value="{create_xlwings_config(self.destination_addin_folder)}" />\n'
+                    f'    <add key="PathToXlWingsBasFile" value="{create_xlwings_config(destination_addin_folder)}" />\n'
                 )
                 new_settings.write(default_settings_line)
             else:
                 new_settings.write(default_settings_line)
 
         default_config_file_path = os.path.join(
-            self.destination_addin_folder, "PyxelRestAddIn.dll.config"
+            destination_addin_folder, "PyxelRestAddIn.dll.config"
         )
         if os.path.isfile(default_config_file_path):
             new_config = io.StringIO()
@@ -381,10 +379,9 @@ def main(*args):
         source=options.source,
         vb_addin=options.vb_addin,
         destination=options.destination,
-        path_to_up_to_date_configuration=options.path_to_up_to_date_configuration,
         check_pre_releases=options.check_pre_releases,
     )
-    installer.install_addin()
+    installer.install_addin(options.path_to_up_to_date_configuration)
 
 
 if __name__ == "__main__":

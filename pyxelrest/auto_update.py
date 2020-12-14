@@ -224,11 +224,10 @@ class UpdateProcess:
                     os.getenv("APPDATA"), "Microsoft", "Excel", "XLSTART"
                 ),
                 destination=install_location,
-                path_to_up_to_date_configuration=get_registry_key(
-                    "PathToUpToDateConfigurations"
-                ),
             )
-            addin_installer.install_addin()
+            addin_installer.install_addin(
+                get_registry_key("PathToUpToDateConfigurations")
+            )
             logger.info("Microsoft Excel add-in successfully updated.")
             self.updating_queue.put((EXCEL_STEP, DONE))
         except:
