@@ -3,14 +3,15 @@ import subprocess
 import sys
 import winreg
 from dataclasses import dataclass
+from typing import List, Tuple
 
 import pytest
 
 import pyxelrest.install_addin
 
 
-def fake_sub_processes(monkeypatch, calls: list[tuple[list[str], int]]):
-    def result_for_call(received: list[str]) -> int:
+def fake_sub_processes(monkeypatch, calls: List[Tuple[List[str], int]]):
+    def result_for_call(received: List[str]) -> int:
         for call, result in calls:
             if call == received:
                 return result
