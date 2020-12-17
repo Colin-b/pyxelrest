@@ -38,8 +38,15 @@ Var AddInUninstallerPath
 
 Function .onInit
 
-    StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
-    StrCpy $PathToConfiguration ""
+    ReadRegStr $0 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "InstallLocation"
+    ${If} $0 != ""
+        StrCpy $INSTDIR "$0"
+        ReadRegStr $PathToPython HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "PathToPython"
+        ReadRegStr $PathToConfiguration HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "PathToUpToDateConfigurations"
+    ${Else}
+        StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
+        StrCpy $PathToConfiguration ""
+    ${EndIf}
 
 FunctionEnd
 
@@ -189,6 +196,7 @@ Function registerUninstaller
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "DisplayName" "PyxelRest"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "UninstallString" '"$INSTDIR\pyxelrest_uninstaller-${VERSION}.exe"'
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "InstallLocation" '"$INSTDIR"'
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "PathToPython" '"$PathToPython"'
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "Publisher" "Bounouar Colin"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "HelpLink" "https://github.com/Colin-b/pyxelrest/"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "URLUpdateInfo" "https://github.com/Colin-b/pyxelrest/"
