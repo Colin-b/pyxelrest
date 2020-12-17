@@ -3,7 +3,7 @@ import subprocess
 import sys
 import winreg
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 import pytest
 
@@ -46,12 +46,36 @@ def fake_registry(monkeypatch):
     return keys
 
 
+def redirect_paths(monkeypatch, redirects: Dict[str, str]):
+    original = os.path.join
+
+    def redirect(*args) -> str:
+        original_path = original(*args)
+        return redirects.get(original_path, original_path)
+
+    monkeypatch.setattr(os.path, "join", redirect)
+
+
+def fake_vsto_installer(tmpdir, monkeypatch) -> str:
+    vsto_installer_path = os.path.join(tmpdir, "existing.exe")
+    with open(vsto_installer_path, "wb") as file:
+        file.write(b"")
+    redirect_paths(
+        monkeypatch,
+        {
+            r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe": vsto_installer_path,
+        },
+    )
+    return vsto_installer_path
+
+
 def test_success(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -85,11 +109,12 @@ def test_success(fake_registry, monkeypatch, tmpdir):
 
 
 def test_success_with_pre_release(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -124,11 +149,12 @@ def test_success_with_pre_release(fake_registry, monkeypatch, tmpdir):
 
 
 def test_success_with_uptodate_configuration(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -168,11 +194,12 @@ def test_success_with_uptodate_configuration(fake_registry, monkeypatch, tmpdir)
 
 
 def test_success_default_source(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -202,16 +229,17 @@ def test_success_default_source(fake_registry, monkeypatch, tmpdir):
 
 
 def test_non_silent_installation(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=-1,
         ),
         addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -245,16 +273,17 @@ def test_non_silent_installation(fake_registry, monkeypatch, tmpdir):
 
 
 def test_update(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         silent_addin_uninstallation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -295,21 +324,22 @@ def test_update(fake_registry, monkeypatch, tmpdir):
 
 
 def test_non_silent_uninstallation(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
         monkeypatch,
         silent_addin_uninstallation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=-1,
         ),
         addin_uninstallation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
         clear_clickonce_cache(return_code=-1),
         silent_addin_installation(
-            installer_path=r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe",
+            installer_path=vsto_installer_path,
             install_location=os.path.join(tmpdir, "destination"),
             return_code=0,
         ),
@@ -371,6 +401,192 @@ def test_vb_addin_source_not_existing(fake_registry, monkeypatch, tmpdir):
     assert (
         str(exception_info.value)
         == f"Visual Basic PyxelRest Excel Add-In cannot be found in {os.path.join(tmpdir, 'empty', 'pyxelrest.xlam')}."
+    )
+
+
+def test_vsto_does_not_exists(fake_registry, monkeypatch, tmpdir):
+    # Create empty source dir (missing VSTO)
+    os.makedirs(os.path.join(tmpdir, "source"))
+    root = os.path.dirname(os.path.dirname(__file__))
+    with pytest.raises(Exception) as exception_info:
+        pyxelrest.install_addin.main(
+            "--trusted_location",
+            os.path.join(tmpdir, "trusted"),
+            "--source",
+            os.path.join(tmpdir, "source"),
+            "--vb_addin",
+            os.path.join(root, "addin", "pyxelrest.xlam"),
+            "--destination",
+            os.path.join(tmpdir, "destination"),
+        )
+    assert (
+        str(exception_info.value)
+        == f'PyxelRest Microsoft Excel add-in cannot be found in {os.path.join(tmpdir, "destination", "excel_addin", "PyxelRestAddIn.vsto")}.'
+    )
+
+
+@pytest.fixture
+def remove_xlwings_bas(tmpdir):
+    import xlwings
+    import shutil
+
+    xlwings_path = xlwings.__path__[0]
+    original = os.path.join(xlwings_path, "xlwings.bas")
+    shutil.move(original, os.path.join(tmpdir, "original_xlwings.bas"))
+    yield original
+    shutil.copyfile(os.path.join(tmpdir, "original_xlwings.bas"), original)
+
+
+def test_xlwings_bas_does_not_exists(
+    fake_registry, monkeypatch, tmpdir, remove_xlwings_bas
+):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
+    fake_sub_processes(
+        monkeypatch,
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=vsto_installer_path,
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    with pytest.raises(Exception) as exception_info:
+        pyxelrest.install_addin.main(
+            "--trusted_location",
+            os.path.join(tmpdir, "trusted"),
+            "--source",
+            os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+            "--vb_addin",
+            os.path.join(root, "addin", "pyxelrest.xlam"),
+            "--destination",
+            os.path.join(tmpdir, "destination"),
+        )
+    assert (
+        str(exception_info.value)
+        == f"XLWings BAS file cannot be found in {remove_xlwings_bas}"
+    )
+
+
+@pytest.fixture
+def remove_pythonw_executable(tmpdir):
+    import shutil
+
+    python_path = os.path.dirname(sys.executable)
+    original = os.path.join(python_path, "pythonw.exe")
+    shutil.move(original, os.path.join(tmpdir, "original_pythonw.exe"))
+    yield original
+    shutil.copyfile(os.path.join(tmpdir, "original_pythonw.exe"), original)
+
+
+def test_pythonw_executable_does_not_exists(
+    fake_registry, monkeypatch, tmpdir, remove_pythonw_executable
+):
+    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
+    fake_sub_processes(
+        monkeypatch,
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=vsto_installer_path,
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    with pytest.raises(Exception) as exception_info:
+        pyxelrest.install_addin.main(
+            "--trusted_location",
+            os.path.join(tmpdir, "trusted"),
+            "--source",
+            os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+            "--vb_addin",
+            os.path.join(root, "addin", "pyxelrest.xlam"),
+            "--destination",
+            os.path.join(tmpdir, "destination"),
+        )
+    assert (
+        str(exception_info.value)
+        == f"Python executable cannot be found in {remove_pythonw_executable}"
+    )
+
+
+def test_vsto_installer_x86(fake_registry, monkeypatch, tmpdir):
+    vsto_installer_path = os.path.join(tmpdir, "existing.exe")
+    with open(vsto_installer_path, "wb") as file:
+        file.write(b"")
+    redirect_paths(
+        monkeypatch,
+        {
+            r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe": os.path.join(
+                tmpdir, "non_existing.exe"
+            ),
+            r"C:\Program Files (x86)\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe": vsto_installer_path,
+        },
+    )
+    fake_sub_processes(
+        monkeypatch,
+        clear_clickonce_cache(return_code=-1),
+        silent_addin_installation(
+            installer_path=vsto_installer_path,
+            install_location=os.path.join(tmpdir, "destination"),
+            return_code=0,
+        ),
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    pyxelrest.install_addin.main(
+        "--trusted_location",
+        os.path.join(tmpdir, "trusted"),
+        "--source",
+        os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        "--vb_addin",
+        os.path.join(root, "addin", "pyxelrest.xlam"),
+        "--destination",
+        os.path.join(tmpdir, "destination"),
+    )
+    assert_registry(fake_registry, install_location=os.path.join(tmpdir, "destination"))
+    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
+    assert_vb_addin(
+        vb_source=os.path.join(root, "addin"),
+        trusted_location=os.path.join(tmpdir, "trusted"),
+    )
+    assert_addin(
+        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_addin_config(
+        "expected_PyxelRestAddIn.dll.config",
+        install_location=os.path.join(tmpdir, "destination"),
+    )
+    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
+
+
+def test_vsto_installer_not_existing(fake_registry, monkeypatch, tmpdir):
+    redirect_paths(
+        monkeypatch,
+        {
+            r"C:\Program Files\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe": os.path.join(
+                tmpdir, "non_existing.exe"
+            ),
+            r"C:\Program Files (x86)\Common Files\microsoft shared\VSTO\10.0\VSTOInstaller.exe": os.path.join(
+                tmpdir, "non_existing.exe"
+            ),
+        },
+    )
+    root = os.path.dirname(os.path.dirname(__file__))
+    with pytest.raises(Exception) as exception_info:
+        pyxelrest.install_addin.main(
+            "--trusted_location",
+            os.path.join(tmpdir, "trusted"),
+            "--source",
+            os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
+            "--vb_addin",
+            os.path.join(root, "addin", "pyxelrest.xlam"),
+            "--destination",
+            os.path.join(tmpdir, "destination"),
+        )
+    assert (
+        str(exception_info.value)
+        == f'PyxelRest Microsoft Excel add-in cannot be installed as VSTO installer cannot be found in {os.path.join(tmpdir, "non_existing.exe")}.'
     )
 
 
