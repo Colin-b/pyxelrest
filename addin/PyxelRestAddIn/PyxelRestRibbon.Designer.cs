@@ -122,11 +122,11 @@
             this.autoUpdateButton.Checked = true;
             this.autoUpdateButton.Image = global::PyxelRestAddIn.Properties.Resources.data_transfer_download_128;
             this.autoUpdateButton.ImageName = "Automatic check for update";
-            this.autoUpdateButton.Label = "Check for update on close";
+            this.autoUpdateButton.Label = "Auto check for update";
             this.autoUpdateButton.Name = "autoUpdateButton";
-            this.autoUpdateButton.ScreenTip = "Check for update on close";
+            this.autoUpdateButton.ScreenTip = "Auto check for update";
             this.autoUpdateButton.ShowImage = true;
-            this.autoUpdateButton.SuperTip = "Check for update once Microsoft Excel is closed.";
+            this.autoUpdateButton.SuperTip = "Check for update while Microsoft Excel is running.";
             this.autoUpdateButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ActivateOrDeactivateAutoUpdate);
             // 
             // installDevelopmentReleasesButton

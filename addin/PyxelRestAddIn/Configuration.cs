@@ -52,7 +52,7 @@ namespace PyxelRestAddIn
 
         private YamlStream LoadUrl(string fileUrl)
         {
-            HttpWebResponse response = UrlChecker.ConnectTo(fileUrl, UrlChecker.GetProxyFor(fileUrl), close: false);
+            HttpWebResponse response = HttpHelper.ConnectTo(fileUrl);
             if (response == null || response.StatusCode != HttpStatusCode.OK)
             {
                 string details = response == null ? "" : response.StatusDescription;

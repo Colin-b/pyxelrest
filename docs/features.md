@@ -38,7 +38,7 @@ Functions are automatically re-generated on [Microsoft Excel] startup and on con
 <p align="center">
   <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/update_gui.gif" alt='Update steps'>
 </p>
-<p align="center"><em>Check for update is performed when closing Microsoft Excel (it can be deactivated), you will be prompted in case one is available.</em></p>
+<p align="center"><em>Update check is only performed while Microsoft Excel is running. You will be prompted in case one is available (it can be deactivated).</em></p>
 
 
 ## Python

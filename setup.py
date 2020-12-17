@@ -63,17 +63,6 @@ setup(
             ],
         ),
         (
-            "pyxelrest_resources",
-            [
-                "pyxelrest_resources/excel_logo_100.png",
-                "pyxelrest_resources/excel_logo_error_100.png",
-                "pyxelrest_resources/excel_logo_greyscale_100.png",
-                "pyxelrest_resources/python_logo_100.png",
-                "pyxelrest_resources/python_logo_error_100.png",
-                "pyxelrest_resources/python_logo_greyscale_100.png",
-            ],
-        ),
-        (
             "pyxelrest_addin/resources",
             [
                 "addin/PyxelRestAddIn/bin/Release/resources/add-file-16.png",
@@ -123,7 +112,6 @@ setup(
     python_requires=">=3.8",
     entry_points={
         "console_scripts": [
-            "pyxelrest_auto_update=pyxelrest.auto_update:main",
             "pyxelrest_install_addin=pyxelrest.install_addin:main",
             "pyxelrest_add_config=pyxelrest._add_config:main",
         ]

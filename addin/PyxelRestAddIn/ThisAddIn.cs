@@ -25,6 +25,7 @@ namespace PyxelRestAddIn
 
         private static System.Configuration.Configuration Config = LoadConfig();
 
+
         internal static string GetSetting(string key)
         {
             if (Config.AppSettings.Settings[key] == null)
@@ -93,22 +94,6 @@ namespace PyxelRestAddIn
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
-            Log.Debug("Stopping PyxelRest Addin...");
-            try
-            {
-                // Do not read configuration to perform the action requested by the user even if saving it in configuration failed.
-                var autoUpdateButton = Globals.Ribbons.PyxelRestRibbon.autoUpdateButton;
-                if (autoUpdateButton.Enabled && autoUpdateButton.Checked)
-                {
-                    var installDevelopmentReleasesButton = Globals.Ribbons.PyxelRestRibbon.installDevelopmentReleasesButton;
-                    var pathToPythonEditBox = Globals.Ribbons.PyxelRestRibbon.pathToPythonEditBox;
-                    new Updater(pathToPythonEditBox.Text).CheckUpdate(installDevelopmentReleasesButton.Checked);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("An error occurred while checking for PyxelRest update on Microsoft Excel shutdown.", ex);
-            }
         }
 
         internal string GetVersion()

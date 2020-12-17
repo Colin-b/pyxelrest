@@ -269,6 +269,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Updater.cs" />
+    <Compile Include="HttpHelper.cs" />
     <Compile Include="UrlChecker.cs" />
     <Compile Include="ServicePanel.cs" />
     <Compile Include="ThisAddIn.cs">

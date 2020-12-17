@@ -18,6 +18,8 @@ namespace PyxelRestAddIn
             "User Defined Functions cannot be loaded.\n"+
             "Check logs for more details or contact your support team.\n";
 
+        private Updater VersionUpdater;
+
         private void PyxelRestRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             generateUDFAtStartupButton.Checked = ThisAddIn.GenerateUDFAtStartup();
@@ -50,7 +52,8 @@ namespace PyxelRestAddIn
             pathToPythonEditBox.Text = ThisAddIn.GetSetting("PathToPython");
             customXlwingsPathEditBox.Text = ThisAddIn.GetSetting("PathToXlWingsBasFile");
 
-            developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), Globals.ThisAddIn.GetPyxelRestVersion(pathToPythonEditBox.Text));
+            var pyxelrestVersion = Globals.ThisAddIn.GetPyxelRestVersion(pathToPythonEditBox.Text);
+            developerGroup.Label = string.Format("Excel {0} - Python {1}", Globals.ThisAddIn.GetVersion(), pyxelrestVersion);
 
             if (!File.Exists(pathToPythonEditBox.Text))
             {
@@ -60,17 +63,28 @@ namespace PyxelRestAddIn
             {
                 developerOptionsGroup.Label = "Advanced options seems to be valid";
             }
+
+            VersionUpdater = new Updater(pyxelrestVersion, installDevelopmentReleasesButton.Checked);
+            if (autoUpdateButton.Enabled)
+                VersionUpdater.StartCheck();
         }
 
         private void ActivateOrDeactivateAutoUpdate(object sender, RibbonControlEventArgs e)
         {
             try
             {
-                ((RibbonToggleButton)sender).Label = string.Format("Automatic update is {0}", ((RibbonToggleButton)sender).Checked ? "enabled" : "disabled");
-                installDevelopmentReleasesButton.Enabled = ((RibbonToggleButton)sender).Checked;
-                ((RibbonToggleButton)sender).Image = ((RibbonToggleButton)sender).Checked ? Properties.Resources.data_transfer_download_128 : Properties.Resources.data_transfer_download_128_grey;
-                ThisAddIn.SetSetting("AutoCheckForUpdates", "" + ((RibbonToggleButton)sender).Checked);
-                Log.DebugFormat("Auto check for update set to {0}", ((RibbonToggleButton)sender).Checked);
+                var autoUpdate = ((RibbonToggleButton)sender).Checked;
+                ((RibbonToggleButton)sender).Label = string.Format("Automatic update is {0}", autoUpdate ? "enabled" : "disabled");
+                installDevelopmentReleasesButton.Enabled = autoUpdate;
+                ((RibbonToggleButton)sender).Image = autoUpdate ? Properties.Resources.data_transfer_download_128 : Properties.Resources.data_transfer_download_128_grey;
+                ThisAddIn.SetSetting("AutoCheckForUpdates", "" + autoUpdate);
+                
+                if (autoUpdate)
+                    VersionUpdater.StartCheck();
+                else
+                    VersionUpdater.StopCheck();
+
+                Log.DebugFormat("Auto check for update set to {0}", autoUpdate);
             }
             catch (ConfigurationErrorsException ex)
             {
@@ -140,7 +154,8 @@ namespace PyxelRestAddIn
         {
             try
             {
-                if (((RibbonToggleButton)sender).Checked)
+                var checkPreRelease = ((RibbonToggleButton)sender).Checked;
+                if (checkPreRelease)
                 {
                     ((RibbonToggleButton)sender).Label = "Update include unstable releases";
                     ((RibbonToggleButton)sender).Image = Properties.Resources.data_transfer_download_128_orange;
@@ -150,8 +165,9 @@ namespace PyxelRestAddIn
                     ((RibbonToggleButton)sender).Label = "Update include stable releases only";
                     ((RibbonToggleButton)sender).Image = Properties.Resources.data_transfer_download_128;
                 }
-                ThisAddIn.SetSetting("CheckPreReleases", "" + ((RibbonToggleButton)sender).Checked);
-                Log.DebugFormat("Check pre-releases during update set to {0}", ((RibbonToggleButton)sender).Checked);
+                ThisAddIn.SetSetting("CheckPreReleases", "" + checkPreRelease);
+                VersionUpdater.InstallPreRelease = checkPreRelease;
+                Log.DebugFormat("Check pre-releases during update set to {0}", checkPreRelease);
             }
             catch (ConfigurationErrorsException ex)
             {
