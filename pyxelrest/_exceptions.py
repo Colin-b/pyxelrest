@@ -23,12 +23,13 @@ class UnsupportedOpenAPIVersion(InvalidOpenAPIDefinition):
         InvalidOpenAPIDefinition.__init__(self, f"Version {version} not supported.")
 
 
-class MandatoryPropertyNotProvided(PyxelRestException):
-    """ Mandatory property not provided. """
+class OpenAPIDefinitionNotProvided(PyxelRestException):
+    """ OpenAPI definition not provided. """
 
-    def __init__(self, section: str, property_name: str, *args, **kwargs):
+    def __init__(self, section: str, *args, **kwargs):
         PyxelRestException.__init__(
-            self, f'"{section}" configuration section must provide "{property_name}".'
+            self,
+            f'"{section}" configuration section must provide "open_api" "definition".',
         )
 
 

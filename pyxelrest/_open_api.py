@@ -16,7 +16,7 @@ from pyxelrest._common import (
     Service,
 )
 from pyxelrest._exceptions import (
-    MandatoryPropertyNotProvided,
+    OpenAPIDefinitionNotProvided,
     DuplicatedParameters,
     OpenAPIVersionNotProvided,
     UnsupportedOpenAPIVersion,
@@ -57,13 +57,11 @@ class RESTAPIConfigSection(ConfigSection):
         :param settings: Section configuration settings.
         """
         ConfigSection.__init__(self, name, settings)
-        open_api = settings.get("open_api")
-        if not open_api:
-            raise MandatoryPropertyNotProvided(name, "open_api")
+        open_api = settings.get("open_api", {})
 
         self.open_api_definition = open_api.get("definition")
         if not self.open_api_definition:
-            raise MandatoryPropertyNotProvided(name, "open_api/definition")
+            raise OpenAPIDefinitionNotProvided(name)
 
         self.definition_read_timeout = open_api.get("definition_read_timeout", 5)
         self.selected_methods = open_api.get(

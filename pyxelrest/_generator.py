@@ -145,7 +145,7 @@ def load_services_from_yaml() -> List[Service]:
         config = yaml.load(config_file, Loader=yaml.FullLoader)
 
     logging.debug(f'Loading services from "{services_configuration_file_path}"...')
-    return load_services(config)
+    return load_services(config or {})
 
 
 if GENERATE_UDF_ON_IMPORT:
