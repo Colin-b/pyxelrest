@@ -13,8 +13,12 @@ def load(tmpdir, config: dict):
         file.write(yaml.dump(config))
 
     pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
+    # pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = stdout_logging(tmpdir)
 
-    # Create logging configuration
+    return reload(import_module("pyxelrest._generator"))
+
+
+def stdout_logging(tmpdir):
     config_file_path = os.path.join(tmpdir, "test_logging.yml")
     with open(config_file_path, "wt") as file:
         file.write(
@@ -40,7 +44,4 @@ root:
   level: DEBUG
   handlers: [standard_output]"""
         )
-
-    pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = config_file_path
-
-    return reload(import_module("pyxelrest._generator"))
+    return config_file_path
