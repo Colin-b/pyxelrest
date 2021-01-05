@@ -33,9 +33,6 @@ def load_services(config: dict) -> List[Service]:
     :return: List of OpenAPI and PyxelRest instances, size should be the same one as the number of sections within
     configuration.
     """
-    if not isinstance(config, dict):
-        raise Exception("Configuration must be a dictionary.")
-
     loaded_services = []
     for name, settings in config.items():
         if "pyxelrest" == name:

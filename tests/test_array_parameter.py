@@ -3,7 +3,9 @@ from responses import RequestsMock
 from tests import loader
 
 
-def test_string_multi_array_parameter(responses: RequestsMock, tmpdir):
+def test_string_multi_array_parameter(
+    responses: RequestsMock, tmpdir, clean_generated_functions
+):
     responses.add(
         responses.GET,
         url="http://test/",

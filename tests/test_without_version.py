@@ -3,7 +3,9 @@ from responses import RequestsMock
 from tests import loader
 
 
-def test_swagger_version_is_mandatory(responses: RequestsMock, tmpdir):
+def test_swagger_version_is_mandatory(
+    responses: RequestsMock, tmpdir, clean_generated_functions
+):
     responses.add(
         responses.GET,
         url="http://localhost:8948/swagger_version_not_provided",
