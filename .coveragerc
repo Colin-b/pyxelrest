@@ -1,5 +1,5 @@
 [run]
-omit = pyxelrest/user_defined_functions/*
+omit = pyxelrest/generated/*
 
 [report]
 exclude_lines =

@@ -53,7 +53,7 @@ import pyxelrest
 configuration = {'petstore': {'open_api': {'definition': 'https://petstore.swagger.io/v2/swagger.json'}}}
 pyxelrest.load(configuration)
 
-from pyxelrest.user_defined_functions import petstore
+from pyxelrest.generated import petstore
 
 # Functions are available as python functions within petstore (in this case) and can be used as such
 user = petstore.getUserByName("test")

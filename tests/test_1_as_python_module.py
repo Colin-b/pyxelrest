@@ -68,7 +68,7 @@ def test_get_order_by_id(responses: RequestsMock, petstore_service, test_api_ser
         match_querystring=True,
     )
 
-    from pyxelrest.user_defined_functions import petstore
+    from pyxelrest.generated import petstore
 
     now = datetime.datetime.utcnow()
     now_str = now.isoformat().encode()
@@ -121,7 +121,7 @@ def test_get_user_by_name(responses: RequestsMock, petstore_service, test_api_se
         match_querystring=True,
     )
 
-    from pyxelrest.user_defined_functions import petstore
+    from pyxelrest.generated import petstore
 
     petstore.createUser(
         id=666666,
@@ -175,6 +175,6 @@ def test_raw_text_response(responses: RequestsMock, test_api_service):
         match_querystring=True,
     )
 
-    from pyxelrest.user_defined_functions import text_api
+    from pyxelrest.generated import text_api
 
     assert text_api.get_text() == "This is the content of the response."

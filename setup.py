@@ -34,11 +34,11 @@ setup(
         "Operating System :: Microsoft :: Windows :: Windows 10",
     ],
     keywords=["excel", "openapi", "swagger", "rest", "udf", "service"],
-    packages=find_packages(exclude=["tests*", "pyxelrest.user_defined_functions"]),
+    packages=find_packages(exclude=["tests*", "pyxelrest.generated"]),
     package_data={
         "pyxelrest": [
-            "user_defined_functions.jinja2",
-            "user_defined_functions_init.jinja2",
+            "generated_api.jinja2",
+            "generated_init.jinja2",
         ]
     },
     data_files=[
