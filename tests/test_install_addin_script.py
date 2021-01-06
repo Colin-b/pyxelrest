@@ -2,48 +2,11 @@ import os.path
 import subprocess
 import sys
 import winreg
-from dataclasses import dataclass
 from typing import List, Tuple, Dict
 
 import pytest
 
 import pyxelrest.install_addin
-
-
-@pytest.fixture
-def fake_registry(monkeypatch):
-    keys = {}
-
-    @dataclass
-    class FakeRegistryKey:
-        entries = {}
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            return
-
-        def set(self, value_name, reserved, type, value):
-            self.entries[value_name] = (reserved, type, value)
-
-        def __eq__(self, other):
-            if isinstance(other, dict):
-                return other == self.entries
-
-    monkeypatch.setattr(
-        winreg,
-        "CreateKey",
-        lambda section, key: keys.setdefault((section, key), FakeRegistryKey()),
-    )
-    monkeypatch.setattr(
-        winreg,
-        "SetValueEx",
-        lambda key, value_name, reserved, type, value: key.set(
-            value_name, reserved, type, value
-        ),
-    )
-    return keys
 
 
 def redirect_paths(monkeypatch, redirects: Dict[str, str]):

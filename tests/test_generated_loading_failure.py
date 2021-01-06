@@ -5,7 +5,6 @@ import os
 from importlib import reload, import_module
 
 import pyxelrest._generator_config
-from tests.loader import stdout_logging
 
 
 def test_loading_failure(monkeypatch, tmpdir, caplog):
@@ -14,7 +13,6 @@ def test_loading_failure(monkeypatch, tmpdir, caplog):
     with open(config_file_path, "wb") as file:
         file.write(b"")
     pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
-    # pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = stdout_logging(tmpdir)
 
     original = import_module
 

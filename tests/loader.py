@@ -13,35 +13,5 @@ def load(tmpdir, config: dict):
         file.write(yaml.dump(config))
 
     pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
-    # pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = stdout_logging(tmpdir)
 
     return reload(import_module("pyxelrest._generator"))
-
-
-def stdout_logging(tmpdir):
-    config_file_path = os.path.join(tmpdir, "test_logging.yml")
-    with open(config_file_path, "wt") as file:
-        file.write(
-            """version: 1
-formatters:
-  clean:
-    format: '%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s'
-handlers:
-  standard_output:
-    class: logging.StreamHandler
-    formatter: clean
-    stream: ext://sys.stdout
-loggers:
-  pyxelrest:
-    level: DEBUG
-  xlwings:
-    level: DEBUG
-  requests_auth:
-    level: DEBUG
-  requests.packages.urllib3:
-    level: DEBUG
-root:
-  level: DEBUG
-  handlers: [standard_output]"""
-        )
-    return config_file_path

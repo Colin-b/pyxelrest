@@ -6,7 +6,6 @@ import pytest
 import yaml
 
 import pyxelrest._generator_config
-from tests.loader import stdout_logging
 
 
 def test_incorrect_configuration(monkeypatch, tmpdir, caplog):
@@ -15,7 +14,6 @@ def test_incorrect_configuration(monkeypatch, tmpdir, caplog):
     with open(config_file_path, "wb") as file:
         file.write(b"\x1f")
     pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
-    # pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = stdout_logging(tmpdir)
     with pytest.raises(yaml.reader.ReaderError):
         reload(import_module("pyxelrest._generator"))
     assert caplog.messages == [
