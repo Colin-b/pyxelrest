@@ -74,7 +74,18 @@ def test_selected_parameters(responses: RequestsMock, parameter_service, tmpdir)
                 "formulas": {
                     "dynamic_array": {"lock_excel": True},
                 },
-            }
+            },
+            "excluded_parameters": {
+                "open_api": {
+                    "definition": "http://localhost:8951/",
+                    "excluded_parameters": [
+                        "*2",
+                    ],
+                },
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                },
+            },
         },
     )
     responses.add(
@@ -103,6 +114,18 @@ def test_excluded_parameters(responses: RequestsMock, parameter_service, tmpdir)
     generated_functions = loader.load(
         tmpdir,
         {
+            "selected_parameters": {
+                "open_api": {
+                    "definition": "http://localhost:8951/",
+                    "selected_parameters": [
+                        "mandatory",
+                        "*1",
+                    ],
+                },
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                },
+            },
             "excluded_parameters": {
                 "open_api": {
                     "definition": "http://localhost:8951/",
@@ -113,7 +136,7 @@ def test_excluded_parameters(responses: RequestsMock, parameter_service, tmpdir)
                 "formulas": {
                     "dynamic_array": {"lock_excel": True},
                 },
-            }
+            },
         },
     )
     responses.add(
