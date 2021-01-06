@@ -1,5 +1,4 @@
 import winreg
-from dataclasses import dataclass
 from distutils import dir_util
 import os.path
 from typing import Dict, Tuple
@@ -16,9 +15,9 @@ def clean_generated_functions():
     dir_util.remove_tree(generated_folder)
 
 
-@dataclass
 class FakeRegistryKey:
-    entries = {}
+    def __init__(self):
+        self.entries = {}
 
     def __enter__(self):
         return self
@@ -36,6 +35,9 @@ class FakeRegistryKey:
     def __eq__(self, other):
         if isinstance(other, dict):
             return other == self.entries
+
+    def __repr__(self):
+        return repr(self.entries)
 
 
 @pytest.fixture
