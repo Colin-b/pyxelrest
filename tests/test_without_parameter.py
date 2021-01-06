@@ -1,4 +1,3 @@
-import pytest
 from responses import RequestsMock
 
 from tests import loader
