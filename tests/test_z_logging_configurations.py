@@ -8,7 +8,6 @@ import pyxelrest._generator_config
 from responses import RequestsMock
 
 from tests.conftest import FakeRegistryKey
-from tests.loader import stdout_logging
 
 
 def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
