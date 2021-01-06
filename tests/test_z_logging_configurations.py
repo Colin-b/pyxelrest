@@ -103,6 +103,7 @@ def test_with_logging_configuration_file(
     with open(config_file_path, "wt") as file:
         file.write(yaml.dump(config))
 
+    reload(import_module("pyxelrest._generator_config"))
     reload(import_module("pyxelrest._generator"))
 
 
