@@ -480,10 +480,6 @@ class OpenAPIUDFMethod(UDFMethod):
         formula_type: str,
         formula_options: dict,
     ):
-        # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
-        self.help_url = OpenAPIUDFMethod.extract_url(
-            open_api_method.get("description") or ""
-        )
         operation_id = open_api_method.get(
             "operationId"
         ) or OpenAPIUDFMethod._compute_operation_id(http_method, path)
@@ -555,17 +551,6 @@ class OpenAPIUDFMethod(UDFMethod):
         header.update(self.service.config.custom_headers)
 
         return header
-
-    @staticmethod
-    def extract_url(text: str) -> Optional[str]:
-        """
-        OpenAPI URLs are interpreted thanks to the following format:
-        [description of the url](url)
-        :return: URL or None if no URL can be found.
-        """
-        urls = re.findall(r"^.*\[.*\]\((.*)\).*$", text)
-        if urls:
-            return urls[0]
 
     def _to_parameters(self, open_api_parameter: dict) -> List[APIUDFParameter]:
         if (

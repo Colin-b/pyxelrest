@@ -138,7 +138,6 @@ class UDFMethod:
         self.requests_method = http_method
         self.uri = f"{service.uri}{path}"
         self.udf_name = udf_name
-        self.help_url = ""
         self.auto_expand_result = "legacy_array" == formula_type
         self.is_asynchronous = (
             "vba_compatible" != formula_type

@@ -38,7 +38,7 @@ udf_methods = None  # Will be set after load
 {% macro add_udf(udf_method) %}
 
 
-@xw.func(category='{{ udf_method.service.config.name }}', call_in_wizard=False{% if udf_method.help_url %}, help_file='{{ udf_method.help_url }}'{% endif %}{% if udf_method.is_asynchronous %}, async_mode='threading'{% endif %})
+@xw.func(category='{{ udf_method.service.config.name }}', call_in_wizard=False{% if udf_method.is_asynchronous %}, async_mode='threading'{% endif %})
 {% if not udf_method.is_asynchronous %}
 @xw.arg('excel_application', vba='Application')
 {% endif %}
