@@ -26,7 +26,24 @@ def test_maximum_length(responses: RequestsMock, tmpdir):
                             }
                         },
                     }
-                }
+                },
+                "/min_length": {
+                    "get": {
+                        "parameters": [
+                            {
+                                "in": "query",
+                                "name": "str",
+                                "type": "string",
+                                "minLength": 2,
+                            },
+                        ],
+                        "responses": {
+                            "200": {
+                                "type": "string",
+                            }
+                        },
+                    }
+                },
             },
         },
         match_querystring=True,
@@ -61,6 +78,23 @@ def test_minimum_length(responses: RequestsMock, tmpdir):
         json={
             "swagger": "2.0",
             "paths": {
+                "/max_length": {
+                    "get": {
+                        "parameters": [
+                            {
+                                "in": "query",
+                                "name": "str",
+                                "type": "string",
+                                "maxLength": 2,
+                            },
+                        ],
+                        "responses": {
+                            "200": {
+                                "type": "string",
+                            }
+                        },
+                    }
+                },
                 "/min_length": {
                     "get": {
                         "parameters": [
@@ -77,7 +111,7 @@ def test_minimum_length(responses: RequestsMock, tmpdir):
                             }
                         },
                     }
-                }
+                },
             },
         },
         match_querystring=True,
