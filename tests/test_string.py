@@ -1,6 +1,3 @@
-import datetime
-
-from dateutil.tz import tzutc
 from responses import RequestsMock
 
 from tests import loader
