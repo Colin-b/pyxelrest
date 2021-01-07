@@ -372,9 +372,8 @@ class APIUDFParameter(UDFParameter):
         if not self.collection_format or "csv" == self.collection_format:
             return ",".join([str(value) for value in list_value])
         if "multi" == self.collection_format:
-            return (
-                list_value  # requests module will send one parameter per item in list
-            )
+            # requests module will send one parameter per item in list
+            return list_value
         if "ssv" == self.collection_format:
             return " ".join([str(value) for value in list_value])
         if "tsv" == self.collection_format:
