@@ -261,7 +261,7 @@ class APIUDFParameter(UDFParameter):
                         f'{self.name} value "{value}" must be superior or equals to {self.minimum}.'
                     )
 
-        if self.multiple_of and (value % self.multiple_of) == 0:
+        if self.multiple_of and (value % self.multiple_of) != 0:
             raise Exception(
                 f'{self.name} value "{value}" must be a multiple of {self.multiple_of}.'
             )
@@ -595,9 +595,8 @@ class OpenAPIUDFMethod(UDFMethod):
         elif "items" in schema:
             inner_parameter = dict(open_api_parameter)
             inner_parameter.update(schema["items"])
-            inner_parameter[
-                "server_param_name"
-            ] = None  # Indicate that this is the whole body
+            # Indicate that this is the whole body
+            inner_parameter["server_param_name"] = None
             parameters.append(APIUDFParameter(inner_parameter, schema))
         else:
             raise Exception(f"Unable to extract parameters from {open_api_parameter}")

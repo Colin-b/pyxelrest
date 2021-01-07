@@ -53,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return raw result when using as a python module even if HTTP 202 is received.
 - Return the full response as text when using as a python module, and not only the first 255 characters.
 - In case NO_PROXY environment variable was containing multiple URLs and should have been applied, it was not the case by the add-in.
+- Numbers are now properly checked if the value is supposed to be a multiple of another value.
+- Allow `str` parameter name.
 
 ### Removed
 - Drop support for `python` < `3.8`.
