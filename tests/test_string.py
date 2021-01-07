@@ -10,7 +10,7 @@ def test_maximum_length(responses: RequestsMock, tmpdir):
         json={
             "swagger": "2.0",
             "paths": {
-                "/max": {
+                "/max_length": {
                     "get": {
                         "parameters": [
                             {
@@ -42,16 +42,16 @@ def test_maximum_length(responses: RequestsMock, tmpdir):
     )
     responses.add(
         responses.GET,
-        url="http://test/max?str=te",
+        url="http://test/max_length?str=te",
         json=[],
         match_querystring=True,
     )
 
     assert (
-        generated_functions.string_get_max("tes")
+        generated_functions.string_get_max_length("tes")
         == 'str_visual_basic value "tes" cannot contains more than 2 characters.'
     )
-    assert generated_functions.string_get_max("te") == [[""]]
+    assert generated_functions.string_get_max_length("te") == [[""]]
 
 
 def test_minimum_length(responses: RequestsMock, tmpdir):
@@ -61,7 +61,7 @@ def test_minimum_length(responses: RequestsMock, tmpdir):
         json={
             "swagger": "2.0",
             "paths": {
-                "/min": {
+                "/min_length": {
                     "get": {
                         "parameters": [
                             {
@@ -93,13 +93,13 @@ def test_minimum_length(responses: RequestsMock, tmpdir):
     )
     responses.add(
         responses.GET,
-        url="http://test/min?str=te",
+        url="http://test/min_length?str=te",
         json=[],
         match_querystring=True,
     )
 
-    assert generated_functions.string_get_min("te") == [[""]]
+    assert generated_functions.string_get_min_length("te") == [[""]]
     assert (
-        generated_functions.string_get_min("t")
+        generated_functions.string_get_min_length("t")
         == 'str_visual_basic value "t" cannot contains less than 2 characters.'
     )
