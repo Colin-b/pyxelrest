@@ -3,6 +3,56 @@ from responses import RequestsMock
 from tests import loader
 
 
+def test_null_array_parameter(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_array_parameter",
+                        "parameters": [
+                            {
+                                "in": "query",
+                                "name": "array",
+                                "required": False,
+                                "items": {"type": "string"},
+                                "type": "array",
+                            }
+                        ],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "type": "string",
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "array_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://test/test",
+        json=[],
+        match_querystring=True,
+    )
+
+    assert generated_functions.array_parameter_get_array_parameter(None) == [[""]]
+
+
 def test_string_multi_array_parameter(
     responses: RequestsMock, tmpdir, clean_generated_functions
 ):

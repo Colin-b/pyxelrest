@@ -352,10 +352,7 @@ class APIUDFParameter(UDFParameter):
         if isinstance(value, list):
             list_value = self._convert_list_to_array(value)
         else:
-            if value is not None or self.allow_null:
-                list_value = [self.array_parameter._convert_to_type(value)]
-            else:
-                list_value = []
+            list_value = [self.array_parameter._convert_to_type(value)]
         self._check_array(list_value)
         return self._apply_collection_format(list_value)
 
