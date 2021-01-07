@@ -3,7 +3,7 @@ import logging
 from tests import loader
 
 
-def test_service_without_openapi_definition(monkeypatch, tmpdir, caplog):
+def test_service_without_openapi_definition(tmpdir, caplog):
     caplog.set_level(logging.ERROR, logger="pyxelrest")
     loader.load(
         tmpdir,
