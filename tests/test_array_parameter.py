@@ -623,3 +623,51 @@ def test_array_minimum_items_parameter(responses: RequestsMock, tmpdir):
     assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str1"]
     ) == [[""]]
+
+
+def test_file_array_parameter_description(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_array_parameter",
+                        "parameters": [
+                            {
+                                "in": "query",
+                                "name": "files",
+                                "required": True,
+                                "items": {"type": "file"},
+                                "type": "array",
+                            }
+                        ],
+                        "responses": {
+                            200: {
+                                "type": "string",
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "array_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    assert (
+        generated_functions.array_parameter_get_array_parameter.__xlfunc__["args"][0][
+            "doc"
+        ]
+        == """
+Value must be an array of cells with files content or files paths."""
+    )
