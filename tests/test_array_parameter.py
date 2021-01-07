@@ -394,3 +394,232 @@ def test_string_pipes_array_parameter(responses: RequestsMock, tmpdir):
     assert generated_functions.array_parameter_get_array_parameter(
         ["str1", "str2"]
     ) == [[""]]
+
+
+def test_string_unknown_array_parameter(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_array_parameter",
+                        "parameters": [
+                            {
+                                "description": "string array parameter",
+                                "in": "query",
+                                "name": "string_array",
+                                "required": True,
+                                "items": {"type": "string"},
+                                "type": "array",
+                                "collectionFormat": "unknown",
+                            }
+                        ],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"type": "string"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "array_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+
+    assert (
+        generated_functions.array_parameter_get_array_parameter(["str1", "str2"])
+        == "Collection format unknown is invalid."
+    )
+
+
+def test_array_unique_parameter(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_array_parameter",
+                        "parameters": [
+                            {
+                                "description": "string array parameter",
+                                "in": "query",
+                                "name": "string_array",
+                                "required": True,
+                                "items": {"type": "string"},
+                                "type": "array",
+                                "uniqueItems": True,
+                            }
+                        ],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"type": "string"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "array_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+
+    assert (
+        generated_functions.array_parameter_get_array_parameter(["str1", "str1"])
+        == "string_array contains duplicated items."
+    )
+
+
+def test_array_maximum_items_parameter(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_array_parameter",
+                        "parameters": [
+                            {
+                                "description": "string array parameter",
+                                "in": "query",
+                                "name": "string_array",
+                                "required": True,
+                                "items": {"type": "string"},
+                                "type": "array",
+                                "maxItems": 2,
+                            }
+                        ],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"type": "string"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "array_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://test/test?string_array=str1,str1",
+        json=[],
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.array_parameter_get_array_parameter(
+            ["str1", "str1", "str1"]
+        )
+        == "string_array cannot contains more than 2 items."
+    )
+
+    assert generated_functions.array_parameter_get_array_parameter(
+        ["str1", "str1"]
+    ) == [[""]]
+
+
+def test_array_minimum_items_parameter(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_array_parameter",
+                        "parameters": [
+                            {
+                                "description": "string array parameter",
+                                "in": "query",
+                                "name": "string_array",
+                                "required": True,
+                                "items": {"type": "string"},
+                                "type": "array",
+                                "minItems": 2,
+                            }
+                        ],
+                        "responses": {
+                            200: {
+                                "description": "successful operation",
+                                "schema": {
+                                    "items": {"type": "string"},
+                                    "type": "array",
+                                },
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "array_parameter": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://test/test?string_array=str1,str1",
+        json=[],
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.array_parameter_get_array_parameter(["str1"])
+        == "string_array cannot contains less than 2 items."
+    )
+    assert generated_functions.array_parameter_get_array_parameter(
+        ["str1", "str1"]
+    ) == [[""]]
