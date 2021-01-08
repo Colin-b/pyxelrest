@@ -658,3 +658,69 @@ def test_get_check_interval(responses: RequestsMock, tmpdir):
         )
         == [[""]]
     )
+
+
+def test_post_invalid_dict_only_header(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                }
+            }
+        },
+    )
+
+    assert (
+        generated_functions.pyxelrest_post_url(
+            "http://localhost:8958/dict",
+            [["key1", "key2", "key3"]],
+            parse_body_as="dict",
+        )
+        == ["There should be only two rows. Header and values."]
+    )
+
+
+def test_post_invalid_dict_too_many_rows(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                }
+            }
+        },
+    )
+
+    assert (
+        generated_functions.pyxelrest_post_url(
+            "http://localhost:8958/dict",
+            [["key1", "key2"], ["value1", "value2"], ["value10", "value20"]],
+            parse_body_as="dict",
+        )
+        == ["There should be only two rows. Header and values."]
+    )
+
+
+def test_post_invalid_dict_list_only_header(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                }
+            }
+        },
+    )
+
+    assert (
+        generated_functions.pyxelrest_post_url(
+            "http://localhost:8958/dict",
+            [["key1", "key2", "key3"]],
+            parse_body_as="dict_list",
+        )
+        == ["There should be at least two rows. Header and first dictionary values."]
+    )

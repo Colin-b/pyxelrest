@@ -137,14 +137,14 @@ class BodyParameter(UDFParameter):
     def list_as_json(lists: list, parse_as: str) -> Union[list, dict]:
         if "dict" == parse_as:
             if len(lists) != 2:
-                return ["There should be only two rows. Header and values."]
+                raise Exception("There should be only two rows. Header and values.")
             return list_to_dict(lists[0], lists[1])
 
         if "dict_list" == parse_as:
             if len(lists) < 2:
-                return [
+                raise Exception(
                     "There should be at least two rows. Header and first dictionary values."
-                ]
+                )
             return list_to_dict_list(lists[0], lists[1:])
 
         return lists
