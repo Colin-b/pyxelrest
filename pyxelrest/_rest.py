@@ -1,4 +1,3 @@
-import datetime
 from typing import Any, List, Union
 
 from pyxelrest._common import (
