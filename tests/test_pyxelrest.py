@@ -724,3 +724,35 @@ def test_post_invalid_dict_list_only_header(responses: RequestsMock, tmpdir):
         )
         == ["There should be at least two rows. Header and first dictionary values."]
     )
+
+
+def test_post_body_as_is(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
+                }
+            }
+        },
+    )
+
+    responses.add(
+        responses.POST,
+        url="http://localhost:8958/dict",
+        json={},
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.pyxelrest_post_url(
+            "http://localhost:8958/dict",
+            "Content of the body",
+        )
+        == [[""]]
+    )
+    request = _get_request(responses, "http://localhost:8958/dict")
+    assert request.headers["Content-Type"] == "application/json"
+    assert request.body == b'"Content of the body"'
