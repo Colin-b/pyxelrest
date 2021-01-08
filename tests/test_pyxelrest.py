@@ -583,3 +583,78 @@ def test_get_invalid_api_key_name(responses: RequestsMock, tmpdir):
         )
         == ['api_key_name value "-1" must be formatted as text.']
     )
+
+
+def test_get_wait_for_status(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                }
+            }
+        },
+    )
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/test",
+        status=303,
+        adding_headers={"location": "http://localhost:8958/test2"},
+        match_querystring=True,
+    )
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/test2",
+        json={},
+        status=200,
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.pyxelrest_get_url(
+            "http://localhost:8958/test",
+            wait_for_status=303,
+        )
+        == [[""]]
+    )
+
+
+def test_get_check_interval(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                }
+            }
+        },
+    )
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/test",
+        status=303,
+        adding_headers={"location": "http://localhost:8958/test2"},
+        match_querystring=True,
+    )
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/test2",
+        json={},
+        status=200,
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.pyxelrest_get_url(
+            "http://localhost:8958/test",
+            wait_for_status=303,
+            check_interval=1,
+        )
+        == [[""]]
+    )
