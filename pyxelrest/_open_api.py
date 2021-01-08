@@ -827,11 +827,7 @@ class OpenAPI(Service):
             raise UnsupportedOpenAPIVersion(self.open_api_definition["swagger"])
 
     def __str__(self) -> str:
-        if "ntlm" in self.config.auth:
-            return (
-                f"[{self.config.name}] service. {self.uri} ({self.config.auth['ntlm']})"
-            )
-        return f"[{self.config.name}] service. {self.uri}"
+        return f"{self.config.name} service. {self.uri}"
 
 
 def load_service(name: str, settings: dict) -> OpenAPI:
