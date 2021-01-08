@@ -16,17 +16,19 @@ from pyxelrest._fast_deserializer import Flattenizer
 class ParseBodyAsParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "parse_body_as", "parse_body_as", "", False, "string"
+            self,
+            "parse_body_as",
+            "parse_body_as",
+            location="",
+            required=False,
+            field_type="string",
         )
         self.choices = ["dict", "dict_list"]
         self.description = f"How the body should be sent ({self.choices})."
 
     def _convert_to_str(self, value: Any) -> str:
-        if isinstance(value, datetime.date):
-            raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        if isinstance(value, int) or isinstance(value, float):
-            value = str(value)
-        if value and value not in self.choices:
+        # No need to convert value as it's impossible to get a valid value if not a string anyway
+        if value not in self.choices:
             raise Exception(
                 f'{self.name} value "{value}" should be {" or ".join(self.choices)}.'
             )
@@ -41,7 +43,12 @@ class ParseBodyAsParameter(UDFParameter):
 class WaitForStatusParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "wait_for_status", "wait_for_status", "", False, "integer"
+            self,
+            "wait_for_status",
+            "wait_for_status",
+            location="",
+            required=False,
+            field_type="integer",
         )
         self.description = (
             "HTTP status code to wait for before returning response. "
@@ -66,7 +73,12 @@ class WaitForStatusParameter(UDFParameter):
 class CheckIntervalParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "check_interval", "check_interval", "", False, "integer"
+            self,
+            "check_interval",
+            "check_interval",
+            location="",
+            required=False,
+            field_type="integer",
         )
         self.description = "Number of seconds to wait before sending a new request. Wait for 30 seconds by default."
 
@@ -89,14 +101,14 @@ class CheckIntervalParameter(UDFParameter):
 
 class UrlParameter(UDFParameter):
     def __init__(self):
-        UDFParameter.__init__(self, "url", "url", "path", True, "string")
+        UDFParameter.__init__(
+            self, "url", "url", location="path", required=True, field_type="string"
+        )
         self.description = "URL to query."
 
     def _convert_to_str(self, value: Any) -> str:
-        if isinstance(value, datetime.date):
+        if not isinstance(value, str):
             raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        if isinstance(value, int) or isinstance(value, float):
-            value = str(value)
         return value
 
     def validate_optional(self, value: Any, request_content: RequestContent):
@@ -107,7 +119,9 @@ class UrlParameter(UDFParameter):
 
 class BodyParameter(UDFParameter):
     def __init__(self):
-        UDFParameter.__init__(self, "body", "body", "body", True, "object")
+        UDFParameter.__init__(
+            self, "body", "body", location="body", required=True, field_type="object"
+        )
         self.description = "Content of the body."
 
     def validate_optional(self, value: Any, request_content: RequestContent):
@@ -140,7 +154,12 @@ class BodyParameter(UDFParameter):
 class ExtraHeadersParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "extra_headers", "extra_headers", "headers", False, "object"
+            self,
+            "extra_headers",
+            "extra_headers",
+            location="headers",
+            required=False,
+            field_type="object",
         )
         self.description = "Extra headers to send in the query."
 
@@ -154,7 +173,9 @@ class ExtraHeadersParameter(UDFParameter):
 
 class AuthenticationParameter(UDFParameter):
     def __init__(self):
-        UDFParameter.__init__(self, "auth", "auth", "", False, "array")
+        UDFParameter.__init__(
+            self, "auth", "auth", location="", required=False, field_type="array"
+        )
         self.choices = ["oauth2_implicit", "api_key_header", "api_key_query", "basic"]
         self.description = f"Authentication methods to use. ({self.choices})"
 
@@ -179,15 +200,18 @@ class AuthenticationParameter(UDFParameter):
 class OAuth2AuthorizationUrlParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "oauth2_auth_url", "oauth2_auth_url", "", False, "string"
+            self,
+            "oauth2_auth_url",
+            "oauth2_auth_url",
+            location="",
+            required=False,
+            field_type="string",
         )
         self.description = "OAuth2 authorization URL."
 
     def _convert_to_str(self, value: Any) -> str:
-        if isinstance(value, datetime.date):
+        if not isinstance(value, str):
             raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        if isinstance(value, int) or isinstance(value, float):
-            value = str(value)
         return value
 
     def validate_optional(self, value: Any, request_content: RequestContent):
@@ -199,15 +223,18 @@ class OAuth2AuthorizationUrlParameter(UDFParameter):
 class OAuth2TokenUrlParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "oauth2_token_url", "oauth2_token_url", "", False, "string"
+            self,
+            "oauth2_token_url",
+            "oauth2_token_url",
+            location="",
+            required=False,
+            field_type="string",
         )
         self.description = "OAuth2 token URL."
 
     def _convert_to_str(self, value: Any) -> str:
-        if isinstance(value, datetime.date):
+        if not isinstance(value, str):
             raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        if isinstance(value, int) or isinstance(value, float):
-            value = str(value)
         return value
 
     def validate_optional(self, value: Any, request_content: RequestContent):
@@ -218,14 +245,19 @@ class OAuth2TokenUrlParameter(UDFParameter):
 
 class ApiKeyNameParameter(UDFParameter):
     def __init__(self):
-        UDFParameter.__init__(self, "api_key_name", "api_key_name", "", False, "string")
+        UDFParameter.__init__(
+            self,
+            "api_key_name",
+            "api_key_name",
+            location="",
+            required=False,
+            field_type="string",
+        )
         self.description = "Name of the field containing API key."
 
     def _convert_to_str(self, value: Any) -> str:
-        if isinstance(value, datetime.date):
+        if not isinstance(value, str):
             raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        if isinstance(value, int) or isinstance(value, float):
-            value = str(value)
         return value
 
     def validate_optional(self, value: Any, request_content: RequestContent):
