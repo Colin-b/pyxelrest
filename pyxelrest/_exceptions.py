@@ -36,10 +36,10 @@ class OpenAPIDefinitionNotProvided(PyxelRestException):
 class DuplicatedParameters(PyxelRestException):
     """ Method contains duplicated parameters. """
 
-    def __init__(self, method: str, *args, **kwargs):
+    def __init__(self, path: str, mode: str, method: dict, *args, **kwargs):
         PyxelRestException.__init__(
             self,
-            f'"{method["operationId"]}" parameters are not unique per location: {method["parameters"]}.',
+            f'{mode} {path} parameters are not unique: {method["parameters"]}.',
         )
 
 

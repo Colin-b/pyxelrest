@@ -767,7 +767,7 @@ class OpenAPI(Service):
                 parameters_names,
             ) in method_parameters_names_per_location.items():
                 if len(set(parameters_names)) != len(parameters_names):
-                    raise DuplicatedParameters(method)
+                    raise DuplicatedParameters(path, mode, method)
 
         def _update_method_produces():
             method["produces"] = (
@@ -789,7 +789,7 @@ class OpenAPI(Service):
         root_security = open_api_definition.get("security", [])
         root_consumes = open_api_definition.get("consumes", [])
 
-        for methods in open_api_definition["paths"].values():
+        for path, methods in open_api_definition["paths"].items():
             # retrieve parameters listed at the path level
             methods_parameters = _normalise_names(methods.pop("parameters", []))
             methods_produces = methods.pop("produces", [])
