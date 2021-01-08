@@ -635,41 +635,52 @@ class OpenAPI(Service):
         uri = self._extract_uri(config).rstrip("/")
         Service.__init__(self, config, uri)
 
-    def _extract_uri(self, config: RESTAPIConfigSection) -> str:
-        open_api_definition_url = (
-            urlsplit(config.open_api_definition)
-            if isinstance(config.open_api_definition, str)
-            else None
+    def _scheme(self, config: RESTAPIConfigSection) -> str:
+        # Prefer HTTPS if available in OpenAPI definition
+        schemes = self.open_api_definition.get("schemes")
+        if schemes:
+            return "https" if "https" in schemes else schemes[0]
+
+        # Allow user to provide scheme thanks to host network property
+        user_provided_host = config.network.get("host")
+        if user_provided_host:
+            scheme = urlsplit(user_provided_host).scheme
+            if scheme:
+                return scheme
+
+        # The default scheme to be used is the one used to access the OpenAPI definition itself.
+        if isinstance(config.open_api_definition, str):
+            return urlsplit(config.open_api_definition).scheme
+
+        raise InvalidOpenAPIDefinition(
+            "As schemes property is not set within OpenAPI definition, you must provide a scheme thanks to 'host' 'network' property."
         )
 
-        schemes = self.open_api_definition.get("schemes")
-        if not schemes:
-            # The default scheme to be used is the one used to access the OpenAPI definition itself.
-            if open_api_definition_url:
-                schemes = [open_api_definition_url.scheme]
-            else:
-                raise InvalidOpenAPIDefinition("At least one scheme must be provided.")
+    def _host(self, config: RESTAPIConfigSection) -> str:
+        host = self.open_api_definition.get("host")
+        if host:
+            return host
 
-        scheme = "https" if "https" in schemes else schemes[0]
+        # Allow user to provide host thanks to host network property
+        user_provided_host = config.network.get("host")
+        if user_provided_host:
+            # Ensure scheme is not part of host even if provided
+            host_parsed = urlsplit(user_provided_host)
+            return host_parsed.netloc + host_parsed.path
 
-        # host property is here to handle REST API behind a reverse proxy
-        # (otherwise host will be the reverse proxy one when retrieving it from the URL)
-        host = self.open_api_definition.get("host", config.network.get("host"))
-        if not host:
-            # The default host to be used is the host serving the documentation (including the port).
-            if open_api_definition_url:
-                host = open_api_definition_url.netloc
-            else:
-                raise InvalidOpenAPIDefinition("host must be provided.")
+        # The default host to be used is the host serving the documentation (including the port).
+        if isinstance(config.open_api_definition, str):
+            return urlsplit(config.open_api_definition).netloc
 
-        # Allow user to provide host starting with scheme (removing it)
-        host_parsed = urlsplit(host)
-        if host_parsed.netloc:
-            host = host_parsed.netloc + host_parsed.path
-        # If it is not included, the API is served directly under the host.
+        raise InvalidOpenAPIDefinition(
+            "As host property is not set within OpenAPI definition, you must provide it thanks to 'host' 'network' property."
+        )
+
+    def _extract_uri(self, config: RESTAPIConfigSection) -> str:
+        # If basePath is not included in OpenAPI definition, the API is served directly under the host.
         base_path = self.open_api_definition.get("basePath", None) or ""
 
-        return f"{scheme}://{host}{base_path}"
+        return f"{self._scheme(config)}://{self._host(config)}{base_path}"
 
     def create_method(
         self,
