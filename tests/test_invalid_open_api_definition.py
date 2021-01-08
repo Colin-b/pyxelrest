@@ -31,7 +31,7 @@ def test_no_schemes(tmpdir, caplog):
         },
     )
     assert caplog.messages == [
-        '"invalid" will not be available: Invalid Definition: At least one scheme must be provided.'
+        """"invalid" will not be available: Invalid Definition: As schemes property is not set within OpenAPI definition, you must provide a scheme thanks to 'host' 'network' property."""
     ]
 
 
@@ -64,5 +64,5 @@ def test_no_host(tmpdir, caplog):
         },
     )
     assert caplog.messages == [
-        '"invalid" will not be available: Invalid Definition: host must be provided.'
+        """"invalid" will not be available: Invalid Definition: As host property is not set within OpenAPI definition, you must provide it thanks to 'host' 'network' property."""
     ]
