@@ -170,98 +170,32 @@ class ExtraHeadersParameter(UDFParameter):
             request_content.header.update(self.received_value)
 
 
-class AuthenticationParameter(UDFParameter):
+class SecurityDefinitionsParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "auth", "auth", location="", required=False, field_type="array"
+            self,
+            "security_definitions",
+            "security_definitions",
+            location="",
+            required=False,
+            field_type="array",
         )
-        self.choices = ["oauth2_implicit", "api_key_header", "api_key_query", "basic"]
-        self.description = f"Authentication methods to use. ({self.choices})"
+        self.description = f"Authentication mechanisms to use."
 
-    def _convert_to_str(self, value: Any) -> str:
-        if value and value not in self.choices:
+    def _convert_to_array(self, value: Any) -> List[dict]:
+        if not isinstance(value, list):
+            pass
+
+        if len(value) < 2:
             raise Exception(
-                f'{self.name} value "{value}" should be {" or ".join(self.choices)}.'
+                "There should be at least two rows. Header and first dictionary values."
             )
-        return value
 
-    def _convert_to_array(self, value: Any) -> List[str]:
-        if isinstance(value, list):
-            return [self._convert_to_str(item) for item in value if item is not None]
-        return [self._convert_to_str(value)]
+        return list_to_dict_list(value[0], value[1:])
 
     def validate_optional(self, value, request_content: RequestContent):
         if value is not None:
             value = self._convert_to_array(value)
-        request_content.add_value(self, value)
-
-
-class OAuth2AuthorizationUrlParameter(UDFParameter):
-    def __init__(self):
-        UDFParameter.__init__(
-            self,
-            "oauth2_auth_url",
-            "oauth2_auth_url",
-            location="",
-            required=False,
-            field_type="string",
-        )
-        self.description = "OAuth2 authorization URL."
-
-    def _convert_to_str(self, value: Any) -> str:
-        if not isinstance(value, str):
-            raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        return value
-
-    def validate_optional(self, value: Any, request_content: RequestContent):
-        if value is not None:
-            value = self._convert_to_str(value)
-        request_content.add_value(self, value)
-
-
-class OAuth2TokenUrlParameter(UDFParameter):
-    def __init__(self):
-        UDFParameter.__init__(
-            self,
-            "oauth2_token_url",
-            "oauth2_token_url",
-            location="",
-            required=False,
-            field_type="string",
-        )
-        self.description = "OAuth2 token URL."
-
-    def _convert_to_str(self, value: Any) -> str:
-        if not isinstance(value, str):
-            raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        return value
-
-    def validate_optional(self, value: Any, request_content: RequestContent):
-        if value is not None:
-            value = self._convert_to_str(value)
-        request_content.add_value(self, value)
-
-
-class ApiKeyNameParameter(UDFParameter):
-    def __init__(self):
-        UDFParameter.__init__(
-            self,
-            "api_key_name",
-            "api_key_name",
-            location="",
-            required=False,
-            field_type="string",
-        )
-        self.description = "Name of the field containing API key."
-
-    def _convert_to_str(self, value: Any) -> str:
-        if not isinstance(value, str):
-            raise Exception(f'{self.name} value "{value}" must be formatted as text.')
-        return value
-
-    def validate_optional(self, value: Any, request_content: RequestContent):
-        if value is not None:
-            value = self._convert_to_str(value)
         request_content.add_value(self, value)
 
 
@@ -290,10 +224,7 @@ class PyxelRestUDFMethod(UDFMethod):
             ExtraHeadersParameter(),
             WaitForStatusParameter(),
             CheckIntervalParameter(),
-            AuthenticationParameter(),
-            OAuth2AuthorizationUrlParameter(),
-            OAuth2TokenUrlParameter(),
-            ApiKeyNameParameter(),
+            SecurityDefinitionsParameter(),
         ]
 
         if self.requests_method in ["post", "put"]:
@@ -309,8 +240,18 @@ class PyxelRestUDFMethod(UDFMethod):
         return True
 
     def security(self, request_content: RequestContent) -> List[dict]:
-        auths = request_content.extra_parameters.get("auth")
-        return [{auth: "" for auth in auths}] if auths else []
+        security_definitions = request_content.extra_parameters.get(
+            "security_definitions"
+        )
+        if not security_definitions:
+            return []
+
+        # Create a fake securityDefinition matching provided auths
+        self.service.open_api_definition["securityDefinitions"] = {
+            str(index): security_definition
+            for index, security_definition in enumerate(security_definitions)
+        }
+        return [{str(index): "" for index in range(len(security_definitions))}]
 
     def json_to_list(self, status_code: int, json_data: Any) -> list:
         return Flattenizer({}, status_code, {}).to_list(json_data)
@@ -324,14 +265,7 @@ class PyxelRest(Service):
         """
         self.methods = {}
         config = ConfigSection("pyxelrest", settings)
-        self.open_api_definition = {
-            "securityDefinitions": {
-                "oauth2_implicit": {"type": "oauth2", "flow": "implicit"},
-                "api_key_header": {"type": "apiKey", "in": "header"},
-                "api_key_query": {"type": "apiKey", "in": "query"},
-                "basic": {"type": "basic"},
-            }
-        }
+        self.open_api_definition = {}
         Service.__init__(self, config, "")
 
     def create_method(

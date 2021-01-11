@@ -27,73 +27,60 @@ logger = logging.getLogger(__name__)
 def _create_authentication(
     service: "pyxelrest._common.Service",
     open_api_security_definition: dict,
-    request_content: "pyxelrest.open_api.RequestContent",
 ):
     service_config = service.config.auth
     if "oauth2" == open_api_security_definition.get("type"):
         flow = open_api_security_definition.get("flow")
         oauth2_config = dict(service_config.get("oauth2", {}))
         if flow == "implicit":
-            authorization_url = open_api_security_definition.get(
-                "authorizationUrl",
-                request_content.extra_parameters.get("oauth2_auth_url"),
-            )
+            authorization_url = open_api_security_definition["authorizationUrl"]
             # Handle relative authentication URI
             if authorization_url.startswith("/"):
                 authorization_url = f"{service.uri}{authorization_url}"
 
-            return OAuth2Implicit(authorization_url, **oauth2_config)
+            return OAuth2Implicit(authorization_url=authorization_url, **oauth2_config)
         elif flow == "accessCode":
-            authorization_url = open_api_security_definition.get(
-                "authorizationUrl",
-                request_content.extra_parameters.get("oauth2_auth_url"),
-            )
+            authorization_url = open_api_security_definition["authorizationUrl"]
             # Handle relative authentication URI
             if authorization_url.startswith("/"):
                 authorization_url = f"{service.uri}{authorization_url}"
 
-            token_url = open_api_security_definition.get(
-                "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
-            )
+            token_url = open_api_security_definition["tokenUrl"]
             # Handle relative authentication URI
             if token_url.startswith("/"):
                 token_url = f"{service.uri}{token_url}"
 
             return OAuth2AuthorizationCode(
-                authorization_url, token_url, **oauth2_config
+                authorization_url=authorization_url,
+                token_url=token_url,
+                **oauth2_config,
             )
         elif flow == "password":
-            token_url = open_api_security_definition.get(
-                "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
-            )
+            token_url = open_api_security_definition["tokenUrl"]
             # Handle relative authentication URI
             if token_url.startswith("/"):
                 token_url = f"{service.uri}{token_url}"
 
-            return OAuth2ResourceOwnerPasswordCredentials(token_url, **oauth2_config)
+            return OAuth2ResourceOwnerPasswordCredentials(
+                token_url=token_url, **oauth2_config
+            )
         elif flow == "application":
-            token_url = open_api_security_definition.get(
-                "tokenUrl", request_content.extra_parameters.get("oauth2_token_url")
-            )
+            token_url = open_api_security_definition["tokenUrl"]
             # Handle relative authentication URI
             if token_url.startswith("/"):
                 token_url = f"{service.uri}{token_url}"
 
-            return OAuth2ClientCredentials(token_url, **oauth2_config)
+            return OAuth2ClientCredentials(token_url=token_url, **oauth2_config)
         logger.warning(f"Unexpected OAuth2 flow: {open_api_security_definition}")
     elif "apiKey" == open_api_security_definition.get("type"):
         if open_api_security_definition["in"] == "query":
             return QueryApiKey(
                 service_config.get("api_key"),
-                open_api_security_definition.get(
-                    "name", request_content.extra_parameters.get("api_key_name")
-                ),
+                open_api_security_definition["name"],
             )
         return HeaderApiKey(
             service_config.get("api_key"),
-            open_api_security_definition.get(
-                "name", request_content.extra_parameters.get("api_key_name")
-            ),
+            open_api_security_definition["name"],
         )
     elif "basic" == open_api_security_definition.get("type"):
         return Basic(
@@ -111,23 +98,23 @@ def _create_authentication_from_config(
 ):
     if "oauth2" == authentication_mode:
         oauth2_config = dict(service_config.get("oauth2", {}))
-        for authentication_mode, authentication in authentication.items():
-            if "implicit" == authentication_mode:
+        for flow, authentication in authentication.items():
+            if "implicit" == flow:
                 return OAuth2Implicit(
                     authorization_url=authentication.get("authorization_url"),
                     **oauth2_config,
                 )
-            elif "access_code" == authentication_mode:
+            elif "access_code" == flow:
                 return OAuth2AuthorizationCode(
                     authorization_url=authentication.get("authorization_url"),
                     token_url=authentication.get("token_url"),
                     **oauth2_config,
                 )
-            elif "password" == authentication_mode:
+            elif "password" == flow:
                 return OAuth2ResourceOwnerPasswordCredentials(
                     token_url=authentication.get("token_url"), **oauth2_config
                 )
-            elif "application" == authentication_mode:
+            elif "application" == flow:
                 return OAuth2ClientCredentials(
                     token_url=authentication.get("token_url"), **oauth2_config
                 )
@@ -155,16 +142,16 @@ def get_auth(
     if not udf_method.requires_authentication(request_content):
         return None
 
-    security_definitions = udf_method.service.open_api_definition.get(
-        "securityDefinitions", {}
-    )
-
     securities = udf_method.security(request_content)
     ntlm_config = udf_method.service.config.auth.get("ntlm", {})
     authentication = (
         NTLM(ntlm_config.get("username"), ntlm_config.get("password"))
         if ntlm_config
         else None
+    )
+
+    security_definitions = udf_method.service.open_api_definition.get(
+        "securityDefinitions", {}
     )
 
     # Run through all available securities
@@ -174,7 +161,6 @@ def get_auth(
                 auth = _create_authentication(
                     udf_method.service,
                     security_definitions.get(security_definition_key, {}),
-                    request_content,
                 )
                 if auth:
                     if authentication:
