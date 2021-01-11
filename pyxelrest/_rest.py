@@ -184,11 +184,12 @@ class SecurityDefinitionsParameter(UDFParameter):
 
     def _convert_to_array(self, value: Any) -> List[dict]:
         if not isinstance(value, list):
-            pass
-
+            raise Exception(
+                f'{self.name} value "{value}" ({type(value)} type) must be a list.'
+            )
         if len(value) < 2:
             raise Exception(
-                "There should be at least two rows. Header and first dictionary values."
+                f"{self.name} value should contains at least two rows. Header and values."
             )
 
         return list_to_dict_list(value[0], value[1:])

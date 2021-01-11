@@ -670,3 +670,48 @@ def test_post_body_as_is(responses: RequestsMock, tmpdir):
     request = _get_request(responses, "http://localhost:8958/dict")
     assert request.headers["Content-Type"] == "application/json"
     assert request.body == b'"Content of the body"'
+
+
+def test_invalid_security_definitions(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
+                }
+            }
+        },
+    )
+
+    assert (
+        generated_functions.pyxelrest_get_url(
+            "http://localhost:8958/dict",
+            security_definitions="invalid",
+        )
+        == [
+            "security_definitions value \"invalid\" (<class 'str'> type) must be a list."
+        ]
+    )
+
+
+def test_incomplete_security_definitions(responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "pyxelrest": {
+                "formulas": {
+                    "dynamic_array": {"lock_excel": True},
+                    "vba_compatible": {},
+                }
+            }
+        },
+    )
+
+    assert generated_functions.pyxelrest_get_url(
+        "http://localhost:8958/dict",
+        security_definitions=["invalid"],
+    ) == [
+        "security_definitions value should contains at least two rows. Header and values."
+    ]
