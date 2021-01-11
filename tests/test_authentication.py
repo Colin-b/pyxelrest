@@ -62,6 +62,159 @@ def test_oauth2_implicit_flow_authentication_success(
     )
 
 
+def test_oauth2_access_code_flow_authentication_success(
+    tmpdir, monkeypatch, token_cache_mock, responses: RequestsMock
+):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_authenticated",
+                        "responses": {"200": {"description": "return value"}},
+                        "security": [{"oauth2_auth_success": ["custom_label"]}],
+                    }
+                }
+            },
+            "securityDefinitions": {
+                "oauth2_auth_success": {
+                    "type": "oauth2",
+                    "authorizationUrl": "http://localhost:8947/auth_success?response_type=id_token",
+                    "tokenUrl": "http://localhost:8947/auth_success?response_type=id_token",
+                    "flow": "accessCode",
+                    "scopes": {"custom_label": "custom category"},
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "authenticated": {
+                "open_api": {"definition": "http://test/"},
+                "auth": {"oauth2": {"timeout": 10}},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+
+    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
+
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
+    assert (
+        _get_request(responses, "http://test/test").headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+
+def test_oauth2_password_flow_authentication_success(
+    tmpdir, monkeypatch, token_cache_mock, responses: RequestsMock
+):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_authenticated",
+                        "responses": {"200": {"description": "return value"}},
+                        "security": [{"oauth2_auth_success": ["custom_label"]}],
+                    }
+                }
+            },
+            "securityDefinitions": {
+                "oauth2_auth_success": {
+                    "type": "oauth2",
+                    "tokenUrl": "http://localhost:8947/auth_success?response_type=id_token",
+                    "flow": "password",
+                    "scopes": {"custom_label": "custom category"},
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "authenticated": {
+                "open_api": {"definition": "http://test/"},
+                "auth": {
+                    "oauth2": {"timeout": 10, "username": "user", "password": "pwd"}
+                },
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+
+    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
+
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
+    assert (
+        _get_request(responses, "http://test/test").headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+
+def test_oauth2_application_flow_authentication_success(
+    tmpdir, monkeypatch, token_cache_mock, responses: RequestsMock
+):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_authenticated",
+                        "responses": {"200": {"description": "return value"}},
+                        "security": [{"oauth2_auth_success": ["custom_label"]}],
+                    }
+                }
+            },
+            "securityDefinitions": {
+                "oauth2_auth_success": {
+                    "type": "oauth2",
+                    "tokenUrl": "http://localhost:8947/auth_success?response_type=id_token",
+                    "flow": "application",
+                    "scopes": {"custom_label": "custom category"},
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "authenticated": {
+                "open_api": {"definition": "http://test/"},
+                "auth": {
+                    "oauth2": {
+                        "timeout": 10,
+                        "client_id": "user",
+                        "client_secret": "pwd",
+                    }
+                },
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+
+    responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
+
+    assert generated_functions.authenticated_get_authenticated() == [[""]]
+    assert (
+        _get_request(responses, "http://test/test").headers["Authorization"]
+        == "Bearer 2YotnFZFEjr1zCsicMWpAA"
+    )
+
+
 def test_pyxelrest_oauth2_implicit_flow_authentication_success(
     tmpdir, monkeypatch, token_cache_mock, responses: RequestsMock
 ):
