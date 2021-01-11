@@ -14,7 +14,7 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
             return call.request
 
 
-def test_oauth2_authentication_success(
+def test_oauth2_implicit_flow_authentication_success(
     tmpdir, monkeypatch, token_cache_mock, responses: RequestsMock
 ):
     responses.add(
@@ -62,7 +62,7 @@ def test_oauth2_authentication_success(
     )
 
 
-def test_pyxelrest_oauth2_authentication_success(
+def test_pyxelrest_oauth2_implicit_flow_authentication_success(
     tmpdir, monkeypatch, token_cache_mock, responses: RequestsMock
 ):
     generated_functions = loader.load(
@@ -97,7 +97,9 @@ def test_pyxelrest_oauth2_authentication_success(
     )
 
 
-def test_oauth2_authentication_failure(tmpdir, monkeypatch, responses: RequestsMock):
+def test_oauth2_implicit_flow_authentication_failure(
+    tmpdir, monkeypatch, responses: RequestsMock
+):
     responses.add(
         responses.GET,
         url="http://test/",
@@ -145,7 +147,9 @@ def test_oauth2_authentication_failure(tmpdir, monkeypatch, responses: RequestsM
     )
 
 
-def test_oauth2_authentication_timeout(tmpdir, monkeypatch, responses: RequestsMock):
+def test_oauth2_implicit_flow_authentication_timeout(
+    tmpdir, monkeypatch, responses: RequestsMock
+):
     responses.add(
         responses.GET,
         url="http://test/",
