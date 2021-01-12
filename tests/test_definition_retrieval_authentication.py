@@ -368,7 +368,10 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
             "authenticated": {
                 "open_api": {
                     "definition": "http://test/",
-                    "definition_retrieval_auths": {"basic": {}},
+                    "definition_retrieval_auths": {
+                        "basic": {},
+                        "api_key": {"header_name": "X-API-HEADER-KEY"},
+                    },
                 },
                 "auth": {"basic": {"username": "test_user", "password": "test_pwd"}},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
@@ -380,3 +383,42 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
         _get_request(responses, "http://test/").headers["Authorization"]
         == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
     )
+
+
+def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMock):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/test": {
+                    "get": {
+                        "operationId": "get_authenticated",
+                        "responses": {"200": {"description": "return value"}},
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    loader.load(
+        tmpdir,
+        {
+            "authenticated": {
+                "open_api": {
+                    "definition": "http://test/",
+                    "definition_retrieval_auths": {"basic": {}},
+                },
+                "auth": {
+                    "api_key": "my_provided_api_key",
+                    "basic": {"username": "test_user", "password": "test_pwd"},
+                },
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+
+    request = _get_request(responses, "http://test/")
+    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
+    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
