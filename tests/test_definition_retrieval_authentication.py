@@ -370,7 +370,6 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
                     "definition": "http://test/",
                     "definition_retrieval_auths": {
                         "basic": {},
-                        "api_key": {"header_name": "X-API-HEADER-KEY"},
                     },
                 },
                 "auth": {"basic": {"username": "test_user", "password": "test_pwd"}},
@@ -408,7 +407,10 @@ def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMoc
             "authenticated": {
                 "open_api": {
                     "definition": "http://test/",
-                    "definition_retrieval_auths": {"basic": {}},
+                    "definition_retrieval_auths": {
+                        "basic": {},
+                        "api_key": {"header_name": "X-API-HEADER-KEY"},
+                    },
                 },
                 "auth": {
                     "api_key": "my_provided_api_key",
