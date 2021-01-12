@@ -117,6 +117,7 @@ def _create_authentication_from_config(
                 return OAuth2ClientCredentials(
                     token_url=authentication.get("token_url"), **oauth2_config
                 )
+            logger.warning(f"Unexpected OAuth2 flow: {flow}")
     elif "api_key" == authentication_mode:
         if "query_parameter_name" in authentication:
             return QueryApiKey(
