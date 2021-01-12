@@ -38,16 +38,8 @@ class LocalFileAdapter(requests.adapters.BaseAdapter):
                 response.status_code = 500
                 response.reason = str(err)
 
-        # TODO Get rid of bytes check if it cannot occurs
-        if isinstance(path, bytes):
-            response.url = path.decode("utf-8")
-        else:
-            response.url = path
-
+        response.url = path
         response.request = request
         response.connection = self
 
         return response
-
-    def close(self):
-        pass
