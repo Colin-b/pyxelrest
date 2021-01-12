@@ -70,7 +70,7 @@ def _create_authentication(
                 token_url = f"{service.uri}{token_url}"
 
             return OAuth2ClientCredentials(token_url=token_url, **oauth2_config)
-        logger.warning(f"Unexpected OAuth2 flow: {open_api_security_definition}")
+        raise Exception(f"Unexpected OAuth2 flow: {open_api_security_definition}")
     elif "apiKey" == open_api_security_definition.get("type"):
         if open_api_security_definition["in"] == "query":
             return QueryApiKey(
@@ -86,10 +86,9 @@ def _create_authentication(
             service_config.get("basic", {}).get("username"),
             service_config.get("basic", {}).get("password"),
         )
-    else:
-        logger.error(
-            f"Unexpected security definition type: {open_api_security_definition}"
-        )
+    raise Exception(
+        f"Unexpected security definition type: {open_api_security_definition}"
+    )
 
 
 def _create_authentication_from_config(
@@ -117,7 +116,7 @@ def _create_authentication_from_config(
                 return OAuth2ClientCredentials(
                     token_url=authentication.get("token_url"), **oauth2_config
                 )
-            logger.warning(f"Unexpected OAuth2 flow: {flow}")
+            raise Exception(f"Unexpected OAuth2 flow: {flow}")
     elif "api_key" == authentication_mode:
         if "query_parameter_name" in authentication:
             return QueryApiKey(
@@ -132,7 +131,7 @@ def _create_authentication_from_config(
             service_config.get("basic", {}).get("password"),
         )
 
-    logger.error(f"Unexpected security definition type: {authentication_mode}")
+    raise Exception(f"Unexpected security definition type: {authentication_mode}")
 
 
 def get_auth(
@@ -162,11 +161,10 @@ def get_auth(
                     udf_method.service,
                     security_definitions.get(security_definition_key, {}),
                 )
-                if auth:
-                    if authentication:
-                        authentication += auth
-                    else:
-                        authentication = auth
+                if authentication:
+                    authentication += auth
+                else:
+                    authentication = auth
             except:
                 logger.exception(
                     f"{security_definition_key} authentication cannot be handled."
@@ -205,17 +203,11 @@ def get_definition_retrieval_auth(
             auth = _create_authentication_from_config(
                 service_config.auth, authentication_mode, authentication_config
             )
-            if auth:
-                if authentication:
-                    authentication += auth
-                else:
-                    authentication = auth
+            if authentication:
+                authentication += auth
+            else:
+                authentication = auth
         except:
             logger.exception(f"{authentication_mode} authentication cannot be handled.")
-        # If a supported authentication is found, return it
-        if authentication:
-            return authentication
-        # Otherwise check if there is another security available
 
-    # Default to custom authentication if no security is supported
     return authentication
