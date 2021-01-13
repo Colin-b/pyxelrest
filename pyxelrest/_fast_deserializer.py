@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Union
+from typing import Union, Any, Dict, Optional, List, Set
 
 import dateutil.parser
 import dateutil.tz
@@ -35,14 +35,42 @@ def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
     return value
 
 
+def convert_simple_type(value: Any, json_definition: dict) -> Any:
+    """
+    :param value: Can be of any JSON type except list or dict.
+    :param json_definition: OpenAPI definition of the value (format used to parse it).
+    """
+    if isinstance(value, str):
+        field_format = json_definition.get("format") if json_definition else None
+        # Sometimes it can happen that array definition is returned as a single element
+        if not field_format and "items" in json_definition:
+            return convert_simple_type(value, json_definition.get("items", {}))
+        if field_format in ("date-time", "date"):
+            value = to_date_time(value)
+        else:
+            # Return first 255 characters otherwise value will not be valid
+            value = value[:255]
+    return value
+
+
 class Flattenizer:
-    def __init__(self, all_responses: dict, status_code: int, json_definitions: dict):
-        self.__values_per_level = {}
-        self.__indexes_per_level = {}
-        self.__header_per_level = {}
-        self.__all_rows = []
-        self.__flatten_header = []
-        self.__all_flatten_rows = []
+    """
+    Convert any JSON data into a Microsoft Excel 2D array.
+
+    Store data for each row following a level index that will be flattened into a single level afterwards.
+    """
+
+    def __init__(
+        self, all_responses: dict, status_code: int, json_definitions: Optional[dict]
+    ):
+        # { level_index -> column_index }
+        self.__indexes_per_level: Dict[int, int] = {}
+        # { level_index: [header1, header2] }
+        self.__headers_per_level: Dict[int, list] = {}
+        # [ { level_index -> [value1, value2] } ]
+        self.__values_per_level: List[Dict[int, List[Any]]] = []
+        self.__headers_row = []
+        self.__values_rows = []
         json_response = response(status_code, all_responses)
         self.schema = (
             json_response.get("schema", json_response) if json_response else {}
@@ -52,29 +80,36 @@ class Flattenizer:
         )
 
     def _reset(self):
-        self.__values_per_level = {}
         self.__indexes_per_level = {}
-        self.__header_per_level = {}
-        self.__all_rows = []
-        self.__flatten_header = []
-        self.__all_flatten_rows = []
+        self.__headers_per_level = {}
+        self.__values_per_level = []
+        self.__headers_row = []
+        self.__values_rows = []
 
-    def _init_values_per_level(self, row, level):
-        if not self.__values_per_level.get(row):
-            self.__values_per_level[row] = {}
-        if not self.__values_per_level[row].get(level):
-            self.__values_per_level[row][level] = []
-
-    def _extract_values_and_level(self, data):
+    def _extract_values_and_level(self, data: Any):
         self._reset()
-        self._set_values_per_level(0, 0, "", data, 0, self.schema)
+        self._set_values_per_level(
+            row=0,
+            level=0,
+            header="",
+            value=data,
+            column_index=0,
+            json_definition=self.schema,
+        )
 
     def _set_values_per_level(
-        self, row, level, header, value, column_index, json_definition
+        self,
+        row: int,
+        level: int,
+        header,
+        value: Any,
+        column_index: int,
+        json_definition,
     ):
-        # Because "0" or "False" are considered as "not value", this condition cannot be smaller
+        # Because 0 or False are evaluated to False in python, this condition cannot be smaller
         if value is None or value == [] or value == {}:
-            self._set_value_on_level(row, level, header, "", json_definition)
+            self._add_level_headers(level, header)
+            self._level_values(row, level).append("")
         else:
             if isinstance(value, dict):
                 self._set_values_per_level_for_dict(
@@ -85,33 +120,23 @@ class Flattenizer:
                     row, level, header, value, column_index, json_definition
                 )
             else:
-                self._set_value_on_level(row, level, header, value, json_definition)
+                self._add_level_headers(level, header)
+                self._level_values(row, level).append(
+                    convert_simple_type(value, json_definition)
+                )
 
-    def _set_value_on_level(self, row, level, header, value, json_definition):
-        self._init_values_per_level(row, level)
-        self.__values_per_level[row][level].append(
-            {
-                "header": header,
-                "value": self.convert_simple_type(value, json_definition),
-            }
-        )
+    def _level_values(self, row: int, level: int) -> List[Any]:
+        if row >= len(self.__values_per_level):
+            self.__values_per_level.append({})
+        return self.__values_per_level[row].setdefault(level, [])
 
-    def convert_simple_type(self, value, json_definition):
-        if isinstance(value, str):
-            field_format = json_definition.get("format") if json_definition else None
-            if (
-                not field_format and "items" in json_definition
-            ):  # Sometimes it can happen that array definition is returned as a single element
-                return self.convert_simple_type(value, json_definition.get("items", {}))
-            if field_format == "date-time" or field_format == "date":
-                value = to_date_time(value)
-            else:
-                # Return first 255 characters otherwise value will not be valid
-                value = value[:255]
-        return value
+    def _add_level_headers(self, level: int, header: Any):
+        headers = self.__headers_per_level.setdefault(level, [])
+        if header not in headers:
+            headers.append(header)
 
     def _set_values_per_level_for_dict(
-        self, row, level, dict_value, column_index, json_definition
+        self, row: int, level: int, values: dict, column_index: int, json_definition
     ):
         """
         For a dict, each value is set on the current row and level.
@@ -123,19 +148,25 @@ class Flattenizer:
             properties = json_definition.get("properties")
         else:
             properties = {}
-        for dict_key in dict_value.keys():
-            json_definition = properties.get(dict_key, {})
+
+        for header, value in values.items():
             self._set_values_per_level(
                 row,
                 level,
-                dict_key,
-                dict_value[dict_key],
-                column_index + 1,
-                json_definition,
+                header,
+                value,
+                column_index=column_index + 1,
+                json_definition=properties.get(header, {}),
             )
 
     def _set_values_per_level_for_list(
-        self, row, level, header, list_values, column_index, json_definition
+        self,
+        row: int,
+        level: int,
+        header,
+        values: list,
+        column_index: int,
+        json_definition,
     ):
         """
         Each item of a list corresponds to a row.
@@ -146,97 +177,90 @@ class Flattenizer:
         if level + 1 not in self.__indexes_per_level:
             self.__indexes_per_level[level + 1] = column_index
 
-        # In order to avoid losing key in case this list has a key, add a column without value
-        self._init_values_per_level(row, level)
-        self.__values_per_level[row][level].append({"header": header, "value": ""})
+        # In order to avoid losing header in case this list has one, add a column without value
+        self._add_level_headers(level, header)
+        self._level_values(row, level).append("")
 
         json_definition = json_definition.get("items", {})
 
         # Iterate through the list
         # Create and Update all required rows for the first list value
         self._set_values_per_level(
-            row, level + 1, header, list_values[0], column_index + 1, json_definition
+            row,
+            level + 1,
+            header,
+            value=values[0],
+            column_index=column_index + 1,
+            json_definition=json_definition,
         )
 
         # Create and Update all required rows for the other list values
         # As other rows might have been created, always recompute the actual row number
         new_row = len(self.__values_per_level) - 1
-        for list_value in list_values[1:]:
+        for value in values[1:]:
             new_row += 1
+
             # Clone first row until current level
-            for previous_level in range(0, level + 1):
-                self._init_values_per_level(new_row, previous_level)
-                self.__values_per_level[new_row][
-                    previous_level
-                ] = self.__values_per_level[row][previous_level]
+            new_row_levels = {
+                previous_level: self.__values_per_level[row][previous_level]
+                for previous_level in range(0, level + 1)
+            }
+            if new_row == len(self.__values_per_level):
+                self.__values_per_level.append(new_row_levels)
+            else:
+                self.__values_per_level[new_row].update(new_row_levels)
+
             self._set_values_per_level(
-                new_row,
-                level + 1,
-                header,
-                list_value,
-                column_index + 1,
-                json_definition,
+                row=new_row,
+                level=level + 1,
+                header=header,
+                value=value,
+                column_index=column_index + 1,
+                json_definition=json_definition,
             )
 
-    def to_list(self, data):
+    def to_list(self, data: Any):
         logger.debug("Converting response to list...")
         self._extract_values_and_level(data)
-        # Extract Header and Rows
-        for row in self.__values_per_level.values():
-            row_values_per_level = {}
-            self.__all_rows.append(row_values_per_level)
-            for level in row.keys():
-                level_values = row[level]
-                row_values_per_level[level] = [
-                    level_value["value"] for level_value in level_values
-                ]
-                if level not in self.__header_per_level:
-                    self.__header_per_level[level] = [
-                        level_value["header"] for level_value in level_values
-                    ]
+
         # Add blanks to Rows shorter than others
-        for level in self.__header_per_level.keys():
-            for row in self.__all_rows:
+        for level in self.__headers_per_level.keys():
+            for row in self.__values_per_level:
                 if level not in row:
-                    row[level] = [""] * len(self.__header_per_level[level])
+                    row[level] = [""] * len(self.__headers_per_level[level])
+
         # Flatten Header
-        for level in self.__header_per_level.keys():
+        for level, headers in self.__headers_per_level.items():
             if level in self.__indexes_per_level:
                 related_to_index = self.__indexes_per_level[level] + 1
-                self.__flatten_header[
-                    related_to_index:related_to_index
-                ] = self.__header_per_level[level]
+                self.__headers_row[related_to_index:related_to_index] = headers
             else:
-                self.__flatten_header.extend(self.__header_per_level[level])
+                self.__headers_row.extend(headers)
+
         # Flatten Rows
-        for row in self.__all_rows:
+        for row in self.__values_per_level:
             flatten_row = []
-            self.__all_flatten_rows.append(flatten_row)
-            for level in row.keys():
+            self.__values_rows.append(flatten_row)
+            for level, values in row.items():
                 if level in self.__indexes_per_level:
                     related_to_index = self.__indexes_per_level[level] + 1
-                    flatten_row[related_to_index:related_to_index] = row[level]
+                    flatten_row[related_to_index:related_to_index] = values
                 else:
-                    flatten_row.extend(row[level])
+                    flatten_row.extend(values)
+
         # Remove unnecessary columns that may appear for lists TODO Avoid adding this in the first place
-        if self.__flatten_header != [""] and not self.__flatten_header[0]:
-            self.__flatten_header = self.__flatten_header[1:]
-            self.__all_flatten_rows = [
-                flatten_row[1:] for flatten_row in self.__all_flatten_rows
-            ]
-        if not self.__flatten_header or self.__flatten_header == [""]:
-            if self.__all_flatten_rows and self.__all_flatten_rows != [[]]:
-                logger.debug(
-                    f"Response converted to list of {len(self.__all_flatten_rows)} elements."
-                )
-                return self.__all_flatten_rows
-            logger.debug("Response converted to empty list.")
-            return [""]
-        self.__all_flatten_rows.insert(0, self.__flatten_header)
+        if self.__headers_row != [""] and not self.__headers_row[0]:
+            self.__headers_row = self.__headers_row[1:]
+            self.__values_rows = [flatten_row[1:] for flatten_row in self.__values_rows]
+
+        # Append headers as first row
+        if self.__headers_row and self.__headers_row != [""]:
+            self.__values_rows.insert(0, self.__headers_row)
+
         logger.debug(
-            f"Response converted to list of {len(self.__all_flatten_rows)} elements."
+            f"Response converted to list of {len(self.__values_rows)} elements."
         )
-        return self.__all_flatten_rows
+        return self.__values_rows
 
 
 def response(status_code: int, responses: dict):
