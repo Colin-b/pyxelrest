@@ -101,7 +101,7 @@ class Flattenizer:
         self,
         row: int,
         level: int,
-        header,
+        header: Any,
         value: Any,
         column_index: int,
         json_definition,
@@ -163,7 +163,7 @@ class Flattenizer:
         self,
         row: int,
         level: int,
-        header,
+        header: Any,
         values: list,
         column_index: int,
         json_definition,
@@ -173,13 +173,17 @@ class Flattenizer:
         The first item belongs to the current row.
         A list corresponds to a nested level.
         """
-        # This new level should be displayed next to the list column.
-        if level + 1 not in self.__indexes_per_level:
-            self.__indexes_per_level[level + 1] = column_index
 
-        # In order to avoid losing header in case this list has one, add a column without value
-        self._add_level_headers(level, header)
-        self._level_values(row, level).append("")
+        if header:
+            # In order to avoid losing header in case this list has one, add a column without value
+            self._add_level_headers(level, header)
+            self._level_values(row, level).append("")
+            level += 1
+
+            # This new level should be displayed next to the list column.
+            if level not in self.__indexes_per_level:
+                self.__indexes_per_level[level] = column_index
+            column_index += 1
 
         json_definition = json_definition.get("items", {})
 
@@ -187,10 +191,10 @@ class Flattenizer:
         # Create and Update all required rows for the first list value
         self._set_values_per_level(
             row,
-            level + 1,
+            level,
             header,
             value=values[0],
-            column_index=column_index + 1,
+            column_index=column_index,
             json_definition=json_definition,
         )
 
@@ -203,7 +207,7 @@ class Flattenizer:
             # Clone first row until current level
             new_row_levels = {
                 previous_level: self.__values_per_level[row][previous_level]
-                for previous_level in range(0, level + 1)
+                for previous_level in range(0, level)
             }
             if new_row == len(self.__values_per_level):
                 self.__values_per_level.append(new_row_levels)
@@ -212,10 +216,10 @@ class Flattenizer:
 
             self._set_values_per_level(
                 row=new_row,
-                level=level + 1,
+                level=level,
                 header=header,
                 value=value,
-                column_index=column_index + 1,
+                column_index=column_index,
                 json_definition=json_definition,
             )
 
@@ -247,11 +251,6 @@ class Flattenizer:
                     flatten_row[related_to_index:related_to_index] = values
                 else:
                     flatten_row.extend(values)
-
-        # Remove unnecessary columns that may appear for lists TODO Avoid adding this in the first place
-        if self.__headers_row != [""] and not self.__headers_row[0]:
-            self.__headers_row = self.__headers_row[1:]
-            self.__values_rows = [flatten_row[1:] for flatten_row in self.__values_rows]
 
         # Append headers as first row
         if self.__headers_row and self.__headers_row != [""]:
