@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+import requests
 from requests import PreparedRequest
 from responses import RequestsMock
 
@@ -178,3 +179,19 @@ def test_raw_text_response(responses: RequestsMock, test_api_service):
     from pyxelrest.generated import text_api
 
     assert text_api.get_text() == "This is the content of the response."
+
+
+def test_http_error_response(responses: RequestsMock, test_api_service):
+    load_as_python_module()
+    responses.add(
+        responses.GET,
+        url="http://test/text",
+        body=b"This is the content of the response.",
+        status=500,
+        match_querystring=True,
+    )
+
+    from pyxelrest.generated import text_api
+
+    with pytest.raises(requests.exceptions.HTTPError):
+        text_api.get_text()
