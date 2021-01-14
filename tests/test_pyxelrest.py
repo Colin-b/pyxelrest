@@ -514,6 +514,14 @@ def test_get_wait_for_status(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://localhost:8958/test",
+        json=["should not be returned"],
+        status=200,
+        match_querystring=True,
+    )
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8958/test",
         status=303,
         adding_headers={"location": "http://localhost:8958/test2"},
         match_querystring=True,
@@ -522,18 +530,14 @@ def test_get_wait_for_status(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://localhost:8958/test2",
-        json={},
+        json=["should be returned"],
         status=200,
         match_querystring=True,
     )
 
-    assert (
-        generated_functions.pyxelrest_get_url(
-            "http://localhost:8958/test",
-            wait_for_status=303,
-        )
-        == [[""]]
-    )
+    assert generated_functions.pyxelrest_get_url(
+        "http://localhost:8958/test", wait_for_status=303, check_interval=1
+    ) == [["should be returned"]]
 
 
 def test_get_check_interval(responses: RequestsMock, tmpdir):
