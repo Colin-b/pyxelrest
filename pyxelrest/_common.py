@@ -2,6 +2,7 @@ import logging
 import re
 import os
 import time
+from abc import ABC, abstractmethod
 from typing import Optional, Union, List, Any, Dict
 
 
@@ -83,7 +84,7 @@ class ConfigSection:
         return True
 
 
-class UDFParameter:
+class UDFParameter(ABC):
     def __init__(
         self,
         name: str,
@@ -116,8 +117,11 @@ class UDFParameter:
             raise self._not_provided()
         self.validate_optional(value, request_content)
 
-    def validate_optional(self, value: Any, request_content: "RequestContent"):
-        pass
+    @abstractmethod
+    def validate_optional(
+        self, value: Any, request_content: "RequestContent"
+    ):  # pragma: no cover
+        ...
 
     def _not_provided(self) -> Exception:
         return Exception(f"{self.name} is required.")
@@ -184,7 +188,7 @@ class UDFMethod:
         if value:
             try:
                 value = int(value)
-                return value if value else None
+                return value if value > 0 else None
             except ValueError:
                 logger.warning(
                     f"Invalid positive value provided: {value}. Considering as not set."
