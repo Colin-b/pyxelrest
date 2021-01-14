@@ -192,3 +192,46 @@ def test_get_datetime_encoding(responses: RequestsMock, tmpdir):
     assert generated_functions.usual_parameters_get_date_time_encoding(
         encoded_date_time=date_time
     ) == [[""]]
+
+
+def test_get_date_with_invalid_format_in_definition(responses: RequestsMock, tmpdir):
+    responses.add(
+        responses.GET,
+        url="http://test/",
+        json={
+            "swagger": "2.0",
+            "paths": {
+                "/single_date": {
+                    "get": {
+                        "operationId": "get_single_date",
+                        "responses": {
+                            "200": {
+                                "description": "return value",
+                                "items": {"type": "string", "format": "date"},
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        match_querystring=True,
+    )
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "usual_parameters": {
+                "open_api": {"definition": "http://test/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://test/single_date",
+        json="2014-03-05",
+        match_querystring=True,
+    )
+
+    assert generated_functions.usual_parameters_get_single_date() == [
+        [datetime.datetime(2014, 3, 5, 0, 0)],
+    ]

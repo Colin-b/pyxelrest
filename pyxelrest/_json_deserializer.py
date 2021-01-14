@@ -12,7 +12,7 @@ def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
     """
     Convert to date-time or date as described in https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14
     :param value: string representation of the date-time or date
-    :return: date or datetime instance or string if None
+    :return: date or datetime instance or original string if conversion failed
     """
     # dateutil does not handle lower cased timezone
     if value[-1:] == "z":
