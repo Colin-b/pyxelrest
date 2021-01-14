@@ -16,23 +16,33 @@ def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
     """
     if not value:
         return ""
+
     # dateutil does not handle lower cased timezone
     if value[-1:] == "z":
         value = value[:-1] + "Z"
-    datetime_with_service_timezone = dateutil.parser.parse(value)
-    if datetime_with_service_timezone:
+
+    try:
+        dt = dateutil.parser.parse(value)
+
         # Changed in python 3.6: The astimezone() method can now be called on naive instances
         # that are presumed to represent system local time.
-        if not datetime_with_service_timezone.tzinfo:
-            return datetime_with_service_timezone
+        if not dt.tzinfo:
+            return dt
+
         # Conversion cannot be performed for dates after year 3000, best effort and return in provided timezone
-        if datetime_with_service_timezone.year > 3000:
-            return datetime_with_service_timezone
+        if dt.year > 3000:
+            return dt
+
         # Conversion cannot be performed for dates <= to 1970-01-01 best effort and return in provided timezone
-        if datetime_with_service_timezone.year < 1971:
-            return datetime_with_service_timezone
-        return datetime_with_service_timezone.astimezone(tz=dateutil.tz.tzlocal())
-    return value
+        if dt.year < 1971:
+            return dt
+
+        return dt.astimezone(tz=dateutil.tz.tzlocal())
+    except dateutil.parser.ParserError:
+        logger.warning(
+            f"{value} cannot be converted to a date-time. Returning value as is."
+        )
+        return value
 
 
 def convert_simple_type(value: Any, json_definition: dict) -> Any:

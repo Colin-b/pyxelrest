@@ -9,7 +9,7 @@ from pyxelrest._common import (
     list_to_dict,
     list_to_dict_list,
 )
-from pyxelrest._fast_deserializer import Flattenizer
+from pyxelrest._json_deserializer import Flattenizer
 
 
 class ParseBodyAsParameter(UDFParameter):

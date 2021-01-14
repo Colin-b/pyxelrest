@@ -23,7 +23,7 @@ from pyxelrest._exceptions import (
     EmptyResponses,
     InvalidOpenAPIDefinition,
 )
-from pyxelrest._fast_deserializer import Flattenizer
+from pyxelrest._json_deserializer import Flattenizer
 
 logger = logging.getLogger(__name__)
 
