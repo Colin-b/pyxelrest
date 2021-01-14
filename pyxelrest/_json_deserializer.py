@@ -14,9 +14,6 @@ def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
     :param value: string representation of the date-time or date
     :return: date or datetime instance or string if None
     """
-    if not value:
-        return ""
-
     # dateutil does not handle lower cased timezone
     if value[-1:] == "z":
         value = value[:-1] + "Z"

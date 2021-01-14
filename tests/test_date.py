@@ -43,7 +43,7 @@ def test_get_date(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
         url="http://test/date",
-        json=["2014-03-05", "9999-01-01", "3001-01-01", "1970-01-01", "1900-01-01"],
+        json=["2014-03-05", "9999-01-01", "3001-01-01", "1970-01-01", "1900-01-01", ""],
         match_querystring=True,
     )
 
@@ -53,6 +53,7 @@ def test_get_date(responses: RequestsMock, tmpdir):
         [datetime.datetime(3001, 1, 1, 0, 0)],
         [datetime.datetime(1970, 1, 1, 0, 0)],
         [datetime.datetime(1900, 1, 1, 0, 0)],
+        [""],
     ]
 
 
@@ -103,6 +104,7 @@ def test_get_datetime(responses: RequestsMock, tmpdir):
             "3001-01-01T08:00:00+00:00",
             "1970-01-01T01:00:00+00:00",
             "1970-01-01T02:00:00+00:00",
+            "",
         ],
         match_querystring=True,
     )
@@ -117,6 +119,7 @@ def test_get_datetime(responses: RequestsMock, tmpdir):
         [datetime.datetime(3001, 1, 1, 8, 0, 0, 0, tzinfo=tzutc())],
         [datetime.datetime(1970, 1, 1, 1, 0, 0, 0, tzinfo=tzutc())],
         [datetime.datetime(1970, 1, 1, 2, 0, 0, 0, tzinfo=tzutc())],
+        [""],
     ]
 
 
