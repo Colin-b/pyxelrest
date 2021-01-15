@@ -17,13 +17,12 @@ def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
 def test_files_parameter(responses: RequestsMock, tmpdir):
     responses.add(
         responses.GET,
-        url="http://localhost:8959/",
+        url="http://test/",
         json={
             "swagger": "2.0",
             "paths": {
                 "/files": {
                     "post": {
-                        "operationId": "post_files",
                         "responses": {200: {"description": "successful operation"}},
                         "parameters": [
                             {
@@ -50,7 +49,7 @@ def test_files_parameter(responses: RequestsMock, tmpdir):
         tmpdir,
         {
             "files": {
-                "open_api": {"definition": "http://localhost:8959/"},
+                "open_api": {"definition": "http://test/"},
                 "formulas": {"dynamic_array": {"lock_excel": True}},
             }
         },
@@ -61,7 +60,7 @@ def test_files_parameter(responses: RequestsMock, tmpdir):
 
     responses.add(
         responses.POST,
-        url="http://localhost:8959/files",
+        url="http://test/files",
         json={},
         match_querystring=True,
     )
@@ -72,7 +71,7 @@ def test_files_parameter(responses: RequestsMock, tmpdir):
         )
         == [[""]]
     )
-    actual_body = _get_request(responses, "http://localhost:8959/files").body
+    actual_body = _get_request(responses, "http://test/files").body
     assert (
         b'\r\nContent-Disposition: form-data; name="mandatory_file"; filename="mandatory_file"\r\n\r\nThis is the content of the mandatory file.\r\n'
         in actual_body
