@@ -246,7 +246,7 @@ def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
     assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
-def test_get_cached_invalid_duration(caching_service, responses: RequestsMock, tmpdir):
+def test_get_cached_negative_duration(caching_service, responses: RequestsMock, tmpdir):
     generated_functions = loader.load(
         tmpdir,
         {
@@ -256,6 +256,38 @@ def test_get_cached_invalid_duration(caching_service, responses: RequestsMock, t
                     "dynamic_array": {
                         "lock_excel": True,
                         "cache": {"duration": -5},
+                    }
+                },
+            }
+        },
+    )
+
+    responses.add(
+        responses.GET,
+        url="http://localhost:8949/cached?test1=1&test2=2",
+        json={},
+        match_querystring=True,
+    )
+
+    assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
+    # Assert a request is issued as there is no cache
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+    assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
+    # Assert a request is issued as there is no cache
+    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+
+
+def test_get_cached_invalid_duration(caching_service, responses: RequestsMock, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "caching": {
+                "open_api": {"definition": "http://localhost:8949/"},
+                "formulas": {
+                    "dynamic_array": {
+                        "lock_excel": True,
+                        "cache": {"duration": "not a number"},
                     }
                 },
             }

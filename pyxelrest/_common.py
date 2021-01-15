@@ -127,7 +127,7 @@ class UDFParameter(ABC):
         return Exception(f"{self.name} is required.")
 
 
-class UDFMethod:
+class UDFMethod(ABC):
     def __init__(
         self,
         *,
@@ -275,14 +275,21 @@ class UDFMethod:
 
         return convert_to_return_type(response.text[:255], self)
 
-    def _create_udf_parameters(self) -> List[UDFParameter]:
-        raise NotImplementedError  # pragma: no cover
+    @abstractmethod
+    def _create_udf_parameters(self) -> List[UDFParameter]:  # pragma: no cover
+        ...
 
-    def security(self, request_content: "RequestContent") -> Optional[List[dict]]:
-        raise NotImplementedError  # pragma: no cover
+    @abstractmethod
+    def security(
+        self, request_content: "RequestContent"
+    ) -> Optional[List[dict]]:  # pragma: no cover
+        ...
 
-    def json_to_list(self, status_code: int, json_data: Any) -> list:
-        raise NotImplementedError  # pragma: no cover
+    @abstractmethod
+    def json_to_list(
+        self, status_code: int, json_data: Any
+    ) -> list:  # pragma: no cover
+        ...
 
 
 class Service:
