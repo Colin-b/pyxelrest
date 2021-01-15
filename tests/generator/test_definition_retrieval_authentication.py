@@ -1,17 +1,15 @@
-import requests_auth
-from requests import PreparedRequest
 from requests_auth.testing import token_cache_mock, token_mock
 from responses import RequestsMock
 
 from tests import loader
 
 
-def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+def _get_headers(responses: RequestsMock, url: str) -> dict:
     for call in responses.calls:
         if call.request.url == url:
             # Pop out verified request (to be able to check multiple requests)
             responses.calls._calls.remove(call)
-            return call.request
+            return call.request.headers
 
 
 def test_unknown_authentication(
@@ -45,7 +43,7 @@ def test_unknown_authentication(
             }
         },
     )
-    assert "Authorization" not in _get_request(responses, "http://test/").headers
+    assert "Authorization" not in _get_headers(responses, "http://test/")
 
 
 def test_oauth2_unknown_flow_authentication_success(
@@ -80,7 +78,7 @@ def test_oauth2_unknown_flow_authentication_success(
         },
     )
 
-    assert "Authorization" not in _get_request(responses, "http://test/").headers
+    assert "Authorization" not in _get_headers(responses, "http://test/")
 
 
 def test_oauth2_implicit_flow_authentication_success(
@@ -123,7 +121,7 @@ def test_oauth2_implicit_flow_authentication_success(
     )
 
     assert (
-        _get_request(responses, "http://test/").headers["Authorization"]
+        _get_headers(responses, "http://test/")["Authorization"]
         == "Bearer 2YotnFZFEjr1zCsicMWpAA"
     )
 
@@ -169,7 +167,7 @@ def test_oauth2_access_code_flow_authentication_success(
     )
 
     assert (
-        _get_request(responses, "http://test/").headers["Authorization"]
+        _get_headers(responses, "http://test/")["Authorization"]
         == "Bearer 2YotnFZFEjr1zCsicMWpAA"
     )
 
@@ -216,7 +214,7 @@ def test_oauth2_password_flow_authentication_success(
     )
 
     assert (
-        _get_request(responses, "http://test/").headers["Authorization"]
+        _get_headers(responses, "http://test/")["Authorization"]
         == "Bearer 2YotnFZFEjr1zCsicMWpAA"
     )
 
@@ -267,7 +265,7 @@ def test_oauth2_application_flow_authentication_success(
     )
 
     assert (
-        _get_request(responses, "http://test/").headers["Authorization"]
+        _get_headers(responses, "http://test/")["Authorization"]
         == "Bearer 2YotnFZFEjr1zCsicMWpAA"
     )
 
@@ -306,7 +304,7 @@ def test_api_key_header_authentication_success(tmpdir, responses: RequestsMock):
     )
 
     assert (
-        _get_request(responses, "http://test/").headers["X-API-HEADER-KEY"]
+        _get_headers(responses, "http://test/")["X-API-HEADER-KEY"]
         == "my_provided_api_key"
     )
 
@@ -379,7 +377,7 @@ def test_basic_authentication_success(tmpdir, responses: RequestsMock):
     )
 
     assert (
-        _get_request(responses, "http://test/").headers["Authorization"]
+        _get_headers(responses, "http://test/")["Authorization"]
         == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
     )
 
@@ -421,6 +419,6 @@ def test_basic_and_api_key_authentication_success(tmpdir, responses: RequestsMoc
         },
     )
 
-    request = _get_request(responses, "http://test/")
-    assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
-    assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
+    headers = _get_headers(responses, "http://test/")
+    assert headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
+    assert headers["X-API-HEADER-KEY"] == "my_provided_api_key"

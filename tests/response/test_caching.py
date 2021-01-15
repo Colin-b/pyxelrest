@@ -2,13 +2,12 @@ import time
 
 import cachetools
 import pytest
-from requests import PreparedRequest
 from responses import RequestsMock
 
 from tests import loader
 
 
-def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
+def _sent_request(responses: RequestsMock, url: str) -> bool:
     for call in responses.calls:
         if call.request.url == url:
             # Pop out verified request (to be able to check multiple requests)
@@ -90,7 +89,7 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache for this request
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     responses.add(
         responses.GET,
@@ -100,22 +99,22 @@ def test_get_cached(caching_service, responses: RequestsMock, tmpdir):
     )
     assert generated_functions.caching_get_cached(test1="1", test2="3") == [[""]]
     # Assert a request is issued as there is no cache for this request
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert no request is issued as there is a cache for this request
-    assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert not _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     # Wait for cache to be out of date
     time.sleep(6)
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache for this request
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert no request is issued as there is a cache for this request
-    assert not _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert not _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_post_cached(caching_service, responses: RequestsMock, tmpdir):
@@ -142,7 +141,7 @@ def test_post_cached(caching_service, responses: RequestsMock, tmpdir):
     )
 
     assert generated_functions.caching_post_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     responses.add(
         responses.POST,
@@ -151,14 +150,14 @@ def test_post_cached(caching_service, responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
     assert generated_functions.caching_post_cached(test1="1", test2="3") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
     assert generated_functions.caching_post_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     time.sleep(5)
     assert generated_functions.caching_post_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     assert generated_functions.caching_post_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_put_cached(caching_service, responses: RequestsMock, tmpdir):
@@ -185,7 +184,7 @@ def test_put_cached(caching_service, responses: RequestsMock, tmpdir):
     )
 
     assert generated_functions.caching_put_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     responses.add(
         responses.PUT,
@@ -194,14 +193,14 @@ def test_put_cached(caching_service, responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
     assert generated_functions.caching_put_cached(test1="1", test2="3") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
     assert generated_functions.caching_put_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     time.sleep(5)
     assert generated_functions.caching_put_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     assert generated_functions.caching_put_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
@@ -227,7 +226,7 @@ def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
     assert generated_functions.caching_delete_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     responses.add(
         responses.DELETE,
@@ -236,14 +235,14 @@ def test_delete_cached(caching_service, responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
     assert generated_functions.caching_delete_cached(test1="1", test2="3") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=3")
     assert generated_functions.caching_delete_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     time.sleep(5)
     assert generated_functions.caching_delete_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
     assert generated_functions.caching_delete_cached(test1="1", test2="2") == [[""]]
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_get_cached_negative_duration(caching_service, responses: RequestsMock, tmpdir):
@@ -271,11 +270,11 @@ def test_get_cached_negative_duration(caching_service, responses: RequestsMock, 
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_get_cached_invalid_duration(caching_service, responses: RequestsMock, tmpdir):
@@ -303,11 +302,11 @@ def test_get_cached_invalid_duration(caching_service, responses: RequestsMock, t
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
 
 def test_get_cached_without_cachetools(
@@ -342,8 +341,8 @@ def test_get_cached_without_cachetools(
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
 
     assert generated_functions.caching_get_cached(test1="1", test2="2") == [[""]]
     # Assert a request is issued as there is no cache
-    assert _get_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
+    assert _sent_request(responses, "http://localhost:8949/cached?test1=1&test2=2")
