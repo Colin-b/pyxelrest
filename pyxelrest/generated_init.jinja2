@@ -23,3 +23,13 @@ def update_services(services):
     {{ service.config.name }}.udf_methods = services["{{ service.config.name }}"].methods
 {% endfor %}
 
+
+__all__ = [
+{% for service in services %}
+{% if service.config.ensure_unique_function_names() %}
+    {% for udf_name in service.methods %}
+    "{{ udf_name }}",
+    {% endfor %}
+{% endif %}
+{% endfor %}
+]

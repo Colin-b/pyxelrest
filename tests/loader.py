@@ -16,5 +16,6 @@ def load(tmpdir, config: dict):
     pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
 
     module = import_module("pyxelrest._generator")
+    # To make sure module is actually reloaded, we need diff timestamp between .py and .pyc file
     time.sleep(0.1)
     return reload(module)
