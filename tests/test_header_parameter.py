@@ -163,3 +163,102 @@ def test_get_header_advanced_configuration(
     assert headers["X-Pxl-Envvar"] == os.environ["USERNAME"]
     assert headers["User-Agent"] == f"pyxelrest/{__version__}"
     assert headers["X-Pxl-Caller"] == ""
+
+
+def test_get_vba_caller(responses: RequestsMock, header_parameter_service, tmpdir):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "header_advanced_configuration": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "formulas": {"vba_compatible": {}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://localhost:8951/header",
+        json={},
+        match_querystring=True,
+    )
+
+    class FakeApplication:
+        class FakeVBE:
+            class FakeCodePane:
+                CodeModule = "FakeModule"
+
+            ActiveCodePane = FakeCodePane
+
+        VBE = FakeVBE
+
+    assert generated_functions.vba_header_advanced_configuration_get_header(
+        header_string="", caller="fake", excel_application=FakeApplication
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8951/header").headers
+    assert headers["X-Pxl-Caller"] == "VBA:FakeModule"
+
+
+def test_get_caller_exception(
+    responses: RequestsMock, header_parameter_service, tmpdir
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "header_advanced_configuration": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "formulas": {"vba_compatible": {}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://localhost:8951/header",
+        json={},
+        match_querystring=True,
+    )
+
+    class FakeCaller:
+        Rows = "FakeRows"
+
+        @staticmethod
+        def get_address():
+            raise Exception("Failure to retrieve address")
+
+    assert generated_functions.vba_header_advanced_configuration_get_header(
+        header_string="", caller=FakeCaller
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8951/header").headers
+    assert headers["X-Pxl-Caller"] == ""
+
+
+def test_get_excel_caller_address(
+    responses: RequestsMock, header_parameter_service, tmpdir
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "header_advanced_configuration": {
+                "open_api": {"definition": "http://localhost:8951/"},
+                "formulas": {"vba_compatible": {}},
+            }
+        },
+    )
+    responses.add(
+        responses.GET,
+        url="http://localhost:8951/header",
+        json={},
+        match_querystring=True,
+    )
+
+    class FakeCaller:
+        Rows = "FakeRows"
+
+        @staticmethod
+        def get_address():
+            return "Excel address"
+
+    assert generated_functions.vba_header_advanced_configuration_get_header(
+        header_string="", caller=FakeCaller
+    ) == [[""]]
+    headers = _get_request(responses, "http://localhost:8951/header").headers
+    assert headers["X-Pxl-Caller"] == "Excel address"
