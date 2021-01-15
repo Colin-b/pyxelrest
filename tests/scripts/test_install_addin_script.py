@@ -43,7 +43,7 @@ def test_success(fake_registry, monkeypatch, tmpdir):
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -82,7 +82,7 @@ def test_success_with_pre_release(fake_registry, monkeypatch, tmpdir):
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -122,7 +122,7 @@ def test_success_with_uptodate_configuration(fake_registry, monkeypatch, tmpdir)
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -167,7 +167,7 @@ def test_success_default_source(fake_registry, monkeypatch, tmpdir):
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -207,7 +207,7 @@ def test_non_silent_installation(fake_registry, monkeypatch, tmpdir):
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -258,7 +258,7 @@ def test_update(fake_registry, monkeypatch, tmpdir):
     ) as file:
         file.write(b"")
 
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -314,7 +314,7 @@ def test_non_silent_uninstallation(fake_registry, monkeypatch, tmpdir):
     ) as file:
         file.write(b"")
 
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -370,7 +370,7 @@ def test_vb_addin_source_not_existing(fake_registry, monkeypatch, tmpdir):
 def test_vsto_does_not_exists(fake_registry, monkeypatch, tmpdir):
     # Create empty source dir (missing VSTO)
     os.makedirs(os.path.join(tmpdir, "source"))
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     with pytest.raises(Exception) as exception_info:
         pyxelrest.install_addin.main(
             "--trusted_location",
@@ -413,7 +413,7 @@ def test_xlwings_bas_does_not_exists(
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     with pytest.raises(Exception) as exception_info:
         pyxelrest.install_addin.main(
             "--trusted_location",
@@ -455,7 +455,7 @@ def test_pythonw_executable_does_not_exists(
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     with pytest.raises(Exception) as exception_info:
         pyxelrest.install_addin.main(
             "--trusted_location",
@@ -495,7 +495,7 @@ def test_vsto_installer_x86(fake_registry, monkeypatch, tmpdir):
             return_code=0,
         ),
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     pyxelrest.install_addin.main(
         "--trusted_location",
         os.path.join(tmpdir, "trusted"),
@@ -535,7 +535,7 @@ def test_vsto_installer_not_existing(fake_registry, monkeypatch, tmpdir):
             ),
         },
     )
-    root = os.path.dirname(os.path.dirname(__file__))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     with pytest.raises(Exception) as exception_info:
         pyxelrest.install_addin.main(
             "--trusted_location",
@@ -689,7 +689,7 @@ def assert_xlwings_bas(install_location: str):
 def assert_resource(file_path: str, resource: str, replace: dict = None):
     assert_content(
         file_path,
-        os.path.join(os.path.dirname(__file__), "resources", resource),
+        os.path.join(os.path.dirname(__file__), "../resources", resource),
         replace,
     )
 

@@ -76,9 +76,10 @@ def test_mixed_operation_id(responses: RequestsMock, tmpdir):
         match_querystring=True,
     )
 
-    assert generated_functions.operation_id_not_always_provided_get_without_operationId() == [
-        ["first"]
-    ]
+    assert (
+        generated_functions.operation_id_not_always_provided_get_without_operationId()
+        == [["first"]]
+    )
 
     responses.add(
         responses.GET,

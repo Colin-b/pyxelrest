@@ -5,7 +5,7 @@ import requests
 from requests import PreparedRequest
 from responses import RequestsMock
 
-from tests.test_petstore import petstore_service
+from tests.request.test_petstore import petstore_service
 
 
 def _get_request(responses: RequestsMock, url: str) -> PreparedRequest:
