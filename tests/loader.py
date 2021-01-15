@@ -1,5 +1,6 @@
 from importlib import import_module, reload
 import os
+import time
 
 import yaml
 
@@ -18,4 +19,5 @@ def load(tmpdir, config: dict):
     cache_file = getattr(module, "__cached__")
     if os.path.exists(cache_file):
         os.remove(cache_file)
+    time.sleep(1)
     return reload(module)
