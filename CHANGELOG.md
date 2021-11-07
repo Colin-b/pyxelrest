@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
-- Compatibility with `python` `3.8` and `3.9`.
+- Compatibility with `python` `3.8`, `3.9` and `3.10`.
 - Ability to change the configuration and impact loaded functions within module without restarting python.
 - file URl are now properly handled, they must start with `file:///` instead of `file://`
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
@@ -64,9 +64,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - It is not possible to filter out HTTP methods from `pyxelrest` service anymore.
 - It is not possible to specify custom python modules to be installed by the Microsoft Excel add-in. Instead, required modules will be automatically installed by the add-in.
 - `udf_name_prefix` option does not exists anymore, instead it should be provided per formula type thanks to `prefix` option.
-- `update_services_config` script does not allow to list services anymore.
-- `update_services_config` script does not allow to remove services anymore.
-- `update_services_config` script does not allow to update services anymore.
+- `update_services_config` script does not allow listing services anymore.
+- `update_services_config` script does not allow removing services anymore.
+- `update_services_config` script does not allow updating services anymore.
 - `X-PXL-REQUEST` header is not sent anymore to avoid computation and respect a bit more user privacy.
 - `X-PXL-SESSION` header is not sent anymore to respect a bit more user privacy.
 - `rely_on_definitions` is not available anymore as it is too slow to be used anyway.
