@@ -33,18 +33,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
 - Do not request VBA caller in threading context (as it cannot be retrieved and result in COM call failure).
 - The `PyxelRestAddIn` does not read default `xlwings` configuration anymore for non provided settings. Allowing to run in addition of the `xlwings` add-in.
-- Allow to call `update_services_config` script without an existing configuration.
+- Allow calling `update_services_config` script without an existing configuration.
 - Allow to provide a custom xlwings bas file path to the add-in.
-- Allow to load pyxelrest even if no services configuration file can be found.
-- Allow to install pyxelrest outside of a virtual environment.
-- Launching add-in as a developer do not mixes logs with the installed add-in anymore. Local development log files are created instead.
+- Allow loading pyxelrest even if no services configuration file can be found.
+- Allow installing pyxelrest outside of a virtual environment.
+- Launching add-in as a developer do not mix logs with the installed add-in anymore. Local development log files are created instead.
 - Use `SafeLoader` rather than `FullLoader` to load module logging configuration.
 - Allow REST APIs with `excel_application` parameter name.
 - Handle Win32Exception occurring if python process cannot be closed due to user rights.
 - Handle relative URI for `authorizationUrl` and `tokenUrl`.
 - Microsoft Excel add-in advanced services configuration screen is now handling all resolutions properly.
 - Microsoft Excel add-in now ensure required `extra` python modules are installed if required.
-- Allow to add new configuration sections via auto-update that will not be updated afterwards.
+- Allow adding new configuration sections via auto-update that will not be updated afterwards.
 - Do not attempt to generate user defined functions if xlwings cannot be imported.
 - Do not import xlwings twice if it is already imported (in case user save pyxelrest.xlam file manually while xlwings was imported).
 - Avoid checking trust access to the VBA project object model twice on function generation.
@@ -56,10 +56,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop support for `application/msgpackpandas` as `msgpack` support has been dropped from `pandas` and this is not a standardized content type.
 - Drop support for `ujson`.
 - Drop support for `ini` configuration files.
-- Drop support for shifted results as there is no need for it anymore, first cell is always filled with an up to date value.
-- Python update script path is now guessed by addin, no need to provide the path in configuration anymore.
+- Drop support for shifted results as there is no need for it anymore, first cell is always filled with an up-to-date value.
+- Python update script path is now guessed by add-in, no need to provide the path in configuration anymore.
 - Drop `ntlm` and `cachetools` extra. As documentation clearly state what is supported and that there is no added value.
-- There is no default services configuration anymore at pyxelrest module installation. However samples can still be found via documentation.
+- There is no default services configuration anymore at pyxelrest module installation. However, samples can still be found via documentation.
 - Remove the ability to select `options` and `head` http method from Microsoft Excel add-in configuration as they are most likely not used.
 - It is not possible to filter out HTTP methods from `pyxelrest` service anymore.
 - It is not possible to specify custom python modules to be installed by the Microsoft Excel add-in. Instead, required modules will be automatically installed by the add-in.
