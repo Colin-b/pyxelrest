@@ -1,12 +1,14 @@
 import argparse
 import os
 import io
+import re
 import shutil
 import subprocess
 import sys
 import logging
 import distutils.dir_util as dir_util
 import winreg
+from typing import Optional
 
 if __name__ == "__main__":
     logger = logging.getLogger("pyxelrest.install_addin")
@@ -147,11 +149,18 @@ class XlWingsConfig:
                     f"XLWings BAS file cannot be found in {xlwings_bas_path}"
                 )
             with open(xlwings_bas_path) as default_settings:
-                process_get_config = False
+                current_function = None
                 for line in default_settings:
-                    if line.startswith("Function GetConfig("):
-                        add_in_file.write(line)
-                        add_in_file.write(f"""    Dim configValue As String
+                    previous_function = current_function
+                    current_function = self._function_or_sub_name(
+                        line, current_function
+                    )
+                    if current_function == "GetConfig":
+                        # If this is the definition of GetConfig function
+                        if previous_function != current_function:
+                            add_in_file.write(line)
+                            add_in_file.write(
+                                f"""    Dim configValue As String
     
     If Application.Name = "Microsoft Excel" Then
         If GetConfigFromFile("{self.xlwings_config_path}", configKey, configValue) Then
@@ -164,25 +173,44 @@ class XlWingsConfig:
     End If
     
     GetConfig = ExpandEnvironmentStrings(GetConfig)
-""")
-                        process_get_config = True
-                    elif process_get_config:
-                        if line.startswith("End Function"):
-                            add_in_file.write(line)
-                            process_get_config = False
+"""
+                            )
                         else:
                             # Skip the xlwings content of GetConfig function as it is replaced
                             pass
+                    elif current_function in (
+                        "ImportPythonUDFsBase",
+                        "ImportXlwingsUdfsModule",
+                    ):
+                        # Keep referring to ThisWorkbook for pyxelrest
+                        add_in_file.write(line)
                     elif "ThisWorkbook" in line:
-                        if "GetUdfModules" in line:
-                            # Keep referring to ThisWorkbook for pyxelrest
-                            add_in_file.write(line)
-                        else:
-                            # Allow users to use xlwings with workbooks
-                            add_in_file.write(line.replace("ThisWorkbook", "ActiveWorkbook"))
+                        # Allow users to use xlwings with workbooks
+                        add_in_file.write(
+                            line.replace("ThisWorkbook", "ActiveWorkbook")
+                        )
                     else:
                         add_in_file.write(line)
         logger.info("XLWings PyxelRest VB add-in created.")
+
+    @staticmethod
+    def _function_or_sub_name(line: str, previous_function_name: str) -> Optional[str]:
+        # End of previous function
+        if line in ("End Function\n", "End Sub\n"):
+            return
+
+        # Start of a new function
+        function_definition_match = re.match("^Function (.*)\(.*$", line)
+        if function_definition_match:
+            return function_definition_match.group(1)
+
+        # Start of a new sub
+        sub_definition_match = re.match("^Sub (.*)\(.*$", line)
+        if sub_definition_match:
+            return sub_definition_match.group(1)
+
+        # Not a new function
+        return previous_function_name
 
 
 class Installer:
@@ -203,7 +231,11 @@ class Installer:
         if not source:
             executable_folder_path = os.path.abspath(os.path.dirname(sys.executable))
             # python executable is in the Scripts folder in case of a virtual environment. In the root folder otherwise.
-            data_dir = os.path.join(executable_folder_path, "..") if (os.path.basename(executable_folder_path) == "Scripts") else executable_folder_path
+            data_dir = (
+                os.path.join(executable_folder_path, "..")
+                if (os.path.basename(executable_folder_path) == "Scripts")
+                else executable_folder_path
+            )
             source = os.path.join(data_dir, "pyxelrest_addin")
 
         self.source = to_absolute_path(source)
@@ -213,9 +245,7 @@ class Installer:
             )
 
         self.destination = destination or os.path.abspath(".")
-        self.destination_addin_folder = os.path.join(
-            self.destination, "excel_addin"
-        )
+        self.destination_addin_folder = os.path.join(self.destination, "excel_addin")
         self.path_to_up_to_date_configuration = path_to_up_to_date_configuration
         self.check_pre_releases = check_pre_releases
         self.vsto_version = vsto_version
@@ -223,7 +253,9 @@ class Installer:
     def install_addin(self):
         self._write_registry_key("InstallLocation", self.destination)
         if self.path_to_up_to_date_configuration:
-            self._write_registry_key("PathToUpToDateConfigurations", self.path_to_up_to_date_configuration)
+            self._write_registry_key(
+                "PathToUpToDateConfigurations", self.path_to_up_to_date_configuration
+            )
         create_folder(self.destination_addin_folder)
         self._create_module_logging()
         # Assert that Microsoft Excel is closed
@@ -286,8 +318,13 @@ class Installer:
         self._update_addin_config()
 
     def _update_addin_config(self):
-        def write_addin_configuration_line(default_settings_line: str, new_settings: io.StringIO):
-            if "PYTHON_PATH_TO_BE_REPLACED_AT_ADDIN_INSTALLATION" in default_settings_line:
+        def write_addin_configuration_line(
+            default_settings_line: str, new_settings: io.StringIO
+        ):
+            if (
+                "PYTHON_PATH_TO_BE_REPLACED_AT_ADDIN_INSTALLATION"
+                in default_settings_line
+            ):
                 python_executable_folder_path = os.path.dirname(sys.executable)
                 python_path = os.path.join(python_executable_folder_path, "python.exe")
                 # Do not set python path to a value that we know wrong, this case should not happen but you never know
@@ -326,7 +363,10 @@ class Installer:
                 default_file.write(new_config.getvalue())
 
     def _write_registry_key(self, key: str, value: str):
-        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest") as pyxelrest_registry_key:
+        with winreg.CreateKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest",
+        ) as pyxelrest_registry_key:
             winreg.SetValueEx(pyxelrest_registry_key, key, 0, winreg.REG_SZ, value)
 
     def _create_module_logging(self):
@@ -337,7 +377,8 @@ class Installer:
         create_folder(config_folder)
 
         with open(os.path.join(config_folder, "logging.yml"), "w") as generated_file:
-            generated_file.write(f"""version: 1
+            generated_file.write(
+                f"""version: 1
 formatters:
   clean:
     format: '%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s'
@@ -360,7 +401,8 @@ loggers:
 root:
   level: INFO
   handlers: [daily_rotating]
-""")
+"""
+            )
 
 
 def main(*args):
@@ -384,7 +426,9 @@ def main(*args):
         type=str,
     )
     parser.add_argument(
-        "--check_pre_releases", help="Also fetch pre-releases when checking for updates.", action="store_true"
+        "--check_pre_releases",
+        help="Also fetch pre-releases when checking for updates.",
+        action="store_true",
     )
     options = parser.parse_args(args if args else None)
     installer = Installer(
