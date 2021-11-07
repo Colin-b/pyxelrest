@@ -22,25 +22,22 @@ from pyxelrest._generator_config import (
 )
 from pyxelrest._common import check_for_duplicates, Service
 from pyxelrest._open_api import load_service
-from pyxelrest._rest import PyxelRestService
+from pyxelrest._rest import PyxelRest
 
 
 def load_services(config: dict) -> List[Service]:
     """
-    Retrieve OpenAPI JSON definition for each service defined in configuration.
-    :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within
+    Retrieve OpenAPI definition for each service defined in configuration.
+    :return: List of OpenAPI and PyxelRest instances, size should be the same one as the number of sections within
     configuration.
     """
-    if not isinstance(config, dict):
-        raise Exception("Configuration must be a dictionary.")
-
     loaded_services = []
-    for service_name, service_config in config.items():
-        if "pyxelrest" == service_name:
-            pyxelrest_service = PyxelRestService(service_name, service_config)
+    for name, settings in config.items():
+        if "pyxelrest" == name:
+            pyxelrest_service = PyxelRest(settings)
             loaded_services.append(pyxelrest_service)
         else:
-            service = load_service(service_name, service_config)
+            service = load_service(name, settings)
             if service:
                 loaded_services.append(service)
 
@@ -48,9 +45,9 @@ def load_services(config: dict) -> List[Service]:
     return loaded_services
 
 
-def _user_defined_functions(service: Service) -> str:
+def _generated_api(service: Service) -> str:
     """
-    Create xlwings User Defined Functions according to user_defined_functions template.
+    Create xlwings User Defined Functions for a REST API according to generated_api template.
     :return: A string containing python code with all xlwings UDFs.
     """
     renderer = jinja2.Environment(
@@ -58,15 +55,15 @@ def _user_defined_functions(service: Service) -> str:
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    return renderer.get_template("user_defined_functions.jinja2").render(
+    return renderer.get_template("generated_api.jinja2").render(
         current_utc_time=datetime.datetime.utcnow().isoformat(), service=service
     )
 
 
-def _user_defined_functions_init(services: List[Service]) -> str:
+def _generated_init(services: List[Service]) -> str:
     """
-    Create xlwings User Defined Functions according to user_defined_functions template.
-    :return: A string containing python code with all xlwings UDFs.
+    Create __init__ file for the generated folder.
+    :return: A string containing python code of the __init__ file.
     """
     renderer = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__), encoding="utf-8"),
@@ -74,39 +71,34 @@ def _user_defined_functions_init(services: List[Service]) -> str:
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    return renderer.get_template("user_defined_functions_init.jinja2").render(
+    return renderer.get_template("generated_init.jinja2").render(
         current_utc_time=datetime.datetime.utcnow().isoformat(), services=services
     )
 
 
-def generate_python_file(services: List[Service]):
+def generate_python_files(services: List[Service]):
     """
     Create python file containing generated xlwings User Defined Functions.
     """
-    user_defined_functions_path = os.path.join(
-        os.path.dirname(__file__), "user_defined_functions"
-    )
-    if not os.path.exists(user_defined_functions_path):
-        os.makedirs(user_defined_functions_path)
+    generated_folder_path = os.path.join(os.path.dirname(__file__), "generated")
+    if not os.path.exists(generated_folder_path):
+        os.makedirs(generated_folder_path)
 
     for service in services:
-        file_path = os.path.join(
-            user_defined_functions_path, f"{service.config.name}.py"
-        )
+        file_path = os.path.join(generated_folder_path, f"{service.config.name}.py")
         logging.debug(f"Generating {file_path}")
         with open(file_path, "w", encoding="utf-8") as file:
-            file.write(_user_defined_functions(service))
+            file.write(_generated_api(service))
 
-    file_path = os.path.join(user_defined_functions_path, "__init__.py")
+    file_path = os.path.join(generated_folder_path, "__init__.py")
     logging.debug(f"Generating {file_path}")
     with open(file_path, "w", encoding="utf-8") as file:
-        file.write(_user_defined_functions_init(services))
+        file.write(_generated_init(services))
 
 
-def load_user_defined_functions(services: List[Service]):
-    # Ensure that newly generated file is reloaded as user_defined_functions
-    user_defined_functions = reload(import_module("pyxelrest.user_defined_functions"))
-    user_defined_functions.update_services(services)
+def reload_generated(services: List[Service]):
+    generated = reload(import_module("pyxelrest.generated"))
+    generated.update_services(services)
 
 
 if __name__ == "__main__":
@@ -151,24 +143,24 @@ def load_services_from_yaml() -> List[Service]:
         config = yaml.load(config_file, Loader=yaml.FullLoader)
 
     logging.debug(f'Loading services from "{services_configuration_file_path}"...')
-    return load_services(config)
+    return load_services(config or {})
 
 
 if GENERATE_UDF_ON_IMPORT:
     load_logging_configuration()
     try:
         services = load_services_from_yaml()
-        generate_python_file(services)
+        generate_python_files(services)
     except Exception as e:
-        logger.exception("Cannot generate user defined functions.")
+        logger.exception("Cannot generate python files.")
         raise
 
     try:
-        logger.debug("Expose user defined functions through PyxelRest.")
-        load_user_defined_functions(services)
-        from pyxelrest.user_defined_functions import *
+        logger.debug("Expose generated functions.")
+        reload_generated(services)
+        from pyxelrest.generated import *
     except:
-        logger.exception("Error while importing UDFs.")
+        logger.exception("Cannot expose generated functions.")
 
 # Uncomment to debug Microsoft Excel UDF calls.
 # if __name__ == '__main__':

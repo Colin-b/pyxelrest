@@ -1,5 +1,6 @@
 from importlib import import_module, reload
 import os
+import time
 
 import yaml
 
@@ -14,33 +15,7 @@ def load(tmpdir, config: dict):
 
     pyxelrest._generator_config.SERVICES_CONFIGURATION_FILE_PATH = config_file_path
 
-    # Create logging configuration
-    config_file_path = os.path.join(tmpdir, "test_logging.yml")
-    with open(config_file_path, "wt") as file:
-        file.write(
-            """version: 1
-formatters:
-  clean:
-    format: '%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s'
-handlers:
-  standard_output:
-    class: logging.StreamHandler
-    formatter: clean
-    stream: ext://sys.stdout
-loggers:
-  pyxelrest:
-    level: DEBUG
-  xlwings:
-    level: DEBUG
-  requests_auth:
-    level: DEBUG
-  requests.packages.urllib3:
-    level: DEBUG
-root:
-  level: DEBUG
-  handlers: [standard_output]"""
-        )
-
-    pyxelrest._generator_config.LOGGING_CONFIGURATION_FILE_PATH = config_file_path
-
-    return reload(import_module("pyxelrest._generator"))
+    module = import_module("pyxelrest._generator")
+    # To make sure module is actually reloaded, we need diff timestamp between .py and .pyc file
+    time.sleep(0.2)
+    return reload(module)

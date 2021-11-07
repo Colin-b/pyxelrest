@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to provide the description of the service in the Microsoft Excel add-in.
 - `skip_update_for` option is now allowing dot notation.
 - Allow to provide a custom response converter when using as a python module.
+- Allow to set NTLM authentication with current credentials in the Microsoft Excel add-in.
+- Allow to provide the authentication mechanism to use when retrieving the OpenAPI definition in the Microsoft Excel add-in.
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
@@ -50,6 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Avoid checking trust access to the VBA project object model twice on function generation.
 - Return raw result when using as a python module even if HTTP 202 is received.
 - Return the full response as text when using as a python module, and not only the first 255 characters.
+- In case NO_PROXY environment variable was containing multiple URLs and should have been applied, it was not the case by the add-in.
+- Numbers are now properly checked if the value is supposed to be a multiple of another value.
+- Allow `str` parameter name.
 
 ### Removed
 - Drop support for `python` < `3.8`.
@@ -103,6 +108,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `raise_exception` is now specified per formula and is not documented anymore as it makes not sense to change it.
 - `flatten` has been renamed to `convert_response` and is now specified per formula and is not documented anymore as it makes not sense to change it.
 - `caching` options are now per formula instead of per REST API and have been renamed. See [migration guide](docs/migration_guide.md) for more details.
+- xlwings configuration is now retrieved faster (not retrieved from a file and do not look for environment variable).
+- `definition_retrieval_auths` parameters have been renamed to match `requests_auth` parameters for consistency with `auth` section.
+- Update is now retrieved as soon as possible instead of only at Microsoft Excel close.
 
 ## [0.69.0] - 2018-12-03
 ### Changed

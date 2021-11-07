@@ -40,5 +40,5 @@ def load(config: dict, to_response: callable = _raw):
         )
 
     services = _generator.load_services(config)
-    _generator.generate_python_file(services)
-    _generator.load_user_defined_functions(services)
+    _generator.generate_python_files(services)
+    _generator.reload_generated(services)

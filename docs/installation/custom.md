@@ -2,7 +2,7 @@
 
 Note that the recommended way to install pyxelrest is [via the installer](installer.md).
 
-1. [Python >= 3.7](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/) and [`tkinter`](https://docs.python.org/3/library/tkinter.html) for auto update to work).
+1. [Python >= 3.7](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/) for auto update to work).
 2. Use [`pip`](https://pip.pypa.io/en/stable/) to install module:
 ```bash
 python -m pip install pyxelrest
@@ -29,8 +29,10 @@ Note: The add-in is not required if you only want to use `pyxelrest` [as a pytho
 |------|-------------|-----------------|
 | path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the [Microsoft Excel] add-in. | file path, folder path or an URL returning a file content. |
 | check_pre_releases | Also fetch pre-releases when checking for updates. | No value is required, providing the option is enough. Prompt only for stable releases by default. |
-| source | Directory containing [Microsoft Excel] COM add-in and `pyxelrest.xlam` file. | Default to `pyxelrest_addin` folder in the python executable data directory. |
+| source | Directory containing [Microsoft Excel] COM add-in (and optionally `pyxelrest.xlam` file). | Default to `pyxelrest_addin` folder in the python executable data directory. |
+| vb_addin | Directory containing [Microsoft Excel] Visual Basic `pyxelrest.xlam` file. | Default to `pyxelrest.xlam` within `source` folder. |
 | destination | Directory where add-in will be installed and add-in logs will be located. | Default to `.` folder (current location). |
+| trusted_location | Trusted Microsoft Excel location where visual basic add-in will be located. | Default to `%APPDATA%\Microsoft\Excel\XLSTART` folder. |
 
 Note: option name must be prefixed with `--` such as:
 ```bash

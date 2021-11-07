@@ -14,7 +14,7 @@ The following application settings are available:
 | Name | Description | Mandatory | Possible values |
 |------|-------------|-----------|-----------------|
 | PathToPython | Path to the python.exe (including) executable where pyxelrest python module was installed. | Mandatory | Installation script is already setting this value properly. |
-| AutoCheckForUpdates | Activate or Deactivate automatic check for PyxelRest update on Microsoft Excel closing. | Optional | True (default), False |
+| AutoCheckForUpdates | Activate or Deactivate automatic check for PyxelRest update while Microsoft Excel is running. | Optional | True (default), False |
 | GenerateUDFAtStartup | Activate or Deactivate generation of user defined functions at Microsoft Excel startup. | Optional | True (default), False |
 | PathToXlWingsBasFile | Path to the XlWings modified BAS file used to configure XlWings for PyxelRest. | Mandatory | Installation script is already setting this value properly. |
 | CheckPreReleases | Should auto update fetch pre-releases. | Optional | True, False (default). |

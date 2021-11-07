@@ -16,14 +16,14 @@ from pyxelrest._common import (
     Service,
 )
 from pyxelrest._exceptions import (
-    MandatoryPropertyNotProvided,
+    OpenAPIDefinitionNotProvided,
     DuplicatedParameters,
     OpenAPIVersionNotProvided,
     UnsupportedOpenAPIVersion,
     EmptyResponses,
     InvalidOpenAPIDefinition,
 )
-from pyxelrest._fast_deserializer import Flattenizer
+from pyxelrest._json_deserializer import Flattenizer
 
 logger = logging.getLogger(__name__)
 
@@ -49,22 +49,19 @@ def return_type_can_be_handled(method_produces: List[str]) -> bool:
     return "application/octet-stream" not in method_produces
 
 
-class ServiceConfigSection(ConfigSection):
-    def __init__(self, service_name: str, service_config: dict):
+class RESTAPIConfigSection(ConfigSection):
+    def __init__(self, name: str, settings: dict):
         """
-        Load service information from configuration.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        Load REST API settings from configuration.
+        :param name: Section name in configuration.
+        :param settings: Section configuration settings.
         """
-        ConfigSection.__init__(self, service_name, service_config)
-        open_api = service_config.get("open_api")
-        if not open_api:
-            raise MandatoryPropertyNotProvided(service_name, "open_api")
+        ConfigSection.__init__(self, name, settings)
+        open_api = settings.get("open_api", {})
 
         self.open_api_definition = open_api.get("definition")
         if not self.open_api_definition:
-            raise MandatoryPropertyNotProvided(service_name, "open_api/definition")
+            raise OpenAPIDefinitionNotProvided(name)
 
         self.definition_read_timeout = open_api.get("definition_read_timeout", 5)
         self.selected_methods = open_api.get(
@@ -264,7 +261,7 @@ class APIUDFParameter(UDFParameter):
                         f'{self.name} value "{value}" must be superior or equals to {self.minimum}.'
                     )
 
-        if self.multiple_of and (value % self.multiple_of) == 0:
+        if self.multiple_of and (value % self.multiple_of) != 0:
             raise Exception(
                 f'{self.name} value "{value}" must be a multiple of {self.multiple_of}.'
             )
@@ -355,10 +352,7 @@ class APIUDFParameter(UDFParameter):
         if isinstance(value, list):
             list_value = self._convert_list_to_array(value)
         else:
-            if value is not None or self.allow_null:
-                list_value = [self.array_parameter._convert_to_type(value)]
-            else:
-                list_value = []
+            list_value = [self.array_parameter._convert_to_type(value)]
         self._check_array(list_value)
         return self._apply_collection_format(list_value)
 
@@ -375,9 +369,8 @@ class APIUDFParameter(UDFParameter):
         if not self.collection_format or "csv" == self.collection_format:
             return ",".join([str(value) for value in list_value])
         if "multi" == self.collection_format:
-            return (
-                list_value  # requests module will send one parameter per item in list
-            )
+            # requests module will send one parameter per item in list
+            return list_value
         if "ssv" == self.collection_format:
             return " ".join([str(value) for value in list_value])
         if "tsv" == self.collection_format:
@@ -487,10 +480,6 @@ class OpenAPIUDFMethod(UDFMethod):
         formula_type: str,
         formula_options: dict,
     ):
-        # Uses "or" in case OpenAPI definition contains None in description (explicitly set by service)
-        self.help_url = OpenAPIUDFMethod.extract_url(
-            open_api_method.get("description") or ""
-        )
         operation_id = open_api_method.get(
             "operationId"
         ) or OpenAPIUDFMethod._compute_operation_id(http_method, path)
@@ -563,17 +552,6 @@ class OpenAPIUDFMethod(UDFMethod):
 
         return header
 
-    @staticmethod
-    def extract_url(text: str) -> Optional[str]:
-        """
-        OpenAPI URLs are interpreted thanks to the following format:
-        [description of the url](url)
-        :return: URL or None if no URL can be found.
-        """
-        urls = re.findall(r"^.*\[.*\]\((.*)\).*$", text)
-        if urls:
-            return urls[0]
-
     def _to_parameters(self, open_api_parameter: dict) -> List[APIUDFParameter]:
         if (
             "type" in open_api_parameter
@@ -598,9 +576,8 @@ class OpenAPIUDFMethod(UDFMethod):
         elif "items" in schema:
             inner_parameter = dict(open_api_parameter)
             inner_parameter.update(schema["items"])
-            inner_parameter[
-                "server_param_name"
-            ] = None  # Indicate that this is the whole body
+            # Indicate that this is the whole body
+            inner_parameter["server_param_name"] = None
             parameters.append(APIUDFParameter(inner_parameter, schema))
         else:
             raise Exception(f"Unable to extract parameters from {open_api_parameter}")
@@ -640,15 +617,14 @@ class OpenAPIUDFMethod(UDFMethod):
 
 
 class OpenAPI(Service):
-    def __init__(self, service_name: str, service_config: dict):
+    def __init__(self, name: str, settings: dict):
         """
-        Load service information from configuration and OpenAPI definition.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        Load REST API information from configuration and OpenAPI definition.
+        :param name: Section name in configuration.
+        :param settings: Section configuration settings.
         """
         self.methods = {}
-        config = ServiceConfigSection(service_name, service_config)
+        config = RESTAPIConfigSection(name, settings)
         self.existing_operation_ids = {
             formula_type: [] for formula_type in config.formulas
         }
@@ -659,41 +635,52 @@ class OpenAPI(Service):
         uri = self._extract_uri(config).rstrip("/")
         Service.__init__(self, config, uri)
 
-    def _extract_uri(self, config: ServiceConfigSection) -> str:
-        open_api_definition_url = (
-            urlsplit(config.open_api_definition)
-            if isinstance(config.open_api_definition, str)
-            else None
+    def _scheme(self, config: RESTAPIConfigSection) -> str:
+        # Prefer HTTPS if available in OpenAPI definition
+        schemes = self.open_api_definition.get("schemes")
+        if schemes:
+            return "https" if "https" in schemes else schemes[0]
+
+        # Allow user to provide scheme thanks to host network property
+        user_provided_host = config.network.get("host")
+        if user_provided_host:
+            scheme = urlsplit(user_provided_host).scheme
+            if scheme:
+                return scheme
+
+        # The default scheme to be used is the one used to access the OpenAPI definition itself.
+        if isinstance(config.open_api_definition, str):
+            return urlsplit(config.open_api_definition).scheme
+
+        raise InvalidOpenAPIDefinition(
+            "As schemes property is not set within OpenAPI definition, you must provide a scheme thanks to 'host' 'network' property."
         )
 
-        schemes = self.open_api_definition.get("schemes")
-        if not schemes:
-            # The default scheme to be used is the one used to access the OpenAPI definition itself.
-            if open_api_definition_url:
-                schemes = [open_api_definition_url.scheme]
-            else:
-                raise InvalidOpenAPIDefinition("At least one scheme must be provided.")
+    def _host(self, config: RESTAPIConfigSection) -> str:
+        host = self.open_api_definition.get("host")
+        if host:
+            return host
 
-        scheme = "https" if "https" in schemes else schemes[0]
+        # Allow user to provide host thanks to host network property
+        user_provided_host = config.network.get("host")
+        if user_provided_host:
+            # Ensure scheme is not part of host even if provided
+            host_parsed = urlsplit(user_provided_host)
+            return host_parsed.netloc + host_parsed.path
 
-        # host property is here to handle REST API behind a reverse proxy
-        # (otherwise host will be the reverse proxy one when retrieving it from the URL)
-        host = self.open_api_definition.get("host", config.network.get("host"))
-        if not host:
-            # The default host to be used is the host serving the documentation (including the port).
-            if open_api_definition_url:
-                host = open_api_definition_url.netloc
-            else:
-                raise InvalidOpenAPIDefinition("host must be provided.")
+        # The default host to be used is the host serving the documentation (including the port).
+        if isinstance(config.open_api_definition, str):
+            return urlsplit(config.open_api_definition).netloc
 
-        # Allow user to provide host starting with scheme (removing it)
-        host_parsed = urlsplit(host)
-        if host_parsed.netloc:
-            host = host_parsed.netloc + host_parsed.path
-        # If it is not included, the API is served directly under the host.
+        raise InvalidOpenAPIDefinition(
+            "As host property is not set within OpenAPI definition, you must provide it thanks to 'host' 'network' property."
+        )
+
+    def _extract_uri(self, config: RESTAPIConfigSection) -> str:
+        # If basePath is not included in OpenAPI definition, the API is served directly under the host.
         base_path = self.open_api_definition.get("basePath", None) or ""
 
-        return f"{scheme}://{host}{base_path}"
+        return f"{self._scheme(config)}://{self._host(config)}{base_path}"
 
     def create_method(
         self,
@@ -715,7 +702,7 @@ class OpenAPI(Service):
         return udf
 
     @classmethod
-    def _retrieve_open_api_definition(cls, config: ServiceConfigSection) -> dict:
+    def _retrieve_open_api_definition(cls, config: RESTAPIConfigSection) -> dict:
         """
         Retrieve OpenAPI JSON definition from service.
         :return: Dictionary representation of the retrieved Open API JSON definition.
@@ -780,7 +767,7 @@ class OpenAPI(Service):
                 parameters_names,
             ) in method_parameters_names_per_location.items():
                 if len(set(parameters_names)) != len(parameters_names):
-                    raise DuplicatedParameters(method)
+                    raise DuplicatedParameters(path, mode, method)
 
         def _update_method_produces():
             method["produces"] = (
@@ -802,7 +789,7 @@ class OpenAPI(Service):
         root_security = open_api_definition.get("security", [])
         root_consumes = open_api_definition.get("consumes", [])
 
-        for methods in open_api_definition["paths"].values():
+        for path, methods in open_api_definition["paths"].items():
             # retrieve parameters listed at the path level
             methods_parameters = _normalise_names(methods.pop("parameters", []))
             methods_produces = methods.pop("produces", [])
@@ -840,19 +827,15 @@ class OpenAPI(Service):
             raise UnsupportedOpenAPIVersion(self.open_api_definition["swagger"])
 
     def __str__(self) -> str:
-        if "ntlm" in self.config.auth:
-            return (
-                f"[{self.config.name}] service. {self.uri} ({self.config.auth['ntlm']})"
-            )
-        return f"[{self.config.name}] service. {self.uri}"
+        return f"{self.config.name} service. {self.uri}"
 
 
-def load_service(service_name: str, service_config: dict) -> OpenAPI:
-    logger.debug(f'Loading "{service_name}" service...')
+def load_service(name: str, settings: dict) -> OpenAPI:
+    logger.debug(f'Loading "{name}" ...')
     try:
-        service = OpenAPI(service_name, service_config)
-        logger.info(f'"{service_name}" service will be available.')
+        service = OpenAPI(name, settings)
+        logger.info(f'"{name}" will be available.')
         logger.debug(str(service))
         return service
     except Exception as e:
-        logger.error(f'"{service_name}" service will not be available: {e}')
+        logger.error(f'"{name}" will not be available: {e}')

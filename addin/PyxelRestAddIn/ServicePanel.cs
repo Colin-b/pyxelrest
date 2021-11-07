@@ -63,6 +63,8 @@ namespace PyxelRestAddIn
         internal void Display(bool expanded)
         {
             checkbox = configurationForm.accordion.Add(servicePanel, service.Description(), open: expanded);
+            if (expanded)
+                openAPIDefinition.Focus();
         }
 
         private TableLayoutPanel DefaultPanel()

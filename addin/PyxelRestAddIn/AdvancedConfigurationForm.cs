@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -30,10 +31,28 @@ namespace PyxelRestAddIn
         private TextBox headerValue;
         private AddButton addHeader;
 
+        private GroupBox apiKeyDefinitionAuthGroup;
+        private ComboBox apiKeyDefinitionAuthLocation;
+        private TextBox apiKeyDefinitionAuthName;
+
+        private GroupBox oauth2DefinitionAuthGroup;
+        private ComboBox oauth2AuthTypeForDefinition;
+        private TextBox oauth2DefinitionAuthorizationUrl;
+        private TextBox oauth2DefinitionTokenUrl;
         private TableLayoutPanel oauth2ParamsPanel;
         private TextBox oauth2ParamName;
         private TextBox oauth2ParamValue;
         private AddButton addOAuth2Param;
+
+        private Dictionary<string, string[]> oauth2ToolTips = new Dictionary<string, string[]>
+        {
+            {"timeout", new string[] { "Maximum number of seconds to wait for the authentication response to be received", "Wait for 1 minute (60 seconds) by default." } },
+            {"header_name", new string[] { "Name of the header in which the OAuth2 token will be sent", "Use 'Authorization' header by default." } },
+            {"header_value", new string[] { "Format in which the OAuth2 token will be sent", "'{token}' will be replaced by the actual token. 'Bearer {token}' by default." } },
+        };
+
+        private TextBox ntlmUsername;
+        private TextBox ntlmPassword;
 
         private CheckBox dynamicArrayFormulasLockExcel;
         private TextBox dynamicArrayFormulasPrefix;
@@ -73,12 +92,8 @@ namespace PyxelRestAddIn
                 foreach (var tag in (IList<string>)servicePanel.service.OpenAPI["selected_operation_ids"])
                     AddOperationID(tag, false);
 
-            var oauth2NonParam = new List<string> { "port", "timeout", "success_display_time", "failure_display_time" };
             foreach (var oauth2Item in (IDictionary<string, object>)servicePanel.service.Auth["oauth2"])
-            {
-                if (!oauth2NonParam.Contains(oauth2Item.Key))
-                    AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
-            }
+                AddOAuth2Param(oauth2Item.Key, oauth2Item.Value.ToString());
         }
 
         /**
@@ -130,7 +145,7 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = string.Format("Short description of {0}", servicePanel.service.Name), UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var description = new TextBox { Location = new Point(PercentWidth(2), PercentWidth(2)), Text = servicePanel.service.description, Width = PercentWidth(80) };
+                        var description = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Text = servicePanel.service.description, Width = PercentWidth(75) };
                         tooltip.SetToolTip(description, "Used only in the add-in configure screen for information.");
                         description.TextChanged += Description_TextChanged;
                         panel.Controls.Add(description);
@@ -166,9 +181,9 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of dynamic array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var prefix = dynamicArrayFormulasOptions.ContainsKey("prefix") ? (string)dynamicArrayFormulasOptions["prefix"] : "{service_name}_";
+                        var prefix = dynamicArrayFormulasOptions.ContainsKey("prefix") ? (string)dynamicArrayFormulasOptions["prefix"] : "{name}_";
                         dynamicArrayFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(dynamicArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        tooltip.SetToolTip(dynamicArrayFormulasPrefix, string.Format("{{name}} will be replaced by {0}", servicePanel.service.Name));
                         dynamicArrayFormulasPrefix.TextChanged += DynamicArrayFormulasPrefix_TextChanged;
                         dynamicArrayFormulasPrefix.Enabled = dynamicArrayFormulasOptions.Count > 0;
                         layout.Controls.Add(dynamicArrayFormulasPrefix, 1, 2);
@@ -222,9 +237,9 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of legacy array formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var prefix = legacyArrayFormulasOptions.ContainsKey("prefix") ? (string)legacyArrayFormulasOptions["prefix"] : "legacy_{service_name}_";
+                        var prefix = legacyArrayFormulasOptions.ContainsKey("prefix") ? (string)legacyArrayFormulasOptions["prefix"] : "legacy_{name}_";
                         legacyArrayFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(legacyArrayFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        tooltip.SetToolTip(legacyArrayFormulasPrefix, string.Format("{{name}} will be replaced by {0}", servicePanel.service.Name));
                         legacyArrayFormulasPrefix.TextChanged += LegacyArrayFormulasPrefix_TextChanged;
                         legacyArrayFormulasPrefix.Enabled = legacyArrayFormulasOptions.Count > 0;
                         layout.Controls.Add(legacyArrayFormulasPrefix, 1, 3);
@@ -278,9 +293,9 @@ namespace PyxelRestAddIn
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Prefix used in front of VBA compatible formulas", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var prefix = vbaCompatibleFormulasOptions.ContainsKey("prefix") ? (string)vbaCompatibleFormulasOptions["prefix"] : "vba_{service_name}_";
+                        var prefix = vbaCompatibleFormulasOptions.ContainsKey("prefix") ? (string)vbaCompatibleFormulasOptions["prefix"] : "vba_{name}_";
                         vbaCompatibleFormulasPrefix = new TextBox { Text = prefix, Width = PercentWidth(20) };
-                        tooltip.SetToolTip(vbaCompatibleFormulasPrefix, string.Format("{{service_name}} will be replaced by {0}", servicePanel.service.Name));
+                        tooltip.SetToolTip(vbaCompatibleFormulasPrefix, string.Format("{{name}} will be replaced by {0}", servicePanel.service.Name));
                         vbaCompatibleFormulasPrefix.TextChanged += VBACompatibleFormulasPrefix_TextChanged;
                         vbaCompatibleFormulasPrefix.Enabled = vbaCompatibleFormulasOptions.Count > 0;
                         layout.Controls.Add(vbaCompatibleFormulasPrefix, 1, 4);
@@ -320,156 +335,151 @@ namespace PyxelRestAddIn
                     var tab = new TabPage { Text = "OpenAPI", AutoScroll = true };
                     var layout = new TableLayoutPanel { AutoSize = true };
 
-                    #region Host
-                    {
-                        var panel = new TableLayoutPanel { AutoSize = true };
-
-                        panel.Controls.Add(new Label { Text = "Host", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(15) }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.Network.ContainsKey("host") ? servicePanel.service.Network["host"].ToString() : string.Empty };
-                        tooltip.SetToolTip(host, "Usefull when host is not provided in the OpenAPI definition and API is behind a reverse proxy.");
-                        host.TextChanged += Host_TextChanged;
-                        panel.Controls.Add(host, 1, 1);
-
-                        layout.Controls.Add(panel);
-                    }
-                    #endregion
-
-                    {
-                        var panel = new TableLayoutPanel { AutoSize = true };
-
-                        #region OpenAPI Definition read timeout
-                        {
-                            panel.Controls.Add(new Label { Text = "Definition read timeout", TextAlign = ContentAlignment.BottomLeft, Width = PercentWidth(25) }, 0, 1);
-
-                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                            var openAPIDefinitionReadTimeout = new NumericUpDown { Width = PercentWidth(10), Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5 };
-                            tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
-                            openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
-                            panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 1);
-                        }
-                        #endregion
-
-                        layout.Controls.Add(panel);
-                    }
 
                     #region Methods
                     {
-                        layout.Controls.Add(new Label { Text = "Methods" });
-
-                        var panel = new TableLayoutPanel { AutoSize = true };
+                        var panel = new GroupBox { AutoSize = true, Text = "Methods" };
                         List<string> selectedMethods = (List<string>)servicePanel.service.OpenAPI["selected_methods"];
 
-                        var get = new CheckBox { Text = "get", Checked = selectedMethods.Contains("get"), Width = PercentWidth(11) };
+                        var get = new CheckBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Text = "get", Checked = selectedMethods.Contains("get"), Width = PercentWidth(11) };
                         get.CheckedChanged += Get_CheckedChanged;
-                        panel.Controls.Add(get, 0, 0);
-                        var post = new CheckBox { Text = "post", Checked = selectedMethods.Contains("post"), Width = PercentWidth(11) };
+                        panel.Controls.Add(get);
+                        var post = new CheckBox { Location = new Point(get.Location.X + get.Width, get.Location.Y), Text = "post", Checked = selectedMethods.Contains("post"), Width = PercentWidth(11) };
                         post.CheckedChanged += Post_CheckedChanged;
-                        panel.Controls.Add(post, 1, 0);
-                        var put = new CheckBox { Text = "put", Checked = selectedMethods.Contains("put"), Width = PercentWidth(11) };
+                        panel.Controls.Add(post);
+                        var put = new CheckBox { Location = new Point(post.Location.X + post.Width, get.Location.Y), Text = "put", Checked = selectedMethods.Contains("put"), Width = PercentWidth(11) };
                         put.CheckedChanged += Put_CheckedChanged;
-                        panel.Controls.Add(put, 2, 0);
-                        var patch = new CheckBox { Text = "patch", Checked = selectedMethods.Contains("patch"), Width = PercentWidth(11) };
+                        panel.Controls.Add(put);
+                        var patch = new CheckBox { Location = new Point(put.Location.X + put.Width, get.Location.Y), Text = "patch", Checked = selectedMethods.Contains("patch"), Width = PercentWidth(11) };
                         patch.CheckedChanged += Patch_CheckedChanged;
-                        panel.Controls.Add(patch, 3, 0);
-                        var delete = new CheckBox { Text = "delete", Checked = selectedMethods.Contains("delete"), Width = PercentWidth(11) };
+                        panel.Controls.Add(patch);
+                        var delete = new CheckBox { Location = new Point(patch.Location.X + patch.Width, get.Location.Y), Text = "delete", Checked = selectedMethods.Contains("delete"), Width = PercentWidth(11) };
                         delete.CheckedChanged += Delete_CheckedChanged;
-                        panel.Controls.Add(delete, 4, 0);
+                        panel.Controls.Add(delete);
 
                         layout.Controls.Add(panel);
                     }
                     #endregion
 
-                    #region Tags
                     {
-                        var tagsLabel = new Label { Text = "Tags" };
-                        layout.Controls.Add(tagsLabel);
-
-                        tagsPanel = new TableLayoutPanel { AutoSize = true };
-                        layout.Controls.Add(tagsPanel);
+                        var panel = new TableLayoutPanel { AutoSize = true };
 
                         {
-                            var addPanel = new TableLayoutPanel { AutoSize = true };
-
-                            {
-                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI tag to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                                tagName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
-                                tooltip.SetToolTip(tagName, "You will be able to filter in/out this tag.");
-                                tagName.TextChanged += TagName_TextChanged;
-                                tagName.KeyDown += TagName_KeyDown;
-                                addPanel.Controls.Add(tagName, 0, 1);
-                            }
-
-                            addTag = new AddButton(PercentWidth(5));
-                            addTag.Click += AddTag_Click;
-                            addPanel.Controls.Add(addTag, 1, 1);
-
-                            layout.Controls.Add(addPanel);
+                            panel.Controls.Add(new Label { Text = "Host" }, 0, 1);
+                            panel.Controls.Add(new Label { Text = "Definition read timeout", Width = PercentWidth(15) }, 1, 1);
                         }
+
+                        {
+                            #region Host
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Root URL of the server", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                var host = new TextBox { Width = PercentWidth(70), Text = servicePanel.service.Network.ContainsKey("host") ? servicePanel.service.Network["host"].ToString() : string.Empty };
+                                tooltip.SetToolTip(host, "Usefull when host is not provided in the OpenAPI definition and API is behind a reverse proxy.");
+                                host.TextChanged += Host_TextChanged;
+                                panel.Controls.Add(host, 0, 2);
+                            }
+                            #endregion
+
+                            #region OpenAPI Definition read timeout
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting an OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                var openAPIDefinitionReadTimeout = new NumericUpDown { Dock = DockStyle.Fill, Maximum = int.MaxValue, Value = servicePanel.service.OpenAPI.ContainsKey("definition_read_timeout") ? decimal.Parse(servicePanel.service.OpenAPI["definition_read_timeout"].ToString()) : 5 };
+                                tooltip.SetToolTip(openAPIDefinitionReadTimeout, "Wait for 5 seconds by default.");
+                                openAPIDefinitionReadTimeout.ValueChanged += OpenAPIDefinitionReadTimeout_ValueChanged;
+                                panel.Controls.Add(openAPIDefinitionReadTimeout, 1, 2);
+                            }
+                            #endregion
+                        }
+
+                        layout.Controls.Add(panel);
+                    }
+
+                    #region Tags
+                    {
+                        GroupBox groupBox = new GroupBox { AutoSize = true, Text = "Tags" };
+
+                        var addPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)), Height = PercentWidth(5) };
+
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI tag to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            tagName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                            tooltip.SetToolTip(tagName, "You will be able to filter in/out this tag.");
+                            tagName.TextChanged += TagName_TextChanged;
+                            tagName.KeyDown += TagName_KeyDown;
+                            addPanel.Controls.Add(tagName, 0, 1);
+                        }
+
+                        addTag = new AddButton(PercentWidth(5));
+                        addTag.Click += AddTag_Click;
+                        addPanel.Controls.Add(addTag, 1, 1);
+
+                        groupBox.Controls.Add(addPanel);
+                        
+                        tagsPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(addPanel.Location.X, addPanel.Location.Y + addPanel.Height), Height = 0 };
+                        groupBox.Controls.Add(tagsPanel);
+
+                        layout.Controls.Add(groupBox);
                     }
                     #endregion
 
                     #region Operation IDs
                     {
-                        var operationIdsLabel = new Label { Text = "Operation IDs" };
-                        layout.Controls.Add(operationIdsLabel);
+                        GroupBox groupBox = new GroupBox { AutoSize = true, Text = "Operation IDs" };
 
-                        operationIDsPanel = new TableLayoutPanel { AutoSize = true };
-                        layout.Controls.Add(operationIDsPanel);
+                        var addPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)), Height = PercentWidth(5) };
 
                         {
-                            var addPanel = new TableLayoutPanel { AutoSize = true };
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            {
-                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI operationID to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                                operationIDName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
-                                tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
-                                operationIDName.TextChanged += OperationIDName_TextChanged;
-                                operationIDName.KeyDown += OperationIDName_KeyDown;
-                                addPanel.Controls.Add(operationIDName, 0, 1);
-                            }
-
-                            addOperationID = new AddButton(PercentWidth(5));
-                            addOperationID.Click += AddOperationID_Click;
-                            addPanel.Controls.Add(addOperationID, 1, 1);
-
-                            layout.Controls.Add(addPanel);
+                            operationIDName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                            tooltip.SetToolTip(operationIDName, "You will be able to filter in/out this operation ID.");
+                            operationIDName.TextChanged += OperationIDName_TextChanged;
+                            operationIDName.KeyDown += OperationIDName_KeyDown;
+                            addPanel.Controls.Add(operationIDName, 0, 1);
                         }
+
+                        addOperationID = new AddButton(PercentWidth(5));
+                        addOperationID.Click += AddOperationID_Click;
+                        addPanel.Controls.Add(addOperationID, 1, 1);
+
+                        groupBox.Controls.Add(addPanel);
+
+                        operationIDsPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(addPanel.Location.X, addPanel.Location.Y + addPanel.Height), Height = 0 };
+                        groupBox.Controls.Add(operationIDsPanel);
+
+                        layout.Controls.Add(groupBox);
                     }
                     #endregion
 
                     #region Parameters
                     {
-                        var parametersLabel = new Label { Text = "Parameters" };
-                        layout.Controls.Add(parametersLabel);
+                        GroupBox groupBox = new GroupBox { AutoSize = true, Text = "Parameters" };
 
-                        parametersPanel = new TableLayoutPanel { AutoSize = true };
-                        layout.Controls.Add(parametersPanel);
+                        var addPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)), Height = PercentWidth(5) };
 
                         {
-                            var addPanel = new TableLayoutPanel { AutoSize = true };
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI parameter to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                            {
-                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of an OpenAPI parameter to filter on", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                                parameterName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
-                                tooltip.SetToolTip(parameterName, "You will be able to filter in/out this parameter.");
-                                parameterName.TextChanged += ParameterName_TextChanged;
-                                parameterName.KeyDown += ParameterName_KeyDown;
-                                addPanel.Controls.Add(parameterName, 0, 1);
-                            }
-
-                            addParameter = new AddButton(PercentWidth(5));
-                            addParameter.Click += AddParameter_Click;
-                            addPanel.Controls.Add(addParameter, 1, 1);
-
-                            layout.Controls.Add(addPanel);
+                            parameterName = new TextBox { Text = string.Empty, Width = PercentWidth(80) };
+                            tooltip.SetToolTip(parameterName, "You will be able to filter in/out this parameter.");
+                            parameterName.TextChanged += ParameterName_TextChanged;
+                            parameterName.KeyDown += ParameterName_KeyDown;
+                            addPanel.Controls.Add(parameterName, 0, 1);
                         }
+
+                        addParameter = new AddButton(PercentWidth(5));
+                        addParameter.Click += AddParameter_Click;
+                        addPanel.Controls.Add(addParameter, 1, 1);
+
+                        groupBox.Controls.Add(addPanel);
+
+                        parametersPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(addPanel.Location.X, addPanel.Location.Y + addPanel.Height), Height = 0 };
+                        groupBox.Controls.Add(parametersPanel);
+
+                        layout.Controls.Add(groupBox);
                     }
                     #endregion
 
@@ -489,16 +499,70 @@ namespace PyxelRestAddIn
                     var tab = new TabPage { Text = "API key", AutoScroll = true };
                     var layout = new TableLayoutPanel { AutoSize = true };
 
+                    #region OpenAPI definition authentication settings
+                    {
+                        var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                        IDictionary<string, object> definitionApiKeyAuth = definitionAuths.ContainsKey("api_key") ? (Dictionary<string, object>)definitionAuths["api_key"] : new Dictionary<string, object>();
+
+                        var panel = new TableLayoutPanel { AutoSize = true };
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Authenticate to retrieve OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var useAuthForDefinition = new CheckBox { Width = PercentWidth(75), Text = "Use API key to retrieve the OpenAPI definition", Checked = definitionApiKeyAuth.Count > 0 };
+                        tooltip.SetToolTip(useAuthForDefinition, "Check to use this API key when retrieving the OpenAPI definition.");
+                        useAuthForDefinition.CheckedChanged += UseApiKeyAuthForDefinition_CheckedChanged;
+                        panel.Controls.Add(useAuthForDefinition);
+
+                        {
+                            apiKeyDefinitionAuthGroup = new GroupBox { AutoSize = true, Text = "OpenAPI definition retrieval" };
+                            var apiKeyDefinitionAuthPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
+
+                            bool inQuery = definitionApiKeyAuth.ContainsKey("query_parameter_name");
+
+                            {
+                                apiKeyDefinitionAuthPanel.Controls.Add(new Label { Text = "Location", Width = PercentWidth(20) }, 0, 1);
+                                apiKeyDefinitionAuthPanel.Controls.Add(new Label { Text = "Name", Width = PercentWidth(40) }, 1, 1);
+                            }
+                            {
+                                ToolTip apiKeyTooltip = new ToolTip { ToolTipTitle = "API key location", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                apiKeyDefinitionAuthLocation = new ComboBox { Dock = DockStyle.Fill, AutoCompleteMode = AutoCompleteMode.SuggestAppend, DropDownStyle = ComboBoxStyle.DropDownList, AutoCompleteSource = AutoCompleteSource.ListItems };
+                                apiKeyDefinitionAuthLocation.Items.AddRange(new string[] { "Header", "Query" });
+                                apiKeyDefinitionAuthLocation.SelectedItem = inQuery ? "Query" : "Header";
+                                apiKeyTooltip.SetToolTip(apiKeyDefinitionAuthLocation, "Location to use to send this API key when retrieving the OpenAPI definition.");
+                                apiKeyDefinitionAuthLocation.SelectedValueChanged += ApiKeyLocation_SelectedValueChanged;
+                                apiKeyDefinitionAuthPanel.Controls.Add(apiKeyDefinitionAuthLocation, 0, 2);
+                            }
+                            {
+                                var name = useAuthForDefinition.Checked ? (string)definitionApiKeyAuth[inQuery ? "query_parameter_name" : "header_name"] : string.Empty;
+                                ToolTip apiKeyTooltip = new ToolTip { ToolTipTitle = "API key name", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                apiKeyDefinitionAuthName = new TextBox { Text = name, Dock = DockStyle.Fill };
+                                apiKeyTooltip.SetToolTip(apiKeyDefinitionAuthName, "Name of the header or query parameter used to store API key when retrieving the OpenAPI definition.");
+                                apiKeyDefinitionAuthName.TextChanged += ApiKeyName_TextChanged;
+                                apiKeyDefinitionAuthPanel.Controls.Add(apiKeyDefinitionAuthName, 1, 2);
+                            }
+                            apiKeyDefinitionAuthGroup.Visible = useAuthForDefinition.Checked;
+                            apiKeyDefinitionAuthGroup.Enabled = useAuthForDefinition.Checked;
+
+                            apiKeyDefinitionAuthGroup.Controls.Add(apiKeyDefinitionAuthPanel);
+                            panel.Controls.Add(apiKeyDefinitionAuthGroup);
+                        }
+
+                        layout.Controls.Add(panel);
+                    }
+                    #endregion
+
                     #region API Key
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "API key", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
+                        var panel = new GroupBox { AutoSize = true, Text = "API key" };
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "API key", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        var apiKey = new TextBox { Width = PercentWidth(75), Text = (string)servicePanel.service.Auth["api_key"] };
+                        var apiKey = new TextBox { Location = new Point(PercentWidth(3), PercentWidth(3)), Width = PercentWidth(75), Text = (string)servicePanel.service.Auth["api_key"] };
                         tooltip.SetToolTip(apiKey, "Only used when required.");
                         apiKey.TextChanged += ApiKey_TextChanged;
-                        layout.Controls.Add(apiKey, 1, 1);
+                        panel.Controls.Add(apiKey);
+                        layout.Controls.Add(panel);
                     }
                     #endregion
 
@@ -511,50 +575,123 @@ namespace PyxelRestAddIn
                 {
                     var tab = new TabPage { Text = "OAuth2", AutoScroll = true };
                     var layout = new TableLayoutPanel { AutoSize = true };
-                    var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
 
-                    #region Timeout
+                    #region OpenAPI definition authentication settings
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(25), Text = "Timeout", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                        IDictionary<string, object> definitionOAuth2Auth = definitionAuths.ContainsKey("oauth2") ? (Dictionary<string, object>)definitionAuths["oauth2"] : new Dictionary<string, object>();
 
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait for the authentication response to be received", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        var panel = new TableLayoutPanel { AutoSize = true };
 
-                        var timeout = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(oauth2Options["timeout"]) };
-                        tooltip.SetToolTip(timeout, "Wait for 1 minute (60 seconds) by default.");
-                        timeout.TextChanged += Oauth2Timeout_TextChanged;
-                        layout.Controls.Add(timeout, 1, 2);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Authenticate to retrieve OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var useAuthForDefinition = new CheckBox { Width = PercentWidth(75), Text = "Use OAuth2 to retrieve the OpenAPI definition", Checked = definitionOAuth2Auth.Count > 0 };
+                        tooltip.SetToolTip(useAuthForDefinition, "Check to use OAuth2 when retrieving the OpenAPI definition.");
+                        useAuthForDefinition.CheckedChanged += UseOAuth2AuthForDefinition_CheckedChanged;
+                        panel.Controls.Add(useAuthForDefinition);
+
+                        {
+                            oauth2DefinitionAuthGroup = new GroupBox { AutoSize = true, Text = "OpenAPI definition retrieval" };
+                            var oauth2DefinitionAuthPanel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
+
+                            var authType = string.Empty;
+                            var authSettings = new Dictionary<string, object>();
+                            foreach (var item in definitionOAuth2Auth)
+                            {
+                                authType = item.Key;
+                                authSettings = (Dictionary<string, object>)item.Value;
+                            }
+
+                            {
+                                oauth2AuthTypeForDefinition = new ComboBox { Dock = DockStyle.Fill, AutoCompleteMode = AutoCompleteMode.SuggestAppend, DropDownStyle = ComboBoxStyle.DropDownList, AutoCompleteSource = AutoCompleteSource.ListItems };
+                                var authTypes = new List<string> { "implicit", "access_code", "password", "application" };
+                                oauth2AuthTypeForDefinition.Items.AddRange(authTypes.ToArray());
+
+                                // Select access_code by default as it is the recommanded auth type
+                                oauth2AuthTypeForDefinition.SelectedItem = authTypes.Contains(authType) ? authType : "access_code";
+                                tooltip.SetToolTip(oauth2AuthTypeForDefinition, "Check to use OAuth2 when retrieving the OpenAPI definition.");
+                                oauth2AuthTypeForDefinition.SelectedValueChanged += OAuth2AuthTypeForDefinition_SelectedValueChanged;
+                                oauth2DefinitionAuthPanel.Controls.Add(oauth2AuthTypeForDefinition, 0, 1);
+                                oauth2DefinitionAuthPanel.SetColumnSpan(oauth2AuthTypeForDefinition, 2);
+                            }
+                            {
+                                oauth2DefinitionAuthPanel.Controls.Add(new Label { Text = "Authorization URL", Width = PercentWidth(20) }, 0, 2);
+
+                                ToolTip oauth2DefinitionAuthorizationUrlTooltip = new ToolTip { ToolTipTitle = "Authorization URL", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                oauth2DefinitionAuthorizationUrl = new TextBox { Text = authSettings.ContainsKey("authorization_url") ? (string)authSettings["authorization_url"] : string.Empty, Width = PercentWidth(40) };
+                                oauth2DefinitionAuthorizationUrlTooltip.SetToolTip(oauth2DefinitionAuthorizationUrl, "URL of the OAuth2 authorization URL used when retrieving the OpenAPI definition.");
+                                oauth2DefinitionAuthorizationUrl.TextChanged += OAuth2DefinitionAuthorizationUrl_TextChanged;
+                                oauth2DefinitionAuthorizationUrl.Enabled = authType == "implicit" || authType == "access_code";
+                                oauth2DefinitionAuthPanel.Controls.Add(oauth2DefinitionAuthorizationUrl, 1, 2);
+                            }
+                            {
+                                oauth2DefinitionAuthPanel.Controls.Add(new Label { Text = "Token URL", Width = PercentWidth(20) }, 0, 3);
+
+                                ToolTip oauth2DefinitionTokenUrlTooltip = new ToolTip { ToolTipTitle = "Token URL", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                oauth2DefinitionTokenUrl = new TextBox { Text = authSettings.ContainsKey("token_url") ? (string)authSettings["token_url"] : string.Empty, Width = PercentWidth(40) };
+                                oauth2DefinitionTokenUrlTooltip.SetToolTip(oauth2DefinitionTokenUrl, "URL of the OAuth2 token URL used when retrieving the OpenAPI definition.");
+                                oauth2DefinitionTokenUrl.TextChanged += OAuth2DefinitionTokenUrl_TextChanged;
+                                oauth2DefinitionTokenUrl.Enabled = authType == "access_code" || authType == "password" || authType == "application";
+                                oauth2DefinitionAuthPanel.Controls.Add(oauth2DefinitionTokenUrl, 1, 3);
+                            }
+                            oauth2DefinitionAuthGroup.Visible = useAuthForDefinition.Checked;
+                            oauth2DefinitionAuthGroup.Enabled = useAuthForDefinition.Checked;
+
+                            oauth2DefinitionAuthGroup.Controls.Add(oauth2DefinitionAuthPanel);
+                            panel.Controls.Add(oauth2DefinitionAuthGroup);
+                        }
+
+                        layout.Controls.Add(panel);
                     }
                     #endregion
 
-                    #region Add items
-
-                    oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
-                    layout.Controls.Add(oauth2ParamsPanel, 0, 7);
-                    layout.SetColumnSpan(oauth2ParamsPanel, 3);
-
                     {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        oauth2ParamsPanel = new TableLayoutPanel { AutoSize = true };
+                        var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
 
-                        oauth2ParamName = new TextBox { Width = PercentWidth(25), Text = string.Empty };
-                        tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
-                        oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
-                        oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
-                        layout.Controls.Add(oauth2ParamName, 0, 8);
+                        #region Table header
+                        {
+                            var nameLabel = new LinkLabel { Width = PercentWidth(25), Text = "requests_auth parameter name" };
+                            nameLabel.Links.Add(0, 13, "https://colin-b.github.io/requests_auth/#oauth-2");
+                            nameLabel.LinkClicked += Label_LinkClicked;
+                            oauth2ParamsPanel.Controls.Add(nameLabel, 0, 1);
+                            var valueLabel = new LinkLabel { Width = PercentWidth(60), Text = "requests_auth parameter value" };
+                            valueLabel.Links.Add(0, 13, "https://colin-b.github.io/requests_auth/#oauth-2");
+                            valueLabel.LinkClicked += Label_LinkClicked;
+                            oauth2ParamsPanel.Controls.Add(valueLabel, 1, 1);
+                        }
+                        #endregion
+
+                        #region Add row to table
+                        {
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                oauth2ParamName = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                                tooltip.SetToolTip(oauth2ParamName, "Parameter will be sent in query.");
+                                oauth2ParamName.TextChanged += Oauth2ParamName_TextChanged;
+                                oauth2ParamName.KeyDown += Oauth2ParamName_KeyDown;
+                                oauth2ParamsPanel.Controls.Add(oauth2ParamName, 0, 2);
+                            }
+                            {
+                                ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                                oauth2ParamValue = new TextBox { Text = string.Empty, Dock = DockStyle.Fill };
+                                tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
+                                oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
+                                oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
+                                oauth2ParamsPanel.Controls.Add(oauth2ParamValue, 1, 2);
+                            }
+                            addOAuth2Param = new AddButton(PercentWidth(5));
+                            addOAuth2Param.Click += AddOAuth2Param_Click;
+                            oauth2ParamsPanel.Controls.Add(addOAuth2Param, 2, 2);
+                        }
+                        #endregion
+                        oauth2ParamsPanel.RowCount += 2;
+                        layout.Controls.Add(oauth2ParamsPanel);
                     }
-                    {
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of parameter to be sent when requesting the authorization.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        oauth2ParamValue = new TextBox { Width = PercentWidth(60), Text = string.Empty };
-                        tooltip.SetToolTip(oauth2ParamValue, "Parameter will be sent in query.");
-                        oauth2ParamValue.TextChanged += Oauth2ParamValue_TextChanged;
-                        oauth2ParamValue.KeyDown += Oauth2ParamValue_KeyDown;
-                        layout.Controls.Add(oauth2ParamValue, 1, 8);
-                    }
-                    addOAuth2Param = new AddButton(PercentWidth(5));
-                    addOAuth2Param.Click += AddOAuth2Param_Click;
-                    layout.Controls.Add(addOAuth2Param, 2, 8);
-
-                    #endregion
 
                     tab.Controls.Add(layout);
                     authTabs.TabPages.Add(tab);
@@ -565,33 +702,57 @@ namespace PyxelRestAddIn
                 {
                     var tab = new TabPage("Basic");
                     var layout = new TableLayoutPanel { AutoSize = true };
+
+                    #region OpenAPI definition authentication settings
+                    {
+                        var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                        IDictionary<string, object> definitionBasicAuth = definitionAuths.ContainsKey("basic") ? (Dictionary<string, object>)definitionAuths["basic"] : new Dictionary<string, object>();
+
+                        var panel = new TableLayoutPanel { AutoSize = true };
+
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Authenticate to retrieve OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var useAuthForDefinition = new CheckBox { Width = PercentWidth(75), Text = "Use basic authentication to retrieve the OpenAPI definition", Checked = definitionBasicAuth.Count > 0 };
+                        tooltip.SetToolTip(useAuthForDefinition, "Check to use those credentials when retrieving the OpenAPI definition.");
+                        useAuthForDefinition.CheckedChanged += UseBasicAuthForDefinition_CheckedChanged;
+                        panel.Controls.Add(useAuthForDefinition);
+
+                        layout.Controls.Add(panel, 0, 1);
+                        layout.SetColumnSpan(panel, 2);
+                    }
+                    #endregion
+
                     var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
 
-                    #region Username
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var userName = new TextBox { Width = PercentWidth(75), Text = (string)basicOptions["username"] };
-                        tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
-                        userName.TextChanged += BasicUsername_TextChanged;
-                        layout.Controls.Add(userName, 1, 1);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 1, 2);
                     }
-                    #endregion
 
-                    #region Password
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        #region Username
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User name.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                            var userName = new TextBox { Text = basicOptions.ContainsKey("username") ? (string)basicOptions["username"] : string.Empty, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(userName, "Used only if basic authentication is required.");
+                            userName.TextChanged += BasicUsername_TextChanged;
+                            layout.Controls.Add(userName, 0, 3);
+                        }
+                        #endregion
 
-                        var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)basicOptions["password"] };
-                        tooltip.SetToolTip(password, "Used only if basic authentication is required.");
-                        password.TextChanged += BasicPassword_TextChanged;
-                        layout.Controls.Add(password, 1, 2);
+                        #region Password
+                        {
+
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User password to be used if needed.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var password = new TextBox { UseSystemPasswordChar = true, Text = basicOptions.ContainsKey("password") ? (string)basicOptions["password"] : string.Empty, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(password, "Used only if basic authentication is required.");
+                            password.TextChanged += BasicPassword_TextChanged;
+                            layout.Controls.Add(password, 1, 3);
+                        }
+                        #endregion
                     }
-                    #endregion
 
                     tab.Controls.Add(layout);
                     authTabs.TabPages.Add(tab);
@@ -600,35 +761,69 @@ namespace PyxelRestAddIn
 
                 #region NTLM Authentication settings
                 {
-                    var tab = new TabPage("NTLM");
+                    var tab = new TabPage("Microsoft Windows");
                     var layout = new TableLayoutPanel { AutoSize = true };
                     var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
+                    var userName = ntlmOptions.ContainsKey("username") ? (string)ntlmOptions["username"] : string.Empty;
+                    var password = ntlmOptions.ContainsKey("password") ? (string)ntlmOptions["password"] : string.Empty;
 
-                    #region Username
+                    #region OpenAPI definition authentication settings
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 1);
+                        var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                        IDictionary<string, object> definitionBasicAuth = definitionAuths.ContainsKey("basic") ? (Dictionary<string, object>)definitionAuths["basic"] : new Dictionary<string, object>();
 
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+                        var panel = new TableLayoutPanel { AutoSize = true };
 
-                        var userName = new TextBox { Width = PercentWidth(75), Text = (string)ntlmOptions["username"] };
-                        tooltip.SetToolTip(userName, "To be set if service requires NTLM authentication.");
-                        userName.TextChanged += NtlmUsername_TextChanged;
-                        layout.Controls.Add(userName, 1, 1);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Authenticate to retrieve OpenAPI definition", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                        var useAuthForDefinition = new CheckBox { Width = PercentWidth(75), Text = "Use NTLM authentication to retrieve the OpenAPI definition", Checked = definitionBasicAuth.Count > 0 };
+                        tooltip.SetToolTip(useAuthForDefinition, "Check to use NTLM when retrieving the OpenAPI definition.");
+                        useAuthForDefinition.CheckedChanged += UseNtlmAuthForDefinition_CheckedChanged;
+                        panel.Controls.Add(useAuthForDefinition);
+
+                        layout.Controls.Add(panel, 0, 1);
+                        layout.SetColumnSpan(panel, 2);
                     }
                     #endregion
 
-                    #region Password
                     {
-                        layout.Controls.Add(new Label { Width = PercentWidth(15), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 0, 2);
+                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Use current credentials.", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var password = new TextBox { UseSystemPasswordChar = true, Width = PercentWidth(75), Text = (string)ntlmOptions["password"] };
-                        tooltip.SetToolTip(password, "To be set if service requires NTLM authentication.");
-                        password.TextChanged += NtlmPassword_TextChanged;
-                        layout.Controls.Add(password, 1, 2);
+                        var useLoggedInCredentials = new CheckBox { Width = PercentWidth(40), Text = "Login as current user", Checked = (ntlmOptions.Count > 0 && password.Length == 0 && userName.Length == 0) };
+                        tooltip.SetToolTip(useLoggedInCredentials, "Use current Microsoft Windows credentials.");
+                        useLoggedInCredentials.CheckedChanged += UseLoggedInCredentials_CheckedChanged;
+                        layout.Controls.Add(useLoggedInCredentials, 0, 2);
+                        layout.SetColumnSpan(useLoggedInCredentials, 2);
                     }
-                    #endregion
+
+                    {
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Username", TextAlign = ContentAlignment.BottomLeft }, 0, 3);
+                        layout.Controls.Add(new Label { Width = PercentWidth(40), Text = "Password", TextAlign = ContentAlignment.BottomLeft }, 1, 3);
+                    }
+
+                    {
+                        #region Username
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User name (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            ntlmUsername = new TextBox { Text = userName, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(ntlmUsername, "To be set if service requires NTLM authentication.");
+                            ntlmUsername.TextChanged += NtlmUsername_TextChanged;
+                            layout.Controls.Add(ntlmUsername, 0, 4);
+                        }
+                        #endregion
+
+                        #region Password
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "User password (including domain if needed).", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            ntlmPassword = new TextBox { UseSystemPasswordChar = true, Text = password, Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(ntlmPassword, "To be set if service requires NTLM authentication.");
+                            ntlmPassword.TextChanged += NtlmPassword_TextChanged;
+                            layout.Controls.Add(ntlmPassword, 1, 4);
+                        }
+                        #endregion
+                    }
 
                     tab.Controls.Add(layout);
                     authTabs.TabPages.Add(tab);
@@ -647,59 +842,10 @@ namespace PyxelRestAddIn
 
                 var networkOptions = (Dictionary<string, object>)servicePanel.service.Network;
 
+                #region SSL certificate verification
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
 
-                    #region Timeout
-
-                    #region Connect timeout
-                    {
-                        panel.Controls.Add(new Label { Text = "Connect timeout", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(17) }, 0, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Width = PercentWidth(10) };
-                        tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
-                        connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
-                        panel.Controls.Add(connectTimeout, 1, 1);
-                    }
-                    #endregion
-
-                    #region Read timeout
-                    {
-                        panel.Controls.Add(new Label { Text = "Read timeout", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(15) }, 2, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Width = PercentWidth(10) };
-                        tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
-                        readTimeout.ValueChanged += ReadTimeout_ValueChanged;
-                        panel.Controls.Add(readTimeout, 3, 1);
-                    }
-                    #endregion
-
-                    #endregion
-
-                    #region Max retries
-                    {
-                        panel.Controls.Add(new Label { Text = "Max retries", TextAlign = ContentAlignment.MiddleCenter, Width = PercentWidth(15) }, 4, 1);
-
-                        ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
-
-                        var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Width = PercentWidth(10) };
-                        tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
-                        maxRetries.ValueChanged += MaxRetries_ValueChanged;
-                        panel.Controls.Add(maxRetries, 5, 1);
-                    }
-                    #endregion
-
-                    layout.Controls.Add(panel, 0, 1);
-                }
-
-                {
-                    var panel = new TableLayoutPanel { AutoSize = true };
-
-                    #region SSL certificate verification
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Enable SSL certificate verification", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
 
@@ -709,13 +855,62 @@ namespace PyxelRestAddIn
                         verifySSLCertificate.CheckedChanged += VerifySSLCertificate_CheckedChanged;
                         panel.Controls.Add(verifySSLCertificate, 0, 1);
                     }
-                    #endregion
 
-                    layout.Controls.Add(panel, 0, 2);
+                    layout.Controls.Add(panel);
                 }
+                #endregion
 
                 {
                     var panel = new TableLayoutPanel { AutoSize = true };
+
+                    {
+                        panel.Controls.Add(new Label { Text = "Max retries", Width = PercentWidth(15) }, 0, 1);
+                        panel.Controls.Add(new Label { Text = "Connect timeout", Width = PercentWidth(17) }, 1, 1);
+                        panel.Controls.Add(new Label { Text = "Read timeout", Width = PercentWidth(15) }, 2, 1);
+                    }
+
+                    {
+                        #region Max retries
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of time a request should be retried before considered as failed", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var maxRetries = new NumericUpDown { Maximum = int.MaxValue, Value = (int)networkOptions["max_retries"], Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(maxRetries, "Retry 5 times by default.");
+                            maxRetries.ValueChanged += MaxRetries_ValueChanged;
+                            panel.Controls.Add(maxRetries, 0, 2);
+                        }
+                        #endregion
+
+                        #region Connect timeout
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when trying to reach the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var connectTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["connect_timeout"]), Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(connectTimeout, "Wait for 1 second by default.");
+                            connectTimeout.ValueChanged += ConnectTimeout_ValueChanged;
+                            panel.Controls.Add(connectTimeout, 1, 2);
+                        }
+                        #endregion
+
+                        #region Read timeout
+                        {
+                            ToolTip tooltip = new ToolTip { ToolTipTitle = "Maximum number of seconds to wait when requesting the service", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+
+                            var readTimeout = new NumericUpDown { Maximum = int.MaxValue, Value = Convert.ToDecimal(networkOptions["read_timeout"]), Dock = DockStyle.Fill };
+                            tooltip.SetToolTip(readTimeout, "Wait for 5 seconds by default.");
+                            readTimeout.ValueChanged += ReadTimeout_ValueChanged;
+                            panel.Controls.Add(readTimeout, 2, 2);
+                        }
+                        #endregion
+                    }
+
+                    layout.Controls.Add(panel);
+                }
+
+                #region Proxies
+                {
+                    var groupBox = new GroupBox { AutoSize = true, Text = "Proxy" };
+                    var panel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
 
                     var proxiesOptions = (Dictionary<string, object>)networkOptions["proxies"];
 
@@ -758,23 +953,22 @@ namespace PyxelRestAddIn
                     }
                     #endregion
 
-                    layout.Controls.Add(panel, 0, 3);
+                    groupBox.Controls.Add(panel);
+                    layout.Controls.Add(groupBox);
                 }
+                #endregion
 
+                #region Headers
                 {
-                    var panel = new TableLayoutPanel { AutoSize = true };
+                    var groupBox = new GroupBox { AutoSize = true, Text = "Headers" };
+                    var panel = new TableLayoutPanel { AutoSize = true, Location = new Point(PercentWidth(3), PercentWidth(3)) };
 
-                    #region Headers
 
                     var nameLabel = new Label { Text = "Header name", Width = PercentWidth(20) };
                     panel.Controls.Add(nameLabel, 0, 1);
 
                     var valueLabel = new Label { Text = "Header value", Width = PercentWidth(65) };
                     panel.Controls.Add(valueLabel, 1, 1);
-
-                    headersPanel = new TableLayoutPanel { AutoSize = true };
-                    panel.Controls.Add(headersPanel, 0, 2);
-                    panel.SetColumnSpan(headersPanel, 3);
 
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Name of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -783,7 +977,7 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(headerName, "Sent in every request on this service.");
                         headerName.TextChanged += HeaderName_TextChanged;
                         headerName.KeyDown += HeaderName_KeyDown;
-                        panel.Controls.Add(headerName, 0, 3);
+                        panel.Controls.Add(headerName, 0, 2);
                     }
                     {
                         ToolTip tooltip = new ToolTip { ToolTipTitle = "Value of the header field", UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
@@ -792,16 +986,20 @@ namespace PyxelRestAddIn
                         tooltip.SetToolTip(headerValue, "Sent in every request on this service.");
                         headerValue.TextChanged += HeaderValue_TextChanged;
                         headerValue.KeyDown += HeaderValue_KeyDown;
-                        panel.Controls.Add(headerValue, 1, 3);
+                        panel.Controls.Add(headerValue, 1, 2);
                     }
                     addHeader = new AddButton(PercentWidth(5));
                     addHeader.Click += AddHeader_Click;
-                    panel.Controls.Add(addHeader, 2, 3);
+                    panel.Controls.Add(addHeader, 2, 2);
 
-                    #endregion
+                    headersPanel = new TableLayoutPanel { AutoSize = true, Height=0 };
+                    panel.Controls.Add(headersPanel, 0, 3);
+                    panel.SetColumnSpan(headersPanel, 3);
 
-                    layout.Controls.Add(panel, 0, 4);
+                    groupBox.Controls.Add(panel);
+                    layout.Controls.Add(groupBox);
                 }
+                #endregion
 
                 tab.Controls.Add(layout);
                 tabs.TabPages.Add(tab);
@@ -811,164 +1009,10 @@ namespace PyxelRestAddIn
             Controls.Add(tabs);
         }
 
-        #region Events
-
+        #region Formulas
         private void Description_TextChanged(object sender, EventArgs e)
         {
             servicePanel.service.description = ((TextBox)sender).Text;
-        }
-
-        private void NtlmPassword_TextChanged(object sender, EventArgs e)
-        {
-            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                ntlmOptions.Remove("password");
-            else
-                ntlmOptions["password"] = ((TextBox)sender).Text;
-        }
-
-        private void NtlmUsername_TextChanged(object sender, EventArgs e)
-        {
-            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                ntlmOptions.Remove("username");
-            else
-                ntlmOptions["username"] = ((TextBox)sender).Text;
-        }
-
-        private void BasicPassword_TextChanged(object sender, EventArgs e)
-        {
-            var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                basicOptions.Remove("password");
-            else
-                basicOptions["password"] = ((TextBox)sender).Text;
-        }
-
-        private void BasicUsername_TextChanged(object sender, EventArgs e)
-        {
-            var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                basicOptions.Remove("username");
-            else
-                basicOptions["username"] = ((TextBox)sender).Text;
-        }
-
-        private void Oauth2Timeout_TextChanged(object sender, EventArgs e)
-        {
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            if (((NumericUpDown)sender).Value == 0)
-                oauth2Options.Remove("timeout");
-            else
-                oauth2Options["timeout"] = ((NumericUpDown)sender).Value;
-        }
-
-        private void NoProxy_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
-            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                proxiesOptions.Remove("no_proxy");
-            else
-                proxiesOptions["no_proxy"] = ((TextBox)sender).Text;
-        }
-
-        private void HttpsProxy_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
-            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                proxiesOptions.Remove("https");
-            else
-                proxiesOptions["https"] = ((TextBox)sender).Text;
-        }
-
-        private void HttpProxy_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
-            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                proxiesOptions.Remove("http");
-            else
-                proxiesOptions["http"] = ((TextBox)sender).Text;
-        }
-
-        private void OpenAPIDefinitionReadTimeout_ValueChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.OpenAPI["definition_read_timeout"] = ((NumericUpDown)sender).Value;
-        }
-
-        private void ReadTimeout_ValueChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Network["read_timeout"] = ((NumericUpDown)sender).Value;
-        }
-
-        private void ConnectTimeout_ValueChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Network["connect_timeout"] = ((NumericUpDown)sender).Value;
-        }
-
-        private void MaxRetries_ValueChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Network["max_retries"] = (int)((NumericUpDown)sender).Value;
-        }
-
-        private void VerifySSLCertificate_CheckedChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Network["verify"] = ((CheckBox)sender).Checked;
-        }
-
-        private void Host_TextChanged(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                servicePanel.service.Network.Remove("host");
-            else
-                servicePanel.service.Network["host"] = ((TextBox)sender).Text;
-        }
-
-        private void Patch_CheckedChanged(object sender, EventArgs e)
-        {
-            SelectedMethodsChanged("patch", ((CheckBox)sender).Checked);
-        }
-
-        private void Delete_CheckedChanged(object sender, EventArgs e)
-        {
-            SelectedMethodsChanged("delete", ((CheckBox)sender).Checked);
-        }
-
-        private void Put_CheckedChanged(object sender, EventArgs e)
-        {
-            SelectedMethodsChanged("put", ((CheckBox)sender).Checked);
-        }
-
-        private void Post_CheckedChanged(object sender, EventArgs e)
-        {
-            SelectedMethodsChanged("post", ((CheckBox)sender).Checked);
-        }
-
-        private void Get_CheckedChanged(object sender, EventArgs e)
-        {
-            SelectedMethodsChanged("get", ((CheckBox)sender).Checked);
-        }
-
-        private void SelectedMethodsChanged(string method, bool selected)
-        {
-            List<string> selectedMethods = (List<string>)servicePanel.service.OpenAPI["selected_methods"];
-            if (selected)
-            {
-                if (!selectedMethods.Contains(method))
-                    selectedMethods.Add(method);
-            }
-            else
-            {
-                if (selectedMethods.Contains(method))
-                    selectedMethods.Remove(method);
-            }
-        }
-
-        private void ApiKey_TextChanged(object sender, EventArgs e)
-        {
-            servicePanel.service.Auth["api_key"] = ((TextBox)sender).Text;
         }
 
         private void LegacyArrayFormulas_CheckedChanged(object sender, EventArgs e)
@@ -1161,7 +1205,9 @@ namespace PyxelRestAddIn
 
             ((IDictionary<string, object>)formulaOptions["cache"])[key] = value;
         }
+        #endregion
 
+        #region OpenAPI
         private void AddValueToList(string value, string listName)
         {
             if (!servicePanel.service.OpenAPI.ContainsKey(listName))
@@ -1246,12 +1292,11 @@ namespace PyxelRestAddIn
             panel.Controls.Add(remove, 3, 1);
 
             tagsPanel.Controls.Add(panel);
-            tagsPanel.SetColumnSpan(panel, 2);
         }
 
         private void TagSelected_CheckedChanged(object sender, EventArgs e)
         {
-            var tagSelected = (RadioButton) sender;
+            var tagSelected = (RadioButton)sender;
             Label tagLabel = (Label)tagSelected.Parent.Controls.Find("tagLabel", false)[0];
 
             if (tagSelected.Checked) // Moved from excluded to selected
@@ -1263,7 +1308,7 @@ namespace PyxelRestAddIn
         private void RemoveTag_Click(object sender, EventArgs e)
         {
             var panel = ((DeleteButton)sender).Parent;
-            var tagLabel = (Label) panel.Controls.Find("tagLabel", false)[0];
+            var tagLabel = (Label)panel.Controls.Find("tagLabel", false)[0];
             var tagSelected = (RadioButton)panel.Controls.Find("tagSelected", false)[0];
 
             RemoveValueFromList(tagLabel.Text, tagSelected.Checked ? "selected_tags" : "excluded_tags");
@@ -1327,7 +1372,6 @@ namespace PyxelRestAddIn
             panel.Controls.Add(remove, 3, 1);
 
             operationIDsPanel.Controls.Add(panel);
-            operationIDsPanel.SetColumnSpan(panel, 2);
         }
 
         private void OperationIDSelected_CheckedChanged(object sender, EventArgs e)
@@ -1408,7 +1452,6 @@ namespace PyxelRestAddIn
             panel.Controls.Add(remove, 3, 1);
 
             parametersPanel.Controls.Add(panel);
-            parametersPanel.SetColumnSpan(panel, 2);
         }
 
         private void ParameterSelected_CheckedChanged(object sender, EventArgs e)
@@ -1434,7 +1477,456 @@ namespace PyxelRestAddIn
         }
 
         #endregion
+        #endregion
 
+        #region Authentication
+        #region API key authentication
+        private void UseApiKeyAuthForDefinition_CheckedChanged(object sender, EventArgs e)
+        {
+            var useApiKeyAuth = ((CheckBox)sender).Checked;
+            apiKeyDefinitionAuthGroup.Visible = useApiKeyAuth;
+            apiKeyDefinitionAuthGroup.Enabled = useApiKeyAuth;
+
+            if (useApiKeyAuth)
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                bool inQuery = (string)apiKeyDefinitionAuthLocation.SelectedItem == "Query";
+                definitionAuths["api_key"] = new Dictionary<string, object> { { inQuery ? "query_parameter_name" : "header_name", apiKeyDefinitionAuthName.Text } };
+            }
+            else
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths.Remove("api_key");
+            }
+        }
+
+        private void ApiKeyName_TextChanged(object sender, EventArgs e)
+        {
+            var apiKeyDefinitionAuth = (IDictionary<string, object>)((IDictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"])["api_key"];
+            if (apiKeyDefinitionAuth.ContainsKey("query_parameter_name"))
+                apiKeyDefinitionAuth["query_parameter_name"] = ((TextBox)sender).Text;
+            else
+                apiKeyDefinitionAuth["header_name"] = ((TextBox)sender).Text;
+        }
+
+        private void ApiKeyLocation_SelectedValueChanged(object sender, EventArgs e)
+        {
+            var apiKeyDefinitionAuth = (IDictionary<string, object>)((IDictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"])["api_key"];
+            if (apiKeyDefinitionAuth.ContainsKey("query_parameter_name"))
+            {
+                apiKeyDefinitionAuth["header_name"] = apiKeyDefinitionAuth["query_parameter_name"];
+                apiKeyDefinitionAuth.Remove("query_parameter_name");
+            }
+            else
+            {
+                apiKeyDefinitionAuth["query_parameter_name"] = apiKeyDefinitionAuth["header_name"];
+                apiKeyDefinitionAuth.Remove("header_name");
+            }
+        }
+
+        private void ApiKey_TextChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Auth["api_key"] = ((TextBox)sender).Text;
+        }
+        #endregion
+
+        #region OAuth2
+        private void UseOAuth2AuthForDefinition_CheckedChanged(object sender, EventArgs e)
+        {
+            var useOAuth2Auth = ((CheckBox)sender).Checked;
+            oauth2DefinitionAuthGroup.Visible = useOAuth2Auth;
+            oauth2DefinitionAuthGroup.Enabled = useOAuth2Auth;
+
+            if (useOAuth2Auth)
+            {
+                var authType = (string)oauth2AuthTypeForDefinition.SelectedItem;
+                oauth2DefinitionAuthorizationUrl.Enabled = (authType == "implicit" || authType == "access_code");
+                oauth2DefinitionTokenUrl.Enabled = (authType == "access_code" || authType == "password" || authType == "application");
+
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                var authSettings = new Dictionary<string, object> { };
+                if (oauth2DefinitionAuthorizationUrl.Enabled)
+                    authSettings.Add("authorization_url", oauth2DefinitionAuthorizationUrl.Text);
+                if (oauth2DefinitionTokenUrl.Enabled)
+                    authSettings.Add("token_url", oauth2DefinitionTokenUrl.Text);
+                definitionAuths["oauth2"] = new Dictionary<string, object> { { authType, authSettings } };
+            }
+            else
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths.Remove("oauth2");
+            }
+        }
+
+        private void OAuth2AuthTypeForDefinition_SelectedValueChanged(object sender, EventArgs e)
+        {
+            var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+            var authType = ((ComboBox)sender).Text;
+            var authSettings = new Dictionary<string, object>();
+            definitionAuths["oauth2"] = new Dictionary<string, object> { { authType, authSettings } };
+            oauth2DefinitionAuthorizationUrl.Enabled = (authType == "implicit" || authType == "access_code");
+            oauth2DefinitionTokenUrl.Enabled = (authType == "access_code" || authType == "password" || authType == "application");
+
+            if (oauth2DefinitionAuthorizationUrl.Enabled)
+                authSettings["authorization_url"] = oauth2DefinitionAuthorizationUrl.Text;
+
+            if (oauth2DefinitionTokenUrl.Enabled)
+                authSettings["token_url"] = oauth2DefinitionTokenUrl.Text;
+        }
+
+        private void OAuth2DefinitionAuthorizationUrl_TextChanged(object sender, EventArgs e)
+        {
+            var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+            var authType = (string)oauth2AuthTypeForDefinition.SelectedItem;
+            var authSettings = (IDictionary<string, object>)((IDictionary<string, object>)definitionAuths["oauth2"])[authType];
+
+            authSettings["authorization_url"] = ((TextBox)sender).Text;
+        }
+
+        private void OAuth2DefinitionTokenUrl_TextChanged(object sender, EventArgs e)
+        {
+            var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+            var authType = (string)oauth2AuthTypeForDefinition.SelectedItem;
+            var authSettings = (IDictionary<string, object>)((IDictionary<string, object>)definitionAuths["oauth2"])[authType];
+
+            authSettings["token_url"] = ((TextBox)sender).Text;
+        }
+
+        private void Label_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start((string)e.Link.LinkData);
+        }
+
+        private void Oauth2ParamValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addOAuth2Param.Enabled)
+                        AddOAuth2Param();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void Oauth2ParamValue_TextChanged(object sender, EventArgs e)
+        {
+            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamName.Text.Length > 0;
+        }
+
+        private void Oauth2ParamName_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (addOAuth2Param.Enabled)
+                        AddOAuth2Param();
+                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
+                    break;
+                default:
+                    // Allow all other characters
+                    break;
+            }
+        }
+
+        private void Oauth2ParamName_TextChanged(object sender, EventArgs e)
+        {
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0 && !oauth2Options.ContainsKey(((TextBox)sender).Text);
+        }
+
+        private void AddOAuth2Param_Click(object sender, EventArgs e)
+        {
+            AddOAuth2Param();
+        }
+
+        private void AddOAuth2Param()
+        {
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            oauth2Options.Add(oauth2ParamName.Text, oauth2ParamValue.Text);
+
+            AddOAuth2Param(oauth2ParamName.Text, oauth2ParamValue.Text);
+
+            oauth2ParamName.Text = string.Empty;
+            oauth2ParamValue.Text = string.Empty;
+        }
+
+        private void AddOAuth2Param(string name, string value)
+        {
+            var row = oauth2ParamsPanel.RowCount + 1;
+            oauth2ParamsPanel.Controls.Add(new Label { Text = name, Dock = DockStyle.Fill }, 0, row);
+
+            Control valueTextBox;
+            try
+            {
+                valueTextBox = new NumericUpDown { Width = PercentWidth(60), Maximum = int.MaxValue, Value = Convert.ToDecimal(value), Name = name };
+            }
+            catch (Exception)
+            {
+                valueTextBox = new TextBox { Width = PercentWidth(60), Text = value, Name = name };
+            }
+
+            valueTextBox.TextChanged += OAuth2ParamValue_TextChanged;
+
+            ToolTip tooltip = new ToolTip { UseFading = true, UseAnimation = true, IsBalloon = true, ShowAlways = true, ReshowDelay = 0 };
+            if (oauth2ToolTips.ContainsKey(name))
+            {
+                tooltip.ToolTipTitle = oauth2ToolTips[name][0];
+                tooltip.SetToolTip(valueTextBox, oauth2ToolTips[name][1]);
+            }
+            else
+            {
+                tooltip.ToolTipTitle = string.Format("Value of {0} requests_auth parameter", name);
+                tooltip.SetToolTip(valueTextBox, "Check requests_auth documentation for more details.");
+            }
+
+            oauth2ParamsPanel.Controls.Add(valueTextBox, 1, row);
+
+            var remove = new DeleteButton(PercentWidth(5));
+            remove.Name = row.ToString();
+            remove.Click += RemoveOAuth2Param_Click;
+            oauth2ParamsPanel.Controls.Add(remove, 2, row);
+            oauth2ParamsPanel.RowCount += 1;
+        }
+
+        private void OAuth2ParamValue_TextChanged(object sender, EventArgs e)
+        {
+            var valueTextBox = (Control)sender;
+            var paramName = valueTextBox.Name;
+
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+
+            if (valueTextBox is NumericUpDown valueNumericUpDown)
+                oauth2Options[paramName] = valueNumericUpDown.Value;
+            else
+                oauth2Options[paramName] = valueTextBox.Text;
+        }
+
+        private void RemoveOAuth2Param_Click(object sender, EventArgs e)
+        {
+            int row = Convert.ToInt32(((Control)sender).Name);
+            var paramName = oauth2ParamsPanel.GetControlFromPosition(1, row).Name;
+
+            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
+            oauth2Options.Remove(paramName);
+
+            oauth2ParamsPanel.Controls.Remove(oauth2ParamsPanel.GetControlFromPosition(0, row));
+            oauth2ParamsPanel.Controls.Remove(oauth2ParamsPanel.GetControlFromPosition(1, row));
+            oauth2ParamsPanel.Controls.Remove((Control)sender);
+        }
+
+        #endregion
+
+        #region Basic authentication
+        private void UseBasicAuthForDefinition_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked)
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths["basic"] = new Dictionary<string, object> { { "username", "not_used" } };
+            }
+            else
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths.Remove("basic");
+            }
+        }
+
+        private void BasicPassword_TextChanged(object sender, EventArgs e)
+        {
+            var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                basicOptions.Remove("password");
+            else
+                basicOptions["password"] = ((TextBox)sender).Text;
+        }
+
+        private void BasicUsername_TextChanged(object sender, EventArgs e)
+        {
+            var basicOptions = (IDictionary<string, object>)servicePanel.service.Auth["basic"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                basicOptions.Remove("username");
+            else
+                basicOptions["username"] = ((TextBox)sender).Text;
+        }
+        #endregion
+
+        #region NTLM
+        private void UseNtlmAuthForDefinition_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked)
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths["ntlm"] = new Dictionary<string, object> { { "username", "not_used" } };
+            }
+            else
+            {
+                var definitionAuths = (Dictionary<string, object>)servicePanel.service.OpenAPI["definition_retrieval_auths"];
+                definitionAuths.Remove("ntlm");
+            }
+        }
+
+        private void NtlmPassword_TextChanged(object sender, EventArgs e)
+        {
+            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                ntlmOptions.Remove("password");
+            else
+                ntlmOptions["password"] = ((TextBox)sender).Text;
+        }
+
+        private void NtlmUsername_TextChanged(object sender, EventArgs e)
+        {
+            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                ntlmOptions.Remove("username");
+            else
+                ntlmOptions["username"] = ((TextBox)sender).Text;
+        }
+
+        private void UseLoggedInCredentials_CheckedChanged(object sender, EventArgs e)
+        {
+            var useLoggedInCredentials = ((CheckBox)sender).Checked;
+            var ntlmOptions = (IDictionary<string, object>)servicePanel.service.Auth["ntlm"];
+            // Use NTLM authentication with logged in user credentials
+            if (useLoggedInCredentials)
+            {
+                ntlmOptions["username"] = string.Empty;
+                ntlmOptions["password"] = string.Empty;
+                ntlmUsername.Text = string.Empty;
+                ntlmPassword.Text = string.Empty;
+                ntlmUsername.Enabled = false;
+                ntlmPassword.Enabled = false;
+            }
+            else
+            {
+                ntlmUsername.Enabled = true;
+                ntlmPassword.Enabled = true;
+                var userName = ntlmUsername.Text;
+                var password = ntlmPassword.Text;
+
+                // Disable NTLM authentication
+                if (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password))
+                {
+                    ntlmOptions.Clear();
+                }
+                // Use NTLM authentication with custom credentials
+                else
+                {
+                    ntlmOptions["username"] = userName;
+                    ntlmOptions["password"] = password;
+                }
+            }
+        }
+        #endregion
+        #endregion
+
+        #region Network settings
+        private void NoProxy_TextChanged(object sender, EventArgs e)
+        {
+            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
+            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                proxiesOptions.Remove("no_proxy");
+            else
+                proxiesOptions["no_proxy"] = ((TextBox)sender).Text;
+        }
+
+        private void HttpsProxy_TextChanged(object sender, EventArgs e)
+        {
+            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
+            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                proxiesOptions.Remove("https");
+            else
+                proxiesOptions["https"] = ((TextBox)sender).Text;
+        }
+
+        private void HttpProxy_TextChanged(object sender, EventArgs e)
+        {
+            servicePanel.openAPIDefinitionTicks = DateTime.UtcNow.Ticks;
+            var proxiesOptions = (Dictionary<string, object>)servicePanel.service.Network["proxies"];
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                proxiesOptions.Remove("http");
+            else
+                proxiesOptions["http"] = ((TextBox)sender).Text;
+        }
+
+        private void OpenAPIDefinitionReadTimeout_ValueChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.OpenAPI["definition_read_timeout"] = ((NumericUpDown)sender).Value;
+        }
+
+        private void ReadTimeout_ValueChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Network["read_timeout"] = ((NumericUpDown)sender).Value;
+        }
+
+        private void ConnectTimeout_ValueChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Network["connect_timeout"] = ((NumericUpDown)sender).Value;
+        }
+
+        private void MaxRetries_ValueChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Network["max_retries"] = (int)((NumericUpDown)sender).Value;
+        }
+
+        private void VerifySSLCertificate_CheckedChanged(object sender, EventArgs e)
+        {
+            servicePanel.service.Network["verify"] = ((CheckBox)sender).Checked;
+        }
+
+        private void Host_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+                servicePanel.service.Network.Remove("host");
+            else
+                servicePanel.service.Network["host"] = ((TextBox)sender).Text;
+        }
+
+        private void Patch_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectedMethodsChanged("patch", ((CheckBox)sender).Checked);
+        }
+
+        private void Delete_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectedMethodsChanged("delete", ((CheckBox)sender).Checked);
+        }
+
+        private void Put_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectedMethodsChanged("put", ((CheckBox)sender).Checked);
+        }
+
+        private void Post_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectedMethodsChanged("post", ((CheckBox)sender).Checked);
+        }
+
+        private void Get_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectedMethodsChanged("get", ((CheckBox)sender).Checked);
+        }
+
+        private void SelectedMethodsChanged(string method, bool selected)
+        {
+            List<string> selectedMethods = (List<string>)servicePanel.service.OpenAPI["selected_methods"];
+            if (selected)
+            {
+                if (!selectedMethods.Contains(method))
+                    selectedMethods.Add(method);
+            }
+            else
+            {
+                if (selectedMethods.Contains(method))
+                    selectedMethods.Remove(method);
+            }
+        }
         #region Header
 
         private void HeaderValue_KeyDown(object sender, KeyEventArgs e)
@@ -1538,106 +2030,6 @@ namespace PyxelRestAddIn
         }
 
         #endregion
-
-        #region OAuth2
-
-        private void Oauth2ParamValue_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    if (addOAuth2Param.Enabled)
-                        AddOAuth2Param();
-                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
-                    break;
-                default:
-                    // Allow all other characters
-                    break;
-            }
-        }
-
-        private void Oauth2ParamValue_TextChanged(object sender, EventArgs e)
-        {
-            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamName.Text.Length > 0;
-        }
-
-        private void Oauth2ParamName_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    if (addOAuth2Param.Enabled)
-                        AddOAuth2Param();
-                    e.SuppressKeyPress = true; // Avoid trying to input "enter" (resulting in a failure sound on windows)
-                    break;
-                default:
-                    // Allow all other characters
-                    break;
-            }
-        }
-
-        private void Oauth2ParamName_TextChanged(object sender, EventArgs e)
-        {
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            addOAuth2Param.Enabled = ((TextBox)sender).Text.Length > 0 && oauth2ParamValue.Text.Length > 0 && !oauth2Options.ContainsKey(((TextBox)sender).Text);
-        }
-
-        private void AddOAuth2Param_Click(object sender, EventArgs e)
-        {
-            AddOAuth2Param();
-        }
-
-        private void AddOAuth2Param()
-        {
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            oauth2Options.Add(oauth2ParamName.Text, oauth2ParamValue.Text);
-
-            AddOAuth2Param(oauth2ParamName.Text, oauth2ParamValue.Text);
-
-            oauth2ParamName.Text = string.Empty;
-            oauth2ParamValue.Text = string.Empty;
-        }
-
-        private void AddOAuth2Param(string name, string value)
-        {
-            var panel = new TableLayoutPanel { AutoSize = true };
-
-            panel.Controls.Add(new Label { Name = "oauth2ParamNameLabel", Text = name, Width = PercentWidth(25) }, 0, 1);
-
-            var valueTextBox = new TextBox { Text = value, Width = PercentWidth(60) };
-            valueTextBox.TextChanged += OAuth2ParamValue_TextChanged;
-            panel.Controls.Add(valueTextBox, 1, 1);
-
-            var remove = new DeleteButton(PercentWidth(5));
-            remove.Click += RemoveOAuth2Param_Click;
-            panel.Controls.Add(remove, 2, 1);
-
-            oauth2ParamsPanel.Controls.Add(panel);
-            oauth2ParamsPanel.SetColumnSpan(panel, 3);
-        }
-
-        private void OAuth2ParamValue_TextChanged(object sender, EventArgs e)
-        {
-            var valueTextBox = (TextBox)sender;
-            Label oauth2ParamNameLabel = (Label)valueTextBox.Parent.Controls.Find("oauth2ParamNameLabel", false)[0];
-
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            oauth2Options[oauth2ParamNameLabel.Text] = valueTextBox.Text;
-        }
-
-        private void RemoveOAuth2Param_Click(object sender, EventArgs e)
-        {
-            var panel = ((DeleteButton)sender).Parent;
-            Label oauth2ParamNameLabel = (Label)panel.Controls.Find("oauth2ParamNameLabel", false)[0];
-
-            var oauth2Options = (IDictionary<string, object>)servicePanel.service.Auth["oauth2"];
-            oauth2Options.Remove(oauth2ParamNameLabel.Text);
-
-            oauth2ParamsPanel.Controls.Remove(panel);
-        }
-
-        #endregion
-
         #endregion
     }
 }

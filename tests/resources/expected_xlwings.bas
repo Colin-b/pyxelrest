@@ -644,18 +644,18 @@ End Function
 
 Function GetConfig(configKey As String, Optional default As String = "", Optional source As String = "") As Variant
     Dim configValue As String
-    
+
     If Application.Name = "Microsoft Excel" Then
-        If GetConfigFromFile("test_config_path\xlwings.conf", configKey, configValue) Then
-            GetConfig = configValue
+        If configKey = "INTERPRETER_WIN" Then
+            GetConfig = "test_python_path\pythonw.exe"
+        ElseIf configKey = "UDF MODULES" Then
+            GetConfig = "pyxelrest._generator"
         End If
     End If
 
     If GetConfig = "" Then
         GetConfig = default
     End If
-    
-    GetConfig = ExpandEnvironmentStrings(GetConfig)
 End Function
 
 Function SaveConfigToFile(sFileName As String, sName As String, Optional sValue As String) As Boolean

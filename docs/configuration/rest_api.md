@@ -66,29 +66,125 @@ For more technical details refer to [`requests` timeouts].
 
 #### Retrieving a definition requiring authentication
 
-In case the OpenAPI definition cannot be accessed anonymously (server requiring NTLM authentication for example), you can specify the list of required authentication mechanisms.
+In case the OpenAPI definition cannot be accessed anonymously (server requiring NTLM authentication for example), you can specify the required authentication mechanisms.
 
-The list of authentication can be provided as `definition_retrieval_auths` under the `open_api` section as in the following sample:
+The authentication can be provided as `definition_retrieval_auths` under the `open_api` section as in the following sample:
 ```yaml
 my_rest_api:
   open_api:
     definition: "https://my_rest_api.com/swagger.json"
     definition_retrieval_auths:
-      - ntlm
+      api_key:
+        in: "header"
+        name: "X-API-KEY"
 ```
 
-The value that will be provided is the list of all authentication that should be used when requesting an [OpenAPI 2.0 definition] via an URL.
+The value that will be provided is the dictionary of all authentication that should be used when requesting an [OpenAPI 2.0 definition] via an URL.
 
-The default value is an empty list, meaning that no authentication will be performed to retrieve the OpenAPI definition.
+The default value is an empty dictionary, meaning that no authentication will be performed to retrieve the OpenAPI definition.
 
-Below is the list of supported authentication mechanism (if your authentication mechanism is not in this list, please open an issue):
-* oauth2_implicit
-* oauth2_access_code
-* oauth2_password
-* oauth2_application
-* api_key
-* basic
-* ntlm (see [NTLM](#ntlm) to provide details)
+Below are the supported authentication mechanism (if your authentication mechanism is not in this list, please open an issue):
+
+##### Retrieving a definition requiring OAuth2 implicit authentication
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      oauth2:
+        implicit:
+          authorization_url: "https://authorization_url"
+```
+
+All other settings will be extracted from [OAuth2 authentication](#oauth-2)
+
+##### Retrieving a definition requiring OAuth2 authorization code authentication
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      oauth2:
+        access_code:
+          authorization_url: "https://authorization_url"
+          token_url: "https://token_url"
+```
+
+All other settings will be extracted from [OAuth2 authentication](#oauth-2)
+
+##### Retrieving a definition requiring OAuth2 resource owner password authentication
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      oauth2:
+        password:
+          token_url: "https://token_url"
+```
+
+All other settings will be extracted from [OAuth2 authentication](#oauth-2)
+
+##### Retrieving a definition requiring OAuth2 client credentials authentication
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      oauth2:
+        application:
+          token_url: "https://token_url"
+```
+
+All other settings will be extracted from [OAuth2 authentication](#oauth-2)
+
+##### Retrieving a definition requiring API key authentication
+
+If API key is supposed to be sent in header:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      api_key:
+        header_name: "x-api-key"
+```
+
+If API key is supposed to be sent as query parameter:
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      api_key:
+        query_parameter_name: "x-api-key"
+```
+
+All other settings will be extracted from [API keu authentication](#api-key)
+
+##### Retrieving a definition requiring basic authentication
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      basic:
+        username: "value"
+```
+
+All settings will be extracted from [basic authentication](#basic-name-and-password)
+
+##### Retrieving a definition requiring NTLM authentication
+```yaml
+my_rest_api:
+  open_api:
+    definition: "https://my_rest_api.com/swagger.json"
+    definition_retrieval_auths:
+      ntlm:
+        username: "value"
+```
+
+All settings will be extracted from [NTLM authentication](#ntlm-microsoft-windows)
 
 ### The definition is stored in a file
 
@@ -165,11 +261,11 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     dynamic_array:
-      prefix: "{service_name}_"
+      prefix: "{name}_"
 ```
 
-Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
-In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `my_rest_api_` prefix.
+Note that `{name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{name}` value, resulting in `my_rest_api_` prefix.
 
 To disable the prefix, you can use a blank value as in the following sample:
 ```yaml
@@ -245,11 +341,11 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     legacy_array:
-      prefix: "legacy_{service_name}_"
+      prefix: "legacy_{name}_"
 ```
 
-Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
-In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `legacy_my_rest_api_` prefix.
+Note that `{name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{name}` value, resulting in `legacy_my_rest_api_` prefix.
 
 To disable the prefix, you can use a blank value as in the following sample:
 ```yaml
@@ -270,7 +366,7 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     vba_compatible:
-      prefix: "vba_{service_name}_"
+      prefix: "vba_{name}_"
 ```
 
 #### Change the prefix in front on formulas
@@ -284,11 +380,11 @@ my_rest_api:
     definition: "https://my_rest_api.com/swagger.json"
   formulas:
     vba_compatible:
-      prefix: "vba_{service_name}_"
+      prefix: "vba_{name}_"
 ```
 
-Note that `{service_name}` will be replaced by the actual REST API name when generating the formulas.
-In this case, `my_rest_api` will be used as `{service_name}` value, resulting in `vba_my_rest_api_` prefix.
+Note that `{name}` will be replaced by the actual REST API name when generating the formulas.
+In this case, `my_rest_api` will be used as `{name}` value, resulting in `vba_my_rest_api_` prefix.
 
 To disable the prefix, you can use a blank value as in the following sample:
 ```yaml

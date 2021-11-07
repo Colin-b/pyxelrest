@@ -30,7 +30,7 @@ import pyxelrest
 configuration = {'petstore': {'open_api': {'definition': 'https://petstore.swagger.io/v2/swagger.json'}}}
 pyxelrest.load(configuration)
 
-from pyxelrest.user_defined_functions import petstore
+from pyxelrest.generated import petstore
 
 user = petstore.getUserByName("test")
 ```
@@ -47,7 +47,7 @@ REST API configuration will most likely not be compatible anymore due to the cha
 We __strongly__ advise to check out the new `dynamic_array` formulas if your [Microsoft Excel] version supports it.
 Otherwise:
 
- * `sync_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `true` and prefix set to `{service_name}_`
+ * `sync_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `true` and prefix set to `{name}_`
  
     Previous (0.69.0)
     
@@ -63,10 +63,10 @@ Otherwise:
     formulas:
         legacy_array:
             lock_excel: true
-            prefix: "{service_name}_"
+            prefix: "{name}_"
     ```
 
- * `async_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `false` and prefix set to `{service_name}_`
+ * `async_auto_expand` `return_type` corresponds to `legacy_array` sub-section with `lock_excel` set to `false` and prefix set to `{name}_`
  
     Previous (0.69.0)
     
@@ -82,7 +82,7 @@ Otherwise:
     formulas:
         legacy_array:
             lock_excel: false
-            prefix: "{service_name}_"
+            prefix: "{name}_"
     ```
 
  * `vba_compatible` `return_type` (in case there was another `return_type` as well) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true`
@@ -104,7 +104,7 @@ Otherwise:
             lock_excel: true
     ```
 
- * `vba_compatible` `return_type` (in case it was the only `return_type`) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true` and prefix set to `{service_name}_`
+ * `vba_compatible` `return_type` (in case it was the only `return_type`) corresponds to `vba_compatible` sub-section with `lock_excel` set to `true` and prefix set to `{name}_`
  
     Previous (0.69.0)
     
@@ -120,7 +120,7 @@ Otherwise:
     formulas:
         vba_compatible:
             lock_excel: true
-            prefix: "{service_name}_"
+            prefix: "{name}_"
     ```
 
 #### shift_result
@@ -227,5 +227,136 @@ formulas:
             size: 100
             duration: 1
 ```
+
+#### definition_retrieval_auths
+
+ * `oauth2_implicit` `oauth2_auth_url` is now `authorization_url` within `oauth2` `implicit` section
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_implicit:
+                oauth2_auth_url: "https://authorization_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2:
+                implicit:
+                    authorization_url: "https://authorization_url"
+    ```
+
+ * `oauth2_access_code` `oauth2_auth_url` is now `authorization_url` and `oauth2_token_url` is now `token_url` within `oauth2` `access_code` section
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_access_code:
+                oauth2_auth_url: "https://authorization_url"
+                oauth2_token_url: "https://token_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2:
+                access_code:
+                    authorization_url: "https://authorization_url"
+                    token_url: "https://token_url"
+    ```
+
+ * `oauth2_password` `oauth2_token_url` is now `token_url` within `oauth2` `password` section
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_password:
+                oauth2_token_url: "https://token_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2:
+                password:
+                    token_url: "https://token_url"
+    ```
+
+ * `oauth2_application` `oauth2_token_url` is now `token_url` within `oauth2` `application` section
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2_application:
+                oauth2_token_url: "https://token_url"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            oauth2:
+                application:
+                    token_url: "https://token_url"
+    ```
+
+ * `api_key` `name` is now `query_parameter_name` if `in` was `query`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                in: "query"
+                name: "param_name"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                query_parameter_name: "param_name"
+    ```
+
+ * `api_key` `name` is now `header_name` if `in` was `header`
+ 
+    Previous (0.69.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                in: "header"
+                name: "x-api-key"
+    ```
+    
+    New (1.0.0)
+    
+    ```yaml
+    open_api:
+        definition_retrieval_auths:
+            api_key:
+                header_name: "x-api-key"
+    ```
+
 
 [Microsoft Excel]: https://products.office.com/en-us/excel

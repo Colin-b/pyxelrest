@@ -45,16 +45,32 @@ Before creating an issue please make sure that it was not already reported.
 4) Follow [Black](https://black.readthedocs.io/en/stable/) code formatting.
     * Install [pre-commit](https://pre-commit.com) python module using pip: **python -m pip install pre-commit**
     * To add the [pre-commit](https://pre-commit.com) hook, after the installation run: **pre-commit install**
-5) Add your changes.
+5) Optional: If your code change impact the Microsoft Excel add-in:
+   1. Within [Microsoft Excel], `Trust access to the VBA project object model` should be enabled.
+      > File > Options > Trust Center > Trust Center Settings > Macro Settings
+   2. Build the add-in C# solution using [Microsoft Visual Studio](https://visualstudio.microsoft.com):
+      1. [Office Developer Tools for Visual Studio](https://visualstudio.microsoft.com/vs/features/office-tools/) needs to be installed.
+        <p align="center">
+            <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/visual_studio_office_option.png" alt='Select office development additional package'>  
+            <img src="https://raw.githubusercontent.com/Colin-b/pyxelrest/develop/resources/doc/visual_studio_office_option_vsto.png" alt='VSTO must be checked'>  
+        </p>
+    
+      2. Open `addin`/`PyxelRestAddIn.sln`.
+      3. Create a test certificate
+         > Project > PyxelRestAddIn > Signing
+
+   3. [Microsoft Excel] must be closed while executing the following script:
+       ```batch
+       python pyxelrest/install_addin.py --source addin/PyxelRestAddIn/bin/Release --vb_addin addin/pyxelrest.xlam
+       ```
+6) Add your changes.
     * The commit should only contain small changes and should be atomic.
     * The commit message should follow [those rules](https://chris.beams.io/posts/git-commit/).
-6) Add or update at least one [`pytest`](http://doc.pytest.org/en/latest/index.html) test case.
-    * Unless it is an internal refactoring request or a documentation update.
+7) Add or update at least one [`pytest`](http://doc.pytest.org/en/latest/index.html) test case.
+    * Unless it is an internal refactoring request, a Microsoft Excel add-in code change, or a documentation update.
     * Each line of code should be covered by the test cases.
-7) Add related [changelog entry](https://keepachangelog.com/en/1.1.0/) in the Unreleased section.
+8) Add related [changelog entry](https://keepachangelog.com/en/1.1.0/) in the Unreleased section.
     * Unless it is a documentation update.
-    
-In addition, you can also refer to the [developer installation documentation](/docs/installation/developer.md)
 
 #### Enter pull request
 

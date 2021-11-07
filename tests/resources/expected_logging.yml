@@ -1,0 +1,23 @@
+version: 1
+formatters:
+  clean:
+    format: '%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s'
+handlers:
+  daily_rotating:
+    class: logging.handlers.TimedRotatingFileHandler
+    formatter: clean
+    filename: test_destination\logs\pyxelrest.log
+    when: 'D'
+    backupCount: 10
+loggers:
+  pyxelrest:
+    level: DEBUG
+  xlwings:
+    level: DEBUG
+  requests_auth:
+    level: DEBUG
+  requests.packages.urllib3:
+    level: DEBUG
+root:
+  level: INFO
+  handlers: [daily_rotating]

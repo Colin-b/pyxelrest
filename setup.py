@@ -35,11 +35,11 @@ setup(
         "Operating System :: Microsoft :: Windows :: Windows 10",
     ],
     keywords=["excel", "openapi", "swagger", "rest", "udf", "service"],
-    packages=find_packages(exclude=["tests*", "pyxelrest.user_defined_functions"]),
+    packages=find_packages(exclude=["tests*", "pyxelrest.generated"]),
     package_data={
         "pyxelrest": [
-            "user_defined_functions.jinja2",
-            "user_defined_functions_init.jinja2",
+            "generated_api.jinja2",
+            "generated_init.jinja2",
         ]
     },
     data_files=[
@@ -61,17 +61,6 @@ setup(
                 "addin/PyxelRestAddIn/bin/Release/YamlDotNet.xml",
                 # VB Add-in
                 "addin/pyxelrest.xlam",
-            ],
-        ),
-        (
-            "pyxelrest_resources",
-            [
-                "pyxelrest_resources/excel_logo_100.png",
-                "pyxelrest_resources/excel_logo_error_100.png",
-                "pyxelrest_resources/excel_logo_greyscale_100.png",
-                "pyxelrest_resources/python_logo_100.png",
-                "pyxelrest_resources/python_logo_error_100.png",
-                "pyxelrest_resources/python_logo_greyscale_100.png",
             ],
         ),
         (
@@ -124,9 +113,8 @@ setup(
     python_requires=">=3.8",
     entry_points={
         "console_scripts": [
-            "pyxelrest_auto_update=pyxelrest.auto_update:main",
             "pyxelrest_install_addin=pyxelrest.install_addin:main",
-            "pyxelrest_add_config=pyxelrest.add_config:main",
+            "pyxelrest_add_config=pyxelrest._add_config:main",
         ]
     },
     project_urls={

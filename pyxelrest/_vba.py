@@ -135,6 +135,8 @@ keywords = [
     "static",
     "step",
     "stop",
+    # python function
+    "str",
     "string",
     "structure",
     "sub",

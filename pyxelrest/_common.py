@@ -2,6 +2,7 @@ import logging
 import re
 import os
 import time
+from abc import ABC, abstractmethod
 from typing import Optional, Union, List, Any, Dict
 
 
@@ -42,51 +43,48 @@ def convert_environment_variable(value: str) -> str:
 
 
 class ConfigSection:
-    def __init__(self, service_name: str, service_config: dict):
+    def __init__(self, name: str, settings: dict):
         """
         Load service information from configuration.
-        :param service_name: Will be used as prefix to use in front of services UDFs
-        to avoid duplicate between services.
-        :param service_config: Dictionary containing service details.
+        :param name: Section name in configuration.
+        :param settings: Section configuration settings.
         """
-        self.name = service_name
-        self.network = service_config.get("network", {})
-        self.formulas = service_config.get(
+        self.name = name
+        self.network = settings.get("network", {})
+        self.formulas = settings.get(
             "formulas", {"dynamic_array": {"lock_excel": False}}
         )
         # Set default prefixes
         for formula_type, formula_options in self.formulas.items():
             if formula_type == "vba_compatible":
-                formula_options.setdefault("prefix", "vba_{service_name}_")
+                formula_options.setdefault("prefix", "vba_{name}_")
             elif formula_type == "dynamic_array":
-                formula_options.setdefault("prefix", "{service_name}_")
+                formula_options.setdefault("prefix", "{name}_")
             else:  # Legacy array
-                formula_options.setdefault("prefix", "legacy_{service_name}_")
+                formula_options.setdefault("prefix", "legacy_{name}_")
 
         self.custom_headers = {
             key: convert_environment_variable(value)
             for key, value in self.network.get("headers", {}).items()
         }
-        self.auth = service_config.get("auth", {})
+        self.auth = settings.get("auth", {})
         if "api_key" in self.auth:
             self.auth["api_key"] = convert_environment_variable(self.auth["api_key"])
 
     def ensure_unique_function_names(self) -> bool:
         for formula_options in self.formulas.values():
-            if "{service_name}" not in formula_options["prefix"]:
+            if "{name}" not in formula_options["prefix"]:
                 return False
         return True
 
     def udf_prefix(self, formula_options: dict) -> str:
-        return formula_options["prefix"].format(
-            service_name=to_valid_python_vba(self.name)
-        )
+        return formula_options["prefix"].format(name=to_valid_python_vba(self.name))
 
     def allow_parameter(self, parameter_name: str) -> bool:
         return True
 
 
-class UDFParameter:
+class UDFParameter(ABC):
     def __init__(
         self,
         name: str,
@@ -119,14 +117,17 @@ class UDFParameter:
             raise self._not_provided()
         self.validate_optional(value, request_content)
 
-    def validate_optional(self, value: Any, request_content: "RequestContent"):
-        pass
+    @abstractmethod
+    def validate_optional(
+        self, value: Any, request_content: "RequestContent"
+    ):  # pragma: no cover
+        ...
 
     def _not_provided(self) -> Exception:
         return Exception(f"{self.name} is required.")
 
 
-class UDFMethod:
+class UDFMethod(ABC):
     def __init__(
         self,
         *,
@@ -141,7 +142,6 @@ class UDFMethod:
         self.requests_method = http_method
         self.uri = f"{service.uri}{path}"
         self.udf_name = udf_name
-        self.help_url = ""
         self.auto_expand_result = "legacy_array" == formula_type
         self.is_asynchronous = (
             "vba_compatible" != formula_type
@@ -188,7 +188,7 @@ class UDFMethod:
         if value:
             try:
                 value = int(value)
-                return value if value else None
+                return value if value > 0 else None
             except ValueError:
                 logger.warning(
                     f"Invalid positive value provided: {value}. Considering as not set."
@@ -275,14 +275,21 @@ class UDFMethod:
 
         return convert_to_return_type(response.text[:255], self)
 
-    def _create_udf_parameters(self) -> List[UDFParameter]:
-        raise NotImplementedError  # pragma: no cover
+    @abstractmethod
+    def _create_udf_parameters(self) -> List[UDFParameter]:  # pragma: no cover
+        ...
 
-    def security(self, request_content: "RequestContent") -> Optional[List[dict]]:
-        raise NotImplementedError  # pragma: no cover
+    @abstractmethod
+    def security(
+        self, request_content: "RequestContent"
+    ) -> Optional[List[dict]]:  # pragma: no cover
+        ...
 
-    def json_to_list(self, status_code: int, json_data: Any) -> list:
-        raise NotImplementedError  # pragma: no cover
+    @abstractmethod
+    def json_to_list(
+        self, status_code: int, json_data: Any
+    ) -> list:  # pragma: no cover
+        ...
 
 
 class Service:
@@ -415,17 +422,17 @@ class RequestContent:
 
 
 def check_for_duplicates(loaded_services: List[Service]):
-    services_by_prefix = {}
+    sections_by_prefix = {}
     for service in loaded_services:
         for formula_options in service.config.formulas.values():
-            services_by_prefix.setdefault(
+            sections_by_prefix.setdefault(
                 service.config.udf_prefix(formula_options), []
             ).append(service.config.name)
-    for udf_prefix in services_by_prefix:
-        service_names = services_by_prefix[udf_prefix]
-        if len(service_names) > 1:
+    for prefix in sections_by_prefix:
+        section_names = sections_by_prefix[prefix]
+        if len(section_names) > 1:
             logger.warning(
-                f'{service_names} services will use the same "{udf_prefix}" prefix, in case there is the same call available, '
+                f'{section_names} services will use the same "{prefix}" prefix. In case there is the same call available, '
                 "only the last declared one will be available."
             )
 
@@ -484,14 +491,14 @@ def get_result(
                 )
 
         logger.info(
-            f"{get_caller_address(caller, excel_application)} [status=Valid] response received for [function={udf_method.udf_name}] [url={response.request.url}]."
+            f"{get_caller_address(caller, excel_application)} Valid response received from {response.request.url} for {udf_method.udf_name}."
         )
         result = udf_method.convert_response(response)
         udf_method.cache_result(request_content, result)
         return result
     except requests.ConnectionError as e:
         logger.exception(
-            f"{get_caller_address(caller, excel_application)} Connection [status=error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
+            f"{get_caller_address(caller, excel_application)} Connection error occurred while calling {udf_method.uri} for {udf_method.udf_name}."
         )
         return handle_exception(
             udf_method,
@@ -502,12 +509,12 @@ def get_result(
         # Check "is not None" because response.ok is overridden according to HTTP status code.
         if response is not None:
             logger.exception(
-                f"{get_caller_address(caller, excel_application)} [status=Error] occurred while handling "
-                f"[function={udf_method.udf_name}] [url={response.request.url}] response: [response={response.text}]."
+                f"{get_caller_address(caller, excel_application)} Error occurred while handling "
+                f"{response.request.url} response for {udf_method.udf_name}: {response.text}."
             )
         else:
             logger.exception(
-                f"{get_caller_address(caller, excel_application)} [status=Error] occurred while calling [function={udf_method.udf_name}] [url={udf_method.uri}]."
+                f"{get_caller_address(caller, excel_application)} Error occurred while calling {udf_method.uri} for {udf_method.udf_name}."
             )
         return handle_exception(udf_method, describe_error(response, error), error)
     finally:

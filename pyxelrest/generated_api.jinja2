@@ -1,0 +1,104 @@
+"""
+This file was generated. DO NOT EDIT manually.
+Source file: {{ self._TemplateReference__context.name }}
+Generation date (UTC): {{ current_utc_time }}
+"""
+import datetime
+import logging
+
+import xlwings as xw
+
+from pyxelrest._common import RequestContent, get_result, convert_to_return_type, get_caller_address, handle_exception
+
+logger = logging.getLogger(__name__)
+udf_methods = None  # Will be set after load
+{# Macro generating the converter for the inner type if needed #}
+{% macro type_converter(udf_parameter) %}
+{%- if udf_parameter.type == 'integer' %}
+ numbers=int,
+{%- elif udf_parameter.type == 'number' %}
+ numbers=float,
+{%- elif udf_parameter.type == 'string' %}
+    {%- if udf_parameter.format == 'date' %}
+ dates=datetime.date,
+    {%- elif udf_parameter.format == 'date-time' %}
+ dates=datetime.datetime,
+    {%- endif %}
+{% endif %}
+{% endmacro %}
+{# Macro generating the converter for the parameter if needed #}
+{% macro param_converter(udf_parameter) %}
+{%- if udf_parameter.array_dimension > 0 %}
+{{ type_converter(udf_parameter.array_parameter) }} ndim={{ udf_parameter.array_dimension }},
+{%- else %}
+{{ type_converter(udf_parameter) }}
+{% endif %}
+{% endmacro %}
+{# Macro generating the UDF related to provided method #}
+{% macro add_udf(udf_method) %}
+
+
+@xw.func(category='{{ udf_method.service.config.name }}', call_in_wizard=False{% if udf_method.is_asynchronous %}, async_mode='threading'{% endif %})
+{% if not udf_method.is_asynchronous %}
+@xw.arg('excel_application', vba='Application')
+{% endif %}
+{% for udf_parameter in udf_method.path_parameters %}
+@xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
+{% endfor %}
+{% for udf_parameter in udf_method.required_parameters %}
+@xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
+{% endfor %}
+{% for udf_parameter in udf_method.optional_parameters %}
+@xw.arg('{{ udf_parameter.name }}',{{ param_converter(udf_parameter) }} doc="""{{ udf_parameter.description }}""")
+{% endfor %}
+{% if udf_method.return_a_list() and udf_method.auto_expand_result %}
+@xw.ret(expand='table')
+{% endif %}
+def {{ udf_method.udf_name }}(
+    {%- for udf_parameter in udf_method.path_parameters %}{{ udf_parameter.name }}, {% endfor %}
+    {%- for udf_parameter in udf_method.required_parameters %}{{ udf_parameter.name }}, {% endfor %}
+    {%- for udf_parameter in udf_method.optional_parameters %}{{ udf_parameter.name }}=None, {% endfor %}
+    caller=None{%- if not udf_method.is_asynchronous %}, excel_application=None{% endif %}):
+{% if udf_method.summary() %}
+    """{{ udf_method.summary() }}"""
+{% endif %}
+    excel_caller_address = get_caller_address(caller{% if not udf_method.is_asynchronous %}, excel_application{% endif %})
+    logger.info(f"{excel_caller_address} [status=Calling] [function={{ udf_method.udf_name }}]...")
+    udf_method = udf_methods['{{ udf_method.udf_name }}']
+    request_content = RequestContent(udf_method, excel_caller_address)
+{% if udf_method.has_path_parameters() or udf_method.has_required_parameters() or udf_method.has_optional_parameters() %}
+
+    try:
+{% for udf_parameter in udf_method.path_parameters %}
+        udf_method.parameters['{{ udf_parameter.name }}'].validate_required({{ udf_parameter.name }}, request_content)
+{% endfor %}
+{% for udf_parameter in udf_method.required_parameters %}
+        udf_method.parameters['{{ udf_parameter.name }}'].validate_required({{ udf_parameter.name }}, request_content)
+{% endfor %}
+{% for udf_parameter in udf_method.optional_parameters %}
+        udf_method.parameters['{{ udf_parameter.name }}'].validate_optional({{ udf_parameter.name }}, request_content)
+{% endfor %}
+        request_content.validate()
+    except Exception as e:
+        logger.exception(f'{excel_caller_address} Unable to validate parameters.')
+        return handle_exception(udf_method, str(e), e)
+{% endif %}
+    return get_result(udf_method, request_content, caller{% if not udf_method.is_asynchronous %}, excel_application{% endif %})
+{% endmacro %}
+{% if service.config.name == 'pyxelrest' %}
+    {% for http_method in ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] %}
+        {% for formula_type, formula_options in service.config.formulas.items() %}
+            {{- add_udf(service.create_method(http_method, formula_type, formula_options)) -}}
+        {% endfor %}
+    {%- endfor %}
+{% else %}
+    {% for method_path, open_api_methods in service.open_api_definition['paths'].items() %}
+        {% for http_method, open_api_method in open_api_methods.items() %}
+            {%- if service.config.should_provide_method(http_method, open_api_method) -%}
+                {% for formula_type, formula_options in service.config.formulas.items() %}
+                    {{- add_udf(service.create_method(http_method, open_api_method, method_path, formula_type, formula_options)) -}}
+                {% endfor %}
+            {%- endif -%}
+        {% endfor %}
+    {%- endfor %}
+{% endif %}
