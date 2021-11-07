@@ -46,7 +46,7 @@ def test_post_dict_list_parameter_without_list(tmpdir, responses: RequestsMock):
 
 
 def test_post_dict_list_parameter_with_less_than_2_rows(
-    tmpdir, responses: RequestsMock
+    tmpdir, responses: RequestsMock, clean_generated_functions
 ):
     responses.add(
         responses.GET,
