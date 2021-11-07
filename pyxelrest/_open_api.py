@@ -562,17 +562,29 @@ class OpenAPIUDFMethod(UDFMethod):
         parameters = []
         open_api_definition = self._get_definition(schema)
         if open_api_definition:
-            for inner_parameter_name, inner_parameter in open_api_definition[
-                "properties"
-            ].items():
-                if not inner_parameter.get("readOnly", False):
-                    inner_parameter["server_param_name"] = inner_parameter_name
-                    inner_parameter["name"] = to_vba_valid_name(inner_parameter_name)
-                    inner_parameter["in"] = open_api_parameter["in"]
-                    inner_parameter[
-                        "required"
-                    ] = inner_parameter_name in open_api_definition.get("required", [])
-                    parameters.append(APIUDFParameter(inner_parameter, schema))
+            # This usually means a primitive type
+            if "properties" not in open_api_definition:
+                inner_parameter = dict(open_api_parameter)
+                inner_parameter.update(open_api_definition)
+                # Indicate that this is the whole body
+                inner_parameter["server_param_name"] = None
+                parameters.append(APIUDFParameter(inner_parameter, schema))
+            else:
+                for inner_parameter_name, inner_parameter in open_api_definition[
+                    "properties"
+                ].items():
+                    if not inner_parameter.get("readOnly", False):
+                        inner_parameter["server_param_name"] = inner_parameter_name
+                        inner_parameter["name"] = to_vba_valid_name(
+                            inner_parameter_name
+                        )
+                        inner_parameter["in"] = open_api_parameter["in"]
+                        inner_parameter[
+                            "required"
+                        ] = inner_parameter_name in open_api_definition.get(
+                            "required", []
+                        )
+                        parameters.append(APIUDFParameter(inner_parameter, schema))
         elif "items" in schema:
             inner_parameter = dict(open_api_parameter)
             inner_parameter.update(schema["items"])

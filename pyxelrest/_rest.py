@@ -16,8 +16,8 @@ class ParseBodyAsParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
             self,
-            "parse_body_as",
-            "parse_body_as",
+            name="parse_body_as",
+            server_param_name="parse_body_as",
             location="",
             required=False,
             field_type="string",
@@ -43,8 +43,8 @@ class WaitForStatusParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
             self,
-            "wait_for_status",
-            "wait_for_status",
+            name="wait_for_status",
+            server_param_name="wait_for_status",
             location="",
             required=False,
             field_type="integer",
@@ -73,8 +73,8 @@ class CheckIntervalParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
             self,
-            "check_interval",
-            "check_interval",
+            name="check_interval",
+            server_param_name="check_interval",
             location="",
             required=False,
             field_type="integer",
@@ -101,7 +101,12 @@ class CheckIntervalParameter(UDFParameter):
 class UrlParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "url", "url", location="path", required=True, field_type="string"
+            self,
+            name="url",
+            server_param_name="url",
+            location="path",
+            required=True,
+            field_type="string",
         )
         self.description = "URL to query."
 
@@ -119,7 +124,12 @@ class UrlParameter(UDFParameter):
 class BodyParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
-            self, "body", "body", location="body", required=True, field_type="object"
+            self,
+            name="body",
+            server_param_name="body",
+            location="body",
+            required=True,
+            field_type="object",
         )
         self.description = "Content of the body."
 
@@ -154,8 +164,8 @@ class ExtraHeadersParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
             self,
-            "extra_headers",
-            "extra_headers",
+            name="extra_headers",
+            server_param_name="extra_headers",
             location="headers",
             required=False,
             field_type="object",
@@ -174,8 +184,8 @@ class SecurityDefinitionsParameter(UDFParameter):
     def __init__(self):
         UDFParameter.__init__(
             self,
-            "security_definitions",
-            "security_definitions",
+            name="security_definitions",
+            server_param_name="security_definitions",
             location="",
             required=False,
             field_type="array",
