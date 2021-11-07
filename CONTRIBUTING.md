@@ -21,7 +21,7 @@ Before creating an issue please make sure that it was not already reported.
 
 1) Go to the *Issues* tab and click on the *New issue* button.
 2) Title should be a small sentence describing the request.
-3) The comment should contains as much information as possible
+3) The comment should contain as much information as possible
     * Actual behavior (including the version you used)
     * Expected behavior
     * Steps to reproduce

@@ -1,12 +1,14 @@
 import argparse
 import os
 import io
+import re
 import shutil
 import subprocess
 import sys
 import logging
 import distutils.dir_util as dir_util
 import winreg
+from typing import Optional
 
 if __name__ == "__main__":
     logger = logging.getLogger("pyxelrest.install_addin")
@@ -131,12 +133,16 @@ def create_xlwings_config(xlwings_config_folder: str) -> str:
             raise Exception(f"Python executable cannot be found in {pythonw_path}")
 
         with open(original_xlwings_bas_path) as original_xlwings_file:
-            process_get_config = False
+            current_function = None
             for line in original_xlwings_file:
-                if line.startswith("Function GetConfig("):
-                    add_in_file.write(line)
-                    add_in_file.write(
-                        f"""    Dim configValue As String
+                previous_function = current_function
+                current_function = _function_or_sub_name(line, current_function)
+                if current_function == "GetConfig":
+                    # If this is the definition of GetConfig function
+                    if previous_function != current_function:
+                        add_in_file.write(line)
+                        add_in_file.write(
+                            f"""    Dim configValue As String
 
     If Application.Name = "Microsoft Excel" Then
         If configKey = "INTERPRETER_WIN" Then
@@ -150,28 +156,42 @@ def create_xlwings_config(xlwings_config_folder: str) -> str:
         GetConfig = default
     End If
 """
-                    )
-                    process_get_config = True
-                elif process_get_config:
-                    if line.startswith("End Function"):
-                        add_in_file.write(line)
-                        process_get_config = False
+                        )
                     else:
                         # Skip the xlwings content of GetConfig function as it is replaced
                         pass
+                elif current_function in (
+                    "ImportPythonUDFsBase",
+                    "ImportXlwingsUdfsModule",
+                ):
+                    # Keep referring to ThisWorkbook for pyxelrest
+                    add_in_file.write(line)
                 elif "ThisWorkbook" in line:
-                    if "GetUdfModules" in line:
-                        # Keep referring to ThisWorkbook for pyxelrest
-                        add_in_file.write(line)
-                    else:
-                        # Allow users to use xlwings with workbooks
-                        add_in_file.write(
-                            line.replace("ThisWorkbook", "ActiveWorkbook")
-                        )
+                    # Allow users to use xlwings with workbooks
+                    add_in_file.write(line.replace("ThisWorkbook", "ActiveWorkbook"))
                 else:
                     add_in_file.write(line)
     logger.info("XLWings PyxelRest VB add-in created.")
     return xlwings_bas_path
+
+
+def _function_or_sub_name(line: str, previous_function_name: str) -> Optional[str]:
+    # End of previous function
+    if line in ("End Function\n", "End Sub\n"):
+        return
+
+    # Start of a new function
+    function_definition_match = re.match(r"^Function (.*)\(.*$", line)
+    if function_definition_match:
+        return function_definition_match.group(1)
+
+    # Start of a new sub
+    sub_definition_match = re.match(r"^Sub (.*)\(.*$", line)
+    if sub_definition_match:
+        return sub_definition_match.group(1)
+
+    # Not a new function
+    return previous_function_name
 
 
 class Installer:

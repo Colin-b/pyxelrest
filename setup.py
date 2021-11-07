@@ -30,6 +30,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Operating System :: Microsoft :: Windows :: Windows 7",
         "Operating System :: Microsoft :: Windows :: Windows 10",
     ],
@@ -86,14 +87,14 @@ setup(
     ],
     install_requires=[
         # Used to generate UDFs python file from a template
-        "jinja2==2.*",
+        "jinja2==3.*",
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.21.*",
+        "xlwings==0.25.*",
         # Used to parse configuration files
-        "pyyaml==5.*",
-        "pyaml==20.*",
+        "pyyaml==6.*",
+        "pyaml==21.*",
         # Used to manage authentication
         "requests_auth==5.*",
         # Used to parse all date-time formats in a easy way
@@ -102,9 +103,9 @@ setup(
     extras_require={
         "testing": [
             # Used to run tests
-            "pytest-cov==2.*",
+            "pytest-cov==3.*",
             # Used to mock responses
-            "pytest-responses==0.4.*",
+            "pytest-responses==0.5.*",
             # Optional dependency: Used to test results caching
             "cachetools==4.*",
         ],
