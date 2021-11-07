@@ -136,7 +136,7 @@ def create_xlwings_config(xlwings_config_folder: str) -> str:
             current_function = None
             for line in original_xlwings_file:
                 previous_function = current_function
-                current_function = self._function_or_sub_name(line, current_function)
+                current_function = _function_or_sub_name(line, current_function)
                 if current_function == "GetConfig":
                     # If this is the definition of GetConfig function
                     if previous_function != current_function:
@@ -174,24 +174,24 @@ def create_xlwings_config(xlwings_config_folder: str) -> str:
     logger.info("XLWings PyxelRest VB add-in created.")
     return xlwings_bas_path
 
-    @staticmethod
-    def _function_or_sub_name(line: str, previous_function_name: str) -> Optional[str]:
-        # End of previous function
-        if line in ("End Function\n", "End Sub\n"):
-            return
 
-        # Start of a new function
-        function_definition_match = re.match(r"^Function (.*)\(.*$", line)
-        if function_definition_match:
-            return function_definition_match.group(1)
+def _function_or_sub_name(line: str, previous_function_name: str) -> Optional[str]:
+    # End of previous function
+    if line in ("End Function\n", "End Sub\n"):
+        return
 
-        # Start of a new sub
-        sub_definition_match = re.match(r"^Sub (.*)\(.*$", line)
-        if sub_definition_match:
-            return sub_definition_match.group(1)
+    # Start of a new function
+    function_definition_match = re.match(r"^Function (.*)\(.*$", line)
+    if function_definition_match:
+        return function_definition_match.group(1)
 
-        # Not a new function
-        return previous_function_name
+    # Start of a new sub
+    sub_definition_match = re.match(r"^Sub (.*)\(.*$", line)
+    if sub_definition_match:
+        return sub_definition_match.group(1)
+
+    # Not a new function
+    return previous_function_name
 
 
 class Installer:
