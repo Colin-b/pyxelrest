@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In case NO_PROXY environment variable was containing multiple URLs and should have been applied, it was not the case by the add-in.
 - Numbers are now properly checked if the value is supposed to be a multiple of another value.
 - Allow `str` parameter name.
+- Handle primitive type body (such as sending a raw string, an integer, etc...).
 
 ### Removed
 - Drop support for `python` < `3.8`.
