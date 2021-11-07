@@ -2,14 +2,12 @@
 Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will generate xlwings User Defined Functions.
 """
 import os
-import sys
-import platform
+import sysconfig
 from importlib import reload, import_module
 from typing import List
 import logging.config
 import logging.handlers
 import datetime
-from distutils import sysconfig
 
 import jinja2
 import yaml
@@ -132,7 +130,7 @@ def load_logging_configuration():
             f"Logging configuration file ({logging_configuration_file_path}) cannot be found."
         )
     logger.info(
-        f"Loading PyxelRest: {version.__version__} Python: {sys.version} OS: {platform.platform()} Lib: {sysconfig.get_python_lib()}"
+        f"Loading PyxelRest: {version.__version__} Python: {sysconfig.get_python_version()} OS: {sysconfig.get_platform()}"
     )
 
 

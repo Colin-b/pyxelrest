@@ -200,12 +200,12 @@ class XlWingsConfig:
             return
 
         # Start of a new function
-        function_definition_match = re.match("^Function (.*)\(.*$", line)
+        function_definition_match = re.match(r"^Function (.*)\(.*$", line)
         if function_definition_match:
             return function_definition_match.group(1)
 
         # Start of a new sub
-        sub_definition_match = re.match("^Sub (.*)\(.*$", line)
+        sub_definition_match = re.match(r"^Sub (.*)\(.*$", line)
         if sub_definition_match:
             return sub_definition_match.group(1)
 
