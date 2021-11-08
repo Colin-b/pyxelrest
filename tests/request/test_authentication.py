@@ -1,3 +1,6 @@
+import os
+from importlib import import_module, reload
+
 import requests_auth
 from requests_auth.testing import token_cache_mock, token_mock
 from responses import RequestsMock
@@ -1146,3 +1149,11 @@ def test_api_key_or_basic_authentication_success(tmpdir, responses: RequestsMock
     request = _get_request(responses, "http://test/test")
     assert "Authorization" not in request.headers
     assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
+
+
+def test_token_cache_location(fake_install_location):
+    reload(import_module("pyxelrest._generator_config"))
+    reload(import_module("pyxelrest._authentication"))
+    assert requests_auth.OAuth2.token_cache.tokens_path == os.path.join(
+        fake_install_location, "tokens.json"
+    )

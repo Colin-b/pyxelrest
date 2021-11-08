@@ -76,3 +76,19 @@ def fake_registry(monkeypatch) -> Dict[Tuple[int, str], FakeRegistryKey]:
         lambda key, value_name: key.get(value_name),
     )
     return keys
+
+
+@pytest.fixture
+def fake_install_location(fake_registry, tmpdir) -> str:
+    location = os.path.join(tmpdir, "install_location")
+    os.makedirs(location)
+
+    registry_key = FakeRegistryKey()
+    registry_key.set("InstallLocation", 0, winreg.REG_SZ, location)
+
+    fake_registry[
+        winreg.HKEY_CURRENT_USER,
+        r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest",
+    ] = registry_key
+
+    return location
