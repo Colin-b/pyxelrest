@@ -313,14 +313,14 @@ class RequestContent:
         # Parameters that should not be sent but interpreted by pyxelrest
         self.extra_parameters = {}
 
-    def validate(self):
+    def validate(self) -> None:
         for udf_parameter in self.udf_method.parameters.values():
             udf_parameter.validate(self)
 
     def unique_id(self) -> str:
         return f"method={self.udf_method.requests_method},payload={self.payload},files={self.files},parameters={self.parameters},path={self.path_values},headers={self.header_parameters}"
 
-    def add_value(self, parameter, value):
+    def add_value(self, parameter: UDFParameter, value: Any) -> None:
         if parameter.location == "query":
             self._add_query_parameter(parameter, value)
         elif parameter.location == "body":
@@ -334,17 +334,17 @@ class RequestContent:
         elif parameter.location == "":
             self._add_extra_parameter(parameter, value)
 
-    def _add_query_parameter(self, parameter, value):
+    def _add_query_parameter(self, parameter: UDFParameter, value: Any) -> None:
         if value is not None:
             self.parameters[parameter.server_param_name] = value
 
-    def _add_extra_parameter(self, parameter, value):
+    def _add_extra_parameter(self, parameter: UDFParameter, value: Any) -> None:
         self.extra_parameters[parameter.server_param_name] = value
 
-    def _add_path_parameter(self, parameter, value):
+    def _add_path_parameter(self, parameter: UDFParameter, value: Any) -> None:
         self.path_values[parameter.server_param_name] = value
 
-    def _add_body_parameter(self, parameter, value):
+    def _add_body_parameter(self, parameter: UDFParameter, value: Any) -> None:
         if parameter.schema.get("type") == "array":
             self._add_body_list_parameter(parameter, value)
         else:
@@ -353,7 +353,7 @@ class RequestContent:
             else:
                 self.payload = value
 
-    def _add_body_list_parameter(self, parameter, value):
+    def _add_body_list_parameter(self, parameter: UDFParameter, value: list) -> None:
         # Change the default payload to list
         if self.payload == {}:
             self.payload = []
@@ -408,20 +408,20 @@ class RequestContent:
                 for non_provided_index in range(nb_values, nb_list_items):
                     self.payload[non_provided_index][parameter.server_param_name] = None
 
-    def _add_form_parameter(self, parameter, value):
+    def _add_form_parameter(self, parameter: UDFParameter, value: Any) -> None:
         if parameter.type == "file":
             if value is not None:
                 self.files[parameter.server_param_name] = value
         else:
             self.payload[parameter.server_param_name] = value
 
-    def _add_header_parameter(self, parameter, value):
+    def _add_header_parameter(self, parameter: UDFParameter, value: Any) -> None:
         if value is not None:
             self.header[parameter.server_param_name] = value
             self.header_parameters[parameter.server_param_name] = value
 
 
-def check_for_duplicates(loaded_services: List[Service]):
+def check_for_duplicates(loaded_services: List[Service]) -> None:
     sections_by_prefix = {}
     for service in loaded_services:
         for formula_options in service.config.formulas.values():
