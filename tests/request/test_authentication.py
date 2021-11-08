@@ -1153,7 +1153,7 @@ def test_api_key_or_basic_authentication_success(tmpdir, responses: RequestsMock
 
 def test_token_cache_location(fake_install_location):
     reload(import_module("pyxelrest._generator_config"))
-    reload(import_module("pyxelrest._generator"))
+    reload(import_module("pyxelrest._authentication"))
     assert requests_auth.OAuth2.token_cache.tokens_path == os.path.join(
         fake_install_location, "tokens.json"
     )
