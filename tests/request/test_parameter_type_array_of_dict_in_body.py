@@ -417,3 +417,35 @@ def test_post_list_of_dict_with_null(json_service, tmpdir, responses: RequestsMo
         _get_request(responses, "http://localhost:8954/dicts").body
         == b"""[{"key1": "value1", "key2": null}, {"key1": "value2", "key2": null}]"""
     )
+
+
+def test_post_list_of_dict_with_not_the_same_number_of_elements(
+    json_service, tmpdir, responses: RequestsMock
+):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "json": {
+                "open_api": {"definition": "http://localhost:8954/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    responses.add(
+        responses.POST,
+        url="http://localhost:8954/dicts",
+        json=[],
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.json_post_dicts(
+            key1=["value1", "value2"],
+            key2=["value3"],
+        )
+        == [[""]]
+    )
+    assert (
+        _get_request(responses, "http://localhost:8954/dicts").body
+        == b"""[{"key1": "value1", "key2": "value3"}, {"key1": "value2", "key2": null}]"""
+    )
