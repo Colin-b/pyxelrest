@@ -41,6 +41,13 @@ def json_service(responses: RequestsMock, tmpdir):
                     },
                     "title": "Test",
                 },
+                "dict": {
+                    "type": "object",
+                    "properties": {
+                        "key1": {"type": "string"},
+                        "key2": {"type": ["null", "string"]},
+                    },
+                },
             },
             "paths": {
                 "/list_of_dict_with_dict": {
@@ -94,6 +101,23 @@ def json_service(responses: RequestsMock, tmpdir):
                                     "type": "array",
                                     "items": {"$ref": "#/definitions/DictWithReadOnly"},
                                     "collectionFormat": "multi",
+                                },
+                            }
+                        ],
+                    }
+                },
+                "/dicts": {
+                    "post": {
+                        "responses": {200: {"description": "successful operation"}},
+                        "parameters": [
+                            {
+                                "name": "payload",
+                                "required": True,
+                                "in": "body",
+                                "schema": {
+                                    "type": "array",
+                                    "collectionFormat": "multi",
+                                    "items": {"$ref": "#/definitions/dict"},
                                 },
                             }
                         ],
@@ -362,4 +386,34 @@ def test_dict_with_read_only_json_post_do_not_provide_read_only_parameter(
     assert (
         str(exception_info.value)
         == "json_post_dict_with_read_only() got an unexpected keyword argument 'read_only_field'"
+    )
+
+
+def test_post_list_of_dict_with_null(json_service, tmpdir, responses: RequestsMock):
+    generated_functions = loader.load(
+        tmpdir,
+        {
+            "json": {
+                "open_api": {"definition": "http://localhost:8954/"},
+                "formulas": {"dynamic_array": {"lock_excel": True}},
+            }
+        },
+    )
+    responses.add(
+        responses.POST,
+        url="http://localhost:8954/dicts",
+        json=[],
+        match_querystring=True,
+    )
+
+    assert (
+        generated_functions.json_post_dicts(
+            key1=["value1", "value2"],
+            key2=None,
+        )
+        == [[""]]
+    )
+    assert (
+        _get_request(responses, "http://localhost:8954/dicts").body
+        == b"""[{"key1": "value1", "key2": null}, {"key1": "value2", "key2": null}]"""
     )
