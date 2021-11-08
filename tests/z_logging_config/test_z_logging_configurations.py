@@ -1,13 +1,10 @@
 import os
-import winreg
 from importlib import import_module, reload
 
 import yaml
 
 import pyxelrest._generator_config
 from responses import RequestsMock
-
-from tests.conftest import FakeRegistryKey
 
 
 def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
@@ -56,7 +53,7 @@ def test_without_logging_configuration_file(responses: RequestsMock, tmpdir):
 
 
 def test_with_logging_configuration_file(
-    responses: RequestsMock, tmpdir, fake_registry
+    responses: RequestsMock, fake_install_location
 ):
     """
     This test case assert that pyxelrest can be loaded with logging configuration
@@ -85,15 +82,16 @@ def test_with_logging_configuration_file(
         },
         match_querystring=True,
     )
-    install_location = fake_install_location(fake_registry, tmpdir)
-    os.mkdir(os.path.join(install_location, "configuration"))
+    os.mkdir(os.path.join(fake_install_location, "configuration"))
 
     log_config_file_path = os.path.join(
-        install_location, "configuration", "logging.yml"
+        fake_install_location, "configuration", "logging.yml"
     )
     create_logging_conf(log_config_file_path)
 
-    config_file_path = os.path.join(install_location, "configuration", "services.yml")
+    config_file_path = os.path.join(
+        fake_install_location, "configuration", "services.yml"
+    )
     config = {
         "usual_parameters": {
             "open_api": {"definition": "http://localhost:8943/"},
@@ -132,18 +130,3 @@ root:
   level: DEBUG
   handlers: [standard_output]"""
         )
-
-
-def fake_install_location(fake_registry, tmpdir) -> str:
-    location = os.path.join(tmpdir, "install_location")
-    os.makedirs(location)
-
-    registry_key = FakeRegistryKey()
-    registry_key.set("InstallLocation", 0, winreg.REG_SZ, location)
-
-    fake_registry[
-        winreg.HKEY_CURRENT_USER,
-        r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest",
-    ] = registry_key
-
-    return location
