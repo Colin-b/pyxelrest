@@ -97,7 +97,7 @@
             Expect the root node.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Emitter.EmitNode(YamlDotNet.Core.Events.ParsingEvent,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:YamlDotNet.Core.Emitter.EmitNode(YamlDotNet.Core.Events.ParsingEvent,System.Boolean,System.Boolean)">
             <summary>
             Expect a node.
             </summary>
@@ -195,6 +195,11 @@
             The specifiction mandates 1024 characters, but any desired value may be used.
             </remarks>
         </member>
+        <member name="P:YamlDotNet.Core.EmitterSettings.IndentSequences">
+            <summary>
+            Indent sequences. The default is to not indent.
+            </summary>
+        </member>
         <member name="T:YamlDotNet.Core.Events.AnchorAlias">
             <summary>
             Represents an alias event.
@@ -210,7 +215,7 @@
             Gets the value of the alias.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Events.AnchorAlias.#ctor(System.String,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.AnchorAlias.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.AnchorAlias"/> class.
             </summary>
@@ -218,7 +223,7 @@
             <param name="start">The start position of the event.</param>
             <param name="end">The end position of the event.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.AnchorAlias.#ctor(System.String)">
+        <member name="M:YamlDotNet.Core.Events.AnchorAlias.#ctor(YamlDotNet.Core.AnchorName)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.AnchorAlias"/> class.
             </summary>
@@ -464,7 +469,7 @@
             Gets the style of the mapping.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Events.MappingStart.#ctor(System.String,System.String,System.Boolean,YamlDotNet.Core.Events.MappingStyle,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.MappingStart.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.Boolean,YamlDotNet.Core.Events.MappingStyle,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.MappingStart"/> class.
             </summary>
@@ -475,7 +480,7 @@
             <param name="start">The start position of the event.</param>
             <param name="end">The end position of the event.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.MappingStart.#ctor(System.String,System.String,System.Boolean,YamlDotNet.Core.Events.MappingStyle)">
+        <member name="M:YamlDotNet.Core.Events.MappingStart.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.Boolean,YamlDotNet.Core.Events.MappingStyle)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.MappingStart"/> class.
             </summary>
@@ -546,7 +551,7 @@
             </summary>
             <value></value>
         </member>
-        <member name="M:YamlDotNet.Core.Events.NodeEvent.#ctor(System.String,System.String,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.NodeEvent.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.NodeEvent"/> class.
             </summary>
@@ -555,7 +560,7 @@
             <param name="start">The start position of the event.</param>
             <param name="end">The end position of the event.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.NodeEvent.#ctor(System.String,System.String)">
+        <member name="M:YamlDotNet.Core.Events.NodeEvent.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.NodeEvent"/> class.
             </summary>
@@ -638,7 +643,7 @@
             </summary>
             <value></value>
         </member>
-        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(System.String,System.String,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.Scalar"/> class.
             </summary>
@@ -651,7 +656,7 @@
             <param name="start">The start position of the event.</param>
             <param name="end">The end position of the event.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(System.String,System.String,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean)">
+        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.Scalar"/> class.
             </summary>
@@ -668,14 +673,14 @@
             </summary>
             <param name="value">The value.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(System.String,System.String)">
+        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.TagName,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.Scalar"/> class.
             </summary>
             <param name="tag">The tag.</param>
             <param name="value">The value.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(System.String,System.String,System.String)">
+        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.Scalar"/> class.
             </summary>
@@ -774,7 +779,7 @@
             </summary>
             <value>The style.</value>
         </member>
-        <member name="M:YamlDotNet.Core.Events.SequenceStart.#ctor(System.String,System.String,System.Boolean,YamlDotNet.Core.Events.SequenceStyle,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.SequenceStart.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.Boolean,YamlDotNet.Core.Events.SequenceStyle,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.SequenceStart"/> class.
             </summary>
@@ -785,7 +790,7 @@
             <param name="start">The start position of the event.</param>
             <param name="end">The end position of the event.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.SequenceStart.#ctor(System.String,System.String,System.Boolean,YamlDotNet.Core.Events.SequenceStyle)">
+        <member name="M:YamlDotNet.Core.Events.SequenceStart.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.Boolean,YamlDotNet.Core.Events.SequenceStyle)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.SequenceStart"/> class.
             </summary>
@@ -1784,13 +1789,13 @@
             </summary>
             <value>The value.</value>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.Anchor.#ctor(System.String)">
+        <member name="M:YamlDotNet.Core.Tokens.Anchor.#ctor(YamlDotNet.Core.AnchorName)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Anchor"/> class.
             </summary>
             <param name="value">The value.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.Anchor.#ctor(System.String,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.Anchor.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Anchor"/> class.
             </summary>
@@ -1808,13 +1813,13 @@
             Gets the value of the alias.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.AnchorAlias.#ctor(System.String)">
+        <member name="M:YamlDotNet.Core.Tokens.AnchorAlias.#ctor(YamlDotNet.Core.AnchorName)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.AnchorAlias"/> class.
             </summary>
             <param name="value">The value of the anchor.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.AnchorAlias.#ctor(System.String,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.AnchorAlias.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.AnchorAlias"/> class.
             </summary>
@@ -2421,15 +2426,6 @@
             </summary>
             <param name="index">The zero-based index of the element to remove.</param>
         </member>
-        <member name="M:YamlDotNet.ReflectionExtensions.HasDefaultConstructor(System.Type)">
-            <summary>
-            Determines whether the specified type has a default constructor.
-            </summary>
-            <param name="type">The type.</param>
-            <returns>
-                <c>true</c> if the type has a default constructor; otherwise, <c>false</c>.
-            </returns>
-        </member>
         <member name="T:YamlDotNet.RepresentationModel.DocumentLoadingState">
             <summary>
             Manages the state of a <see cref="T:YamlDotNet.RepresentationModel.YamlDocument" /> while it is loading.
@@ -2441,17 +2437,7 @@
             </summary>
             <param name="node">The node.</param>
         </member>
-        <member name="M:YamlDotNet.RepresentationModel.DocumentLoadingState.GetNode(System.String,System.Boolean,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
-            <summary>
-            Gets the node with the specified anchor.
-            </summary>
-            <param name="anchor">The anchor.</param>
-            <param name="throwException">if set to <c>true</c>, the method should throw an exception if there is no node with that anchor.</param>
-            <param name="start">The start position.</param>
-            <param name="end">The end position.</param>
-            <returns></returns>
-        </member>
-        <member name="M:YamlDotNet.RepresentationModel.DocumentLoadingState.GetNode(System.String,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.RepresentationModel.DocumentLoadingState.GetNode(YamlDotNet.Core.AnchorName,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
             <summary>
             Gets the node with the specified anchor.
             </summary>
@@ -2461,7 +2447,7 @@
             <returns></returns>
             <exception cref="T:YamlDotNet.Core.AnchorNotFoundException">if there is no node with that anchor.</exception>
         </member>
-        <member name="M:YamlDotNet.RepresentationModel.DocumentLoadingState.TryGetNode(System.String,YamlDotNet.RepresentationModel.YamlNode@)">
+        <member name="M:YamlDotNet.RepresentationModel.DocumentLoadingState.TryGetNode(YamlDotNet.Core.AnchorName,YamlDotNet.RepresentationModel.YamlNode@)">
             <summary>
             Gets the node with the specified anchor.
             </summary>
@@ -2554,7 +2540,7 @@
             Represents an alias node in the YAML document.
             </summary>
         </member>
-        <member name="M:YamlDotNet.RepresentationModel.YamlAliasNode.#ctor(System.String)">
+        <member name="M:YamlDotNet.RepresentationModel.YamlAliasNode.#ctor(YamlDotNet.Core.AnchorName)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.RepresentationModel.YamlAliasNode"/> class.
             </summary>
@@ -3610,12 +3596,17 @@
         </member>
         <member name="F:YamlDotNet.Serialization.DefaultValuesHandling.OmitNull">
             <summary>
-            Specifies that properties that contain null references or a null Nullable&lt;T&gt; are to be omitted. 
+            Specifies that properties that contain null references or a null Nullable&lt;T&gt; are to be omitted.
             </summary>
         </member>
         <member name="F:YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults">
             <summary>
-            Specifies that properties that that contain their default value, either default(T) or the value specified in DefaultValueAttribute are to be omitted. 
+            Specifies that properties that that contain their default value, either default(T) or the value specified in DefaultValueAttribute are to be omitted.
+            </summary>
+        </member>
+        <member name="F:YamlDotNet.Serialization.DefaultValuesHandling.OmitEmptyCollections">
+            <summary>
+            Specifies that properties that that contain collections/arrays/enumerations that are empty are to be omitted.
             </summary>
         </member>
         <member name="T:YamlDotNet.Serialization.Deserializer">
@@ -3735,12 +3726,17 @@
             Unregisters an existing <see cref="T:YamlDotNet.Serialization.INodeTypeResolver" /> of type <param name="nodeTypeResolverType" />.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithTagMapping(System.String,System.Type)">
+        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithTagMapping(YamlDotNet.Core.TagName,System.Type)">
             <summary>
             Registers a tag mapping.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithoutTagMapping(System.String)">
+        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithTypeMapping``2">
+            <summary>
+            Registers a type mapping using the default object factory.
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithoutTagMapping(YamlDotNet.Core.TagName)">
             <summary>
             Unregisters an existing tag mapping.
             </summary>
@@ -4302,7 +4298,7 @@
             Unregisters an existing <see cref="T:YamlDotNet.Serialization.IEventEmitter" /> of type <param name="eventEmitterType" />.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithTagMapping(System.String,System.Type)">
+        <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithTagMapping(YamlDotNet.Core.TagName,System.Type)">
             <summary>
             Registers a tag mapping.
             </summary>
@@ -4437,6 +4433,17 @@
             <summary>
             Unregisters an existing <see cref="T:YamlDotNet.Serialization.IObjectGraphVisitor`1" /> of type <param name="objectGraphVisitorType" />.
             </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithIndentedSequences">
+            <summary>
+            Creates sequences with extra indentation
+            </summary>
+            <example>
+             list:
+               - item
+               - item
+            </example>
+            <returns></returns>
         </member>
         <member name="M:YamlDotNet.Serialization.SerializerBuilder.Build">
             <summary>
@@ -4618,13 +4625,6 @@
             Performs type conversions using every standard provided by the .NET library.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Serialization.Utilities.TypeConverter.RegisterTypeConverter``2">
-            <summary>
-            Registers a <see cref="T:System.ComponentModel.TypeConverter"/> dynamically.
-            </summary>
-            <typeparam name="TConvertible">The type to which the converter should be associated.</typeparam>
-            <typeparam name="TConverter">The type of the converter.</typeparam>
-        </member>
         <member name="M:YamlDotNet.Serialization.Utilities.TypeConverter.ChangeType``1(System.Object)">
             <summary>
             Converts the specified value.
@@ -4677,6 +4677,13 @@
             <param name="culture">The culture.</param>
             <returns></returns>
         </member>
+        <member name="M:YamlDotNet.Serialization.Utilities.TypeConverter.RegisterTypeConverter``2">
+            <summary>
+            Registers a <see cref="T:System.ComponentModel.TypeConverter"/> dynamically.
+            </summary>
+            <typeparam name="TConvertible">The type to which the converter should be associated.</typeparam>
+            <typeparam name="TConverter">The type of the converter.</typeparam>
+        </member>
         <member name="T:YamlDotNet.Serialization.YamlAttributeOverrides">
             <summary>
             Define a collection of YamlAttribute Overrides for pre-defined object types.
@@ -4696,14 +4703,14 @@
             <param name="member">Class Member</param>
             <param name="attribute">Overriding Attribute</param>
         </member>
-        <member name="M:YamlDotNet.Serialization.YamlAttributeOverrides.Add``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Attribute)">
-            <summary>
-            Adds a Member Attribute Override
-            </summary>
-        </member>
         <member name="M:YamlDotNet.Serialization.YamlAttributeOverrides.Clone">
             <summary>
             Creates a copy of this instance.
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.YamlAttributeOverrides.Add``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Attribute)">
+            <summary>
+            Adds a Member Attribute Override
             </summary>
         </member>
         <member name="T:YamlDotNet.Serialization.YamlAttributeOverridesInspector">
@@ -4724,6 +4731,12 @@
         <member name="T:YamlDotNet.Serialization.YamlMemberAttribute">
             <summary>
             Provides special Yaml serialization instructions.
+            </summary>
+        </member>
+        <member name="P:YamlDotNet.Serialization.YamlMemberAttribute.Description">
+            <summary>
+            Decription/Comment about this property.
+            When set, a comment will be emitted when serializing this member.
             </summary>
         </member>
         <member name="P:YamlDotNet.Serialization.YamlMemberAttribute.SerializeAs">
@@ -4766,6 +4779,15 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Serialization.YamlMemberAttribute" /> class.
             </summary>
             <param name="serializeAs">Specifies that this property should be serialized as the given type, rather than using the actual runtime value's type.</param>
+        </member>
+        <member name="M:YamlDotNet.ReflectionExtensions.HasDefaultConstructor(System.Type)">
+            <summary>
+            Determines whether the specified type has a default constructor.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>
+                <c>true</c> if the type has a default constructor; otherwise, <c>false</c>.
+            </returns>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
             <summary>

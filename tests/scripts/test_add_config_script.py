@@ -63,8 +63,8 @@ def test_unable_to_load_existing_config(tmpdir, monkeypatch, caplog):
     )
 
     assert caplog.messages == [
-        f'Configuration file "{os.path.join(tmpdir, "test_config.yml")}" cannot be read.',
-        "Unable to perform services configuration update.",
+        f'Configuration file "{os.path.join(tmpdir, "test_config.yml")}" cannot be read: yaml load error.',
+        "Unable to add services configuration.",
     ]
 
 
@@ -125,6 +125,6 @@ def test_main_error(tmpdir, monkeypatch, caplog):
         os.path.join(tmpdir, "test_config.yml"), "https://config_to_retrieve"
     )
     assert caplog.messages == [
-        f'Configuration file "{os.path.join(tmpdir, "test_config.yml")}" cannot be read.',
-        "Unable to perform services configuration update.",
+        f'Configuration file "{os.path.join(tmpdir, "test_config.yml")}" cannot be read: yaml load error.',
+        "Unable to add services configuration.",
     ]

@@ -7,7 +7,7 @@ import requests
 import yaml
 
 if __name__ == "__main__":
-    logger = logging.getLogger("pyxelrest.update_services_config")
+    logger = logging.getLogger("pyxelrest._add_config")
 else:
     logger = logging.getLogger(__name__)
 
@@ -19,9 +19,9 @@ def open_file_config(configuration_file_path: str) -> Optional[dict]:
     try:
         with open(configuration_file_path, "r") as config_file:
             return yaml.load(config_file, Loader=yaml.FullLoader)
-    except:
+    except Exception as e:
         logger.exception(
-            f'Configuration file "{configuration_file_path}" cannot be read.'
+            f'Configuration file "{configuration_file_path}" cannot be read: {e}.'
         )
 
 
@@ -96,7 +96,7 @@ def main(*args):
         installer = ServicesConfigUpdater(config_file_path=options.config_to_update)
         installer.update_configuration(options.source)
     except:
-        logger.exception("Unable to perform services configuration update.")
+        logger.exception("Unable to add services configuration.")
 
 
 if __name__ == "__main__":
