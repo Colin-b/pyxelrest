@@ -45,8 +45,8 @@ pyxelrest_install_addin --check_pre_releases
 ```bash
 python -m pip uninstall pyxelrest
 ```
-3. Remove the folder provided at add-in installation.
-4. Remove `%APPDATA%\Microsoft\Excel\XLSTART\pyxelrest.xlam` file.
+3. Remove the `destination` folder provided at add-in installation.
+4. Remove `pyxelrest.xlam` file within the `trusted_location` folder provided at add-in installation.
 5. Remove `HKEY_CURRENT_USER` `Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest` registry key.
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
