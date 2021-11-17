@@ -230,13 +230,9 @@ class Installer:
         self.check_pre_releases = check_pre_releases
         self.trusted_location = trusted_location
 
-    def install_addin(self, path_to_up_to_date_configuration: str = None):
+    def install_addin(self):
         create_folder(self.destination)
         self._write_registry_key("InstallLocation", self.destination)
-        if path_to_up_to_date_configuration:
-            self._write_registry_key(
-                "PathToUpToDateConfigurations", path_to_up_to_date_configuration
-            )
         self._create_module_logging()
         self._install_vb_addin()
         self._install_addin()
@@ -383,12 +379,6 @@ def main(*args):
         type=str,
     )
     parser.add_argument(
-        "--path_to_up_to_date_configuration",
-        help="Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the Microsoft Excel add-in.",
-        default=None,
-        type=str,
-    )
-    parser.add_argument(
         "--check_pre_releases",
         help="Also fetch pre-releases when checking for updates.",
         action="store_true",
@@ -401,7 +391,7 @@ def main(*args):
         destination=options.destination,
         check_pre_releases=options.check_pre_releases,
     )
-    installer.install_addin(options.path_to_up_to_date_configuration)
+    installer.install_addin()
 
 
 if __name__ == "__main__":

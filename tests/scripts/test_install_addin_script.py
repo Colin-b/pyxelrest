@@ -111,51 +111,6 @@ def test_success_with_pre_release(fake_registry, monkeypatch, tmpdir):
     assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
 
 
-def test_success_with_uptodate_configuration(fake_registry, monkeypatch, tmpdir):
-    vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
-    fake_sub_processes(
-        monkeypatch,
-        clear_clickonce_cache(return_code=-1),
-        silent_addin_installation(
-            installer_path=vsto_installer_path,
-            install_location=os.path.join(tmpdir, "destination"),
-            return_code=0,
-        ),
-    )
-    root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    pyxelrest.install_addin.main(
-        "--trusted_location",
-        os.path.join(tmpdir, "trusted"),
-        "--source",
-        os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
-        "--vb_addin",
-        os.path.join(root, "addin", "pyxelrest.xlam"),
-        "--destination",
-        os.path.join(tmpdir, "destination"),
-        "--path_to_up_to_date_configuration",
-        "https://location_of_configurations",
-    )
-    assert_registry(
-        fake_registry,
-        install_location=os.path.join(tmpdir, "destination"),
-        path_to_up_to_date_configurations="https://location_of_configurations",
-    )
-    assert_logging_conf(install_location=os.path.join(tmpdir, "destination"))
-    assert_vb_addin(
-        vb_source=os.path.join(root, "addin"),
-        trusted_location=os.path.join(tmpdir, "trusted"),
-    )
-    assert_addin(
-        source=os.path.join(root, "addin", "PyxelRestAddIn", "bin", "Release"),
-        install_location=os.path.join(tmpdir, "destination"),
-    )
-    assert_addin_config(
-        "expected_PyxelRestAddIn.dll.config",
-        install_location=os.path.join(tmpdir, "destination"),
-    )
-    assert_xlwings_bas(install_location=os.path.join(tmpdir, "destination"))
-
-
 def test_success_default_source(fake_registry, monkeypatch, tmpdir):
     vsto_installer_path = fake_vsto_installer(tmpdir, monkeypatch)
     fake_sub_processes(
@@ -658,23 +613,14 @@ def assert_addin_config(expected: str, install_location: str):
     )
 
 
-def assert_registry(
-    fake_registry, install_location: str, path_to_up_to_date_configurations: str = None
-):
-    entries = {
-        "InstallLocation": (0, winreg.REG_SZ, install_location),
-    }
-    if path_to_up_to_date_configurations:
-        entries["PathToUpToDateConfigurations"] = (
-            0,
-            winreg.REG_SZ,
-            path_to_up_to_date_configurations,
-        )
+def assert_registry(fake_registry, install_location: str):
     assert fake_registry == {
         (
             winreg.HKEY_CURRENT_USER,
             r"Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest",
-        ): entries
+        ): {
+            "InstallLocation": (0, winreg.REG_SZ, install_location),
+        }
     }
 
 

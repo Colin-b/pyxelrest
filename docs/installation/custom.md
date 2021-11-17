@@ -27,7 +27,6 @@ Note: The add-in is not required if you only want to use `pyxelrest` [as a pytho
 
 | Name | Description | Possible values |
 |------|-------------|-----------------|
-| path_to_up_to_date_configuration | Path to up to date configuration file(s). This path will be used to keep services configuration up to date and provide a list of available services within the [Microsoft Excel] add-in. | file path, folder path or an URL returning a file content. |
 | check_pre_releases | Also fetch pre-releases when checking for updates. | No value is required, providing the option is enough. Prompt only for stable releases by default. |
 | source | Directory containing [Microsoft Excel] COM add-in (and optionally `pyxelrest.xlam` file). | Default to `pyxelrest_addin` folder in the python executable data directory. |
 | vb_addin | Directory containing [Microsoft Excel] Visual Basic `pyxelrest.xlam` file. | Default to `pyxelrest.xlam` within `source` folder. |

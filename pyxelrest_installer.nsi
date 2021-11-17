@@ -25,10 +25,6 @@ Var PythonWarningLabel
 Var PythonDownloadLink
 Var PythonStatusLabel
 
-Var PathToConfiguration
-Var PathToConfigurationTextBox
-Var BrowsePathToConfigurationButton
-
 Var PathToPythonFolder
 Var PathToScriptsFolder
 Var NextButton
@@ -42,10 +38,8 @@ Function .onInit
     ${If} $0 != ""
         StrCpy $INSTDIR "$0"
         ReadRegStr $PathToPython HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "PathToPython"
-        ReadRegStr $PathToConfiguration HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PyxelRest" "PathToUpToDateConfigurations"
     ${Else}
         StrCpy $PathToPython "$%USERPROFILE%\AppData\Local\Programs\Python\Python38\python.exe"
-        StrCpy $PathToConfiguration ""
     ${EndIf}
 
 FunctionEnd
@@ -88,16 +82,6 @@ Function optionsPageCreate
 
     ${NSD_CreateLabel} 6u 30u 70% 12u ""
     pop $PythonStatusLabel
-
-    ${NSD_CreateGroupBox} 0 65u 100% 35u "Path to up to date services configurations"
-    Pop $0
-
-    ${NSD_CreateText} 5u 80u 72% 12u "$PathToConfiguration"
-    Pop $PathToConfigurationTextBox
-
-    ${NSD_CreateBrowseButton} 205u 78u 20% 15u "Browse..."
-    pop $BrowsePathToConfigurationButton
-    ${NSD_OnClick} $BrowsePathToConfigurationButton browsePathToConfiguration
 
     Call changePathToPython
 
@@ -163,17 +147,6 @@ Function downloadAndInstallPython
 
 FunctionEnd
 
-Function browsePathToConfiguration
-
-    ${NSD_GetText} $PathToConfigurationTextBox $0
-    nsDialogs::SelectFileDialog open $0 "YAML configuration file | *.y*ml"
-    Pop $0
-    ${If} $0 != ""
-        ${NSD_SetText} $PathToConfigurationTextBox $0
-    ${EndIf}
-
-FunctionEnd
-
 Function optionsPageLeave
 
     ${GetParent} "$PathToPython" $PathToPythonFolder
@@ -185,8 +158,6 @@ Function optionsPageLeave
     ${If} $0 != "Scripts"
     	StrCpy $PathToScriptsFolder "$PathToScriptsFolder\Scripts"
     ${EndIf}
-
-    ${NSD_GetText} $PathToConfigurationTextBox $PathToConfiguration
 
 FunctionEnd
 
@@ -306,11 +277,7 @@ Section "Microsoft Excel add-in" install_addin
     ${EndIf}
 
     DetailPrint "Installing Microsoft Excel add-in"
-    ${If} $PathToConfiguration != ""
-        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--destination" "$INSTDIR" "--path_to_up_to_date_configuration" "$PathToConfiguration"'
-    ${Else}
-        ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--destination" "$INSTDIR"'
-    ${EndIf}
+    ExecDos::exec /DETAILED '"$PathToScriptsFolder\pyxelrest_install_addin.exe" "--destination" "$INSTDIR"'
 
     Pop $0
     ${If} $0 != "0"
