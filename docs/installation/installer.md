@@ -24,7 +24,6 @@ Want to help test development versions of `PyxelRest`?
 The installer allows you to:
  * Chose the installation directory.
  * Download and install python if required.
- * Provide a path to up to date services configuration (optional).
  * Install optional dependencies.
  * Add sample services.
 
