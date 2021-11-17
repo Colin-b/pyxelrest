@@ -250,7 +250,7 @@ my_rest_api:
       lock_excel: true
 ```
 
-#### Change the prefix in front on formulas
+#### Change the prefix in front of formulas
 
 By default, dynamic array formulas will be prefixed by the REST API name.
 

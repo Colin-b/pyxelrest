@@ -18,7 +18,7 @@ user = petstore.getUserByName("test")
 print(user)
 ```
 
-Refer to [configuration](#services-configuration) section for more details on the available options.
+Refer to [configuration](configuration/rest_api.md) section for more details on the available options.
 
 ## Generating functions
 

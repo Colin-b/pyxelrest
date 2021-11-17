@@ -22,18 +22,18 @@ The total length of parameter names (and commas to separate them) should not exc
 In case it does (your UDF has a lot of parameters or parameters with long names), then [Microsoft Excel] is unable to display them all in the function wizard.
 
 To overcome this [Microsoft Excel] limitation you can try the following:
- * Exclude some parameters (refer to [Open API](configuration/rest_api.md#openapi) configuration section for more information).
- * Remove some parameters in your service.
- * Reduce the length of your service parameter names.
+ * [Exclude some parameters](configuration/rest_api.md#selecting-parameters-to-include-or-exclude).
+ * Remove some parameters in your service (in case you manage the service yourself).
+ * Reduce the length of your service parameter names (in case you manage the service yourself).
 
 ## Microsoft Excel Wizard only list some functions
 
 [Microsoft Excel] function wizard is not able to list more than a certain amount of functions per category.
 
-However all functions can be directly accessed in cells.
+However, all functions can be directly accessed in cells.
 
 To overcome this [Microsoft Excel] limitation you can try the following:
- * Exclude some functions in your service (refer to [Open API](configuration/rest_api.md#openapi) configuration section for more information).
+ * [Exclude some functions in your service](configuration/rest_api.md#do-not-expose-everything-the-rest-api-offers).
 
 ## No command specified in the configuration, cannot autostart server
 
@@ -67,7 +67,7 @@ Within [Microsoft Excel], go to `File/Option/addin` and check disabled items (`M
 
 Yes.
 
-We advise to install [`pyxelrest`] in its own virtual environment.
+We advise installing [`pyxelrest`] in its own virtual environment.
 As [`pyxelrest`] relies on [`xlwings`], if you want to use [`xlwings`] you can, but if you rely on some specific [`xlwings`] configuration, you should use a separate environment.
 
 The [`pyxelrest`] add-in and [`xlwings`] add-in can be installed for the same user as long as [`pyxelrest`] is installed in a separate virtual environment.

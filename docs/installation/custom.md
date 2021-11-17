@@ -2,7 +2,7 @@
 
 Note that the recommended way to install pyxelrest is [via the installer](installer.md).
 
-1. [Python >= 3.7](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/) for auto update to work).
+1. [Python >= 3.8](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/)).
 2. Use [`pip`](https://pip.pypa.io/en/stable/) to install module:
 ```bash
 python -m pip install pyxelrest
@@ -21,7 +21,7 @@ Once `pyxelrest` python module is installed, `pyxelrest_install_addin` executabl
 pyxelrest_install_addin
 ```
 
-Note: The add-in is not required if you only want to use `pyxelrest` [as a python module](#using-as-a-module).
+Note: The add-in is not required if you only want to use `pyxelrest` [as a python module](../python_module.md).
 
 ### Microsoft Excel add-in installer options
 
