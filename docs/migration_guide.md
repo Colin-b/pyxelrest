@@ -6,6 +6,8 @@ For a list of enhancements and bugfixes, refer to [changelog](../CHANGELOG.md).
 
 ### Breaking changes
 
+#### Python module usage
+
 If you were using `pyxelrest` as a python module, you will now have to import your functions via the submodule corresponding to your REST API configuration.
 The name of the function is not prefixed by the REST API configuration name anymore, requiring to remove the prefix from your function calls in your code.
 
@@ -35,12 +37,11 @@ from pyxelrest.generated import petstore
 user = petstore.getUserByName("test")
 ```
 
-If you were expecting your formulas to shift results from one column to the right, 
-then you will have to update your Microsoft Excel workbooks due to [this change](#shift_result) as this will not be the case anymore.
+#### Services configuration changes
 
 REST API configuration will most likely not be compatible anymore due to the changes in the following section:
 
-#### udf
+##### udf
 
 `udf` section has been replaced by a `formulas` section.
 
@@ -123,15 +124,15 @@ Otherwise:
             prefix: "{name}_"
     ```
 
-#### shift_result
+##### shift_result
 
 `shift_result` is not an option anymore. 
 
-As a result, formulas results will start from the first cell.
+As a result, formulas results will start from the first cell (results will not be shifted from one column to the right).
 
 If you were using `shift_result: true`, __this change will impact your existing Microsoft Excel workbooks__
 
-#### methods
+##### methods
 
 `methods` option is now `selected_methods` option within `open_api` section.
 
@@ -150,7 +151,7 @@ open_api:
         - get
 ```
 
-#### headers
+##### headers
 
 `headers` section is now expected as a sub-section within `network` section.
 
@@ -169,7 +170,7 @@ network:
         X-Custom: "This is a value"
 ```
 
-#### service_host
+##### service_host
 
 `service_host` option within `open_api` section is now `host` option within `network` section.
 
@@ -187,7 +188,7 @@ network:
     host: "my_reverse_proxy/api"
 ```
 
-#### udf_name_prefix
+##### udf_name_prefix
 
 `udf_name_prefix` option was replaced by `prefix` option per formula type.
 
@@ -205,7 +206,7 @@ formulas:
         prefix: "my_prefix"
 ```
 
-#### caching
+##### caching
 
 `caching` option was replaced by `cache` option per formula type.
 `max_nb_results` has been renamed to `size` and `result_caching_time` to `duration`.
@@ -228,7 +229,7 @@ formulas:
             duration: 1
 ```
 
-#### definition_retrieval_auths
+##### definition_retrieval_auths
 
  * `oauth2_implicit` `oauth2_auth_url` is now `authorization_url` within `oauth2` `implicit` section
  
@@ -358,5 +359,23 @@ formulas:
                 header_name: "x-api-key"
     ```
 
+#### Add-in installation script
+
+* `--path_to_up_to_date_configuration` parameter does not exists anymore. [Use the registry key](configuration/advanced.md) to provide it instead.
+* `--scripts_directory` parameter does not exist anymore.
+
+Previous (0.69.0)
+
+```shell
+python pyxelrest_install_addin.py --add_in_directory ADD_IN_DIR --scripts_directory SCRIPTS_DIR --path_to_up_to_date_configuration PATH_TO_CONFS
+```
+
+New (1.0.0)
+
+```shell
+pyxelrest_install_addin.exe --source ADD_IN_DIR
+```
+
+For more information on what the new script has to offer, refer to [the custom installation documentation](installation/custom.md#microsoft-excel-add-in-installer-options)
 
 [Microsoft Excel]: https://products.office.com/en-us/excel
