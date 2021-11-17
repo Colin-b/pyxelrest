@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `X-PXL-REQUEST` header is not sent anymore to avoid computation and respect a bit more user privacy.
 - `X-PXL-SESSION` header is not sent anymore to respect a bit more user privacy.
 - `rely_on_definitions` is not available anymore as it is too slow to be used anyway.
+- `install_addin` script `path_to_up_to_date_configuration` parameter has been removed.
 
 ### Changed
 - Auto update does not request pre-releases by default anymore. It must be explicitly requested via `--check_pre_releases`.
