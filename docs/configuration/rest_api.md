@@ -160,7 +160,7 @@ my_rest_api:
         query_parameter_name: "x-api-key"
 ```
 
-All other settings will be extracted from [API keu authentication](#api-key)
+All other settings will be extracted from [API key authentication](#api-key)
 
 ##### Retrieving a definition requiring basic authentication
 ```yaml
