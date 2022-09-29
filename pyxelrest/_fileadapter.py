@@ -1,4 +1,3 @@
-from typing import Tuple
 import os
 
 import requests
@@ -13,7 +12,7 @@ class LocalFileAdapter(requests.adapters.BaseAdapter):
     """
 
     @staticmethod
-    def _check_path(path: str) -> Tuple[int, str]:
+    def _check_path(path: str) -> (int, str):
         """Return an HTTP status for the given filesystem path."""
         if os.path.isdir(path):
             return 400, "Path Not A File"

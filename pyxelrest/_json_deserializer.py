@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Union, Any, Dict, Optional, List, Set
+from typing import Any
 
 import dateutil.parser
 import dateutil.tz
@@ -8,7 +8,7 @@ import dateutil.tz
 logger = logging.getLogger(__name__)
 
 
-def to_date_time(value: str) -> Union[str, datetime.datetime, datetime.date]:
+def to_date_time(value: str) -> str | datetime.datetime | datetime.date:
     """
     Convert to date-time or date as described in https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14
     :param value: string representation of the date-time or date
@@ -68,14 +68,14 @@ class Flattenizer:
     """
 
     def __init__(
-        self, all_responses: dict, status_code: int, json_definitions: Optional[dict]
+        self, all_responses: dict, status_code: int, json_definitions: dict | None
     ):
         # { level_index -> column_index }
-        self.__indexes_per_level: Dict[int, int] = {}
+        self.__indexes_per_level: dict[int, int] = {}
         # { level_index: [header1, header2] }
-        self.__headers_per_level: Dict[int, list] = {}
+        self.__headers_per_level: dict[int, list] = {}
         # [ { level_index -> [value1, value2] } ]
-        self.__values_per_level: List[Dict[int, List[Any]]] = []
+        self.__values_per_level: list[dict[int, list[Any]]] = []
         self.__headers_row = []
         self.__values_rows = []
         json_response = response(status_code, all_responses)
@@ -132,7 +132,7 @@ class Flattenizer:
                     convert_simple_type(value, json_definition)
                 )
 
-    def _level_values(self, row: int, level: int) -> List[Any]:
+    def _level_values(self, row: int, level: int) -> list[Any]:
         if row >= len(self.__values_per_level):
             self.__values_per_level.append({})
         return self.__values_per_level[row].setdefault(level, [])

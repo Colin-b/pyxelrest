@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 import requests.auth
 from requests_auth import (
@@ -137,7 +136,7 @@ def _create_authentication_from_config(
 def get_auth(
     udf_method: "pyxelrest.open_api.UDFMethod",
     request_content: "pyxelrest.open_api.RequestContent",
-) -> Optional[requests.auth.AuthBase]:
+) -> requests.auth.AuthBase | None:
     if not udf_method.requires_authentication(request_content):
         return None
 
@@ -180,7 +179,7 @@ def get_auth(
 
 def get_definition_retrieval_auth(
     service_config: "pyxelrest.open_api.RESTAPIConfigSection",
-) -> Optional[requests.auth.AuthBase]:
+) -> requests.auth.AuthBase | None:
     if not service_config.definition_retrieval_auths:
         return None
 

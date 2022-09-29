@@ -1,7 +1,6 @@
 import argparse
 import logging
 import os
-from typing import Optional
 
 import requests
 import yaml
@@ -12,7 +11,7 @@ else:
     logger = logging.getLogger(__name__)
 
 
-def open_file_config(configuration_file_path: str) -> Optional[dict]:
+def open_file_config(configuration_file_path: str) -> dict | None:
     if not os.path.isfile(configuration_file_path):
         return {}
 
@@ -25,7 +24,7 @@ def open_file_config(configuration_file_path: str) -> Optional[dict]:
         )
 
 
-def open_url_config(configuration_file_url: str) -> Optional[dict]:
+def open_url_config(configuration_file_url: str) -> dict | None:
     try:
         response = requests.get(configuration_file_url)
         response.raise_for_status()

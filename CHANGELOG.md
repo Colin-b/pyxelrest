@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `install_addin` script now has a `destination` parameter allowing to install it anywhere.
 - Allow to report an issue from the PyxelRest tab within Microsoft Excel.
 - Allow to provide an OpenAPI definition within the configuration.
-- Allow to change path to up to date configurations while add-in is running.
+- Allow to change path to up-to-date configurations while add-in is running.
 - Display path to python in Microsoft Excel add-in.
 - Display path to xlwings BAS file in Microsoft Excel add-in.
 - Allow to toggle pre-releases check in Microsoft Excel add-in.
@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
-- Compatibility with `python` `3.8`, `3.9` and `3.10`.
+- Compatibility with `python` `3.10`.
 - Ability to change the configuration and impact loaded functions within module without restarting python.
 - file URl are now properly handled, they must start with `file:///` instead of `file://`
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle primitive type body (such as sending a raw string, an integer, etc...).
 
 ### Removed
-- Drop support for `python` < `3.8`.
+- Drop support for `python` < `3.10`.
 - Drop support for `application/msgpackpandas` as `msgpack` support has been dropped from `pandas` and this is not a standardized content type.
 - Drop support for `ujson`.
 - Drop support for `ini` configuration files.

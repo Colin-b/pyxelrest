@@ -4,7 +4,6 @@ Each time this module is loaded (and GENERATE_UDF_ON_IMPORT is True) it will gen
 import os
 import sysconfig
 from importlib import reload, import_module
-from typing import List
 import logging.config
 import logging.handlers
 import datetime
@@ -25,7 +24,7 @@ from pyxelrest._open_api import load_service
 from pyxelrest._rest import PyxelRest
 
 
-def load_services(config: dict) -> List[Service]:
+def load_services(config: dict) -> list[Service]:
     """
     Retrieve OpenAPI definition for each service defined in configuration.
     :return: List of OpenAPI and PyxelRest instances, size should be the same one as the number of sections within
@@ -60,7 +59,7 @@ def _generated_api(service: Service) -> str:
     )
 
 
-def _generated_init(services: List[Service]) -> str:
+def _generated_init(services: list[Service]) -> str:
     """
     Create __init__ file for the generated folder.
     :return: A string containing python code of the __init__ file.
@@ -76,7 +75,7 @@ def _generated_init(services: List[Service]) -> str:
     )
 
 
-def generate_python_files(services: List[Service]):
+def generate_python_files(services: list[Service]):
     """
     Create python file containing generated xlwings User Defined Functions.
     """
@@ -96,7 +95,7 @@ def generate_python_files(services: List[Service]):
         file.write(_generated_init(services))
 
 
-def reload_generated(services: List[Service]):
+def reload_generated(services: list[Service]):
     generated = reload(import_module("pyxelrest.generated"))
     generated.update_services(services)
 
@@ -126,7 +125,7 @@ def load_logging_configuration():
     )
 
 
-def load_services_from_yaml() -> List[Service]:
+def load_services_from_yaml() -> list[Service]:
     """
     Retrieve OpenAPI JSON definition for each service defined in configuration file.
     :return: List of OpenAPI and PyxelRestService instances, size is the same one as the number of sections within

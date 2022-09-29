@@ -2,7 +2,7 @@ import datetime
 import logging
 import os
 import re
-from typing import List, Union, Optional, Any, Dict
+from typing import Any
 from urllib.parse import urlsplit
 
 from pyxelrest import _authentication, _session, _vba
@@ -45,7 +45,7 @@ def to_vba_valid_name(open_api_name: str) -> str:
     return open_api_name.replace("-", "_").replace(".", "_").lstrip("_")
 
 
-def return_type_can_be_handled(method_produces: List[str]) -> bool:
+def return_type_can_be_handled(method_produces: list[str]) -> bool:
     return "application/octet-stream" not in method_produces
 
 
@@ -76,7 +76,7 @@ class RESTAPIConfigSection(ConfigSection):
         self.selected_parameters = open_api.get("selected_parameters", [])
         self.definition_retrieval_auths = open_api.get("definition_retrieval_auths", {})
 
-    def _allow_tags(self, method_tags: Optional[List[str]]) -> bool:
+    def _allow_tags(self, method_tags: list[str] | None) -> bool:
         if not method_tags:
             return True
 
@@ -94,7 +94,7 @@ class RESTAPIConfigSection(ConfigSection):
 
         return True
 
-    def _allow_operation_id(self, method_operation_id: Optional[str]) -> bool:
+    def _allow_operation_id(self, method_operation_id: str | None) -> bool:
         if not method_operation_id:
             return True
 
@@ -210,7 +210,7 @@ class APIUDFParameter(UDFParameter):
             value = self._convert_to_type(value)
         request_content.add_value(self, value)
 
-    def _get_open_api_array_parameter(self, open_api_parameter: dict) -> Optional[dict]:
+    def _get_open_api_array_parameter(self, open_api_parameter: dict) -> dict | None:
         if self.type == "array":
             open_api_array_parameter = dict(open_api_parameter)
             open_api_array_parameter.update(open_api_parameter["items"])
@@ -236,7 +236,7 @@ class APIUDFParameter(UDFParameter):
         self._check_number(value)
         return value
 
-    def _check_number(self, value: Union[int, float]):
+    def _check_number(self, value: int | float):
         if self.maximum is not None:
             if self.exclusive_maximum:
                 if value >= self.maximum:
@@ -306,7 +306,7 @@ class APIUDFParameter(UDFParameter):
             )
         return value
 
-    def _check_choices(self, value: Any):
+    def _check_choices(self, value: Any) -> None:
         if self.choices and value not in self.choices:
             raise Exception(
                 f'{self.name} value "{value}" should be {" or ".join([str(choice) for choice in self.choices])}.'
@@ -330,7 +330,7 @@ class APIUDFParameter(UDFParameter):
             )
         return list_to_dict(value[0], value[1])
 
-    def _convert_to_dict_list(self, value: Any) -> List[dict]:
+    def _convert_to_dict_list(self, value: Any) -> list[dict]:
         if not isinstance(value, list):
             raise Exception(
                 f'{self.name} value "{value}" ({type(value)} type) must be a list.'
@@ -348,7 +348,7 @@ class APIUDFParameter(UDFParameter):
             return open(value, "rb")
         return self.server_param_name, value  # Or the content of the file
 
-    def _convert_to_array(self, value: Any) -> Union[str, list]:
+    def _convert_to_array(self, value: Any) -> str | list:
         if isinstance(value, list):
             list_value = self._convert_list_to_array(value)
         else:
@@ -365,7 +365,7 @@ class APIUDFParameter(UDFParameter):
             if list_item is not None or self.allow_null
         ]
 
-    def _apply_collection_format(self, list_value: list) -> Union[str, list]:
+    def _apply_collection_format(self, list_value: list) -> str | list:
         if not self.collection_format or "csv" == self.collection_format:
             return ",".join([str(value) for value in list_value])
         if "multi" == self.collection_format:
@@ -379,7 +379,7 @@ class APIUDFParameter(UDFParameter):
             return "|".join([str(value) for value in list_value])
         raise Exception(f"Collection format {self.collection_format} is invalid.")
 
-    def _check_array(self, value: list):
+    def _check_array(self, value: list) -> None:
         if self.unique_items and len(set(value)) != len(value):
             raise Exception(f"{self.name} contains duplicated items.")
 
@@ -503,7 +503,7 @@ class OpenAPIUDFMethod(UDFMethod):
             udf_name=udf_name,
         )
 
-    def _create_udf_parameters(self) -> List[UDFParameter]:
+    def _create_udf_parameters(self) -> list[UDFParameter]:
         udf_parameters = []
         for open_api_parameter in self.open_api_method.get("parameters", []):
             udf_parameters.extend(self._to_parameters(open_api_parameter))
@@ -522,13 +522,13 @@ class OpenAPIUDFMethod(UDFMethod):
     def return_a_list(self) -> bool:
         return "application/json" in self.open_api_method["produces"]
 
-    def security(self, request_content: RequestContent) -> Optional[List[dict]]:
+    def security(self, request_content: RequestContent) -> list[dict] | None:
         return self.open_api_method.get("security")
 
-    def summary(self) -> Optional[str]:
+    def summary(self) -> str | None:
         return self.open_api_method.get("summary")
 
-    def initial_header(self) -> Dict[str, str]:
+    def initial_header(self) -> dict[str, str]:
         """
         Initial header content
         For more details refer to https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
@@ -552,7 +552,7 @@ class OpenAPIUDFMethod(UDFMethod):
 
         return header
 
-    def _to_parameters(self, open_api_parameter: dict) -> List[APIUDFParameter]:
+    def _to_parameters(self, open_api_parameter: dict) -> list[APIUDFParameter]:
         if (
             "type" in open_api_parameter
         ):  # Type usually means that this is not a complex type
@@ -605,7 +605,7 @@ class OpenAPIUDFMethod(UDFMethod):
             return schema
         return {}
 
-    def _avoid_duplicated_names(self, udf_parameters: List[UDFParameter]):
+    def _avoid_duplicated_names(self, udf_parameters: list[UDFParameter]):
         parameters_by_name = {}
         for udf_parameter in udf_parameters:
             parameters_by_name.setdefault(udf_parameter.name, []).append(udf_parameter)

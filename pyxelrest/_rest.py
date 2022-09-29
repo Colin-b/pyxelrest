@@ -1,4 +1,4 @@
-from typing import Any, List, Union
+from typing import Any
 
 from pyxelrest._common import (
     ConfigSection,
@@ -144,7 +144,7 @@ class BodyParameter(UDFParameter):
         )
 
     @staticmethod
-    def list_as_json(lists: list, parse_as: str) -> Union[list, dict]:
+    def list_as_json(lists: list, parse_as: str) -> list | dict:
         if "dict" == parse_as:
             if len(lists) != 2:
                 raise Exception("There should be only two rows. Header and values.")
@@ -192,7 +192,7 @@ class SecurityDefinitionsParameter(UDFParameter):
         )
         self.description = f"Authentication mechanisms to use."
 
-    def _convert_to_array(self, value: Any) -> List[dict]:
+    def _convert_to_array(self, value: Any) -> list[dict]:
         if not isinstance(value, list):
             raise Exception(
                 f'{self.name} value "{value}" ({type(value)} type) must be a list.'
@@ -229,7 +229,7 @@ class PyxelRestUDFMethod(UDFMethod):
             udf_name=udf_name,
         )
 
-    def _create_udf_parameters(self) -> List[UDFParameter]:
+    def _create_udf_parameters(self) -> list[UDFParameter]:
         parameters = [
             UrlParameter(),
             ExtraHeadersParameter(),
@@ -250,7 +250,7 @@ class PyxelRestUDFMethod(UDFMethod):
     def return_a_list(self) -> bool:
         return True
 
-    def security(self, request_content: RequestContent) -> List[dict]:
+    def security(self, request_content: RequestContent) -> list[dict]:
         security_definitions = request_content.extra_parameters.get(
             "security_definitions"
         )

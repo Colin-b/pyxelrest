@@ -8,7 +8,6 @@ import sys
 import logging
 import distutils.dir_util as dir_util
 import winreg
-from typing import Optional
 
 if __name__ == "__main__":
     logger = logging.getLogger("pyxelrest.install_addin")
@@ -175,7 +174,7 @@ def create_xlwings_config(xlwings_config_folder: str) -> str:
     return xlwings_bas_path
 
 
-def _function_or_sub_name(line: str, previous_function_name: str) -> Optional[str]:
+def _function_or_sub_name(line: str, previous_function_name: str) -> str | None:
     # End of previous function
     if line in ("End Function\n", "End Sub\n"):
         return

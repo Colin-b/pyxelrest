@@ -3,7 +3,7 @@ import re
 import os
 import time
 from abc import ABC, abstractmethod
-from typing import Optional, Union, List, Any, Dict
+from typing import Any
 
 
 import requests
@@ -23,7 +23,7 @@ def list_to_dict(header: Any, values: Any) -> dict:
     return {header[index]: value for index, value in enumerate(values)}
 
 
-def list_to_dict_list(header: Any, values_list: Any) -> List[dict]:
+def list_to_dict_list(header: Any, values_list: Any) -> list[dict]:
     return [list_to_dict(header, values) for values in values_list]
 
 
@@ -90,8 +90,8 @@ class UDFParameter(ABC):
         name: str,
         server_param_name: str,
         location: str,
-        required: Optional[bool],
-        field_type: Union[List[str], str],
+        required: bool | None,
+        field_type: list[str] | str,
     ):
         self.name = name
         self.server_param_name = server_param_name
@@ -184,7 +184,7 @@ class UDFMethod(ABC):
         )
 
     @staticmethod
-    def _to_positive_int(value: Union[str, int]) -> Optional[int]:
+    def _to_positive_int(value: str | int) -> int | None:
         if value:
             try:
                 value = int(value)
@@ -195,7 +195,7 @@ class UDFMethod(ABC):
                 )
 
     @staticmethod
-    def _create_cache(max_nb_results: int, ttl: int) -> Optional["cachetools.TTLCache"]:
+    def _create_cache(max_nb_results: int, ttl: int) -> "cachetools.TTLCache" | None:
         """
         Create a new in-memory cache.
 
@@ -212,7 +212,7 @@ class UDFMethod(ABC):
                 "cachetools module is required to initialize a memory cache. Results will not be cached."
             )
 
-    def get_cached_result(self, request_content: "RequestContent") -> Optional[Any]:
+    def get_cached_result(self, request_content: "RequestContent") -> Any | None:
         if self.cache is None:
             return
         # Results are only cached on GET requests
@@ -254,7 +254,7 @@ class UDFMethod(ABC):
     def has_optional_parameters(self) -> bool:
         return len(self.optional_parameters) > 0
 
-    def initial_header(self) -> Dict[str, str]:
+    def initial_header(self) -> dict[str, str]:
         """
         Initial header content
         For more details refer to https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
@@ -263,7 +263,7 @@ class UDFMethod(ABC):
 
     def requires_authentication(
         self, request_content: "RequestContent"
-    ) -> Union[List[dict], dict]:
+    ) -> list[dict] | dict:
         return self.security(request_content) or self.service.config.auth.get("ntlm")
 
     def to_list(self, response: requests.Response) -> list:
@@ -276,13 +276,13 @@ class UDFMethod(ABC):
         return convert_to_return_type(response.text[:255], self)
 
     @abstractmethod
-    def _create_udf_parameters(self) -> List[UDFParameter]:  # pragma: no cover
+    def _create_udf_parameters(self) -> list[UDFParameter]:  # pragma: no cover
         ...
 
     @abstractmethod
     def security(
         self, request_content: "RequestContent"
-    ) -> Optional[List[dict]]:  # pragma: no cover
+    ) -> list[dict] | None:  # pragma: no cover
         ...
 
     @abstractmethod
@@ -421,7 +421,7 @@ class RequestContent:
             self.header_parameters[parameter.server_param_name] = value
 
 
-def check_for_duplicates(loaded_services: List[Service]) -> None:
+def check_for_duplicates(loaded_services: list[Service]) -> None:
     sections_by_prefix = {}
     for service in loaded_services:
         for formula_options in service.config.formulas.values():
@@ -555,7 +555,5 @@ def handle_exception(
     return convert_to_return_type(exception_message, udf_method)
 
 
-def convert_to_return_type(
-    str_value: str, udf_method: UDFMethod
-) -> Union[List[str], str]:
+def convert_to_return_type(str_value: str, udf_method: UDFMethod) -> list[str] | str:
     return [str_value] if udf_method.return_a_list() else str_value
