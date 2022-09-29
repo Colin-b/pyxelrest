@@ -132,7 +132,7 @@ Function downloadAndInstallPython
         Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
     ${EndIf}
     # https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-transfer
-    ExecDos::exec '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
+    ExecDos::exec '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.10.7/python-3.10.7-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
 
     ${IfNot} ${FileExists} "$%USERPROFILE%\python_for_pyxelrest.exe"
         ${NSD_SetText} $PythonStatusLabel "Python could not be downloaded."
@@ -256,7 +256,7 @@ Section "Allow to cache requests results" allow_cached_results
     # Approximate modules size is 150KB
     AddSize 150
     DetailPrint "Installing cachetools python module"
-    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==4.*" "--disable-pip-version-check"'
+    ExecDos::exec /DETAILED '"$PathToPythonFolder\python.exe" "-m" "pip" "install" "cachetools==5.*" "--disable-pip-version-check"'
 
 SectionEnd
 

@@ -15,7 +15,7 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:YamlDotNet.Core.AnchorNotFoundException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String)">
+        <member name="M:YamlDotNet.Core.AnchorNotFoundException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.AnchorNotFoundException"/> class.
             </summary>
@@ -73,14 +73,14 @@
             </summary>
         </member>
         <member name="M:YamlDotNet.Core.Emitter.NeedMoreEvents">
-            <summary>
-            Check if we need to accumulate more events before emitting.
+             <summary>
+             Check if we need to accumulate more events before emitting.
             
-            We accumulate extra
-             - 1 event for DOCUMENT-START
-             - 2 events for SEQUENCE-START
-             - 3 events for MAPPING-START
-            </summary>
+             We accumulate extra
+              - 1 event for DOCUMENT-START
+              - 2 events for SEQUENCE-START
+              - 3 events for MAPPING-START
+             </summary>
         </member>
         <member name="M:YamlDotNet.Core.Emitter.EmitStreamStart(YamlDotNet.Core.Events.ParsingEvent)">
             <summary>
@@ -359,7 +359,7 @@
             <param name="tags">The tags.</param>
             <param name="isImplicit">Indicates whether the event is implicit.</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.DocumentStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.DocumentStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.DocumentStart"/> class.
             </summary>
@@ -407,7 +407,7 @@
             Gets the event type, which allows for simpler type comparisons.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Events.MappingEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.MappingEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.MappingEnd"/> class.
             </summary>
@@ -598,7 +598,7 @@
             </summary>
             <param name="visitor">Visitor to accept, may not be null</param>
         </member>
-        <member name="M:YamlDotNet.Core.Events.ParsingEvent.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.ParsingEvent.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.ParsingEvent"/> class.
             </summary>
@@ -643,7 +643,12 @@
             </summary>
             <value></value>
         </member>
-        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="P:YamlDotNet.Core.Events.Scalar.IsKey">
+            <summary>
+            Gets whether this scalar event is a key
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean,YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.Scalar"/> class.
             </summary>
@@ -655,6 +660,7 @@
             <param name="isQuotedImplicit">.</param>
             <param name="start">The start position of the event.</param>
             <param name="end">The end position of the event.</param>
+            <param name="isKey">Whether or not this scalar event is for a key</param>
         </member>
         <member name="M:YamlDotNet.Core.Events.Scalar.#ctor(YamlDotNet.Core.AnchorName,YamlDotNet.Core.TagName,System.String,YamlDotNet.Core.ScalarStyle,System.Boolean,System.Boolean)">
             <summary>
@@ -716,7 +722,7 @@
             Gets the event type, which allows for simpler type comparisons.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Events.SequenceEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.SequenceEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.SequenceEnd"/> class.
             </summary>
@@ -846,7 +852,7 @@
             Gets the event type, which allows for simpler type comparisons.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Events.StreamEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.StreamEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.StreamEnd"/> class.
             </summary>
@@ -894,7 +900,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.StreamStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Events.StreamStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Events.StreamStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Events.StreamStart"/> class.
             </summary>
@@ -927,7 +933,7 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:YamlDotNet.Core.ForwardAnchorNotSupportedException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String)">
+        <member name="M:YamlDotNet.Core.ForwardAnchorNotSupportedException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.AnchorNotFoundException"/> class.
             </summary>
@@ -1160,7 +1166,7 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:YamlDotNet.Core.MaximumRecursionLevelReachedException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String)">
+        <member name="M:YamlDotNet.Core.MaximumRecursionLevelReachedException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.MaximumRecursionLevelReachedException"/> class.
             </summary>
@@ -1232,7 +1238,7 @@
                                                                ***********
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Parser.ProcessEmptyScalar(YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Parser.ProcessEmptyScalar(YamlDotNet.Core.Mark@)">
             <summary>
             Generate an empty scalar event.
             </summary>
@@ -1647,7 +1653,7 @@
             Remove a potential simple key at the current flow level.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Scanner.ScanDirectiveName(YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Scanner.ScanDirectiveName(YamlDotNet.Core.Mark@)">
              <summary>
              Scan the directive name.
             
@@ -1658,7 +1664,7 @@
                    ^^^
              </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Scanner.ScanVersionDirectiveValue(YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Scanner.ScanVersionDirectiveValue(YamlDotNet.Core.Mark@)">
              <summary>
              Scan the value of VERSION-DIRECTIVE.
             
@@ -1667,7 +1673,7 @@
                        ^^^^^^
              </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Scanner.ScanTagDirectiveValue(YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Scanner.ScanTagDirectiveValue(YamlDotNet.Core.Mark@)">
              <summary>
              Scan the value of a TAG-DIRECTIVE token.
             
@@ -1681,7 +1687,7 @@
             Scan a tag.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Scanner.ScanUriEscapes(YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Scanner.ScanUriEscapes(YamlDotNet.Core.Mark@)">
             <summary>
             Decode an URI-escape sequence corresponding to a single UTF-8 character.
             </summary>
@@ -1691,7 +1697,7 @@
             Scan a tag handle.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Scanner.ScanVersionDirectiveNumber(YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Scanner.ScanVersionDirectiveNumber(YamlDotNet.Core.Mark@)">
              <summary>
              Scan the version number of VERSION-DIRECTIVE.
             
@@ -1719,7 +1725,7 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:YamlDotNet.Core.SemanticErrorException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String)">
+        <member name="M:YamlDotNet.Core.SemanticErrorException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.SemanticErrorException"/> class.
             </summary>
@@ -1742,7 +1748,7 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:YamlDotNet.Core.SyntaxErrorException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String)">
+        <member name="M:YamlDotNet.Core.SyntaxErrorException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.SyntaxErrorException"/> class.
             </summary>
@@ -1837,7 +1843,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockEnd"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.BlockEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.BlockEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockEnd"/> class.
             </summary>
@@ -1854,7 +1860,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockEntry"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.BlockEntry.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.BlockEntry.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockEntry"/> class.
             </summary>
@@ -1871,7 +1877,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockMappingStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.BlockMappingStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.BlockMappingStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockMappingStart"/> class.
             </summary>
@@ -1888,7 +1894,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockSequenceStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.BlockSequenceStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.BlockSequenceStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.BlockSequenceStart"/> class.
             </summary>
@@ -1930,7 +1936,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.DocumentEnd"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.DocumentEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.DocumentEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.DocumentEnd"/> class.
             </summary>
@@ -1947,7 +1953,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.DocumentStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.DocumentStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.DocumentStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.DocumentStart"/> class.
             </summary>
@@ -1974,7 +1980,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowEntry"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.FlowEntry.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.FlowEntry.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowEntry"/> class.
             </summary>
@@ -1991,7 +1997,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowMappingEnd"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.FlowMappingEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.FlowMappingEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowMappingEnd"/> class.
             </summary>
@@ -2008,7 +2014,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowMappingStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.FlowMappingStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.FlowMappingStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowMappingStart"/> class.
             </summary>
@@ -2025,7 +2031,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowSequenceEnd"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.FlowSequenceEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.FlowSequenceEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowSequenceEnd"/> class.
             </summary>
@@ -2042,7 +2048,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowSequenceStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.FlowSequenceStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.FlowSequenceStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.FlowSequenceStart"/> class.
             </summary>
@@ -2059,7 +2065,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Key"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.Key.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.Key.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Key"/> class.
             </summary>
@@ -2069,6 +2075,11 @@
         <member name="T:YamlDotNet.Core.Tokens.Scalar">
             <summary>
             Represents a scalar token.
+            </summary>
+        </member>
+        <member name="P:YamlDotNet.Core.Tokens.Scalar.IsKey">
+            <summary>
+            Gets or sets whether this scalar is a key
             </summary>
         </member>
         <member name="P:YamlDotNet.Core.Tokens.Scalar.Value">
@@ -2115,7 +2126,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.StreamEnd"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.StreamEnd.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.StreamEnd.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.StreamEnd"/> class.
             </summary>
@@ -2132,7 +2143,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.StreamStart"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.StreamStart.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.StreamStart.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.StreamStart"/> class.
             </summary>
@@ -2240,7 +2251,7 @@
             Gets the end of the token in the input stream.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.Token.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.Token.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Token"/> class.
             </summary>
@@ -2257,7 +2268,7 @@
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Value"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.Tokens.Value.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark)">
+        <member name="M:YamlDotNet.Core.Tokens.Value.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.Tokens.Value"/> class.
             </summary>
@@ -2366,12 +2377,12 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:YamlDotNet.Core.YamlException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String)">
+        <member name="M:YamlDotNet.Core.YamlException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.YamlException"/> class.
             </summary>
         </member>
-        <member name="M:YamlDotNet.Core.YamlException.#ctor(YamlDotNet.Core.Mark,YamlDotNet.Core.Mark,System.String,System.Exception)">
+        <member name="M:YamlDotNet.Core.YamlException.#ctor(YamlDotNet.Core.Mark@,YamlDotNet.Core.Mark@,System.String,System.Exception)">
             <summary>
             Initializes a new instance of the <see cref="T:YamlDotNet.Core.YamlException"/> class.
             </summary>
@@ -2382,6 +2393,51 @@
             </summary>
             <param name="message">The message.</param>
             <param name="inner">The inner.</param>
+        </member>
+        <member name="T:YamlDotNet.Helpers.ConcurrentObjectPool`1">
+             <summary>
+             Generic implementation of object pooling pattern with predefined pool size limit. The main
+             purpose is that limited number of frequently used objects can be kept in the pool for
+             further recycling.
+            
+             Notes:
+             1) it is not the goal to keep all returned objects. Pool is not meant for storage. If there
+                is no space in the pool, extra returned objects will be dropped.
+            
+             2) it is implied that if object was obtained from a pool, the caller will return it back in
+                a relatively short time. Keeping checked out objects for long durations is ok, but
+                reduces usefulness of pooling. Just new up your own.
+            
+             Not returning objects to the pool in not detrimental to the pool's work, but is a bad practice.
+             Rationale:
+                If there is no intent for reusing the object, do not use pool - just use "new".
+             </summary>
+        </member>
+        <member name="T:YamlDotNet.Helpers.ConcurrentObjectPool`1.Factory">
+            <remarks>
+            Not using System.Func{T} because this file is linked into the (debugger) Formatter,
+            which does not have that type (since it compiles against .NET 2.0).
+            </remarks>
+        </member>
+        <member name="M:YamlDotNet.Helpers.ConcurrentObjectPool`1.Allocate">
+            <summary>
+            Produces an instance.
+            </summary>
+            <remarks>
+            Search strategy is a simple linear probing which is chosen for it cache-friendliness.
+            Note that Free will try to store recycled objects close to the start thus statistically
+            reducing how far we will typically search.
+            </remarks>
+        </member>
+        <member name="M:YamlDotNet.Helpers.ConcurrentObjectPool`1.Free(`0)">
+            <summary>
+            Returns objects to the pool.
+            </summary>
+            <remarks>
+            Search strategy is a simple linear probing which is chosen for it cache-friendliness.
+            Note that Free will try to store recycled objects close to the start thus statistically
+            reducing how far we will typically search in Allocate.
+            </remarks>
         </member>
         <member name="M:YamlDotNet.Helpers.ExpressionExtensions.AsProperty(System.Linq.Expressions.LambdaExpression)">
             <summary>
@@ -2425,6 +2481,11 @@
             Removes the element at the specified index.
             </summary>
             <param name="index">The zero-based index of the element to remove.</param>
+        </member>
+        <member name="T:YamlDotNet.Helpers.StringBuilderPool">
+            <summary>
+            Pooling of StringBuilder instances.
+            </summary>
         </member>
         <member name="T:YamlDotNet.RepresentationModel.DocumentLoadingState">
             <summary>
@@ -3658,6 +3719,12 @@
             Initializes a new <see cref="T:YamlDotNet.Serialization.DeserializerBuilder" /> using the default component registrations.
             </summary>
         </member>
+        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithAttemptingUnquotedStringTypeDeserialization">
+            <summary>
+            When deserializing it will attempt to convert unquoted strings to their correct datatype. If conversion is not sucessful, it will leave it as a string.
+            This option is only applicable when not specifying a type or specifying the object type during deserialization.
+            </summary>
+        </member>
         <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithObjectFactory(YamlDotNet.Serialization.IObjectFactory)">
             <summary>
             Sets the <see cref="T:YamlDotNet.Serialization.IObjectFactory" /> that will be used by the deserializer.
@@ -4263,6 +4330,11 @@
             with the desired customizations.
             </summary>
         </member>
+        <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithQuotingNecessaryStrings">
+            <summary>
+            Put double quotes around strings that need it, for example Null, True, False, a number. This should be called before any other "With" methods if you want this feature enabled.
+            </summary>
+        </member>
         <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithMaximumRecursion(System.Int32)">
             <summary>
             Sets the maximum recursion that is allowed while traversing the object graph. The default value is 50.
@@ -4539,6 +4611,11 @@
             Returns the properties of a type that are readable.
             </summary>
         </member>
+        <member name="T:YamlDotNet.Serialization.TypeInspectors.WritablePropertiesTypeInspector">
+            <summary>
+            Returns the properties of a type that are writable.
+            </summary>
+        </member>
         <member name="T:YamlDotNet.Serialization.TypeResolvers.DynamicTypeResolver">
             <summary>
             The type returned will be the actual type of the value, if available.
@@ -4788,149 +4865,6 @@
             <returns>
                 <c>true</c> if the type has a default constructor; otherwise, <c>false</c>.
             </returns>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
-            <summary>
-                Specifies that <see langword="null"/> is allowed as an input even if the
-                corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.AllowNullAttribute.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute"/> class.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute">
-            <summary>
-                Specifies that <see langword="null"/> is disallowed as an input even if the
-                corresponding type allows it.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.DisallowNullAttribute.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute"/> class.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
-            <summary>
-                Specifies that a method that will never return under any circumstance.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute"/> class.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
-            <summary>
-                Specifies that the method will not return if the associated <see cref="T:System.Boolean"/>
-                parameter is passed the specified value.
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
-            <summary>
-                Gets the condition parameter value.
-                Code after the method is considered unreachable by diagnostics if the argument
-                to the associated parameter matches this value.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
-            <summary>
-                Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute"/>
-                class with the specified parameter value.
-            </summary>
-            <param name="parameterValue">
-                The condition parameter value.
-                Code after the method is considered unreachable by diagnostics if the argument
-                to the associated parameter matches this value.
-            </param>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
-            <summary>
-                Specifies that an output may be <see langword="null"/> even if the
-                corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullAttribute.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute"/> class.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute">
-            <summary>
-                Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue"/>, 
-                the parameter may be <see langword="null"/> even if the corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue">
-            <summary>
-                Gets the return value condition.
-                If the method returns this value, the associated parameter may be <see langword="null"/>.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)">
-            <summary>
-                 Initializes the attribute with the specified return value condition.
-            </summary>
-            <param name="returnValue">
-                The return value condition.
-                If the method returns this value, the associated parameter may be <see langword="null"/>.
-            </param>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
-            <summary>
-                Specifies that an output is not <see langword="null"/> even if the
-                corresponding type allows it.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.NotNullAttribute"/> class.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
-            <summary>
-                Specifies that the output will be non-<see langword="null"/> if the
-                named parameter is non-<see langword="null"/>.
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
-            <summary>
-                Gets the associated parameter name.
-                The output will be non-<see langword="null"/> if the argument to the
-                parameter specified is non-<see langword="null"/>.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
-            <summary>
-                Initializes the attribute with the associated parameter name.
-            </summary>
-            <param name="parameterName">
-                The associated parameter name.
-                The output will be non-<see langword="null"/> if the argument to the
-                parameter specified is non-<see langword="null"/>.
-            </param>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
-            <summary>
-                Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>,
-                the parameter will not be <see langword="null"/> even if the corresponding type allows it.
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
-            <summary>
-                Gets the return value condition.
-                If the method returns this value, the associated parameter will not be <see langword="null"/>.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
-            <summary>
-                Initializes the attribute with the specified return value condition.
-            </summary>
-            <param name="returnValue">
-                The return value condition.
-                If the method returns this value, the associated parameter will not be <see langword="null"/>.
-            </param>
         </member>
     </members>
 </doc>

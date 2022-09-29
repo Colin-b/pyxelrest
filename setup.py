@@ -91,23 +91,23 @@ setup(
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.25.*",
+        "xlwings==0.27.*",
         # Used to parse configuration files
         "pyyaml==6.*",
         "pyaml==21.*",
         # Used to manage authentication
-        "requests_auth==5.*",
+        "requests_auth==6.*",
         # Used to parse all date-time formats in a easy way
         "python-dateutil==2.*",
     ],
     extras_require={
         "testing": [
             # Used to run tests
-            "pytest-cov==3.*",
+            "pytest-cov==4.*",
             # Used to mock responses
             "pytest-responses==0.5.*",
             # Optional dependency: Used to test results caching
-            "cachetools==4.*",
+            "cachetools==5.*",
         ],
     },
     python_requires=">=3.8",

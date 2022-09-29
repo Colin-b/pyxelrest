@@ -369,7 +369,7 @@ my_rest_api:
       prefix: "vba_{name}_"
 ```
 
-#### Change the prefix in front on formulas
+#### Change the prefix in front of formulas
 
 By default, VBA formulas will be prefixed by `vba_` followed by the REST API name.
 
@@ -421,7 +421,7 @@ my_rest_api:
     api_key: "value"
 ```
 
-The value can contains environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
+The value can contain environment variables if provided in the `%MY_ENV_VARIABLE%` form (where `MY_ENV_VARIABLE` is an environment variable).
 
 The following sample will use the value of `REST_API_KEY` environment variable as the API key:
 ```yaml

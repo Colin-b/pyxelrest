@@ -362,6 +362,12 @@
             </para>
             </remarks>
         </member>
+        <member name="M:log4net.Appender.AdoNetAppender.Prepare(System.Data.IDbCommand)">
+            <summary>
+            Prepare entire database command object to be executed.
+            </summary>
+            <param name="dbCmd">The command to prepare.</param>
+        </member>
         <member name="M:log4net.Appender.AdoNetAppender.GetLogStatement(log4net.Core.LoggingEvent)">
             <summary>
             Formats the log message into database statement text.
@@ -10466,6 +10472,103 @@
             </para>
             </remarks>
         </member>
+        <member name="T:log4net.Core.FixFlags">
+            <summary>
+            Flags passed to the <see cref="P:log4net.Core.LoggingEvent.Fix"/> property
+            </summary>
+            <remarks>
+            <para>
+            Flags passed to the <see cref="P:log4net.Core.LoggingEvent.Fix"/> property
+            </para>
+            </remarks>
+            <author>Nicko Cadell</author>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Mdc">
+            <summary>
+            Fix the MDC
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Ndc">
+            <summary>
+            Fix the NDC
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Message">
+            <summary>
+            Fix the rendered message
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.ThreadName">
+            <summary>
+            Fix the thread name
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.LocationInfo">
+            <summary>
+            Fix the callers location information
+            </summary>
+            <remarks>
+            CAUTION: Very slow to generate
+            </remarks>
+        </member>
+        <member name="F:log4net.Core.FixFlags.UserName">
+            <summary>
+            Fix the callers windows user name
+            </summary>
+            <remarks>
+            CAUTION: Slow to generate
+            </remarks>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Domain">
+            <summary>
+            Fix the domain friendly name
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Identity">
+            <summary>
+            Fix the callers principal name
+            </summary>
+            <remarks>
+            CAUTION: May be slow to generate
+            </remarks>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Exception">
+            <summary>
+            Fix the exception text
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Properties">
+            <summary>
+            Fix the event properties. Active properties must implement <see cref="T:log4net.Core.IFixingRequired"/> in order to be eligible for fixing.
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.None">
+            <summary>
+            No fields fixed
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.All">
+            <summary>
+            All fields fixed
+            </summary>
+        </member>
+        <member name="F:log4net.Core.FixFlags.Partial">
+            <summary>
+            Partial fields fixed
+            </summary>
+            <remarks>
+            <para>
+            This set of partial fields gives good performance. The following fields are fixed:
+            </para>
+            <list type="bullet">
+            <item><description><see cref="F:log4net.Core.FixFlags.Message"/></description></item>
+            <item><description><see cref="F:log4net.Core.FixFlags.ThreadName"/></description></item>
+            <item><description><see cref="F:log4net.Core.FixFlags.Exception"/></description></item>
+            <item><description><see cref="F:log4net.Core.FixFlags.Domain"/></description></item>
+            <item><description><see cref="F:log4net.Core.FixFlags.Properties"/></description></item>
+            </list>
+            </remarks>
+        </member>
         <member name="T:log4net.Core.IAppenderAttachable">
             <summary>
             Interface for attaching appenders to objects.
@@ -12887,103 +12990,6 @@
             properties to specific events. These properties
             have a string key and an object value.
             </para>
-            </remarks>
-        </member>
-        <member name="T:log4net.Core.FixFlags">
-            <summary>
-            Flags passed to the <see cref="P:log4net.Core.LoggingEvent.Fix"/> property
-            </summary>
-            <remarks>
-            <para>
-            Flags passed to the <see cref="P:log4net.Core.LoggingEvent.Fix"/> property
-            </para>
-            </remarks>
-            <author>Nicko Cadell</author>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Mdc">
-            <summary>
-            Fix the MDC
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Ndc">
-            <summary>
-            Fix the NDC
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Message">
-            <summary>
-            Fix the rendered message
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.ThreadName">
-            <summary>
-            Fix the thread name
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.LocationInfo">
-            <summary>
-            Fix the callers location information
-            </summary>
-            <remarks>
-            CAUTION: Very slow to generate
-            </remarks>
-        </member>
-        <member name="F:log4net.Core.FixFlags.UserName">
-            <summary>
-            Fix the callers windows user name
-            </summary>
-            <remarks>
-            CAUTION: Slow to generate
-            </remarks>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Domain">
-            <summary>
-            Fix the domain friendly name
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Identity">
-            <summary>
-            Fix the callers principal name
-            </summary>
-            <remarks>
-            CAUTION: May be slow to generate
-            </remarks>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Exception">
-            <summary>
-            Fix the exception text
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Properties">
-            <summary>
-            Fix the event properties. Active properties must implement <see cref="T:log4net.Core.IFixingRequired"/> in order to be eligible for fixing.
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.None">
-            <summary>
-            No fields fixed
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.All">
-            <summary>
-            All fields fixed
-            </summary>
-        </member>
-        <member name="F:log4net.Core.FixFlags.Partial">
-            <summary>
-            Partial fields fixed
-            </summary>
-            <remarks>
-            <para>
-            This set of partial fields gives good performance. The following fields are fixed:
-            </para>
-            <list type="bullet">
-            <item><description><see cref="F:log4net.Core.FixFlags.Message"/></description></item>
-            <item><description><see cref="F:log4net.Core.FixFlags.ThreadName"/></description></item>
-            <item><description><see cref="F:log4net.Core.FixFlags.Exception"/></description></item>
-            <item><description><see cref="F:log4net.Core.FixFlags.Domain"/></description></item>
-            <item><description><see cref="F:log4net.Core.FixFlags.Properties"/></description></item>
-            </list>
             </remarks>
         </member>
         <member name="T:log4net.Core.LoggingEvent">
@@ -21452,16 +21458,6 @@
             </remarks>
             <author>Nicko Cadell</author>
             <author>Gert Driesen</author>
-        </member>
-        <member name="M:log4net.ObjectRenderer.RendererMap.#ctor">
-            <summary>
-            Default Constructor
-            </summary>
-            <remarks>
-            <para>
-            Default constructor.
-            </para>
-            </remarks>
         </member>
         <member name="M:log4net.ObjectRenderer.RendererMap.FindAndRender(System.Object)">
             <summary>
@@ -30900,6 +30896,16 @@
             </para>
             </remarks>
             <author>Nicko Cadell</author>
+        </member>
+        <member name="P:log4net.Util.SystemStringFormat.Format">
+            <summary>
+            Format
+            </summary>
+        </member>
+        <member name="P:log4net.Util.SystemStringFormat.Args">
+            <summary>
+            Args
+            </summary>
         </member>
         <member name="M:log4net.Util.SystemStringFormat.#ctor(System.IFormatProvider,System.String,System.Object[])">
             <summary>
