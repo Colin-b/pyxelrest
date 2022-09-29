@@ -3,8 +3,7 @@ import re
 import os
 import time
 from abc import ABC, abstractmethod
-from typing import Any
-
+from typing import Any, Optional
 
 import requests
 from xlwings.udfs import ComRange
@@ -195,7 +194,7 @@ class UDFMethod(ABC):
                 )
 
     @staticmethod
-    def _create_cache(max_nb_results: int, ttl: int) -> "cachetools.TTLCache" | None:
+    def _create_cache(max_nb_results: int, ttl: int) -> Optional["cachetools.TTLCache"]:
         """
         Create a new in-memory cache.
 
