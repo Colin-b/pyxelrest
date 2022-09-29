@@ -610,20 +610,17 @@ def test_pyxelrest_oauth2_implicit_flow_authentication_success(
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
 
-    assert (
-        generated_functions.pyxelrest_get_url(
-            "http://test/test",
-            security_definitions=[
-                ["type", "flow", "authorizationUrl"],
-                [
-                    "oauth2",
-                    "implicit",
-                    "http://localhost:8947/auth_success?response_type=id_token",
-                ],
+    assert generated_functions.pyxelrest_get_url(
+        "http://test/test",
+        security_definitions=[
+            ["type", "flow", "authorizationUrl"],
+            [
+                "oauth2",
+                "implicit",
+                "http://localhost:8947/auth_success?response_type=id_token",
             ],
-        )
-        == [[""]]
-    )
+        ],
+    ) == [[""]]
     assert (
         _get_request(responses, "http://test/test").headers["Authorization"]
         == "Bearer 2YotnFZFEjr1zCsicMWpAA"
@@ -817,16 +814,13 @@ def test_pyxelrest_api_key_header_authentication_success(
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert (
-        generated_functions.pyxelrest_get_url(
-            "http://test/test",
-            security_definitions=[
-                ["type", "in", "name"],
-                ["apiKey", "header", "X-API-HEADER-KEY"],
-            ],
-        )
-        == [[""]]
-    )
+    assert generated_functions.pyxelrest_get_url(
+        "http://test/test",
+        security_definitions=[
+            ["type", "in", "name"],
+            ["apiKey", "header", "X-API-HEADER-KEY"],
+        ],
+    ) == [[""]]
     request = _get_request(responses, "http://test/test")
     assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"
 
@@ -895,16 +889,13 @@ def test_pyxelrest_api_key_query_authentication_success(
         json=[],
         match_querystring=True,
     )
-    assert (
-        generated_functions.pyxelrest_get_url(
-            "http://test/test",
-            security_definitions=[
-                ["type", "in", "name"],
-                ["apiKey", "query", "X-API-QUERY-KEY"],
-            ],
-        )
-        == [[""]]
-    )
+    assert generated_functions.pyxelrest_get_url(
+        "http://test/test",
+        security_definitions=[
+            ["type", "in", "name"],
+            ["apiKey", "query", "X-API-QUERY-KEY"],
+        ],
+    ) == [[""]]
 
 
 def test_basic_authentication_success(tmpdir, responses: RequestsMock):
@@ -955,13 +946,10 @@ def test_pyxelrest_basic_authentication_success(tmpdir, responses: RequestsMock)
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert (
-        generated_functions.pyxelrest_get_url(
-            "http://test/test",
-            security_definitions=[["type"], ["basic"]],
-        )
-        == [[""]]
-    )
+    assert generated_functions.pyxelrest_get_url(
+        "http://test/test",
+        security_definitions=[["type"], ["basic"]],
+    ) == [[""]]
     request = _get_request(responses, "http://test/test")
     assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
 
@@ -1035,17 +1023,14 @@ def test_pyxelrest_basic_and_api_key_authentication_success(
     )
 
     responses.add(responses.GET, "http://test/test", json=[], match_querystring=True)
-    assert (
-        generated_functions.pyxelrest_get_url(
-            "http://test/test",
-            security_definitions=[
-                ["type", "in", "name"],
-                ["basic", "", ""],
-                ["apiKey", "header", "X-API-HEADER-KEY"],
-            ],
-        )
-        == [[""]]
-    )
+    assert generated_functions.pyxelrest_get_url(
+        "http://test/test",
+        security_definitions=[
+            ["type", "in", "name"],
+            ["basic", "", ""],
+            ["apiKey", "header", "X-API-HEADER-KEY"],
+        ],
+    ) == [[""]]
     request = _get_request(responses, "http://test/test")
     assert request.headers["Authorization"] == "Basic dGVzdF91c2VyOnRlc3RfcHdk"
     assert request.headers["X-API-HEADER-KEY"] == "my_provided_api_key"

@@ -71,21 +71,18 @@ def test_post_min_and_max_items(json_service, responses, tmpdir):
         match_querystring=True,
     )
 
-    assert (
-        generated_functions.json_post_min_and_max_items(
-            items=[
-                ["value10", "value11", "value12"],
-                ["value20", "value21", "value22"],
-                ["value30", "value31", "value32"],
-            ],
-            rule_set=[
-                ["value10", "value11", "value12"],
-                ["value20", "value21", "value22"],
-                ["value30", "value31", "value32"],
-            ],
-        )
-        == [["OK"]]
-    )
+    assert generated_functions.json_post_min_and_max_items(
+        items=[
+            ["value10", "value11", "value12"],
+            ["value20", "value21", "value22"],
+            ["value30", "value31", "value32"],
+        ],
+        rule_set=[
+            ["value10", "value11", "value12"],
+            ["value20", "value21", "value22"],
+            ["value30", "value31", "value32"],
+        ],
+    ) == [["OK"]]
 
     assert (
         _get_request(responses, "http://localhost:8954/min_and_max_items").body

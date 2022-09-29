@@ -56,13 +56,10 @@ def test_files_parameter(responses: RequestsMock, tmpdir):
         json={},
         match_querystring=True,
     )
-    assert (
-        generated_functions.files_post_files(
-            mandatory_file="This is the content of the mandatory file.",
-            optional_file=temp_file.name,
-        )
-        == [[""]]
-    )
+    assert generated_functions.files_post_files(
+        mandatory_file="This is the content of the mandatory file.",
+        optional_file=temp_file.name,
+    ) == [[""]]
     actual_body = _get_request(responses, "http://test/files").body
     assert (
         b'\r\nContent-Disposition: form-data; name="mandatory_file"; filename="mandatory_file"\r\n\r\nThis is the content of the mandatory file.\r\n'

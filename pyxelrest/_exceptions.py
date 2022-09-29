@@ -3,28 +3,28 @@ class PyxelRestException(Exception):
 
 
 class InvalidOpenAPIDefinition(PyxelRestException):
-    """ Invalid OpenAPI Definition. """
+    """Invalid OpenAPI Definition."""
 
     def __init__(self, message: str, *args, **kwargs):  # real signature unknown
         PyxelRestException.__init__(self, "Invalid Definition: " + message)
 
 
 class OpenAPIVersionNotProvided(InvalidOpenAPIDefinition):
-    """ OpenAPI version is not provided. """
+    """OpenAPI version is not provided."""
 
     def __init__(self, *args, **kwargs):
         InvalidOpenAPIDefinition.__init__(self, "Version not provided.")
 
 
 class UnsupportedOpenAPIVersion(InvalidOpenAPIDefinition):
-    """ OpenAPI version is not supported. """
+    """OpenAPI version is not supported."""
 
     def __init__(self, version: str, *args, **kwargs):
         InvalidOpenAPIDefinition.__init__(self, f"Version {version} not supported.")
 
 
 class OpenAPIDefinitionNotProvided(PyxelRestException):
-    """ OpenAPI definition not provided. """
+    """OpenAPI definition not provided."""
 
     def __init__(self, section: str, *args, **kwargs):
         PyxelRestException.__init__(
@@ -34,7 +34,7 @@ class OpenAPIDefinitionNotProvided(PyxelRestException):
 
 
 class DuplicatedParameters(PyxelRestException):
-    """ Method contains duplicated parameters. """
+    """Method contains duplicated parameters."""
 
     def __init__(self, path: str, mode: str, method: dict, *args, **kwargs):
         PyxelRestException.__init__(
@@ -44,7 +44,7 @@ class DuplicatedParameters(PyxelRestException):
 
 
 class EmptyResponses(InvalidOpenAPIDefinition):
-    """ Responses are not set in OpenAPI definition. """
+    """Responses are not set in OpenAPI definition."""
 
     def __init__(self, method_name: str, *args, **kwargs):
         InvalidOpenAPIDefinition.__init__(

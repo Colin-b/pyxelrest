@@ -148,19 +148,16 @@ def test_list_of_dict_with_dict_json_post(
         match_querystring=True,
     )
 
-    assert (
-        generated_functions.json_post_list_of_dict_with_dict(
-            inner_dict=[
-                ["key1", "key2", "key3"],
-                ["value10", "value20", "value30"],
-                ["value11", "value21", "value31"],
-                ["value12", "value22", "value32"],
-            ],
-            dict_field1=["value000", "value001", "value002"],
-            dict_field2=["value010", "value011", "value012"],
-        )
-        == [[""]]
-    )
+    assert generated_functions.json_post_list_of_dict_with_dict(
+        inner_dict=[
+            ["key1", "key2", "key3"],
+            ["value10", "value20", "value30"],
+            ["value11", "value21", "value31"],
+            ["value12", "value22", "value32"],
+        ],
+        dict_field1=["value000", "value001", "value002"],
+        dict_field2=["value010", "value011", "value012"],
+    ) == [[""]]
     assert (
         _get_request(responses, "http://localhost:8954/list_of_dict_with_dict").body
         == b"""[{"inner_dict": {"key1": "value10", "key2": "value20", "key3": "value30"}, "dict_field1": "value000", "dict_field2": "value010"}, {"inner_dict": {"key1": "value11", "key2": "value21", "key3": "value31"}, "dict_field1": "value001", "dict_field2": "value011"}, {"inner_dict": {"key1": "value12", "key2": "value22", "key3": "value32"}, "dict_field1": "value002", "dict_field2": "value012"}]"""
@@ -406,13 +403,10 @@ def test_post_list_of_dict_with_null(json_service, tmpdir, responses: RequestsMo
         match_querystring=True,
     )
 
-    assert (
-        generated_functions.json_post_dicts(
-            key1=["value1", "value2"],
-            key2=None,
-        )
-        == [[""]]
-    )
+    assert generated_functions.json_post_dicts(
+        key1=["value1", "value2"],
+        key2=None,
+    ) == [[""]]
     assert (
         _get_request(responses, "http://localhost:8954/dicts").body
         == b"""[{"key1": "value1", "key2": null}, {"key1": "value2", "key2": null}]"""
@@ -438,13 +432,10 @@ def test_post_list_of_dict_with_not_the_same_number_of_elements(
         match_querystring=True,
     )
 
-    assert (
-        generated_functions.json_post_dicts(
-            key1=["value1", "value2"],
-            key2=["value3"],
-        )
-        == [[""]]
-    )
+    assert generated_functions.json_post_dicts(
+        key1=["value1", "value2"],
+        key2=["value3"],
+    ) == [[""]]
     assert (
         _get_request(responses, "http://localhost:8954/dicts").body
         == b"""[{"key1": "value1", "key2": "value3"}, {"key1": "value2", "key2": null}]"""
