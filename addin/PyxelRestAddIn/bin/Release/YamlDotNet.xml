@@ -177,6 +177,11 @@
             The preferred text width.
             </summary>
         </member>
+        <member name="P:YamlDotNet.Core.EmitterSettings.NewLine">
+            <summary>
+            New line characters.
+            </summary>
+        </member>
         <member name="P:YamlDotNet.Core.EmitterSettings.IsCanonical">
             <summary>
             If true, write the output in canonical form.
@@ -1962,12 +1967,12 @@
         </member>
         <member name="T:YamlDotNet.Core.Tokens.Error">
             <summary>
-            Base class for YAML tokens.
+            Error tokens.
             </summary>
         </member>
         <member name="P:YamlDotNet.Core.Tokens.Error.Value">
             <summary>
-            Gets the value of the comment
+            Gets the value of the error
             </summary>
         </member>
         <member name="T:YamlDotNet.Core.Tokens.FlowEntry">
@@ -3490,6 +3495,11 @@
             Allows serialization and deserialization of non-public properties.
             </summary>
         </member>
+        <member name="M:YamlDotNet.Serialization.BuilderSkeleton`1.EnablePrivateConstructors">
+            <summary>
+            Calling this will enable the support for private constructors when considering serialization and deserialization.
+            </summary>
+        </member>
         <member name="M:YamlDotNet.Serialization.BuilderSkeleton`1.WithNamingConvention(YamlDotNet.Serialization.INamingConvention)">
             <summary>
             Sets the <see cref="T:YamlDotNet.Serialization.INamingConvention" /> that will be used by the (de)serializer.
@@ -3719,6 +3729,14 @@
             Initializes a new <see cref="T:YamlDotNet.Serialization.DeserializerBuilder" /> using the default component registrations.
             </summary>
         </member>
+        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithStaticContext(YamlDotNet.Serialization.StaticContext)">
+            <summary>
+            When using Ahead of Time compilation or assembly trimming you need to pass in a generated static context. The context will contain a statically generated IObjectFactory and ITypeInspector.
+            This method will also remove the default reflection based type inspectors and node deserializers.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithAttemptingUnquotedStringTypeDeserialization">
             <summary>
             When deserializing it will attempt to convert unquoted strings to their correct datatype. If conversion is not sucessful, it will leave it as a string.
@@ -3813,6 +3831,12 @@
             Instructs the deserializer to ignore unmatched properties instead of throwing an exception.
             </summary>
         </member>
+        <member name="M:YamlDotNet.Serialization.DeserializerBuilder.WithDuplicateKeyChecking">
+            <summary>
+            Instructs the deserializer to check for duplicate keys and throw an exception if duplicate keys are found.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:YamlDotNet.Serialization.DeserializerBuilder.Build">
             <summary>
             Creates a new <see cref="T:YamlDotNet.Serialization.Deserializer" /> according to the current configuration.
@@ -3880,6 +3904,27 @@
             true if <paramref name="currentType"/> has been resolved completely;
             false if the next type <see cref="T:YamlDotNet.Serialization.INodeTypeResolver"/> should be invoked.
             </returns>
+        </member>
+        <member name="T:YamlDotNet.Serialization.IObjectAccessor">
+            <summary>
+            The interface to implement for getting/setting an objects fields and properties when using a static context
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.IObjectAccessor.Set(System.String,System.Object,System.Object)">
+            <summary>
+            Set a field/property value
+            </summary>
+            <param name="name">Name of the field or property.</param>
+            <param name="target">Object to set the field/property on.</param>
+            <param name="value">Value to set the field/property to.</param>
+        </member>
+        <member name="M:YamlDotNet.Serialization.IObjectAccessor.Read(System.String,System.Object)">
+            <summary>
+            Reads a value from a field/property
+            </summary>
+            <param name="name">Name of the field or property.</param>
+            <param name="target">Object to get the field/property from.</param>
+            <returns></returns>
         </member>
         <member name="T:YamlDotNet.Serialization.IObjectDescriptor">
             <summary>
@@ -4201,8 +4246,7 @@
         <member name="T:YamlDotNet.Serialization.NamingConventions.LowerCaseNamingConvention">
             <summary>
             Convert the string with underscores (this_is_a_test) or hyphens (this-is-a-test) to 
-            pascal case (ThisIsATest). Pascal case is the same as camel case, except the first letter
-            is uppercase.
+            lower case (thisisatest).
             </summary>
         </member>
         <member name="T:YamlDotNet.Serialization.NamingConventions.NullNamingConvention">
@@ -4236,6 +4280,46 @@
             <summary>
             Creates objects using a Func{Type,object}"/>.
             </summary>
+        </member>
+        <member name="T:YamlDotNet.Serialization.ObjectFactories.StaticObjectFactory">
+            <summary>
+            Gets information about and creates statically known, serializable, types.
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.ObjectFactories.StaticObjectFactory.Create(System.Type)">
+            <summary>
+            Create an object of the specified type
+            </summary>
+            <param name="type">Type of object to create</param>
+            <returns></returns>
+        </member>
+        <member name="M:YamlDotNet.Serialization.ObjectFactories.StaticObjectFactory.IsDictionary(System.Type)">
+            <summary>
+            Gets whether the type is a dictionary or not
+            </summary>
+            <param name="type">Type to check</param>
+            <returns></returns>
+        </member>
+        <member name="M:YamlDotNet.Serialization.ObjectFactories.StaticObjectFactory.IsList(System.Type)">
+            <summary>
+            Gets whether the type is a list
+            </summary>
+            <param name="type">Type to check</param>
+            <returns></returns>
+        </member>
+        <member name="M:YamlDotNet.Serialization.ObjectFactories.StaticObjectFactory.GetKeyType(System.Type)">
+            <summary>
+            Gets the type of the key of a dictionary
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YamlDotNet.Serialization.ObjectFactories.StaticObjectFactory.GetValueType(System.Type)">
+            <summary>
+            Gets the type of the value part of a dictionary or list.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
         </member>
         <member name="T:YamlDotNet.Serialization.ObjectGraphTraversalStrategies.FullObjectGraphTraversalStrategy">
             <summary>
@@ -4330,6 +4414,14 @@
             with the desired customizations.
             </summary>
         </member>
+        <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithStaticContext(YamlDotNet.Serialization.StaticContext)">
+            <summary>
+            When using Ahead of Time compilation you need to pass in a generated Ahead of Time context. The context will contain a statically generated IObjectFactory and ITypeInspector.
+            This method will also remove the default dynamic, reflection based type inspectors and node deserializers.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithQuotingNecessaryStrings">
             <summary>
             Put double quotes around strings that need it, for example Null, True, False, a number. This should be called before any other "With" methods if you want this feature enabled.
@@ -4417,6 +4509,12 @@
             <summary>
             Ensures that the result of the serialization is valid JSON.
             </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithNewLine(System.String)">
+            <summary>
+            Allows you to override the new line character to use when serializing to YAML.
+            </summary>
+            <param name="newLine">NewLine character(s) to use when serializing to YAML.</param>
         </member>
         <member name="M:YamlDotNet.Serialization.SerializerBuilder.WithPreProcessingPhaseObjectGraphVisitor``1(``0)">
             <summary>
@@ -4528,6 +4626,28 @@
             This method is available for advanced scenarios. The preferred way to customize the behavior of the
             deserializer is to use the <see cref="M:YamlDotNet.Serialization.SerializerBuilder.Build" /> method.
             </summary>
+        </member>
+        <member name="P:YamlDotNet.Serialization.Settings.AllowPrivateConstructors">
+            <summary>
+            If true then private, parameterless constructors will be invoked if a public one is not available.
+            </summary>
+        </member>
+        <member name="T:YamlDotNet.Serialization.StaticContext">
+            <summary>
+            Holds the static object factory and type inspector to use when statically serializing/deserializing YAML.
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.StaticContext.GetFactory">
+            <summary>
+            Gets the factory to use for serialization and deserialization
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:YamlDotNet.Serialization.StaticContext.GetTypeInspector">
+            <summary>
+            Gets the type inspector to use when statically serializing/deserializing YAML.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:YamlDotNet.Serialization.StreamFragment">
             <summary>
@@ -4857,11 +4977,17 @@
             </summary>
             <param name="serializeAs">Specifies that this property should be serialized as the given type, rather than using the actual runtime value's type.</param>
         </member>
-        <member name="M:YamlDotNet.ReflectionExtensions.HasDefaultConstructor(System.Type)">
+        <member name="T:YamlDotNet.Serialization.YamlSerializableAttribute">
+            <summary>
+            Put this attribute on classes that you want the static analyzer to detect and use.
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.ReflectionExtensions.HasDefaultConstructor(System.Type,System.Boolean)">
             <summary>
             Determines whether the specified type has a default constructor.
             </summary>
             <param name="type">The type.</param>
+            <param name="allowPrivateConstructors">Whether to include private constructors</param>
             <returns>
                 <c>true</c> if the type has a default constructor; otherwise, <c>false</c>.
             </returns>
