@@ -1,6 +1,6 @@
 Attribute VB_Name = "xlwings"
 #Const App = "Microsoft Excel" 'Adjust when using outside of Excel
-'Version: 0.27.15
+'Version: 0.28.9
 
 'xlwings is distributed under a BSD 3-clause license.
 '
@@ -41,29 +41,29 @@ Attribute VB_Name = "xlwings"
         Private Declare PtrSafe Function system Lib "libc.dylib" (ByVal Command As String) As Long
     #End If
     #If Win64 Then
-        Const XLPyDLLName As String = "xlwings64-0.27.15.dll"
-        Declare PtrSafe Function XLPyDLLActivateAuto Lib "xlwings64-0.27.15.dll" (ByRef Result As Variant, Optional ByVal Config As String = "", Optional ByVal mode As Long = 1) As Long
-        Declare PtrSafe Function XLPyDLLNDims Lib "xlwings64-0.27.15.dll" (ByRef src As Variant, ByRef dims As Long, ByRef transpose As Boolean, ByRef dest As Variant) As Long
-        Declare PtrSafe Function XLPyDLLVersion Lib "xlwings64-0.27.15.dll" (tag As String, VERSION As Double, arch As String) As Long
+        Const XLPyDLLName As String = "xlwings64-0.28.9.dll"
+        Declare PtrSafe Function XLPyDLLActivateAuto Lib "xlwings64-0.28.9.dll" (ByRef Result As Variant, Optional ByVal Config As String = "", Optional ByVal mode As Long = 1) As Long
+        Declare PtrSafe Function XLPyDLLNDims Lib "xlwings64-0.28.9.dll" (ByRef src As Variant, ByRef dims As Long, ByRef transpose As Boolean, ByRef dest As Variant) As Long
+        Declare PtrSafe Function XLPyDLLVersion Lib "xlwings64-0.28.9.dll" (tag As String, VERSION As Double, arch As String) As Long
     #Else
-        Private Const XLPyDLLName As String = "xlwings32-0.27.15.dll"
-        Declare PtrSafe Function XLPyDLLActivateAuto Lib "xlwings32-0.27.15.dll" (ByRef Result As Variant, Optional ByVal Config As String = "", Optional ByVal mode As Long = 1) As Long
-        Private Declare PtrSafe Function XLPyDLLNDims Lib "xlwings32-0.27.15.dll" (ByRef src As Variant, ByRef dims As Long, ByRef transpose As Boolean, ByRef dest As Variant) As Long
-        Private Declare PtrSafe Function XLPyDLLVersion Lib "xlwings32-0.27.15.dll" (tag As String, VERSION As Double, arch As String) As Long
+        Private Const XLPyDLLName As String = "xlwings32-0.28.9.dll"
+        Declare PtrSafe Function XLPyDLLActivateAuto Lib "xlwings32-0.28.9.dll" (ByRef Result As Variant, Optional ByVal Config As String = "", Optional ByVal mode As Long = 1) As Long
+        Private Declare PtrSafe Function XLPyDLLNDims Lib "xlwings32-0.28.9.dll" (ByRef src As Variant, ByRef dims As Long, ByRef transpose As Boolean, ByRef dest As Variant) As Long
+        Private Declare PtrSafe Function XLPyDLLVersion Lib "xlwings32-0.28.9.dll" (tag As String, VERSION As Double, arch As String) As Long
     #End If
     Private Declare PtrSafe Function LoadLibrary Lib "KERNEL32" Alias "LoadLibraryA" (ByVal lpLibFileName As String) As Long
 #Else
     #If Mac Then
         Private Declare Function system Lib "libc.dylib" (ByVal Command As String) As Long
     #End If
-    Private Const XLPyDLLName As String = "xlwings32-0.27.15.dll"
-    Private Declare Function XLPyDLLActivateAuto Lib "xlwings32-0.27.15.dll" (ByRef Result As Variant, Optional ByVal Config As String = "", Optional ByVal mode As Long = 1) As Long
-    Private Declare Function XLPyDLLNDims Lib "xlwings32-0.27.15.dll" (ByRef src As Variant, ByRef dims As Long, ByRef transpose As Boolean, ByRef dest As Variant) As Long
+    Private Const XLPyDLLName As String = "xlwings32-0.28.9.dll"
+    Private Declare Function XLPyDLLActivateAuto Lib "xlwings32-0.28.9.dll" (ByRef Result As Variant, Optional ByVal Config As String = "", Optional ByVal mode As Long = 1) As Long
+    Private Declare Function XLPyDLLNDims Lib "xlwings32-0.28.9.dll" (ByRef src As Variant, ByRef dims As Long, ByRef transpose As Boolean, ByRef dest As Variant) As Long
     Private Declare Function LoadLibrary Lib "KERNEL32" Alias "LoadLibraryA" (ByVal lpLibFileName As String) As Long
-    Declare Function XLPyDLLVersion Lib "xlwings32-0.27.15.dll" (tag As String, VERSION As Double, arch As String) As Long
+    Declare Function XLPyDLLVersion Lib "xlwings32-0.28.9.dll" (tag As String, VERSION As Double, arch As String) As Long
 #End If
 
-Public Const XLWINGS_VERSION As String = "0.27.15"
+Public Const XLWINGS_VERSION As String = "0.28.9"
 Public Const PROJECT_NAME As String = "xlwings"
 
 Public Function RunPython(PythonCommand As String)
