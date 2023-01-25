@@ -132,7 +132,7 @@ Function downloadAndInstallPython
         Delete "$%USERPROFILE%\python_for_pyxelrest.exe"
     ${EndIf}
     # https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-transfer
-    ExecDos::exec '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.10.7/python-3.10.7-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
+    ExecDos::exec '"bitsadmin.exe" "/transfer" "Download Python" "https://www.python.org/ftp/python/3.11.1/python-3.11.1-amd64.exe" "$%USERPROFILE%\python_for_pyxelrest.exe"'
 
     ${IfNot} ${FileExists} "$%USERPROFILE%\python_for_pyxelrest.exe"
         ${NSD_SetText} $PythonStatusLabel "Python could not be downloaded."

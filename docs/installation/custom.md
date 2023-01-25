@@ -2,7 +2,7 @@
 
 Note that the recommended way to install pyxelrest is [via the installer](installer.md).
 
-1. [Python >= 3.10](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/)).
+1. [Python >= 3.11](https://www.python.org/downloads/) must be installed (with [`pip`](https://pip.pypa.io/en/stable/)).
 2. Use [`pip`](https://pip.pypa.io/en/stable/) to install module:
 ```bash
 python -m pip install pyxelrest

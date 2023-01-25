@@ -28,9 +28,10 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Operating System :: Microsoft :: Windows :: Windows 7",
         "Operating System :: Microsoft :: Windows :: Windows 10",
+        "Operating System :: Microsoft :: Windows :: Windows 11",
     ],
     keywords=["excel", "openapi", "swagger", "rest", "udf", "service"],
     packages=find_packages(exclude=["tests*", "pyxelrest.generated"]),
@@ -108,7 +109,7 @@ setup(
             "cachetools==5.*",
         ],
     },
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     entry_points={
         "console_scripts": [
             "pyxelrest_install_addin=pyxelrest.install_addin:main",

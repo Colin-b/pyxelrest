@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Allow flexible dependencies versions (only requires major component to match).
-- Compatibility with `python` `3.10`.
+- Compatibility with `python` `3.11`.
 - Ability to change the configuration and impact loaded functions within module without restarting python.
 - file URl are now properly handled, they must start with `file:///` instead of `file://`
 - Updater do not rely on yaml anymore. Instead, a basic configuration for logging is used. This should prevent random yaml upgrade issues.
@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle primitive type body (such as sending a raw string, an integer, etc...).
 
 ### Removed
-- Drop support for `python` < `3.10`.
+- Drop support for `python` < `3.11`.
 - Drop support for `application/msgpackpandas` as `msgpack` support has been dropped from `pandas` and this is not a standardized content type.
 - Drop support for `ujson`.
 - Drop support for `ini` configuration files.
