@@ -90,7 +90,7 @@ setup(
         # Used to communicate with services
         "requests==2.*",
         # Used to communicate with Microsoft Excel (pywin32 dependency is also used to check that Excel is not running)
-        "xlwings==0.27.*",
+        "xlwings==0.28.*",
         # Used to parse configuration files
         "pyyaml==6.*",
         "pyaml==21.*",
