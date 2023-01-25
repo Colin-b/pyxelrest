@@ -1156,7 +1156,88 @@ Function GetFullName(wb As Workbook) As String
 End Function
 #End If
 
+Function GetAzureAdAccessToken( _
+    Optional tenantId As String, _
+    Optional clientId As String, _
+    Optional port As String, _
+    Optional scopes As String, _
+    Optional username As String, _
+    Optional cliPath As String _
+)
+    Dim nowTs As Long, expiresTs As Long
+    Dim kwargs As String
 
+    If tenantId = "" Then
+        tenantId = GetConfig("AZUREAD_TENANT_ID")
+    End If
+    If clientId = "" Then
+        clientId = GetConfig("AZUREAD_CLIENT_ID")
+    End If
+    If port = "" Then
+        port = GetConfig("AZUREAD_PORT")
+    End If
+    If scopes = "" Then
+        scopes = GetConfig("AZUREAD_SCOPES")
+    End If
+    If username = "" Then
+        username = GetConfig("AZUREAD_USERNAME")
+    End If
+    If cliPath = "" Then
+        cliPath = GetConfig("CLI_PATH")
+    End If
+    If cliPath = "" Then
+        kwargs = "tenant_id='" & tenantId & "', "
+        kwargs = kwargs & "client_id='" & clientId & "', "
+        If port <> "" Then
+            kwargs = kwargs & "port='" & port & "', "
+        End If
+        If scopes <> "" Then
+            kwargs = kwargs & "scopes='" & scopes & "', "
+        End If
+        If username <> "" Then
+            kwargs = kwargs & "username='" & username & "', "
+        End If
+    Else
+        kwargs = "--tenant_id=" & tenantId & " "
+        kwargs = kwargs & "--client_id=" & clientId & " "
+        If port <> "" Then
+            kwargs = kwargs & "--port=" & port & " "
+        End If
+        If scopes <> "" Then
+            kwargs = kwargs & "--scopes=" & scopes & " "
+        End If
+        If username <> "" Then
+            kwargs = kwargs & "--username=" & username & " "
+        End If
+    End If
+
+    expiresTs = GetConfig("AZUREAD_ACCESS_TOKEN_EXPIRES_ON_" & clientId, 0)
+    nowTs = DateDiff("s", #1/1/1970#, ConvertToUtc(Now()))
+
+    If (expiresTs > 0) And (nowTs < (expiresTs - 30)) Then
+        GetAzureAdAccessToken = GetConfig("AZUREAD_ACCESS_TOKEN_" & clientId)
+        Exit Function
+    Else
+        If cliPath <> "" Then
+            RunFrozenPython cliPath, "auth azuread " & kwargs
+        Else
+            RunPython "from xlwings import cli;cli._auth_aad(" & kwargs & ")"
+        End If
+        #If Mac Then
+            ' RunPython on macOS is async: 60s should be enough if you have to login from scratch
+            For i = 1 To 60
+                expiresTs = GetConfig("AZUREAD_ACCESS_TOKEN_EXPIRES_ON_" & clientId, 0)
+                If (nowTs < (expiresTs - 30)) Then
+                    GetAzureAdAccessToken = GetConfig("AZUREAD_ACCESS_TOKEN_" & clientId)
+                    Exit Function
+                End If
+                Application.Wait (Now + TimeValue("0:00:01"))
+            Next i
+        #Else
+            GetAzureAdAccessToken = GetConfig("AZUREAD_ACCESS_TOKEN_" & clientId)
+        #End If
+    End If
+End Function
 
 
 
@@ -1164,6 +1245,7 @@ End Function
 
 Function RunRemotePython( _
     url As String, _
+    Optional auth As String, _
     Optional apiKey As String, _
     Optional include As String, _
     Optional exclude As String, _
@@ -1239,8 +1321,11 @@ Function RunRemotePython( _
     If proxyBypassList = "" Then
         proxyBypassList = GetConfig("PROXY_BYPASS_LIST", "")
     End If
-    If apiKey = "" Then
+    If apiKey = "" Then  ' Deprecated: replaced by "auth"
         apiKey = GetConfig("API_KEY", "")
+    End If
+    If auth = "" Then
+        auth = GetConfig("AUTH", "")
     End If
 
     ' Request payload
@@ -1303,21 +1388,26 @@ Function RunRemotePython( _
         sheetDict.Add "name", wb.Worksheets(i).Name
 
         ' Pictures
-        Dim pic As Picture
+        Dim pic As Shape
         Dim pics() As Dictionary
-        Dim nPics As Integer
+        Dim nShapes As Integer
+        Dim iShape As Integer
         Dim iPic As Integer
-        nPics = wb.Worksheets(i).Pictures.Count
-        If nPics > 0 Then
-            ReDim pics(nPics - 1)
-            For iPic = 1 To nPics
-                Set pic = wb.Worksheets(i).Pictures(iPic)
-                Dim picDict As Dictionary
-                Set picDict = New Dictionary
-                picDict.Add "name", pic.Name
-                picDict.Add "height", pic.Height
-                picDict.Add "width", pic.Width
-                Set pics(iPic - 1) = picDict
+        nShapes = wb.Worksheets(i).Shapes.Count
+        If (nShapes > 0) And Not (IsInArray(wb.Worksheets(i).Name, excludeArray)) Then
+            iPic = 0
+            For iShape = 1 To nShapes
+                Set pic = wb.Worksheets(i).Shapes(iShape)
+                If pic.Type = msoPicture Then
+                    ReDim Preserve pics(iPic)
+                    Dim picDict As Dictionary
+                    Set picDict = New Dictionary
+                    picDict.Add "name", pic.Name
+                    picDict.Add "height", pic.Height
+                    picDict.Add "width", pic.Width
+                    Set pics(iPic) = picDict
+                    iPic = iPic + 1
+                End If
             Next
             sheetDict.Add "pictures", pics
         Else
@@ -1368,7 +1458,7 @@ Function RunRemotePython( _
     authHeader = False
     If Not IsMissing(headers) Then
         Dim myKey As Variant
-        For Each myKey In headers.myKeys
+        For Each myKey In headers.Keys
             myRequest.AddHeader CStr(myKey), headers(myKey)
         Next
         If headers.Exists("Authorization") Then
@@ -1377,8 +1467,11 @@ Function RunRemotePython( _
     End If
 
     If authHeader = False Then
-        If apiKey <> "" Then
+        If apiKey <> "" Then  ' Deprecated: replaced by "auth"
             myRequest.AddHeader "Authorization", apiKey
+        End If
+        If auth <> "" Then
+            myRequest.AddHeader "Authorization", auth
         End If
     End If
 
@@ -1710,4 +1803,26 @@ Sub alert(wb As Workbook, action As Dictionary)
         Application.Run myCallback, buttonResult
     End If
 
+End Sub
+
+Sub setRangeName(wb As Workbook, action As Dictionary)
+    GetRange(wb, action).Name = action("args")(1)
+End Sub
+
+Sub namesAdd(wb As Workbook, action As Dictionary)
+    If IsNull(action("sheet_position")) Then
+        wb.Names.Add Name:=action("args")(1), RefersTo:=action("args")(2)
+    Else
+        wb.Worksheets(action("sheet_position") + 1).Names.Add Name:=action("args")(1), RefersTo:=action("args")(2)
+    End If
+End Sub
+
+Sub nameDelete(wb As Workbook, action As Dictionary)
+    Dim myname As Name
+    For Each myname In wb.Names()
+        If (myname.Name = action("args")(1)) And (myname.RefersTo = action("args")(2)) Then
+            myname.Delete
+            Exit For
+        End If
+    Next
 End Sub
